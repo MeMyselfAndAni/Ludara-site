@@ -2,34 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Ludara — AI-native platform for better decisions</title>
-  <meta name="description" content="Ludara is an AI-native platform that helps teams make faster, higher-quality decisions with secure data workflows." />
+  <title>Ludara.AI — Personalized, Gamified Storytelling</title>
+  <meta name="description" content="Ludara.AI turns any content into a personalized, gamified experience for culture, tourism, and education." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d;--ok:#2dcc8b;--err:#ff6b6b}
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d}
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
     .logo a{font-weight:800;letter-spacing:.3px;color:#fff}
     .menu{display:flex;gap:18px}
     .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
-    .cta{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#00142a;border:none;padding:10px 14px;border-radius:10px;font-weight:700}
-    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:36px 0}
+    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:42px 0}
     .hero h1{font-size:clamp(28px,4.5vw,56px);line-height:1.1;margin:0}
-    .hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);margin:8px 0 20px}
-    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px}
-    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
-    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
-    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px}
+    .hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);margin:8px 0 0}
     .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px}
+    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <nav class="nav">
+    <nav class="nav" aria-label="Primary">
       <div class="logo"><a href="/">Ludara.AI</a></div>
       <div class="menu">
         <a class="active" href="/">Home</a>
@@ -41,44 +39,32 @@
 
     <section class="hero">
       <div>
-        <div class="pill">AI-native • Secure • Fast to adopt</div>
-        <h1>Ludara.AI</h1>
-        <p>The API that turns any content into a personalized, gamified experience.</p>
+        <div class="pill">Ludus → Ludara • Personalized • Gamified</div>
+        <h1>Ludara.AI turns any content into a personalized, gamified experience.</h1>
+        <p>Built for culture, tourism, wellness, and education. Ludara comes from the Latin word ludus meaning play & learn. We make it engaging and personal.</p>
       </div>
     </section>
 
-    <section class="card">
-      <div class="kicker">What we do</div>
-      <h2 style="margin:8px 0 6px">Ludara.AI takes its name from ludus—Latin for “game” or “quest”—because we believe every story should feel like an adventure. Our platform transforms static content into interactive journeys, tailored to each user’s background, interests, and emotions. Built for museums, tourism providers, and educational platforms, Ludara.AI drives engagement, repeat visits, and revenue—while safeguarding brand voice, accuracy, and user privacy.</h2>
+    <!-- Optional tiny value strip, still minimal -->
+    <section class="card" aria-labelledby="value">
+      <div class="kicker" id="value">Why Ludara</div>
       <div class="grid-3">
-        <div class="card">
-          <h3>Secure data flows</h3>
-          <p style="color:var(--muted)">Connect to your sources safely with role-based access and built-in PII controls.</p>
+        <div>
+          <h3 style="margin:6px 0 4px">Deeper Engagement</h3>
+          <p style="margin:0;color:var(--muted)">Stories adapt to each visitor’s age, interests, cultural background, and language—making every moment feel personal and emotionally resonant.</p>
         </div>
-        <div class="card">
-          <h3>Explainable AI</h3>
-          <p style="color:var(--muted)">Every suggestion includes evidence and citations so teams can trust outcomes.</p>
+        <div>
+          <h3 style="margin:6px 0 4px">Lasting Connections</h3>
+          <p style="margin:0;color:var(--muted)">Progression, memory, and playful challenges keep audiences returning, building loyalty with every visit.</p>
         </div>
-        <div class="card">
-          <h3>Human-in-the-loop</h3>
-          <p style="color:var(--muted)">Route decisions to the right people for review, approvals, and overrides.</p>
+        <div>
+          <h3 style="margin:6px 0 4px">Safe and on-brand</h3>
+          <p style="margin:0;color:var(--muted)">Only curated, verified content is used. Our privacy-first design and tone controls protect both your audience and your reputation.</p>
         </div>
       </div>
     </section>
 
-    <section style="margin-top:18px" class="card">
-      <div class="kicker">Who we serve</div>
-      <h2 style="margin:8px 0 6px">For operations, product, and data teams</h2>
-      <p style="color:var(--muted)">From triaging support tickets to prioritizing roadmap bets, Ludara accelerates everyday decisions across your org.</p>
-      <div class="actions" style="margin-top:12px">
-        <a class="pill" href="/about.html">Meet the team</a>
-        <a class="pill" href="/contact.html">Request a demo</a>
-      </div>
-    </section>
-
-    <footer class="footer">
-      © <span id="y"></span> Ludara.AI, Inc. All rights reserved.
-    </footer>
+    <footer class="footer">© <span id="y"></span> Ludara.AI</footer>
   </div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
