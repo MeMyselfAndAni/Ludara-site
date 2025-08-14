@@ -7,7 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d;--ok:#2dcc8b;--err:#ff6b6b}
-    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
     a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:760px;margin:0 auto;padding:24px}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
@@ -22,10 +23,7 @@
     .row{display:grid;gap:14px;grid-template-columns:1fr} @media(min-width:640px){.row{grid-template-columns:1fr 1fr}}
     .actions{display:flex;gap:10px;align-items:center}
     button{background:linear-gradient(135deg,var(--brand),#8fd3ff);color:#00142a;border:none;padding:12px 18px;border-radius:10px;font-weight:800}
-    button:disabled{opacity:.6}
-    .msg{display:none;padding:12px;border-radius:10px;font-size:14px}
-    .msg.ok{display:block;background:rgba(45,204,139,.1);border:1px solid rgba(45,204,139,.5);color:#c6ffe8}
-    .msg.err{display:block;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.5);color:#ffd9d9}
+    small{color:var(--muted)}
   </style>
 </head>
 <body>
@@ -44,9 +42,11 @@
       <h1>Contact us</h1>
       <p style="color:var(--muted)">We typically respond within one business day. You can also email us at <a href="mailto:info@ludara.ai">info@ludara.ai</a>.</p>
 
-      <!-- Netlify forms -->
-      <form id="contact" name="contact" method="post" data-netlify="true" netlify-honeypot="bot-field">
+      <!-- Native Netlify Forms: success redirect to /contact-success.html -->
+      <form name="contact" method="post" data-netlify="true" netlify-honeypot="bot-field" action="/contact-success.html">
+        <!-- Required hidden input to match form name -->
         <input type="hidden" name="form-name" value="contact" />
+        <!-- Honeypot field -->
         <p hidden><label>Don’t fill this out: <input name="bot-field" /></label></p>
 
         <div class="row">
@@ -54,50 +54,3 @@
             <label for="name">Name</label>
             <input id="name" name="name" autocomplete="name" required />
           </div>
-          <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
-          </div>
-        </div>
-
-        <div>
-          <label for="subject">Subject</label>
-          <input id="subject" name="subject" required />
-        </div>
-
-        <div>
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="6" required></textarea>
-        </div>
-
-        <div class="actions">
-          <button id="send" type="submit">Send message</button>
-          <small style="color:var(--muted)">All fields required</small>
-        </div>
-        <div id="status" class="msg" role="status" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <footer class="card" style="text-align:center;color:var(--muted)">
-      © <span id="y"></span> Ludara, Inc.
-    </footer>
-  </div>
-
-  <script>
-    const form=document.getElementById('contact'); const btn=document.getElementById('send'); const s=document.getElementById('status');
-    function encode(d){return [...new FormData(d).entries()].map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&')}
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      s.className='msg'; s.textContent='';
-      btn.disabled=true;
-      try{
-        const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:encode(form)});
-        if(res.ok){form.reset(); s.className='msg ok'; s.textContent='Thanks! Your message has been sent.';}
-        else throw new Error('Network error');
-      }catch(err){s.className='msg err'; s.textContent='Sorry, something went wrong. Please try again.'}
-      finally{btn.disabled=false;}
-    });
-    document.getElementById('y').textContent=new Date().getFullYear();
-  </script>
-</body>
-</html>
