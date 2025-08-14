@@ -1,44 +1,16 @@
-<!doctype html> <html lang="en"> <head> <meta charset="utf-8" /> <title>Contact — Ludara</title> <meta name="description" content="Contact the Ludara team. We typically respond within one business day." /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <style> :root{ --bg:#0e0f12; --surface:#121419; --card:#16181d; --text:#e9eef6; --muted:#a9b3c7; --brand:#6aa3ff; --brand-2:#8fd3ff; --border:#23262d; --ring:rgba(106,163,255,.28) } *{box-sizing:border-box} html,body{ margin:0; background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial } a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline} .wrap{max-width:960px; margin:0 auto; padding:28px} .nav{display:flex; align-items:center; justify-content:space-between; padding:8px 0} .logo a{font-weight:800; letter-spacing:.2px; color:#fff} .menu{display:flex; gap:18px} .menu a{color:var(--muted)} .menu a.active, .menu a:hover{color:#fff} .hero{ background:linear-gradient(180deg,rgba(138,180,255,.06),transparent); border:1px solid var(--border); border-radius:16px; padding:22px; margin:14px 0 } .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin:14px 0} h1{margin:0 0 6px; font-size:clamp(26px,3.8vw,40px)} p.lead{color:var(--muted); margin:0} form{display:grid; gap:16px; margin-top:14px} .row{display:grid; gap:16px; grid-template-columns:1fr} @media(min-width:680px){.row{grid-template-columns:1fr 1fr}} label{font-weight:600; font-size:14px; margin-bottom:6px; display:block} input, textarea{ width:100%; padding:12px 14px; background:var(--surface); color:var(--text); border:1px solid var(--border); border-radius:12px; font-size:16px } input:focus, textarea:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 4px var(--ring)} textarea{resize:vertical; min-height:140px} .actions{display:flex; gap:12px; align-items:center; margin-top:2px; flex-wrap:wrap} .btn{ background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#04111f; border:none; padding:12px 18px; border-radius:12px; font-weight:800; cursor:pointer } .note{color:var(--muted); font-size:14px} .footer{border-top:1px solid var(--border); margin-top:28px; padding:16px 0; color:var(--muted); text-align:center} </style> </head> <body> <div class="wrap"> <nav class="nav"> <div class="logo"><a href="/">Ludara</a></div> <div class="menu"> <a href="/">Home</a> <a href="/product.html">Product</a> <a href="/about.html">About</a> <a class="active" href="/contact.html">Contact</a> </div> </nav>
-    
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8" /> <title>Contact — Ludara</title> <meta name="description" content="Contact the Ludara team via email. We typically respond within one business day." /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <style> :root{ --bg:#0e0f12; --surface:#121419; --card:#16181d; --text:#e9eef6; --muted:#a9b3c7; --brand:#6aa3ff; --brand-2:#8fd3ff; --border:#23262d; --ring:rgba(106,163,255,.28) } *{box-sizing:border-box} html,body{ margin:0; background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial } a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline} .wrap{max-width:960px; margin:0 auto; padding:28px} .nav{display:flex; align-items:center; justify-content:space-between; padding:8px 0} .logo a{font-weight:800; letter-spacing:.2px; color:#fff} .menu{display:flex; gap:18px} .menu a{color:var(--muted)} .menu a.active, .menu a:hover{color:#fff} .hero{ background:linear-gradient(180deg,rgba(138,180,255,.06),transparent); border:1px solid var(--border); border-radius:16px; padding:22px; margin:14px 0 } h1{margin:0 0 8px; font-size:clamp(26px,3.8vw,40px)} p.lead{color:var(--muted); margin:0} .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin:14px 0} .btn{ display:inline-block; background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#04111f; border:none; padding:12px 18px; border-radius:12px; font-weight:800; cursor:pointer } .footer{border-top:1px solid var(--border); margin-top:28px; padding:16px 0; color:var(--muted); text-align:center} .hint{color:var(--muted); margin-top:10px} </style> </head> <body> <div class="wrap"> <nav class="nav"> <div class="logo"><a href="/">Ludara</a></div> <div class="menu"> <a href="/">Home</a> <a href="/product.html">Product</a> <a href="/about.html">About</a> <a class="active" href="/contact.html">Contact</a> </div> </nav>
+text
 <section class="hero">
   <h1>Contact us</h1>
-  <p class="lead">We typically respond within one business day. Prefer email? Write to <a href="mailto:info@ludara.ai">info@ludara.ai</a>.</p>
+  <p class="lead">We typically respond within one business day.</p>
 </section>
 
 <section class="card">
-  <!-- Netlify Forms: native POST to root (/) to ensure detection -->
-  <form name="contact" method="post" data-netlify="true" netlify-honeypot="bot-field" action="/">
-    <!-- Required hidden input to match the form name -->
-    <input type="hidden" name="form-name" value="contact" />
-    <!-- Honeypot field (spam protection) -->
-    <p hidden><label>Don’t fill this out: <input name="bot-field" /></label></p>
-
-    <div class="row">
-      <div>
-        <label for="name">Name</label>
-        <input id="name" name="name" autocomplete="name" required />
-      </div>
-      <div>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
-      </div>
-    </div>
-
-    <div>
-      <label for="subject">Subject</label>
-      <input id="subject" name="subject" placeholder="How can we help?" required />
-    </div>
-
-    <div>
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
-    </div>
-
-    <div class="actions">
-      <button class="btn" type="submit">Send message</button>
-      <span class="note">All fields required</span>
-    </div>
-  </form>
+  <p>To get in touch, just email us. We’ll reply shortly.</p>
+  <p>
+    <a class="btn" href="mailto:info@ludara.ai?subject=Contact%20from%20ludara.ai">Email us at info@ludara.ai</a>
+  </p>
+  <p class="hint">Prefer a different client? Copy the address: <strong>info@ludara.ai</strong></p>
 </section>
 
 <footer class="footer">© <span id="y"></span> Ludara, Inc.</footer>
