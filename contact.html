@@ -54,3 +54,33 @@
             <label for="name">Name</label>
             <input id="name" name="name" autocomplete="name" required />
           </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+          </div>
+        </div>
+
+        <div>
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" required />
+        </div>
+
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Send message</button>
+          <small>All fields required</small>
+        </div>
+      </form>
+    </section>
+
+    <footer class="card" style="text-align:center;color:var(--muted)">
+      © <span id="y"></span> Ludara, Inc.
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
