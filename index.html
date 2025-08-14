@@ -1,19 +1,90 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-<meta charset="utf-8" /> 
-<meta name="viewport" content="width=device-width,initial-scale=1" /> 
-<title>Ludara</title> 
-<style> 
-body { font-family: system-ui, Arial, sans-serif; margin: 0; padding: 0; background:#0b1220; color:#fff; } .wrap { max-width: 900px; margin: 12vh auto; padding: 0 24px; } .card { background: #121a2b; border: 1px solid #1f2a44; border-radius: 12px; padding: 28px; } h1 { margin: 0 0 12px; font-size: 40px; } p { margin: 0 0 18px; color: #c9d3ea; } a.button { display: inline-block; background: #4b8cff; color:#fff; text-decoration:none; padding:12px 18px; border-radius:8px; } small { color:#9bb0d8; } </style> 
-</head> 
-<body> 
-<div class="wrap"> 
-<div class="card"> 
-<h1>Ludara</h1> 
-<p>We’re building something new for all of us to learn and enjoy.</p> 
-<a class="button" href="mailto:info@ludara.ai">Contact us</a> <p><small>© Ludara. All rights reserved.</small></p> 
-</div> 
-</div> 
-</body> 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Ludara — AI-native platform for better decisions</title>
+  <meta name="description" content="Ludara is an AI-native platform that helps teams make faster, higher-quality decisions with secure data workflows." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d;--ok:#2dcc8b;--err:#ff6b6b}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .logo a{font-weight:800;letter-spacing:.3px;color:#fff}
+    .menu{display:flex;gap:18px}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+    .cta{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#00142a;border:none;padding:10px 14px;border-radius:10px;font-weight:700}
+    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:36px 0}
+    .hero h1{font-size:clamp(28px,4.5vw,56px);line-height:1.1;margin:0}
+    .hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);margin:8px 0 20px}
+    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px}
+    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px}
+    .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <div class="logo"><a href="/">Ludara</a></div>
+      <div class="menu">
+        <a class="active" href="/">Home</a>
+        <a href="/product.html">Product</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <div class="pill">AI-native • Secure • Fast to adopt</div>
+        <h1>Make better decisions with Ludara’s AI-native platform</h1>
+        <p>Ludara connects your data, people, and processes to deliver accurate, explainable AI suggestions right where work happens. Built for teams that need speed without sacrificing security.</p>
+        <div class="actions">
+          <a class="cta" href="/product.html">Explore the Product</a>
+          <a class="pill" href="/contact.html">Talk to us</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="kicker">What we do</div>
+      <h2 style="margin:8px 0 6px">A platform, not a black box</h2>
+      <p style="color:var(--muted);margin:0 0 16px">Ludara brings together data pipelines, AI reasoning, and human approvals. Configure workflows in minutes, keep full audit trails, and ship decisions with confidence.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Secure data flows</h3>
+          <p style="color:var(--muted)">Connect to your sources safely with role-based access and built-in PII controls.</p>
+        </div>
+        <div class="card">
+          <h3>Explainable AI</h3>
+          <p style="color:var(--muted)">Every suggestion includes evidence and citations so teams can trust outcomes.</p>
+        </div>
+        <div class="card">
+          <h3>Human-in-the-loop</h3>
+          <p style="color:var(--muted)">Route decisions to the right people for review, approvals, and overrides.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:18px" class="card">
+      <div class="kicker">Who we serve</div>
+      <h2 style="margin:8px 0 6px">For operations, product, and data teams</h2>
+      <p style="color:var(--muted)">From triaging support tickets to prioritizing roadmap bets, Ludara accelerates everyday decisions across your org.</p>
+      <div class="actions" style="margin-top:12px">
+        <a class="pill" href="/about.html">Meet the team</a>
+        <a class="pill" href="/contact.html">Request a demo</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © <span id="y"></span> Ludara, Inc. All rights reserved.
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
 </html>

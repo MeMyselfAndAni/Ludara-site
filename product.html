@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Product — Ludara Platform</title>
+  <meta name="description" content="Learn how Ludara’s AI-native platform turns data into decisions with explainability and approvals." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .logo a{font-weight:800;color:#fff}
+    .menu{display:flex;gap:18px}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+    .hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:14px 0}
+    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:16px}
+    .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <div class="logo"><a href="/">Ludara</a></div>
+      <div class="menu">
+        <a href="/">Home</a>
+        <a class="active" href="/product.html">Product</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="pill">The Platform</div>
+      <h1>Ludara: from data to decisions</h1>
+      <p style="color:var(--muted)">A single platform to capture context, run explainable AI, and ship outcomes with human approvals.</p>
+    </section>
+
+    <section class="grid-3">
+      <div class="card">
+        <h3>Integrations</h3>
+        <p style="color:var(--muted)">Connect to data warehouses, product analytics, CRMs, and ticketing tools. Keep governance intact.</p>
+      </div>
+      <div class="card">
+        <h3>Reasoning</h3>
+        <p style="color:var(--muted)">Chain-of-thought style pipelines with evidence, citations, and guardrails. Choose your model.</p>
+      </div>
+      <div class="card">
+        <h3>Approvals</h3>
+        <p style="color:var(--muted)">Define who approves which decisions. Full audit trails for compliance and learning.</p>
+      </div>
+    </section>
+
+    <section class="hero">
+      <h2>Common use cases</h2>
+      <ul>
+        <li>Support triage and suggested replies with evidence</li>
+        <li>Feature prioritization and impact analysis</li>
+        <li>Sales opportunity scoring with next-best-action</li>
+      </ul>
+      <div style="margin-top:10px">
+        <a class="pill" href="/contact.html">Request a demo</a>
+      </div>
+    </section>
+
+    <footer class="hero" style="text-align:center;color:var(--muted)">
+      © <span id="y"></span> Ludara, Inc.
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>

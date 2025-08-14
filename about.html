@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>About — Ludara</title>
+  <meta name="description" content="Meet the Ludara team and learn our story." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .logo a{font-weight:800;color:#fff}
+    .menu{display:flex;gap:18px}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:14px 0}
+    .grid{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .member{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:16px}
+    .role{color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <div class="logo"><a href="/">Ludara</a></div>
+      <div class="menu">
+        <a href="/">Home</a>
+        <a href="/product.html">Product</a>
+        <a class="active" href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="section">
+      <h1>Our story</h1>
+      <p style="color:var(--muted)">We started Ludara to help teams make better, faster decisions with AI they can trust. After years building data products and ML systems, we saw organizations struggle to connect insights to action. Ludara bridges that gap with secure data flows, explainable reasoning, and human approvals—so the best decision is also the easiest one.</p>
+    </section>
+
+    <section class="section">
+      <h2>Team</h2>
+      <div class="grid">
+        <div class="member">
+          <h3>Maria Kovacs</h3>
+          <div class="role">CEO & Co‑founder</div>
+          <p style="color:var(--muted)">Product leader with 10+ years shipping B2B platforms. Obsessed with user outcomes and trustworthy AI.</p>
+        </div>
+        <div class="member">
+          <h3>Daniel Levi</h3>
+          <div class="role">CTO & Co‑founder</div>
+          <p style="color:var(--muted)">Built ML infra at scale. Loves clean APIs, reproducible pipelines, and coffee.</p>
+        </div>
+        <div class="member">
+          <h3>Sarah Amir</h3>
+          <div class="role">Head of Design</div>
+          <p style="color:var(--muted)">Designs human-centered tools that feel effortless, from first run to power use.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Values</h2>
+      <ul>
+        <li>Transparency over magic</li>
+        <li>Security as a default</li>
+        <li>Speed with responsibility</li>
+      </ul>
+    </section>
+
+    <footer class="section" style="text-align:center;color:var(--muted)">
+      © <span id="y"></span> Ludara, Inc.
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
