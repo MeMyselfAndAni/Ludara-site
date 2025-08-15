@@ -16,7 +16,7 @@
     .menu{display:flex;gap:18px}
     .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
     .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:42px 0}
-    .hero 
+    .hero h1{font-size:clamp(28px,4.5vw,56px);line-height:1.1;margin:0}
     .hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);margin:8px 0 0;max-width:60ch}
     .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px}
@@ -24,7 +24,6 @@
     .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
     .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
   </style>
-  <link rel="stylesheet" href="assets/styles/unified.css">
 </head>
 <body>
   <div class="wrap">
@@ -38,7 +37,7 @@
       </div>
     </nav>
 
-    <section class="hero">
+    <section class="card hero">
       <div>
         <div class="pill">Ludus → Ludara • Personalized • Gamified</div>
         <h1>Ludara.AI turns any content into a personalized, gamified experience.</h1>
