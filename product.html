@@ -22,6 +22,24 @@
     .card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:16px}
     ul.clean{margin:0;padding-left:18px}
     .footer{border-top:1px solid var(--border);margin-top:32px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+  
+    .icon-title { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    /* Icon default and category colors */
+.icon { 
+  width: 34px; 
+  height: 34px; 
+  color: #ccc; /* default light grey */
+  display:inline-block;
+}
+    @media (max-width: 799px) { .icon { width:28px; height:28px; } }
+
+  
+.icon {
+  width: 34px;
+  height: 34px;
+  color: var(--brand);
+}
+
   </style>
 </head>
 <body>
@@ -46,45 +64,86 @@
       <div class="kicker" id="usecases">Use cases</div>
       <div class="grid-3">
         <div class="card">
-          <h3>Travel Industry</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="9"/>
+  <path d="M3 12h18"/>
+  <path d="M12 3a12 12 0 0 1 0 18"/>
+  <path d="M12 3a12 12 0 0 0 0 18"/>
+</svg>
+              <h3>Travel Industry</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Crafting bespoke itineraries for small tour agencies, delivered as interactive, gamified journeys.</li>
-            <li>Enabling online booking platforms to stand out with on-demand, ultra-personalized travel experiences.</li>
+            <li>Bespoke gamified itineraries for tour agencies</li>
+            <li>Ultra-personalized trips on booking platforms</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Museums & Sites</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 10l9-5 9 5z"/>
+  <path d="M5 10v8M9 10v8M15 10v8M19 10v8"/>
+  <path d="M3 18h18M2 20h20"/>
+</svg>
+              <h3>Museums & Sites</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Powering museum audio-guides with dynamic “story modes” that adapt to each visitor’s profile.</li>
-            <li>Enriching engagement at national parks and UNESCO heritage sites through personalized exploration paths.</li>
+            <li>Adaptive “story modes” in audio-guides and websites</li>
+            <li>Personalized trails at heritage sites</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Education</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5A1.5 1.5 0 0 1 18.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/>
+  <path d="M4 6h13.5A2.5 2.5 0 0 1 20 8.5V3"/>
+</svg>
+              <h3>Education</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Transforming educational materials into interactive companion apps with adaptive storytelling.</li>
-            <li>Enhancing online learning platforms with culturally and linguistically tailored course content.</li>
+            <li>Transformation of educational materials into interactive personalized apps</li>
+            <li>Persona-tailored content for online learning platforms</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Genealogy Platforms</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="9" cy="8" r="3"/>
+  <path d="M2 19a7 7 0 0 1 14 0"/>
+  <circle cx="17" cy="9" r="2.5"/>
+  <path d="M21.5 19a5.5 5.5 0 0 0-7.5-4.9"/>
+</svg>
+              <h3>Genealogy Platforms</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Integrating MyHeritage-style personal storytelling into genealogy platforms for deeper user connection.</li>
-            <li>Designing travel packages that take visitors on immersive journeys to their ancestral locations.</li>
+            <li>Personal storytelling for ancestry platforms</li>
+            <li>Ancestral travel packages (virtual and real)</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Hotels • Resorts • Cruise Lines</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14l8-4 8 4-2 6H6l-2-6z"/>
+  <path d="M10 10V6h4v4"/>
+  <path d="M3 20c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/>
+</svg>
+              <h3>Hotels • Resorts • Cruise Lines</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Providing hotels and resorts with branded “personalized city guides” for their guests.”</li>
-            <li>Delivering custom on-shore excursion narratives for cruise lines, matching each traveler’s interests.</li>
+            <li>Branded city guides for hotels & resorts</li>
+            <li>Personalized on-shore excursions for cruises</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Wellness</h3>
+          <div class="icon-title">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 21s-6.5-4.8-8.5-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6c-2 3.2-8.5 8-8.5 8z"/>
+</svg>
+              <h3>Wellness</h3>
+          </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Guiding clinic and retreat participants through narrative-driven healing programs.</li>
-            <li>Creating mental-health storytelling apps that adapt to individual emotional journeys.</li>
+            <li>Narrative-driven personalized healing programs</li>
+            <li>Adaptive mental-health storytelling apps</li>
           </ul>
         </div>
       </div>
