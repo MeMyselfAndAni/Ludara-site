@@ -6,7 +6,7 @@
   <meta name="description" content="Meet the Ludara.AI team and learn our story." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d;--img-size:160px;--top-gap:16px}
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d;--img-size:128px;--top-gap:12px}
     *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
     a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
@@ -14,13 +14,13 @@
     .logo a{font-weight:800;color:#fff}
     .menu{display:flex;gap:18px}
     .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
-    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:14px 0}
-    .grid{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .member{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:16px}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin:8px 0}
+    .grid{display:grid;gap:12px;grid-template-columns:1fr} @media(min-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .member{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:12px}
     .role{color:var(--muted);font-size:14px}
   
     /* Responsive profile grid for Maria's card */
-    .profile-grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+    .profile-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
     .profile-grid .bio{grid-column:1 / -1;margin-top:8px}
     .profile-grid img{width:var(--img-size);height:var(--img-size);object-fit:cover;border-radius:50%;justify-self:end}
     @media(max-width:799px){
@@ -32,9 +32,14 @@
     /* Auto-sized spacer for consultants to align with start of bio */
     .consultants .start-align{height:calc(var(--img-size) + var(--top-gap))}
     @media(max-width:799px){
-      :root{--img-size:120px;}
+      :root{--img-size:100px;}
       .consultants .start-align{height:0}
     }
+
+  
+    /* Compact headings and section spacing */
+    h1, h2 { margin: 2px 0 8px; line-height: 1.2; }
+    h3 { margin: 0 0 6px; }
 
   </style>
 </head>
@@ -52,17 +57,13 @@
 
     <section class="section">
       <h1>Our story</h1>
-      <p style="color:var(--muted)">At Ludara.AI, we believe that every story can be a personal adventure. After years in R&D, creative technology, and business development, we saw a huge gap: museums, tour sites, educators, and publishers were delivering the same generic content to everyone—missing the chance to truly connect.
-
-We built Ludara.AI to change that. Our platform transforms any existing content into deeply personalized, gamified narratives—crafted for each visitor’s background, interests, and emotional triggers. Whether you’re walking through a historic city, exploring an art exhibit, or learning online, Ludara.AI turns static information into an interactive journey that feels made just for you.
-
-By blending AI-driven personalization with storytelling and game mechanics, we help cultural institutions, tourism providers, and educational platforms captivate audiences, drive repeat visits, and create lasting emotional bonds.</p>
+      <p style="color:var(--muted)">At Ludara.AI, we believe that every story can be a personal adventure. After years in R&D, creative technology, and business development, we saw a huge gap: museums, tour sites, educators, and publishers were delivering the same generic content to everyone—missing the chance to truly connect. We built Ludara.AI to change that. Our platform transforms any existing content into deeply personalized, gamified narratives—crafted for each visitor’s background, interests, and emotional triggers. Whether you’re walking through a historic city, exploring an art exhibit, or learning online, Ludara.AI turns static information into an interactive journey that feels made just for you. By blending AI-driven personalization with storytelling and game mechanics, we help cultural institutions, tourism providers, and educational platforms captivate audiences, drive repeat visits, and create lasting emotional bonds.</p>
     </section>
 
     <section class="section">
       <h2>Team</h2>
       <div class="grid">
-        <div class="member"><div class="profile-grid"><div><h3>Maria Lando</h3><div class="role">CEO & Founder</div></div><img src="IMG-20241124-WA0020.jpg" alt="Maria Lando portrait" /><p class="bio" style="color:var(--muted)">Maria Lando is a seasoned innovator with over 25 years of experience in R&D, product development, and business growth across industries including movie special effects, fashion technology, medical devices, and education. A lifelong learner and AI enthusiast, she has lived and worked in Russia, the United States, and Israel—bringing a global perspective to every project. At Ludara.AI, Maria leads the vision of transforming how people experience culture, travel, and learning through deeply personalized, gamified storytelling.</p></div></div>
+        <div class="member"><div class="profile-grid"><div><h3>Maria Lando</h3><div class="role">CEO & Founder</div></div><img src="./assets/Maria.jpg" alt="Maria Lando portrait" /><p class="bio" style="color:var(--muted)">Maria Lando is an innovator with 25+ years in R&D, product development, and business growth across movie special effects, fashion tech, medical devices, and education. A lifelong learner and AI enthusiast, she has lived in Russia, the U.S., and Israel, bringing a global perspective to Ludara.AI’s mission of transforming culture, travel, and learning through personalized storytelling.</p></div></div>
         <div class="member consultants">
           <h3>Consultants</h3>
           <div class="start-align"></div>
