@@ -107,3 +107,93 @@ a:hover {
   color: var(--muted);
   text-align: center;
 }
+/* Subtle reveal animation */
+[data-animate]{
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+[data-animate].in{
+  opacity:1;
+  transform:none;
+}
+@media (prefers-reduced-motion: reduce){
+  [data-animate]{opacity:1; transform:none}
+}
+/* --- homepage visual accents --- */
+.icon-band {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 14px;            /* tighter than before */
+}
+.band-icon {
+  width: 26px;
+  height: 26px;
+  stroke: var(--brand-2);      /* same family as product icons */
+  fill: none;
+  stroke-width: 1.8;
+}
+.band-icon circle,
+.band-icon path,
+.band-icon polyline,
+.band-icon line,
+.band-icon rect {
+  vector-effect: non-scaling-stroke;
+}
+.divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 28px auto;
+  width: min(620px, 70%);
+  position: relative;
+}
+.divider::before {
+  content: "";
+  height: 0;
+  border-top: 1px dotted var(--brand-2);
+  width: 100%;
+  opacity: .8;
+}
+.divider svg {
+  position: absolute;
+  background: var(--bg);
+  padding: 0 6px;
+  width: 18px;
+  height: 18px;
+  stroke: var(--brand-2);
+  fill: none;
+  stroke-width: 1.8;
+}
+/* Treasure-map divider (robust) */
+.divider{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:min(620px,70%);
+  margin:28px auto;
+  position:relative;
+}
+
+.divider::before{
+  content:"";
+  display:block;           /* <- ensures it draws */
+  height:0;                /* <- works with border-top */
+  width:100%;
+  border-top:1px dotted var(--brand-2, #8fd3ff);
+  opacity:.9;
+}
+
+.divider svg{
+  position:absolute;
+  width:18px;
+  height:18px;
+  stroke:var(--brand-2, #8fd3ff);
+  fill:none;
+  stroke-width:1.8;
+  background:var(--bg, #0e0f12);
+  padding:0 6px;           /* masks the dotted line behind the icon */
+  box-sizing:content-box;
+}
