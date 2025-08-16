@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Ludara.AI — Personalized, Gamified Storytelling</title>
+  <meta name="description" content="Ludara.AI turns any content into a personalized, gamified experience for culture, tourism, and education." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .logo a{font-weight:800;letter-spacing:.3px;color:#fff}
+    .menu{display:flex;gap:18px}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:42px 0}
+    .hero h1{font-size:clamp(28px,4.5vw,56px);line-height:1.1;margin:0}
+    .hero p{color:var(--muted);font-size:clamp(16px,2vw,20px);margin:8px 0 0;max-width:60ch}
+    .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px}
+    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+
+    /* --- tiny additions for this pass --- */
+    .icon-title{display:flex;align-items:center;gap:10px;margin:6px 0 4px}
+    .icon{width:26px;height:26px;color:var(--brand)}
+    .feature-note{margin:0;color:var(--muted)}
+    .btn{display:inline-block;background:var(--brand);color:#0b0c10;padding:10px 14px;border-radius:10px;font-weight:600;text-decoration:none}
+    .btn:hover{opacity:.9}
+
+    /* subtle, opt-in reveal animation */
+    [data-animate]{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    [data-animate].in{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <div class="logo"><a href="/">Ludara.AI</a></div>
+      <div class="menu">
+        <a class="active" href="/">Home</a>
+        <a href="/product.html">Product</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="card hero" data-animate>
+      <div>
+        <div class="pill">Ludus → Ludara • Personalized • Gamified</div>
+        <h1>Ludara.AI turns any content into a personalized, gamified experience.</h1>
+        <p>Built for culture, tourism, wellness, and education. From <em>ludus</em> — Latin for “play” and “learn” — we make every journey engaging and personal.</p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="value" data-animate>
+      <div class="kicker" id="value">Why Ludara</div>
+      <div class="grid-3" style="margin-top:4px">
+        <!-- Personalized -->
+        <div>
+          <h3 class="icon-title">
+            <!-- target icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            </svg>
+            <span>Personalized</span>
+          </h3>
+          <p class="feature-note">Narratives adapt to age, interests, culture, and language.</p>
+        </div>
+        <!-- Engaging -->
+        <div>
+          <h3 class="icon-title">
+            <!-- loop icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="3 7 7 7 7 3"/><path d="M7 7a7 7 0 0 1 12 5"/><polyline points="21 17 17 17 17 21"/><path d="M17 17a7 7 0 0 1-12-5"/>
+            </svg>
+            <span>Engaging</span>
+          </h3>
+          <p class="feature-note">Game loops—memory and progression—bring people back.</p>
+        </div>
+        <!-- Brand-safe -->
+        <div>
+          <h3 class="icon-title">
+            <!-- shield icon -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l7 3v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-3z"/>
+              <path d="M9.5 12.5l2 2 3-4"/>
+            </svg>
+            <span>Brand-safe</span>
+          </h3>
+          <p class="feature-note">Curated sources, tone control, and privacy-first design protect your audience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightweight CTA card (keeps your card layout) -->
+    <section class="card" data-animate style="text-align:center;margin-top:16px">
+      <h3 style="margin:4px 0 8px">We’re building the future of personalized storytelling.</h3>
+      <p class="muted" style="margin:0 0 12px">If you’re an investor, partner, or want to join us—let’s talk.</p>
+      <a class="btn" href="/contact.html">Contact us</a>
+    </section>
+
+    <footer class="footer">© <span id="y"></span> Ludara.AI</footer>
+  </div>
+
+  <script>
+    // keep your year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // subtle reveal on scroll (opt-in via [data-animate])
+    (function(){
+      const els = document.querySelectorAll('[data-animate]');
+      if(!('IntersectionObserver' in window)) { els.forEach(el=>el.classList.add('in')); return; }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:0.12});
+      els.forEach(el=>io.observe(el));
+    })();
+  </script>
+</body>
+</html>
