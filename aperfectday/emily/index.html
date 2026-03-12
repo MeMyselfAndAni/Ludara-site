@@ -293,19 +293,16 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
 }
 .chevron { color: var(--text3); font-size: 0.8rem; flex-shrink: 0; }
 
-/* ── DETAIL HEADER — compact image beside title ── */
+/* ── DETAIL SHEET — full screen on mobile ── */
 .detail-sheet {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   z-index: 400;
   background: var(--surface);
-  border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   transform: translateY(100%);
   transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-  max-height: 85dvh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.13);
   overflow: hidden;
 }
 .detail-sheet.open { transform: translateY(0); }
@@ -354,18 +351,19 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
   z-index: 4;
 }
 .detail-img-box {
-  width: 100px;
-  height: 100px;
-  border-radius: 12px;
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--surface3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   position: relative;
-  margin-top: 32px;
+  margin-top: 36px;
+  align-self: flex-start;
 }
 .detail-img-box img {
   width: 100%; height: 100%;
@@ -382,9 +380,10 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
 .detail-title-col {
   flex: 1;
   min-width: 0;
-  padding-top: 34px;
-  padding-right: 32px;
+  padding-top: 36px;
+  padding-right: 36px;
 }
+.detail-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; line-height: 1.2; color: var(--text); margin-bottom: 4px; }
 .detail-cat {
   display: flex;
   align-items: center;
@@ -397,13 +396,6 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
   color: var(--text3);
 }
 .detail-cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.detail-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  line-height: 1.2;
-  color: var(--text);
-  margin-bottom: 4px;
-}
 .detail-type {
   font-size: 0.68rem;
   color: var(--text2);
@@ -533,10 +525,12 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
   .filter-bar { left: 300px; }
 
   .detail-sheet {
-    left: 300px; right: 0;
-    top: auto; bottom: 0;
-    max-height: 55dvh;
+    position: absolute;
+    top: auto;
+    left: 300px; right: 0; bottom: 0;
+    max-height: 60dvh;
     border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.13);
   }
 
   header { left: 300px; }
@@ -575,9 +569,14 @@ h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
 <!-- Header -->
 <header>
   <div class="header-title">
-    <div class="header-byline">Emily Lush · Wander-Lush.org</div>
+    <a href="https://wander-lush.org" target="_blank" style="pointer-events:all;display:block;text-decoration:none;">
+      <img src="https://wander-lush.org/wp-content/uploads/2020/01/wander-lush-logo.png"
+           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block';"
+           alt="Wander-Lush" style="height:28px;width:auto;display:block;">
+      <span id="logo-fallback" style="display:none;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;font-style:italic;color:var(--terracotta);">Wander-Lush</span>
+    </a>
     <h1><em>Tbilisi</em> Guide</h1>
-    <div class="header-sub">35 curated places · Georgia</div>
+    <div class="header-sub">35 curated places · by Emily Lush</div>
   </div>
   <a class="header-btn" href="https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/" target="_blank">Blog ↗</a>
 </header>
