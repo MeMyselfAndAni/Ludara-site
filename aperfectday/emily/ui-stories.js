@@ -12,136 +12,138 @@ const CL_STORIES = {
   church:'Church', market:'Market', soviet:'Soviet Heritage', nature:'Nature'
 };
 
-let storyPlaces = [], storyIdx = 0, storyTimer = null, storyFillTimer = null;
-const STORY_DURATION = 6000; // ms per slide
+// Neighbourhood map bounds for zoom-to
+const NBHD_BOUNDS = {
+  'old-town':   { lat:41.6895, lng:44.8100, zoom:16 },
+  'sololaki':   { lat:41.6920, lng:44.8040, zoom:16 },
+  'avlabari':   { lat:41.6920, lng:44.8190, zoom:16 },
+  'vera':       { lat:41.6990, lng:44.7960, zoom:15 },
+  'chugureti':  { lat:41.6890, lng:44.7990, zoom:15 },
+  'mtatsminda': { lat:41.6940, lng:44.7960, zoom:15 },
+  'vake':       { lat:41.7040, lng:44.7720, zoom:14 },
+};
+
+let storyPlaces = [], storyIdx = 0;
 
 function openStories(nbhd){
   storyPlaces = PLACES.filter(p => p.nbhd === nbhd);
-  if(!storyPlaces.length){ alert('No places tagged for this neighbourhood yet!'); return; }
+  if(!storyPlaces.length){ alert('No places for this neighbourhood yet!'); return; }
   storyIdx = 0;
-  document.getElementById('stories-overlay').classList.add('open');
+
+  // Zoom map to neighbourhood
+  const b = NBHD_BOUNDS[nbhd];
+  if(b && map) { map.setCenter({lat:b.lat, lng:b.lng}); map.setZoom(b.zoom); }
+
   const meta = NBHD_META[nbhd] || { label: nbhd, icon: '📍' };
-  document.getElementById('stories-nbhd-name').textContent = meta.label;
-  document.getElementById('stories-icon').textContent = meta.icon;
-  buildProgressBars();
+  document.getElementById('nbhd-card-icon').textContent = meta.icon;
+  document.getElementById('nbhd-card-label').textContent = meta.label;
+
+  document.getElementById('nbhd-cards').classList.add('open');
+  document.getElementById('nbhd-dim').classList.add('open');
+
   showStorySlide(0);
 }
 
-function buildProgressBars(){
-  const bar = document.getElementById('stories-progress');
-  bar.innerHTML = storyPlaces.map((_,i) =>
-    `<div class="stories-seg"><div class="stories-seg-fill" id="sfill-${i}"></div></div>`
-  ).join('');
-}
+// Keep these stubs so old HTML references don't break
+function buildProgressBars(){}
+let storyTimer = null, storyFillTimer = null;
+const STORY_DURATION = 6000;
 
 function showStorySlide(idx){
-  clearTimeout(storyTimer);
-  cancelAnimationFrame(storyFillTimer);
   storyIdx = idx;
   const p = storyPlaces[idx];
-  if(!p) { closeStories(); return; }
+  if(!p){ closeStories(); return; }
 
-  // Update progress bars
-  storyPlaces.forEach((_,i) => {
-    const fill = document.getElementById('sfill-'+i);
-    if(!fill) return;
-    fill.style.transition = 'none';
-    if(i < idx)       { fill.style.width = '100%'; }
-    else if(i === idx){ fill.style.width = '0%'; }
-    else              { fill.style.width = '0%'; }
-  });
+  // Pan map to this place
+  if(map) map.panTo({lat: p.lat, lng: p.lng});
 
-  // Animate current bar
-  const activeFill = document.getElementById('sfill-'+idx);
-  if(activeFill){
-    requestAnimationFrame(() => {
-      activeFill.style.transition = `width ${STORY_DURATION}ms linear`;
-      activeFill.style.width = '100%';
-    });
-  }
+  // Badge, name, note
+  document.getElementById('card-badge').textContent = p.emoji + '  ' + (CL_STORIES[p.cat] || p.cat);
+  document.getElementById('card-name').textContent = p.name;
+  document.getElementById('card-note').textContent = p.note || '';
+  document.getElementById('card-counter').textContent = (idx + 1) + ' / ' + storyPlaces.length;
+  document.getElementById('card-prev').disabled = (idx === 0);
+  document.getElementById('card-next').disabled = (idx === storyPlaces.length - 1);
 
-  // Background — color layer shows instantly, photo fades in on top
-  const bgColor = document.getElementById('stories-bg-color');
-  const bg = document.getElementById('stories-bg');
-  const colors = {
-    landmark:'135deg,#1a3a5c 0%,#2a5298 100%',
-    food:'135deg,#7a3020 0%,#c06040 100%',
-    cafe:'135deg,#1a3a2a 0%,#2a7a4a 100%',
-    church:'135deg,#1a1a5c 0%,#3a3a9c 100%',
-    market:'135deg,#5c3a1a 0%,#9c6a3a 100%',
-    soviet:'135deg,#3a1a5c 0%,#6a3a9c 100%',
-    nature:'135deg,#1a4a2a 0%,#3a8a4a 100%',
+  // Photo: gradient placeholder first, then fade photo in
+  const placeholder = document.getElementById('card-placeholder');
+  const img = document.getElementById('card-img');
+  const gradients = {
+    landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
+    food:    'linear-gradient(135deg,#7a3020,#c06040)',
+    cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
+    church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
+    market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
+    soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
+    nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
   };
-  // Always show gradient immediately
-  bgColor.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
-  bg.classList.remove('loaded');
-  bg.style.backgroundImage = '';
-  const loadImg = (url) => {
-    const img = new Image();
+  placeholder.style.background = gradients[p.cat] || gradients.landmark;
+  placeholder.style.opacity = '1';
+  placeholder.textContent = p.emoji;
+  img.classList.remove('loaded');
+  img.src = '';
+
+  const captureIdx = idx;
+  const loadPhoto = (url) => {
+    if(storyIdx !== captureIdx) return;
     img.onload = () => {
-      if(storyIdx === idx){
-        bg.style.backgroundImage = `url(${url})`;
-        bg.classList.add('loaded');
+      if(storyIdx === captureIdx){
+        img.classList.add('loaded');
+        placeholder.style.opacity = '0';
       }
     };
     img.src = url;
   };
+
   if(photoCache[p.id] && photoCache[p.id].url){
-    loadImg(photoCache[p.id].url);
+    loadPhoto(photoCache[p.id].url);
   } else {
     fetchPhoto(p, result => {
-      if(result && storyIdx === idx) loadImg(result.url);
+      if(result && result.url) loadPhoto(result.url);
     });
   }
-
-  // Content
-  document.getElementById('stories-badge').innerHTML =
-    `<span>${p.emoji}</span> ${CL_STORIES[p.cat]||p.cat}`;
-  document.getElementById('stories-name').textContent = p.name;
-  document.getElementById('stories-note').textContent = p.note || '';
-  document.getElementById('stories-tip').textContent = p.tip ? '💡 ' + p.tip : '';
-  document.getElementById('stories-count').textContent = `${idx+1} / ${storyPlaces.length}`;
-
-  // Auto-advance
-  storyTimer = setTimeout(() => storiesNext(), STORY_DURATION);
 }
 
 function storiesNext(){
-  if(storyIdx < storyPlaces.length - 1){
-    showStorySlide(storyIdx + 1);
-  } else {
-    closeStories();
-  }
+  if(storyIdx < storyPlaces.length - 1) showStorySlide(storyIdx + 1);
 }
 function storiesPrev(){
   if(storyIdx > 0) showStorySlide(storyIdx - 1);
 }
 function closeStories(){
-  clearTimeout(storyTimer);
-  document.getElementById('stories-overlay').classList.remove('open');
+  document.getElementById('nbhd-cards').classList.remove('open');
+  document.getElementById('nbhd-dim').classList.remove('open');
+  storyPlaces = []; storyIdx = 0;
 }
 function storiesOpenDetail(){
   const p = storyPlaces[storyIdx];
   if(!p) return;
   closeStories();
   openDetail(p.id);
-  // On mobile, open the detail sheet
-  setTimeout(()=>{
-    if(window.innerWidth < 768){
+  if(window.innerWidth < 768){
+    setTimeout(()=>{
       document.getElementById('detail-sheet').classList.add('open');
       document.getElementById('sheet').classList.remove('open');
-    }
-  }, 100);
+    }, 100);
+  }
 }
 function storiesMaps(){
   const p = storyPlaces[storyIdx];
   if(p) window.open(`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,'_blank');
 }
 
-// Swipe down to close stories
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if(!document.getElementById('nbhd-cards').classList.contains('open')) return;
+  if(e.key === 'ArrowRight') storiesNext();
+  if(e.key === 'ArrowLeft')  storiesPrev();
+  if(e.key === 'Escape')     closeStories();
+});
+
+// Swipe down on card to close
 (function(){
   let startY = 0;
-  const el = document.getElementById('stories-overlay');
+  const el = document.getElementById('nbhd-cards');
   if(!el) return;
   el.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
   el.addEventListener('touchend', e => {
