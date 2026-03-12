@@ -1,7 +1,49 @@
 // ── LIST ──────────────────────────────────────────────────────
 function renderList(){
   const el=document.getElementById('places-list');
-  let filtered=AF==='all'?PLACES:PLACES.filter(p=>p.cat===AF);
+  let filtered;
+
+  // Saved filter mode — show only favourites, in route order
+  if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+    filtered = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
+    document.getElementById('sheet-title').textContent = `♥ ${filtered.length} Saved`;
+    document.getElementById('list-badge').textContent = filtered.length;
+
+    // Show/update the plan-trip banner at top of sheet
+    let banner = document.getElementById('saved-mode-banner');
+    if(!banner){
+      const sheet = document.getElementById('sheet');
+      banner = document.createElement('div');
+      banner.id = 'saved-mode-banner';
+      banner.className = 'saved-mode-banner';
+      banner.innerHTML = `<span>Walking route through your saved places</span>
+        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Full itinerary</button>`;
+      // Insert after sheet-header
+      const header = sheet.querySelector('.sheet-header');
+      if(header) header.insertAdjacentElement('afterend', banner);
+    }
+
+    el.innerHTML = filtered.length === 0
+      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
+      : filtered.map((p,i) => `
+        <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
+          <div class="trip-stop-num" style="margin:0 10px 0 4px;flex-shrink:0">${i+1}</div>
+          <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
+          <div class="place-info">
+            <div class="place-name">${p.name}</div>
+            <div class="place-type">${CL[p.cat]}</div>
+            <div class="place-addr">${p.address}</div>
+          </div>
+          <span class="chevron">›</span>
+        </div>`).join('');
+    return;
+  }
+
+  // Remove saved banner if present
+  const banner = document.getElementById('saved-mode-banner');
+  if(banner) banner.remove();
+
+  filtered=AF==='all'?PLACES:PLACES.filter(p=>p.cat===AF);
   if(openNowActive) filtered=filtered.filter(p=>isOpenNow(p));
   const count=filtered.length;
   document.getElementById('sheet-title').textContent=`${count} Places`;
@@ -270,11 +312,25 @@ function isOpenNow(place){
 }
 
 function applyFilters(){
+  const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+  const savedIds = isSaved ? (typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces().map(p=>p.id) : []) : null;
+
   PLACES.forEach(p => {
-    const catOk = AF === 'all' || p.cat === AF;
-    const openOk = !openNowActive || isOpenNow(p);
-    if(markers[p.id]) markers[p.id].setVisible(catOk && openOk);
+    let visible;
+    if(isSaved){
+      visible = savedIds.includes(p.id);
+    } else {
+      const catOk = AF === 'all' || p.cat === AF;
+      const openOk = !openNowActive || isOpenNow(p);
+      visible = catOk && openOk;
+    }
+    if(markers[p.id]) markers[p.id].setVisible(visible);
   });
+
+  // Draw or clear route
+  if(isSaved && typeof drawSavedRoute === 'function') drawSavedRoute();
+  else if(!isSaved && typeof clearTripRoute === 'function') clearTripRoute();
+
   renderList();
 }
 function applyOpenNowFilter(){ applyFilters(); }

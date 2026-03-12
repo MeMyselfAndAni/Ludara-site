@@ -55,6 +55,7 @@
   <button class="pill" onclick="fc(this,'soviet')"><span class="dot" style="background:#9080a8"></span>Soviet</button>
   <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#50906a"></span>Nature</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
 <!-- Map -->
@@ -136,17 +137,7 @@
 
 <div id="pin-pulse"></div>
 
-<!-- Favourites panel -->
-<div id="fav-panel">
-  <div class="fav-panel-header">
-    <div class="fav-panel-title">♡ My Favourites</div>
-    <button class="fav-panel-close" onclick="toggleFavPanel()">✕</button>
-  </div>
-  <div id="fav-list" class="fav-list"></div>
-  <div class="fav-panel-footer">
-    <button class="fav-trip-btn" id="fav-trip-btn" onclick="planFavTrip()">🗺 Plan a trip with these</button>
-  </div>
-</div>
+<!-- fav-panel removed — Saved filter replaces it -->
 
 <!-- Trip plan overlay -->
 <div id="trip-overlay">
@@ -181,11 +172,7 @@
   </div>
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">64 Places</span>
-    <button class="fav-panel-btn" id="fav-panel-btn" onclick="toggleFavPanel()" title="My Favourites">
-      <span id="fav-panel-icon">♡</span>
-      <span class="fav-btn-label">Saved</span>
-      <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    </button>
+    <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
