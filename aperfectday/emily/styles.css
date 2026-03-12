@@ -643,8 +643,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* Neighbourhood card: centre in map area (right of 300px sidebar) */
   #nbhd-cards {
     left: calc(300px + (100vw - 300px) / 2);
-    bottom: 80px; /* above nbhd bar */
-    width: min(460px, calc(100vw - 340px));
+    bottom: 110px;
+    width: min(520px, calc(100vw - 340px));
   }
 }
 
@@ -869,14 +869,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 #nbhd-cards {
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1500;
-  width: min(400px, calc(100vw - 32px));
+  width: min(500px, calc(100vw - 24px));
   display: none;
   flex-direction: column;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.28));
+  filter: drop-shadow(0 12px 40px rgba(0,0,0,0.32));
 }
 #nbhd-cards.open { display: flex; }
 
@@ -915,7 +915,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .nbhd-card-img-wrap {
   width: 100%;
-  height: 289px;   /* 170 × 1.7 ≈ 289px */
+  height: 340px;
   overflow: hidden;
   position: relative;
 }
@@ -1224,41 +1224,53 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .fav-panel-btn {
   position: relative;
   background: transparent;
-  border: none;
-  font-size: 1.2rem;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  font-size: 1.1rem;
   cursor: pointer;
-  padding: 4px 6px;
+  padding: 5px 10px;
   color: var(--text);
   line-height: 1;
-  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: border-color 0.15s, background 0.15s;
+}
+.fav-panel-btn:hover { border-color: #e00040; background: #fff0f3; }
+.fav-panel-btn .fav-btn-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 0.02em;
 }
 .fav-count-badge {
-  position: absolute;
-  top: -2px; right: -2px;
-  background: var(--accent);
+  background: #e00040;
   color: white;
-  font-size: 0.55rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  width: 14px; height: 14px;
-  border-radius: 50%;
+  min-width: 18px; height: 18px;
+  border-radius: 9px;
+  padding: 0 4px;
   display: flex; align-items: center; justify-content: center;
 }
 
 /* Fav button inside detail panel */
 .detail-fav-btn {
-  position: absolute;
-  top: 10px; right: 48px;
+  /* Inline next to title — not absolute any more */
   background: transparent;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   cursor: pointer;
-  color: var(--text3);
+  color: #ccc;
   line-height: 1;
-  transition: color 0.15s, transform 0.15s;
-  z-index: 10;
+  transition: color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  padding: 0 2px;
+  touch-action: manipulation;
 }
-.detail-fav-btn.faved { color: #e05; }
-.detail-fav-btn:hover { transform: scale(1.2); }
+.detail-fav-btn.faved { color: #e00040; }
+.detail-fav-btn:active { transform: scale(1.3); }
 
 /* ── TRIP OVERLAY ────────────────────────────────────────────── */
 #trip-overlay {
@@ -1375,4 +1387,30 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif;
 }
 .trip-maps-btn:hover { background: #152e4a; }
+
+/* ── DETAIL — title + heart inline ─────────────────────────── */
+.detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 2px 0 2px;
+}
+.detail-title-row .detail-title {
+  flex: 1;
+  margin: 0; /* override any standalone margin */
+}
+
+/* ── TRIP SUMMARY BAR ───────────────────────────────────────── */
+.trip-summary {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text2);
+}
+.trip-stop { cursor: pointer; }
+.trip-stop:hover { background: var(--surface2); border-radius: 8px; }
 

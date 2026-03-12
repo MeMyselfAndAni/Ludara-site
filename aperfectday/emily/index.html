@@ -183,6 +183,7 @@
     <span class="sheet-title" id="sheet-title">64 Places</span>
     <button class="fav-panel-btn" id="fav-panel-btn" onclick="toggleFavPanel()" title="My Favourites">
       <span id="fav-panel-icon">♡</span>
+      <span class="fav-btn-label">Saved</span>
       <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     </button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
@@ -194,7 +195,6 @@
 <div class="detail-sheet" id="detail-sheet">
   <div class="detail-header-row">
     <button class="detail-back-btn" onclick="backToList()">‹ List</button>
-    <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
     <button class="detail-close-btn" onclick="closeDetail()">✕</button>
     <div class="detail-img-box" id="detail-img-box">
       <span id="detail-emoji">📍</span>
@@ -202,7 +202,10 @@
     </div>
     <div class="detail-title-col">
       <div class="detail-cat" id="detail-cat"></div>
-      <div class="detail-title" id="detail-title"></div>
+      <div class="detail-title-row">
+        <div class="detail-title" id="detail-title"></div>
+        <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
+      </div>
       <div class="detail-type" id="detail-type"></div>
       <div class="detail-quick-meta" id="detail-quick-meta"></div>
     </div>
