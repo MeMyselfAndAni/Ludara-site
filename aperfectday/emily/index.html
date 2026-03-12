@@ -503,15 +503,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 @media (max-width: 767px) {
   #map { bottom: 56px !important; }
   #nbhd-bar {
-    left: 0;
-    right: auto;
-    width: 300px;
-    bottom: 0;
-    padding: 12px 12px 16px;
-    background: white;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
-    gap: 8px;
+    left: 0; right: 0;
+    bottom: 56px;
+    padding: 8px 12px 10px;
+    background: linear-gradient(to top, rgba(255,255,255,0.98) 70%, rgba(255,255,255,0) 100%);
+    flex-wrap: nowrap;
+    overflow-x: auto;
   }
 }
 
@@ -540,12 +537,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .filter-bar { left: 300px; }
 
   .detail-sheet {
-    position: absolute;
+    position: fixed;
     top: auto;
     left: 300px; right: 0; bottom: 0;
     max-height: 52vh;
     border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
     box-shadow: 0 -4px 24px rgba(0,0,0,0.13);
+    z-index: 500;
   }
   /* Desktop detail: horizontal layout, buttons inline not full-width */
   .detail-sheet .detail-header-row {
@@ -593,6 +591,27 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
 
   header { left: 300px; }
+
+  /* Neighbourhood bar sits at bottom of sidebar */
+  #nbhd-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 300px;
+    padding: 10px 12px 14px;
+    background: white;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 310;
+    overflow-x: visible;
+  }
+  #nbhd-label { display: none; }
+
+  /* Smaller bubbles in desktop sidebar */
+  .nbhd-ring { width: 46px; height: 46px; }
+  .nbhd-ring-inner { font-size: 1.1rem; }
+  .nbhd-label { font-size: 0.58rem; }
+  .nbhd-bubble { gap: 3px; }
 }
 
 .loading {
@@ -744,10 +763,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   bottom: 56px; left: 0; right: 0;
   z-index: 350;
   display: flex;
+  flex-wrap: nowrap;
   gap: 10px;
   padding: 10px 14px 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   background: linear-gradient(to top, rgba(255,255,255,0.98) 60%, rgba(255,255,255,0) 100%);
 }
@@ -755,6 +776,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 .nbhd-bubble {
   flex-shrink: 0;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -808,8 +830,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.45);
-  transition: background-image 0.3s;
+  filter: brightness(0.7);
+  transition: background-image 0.4s;
 }
 .stories-gradient {
   position: absolute;
@@ -1676,29 +1698,27 @@ function showStorySlide(idx){
     });
   }
 
-  // Background — use photo cache if available, else gradient
+  // Background — always set gradient first so screen is never black
   const bg = document.getElementById('stories-bg');
+  const colors = {
+    landmark:'135deg,#1a3a5c 0%,#2a5298 100%',
+    food:'135deg,#7a3020 0%,#c06040 100%',
+    cafe:'135deg,#1a3a2a 0%,#2a7a4a 100%',
+    church:'135deg,#1a1a5c 0%,#3a3a9c 100%',
+    market:'135deg,#5c3a1a 0%,#9c6a3a 100%',
+    soviet:'135deg,#3a1a5c 0%,#6a3a9c 100%',
+    nature:'135deg,#1a4a2a 0%,#3a8a4a 100%',
+  };
+  bg.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
   bg.style.backgroundImage = '';
-  if(photoCache[p.id]){
-    bg.style.backgroundImage = `url(${photoCache[p.id]})`;
+  if(photoCache[p.id] && photoCache[p.id].url){
+    bg.style.backgroundImage = `url(${photoCache[p.id].url})`;
   } else {
-    // Trigger photo load
-    getPhoto(p, url => {
-      if(url && storyIdx === idx){
-        bg.style.backgroundImage = `url(${url})`;
+    fetchPhoto(p, result => {
+      if(result && storyIdx === idx){
+        bg.style.backgroundImage = `url(${result.url})`;
       }
     });
-    // Colour gradient fallback
-    const colors = {
-      landmark:'135deg,#1a3a5c,#2a5298',
-      food:'135deg,#7a3020,#c06040',
-      cafe:'135deg,#2a4a2a,#4a7a4a',
-      church:'135deg,#2a2a5c,#4a4a9c',
-      market:'135deg,#5c3a1a,#9c6a3a',
-      soviet:'135deg,#3a1a5c,#6a3a9c',
-      nature:'135deg,#1a4a2a,#3a8a4a',
-    };
-    bg.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
   }
 
   // Content
