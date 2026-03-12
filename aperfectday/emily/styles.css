@@ -499,13 +499,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     position: fixed;
     left: 0; right: 0;
     bottom: 64px; /* above the list-toggle button */
-    padding: 8px 12px 6px;
+    padding: 6px 10px 8px;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid rgba(0,0,0,0.07);
     flex-wrap: nowrap;
-    overflow-x: auto;
+    overflow: visible;
     z-index: 410;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   }
@@ -605,15 +605,16 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   header { left: 300px; }
 
-  /* Neighbourhood bar floats over map bottom-left, draggable */
+  /* Neighbourhood bar floats over map bottom, draggable, always horizontal */
   #nbhd-bar {
     position: fixed;
     bottom: 24px;
     left: 316px; /* 300px sidebar + 16px gap */
-    right: auto;
+    right: 16px;
     width: auto;
-    max-width: calc(100vw - 340px);
-    padding: 8px 14px 10px;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 10px 8px;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -621,8 +622,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     border-radius: 18px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.14);
     flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 8px;
+    overflow: visible;
+    gap: 0;
     z-index: 450;
   }
   #nbhd-label { display: none; }
@@ -642,7 +643,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* Neighbourhood card: centre in map area (right of 300px sidebar) */
   #nbhd-cards {
     left: calc(300px + (100vw - 300px) / 2);
-    bottom: 32px;
+    bottom: 80px; /* above nbhd bar */
+    width: min(460px, calc(100vw - 340px));
   }
 }
 
@@ -796,16 +798,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   bottom: 56px; left: 0; right: 0;
   z-index: 400;
   display: flex;
+  flex-direction: row;
+  align-items: center;
   flex-wrap: nowrap;
-  gap: 10px;
-  padding: 10px 14px 12px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  gap: 0;
+  padding: 6px 10px 8px;
+  overflow: visible;
   background: linear-gradient(to top, rgba(255,255,255,0.98) 60%, rgba(255,255,255,0) 100%);
 }
-#nbhd-bar::-webkit-scrollbar { display: none; }
 
 .nbhd-bubble {
   flex-shrink: 0;
@@ -915,7 +915,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .nbhd-card-img-wrap {
   width: 100%;
-  height: 170px;
+  height: 289px;   /* 170 × 1.7 ≈ 289px */
   overflow: hidden;
   position: relative;
 }
@@ -995,23 +995,31 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-weight: 600;
   white-space: nowrap;
 }
-.nbhd-card-nav {
-  display: flex;
-  gap: 6px;
-}
-.nbhd-card-nav button {
-  width: 32px; height: 32px;
+/* Nav arrows overlaid on image — old footer nav hidden */
+.nbhd-card-nav { display: none; }
+
+.nbhd-img-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px; height: 36px;
   border-radius: 50%;
-  border: 1.5px solid #ddd;
-  background: white;
-  font-size: 0.9rem;
+  border: none;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(4px);
+  font-size: 1rem;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.15s;
-  color: var(--text);
+  color: var(--accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+  touch-action: manipulation;
 }
-.nbhd-card-nav button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-.nbhd-card-nav button:disabled { opacity: 0.3; cursor: default; }
+.nbhd-img-nav:hover  { background: white; transform: translateY(-50%) scale(1.1); }
+.nbhd-img-nav:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+.nbhd-img-nav.prev { left: 10px; }
+.nbhd-img-nav.next { right: 10px; }
 
 @keyframes cardSlideUp {
   from { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.97); }
@@ -1047,26 +1055,54 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── NEIGHBOURHOOD BAR DRAG HANDLE ──────────────────────────── */
 .nbhd-bar-handle {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 4px 6px;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px 6px 4px;
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+  flex: 0 0 auto;          /* fixed width, never grows */
+  width: 28px;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  margin-right: 6px;
+  touch-action: none;      /* needed so touchmove fires */
 }
 .nbhd-bar-handle:active { cursor: grabbing; }
 .nbhd-bar-label {
-  font-size: 0.6rem;
+  font-size: 0.48rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--text3);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  white-space: nowrap;
 }
 .nbhd-handle-grip {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: var(--text3);
   line-height: 1;
+  letter-spacing: -1px;
 }
+
+/* Bubbles row fills remaining width and scrolls horizontally */
+.nbhd-bubbles-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 2px 0;
+}
+.nbhd-bubbles-row::-webkit-scrollbar { display: none; }
 
 /* ── FAVOURITES PANEL ────────────────────────────────────────── */
 #fav-panel {

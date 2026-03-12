@@ -113,6 +113,8 @@
     <div class="nbhd-card-img-wrap">
       <div class="nbhd-card-img-placeholder" id="card-placeholder"></div>
       <img class="nbhd-card-img" id="card-img" alt="">
+      <button class="nbhd-img-nav prev" id="card-prev" onclick="storiesPrev()" ontouchend="storiesPrev()">‹</button>
+      <button class="nbhd-img-nav next" id="card-next" onclick="storiesNext()" ontouchend="storiesNext()">›</button>
     </div>
     <div class="nbhd-card-body">
       <div class="nbhd-card-badge" id="card-badge"></div>
@@ -123,13 +125,7 @@
           <button class="nbhd-card-btn primary" onclick="storiesOpenDetail()">Full details →</button>
           <button class="nbhd-card-btn" onclick="storiesMaps()">📍 Maps</button>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="nbhd-card-counter" id="card-counter"></span>
-          <div class="nbhd-card-nav">
-            <button id="card-prev" onclick="storiesPrev()">←</button>
-            <button id="card-next" onclick="storiesNext()">→</button>
-          </div>
-        </div>
+        <span class="nbhd-card-counter" id="card-counter"></span>
       </div>
     </div>
   </div>
