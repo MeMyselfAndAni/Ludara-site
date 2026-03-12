@@ -8,10 +8,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --bg: #e8f0f9;
+  --bg: #f5edd8;
   --surface: #ffffff;
-  --surface2: #ddeaf7;
-  --surface3: #c8daf0;
+  --surface2: #ede5c8;
+  --surface3: #e0d5b0;
   --border: #ddd5b0;
   --text: #0f1a2e;
   --text2: #4a5568;
@@ -502,6 +502,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
   #map { bottom: 56px !important; }
+  #nbhd-bar { bottom: 56px; }
 }
 
 /* ── DESKTOP LAYOUT (≥768px) ── */
@@ -651,7 +652,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: var(--bg);
+  background: linear-gradient(160deg, #fdf6e3 0%, #f5e6b8 50%, #f0d890 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -671,13 +672,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Playfair Display', serif;
   font-size: 2.4rem;
   font-weight: 700;
-  color: var(--text);
+  color: #0f1a2e;
   line-height: 1.1;
 }
 .splash-title em { font-style: italic; color: var(--accent); }
 .splash-sub {
   font-size: 0.88rem;
-  color: var(--text2);
+  color: #4a3f2a;
   line-height: 1.65;
   max-width: 380px;
 }
@@ -693,12 +694,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif;
   margin-top: 8px;
   transition: background 0.2s;
-  box-shadow: 0 4px 16px rgba(26,58,92,0.25);
+  box-shadow: 0 4px 20px rgba(26,58,92,0.3);
 }
 .splash-btn:hover { background: #152e4a; }
 .splash-footer a {
   font-size: 0.72rem;
-  color: var(--text3);
+  color: #8a7050;
   text-decoration: none;
   letter-spacing: 0.05em;
 }
@@ -724,6 +725,263 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   0%   { transform: scale(0.6); opacity: 1; }
   100% { transform: scale(2);   opacity: 0; }
 }
+
+/* ══ NEIGHBOURHOOD STORIES ══════════════════════════════════ */
+#nbhd-bar {
+  position: absolute;
+  bottom: 56px; left: 0; right: 0;
+  z-index: 350;
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background: linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+}
+#nbhd-bar::-webkit-scrollbar { display: none; }
+
+.nbhd-bubble {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nbhd-ring {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a5c 0%, #2a7298 50%, #b8960a 100%);
+  padding: 2.5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  transition: transform 0.15s;
+}
+.nbhd-ring:active { transform: scale(0.93); }
+.nbhd-ring-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2.5px solid white;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  overflow: hidden;
+}
+.nbhd-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #1a3a5c;
+  text-align: center;
+  max-width: 64px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ── Stories overlay ── */
+#stories-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+  display: none;
+  flex-direction: column;
+}
+#stories-overlay.open { display: flex; }
+
+.stories-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45);
+  transition: background-image 0.3s;
+}
+.stories-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.2) 0%,
+    rgba(0,0,0,0) 30%,
+    rgba(0,0,0,0) 55%,
+    rgba(0,0,0,0.85) 100%
+  );
+}
+/* Progress bars */
+.stories-progress {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  gap: 4px;
+  padding: 14px 12px 0;
+  z-index: 10;
+}
+.stories-seg {
+  flex: 1;
+  height: 2.5px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stories-seg-fill {
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+  width: 0%;
+  transition: width linear;
+}
+.stories-seg-fill.done { width: 100%; transition: none; }
+.stories-seg-fill.active { width: 0%; }
+
+/* Header */
+.stories-header {
+  position: absolute;
+  top: 28px; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 0;
+  z-index: 10;
+}
+.stories-nbhd-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.stories-nbhd-name {
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex: 1;
+}
+.stories-count {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.72rem;
+}
+.stories-close {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Tap zones */
+.stories-tap-left, .stories-tap-right {
+  position: absolute;
+  top: 0; bottom: 30%;
+  width: 40%;
+  z-index: 9;
+  cursor: pointer;
+}
+.stories-tap-left { left: 0; }
+.stories-tap-right { right: 0; }
+
+/* Content */
+.stories-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 18px 36px;
+  z-index: 10;
+}
+.stories-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.18);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.stories-place-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.stories-note {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.55;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.stories-tip {
+  font-size: 0.74rem;
+  color: #FFD700;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.stories-actions {
+  display: flex;
+  gap: 8px;
+}
+.stories-btn {
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.15s;
+}
+.stories-btn:active { opacity: 0.8; }
+.stories-btn-primary {
+  background: white;
+  color: #1a3a5c;
+}
+.stories-btn-secondary {
+  background: rgba(255,255,255,0.18);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+/* Hide nbhd bar on desktop */
+@media (min-width: 768px) {
+  #nbhd-bar { display: none; }
+}
+
+
+/* ── WANDER-LUSH TEXT LOGO ── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap');
+.wl-logo {
+  font-family: 'Cormorant Garamond', 'Cormorant', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: white;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  display: block;
+}
+/* In the splash (light bg), make it dark */
+.splash .wl-logo {
+  color: var(--accent);
+  font-size: 2rem;
+}
 </style>
 </head>
 <body>
@@ -732,7 +990,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-logo-row">
-      <img src="data:image/png;base64,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" alt="Wander-Lush" style="height:48px;width:auto;filter:brightness(0) invert(1);">
+      <span class="wl-logo">Wander-Lush</span>
     </div>
     <h2 class="splash-title">Tbilisi Guide</h2>
     <p class="splash-sub">64 hand-picked places by <strong>Emily Lush</strong> — journalist, photographer and Tbilisi resident since 2020. Every place on this map has been personally visited and recommended.</p>
@@ -753,7 +1011,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 <header>
   <div class="header-title">
     <a href="https://wander-lush.org" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
-      <img src="data:image/png;base64,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" alt="Wander-Lush" style="height:42px;width:auto;display:block;filter:brightness(0) invert(1);">
+      <span class="wl-logo">Wander-Lush</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
@@ -779,6 +1037,66 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 <!-- Map -->
 <div id="map"></div>
+
+<!-- Neighbourhood bubble bar (mobile only) -->
+<div id="nbhd-bar">
+  <div class="nbhd-bubble" onclick="openStories('old-town')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
+    <span class="nbhd-label">Old Town</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('sololaki')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
+    <span class="nbhd-label">Sololaki</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('avlabari')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
+    <span class="nbhd-label">Avlabari</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('vera')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
+    <span class="nbhd-label">Vera</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('chugureti')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
+    <span class="nbhd-label">Chugureti</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('mtatsminda')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
+    <span class="nbhd-label">Mtatsminda</span>
+  </div>
+  <div class="nbhd-bubble" onclick="openStories('vake')">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
+    <span class="nbhd-label">Vake</span>
+  </div>
+</div>
+
+<!-- Stories overlay -->
+<div id="stories-overlay">
+  <div class="stories-bg" id="stories-bg"></div>
+  <div class="stories-gradient"></div>
+  <div class="stories-progress" id="stories-progress"></div>
+  <div class="stories-header">
+    <div class="stories-nbhd-icon" id="stories-icon"></div>
+    <div>
+      <div class="stories-nbhd-name" id="stories-nbhd-name"></div>
+    </div>
+    <span class="stories-count" id="stories-count"></span>
+    <button class="stories-close" onclick="closeStories()">✕</button>
+  </div>
+  <div class="stories-tap-left"  onclick="storiesPrev()"></div>
+  <div class="stories-tap-right" onclick="storiesNext()"></div>
+  <div class="stories-content">
+    <div class="stories-cat-badge" id="stories-badge"></div>
+    <div class="stories-place-name" id="stories-name"></div>
+    <div class="stories-note" id="stories-note"></div>
+    <div class="stories-tip" id="stories-tip"></div>
+    <div class="stories-actions">
+      <button class="stories-btn stories-btn-primary" onclick="storiesOpenDetail()">See full details →</button>
+      <button class="stories-btn stories-btn-secondary" onclick="storiesMaps()">📍 Maps</button>
+    </div>
+  </div>
+</div>
+
 <div id="pin-pulse"></div>
 
 <!-- List toggle (mobile only) -->
@@ -842,70 +1160,70 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 <script>
 // ── DATA ──────────────────────────────────────────────────────
 const PLACES = [
-  {id:1,name:"Fabrika",cat:"cafe",emoji:"🏭",address:"8 Ninoshvili St, Chugureti",lat:41.6878,lng:44.9930,search:"Fabrika Tbilisi hostel",note:"Tbilisi has a knack for taking abandoned, ramshackle buildings and relaunching them as vibrant creative spaces. Fabrika is the one that really got the trend rolling — a Soviet-era sewing factory reborn as hostel, café hub, bar cluster and boutique strip. Some see it as commercialisation of the subculture. Personally I will always have a soft spot for it — it's simply one of the best places in Tbilisi to drink, eat, shop, work and socialise under one roof.",hours:"Daily, open from morning till late",tip:"You're no longer allowed to photograph with a DSLR in the lobby — use your phone instead.",type:"Creative hub / café complex",blog:"https://wander-lush.org/fabrika-tbilisi-georgia-hostel-hotel-review-blog/",phone:"+995 32 224 0000",website:"https://fabrika.ge"},
-  {id:2,name:"Abanotubani Sulfur Baths",cat:"landmark",emoji:"♨️",address:"Abano St, Old Town",lat:41.6888,lng:44.8120,search:"Abanotubani sulfur baths Tbilisi",note:"When Tbilisi became Georgia's capital in the 5th century, the site was chosen partly because of natural hot springs underground — 'Tbilisi' literally means warm place. Persian-Ottoman style bath houses were erected atop this geothermal playground. Each domed bathhouse offers health and beauty treatments. Don't forget to order an exfoliating kisi scrub — similar but oh-so different to a Turkish hammam.",hours:"Daily approx 9:00–23:00 (varies by bath)",tip:"Chreli-Abano looks beautiful but isn't the most authentic. Seek out Gulo's Thermal Spa for a more local experience.",type:"Historic baths / wellness",blog:"https://wander-lush.org/tbilisi-georgia-gulos-thermal-spa-bath-blog-review/",phone:"+995 579 700 470",website:"https://gulos-thermalspa.ge"},
-  {id:3,name:"Narikala Fortress",cat:"landmark",emoji:"🏰",address:"Narikala, Old Town",lat:41.6876,lng:44.8108,search:"Narikala Fortress Tbilisi",note:"The 4th-century fortress dominating Old Tbilisi offers spectacular views over the whole city. Climb via the Betlemi Street stairs for the most atmospheric route, or take the cable car from Rike Park. At golden hour the walls turn honey-gold and the whole city seems to glow.",hours:"Open daily, free entry",tip:"Come at golden hour — roughly 45 minutes before sunset — for the most magical light.",type:"Historic fortress / viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:4,name:"Mother of Georgia",cat:"landmark",emoji:"🗿",address:"Narikala Hill, Old Town",lat:41.6871,lng:44.8096,search:"Kartlis Deda Mother of Georgia statue Tbilisi",note:"The 20-metre aluminium figure holds a bowl of wine for friends and a sword for enemies — she perfectly captures the Georgian spirit. Built in 1958, she's become the city's icon. I love coming up here in late afternoon when the light is soft and the city stretches out below in a haze of terracotta rooftops.",hours:"Always accessible",tip:"Hike up from the sulfur baths via Betlemi Street stairs — about 20 minutes, passing wonderful hidden churches.",type:"Monument / viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:5,name:"Dry Bridge Flea Market",cat:"market",emoji:"🛍️",address:"Dry Bridge, Mtatsminda",lat:41.6937,lng:44.7977,search:"Dry Bridge flea market Tbilisi",note:"The chaotic, wonderful open-air flea market spread across Dry Bridge is one of Tbilisi's great free experiences. Soviet memorabilia, old icons, paintings, jewellery, samovars, lace — it's all here in a wonderful jumble. Bargaining is expected and part of the fun. I've discovered some genuinely beautiful antiques here over the years.",hours:"Daily roughly 9:00–18:00 (best on weekends)",tip:"Start at half the asking price when bargaining. Come on a Saturday for the biggest selection.",type:"Flea market / antiques",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:6,name:"Holy Trinity Cathedral (Sameba)",cat:"church",emoji:"⛪",address:"Avlabari district",lat:41.6932,lng:44.8228,search:"Sameba Holy Trinity Cathedral Tbilisi",note:"Sameba is Georgia's largest cathedral and one of the biggest Orthodox churches in the world. Completed in 2004, it's a striking example of Georgian ecclesiastical architecture. The scale is genuinely humbling — it took me several visits before I stopped feeling completely overwhelmed. Go on a Sunday morning if you can, when polyphonic chanting fills the nave with something extraordinary.",hours:"Daily 8:00–20:00",tip:"Dress modestly — women need a headscarf and covered shoulders; men need long trousers.",type:"Cathedral / Orthodox",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 295 0297",website:"https://samebacathedral.ge"},
-  {id:7,name:"Sioni Cathedral",cat:"church",emoji:"⛪",address:"Sioni St, Old Town",lat:41.6904,lng:44.8091,search:"Sioni Cathedral Tbilisi",note:"Sioni is the spiritual heart of Old Tbilisi. On Sunday mornings, polyphonic chanting drifts through the thick stone walls — one of the most hauntingly beautiful sounds in the world. The cathedral dates from the 5th century, though rebuilt many times. It houses the cross of St Nino, who brought Christianity to Georgia in the 4th century.",hours:"Daily from early morning",tip:"Listen for the choir on Sunday mornings — Georgian polyphonic chanting is a UNESCO Intangible Cultural Heritage.",type:"Ancient cathedral",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 272 0000"},
-  {id:8,name:"Bridge of Peace & Rike Park",cat:"landmark",emoji:"🌉",address:"Rike Park, riverbank",lat:41.6918,lng:44.8074,search:"Bridge of Peace Tbilisi Rike Park",note:"The futuristic glass-and-steel Bridge of Peace is one of Tbilisi's most divisive pieces of architecture — locals either love it or hate it. I find it endlessly fascinating, especially at night illuminated by LED lights. The surrounding Rike Park is also home to striking modernist buildings.",hours:"Open 24 hours",tip:"Walk across at night when the bridge is lit — completely different atmosphere to daytime.",type:"Architecture / bridge",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:9,name:"Betlemi Street Stairs",cat:"nature",emoji:"🪜",address:"Betlemi St, Old Town",lat:41.6886,lng:44.8101,search:"Betlemi Street stairs Tbilisi",note:"One of my favourite walks in all of Tbilisi. The Betlemi stairs wind through Old Tbilisi past carved-balcony houses, tiny neighbourhood churches, and sweeping viewpoints over the jumbled rooftops. It's free, mostly uncrowded, and I walk this route every time I have visitors.",hours:"Always accessible",tip:"Wear proper shoes — the cobblestones are uneven and some sections are quite steep.",type:"Walking route / viewpoints",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:10,name:"Ateshgah Zoroastrian Temple",cat:"church",emoji:"🔥",address:"Betlemi Quarter, Old Town",lat:41.6883,lng:44.8096,search:"Ateshgah Zoroastrian temple Tbilisi",note:"One of the oldest surviving buildings in Tbilisi and one of its best-kept secrets — a tiny Zoroastrian fire temple nestled in the Betlemi Quarter hillside. A reminder of how cosmopolitan Old Tbilisi once was: a Silk Road city where merchants prayed at their own temples, mosques and churches side by side.",hours:"Exterior always visible",tip:"Look for it when climbing the Betlemi stairs — easy to miss but unmissable once you know it's there.",type:"Ancient temple",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:11,name:"Dezerter Bazaar",cat:"market",emoji:"🥬",address:"Bazroba District",lat:41.6960,lng:44.8189,search:"Dezerter Bazaar Tbilisi market",note:"The first time I visited Tbilisi, I was stunned to see pomegranates alongside rounds of fresh cheese and small mountains of turmeric and sumac. Walnuts, garlic, aubergine, blue fenugreek and honey — this is what Georgia tastes like. The Dezerter Bazaar is the beating heart of the city: informal, raw, and a bit dirty — but that's why we love it.",hours:"Daily approx 7:00–17:00 (best in the morning)",tip:"Go early on a weekday to avoid crowds and get the freshest produce. The spice section is unmissable.",type:"Fresh produce market",blog:"https://wander-lush.org/dezerter-bazaar-tbilisi-market/"},
-  {id:12,name:"Mtatsminda Pantheon & Park",cat:"nature",emoji:"🌿",address:"Mtatsminda Mountain",lat:41.6922,lng:44.7960,search:"Mtatsminda Pantheon Tbilisi",note:"The hillside cemetery and park overlooking Tbilisi is one of the city's most serene spots. The Pantheon is the resting place of Georgia's greatest writers, poets and politicians. The carved gravestones are artworks in themselves. Above it, Mtatsminda Park is a slightly shabby but charming Soviet-era amusement park with the best city views.",hours:"Pantheon daily; Park hours vary seasonally",tip:"Take the funicular up (12 GEL one way) and walk down through the Pantheon — a beautiful descent.",type:"Cemetery / park / views",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 0990",website:"https://funicular.ge"},
-  {id:13,name:"Tabor Monastery Viewpoint",cat:"church",emoji:"👁️",address:"Tabori Hill, above Old Town",lat:41.6861,lng:44.8057,search:"Tabor Monastery Tbilisi viewpoint",note:"In my opinion, the absolute best view over Tbilisi — better than the cable car, better than Mtatsminda, better than any rooftop bar. Tabor Monastery sits on a rocky crag above the old town and the panorama is breathtaking. Almost nobody comes here.",hours:"Always accessible (monastery gates vary)",tip:"From the sulfur baths, walk up through Kldis Ubani neighbourhood — about 25 minutes and beautiful in itself.",type:"Monastery / secret viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:14,name:"Chronicles of Georgia",cat:"soviet",emoji:"🗿",address:"Tbilisi Sea, outskirts",lat:41.7266,lng:44.8744,search:"Chronicles of Georgia monument Tbilisi",note:"One of the most dramatic and strange monuments I've ever encountered. Sixteen massive stone pillars, each carved with scenes from Georgian history and mythology, rise from the hillside above the Tbilisi Sea. Started in the Soviet era and never completed, the monument is raw, powerful and slightly overwhelming.",hours:"Always accessible",tip:"You need a taxi to get here — about 20–25 minutes from the centre. Ask the driver to wait.",type:"Soviet monument",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:15,name:"Stalin's Underground Press",cat:"soviet",emoji:"🖨️",address:"37 Kamo St, Chugureti",lat:41.6895,lng:44.9914,search:"Stalin underground printing press museum Tbilisi",note:"Hidden beneath an ordinary-looking building in Chugureti, this is where young Stalin's Bolshevik party secretly printed revolutionary pamphlets in the early 1900s. The underground printing room is remarkably well-preserved — genuinely atmospheric. One of the most fascinating offbeat museums in Tbilisi.",hours:"Tue–Sun 10:00–18:00, closed Mon",tip:"The entrance is easy to miss — look for the small sign on Kamo Street. Admission is very cheap.",type:"Underground museum / Soviet history",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 299 8022",website:"https://museum.ge"},
-  {id:16,name:"Soviet Occupation Hall",cat:"soviet",emoji:"🏛️",address:"3 Shota Rustaveli Ave",lat:41.6949,lng:44.8012,search:"Georgian National Museum Soviet Occupation Hall Tbilisi",note:"One of the most sobering and important spaces in Tbilisi — it documents Georgia's occupation, resistance and suffering under Soviet rule with clarity and sorrow. I think every visitor to Georgia should spend time here to understand what this country has been through.",hours:"Tue–Sun 10:00–18:00",tip:"The whole National Museum is worth 2 hours. The Soviet Hall alone is about 45 minutes.",type:"National museum",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 299 8022",website:"https://museum.ge"},
-  {id:17,name:"Rike–Narikala Cable Car",cat:"nature",emoji:"🚡",address:"Rike Park station",lat:41.6921,lng:44.8080,search:"Rike Narikala cable car Tbilisi",note:"The red cable car swooping from Rike Park up to Narikala Fortress is one of the most fun ways to move between the riverbank and the old town. At 2.5 GEL each way, it's also one of the best-value experiences in Tbilisi. The views on the way up are wonderful.",hours:"Approx 10:00–23:00 daily",tip:"It's a very short ride — about 3 minutes — but the view going up makes it completely worthwhile.",type:"Cable car / views",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
-  {id:18,name:"Gabriadze Marionette Theatre",cat:"landmark",emoji:"🎭",address:"13 Shavteli St, Old Town",lat:41.6913,lng:44.8089,search:"Gabriadze Marionette Theatre Tbilisi",note:"The Rezo Gabriadze marionette theatre is one of the quirkiest, most magical places in Tbilisi. The shows are adults-only puppet performances — surreal, funny and deeply Georgian. There's also a beautiful leaning clock tower in the courtyard that puts on a tiny mechanical show on the hour.",hours:"Courtyard always open; show times vary",tip:"Book tickets in advance — the theatre is tiny and shows sell out. Check their Facebook page for the schedule.",type:"Theatre / puppet show",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 5696",website:"https://gabriadze.com"},
-  {id:19,name:"Shemomechama",cat:"food",emoji:"🍽️",address:"16 Atoneli St, Sololaki",lat:41.6919,lng:44.8048,search:"Shemomechama restaurant Tbilisi",note:"My number-one recommendation for classic Georgian food in Tbilisi. Shemomechama does the old favourites — lobiani, pkhali, satsivi — with real skill and consistency. Beautiful exposed stone walls, painted ceilings. Not the cheapest option but the quality justifies every tetri.",hours:"Daily 12:00–23:00",tip:"Reserve for evenings — it fills up fast. The courtyard tables are the best seats in summer.",type:"Classic Georgian restaurant",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 32 243 4242",website:"https://shemomechama.ge"},
-  {id:20,name:"Amra (Abkhazian Cuisine)",cat:"food",emoji:"🍽️",address:"Avlabari district",lat:41.6936,lng:44.8220,search:"Amra restaurant Tbilisi Abkhazian",note:"For Abkhazian and Megrelian cuisine — the rich, walnut-heavy cooking of western Georgia — Amra is my top pick. The menu features dishes you won't find at most Tbilisi restaurants: Abkhazian bean stew, achari egg bread, red adjika. The restaurant I always bring visitors who want to go beyond the usual khinkali-and-khachapuri circuit.",hours:"Daily 12:00–22:00",tip:"Order the Abkhazian bean stew and chicken in walnut sauce. Don't leave without trying their homemade chacha.",type:"Regional Georgian / Abkhazian",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 243 2244",website:"https://amrageorgia.ge"},
-  {id:21,name:"Amo Rame Bani",cat:"food",emoji:"🥟",address:"68 Aghmashenebeli Ave",lat:41.6878,lng:44.9928,search:"Amo Rame Bani khinkali Tbilisi",note:"An offshoot of the popular Amo Rame bar in Sololaki, this 'district kitchen' specialises in hand-pinched khinkali dumplings. The vegetarian versions — plaited nadughi soft cheese and creamy potato — are my favourite khinkali in all of Tbilisi. No minimum order, so you can try both.",hours:"Daily 11:00–23:00",tip:"Go vegetarian here — the nadughi cheese khinkali are extraordinary.",type:"Khinkali restaurant",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 557 55 55 55",website:"https://amorame.ge"},
-  {id:22,name:"Ninia's Garden",cat:"food",emoji:"🌿",address:"Sololaki neighbourhood",lat:41.6907,lng:44.8030,search:"Ninia's Garden restaurant Tbilisi",note:"A beautiful restaurant set in a sun-dappled courtyard garden in Sololaki. Ninia's specialises in traditional Georgian recipes with an emphasis on fresh vegetables and local herbs. The atmosphere is peaceful and the courtyard is magical on warm evenings. This is the kind of place you accidentally spend three hours at.",hours:"Daily 12:00–23:00",tip:"Book a courtyard table for summer evenings. The pkhali platter is a wonderful way to start.",type:"Modern Georgian / garden",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 32 292 2334",website:"https://niniasgarden.ge"},
-  {id:23,name:"Sasadilo Zeche",cat:"food",emoji:"🥣",address:"Vera district",lat:41.6976,lng:44.7989,search:"Sasadilo canteen Tbilisi workers lunch",note:"A sasadilo is a Soviet-style workers' canteen — you pick up a tray and choose from a counter. Zeche is the best example in Tbilisi: a perfect time capsule of retro Georgian dining. The food is simple, honest and delicious. About 8–12 GEL for a full, satisfying lunch.",hours:"Mon–Sat approx 10:00–17:00",tip:"Go for lunch — it closes mid-afternoon. Point to what you want. Eat what the locals are eating.",type:"Budget Georgian / Soviet canteen",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 1133"},
-  {id:24,name:"Cafe Leila",cat:"food",emoji:"🍮",address:"Sololaki",lat:41.6916,lng:44.8045,search:"Cafe Leila Tbilisi",note:"Named after a character in Nizami's great epic poem, Cafe Leila serves Persian-inspired sweets and cakes in an interior that feels like stepping into a beautiful old merchant's house. I come here for the rose water cake and a glass of amber wine. It's the kind of place that makes you feel time has genuinely slowed down.",hours:"Daily 10:00–22:00",tip:"The rose and cardamom pastries are extraordinary. Save room for dessert.",type:"Café / Persian-inspired sweets",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 0880"},
-  {id:25,name:"Wine Factory N1",cat:"cafe",emoji:"🍷",address:"Chugureti / Marjanishvili",lat:41.6881,lng:44.9919,search:"Wine Factory N1 Tbilisi",note:"A converted wine factory now housing a cluster of excellent wine bars and natural wine shops. This is where Tbilisi's hip wine crowd congregates. You can taste your way through Georgia's extraordinary wine regions here — from inky Saperavi reds to amber-hued skin-contact whites.",hours:"Bars open from approx 16:00–17:00 daily",tip:"Ask for a natural wine recommendation. Ask what amber wine they're excited about that week.",type:"Wine bars / nightlife cluster",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",website:"https://winefactory.ge"},
-  {id:26,name:"Stamba Hotel",cat:"cafe",emoji:"☕",address:"14 M. Kostava St, Vera",lat:41.6965,lng:44.7955,search:"Stamba Hotel Tbilisi bar cafe",note:"Set inside a dramatic former Soviet printing house with soaring ceilings and original printing equipment, the Stamba Hotel bar and café is one of the most atmospheric spaces in Tbilisi. Even if you're not staying here, come for a coffee or evening drink. The industrial-chic interior is genuinely stunning.",hours:"Daily from 7:00",tip:"The breakfast buffet is worth it — possibly the best in Tbilisi. Book even if you're not a guest.",type:"Hotel café / bar / design space",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 9292",website:"https://littera.ge"},
-  {id:27,name:"Funicular Café (Ponchiki)",cat:"cafe",emoji:"🍩",address:"Mtatsminda Funicular station",lat:41.6939,lng:44.7973,search:"Funicular cafe ponchiki Tbilisi",note:"The ponchiki (Soviet-style ring doughnuts) at the Funicular café are a Tbilisi institution. Freshly fried, dusted with powdered sugar, and utterly irresistible at a few tetri each. You'll be standing shoulder to shoulder with Tbilisi grandmothers and school kids — this is breakfast, Tbilisi style.",hours:"Approx 7:00–11:00, until sold out",tip:"Go early — they sell out by mid-morning. Don't skip this.",type:"Local café institution",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 243 8787",website:"https://stamba.ge"},
-  {id:28,name:"Bitadze Tea Museum",cat:"cafe",emoji:"🍵",address:"Old Town / Kala",lat:41.6907,lng:44.8088,search:"Bitadze Tea Museum Tbilisi",note:"Georgia was once a major tea-producing country — a fact largely forgotten since independence. The tiny Bitadze Tea Museum is a wonderful discovery: a working museum and tasting room where you can try Georgian teas and learn about the country's tea history. A lovely, quiet counterpoint to the wine culture everywhere else.",hours:"Mon–Sat 10:00–19:00",tip:"Try the mountain herb teas alongside classic Georgian black tea. The shop sells beautiful gift sets.",type:"Tea museum / tasting room",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 3344",website:"https://vinoundergound.ge"},
-  {id:29,name:"Tbilisi Opera Theatre",cat:"landmark",emoji:"🎶",address:"25 Rustaveli Ave",lat:41.6943,lng:44.7998,search:"Tbilisi Opera Ballet Theatre",note:"One of the most beautiful buildings on Rustaveli Avenue — a Moorish-inspired confection of carved arches and ornate detail. Going to the opera or ballet here is a genuine Tbilisi experience, and tickets are remarkably affordable by any international standard.",hours:"Performances typically evening; varies by programme",tip:"Check the programme and book in advance. Even the cheapest seats have decent views. Dress up a little.",type:"Opera / ballet / theatre",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 8090",website:"https://rcheulirestaurant.ge"},
-  {id:30,name:"Saburtalo Skybridge",cat:"soviet",emoji:"🌉",address:"Saburtalo district",lat:41.7144,lng:44.7653,search:"Saburtalo Skybridge Tbilisi Soviet",note:"A strange and wonderful piece of Soviet infrastructure — a pedestrian bridge connecting two residential towers high above a busy road, with an elevator operated by Mzia, a legendary character who has tended the bridge for decades. The Soviet apartments, the view from the bridge, and the encounter with Mzia herself make this a genuinely memorable Tbilisi experience.",hours:"Accessible during daylight",tip:"Join the Friendly.ge Brutal Tbilisi urban exploration tour to visit with full context — use code WANDERLUSH for 10% off.",type:"Soviet architecture / urban gem",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 4040",website:"https://barbarestan.ge"},
-  {id:31,name:"King Parnavaz Garden",cat:"nature",emoji:"🌅",address:"Kala, Old Town",lat:41.6895,lng:44.8075,search:"King Parnavaz Garden Tbilisi sunset",note:"My secret sunset spot in Tbilisi — a small, rarely-visited garden on a hillside in the old town with a perfectly framed view over the Mtkvari River and Metekhi Church. Almost no tourists come here. In the evenings the light is soft and golden, and you can watch the whole city turn amber.",hours:"Always accessible",tip:"Come 45 minutes before sunset for the best light. Bring wine.",type:"Hidden garden / sunset viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 272 7878",website:"https://verikorestaurant.ge"},
-  {id:32,name:"ATI Restaurant",cat:"food",emoji:"🍽️",address:"Old Town heights",lat:41.6874,lng:44.8105,search:"ATI restaurant Tbilisi",note:"ATI is my go-to recommendation for a special occasion dinner with a view. Perched above Old Tbilisi with a terrace overlooking the rooftops, it serves creative modern Georgian food at sunset. Not cheap by Tbilisi standards but worth it for the occasion. The lamb chops and their version of Adjarian khachapuri are both extraordinary.",hours:"Daily 13:00–23:00",tip:"Reserve a terrace table and specify you want it for sunset. Arrive about an hour before dusk.",type:"Fine dining Georgian / views",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/"},
-  {id:33,name:"Anchiskhati Basilica",cat:"church",emoji:"⛪",address:"Anchiskhati St, Old Town",lat:41.6919,lng:44.8081,search:"Anchiskhati Basilica Tbilisi oldest church",note:"The oldest church in Tbilisi, dating from the 5th century — somehow still standing, still functioning, still beautiful. Small, slightly crumbling, and wonderfully unpolished. On evenings and Sunday mornings, the church choir practises here and the sound of Georgian polyphonic chanting floating through the old stone walls is one of the most magical things you can experience in this city.",hours:"Daily early morning until early evening",tip:"Visit on a Sunday morning or weekday evening when the choir is practising. The experience is transformative.",type:"Ancient basilica",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 7799",website:"https://ethnographicmuseum.ge"},
-  {id:34,name:"Metekhi Church",cat:"church",emoji:"⛪",address:"Metekhi Cliff",lat:41.6910,lng:44.8137,search:"Metekhi Church Tbilisi cliff",note:"Perched dramatically on a cliff above the Mtkvari River, Metekhi Church is one of Tbilisi's most iconic images. The 13th-century church and its equestrian statue of King Vakhtang Gorgasali against the backdrop of the old town is the view that graces a thousand postcards.",hours:"Daily from early morning",tip:"The view looking back from the church grounds across the river towards Old Tbilisi and the sulfur baths is arguably the best in the city.",type:"Medieval cliff church",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 261 3141",website:"https://gncm.ge"},
-  {id:35,name:"National Botanical Garden",cat:"nature",emoji:"🌳",address:"Behind Narikala Fortress",lat:41.6834,lng:44.8149,search:"National Botanical Garden Tbilisi",note:"A wonderful escape — 128 hectares of gardens, forests and streams tucked in a gorge behind Narikala Fortress. The Botanical Garden has been here in some form since the 16th century. I love coming on autumn mornings when the leaves are turning and the gorge is misty. There's a beautiful waterfall at the far end.",hours:"Daily 10:00–19:00 summer / 10:00–17:00 winter; small fee",tip:"Enter from behind Narikala rather than the Botanikuri Metro entrance — more atmospheric and combinable with a fortress walk.",type:"Botanical garden",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 261 2006",website:"https://botanicalgarden.ge"},
-  {id:36,name:"Coffee LAB",cat:"cafe",emoji:"☕",address:"37 E. Ninoshvili St, Chugureti",lat:41.6882,lng:44.9918,search:"Coffee LAB Tbilisi roastery",note:"Tbilisi's original specialty coffee shop and the place that kick-started the city's serious coffee scene. Coffee LAB roasts their own beans in-house — in fact they supply dozens of other cafes around the city, so you've likely tasted their coffee already without knowing it. The industrial-cool space is always buzzing with locals, students and remote workers.",hours:"Daily 9:00–22:00",tip:"Order the filter coffee if you want to taste their beans at their purest. Ask the barista what single origin they're excited about.",type:"Specialty coffee roastery",website:"https://coffeelab.ge"},
-  {id:37,name:"Stamba Hotel & Cafe",cat:"cafe",emoji:"📰",address:"14 Kostava St, Vera",lat:41.6976,lng:44.7985,search:"Stamba Hotel cafe Tbilisi",note:"Set inside a converted Soviet printing house with soaring ceilings and exposed brick, Stamba is one of the most architecturally spectacular spaces in Tbilisi. Even if you're not staying here, the cafe is worth a visit. The building itself is a design pilgrimage — the atrium alone will make you reach for your camera.",hours:"Daily, open from morning",tip:"The Stamba Bakery launched in late 2025 — incredible pastries made with Georgian wheat from their own farm. Get there early before they sell out.",type:"Design hotel / café / bakery",website:"https://stambatbilisi.com"},
-  {id:38,name:"Anchiskhati Basilica",cat:"church",emoji:"⛪",address:"Shavteli St, Old Town",lat:41.6917,lng:44.8082,search:"Anchiskhati Basilica Tbilisi",note:"The oldest surviving church in Tbilisi, dating from the 6th century. Home to the world-renowned Anchiskhati Choir, whose polyphonic chanting during daily liturgy is one of the most transcendent experiences in the city. The building itself is wonderfully austere — no gilt or glitter, just ancient stone and soft candlelight.",hours:"Daily liturgy; Sunday service from 10:00",tip:"Arrive early for the Sunday service and find a quiet spot at the back. The choir usually begins around 10am and it's absolutely spellbinding.",type:"6th-century basilica / choir"},
-  {id:39,name:"Metekhi Church & Cliff",cat:"church",emoji:"⛪",address:"Metekhi Rise, Avlabari",lat:41.6897,lng:44.8139,search:"Metekhi Church Tbilisi cliff",note:"The 13th-century Metekhi Church perched on a sheer cliff above the Mtkvari River is one of Tbilisi's most iconic images. The views from the cliff edge back across the river to the old city are breathtaking — this is one of my favourite spots in all of Tbilisi. The equestrian statue of King Vakhtang Gorgasali stands proudly at the cliff edge.",hours:"Daily from early morning",tip:"Come at dusk when the old city glows warm gold across the river. The contrast with the dark cliff is magical."},
-  {id:40,name:"ATI Restaurant",cat:"food",emoji:"🍽️",address:"20 Telavi St (Sheraton Grand Hotel), Old Town",lat:41.6906,lng:44.8136,search:"ATI Restaurant Tbilisi Sheraton",note:"ATI is my go-to recommendation for a special occasion dinner with a view. Perched above Old Tbilisi with a terrace overlooking the rooftops, it serves creative modern Georgian food at sunset. Not cheap by Tbilisi standards but worth it for the occasion. The lamb chops and their version of Adjarian khachapuri are both extraordinary.",hours:"Daily 13:00–23:00",tip:"Reserve a terrace table and specify you want it for sunset. Arrive about an hour before dusk.",type:"Fine dining Georgian / views",website:"https://atirestaurant.ge"},
-  {id:41,name:"Cafe Daphna",cat:"food",emoji:"🥟",address:"Sololaki",lat:41.6912,lng:44.8040,search:"Cafe Daphna khinkali Tbilisi",note:"Coral-coloured Daphna is quite possibly Tbilisi's prettiest restaurant — I'm sure Wes Anderson would agree. Their dumplings are so soft and tasty they will leave you speechless. Their kalakuri is probably my all-time favourite: plump, juicy, and pimped out with secret herbs and spices. The cheesy potato version drizzled with melted butter is also extraordinary.",hours:"Daily 12:00–23:00",tip:"The cheesy potato khinkali drizzled with melted butter is life-changing. Order two portions.",type:"Khinkali restaurant"},
-  {id:42,name:"Barbarestan",cat:"food",emoji:"📖",address:"132 David Agmashenebeli Ave, Chugureti",lat:41.6872,lng:44.9940,search:"Barbarestan restaurant Tbilisi cookbook",note:"One of the most original restaurants in Tbilisi — all dishes are taken from a 19th-century Georgian cookbook by Princess Barbare Jorjadze. It's like eating history. The food is elegant, unusual and deeply Georgian. The space, inside a restored townhouse, is one of the most beautiful dining rooms in the city. Book well in advance.",hours:"Daily 12:00–23:00",tip:"Book at least a week ahead — it's deservedly popular. Ask the waiter to explain the provenance of each dish.",type:"Historical Georgian cuisine",website:"https://barbarestan.ge",phone:"+995 32 292 4040"},
-  {id:43,name:"Vino Underground",cat:"cafe",emoji:"🍷",address:"14 Galaktion Tabidze St, Old Town",lat:41.6921,lng:44.8060,search:"Vino Underground wine bar Tbilisi",note:"Tbilisi's original natural wine bar, and still one of the best. A candlelit basement space in Old Town where passionate winemakers and obsessive oenophiles converge. The wine list reads like a who's who of Georgian natural winemaking. I've had some of my most memorable bottles here.",hours:"Daily 17:00–02:00",tip:"Ask the staff to walk you through the amber wine selection — they know their producers intimately and will match you perfectly.",type:"Natural wine bar",website:"https://vinounderground.ge"},
-  {id:44,name:"Rooms Hotel Tbilisi",cat:"cafe",emoji:"🏨",address:"14 Melikishvili Ave, Vera",lat:41.7003,lng:44.7933,search:"Rooms Hotel Tbilisi Vera",note:"Even if you're not staying here, the lobby bar and rooftop of Rooms Hotel are worth a visit. This is arguably the coolest hotel in the Caucasus — a beautifully converted Soviet-era building with a creative, intellectually curious atmosphere. The rooftop bar has one of the best city views in Tbilisi.",hours:"Bar daily from 12:00",tip:"The Sunday brunch at Rooms is legendary. Book ahead. The rooftop is best in the golden hour before sunset.",type:"Design hotel / rooftop bar",website:"https://roomshotels.com"},
-  {id:45,name:"Turtle Lake & Ethnography Museum",cat:"nature",emoji:"🌲",address:"Vake Park, above Vake",lat:41.7052,lng:44.7710,search:"Turtle Lake Tbilisi Vake ethnography museum",note:"Turtle Lake sits in the hills above Vake and is one of Tbilisi's favourite spots for an urban escape. The nearby Open-Air Museum of Ethnography is fascinating — traditional houses from every region of Georgia transported and reconstructed on the hillside. The annual Art-Gene folk festival happens here every July.",hours:"Museum daily 10:00–18:00; lake always accessible",tip:"Combine Turtle Lake with a walk down through Vake Park — one of the best urban hikes in Tbilisi, finishing at Rustaveli Avenue.",type:"Urban lake / ethnography museum",website:"https://ethnographicmuseum.ge"},
-  {id:46,name:"King Parnavaz Garden",cat:"nature",emoji:"🌅",address:"Sololaki Ridge, Old Town",lat:41.6855,lng:44.8085,search:"King Parnavaz Garden Tbilisi sunset viewpoint",note:"Tbilisi's secret sunset spot and one of my absolute favourite places in the city. A small, crumbling garden on the Sololaki ridge with a stone tower and a bench — and a view over the old city that will stop your heart. Almost nobody comes here. I've been at sunset and had the whole place to myself.",hours:"Always accessible",tip:"Go 30 minutes before sunset and bring a bottle of wine. This is genuinely one of the most beautiful sunsets in the whole of Georgia."},
-  {id:47,name:"Opera & Ballet Theatre",cat:"landmark",emoji:"🎭",address:"25 Rustaveli Ave, Mtatsminda",lat:41.6955,lng:44.7980,search:"Tbilisi Opera Ballet Theatre Rustaveli",note:"One of the most beautiful buildings on Rustaveli Avenue — a Moorish-Gothic wedding cake of a building dating from 1851. A show here is one of the great Tbilisi experiences. The interior is all red velvet and gilded plasterwork. Tickets are extraordinarily cheap by any international standard.",hours:"Performance evenings; box office daily",tip:"Check the schedule on their website and dress up — Tbilisi's opera crowd takes the occasion seriously.",type:"Opera house / performance venue",website:"https://opera.ge",phone:"+995 32 298 7225"},
-  {id:48,name:"Bitadze Tea Museum",cat:"landmark",emoji:"🍵",address:"Kala neighbourhood, Old Town",lat:41.6910,lng:44.8078,search:"Bitadze Tea Museum Tbilisi Georgia tea",note:"One of Tbilisi's best-kept secrets. A tiny family-run tea merchants and museum — let Giorgi, second-generation tea connoisseur, lead you down the rabbit hole of Georgian tea history. Georgia has a fascinating tea industry that almost nobody knows about. He can even perform a tea ceremony using white and green leaves grown locally in the Guria region.",hours:"Mon–Sat 10:00–18:00",tip:"Ask Giorgi to perform a tea ceremony and explain how tea first came to Georgia. It's one of the most memorable experiences in Tbilisi."},
-  {id:49,name:"Leghvtakhevi Waterfall",cat:"nature",emoji:"💧",address:"Leghvtakhevi gorge, Old Town",lat:41.6868,lng:44.8113,search:"Leghvtakhevi Waterfall Tbilisi gorge",note:"A hidden urban waterfall tucked in a gorge right in the heart of Old Tbilisi. The walk down through the gorge is one of the most unexpected experiences in the city — within minutes of the busy tourist streets, you're in a wild canyon with a 20-metre waterfall. Most tourists walk right past without knowing it exists.",hours:"Always accessible (check for construction closures)",tip:"Access from Botanikuri Street near the Botanical Garden entrance. The path is sometimes muddy — wear sensible shoes."},
-  {id:50,name:"Mziuri Park",cat:"nature",emoji:"🌿",address:"Vake district",lat:41.7035,lng:44.7822,search:"Mziuri Park Tbilisi Vake",note:"A lovely green park in Vake that's a favourite with local families and joggers. Less touristy than the other parks in the centre — this is where Tbilisi residents actually come to relax. There's a small pond, wide walking paths and a peaceful atmosphere that feels a world away from the Old Town hustle.",hours:"Always open",tip:"Come in the morning when locals are doing their daily walk. The park cafe opens from about 10am and serves decent coffee."},
-  {id:51,name:"Orbeliani Square & Palace",cat:"landmark",emoji:"🏛️",address:"Orbeliani Square, Sololaki",lat:41.6932,lng:44.8035,search:"Orbeliani Square Tbilisi palace",note:"One of the most beautiful squares in Tbilisi — a quiet, tree-lined space in Sololaki anchored by the old Orbeliani Palace, now the Presidential Administration. The surrounding architecture is a mix of Russian Imperial and traditional Georgian. This is a neighbourhood square that most tourists skip entirely, which is exactly why I love it.",hours:"Always accessible (exterior only)",tip:"Combine with a wander through the Sololaki neighbourhood streets — the 19th-century architecture here is some of the finest in the city."},
-  {id:52,name:"Juma Mosque",cat:"church",emoji:"🕌",address:"Botanikuri St, Old Town",lat:41.6879,lng:44.8124,search:"Juma Mosque Tbilisi Old Town",note:"Tbilisi's only functioning mosque, and a symbol of the city's extraordinary religious diversity. The blue-tiled minaret rising above the sulfur bath domes is one of the most photographed views in the old city. The mosque serves both Sunni and Shia Muslims — both communities share the same prayer space, something almost unique in the Islamic world.",hours:"Open for prayer times; visitors welcome outside prayer",tip:"Visit in the early evening when the light catches the turquoise tiles beautifully. Always remove shoes and dress modestly."},
-  {id:53,name:"Mtkvari River Walk",cat:"nature",emoji:"🚶",address:"Riverside, Old Town to Avlabari",lat:41.6910,lng:44.8100,search:"Mtkvari River walk Tbilisi embankment",note:"The riverside walk stretching from the Bridge of Peace past the old town and up to Metekhi is one of my favourite evening strolls in Tbilisi. The city looks completely different from water level — you see the carved balconies, the cliff churches and the new architecture all at once. After renovation, the embankment has some excellent café terraces.",hours:"Always accessible",tip:"Walk it at dusk in both directions — it looks completely different lit up at night. Stop for wine at one of the riverside café terraces."},
-  {id:54,name:"Saburtalo Skybridge",cat:"soviet",emoji:"🌉",address:"Saburtalo district",lat:41.7160,lng:44.7710,search:"Saburtalo Skybridge Tbilisi Soviet",note:"A spectacular Soviet-era pedestrian bridge spanning a deep gorge in the Saburtalo district — most tourists never make it here. The views down into the forested gorge are dizzying. The bridge itself is a striking piece of Soviet engineering, and the neighbourhoods on either side are completely authentic residential Tbilisi, untouched by tourism.",hours:"Always accessible",tip:"Take the metro to Delisi station and walk — it's about 20 minutes. Combine with a walk through the Soviet-era residential streets."},
-  {id:55,name:"Corridor Wine Bar",cat:"cafe",emoji:"🍷",address:"Atoneli Street, Sololaki",lat:41.6917,lng:44.8047,search:"Corridor wine bar Tbilisi Atoneli",note:"The Atoneli Street precinct in Sololaki is one of my favourite evening destinations in Tbilisi — a cluster of wine bars, restaurants and cafes in a beautiful pedestrianised street. Corridor is one of the best wine bars here: relaxed, knowledgeable staff, excellent Georgian natural wine selection and great small plates.",hours:"Daily 17:00–late",tip:"The whole Atoneli Street strip is worth exploring on foot — pop into several different wine bars and compare their amber wine selections."},
-  {id:56,name:"Open-Air Art Market, Dedaena Park",cat:"market",emoji:"🎨",address:"Dedaena Park, near Dry Bridge",lat:41.6940,lng:44.7972,search:"Dedaena Park art market Tbilisi painters",note:"Beneath the Dry Bridge, in the adjacent Dedaena Park, painters set up their easels and makers sell handmade souvenirs. This is a gentler, more artistic companion to the chaotic flea market above. Original paintings of Georgian scenes, handmade jewellery, ceramics and textiles — all at very reasonable prices.",hours:"Daily roughly 10:00–18:00 (best on weekends)",tip:"This is a genuinely good place to buy original art. Prices are negotiable. Many painters will do a small custom piece on the spot."},
-  {id:57,name:"Funicular Railway",cat:"nature",emoji:"🚞",address:"Chonkadze St, Mtatsminda",lat:41.6936,lng:44.7930,search:"Mtatsminda Funicular Railway Tbilisi",note:"The historic funicular climbing Mtatsminda mountain is one of Tbilisi's classic experiences. The bottom station is a beautiful Art Nouveau building. The ride takes you past the Pantheon and up to the amusement park and restaurant at the summit, with gradually expanding views over the city.",hours:"Daily approx 10:00–00:00",tip:"Go up in the funicular, walk down through the Pantheon and Betlemi stairs — it's one of the great Tbilisi days.",type:"Historic funicular / views",website:"https://funicular.ge"},
-  {id:58,name:"Rezo Gabriadze Clock Tower",cat:"landmark",emoji:"🕰️",address:"13 Shavteli St, Old Town",lat:41.6914,lng:44.8088,search:"Gabriadze Clock Tower Tbilisi",note:"The leaning clock tower in the courtyard of the Gabriadze Marionette Theatre puts on a tiny mechanical show on the hour — a miniature angel appears and rings the bell. Created by the legendary Georgian artist Rezo Gabriadze, it's one of the most charming and whimsical things in all of Tbilisi. Easy to miss if you don't know it's there.",hours:"Courtyard always open; show on the hour",tip:"The clockwork show happens every hour — position yourself in the courtyard about 5 minutes before the hour to get a good spot."},
-  {id:59,name:"Georgian National Museum",cat:"landmark",emoji:"🏛️",address:"3 Shota Rustaveli Ave",lat:41.6949,lng:44.8010,search:"Georgian National Museum Tbilisi Rustaveli",note:"The main building of the Georgian National Museum on Rustaveli Avenue houses one of the great archaeological collections in the Caucasus — including gold treasures from 5th-century BC Colchis and an extraordinary collection of medieval jewellery. The Soviet Occupation Hall in the same building is a must-see separately.",hours:"Tue–Sun 10:00–18:00, closed Mon",tip:"Allow at least 2 hours for the full museum. The treasury (golden collection) requires a separate ticket but is absolutely worth it.",type:"National history museum",website:"https://museum.ge",phone:"+995 32 299 8022"},
-  {id:60,name:"Mtatsminda TV Tower Hike",cat:"nature",emoji:"📡",address:"Mtatsminda Mountain, above funicular",lat:41.6900,lng:44.7870,search:"Mtatsminda TV Tower hike Tbilisi",note:"One of the best urban hikes in the Caucasus. The trail up to the Mtatsminda TV Tower takes about 90 minutes from the city and rewards you with a 360-degree panorama over Tbilisi and the surrounding mountains. On a clear day you can see all the way to the Greater Caucasus range.",hours:"Always accessible",tip:"Start early morning to beat the heat in summer. Bring water. The trail begins near Turtle Lake — follow the signs for the TV Tower."},
-  {id:61,name:"Lisi Lake",cat:"nature",emoji:"🏊",address:"Lisi, above Vake",lat:41.7144,lng:44.7551,search:"Lisi Lake Tbilisi swimming",note:"Tbilisi's favourite swimming lake sits in the hills above Vake and has been beautifully developed in recent years with walking paths, restaurants and thermal baths at the water's edge. On hot summer days the whole city seems to come here. I love it in autumn when the crowds thin and the surrounding trees turn gold.",hours:"Always accessible; thermal baths daily",tip:"The thermal baths on the lake edge are a wonderful way to end a summer day at the lake. Come on a weekday to avoid weekend crowds."},
-  {id:62,name:"Mtkvarze Terrace Bars",cat:"cafe",emoji:"🌊",address:"Left Embankment, Avlabari",lat:41.6919,lng:44.8175,search:"Mtkvarze riverside bar Tbilisi embankment",note:"The Left Embankment running through Avlabari has become one of Tbilisi's most vibrant evening destinations — a strip of bar terraces right on the river with views back across to the old town and the Metekhi cliff. On warm evenings, the whole strip comes alive. This is where I bring friends who want the quintessential Tbilisi summer experience.",hours:"Bars open from approx 17:00 daily (seasonal)",tip:"Arrive before sunset to get a riverside table. Come on a warm Thursday or Friday evening for the best atmosphere."},
-  {id:63,name:"Cafe Linville (Lagidze Water Fountain)",cat:"food",emoji:"🥤",address:"Rustaveli Ave / Freedom Square area",lat:41.6951,lng:44.8000,search:"Lagidze Water fountain Tbilisi Rustaveli",note:"Lagidze Water is one of Georgia's most beloved traditions — naturally carbonated water flavoured with fruit and flower syrups, drunk from a fountain. The original recipe dates from 1887. You can find Lagidze Water fountains at several spots along Rustaveli Avenue. It's one of those utterly Georgian experiences that costs almost nothing and tastes like nowhere else on earth.",hours:"Daily approx 9:00–21:00",tip:"Try the cream soda and tarragon flavours — these are the classic Georgian combinations. The tarragon one is an acquired taste but totally addictive."},
-  {id:64,name:"Tbilisi Metro (Stations as Art)",cat:"landmark",emoji:"🚇",address:"Various stations, citywide",lat:41.6951,lng:44.8082,search:"Tbilisi Metro Soviet station art mosaic",note:"The Tbilisi Metro is a Soviet-era underground system with stations that are genuine works of art — mosaic murals, chandeliers, carved reliefs and sweeping socialist realism. Rustaveli and Liberty Square stations are the most spectacular. Riding the metro is not just a way to get around — it's a cultural experience in itself, and costs about 20 cents.",hours:"Daily approx 6:00–00:00",tip:"Buy a Metro card at the ticket booth (10 GEL deposit). The Rustaveli station mosaic on the platform is one of the most beautiful in the system — stop and look up.",type:"Soviet underground / public art"}
+  {id:1,nbhd:"chugureti",name:"Fabrika",cat:"cafe",emoji:"🏭",address:"8 Ninoshvili St, Chugureti",lat:41.6878,lng:44.9930,search:"Fabrika Tbilisi hostel",note:"Tbilisi has a knack for taking abandoned, ramshackle buildings and relaunching them as vibrant creative spaces. Fabrika is the one that really got the trend rolling — a Soviet-era sewing factory reborn as hostel, café hub, bar cluster and boutique strip. Some see it as commercialisation of the subculture. Personally I will always have a soft spot for it — it's simply one of the best places in Tbilisi to drink, eat, shop, work and socialise under one roof.",hours:"Daily, open from morning till late",tip:"You're no longer allowed to photograph with a DSLR in the lobby — use your phone instead.",type:"Creative hub / café complex",blog:"https://wander-lush.org/fabrika-tbilisi-georgia-hostel-hotel-review-blog/",phone:"+995 32 224 0000",website:"https://fabrika.ge"},
+  {id:2,nbhd:"old-town",name:"Abanotubani Sulfur Baths",cat:"landmark",emoji:"♨️",address:"Abano St, Old Town",lat:41.6888,lng:44.8120,search:"Abanotubani sulfur baths Tbilisi",note:"When Tbilisi became Georgia's capital in the 5th century, the site was chosen partly because of natural hot springs underground — 'Tbilisi' literally means warm place. Persian-Ottoman style bath houses were erected atop this geothermal playground. Each domed bathhouse offers health and beauty treatments. Don't forget to order an exfoliating kisi scrub — similar but oh-so different to a Turkish hammam.",hours:"Daily approx 9:00–23:00 (varies by bath)",tip:"Chreli-Abano looks beautiful but isn't the most authentic. Seek out Gulo's Thermal Spa for a more local experience.",type:"Historic baths / wellness",blog:"https://wander-lush.org/tbilisi-georgia-gulos-thermal-spa-bath-blog-review/",phone:"+995 579 700 470",website:"https://gulos-thermalspa.ge"},
+  {id:3,nbhd:"old-town",name:"Narikala Fortress",cat:"landmark",emoji:"🏰",address:"Narikala, Old Town",lat:41.6876,lng:44.8108,search:"Narikala Fortress Tbilisi",note:"The 4th-century fortress dominating Old Tbilisi offers spectacular views over the whole city. Climb via the Betlemi Street stairs for the most atmospheric route, or take the cable car from Rike Park. At golden hour the walls turn honey-gold and the whole city seems to glow.",hours:"Open daily, free entry",tip:"Come at golden hour — roughly 45 minutes before sunset — for the most magical light.",type:"Historic fortress / viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:4,nbhd:"old-town",name:"Mother of Georgia",cat:"landmark",emoji:"🗿",address:"Narikala Hill, Old Town",lat:41.6871,lng:44.8096,search:"Kartlis Deda Mother of Georgia statue Tbilisi",note:"The 20-metre aluminium figure holds a bowl of wine for friends and a sword for enemies — she perfectly captures the Georgian spirit. Built in 1958, she's become the city's icon. I love coming up here in late afternoon when the light is soft and the city stretches out below in a haze of terracotta rooftops.",hours:"Always accessible",tip:"Hike up from the sulfur baths via Betlemi Street stairs — about 20 minutes, passing wonderful hidden churches.",type:"Monument / viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:5,nbhd:"mtatsminda",name:"Dry Bridge Flea Market",cat:"market",emoji:"🛍️",address:"Dry Bridge, Mtatsminda",lat:41.6937,lng:44.7977,search:"Dry Bridge flea market Tbilisi",note:"The chaotic, wonderful open-air flea market spread across Dry Bridge is one of Tbilisi's great free experiences. Soviet memorabilia, old icons, paintings, jewellery, samovars, lace — it's all here in a wonderful jumble. Bargaining is expected and part of the fun. I've discovered some genuinely beautiful antiques here over the years.",hours:"Daily roughly 9:00–18:00 (best on weekends)",tip:"Start at half the asking price when bargaining. Come on a Saturday for the biggest selection.",type:"Flea market / antiques",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:6,nbhd:"avlabari",name:"Holy Trinity Cathedral (Sameba)",cat:"church",emoji:"⛪",address:"Avlabari district",lat:41.6932,lng:44.8228,search:"Sameba Holy Trinity Cathedral Tbilisi",note:"Sameba is Georgia's largest cathedral and one of the biggest Orthodox churches in the world. Completed in 2004, it's a striking example of Georgian ecclesiastical architecture. The scale is genuinely humbling — it took me several visits before I stopped feeling completely overwhelmed. Go on a Sunday morning if you can, when polyphonic chanting fills the nave with something extraordinary.",hours:"Daily 8:00–20:00",tip:"Dress modestly — women need a headscarf and covered shoulders; men need long trousers.",type:"Cathedral / Orthodox",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 295 0297",website:"https://samebacathedral.ge"},
+  {id:7,nbhd:"old-town",name:"Sioni Cathedral",cat:"church",emoji:"⛪",address:"Sioni St, Old Town",lat:41.6904,lng:44.8091,search:"Sioni Cathedral Tbilisi",note:"Sioni is the spiritual heart of Old Tbilisi. On Sunday mornings, polyphonic chanting drifts through the thick stone walls — one of the most hauntingly beautiful sounds in the world. The cathedral dates from the 5th century, though rebuilt many times. It houses the cross of St Nino, who brought Christianity to Georgia in the 4th century.",hours:"Daily from early morning",tip:"Listen for the choir on Sunday mornings — Georgian polyphonic chanting is a UNESCO Intangible Cultural Heritage.",type:"Ancient cathedral",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 272 0000"},
+  {id:8,nbhd:"old-town",name:"Bridge of Peace & Rike Park",cat:"landmark",emoji:"🌉",address:"Rike Park, riverbank",lat:41.6918,lng:44.8074,search:"Bridge of Peace Tbilisi Rike Park",note:"The futuristic glass-and-steel Bridge of Peace is one of Tbilisi's most divisive pieces of architecture — locals either love it or hate it. I find it endlessly fascinating, especially at night illuminated by LED lights. The surrounding Rike Park is also home to striking modernist buildings.",hours:"Open 24 hours",tip:"Walk across at night when the bridge is lit — completely different atmosphere to daytime.",type:"Architecture / bridge",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:9,nbhd:"old-town",name:"Betlemi Street Stairs",cat:"nature",emoji:"🪜",address:"Betlemi St, Old Town",lat:41.6886,lng:44.8101,search:"Betlemi Street stairs Tbilisi",note:"One of my favourite walks in all of Tbilisi. The Betlemi stairs wind through Old Tbilisi past carved-balcony houses, tiny neighbourhood churches, and sweeping viewpoints over the jumbled rooftops. It's free, mostly uncrowded, and I walk this route every time I have visitors.",hours:"Always accessible",tip:"Wear proper shoes — the cobblestones are uneven and some sections are quite steep.",type:"Walking route / viewpoints",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:10,nbhd:"old-town",name:"Ateshgah Zoroastrian Temple",cat:"church",emoji:"🔥",address:"Betlemi Quarter, Old Town",lat:41.6883,lng:44.8096,search:"Ateshgah Zoroastrian temple Tbilisi",note:"One of the oldest surviving buildings in Tbilisi and one of its best-kept secrets — a tiny Zoroastrian fire temple nestled in the Betlemi Quarter hillside. A reminder of how cosmopolitan Old Tbilisi once was: a Silk Road city where merchants prayed at their own temples, mosques and churches side by side.",hours:"Exterior always visible",tip:"Look for it when climbing the Betlemi stairs — easy to miss but unmissable once you know it's there.",type:"Ancient temple",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:11,nbhd:"mtatsminda",name:"Dezerter Bazaar",cat:"market",emoji:"🥬",address:"Bazroba District",lat:41.6960,lng:44.8189,search:"Dezerter Bazaar Tbilisi market",note:"The first time I visited Tbilisi, I was stunned to see pomegranates alongside rounds of fresh cheese and small mountains of turmeric and sumac. Walnuts, garlic, aubergine, blue fenugreek and honey — this is what Georgia tastes like. The Dezerter Bazaar is the beating heart of the city: informal, raw, and a bit dirty — but that's why we love it.",hours:"Daily approx 7:00–17:00 (best in the morning)",tip:"Go early on a weekday to avoid crowds and get the freshest produce. The spice section is unmissable.",type:"Fresh produce market",blog:"https://wander-lush.org/dezerter-bazaar-tbilisi-market/"},
+  {id:12,nbhd:"mtatsminda",name:"Mtatsminda Pantheon & Park",cat:"nature",emoji:"🌿",address:"Mtatsminda Mountain",lat:41.6922,lng:44.7960,search:"Mtatsminda Pantheon Tbilisi",note:"The hillside cemetery and park overlooking Tbilisi is one of the city's most serene spots. The Pantheon is the resting place of Georgia's greatest writers, poets and politicians. The carved gravestones are artworks in themselves. Above it, Mtatsminda Park is a slightly shabby but charming Soviet-era amusement park with the best city views.",hours:"Pantheon daily; Park hours vary seasonally",tip:"Take the funicular up (12 GEL one way) and walk down through the Pantheon — a beautiful descent.",type:"Cemetery / park / views",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 0990",website:"https://funicular.ge"},
+  {id:13,nbhd:"old-town",name:"Tabor Monastery Viewpoint",cat:"church",emoji:"👁️",address:"Tabori Hill, above Old Town",lat:41.6861,lng:44.8057,search:"Tabor Monastery Tbilisi viewpoint",note:"In my opinion, the absolute best view over Tbilisi — better than the cable car, better than Mtatsminda, better than any rooftop bar. Tabor Monastery sits on a rocky crag above the old town and the panorama is breathtaking. Almost nobody comes here.",hours:"Always accessible (monastery gates vary)",tip:"From the sulfur baths, walk up through Kldis Ubani neighbourhood — about 25 minutes and beautiful in itself.",type:"Monastery / secret viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:14,nbhd:"other",name:"Chronicles of Georgia",cat:"soviet",emoji:"🗿",address:"Tbilisi Sea, outskirts",lat:41.7266,lng:44.8744,search:"Chronicles of Georgia monument Tbilisi",note:"One of the most dramatic and strange monuments I've ever encountered. Sixteen massive stone pillars, each carved with scenes from Georgian history and mythology, rise from the hillside above the Tbilisi Sea. Started in the Soviet era and never completed, the monument is raw, powerful and slightly overwhelming.",hours:"Always accessible",tip:"You need a taxi to get here — about 20–25 minutes from the centre. Ask the driver to wait.",type:"Soviet monument",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:15,nbhd:"chugureti",name:"Stalin's Underground Press",cat:"soviet",emoji:"🖨️",address:"37 Kamo St, Chugureti",lat:41.6895,lng:44.9914,search:"Stalin underground printing press museum Tbilisi",note:"Hidden beneath an ordinary-looking building in Chugureti, this is where young Stalin's Bolshevik party secretly printed revolutionary pamphlets in the early 1900s. The underground printing room is remarkably well-preserved — genuinely atmospheric. One of the most fascinating offbeat museums in Tbilisi.",hours:"Tue–Sun 10:00–18:00, closed Mon",tip:"The entrance is easy to miss — look for the small sign on Kamo Street. Admission is very cheap.",type:"Underground museum / Soviet history",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 299 8022",website:"https://museum.ge"},
+  {id:16,nbhd:"mtatsminda",name:"Soviet Occupation Hall",cat:"soviet",emoji:"🏛️",address:"3 Shota Rustaveli Ave",lat:41.6949,lng:44.8012,search:"Georgian National Museum Soviet Occupation Hall Tbilisi",note:"One of the most sobering and important spaces in Tbilisi — it documents Georgia's occupation, resistance and suffering under Soviet rule with clarity and sorrow. I think every visitor to Georgia should spend time here to understand what this country has been through.",hours:"Tue–Sun 10:00–18:00",tip:"The whole National Museum is worth 2 hours. The Soviet Hall alone is about 45 minutes.",type:"National museum",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 299 8022",website:"https://museum.ge"},
+  {id:17,nbhd:"old-town",name:"Rike–Narikala Cable Car",cat:"nature",emoji:"🚡",address:"Rike Park station",lat:41.6921,lng:44.8080,search:"Rike Narikala cable car Tbilisi",note:"The red cable car swooping from Rike Park up to Narikala Fortress is one of the most fun ways to move between the riverbank and the old town. At 2.5 GEL each way, it's also one of the best-value experiences in Tbilisi. The views on the way up are wonderful.",hours:"Approx 10:00–23:00 daily",tip:"It's a very short ride — about 3 minutes — but the view going up makes it completely worthwhile.",type:"Cable car / views",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/"},
+  {id:18,nbhd:"old-town",name:"Gabriadze Marionette Theatre",cat:"landmark",emoji:"🎭",address:"13 Shavteli St, Old Town",lat:41.6913,lng:44.8089,search:"Gabriadze Marionette Theatre Tbilisi",note:"The Rezo Gabriadze marionette theatre is one of the quirkiest, most magical places in Tbilisi. The shows are adults-only puppet performances — surreal, funny and deeply Georgian. There's also a beautiful leaning clock tower in the courtyard that puts on a tiny mechanical show on the hour.",hours:"Courtyard always open; show times vary",tip:"Book tickets in advance — the theatre is tiny and shows sell out. Check their Facebook page for the schedule.",type:"Theatre / puppet show",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 5696",website:"https://gabriadze.com"},
+  {id:19,nbhd:"sololaki",name:"Shemomechama",cat:"food",emoji:"🍽️",address:"16 Atoneli St, Sololaki",lat:41.6919,lng:44.8048,search:"Shemomechama restaurant Tbilisi",note:"My number-one recommendation for classic Georgian food in Tbilisi. Shemomechama does the old favourites — lobiani, pkhali, satsivi — with real skill and consistency. Beautiful exposed stone walls, painted ceilings. Not the cheapest option but the quality justifies every tetri.",hours:"Daily 12:00–23:00",tip:"Reserve for evenings — it fills up fast. The courtyard tables are the best seats in summer.",type:"Classic Georgian restaurant",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 32 243 4242",website:"https://shemomechama.ge"},
+  {id:20,nbhd:"avlabari",name:"Amra (Abkhazian Cuisine)",cat:"food",emoji:"🍽️",address:"Avlabari district",lat:41.6936,lng:44.8220,search:"Amra restaurant Tbilisi Abkhazian",note:"For Abkhazian and Megrelian cuisine — the rich, walnut-heavy cooking of western Georgia — Amra is my top pick. The menu features dishes you won't find at most Tbilisi restaurants: Abkhazian bean stew, achari egg bread, red adjika. The restaurant I always bring visitors who want to go beyond the usual khinkali-and-khachapuri circuit.",hours:"Daily 12:00–22:00",tip:"Order the Abkhazian bean stew and chicken in walnut sauce. Don't leave without trying their homemade chacha.",type:"Regional Georgian / Abkhazian",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 243 2244",website:"https://amrageorgia.ge"},
+  {id:21,nbhd:"chugureti",name:"Amo Rame Bani",cat:"food",emoji:"🥟",address:"68 Aghmashenebeli Ave",lat:41.6878,lng:44.9928,search:"Amo Rame Bani khinkali Tbilisi",note:"An offshoot of the popular Amo Rame bar in Sololaki, this 'district kitchen' specialises in hand-pinched khinkali dumplings. The vegetarian versions — plaited nadughi soft cheese and creamy potato — are my favourite khinkali in all of Tbilisi. No minimum order, so you can try both.",hours:"Daily 11:00–23:00",tip:"Go vegetarian here — the nadughi cheese khinkali are extraordinary.",type:"Khinkali restaurant",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 557 55 55 55",website:"https://amorame.ge"},
+  {id:22,nbhd:"sololaki",name:"Ninia's Garden",cat:"food",emoji:"🌿",address:"Sololaki neighbourhood",lat:41.6907,lng:44.8030,search:"Ninia's Garden restaurant Tbilisi",note:"A beautiful restaurant set in a sun-dappled courtyard garden in Sololaki. Ninia's specialises in traditional Georgian recipes with an emphasis on fresh vegetables and local herbs. The atmosphere is peaceful and the courtyard is magical on warm evenings. This is the kind of place you accidentally spend three hours at.",hours:"Daily 12:00–23:00",tip:"Book a courtyard table for summer evenings. The pkhali platter is a wonderful way to start.",type:"Modern Georgian / garden",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/",phone:"+995 32 292 2334",website:"https://niniasgarden.ge"},
+  {id:23,nbhd:"vera",name:"Sasadilo Zeche",cat:"food",emoji:"🥣",address:"Vera district",lat:41.6976,lng:44.7989,search:"Sasadilo canteen Tbilisi workers lunch",note:"A sasadilo is a Soviet-style workers' canteen — you pick up a tray and choose from a counter. Zeche is the best example in Tbilisi: a perfect time capsule of retro Georgian dining. The food is simple, honest and delicious. About 8–12 GEL for a full, satisfying lunch.",hours:"Mon–Sat approx 10:00–17:00",tip:"Go for lunch — it closes mid-afternoon. Point to what you want. Eat what the locals are eating.",type:"Budget Georgian / Soviet canteen",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 1133"},
+  {id:24,nbhd:"sololaki",name:"Cafe Leila",cat:"food",emoji:"🍮",address:"Sololaki",lat:41.6916,lng:44.8045,search:"Cafe Leila Tbilisi",note:"Named after a character in Nizami's great epic poem, Cafe Leila serves Persian-inspired sweets and cakes in an interior that feels like stepping into a beautiful old merchant's house. I come here for the rose water cake and a glass of amber wine. It's the kind of place that makes you feel time has genuinely slowed down.",hours:"Daily 10:00–22:00",tip:"The rose and cardamom pastries are extraordinary. Save room for dessert.",type:"Café / Persian-inspired sweets",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 0880"},
+  {id:25,nbhd:"chugureti",name:"Wine Factory N1",cat:"cafe",emoji:"🍷",address:"Chugureti / Marjanishvili",lat:41.6881,lng:44.9919,search:"Wine Factory N1 Tbilisi",note:"A converted wine factory now housing a cluster of excellent wine bars and natural wine shops. This is where Tbilisi's hip wine crowd congregates. You can taste your way through Georgia's extraordinary wine regions here — from inky Saperavi reds to amber-hued skin-contact whites.",hours:"Bars open from approx 16:00–17:00 daily",tip:"Ask for a natural wine recommendation. Ask what amber wine they're excited about that week.",type:"Wine bars / nightlife cluster",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",website:"https://winefactory.ge"},
+  {id:26,nbhd:"vera",name:"Stamba Hotel",cat:"cafe",emoji:"☕",address:"14 M. Kostava St, Vera",lat:41.6965,lng:44.7955,search:"Stamba Hotel Tbilisi bar cafe",note:"Set inside a dramatic former Soviet printing house with soaring ceilings and original printing equipment, the Stamba Hotel bar and café is one of the most atmospheric spaces in Tbilisi. Even if you're not staying here, come for a coffee or evening drink. The industrial-chic interior is genuinely stunning.",hours:"Daily from 7:00",tip:"The breakfast buffet is worth it — possibly the best in Tbilisi. Book even if you're not a guest.",type:"Hotel café / bar / design space",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 9292",website:"https://littera.ge"},
+  {id:27,nbhd:"mtatsminda",name:"Funicular Café (Ponchiki)",cat:"cafe",emoji:"🍩",address:"Mtatsminda Funicular station",lat:41.6939,lng:44.7973,search:"Funicular cafe ponchiki Tbilisi",note:"The ponchiki (Soviet-style ring doughnuts) at the Funicular café are a Tbilisi institution. Freshly fried, dusted with powdered sugar, and utterly irresistible at a few tetri each. You'll be standing shoulder to shoulder with Tbilisi grandmothers and school kids — this is breakfast, Tbilisi style.",hours:"Approx 7:00–11:00, until sold out",tip:"Go early — they sell out by mid-morning. Don't skip this.",type:"Local café institution",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 243 8787",website:"https://stamba.ge"},
+  {id:28,nbhd:"old-town",name:"Bitadze Tea Museum",cat:"cafe",emoji:"🍵",address:"Old Town / Kala",lat:41.6907,lng:44.8088,search:"Bitadze Tea Museum Tbilisi",note:"Georgia was once a major tea-producing country — a fact largely forgotten since independence. The tiny Bitadze Tea Museum is a wonderful discovery: a working museum and tasting room where you can try Georgian teas and learn about the country's tea history. A lovely, quiet counterpoint to the wine culture everywhere else.",hours:"Mon–Sat 10:00–19:00",tip:"Try the mountain herb teas alongside classic Georgian black tea. The shop sells beautiful gift sets.",type:"Tea museum / tasting room",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 3344",website:"https://vinoundergound.ge"},
+  {id:29,nbhd:"mtatsminda",name:"Tbilisi Opera Theatre",cat:"landmark",emoji:"🎶",address:"25 Rustaveli Ave",lat:41.6943,lng:44.7998,search:"Tbilisi Opera Ballet Theatre",note:"One of the most beautiful buildings on Rustaveli Avenue — a Moorish-inspired confection of carved arches and ornate detail. Going to the opera or ballet here is a genuine Tbilisi experience, and tickets are remarkably affordable by any international standard.",hours:"Performances typically evening; varies by programme",tip:"Check the programme and book in advance. Even the cheapest seats have decent views. Dress up a little.",type:"Opera / ballet / theatre",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 298 8090",website:"https://rcheulirestaurant.ge"},
+  {id:30,nbhd:"other",name:"Saburtalo Skybridge",cat:"soviet",emoji:"🌉",address:"Saburtalo district",lat:41.7144,lng:44.7653,search:"Saburtalo Skybridge Tbilisi Soviet",note:"A strange and wonderful piece of Soviet infrastructure — a pedestrian bridge connecting two residential towers high above a busy road, with an elevator operated by Mzia, a legendary character who has tended the bridge for decades. The Soviet apartments, the view from the bridge, and the encounter with Mzia herself make this a genuinely memorable Tbilisi experience.",hours:"Accessible during daylight",tip:"Join the Friendly.ge Brutal Tbilisi urban exploration tour to visit with full context — use code WANDERLUSH for 10% off.",type:"Soviet architecture / urban gem",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 292 4040",website:"https://barbarestan.ge"},
+  {id:31,nbhd:"old-town",name:"King Parnavaz Garden",cat:"nature",emoji:"🌅",address:"Kala, Old Town",lat:41.6895,lng:44.8075,search:"King Parnavaz Garden Tbilisi sunset",note:"My secret sunset spot in Tbilisi — a small, rarely-visited garden on a hillside in the old town with a perfectly framed view over the Mtkvari River and Metekhi Church. Almost no tourists come here. In the evenings the light is soft and golden, and you can watch the whole city turn amber.",hours:"Always accessible",tip:"Come 45 minutes before sunset for the best light. Bring wine.",type:"Hidden garden / sunset viewpoint",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 272 7878",website:"https://verikorestaurant.ge"},
+  {id:32,nbhd:"old-town",name:"ATI Restaurant",cat:"food",emoji:"🍽️",address:"Old Town heights",lat:41.6874,lng:44.8105,search:"ATI restaurant Tbilisi",note:"ATI is my go-to recommendation for a special occasion dinner with a view. Perched above Old Tbilisi with a terrace overlooking the rooftops, it serves creative modern Georgian food at sunset. Not cheap by Tbilisi standards but worth it for the occasion. The lamb chops and their version of Adjarian khachapuri are both extraordinary.",hours:"Daily 13:00–23:00",tip:"Reserve a terrace table and specify you want it for sunset. Arrive about an hour before dusk.",type:"Fine dining Georgian / views",blog:"https://wander-lush.org/tbilisi-georgia-food-best-restaurants-cafes-guide/"},
+  {id:33,nbhd:"old-town",name:"Anchiskhati Basilica",cat:"church",emoji:"⛪",address:"Anchiskhati St, Old Town",lat:41.6919,lng:44.8081,search:"Anchiskhati Basilica Tbilisi oldest church",note:"The oldest church in Tbilisi, dating from the 5th century — somehow still standing, still functioning, still beautiful. Small, slightly crumbling, and wonderfully unpolished. On evenings and Sunday mornings, the church choir practises here and the sound of Georgian polyphonic chanting floating through the old stone walls is one of the most magical things you can experience in this city.",hours:"Daily early morning until early evening",tip:"Visit on a Sunday morning or weekday evening when the choir is practising. The experience is transformative.",type:"Ancient basilica",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 222 7799",website:"https://ethnographicmuseum.ge"},
+  {id:34,nbhd:"avlabari",name:"Metekhi Church",cat:"church",emoji:"⛪",address:"Metekhi Cliff",lat:41.6910,lng:44.8137,search:"Metekhi Church Tbilisi cliff",note:"Perched dramatically on a cliff above the Mtkvari River, Metekhi Church is one of Tbilisi's most iconic images. The 13th-century church and its equestrian statue of King Vakhtang Gorgasali against the backdrop of the old town is the view that graces a thousand postcards.",hours:"Daily from early morning",tip:"The view looking back from the church grounds across the river towards Old Tbilisi and the sulfur baths is arguably the best in the city.",type:"Medieval cliff church",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 261 3141",website:"https://gncm.ge"},
+  {id:35,nbhd:"old-town",name:"National Botanical Garden",cat:"nature",emoji:"🌳",address:"Behind Narikala Fortress",lat:41.6834,lng:44.8149,search:"National Botanical Garden Tbilisi",note:"A wonderful escape — 128 hectares of gardens, forests and streams tucked in a gorge behind Narikala Fortress. The Botanical Garden has been here in some form since the 16th century. I love coming on autumn mornings when the leaves are turning and the gorge is misty. There's a beautiful waterfall at the far end.",hours:"Daily 10:00–19:00 summer / 10:00–17:00 winter; small fee",tip:"Enter from behind Narikala rather than the Botanikuri Metro entrance — more atmospheric and combinable with a fortress walk.",type:"Botanical garden",blog:"https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/",phone:"+995 32 261 2006",website:"https://botanicalgarden.ge"},
+  {id:36,nbhd:"chugureti",name:"Coffee LAB",cat:"cafe",emoji:"☕",address:"37 E. Ninoshvili St, Chugureti",lat:41.6882,lng:44.9918,search:"Coffee LAB Tbilisi roastery",note:"Tbilisi's original specialty coffee shop and the place that kick-started the city's serious coffee scene. Coffee LAB roasts their own beans in-house — in fact they supply dozens of other cafes around the city, so you've likely tasted their coffee already without knowing it. The industrial-cool space is always buzzing with locals, students and remote workers.",hours:"Daily 9:00–22:00",tip:"Order the filter coffee if you want to taste their beans at their purest. Ask the barista what single origin they're excited about.",type:"Specialty coffee roastery",website:"https://coffeelab.ge"},
+  {id:37,nbhd:"vera",name:"Stamba Hotel & Cafe",cat:"cafe",emoji:"📰",address:"14 Kostava St, Vera",lat:41.6976,lng:44.7985,search:"Stamba Hotel cafe Tbilisi",note:"Set inside a converted Soviet printing house with soaring ceilings and exposed brick, Stamba is one of the most architecturally spectacular spaces in Tbilisi. Even if you're not staying here, the cafe is worth a visit. The building itself is a design pilgrimage — the atrium alone will make you reach for your camera.",hours:"Daily, open from morning",tip:"The Stamba Bakery launched in late 2025 — incredible pastries made with Georgian wheat from their own farm. Get there early before they sell out.",type:"Design hotel / café / bakery",website:"https://stambatbilisi.com"},
+  {id:38,nbhd:"old-town",name:"Anchiskhati Basilica",cat:"church",emoji:"⛪",address:"Shavteli St, Old Town",lat:41.6917,lng:44.8082,search:"Anchiskhati Basilica Tbilisi",note:"The oldest surviving church in Tbilisi, dating from the 6th century. Home to the world-renowned Anchiskhati Choir, whose polyphonic chanting during daily liturgy is one of the most transcendent experiences in the city. The building itself is wonderfully austere — no gilt or glitter, just ancient stone and soft candlelight.",hours:"Daily liturgy; Sunday service from 10:00",tip:"Arrive early for the Sunday service and find a quiet spot at the back. The choir usually begins around 10am and it's absolutely spellbinding.",type:"6th-century basilica / choir"},
+  {id:39,nbhd:"avlabari",name:"Metekhi Church & Cliff",cat:"church",emoji:"⛪",address:"Metekhi Rise, Avlabari",lat:41.6897,lng:44.8139,search:"Metekhi Church Tbilisi cliff",note:"The 13th-century Metekhi Church perched on a sheer cliff above the Mtkvari River is one of Tbilisi's most iconic images. The views from the cliff edge back across the river to the old city are breathtaking — this is one of my favourite spots in all of Tbilisi. The equestrian statue of King Vakhtang Gorgasali stands proudly at the cliff edge.",hours:"Daily from early morning",tip:"Come at dusk when the old city glows warm gold across the river. The contrast with the dark cliff is magical."},
+  {id:40,nbhd:"avlabari",name:"ATI Restaurant",cat:"food",emoji:"🍽️",address:"20 Telavi St (Sheraton Grand Hotel), Old Town",lat:41.6906,lng:44.8136,search:"ATI Restaurant Tbilisi Sheraton",note:"ATI is my go-to recommendation for a special occasion dinner with a view. Perched above Old Tbilisi with a terrace overlooking the rooftops, it serves creative modern Georgian food at sunset. Not cheap by Tbilisi standards but worth it for the occasion. The lamb chops and their version of Adjarian khachapuri are both extraordinary.",hours:"Daily 13:00–23:00",tip:"Reserve a terrace table and specify you want it for sunset. Arrive about an hour before dusk.",type:"Fine dining Georgian / views",website:"https://atirestaurant.ge"},
+  {id:41,nbhd:"sololaki",name:"Cafe Daphna",cat:"food",emoji:"🥟",address:"Sololaki",lat:41.6912,lng:44.8040,search:"Cafe Daphna khinkali Tbilisi",note:"Coral-coloured Daphna is quite possibly Tbilisi's prettiest restaurant — I'm sure Wes Anderson would agree. Their dumplings are so soft and tasty they will leave you speechless. Their kalakuri is probably my all-time favourite: plump, juicy, and pimped out with secret herbs and spices. The cheesy potato version drizzled with melted butter is also extraordinary.",hours:"Daily 12:00–23:00",tip:"The cheesy potato khinkali drizzled with melted butter is life-changing. Order two portions.",type:"Khinkali restaurant"},
+  {id:42,nbhd:"chugureti",name:"Barbarestan",cat:"food",emoji:"📖",address:"132 David Agmashenebeli Ave, Chugureti",lat:41.6872,lng:44.9940,search:"Barbarestan restaurant Tbilisi cookbook",note:"One of the most original restaurants in Tbilisi — all dishes are taken from a 19th-century Georgian cookbook by Princess Barbare Jorjadze. It's like eating history. The food is elegant, unusual and deeply Georgian. The space, inside a restored townhouse, is one of the most beautiful dining rooms in the city. Book well in advance.",hours:"Daily 12:00–23:00",tip:"Book at least a week ahead — it's deservedly popular. Ask the waiter to explain the provenance of each dish.",type:"Historical Georgian cuisine",website:"https://barbarestan.ge",phone:"+995 32 292 4040"},
+  {id:43,nbhd:"old-town",name:"Vino Underground",cat:"cafe",emoji:"🍷",address:"14 Galaktion Tabidze St, Old Town",lat:41.6921,lng:44.8060,search:"Vino Underground wine bar Tbilisi",note:"Tbilisi's original natural wine bar, and still one of the best. A candlelit basement space in Old Town where passionate winemakers and obsessive oenophiles converge. The wine list reads like a who's who of Georgian natural winemaking. I've had some of my most memorable bottles here.",hours:"Daily 17:00–02:00",tip:"Ask the staff to walk you through the amber wine selection — they know their producers intimately and will match you perfectly.",type:"Natural wine bar",website:"https://vinounderground.ge"},
+  {id:44,nbhd:"vera",name:"Rooms Hotel Tbilisi",cat:"cafe",emoji:"🏨",address:"14 Melikishvili Ave, Vera",lat:41.7003,lng:44.7933,search:"Rooms Hotel Tbilisi Vera",note:"Even if you're not staying here, the lobby bar and rooftop of Rooms Hotel are worth a visit. This is arguably the coolest hotel in the Caucasus — a beautifully converted Soviet-era building with a creative, intellectually curious atmosphere. The rooftop bar has one of the best city views in Tbilisi.",hours:"Bar daily from 12:00",tip:"The Sunday brunch at Rooms is legendary. Book ahead. The rooftop is best in the golden hour before sunset.",type:"Design hotel / rooftop bar",website:"https://roomshotels.com"},
+  {id:45,nbhd:"vake",name:"Turtle Lake & Ethnography Museum",cat:"nature",emoji:"🌲",address:"Vake Park, above Vake",lat:41.7052,lng:44.7710,search:"Turtle Lake Tbilisi Vake ethnography museum",note:"Turtle Lake sits in the hills above Vake and is one of Tbilisi's favourite spots for an urban escape. The nearby Open-Air Museum of Ethnography is fascinating — traditional houses from every region of Georgia transported and reconstructed on the hillside. The annual Art-Gene folk festival happens here every July.",hours:"Museum daily 10:00–18:00; lake always accessible",tip:"Combine Turtle Lake with a walk down through Vake Park — one of the best urban hikes in Tbilisi, finishing at Rustaveli Avenue.",type:"Urban lake / ethnography museum",website:"https://ethnographicmuseum.ge"},
+  {id:46,nbhd:"old-town",name:"King Parnavaz Garden",cat:"nature",emoji:"🌅",address:"Sololaki Ridge, Old Town",lat:41.6855,lng:44.8085,search:"King Parnavaz Garden Tbilisi sunset viewpoint",note:"Tbilisi's secret sunset spot and one of my absolute favourite places in the city. A small, crumbling garden on the Sololaki ridge with a stone tower and a bench — and a view over the old city that will stop your heart. Almost nobody comes here. I've been at sunset and had the whole place to myself.",hours:"Always accessible",tip:"Go 30 minutes before sunset and bring a bottle of wine. This is genuinely one of the most beautiful sunsets in the whole of Georgia."},
+  {id:47,nbhd:"mtatsminda",name:"Opera & Ballet Theatre",cat:"landmark",emoji:"🎭",address:"25 Rustaveli Ave, Mtatsminda",lat:41.6955,lng:44.7980,search:"Tbilisi Opera Ballet Theatre Rustaveli",note:"One of the most beautiful buildings on Rustaveli Avenue — a Moorish-Gothic wedding cake of a building dating from 1851. A show here is one of the great Tbilisi experiences. The interior is all red velvet and gilded plasterwork. Tickets are extraordinarily cheap by any international standard.",hours:"Performance evenings; box office daily",tip:"Check the schedule on their website and dress up — Tbilisi's opera crowd takes the occasion seriously.",type:"Opera house / performance venue",website:"https://opera.ge",phone:"+995 32 298 7225"},
+  {id:48,nbhd:"old-town",name:"Bitadze Tea Museum",cat:"landmark",emoji:"🍵",address:"Kala neighbourhood, Old Town",lat:41.6910,lng:44.8078,search:"Bitadze Tea Museum Tbilisi Georgia tea",note:"One of Tbilisi's best-kept secrets. A tiny family-run tea merchants and museum — let Giorgi, second-generation tea connoisseur, lead you down the rabbit hole of Georgian tea history. Georgia has a fascinating tea industry that almost nobody knows about. He can even perform a tea ceremony using white and green leaves grown locally in the Guria region.",hours:"Mon–Sat 10:00–18:00",tip:"Ask Giorgi to perform a tea ceremony and explain how tea first came to Georgia. It's one of the most memorable experiences in Tbilisi."},
+  {id:49,nbhd:"old-town",name:"Leghvtakhevi Waterfall",cat:"nature",emoji:"💧",address:"Leghvtakhevi gorge, Old Town",lat:41.6868,lng:44.8113,search:"Leghvtakhevi Waterfall Tbilisi gorge",note:"A hidden urban waterfall tucked in a gorge right in the heart of Old Tbilisi. The walk down through the gorge is one of the most unexpected experiences in the city — within minutes of the busy tourist streets, you're in a wild canyon with a 20-metre waterfall. Most tourists walk right past without knowing it exists.",hours:"Always accessible (check for construction closures)",tip:"Access from Botanikuri Street near the Botanical Garden entrance. The path is sometimes muddy — wear sensible shoes."},
+  {id:50,nbhd:"vake",name:"Mziuri Park",cat:"nature",emoji:"🌿",address:"Vake district",lat:41.7035,lng:44.7822,search:"Mziuri Park Tbilisi Vake",note:"A lovely green park in Vake that's a favourite with local families and joggers. Less touristy than the other parks in the centre — this is where Tbilisi residents actually come to relax. There's a small pond, wide walking paths and a peaceful atmosphere that feels a world away from the Old Town hustle.",hours:"Always open",tip:"Come in the morning when locals are doing their daily walk. The park cafe opens from about 10am and serves decent coffee."},
+  {id:51,nbhd:"sololaki",name:"Orbeliani Square & Palace",cat:"landmark",emoji:"🏛️",address:"Orbeliani Square, Sololaki",lat:41.6932,lng:44.8035,search:"Orbeliani Square Tbilisi palace",note:"One of the most beautiful squares in Tbilisi — a quiet, tree-lined space in Sololaki anchored by the old Orbeliani Palace, now the Presidential Administration. The surrounding architecture is a mix of Russian Imperial and traditional Georgian. This is a neighbourhood square that most tourists skip entirely, which is exactly why I love it.",hours:"Always accessible (exterior only)",tip:"Combine with a wander through the Sololaki neighbourhood streets — the 19th-century architecture here is some of the finest in the city."},
+  {id:52,nbhd:"old-town",name:"Juma Mosque",cat:"church",emoji:"🕌",address:"Botanikuri St, Old Town",lat:41.6879,lng:44.8124,search:"Juma Mosque Tbilisi Old Town",note:"Tbilisi's only functioning mosque, and a symbol of the city's extraordinary religious diversity. The blue-tiled minaret rising above the sulfur bath domes is one of the most photographed views in the old city. The mosque serves both Sunni and Shia Muslims — both communities share the same prayer space, something almost unique in the Islamic world.",hours:"Open for prayer times; visitors welcome outside prayer",tip:"Visit in the early evening when the light catches the turquoise tiles beautifully. Always remove shoes and dress modestly."},
+  {id:53,nbhd:"old-town",name:"Mtkvari River Walk",cat:"nature",emoji:"🚶",address:"Riverside, Old Town to Avlabari",lat:41.6910,lng:44.8100,search:"Mtkvari River walk Tbilisi embankment",note:"The riverside walk stretching from the Bridge of Peace past the old town and up to Metekhi is one of my favourite evening strolls in Tbilisi. The city looks completely different from water level — you see the carved balconies, the cliff churches and the new architecture all at once. After renovation, the embankment has some excellent café terraces.",hours:"Always accessible",tip:"Walk it at dusk in both directions — it looks completely different lit up at night. Stop for wine at one of the riverside café terraces."},
+  {id:54,nbhd:"other",name:"Saburtalo Skybridge",cat:"soviet",emoji:"🌉",address:"Saburtalo district",lat:41.7160,lng:44.7710,search:"Saburtalo Skybridge Tbilisi Soviet",note:"A spectacular Soviet-era pedestrian bridge spanning a deep gorge in the Saburtalo district — most tourists never make it here. The views down into the forested gorge are dizzying. The bridge itself is a striking piece of Soviet engineering, and the neighbourhoods on either side are completely authentic residential Tbilisi, untouched by tourism.",hours:"Always accessible",tip:"Take the metro to Delisi station and walk — it's about 20 minutes. Combine with a walk through the Soviet-era residential streets."},
+  {id:55,nbhd:"sololaki",name:"Corridor Wine Bar",cat:"cafe",emoji:"🍷",address:"Atoneli Street, Sololaki",lat:41.6917,lng:44.8047,search:"Corridor wine bar Tbilisi Atoneli",note:"The Atoneli Street precinct in Sololaki is one of my favourite evening destinations in Tbilisi — a cluster of wine bars, restaurants and cafes in a beautiful pedestrianised street. Corridor is one of the best wine bars here: relaxed, knowledgeable staff, excellent Georgian natural wine selection and great small plates.",hours:"Daily 17:00–late",tip:"The whole Atoneli Street strip is worth exploring on foot — pop into several different wine bars and compare their amber wine selections."},
+  {id:56,nbhd:"mtatsminda",name:"Open-Air Art Market, Dedaena Park",cat:"market",emoji:"🎨",address:"Dedaena Park, near Dry Bridge",lat:41.6940,lng:44.7972,search:"Dedaena Park art market Tbilisi painters",note:"Beneath the Dry Bridge, in the adjacent Dedaena Park, painters set up their easels and makers sell handmade souvenirs. This is a gentler, more artistic companion to the chaotic flea market above. Original paintings of Georgian scenes, handmade jewellery, ceramics and textiles — all at very reasonable prices.",hours:"Daily roughly 10:00–18:00 (best on weekends)",tip:"This is a genuinely good place to buy original art. Prices are negotiable. Many painters will do a small custom piece on the spot."},
+  {id:57,nbhd:"mtatsminda",name:"Funicular Railway",cat:"nature",emoji:"🚞",address:"Chonkadze St, Mtatsminda",lat:41.6936,lng:44.7930,search:"Mtatsminda Funicular Railway Tbilisi",note:"The historic funicular climbing Mtatsminda mountain is one of Tbilisi's classic experiences. The bottom station is a beautiful Art Nouveau building. The ride takes you past the Pantheon and up to the amusement park and restaurant at the summit, with gradually expanding views over the city.",hours:"Daily approx 10:00–00:00",tip:"Go up in the funicular, walk down through the Pantheon and Betlemi stairs — it's one of the great Tbilisi days.",type:"Historic funicular / views",website:"https://funicular.ge"},
+  {id:58,nbhd:"old-town",name:"Rezo Gabriadze Clock Tower",cat:"landmark",emoji:"🕰️",address:"13 Shavteli St, Old Town",lat:41.6914,lng:44.8088,search:"Gabriadze Clock Tower Tbilisi",note:"The leaning clock tower in the courtyard of the Gabriadze Marionette Theatre puts on a tiny mechanical show on the hour — a miniature angel appears and rings the bell. Created by the legendary Georgian artist Rezo Gabriadze, it's one of the most charming and whimsical things in all of Tbilisi. Easy to miss if you don't know it's there.",hours:"Courtyard always open; show on the hour",tip:"The clockwork show happens every hour — position yourself in the courtyard about 5 minutes before the hour to get a good spot."},
+  {id:59,nbhd:"mtatsminda",name:"Georgian National Museum",cat:"landmark",emoji:"🏛️",address:"3 Shota Rustaveli Ave",lat:41.6949,lng:44.8010,search:"Georgian National Museum Tbilisi Rustaveli",note:"The main building of the Georgian National Museum on Rustaveli Avenue houses one of the great archaeological collections in the Caucasus — including gold treasures from 5th-century BC Colchis and an extraordinary collection of medieval jewellery. The Soviet Occupation Hall in the same building is a must-see separately.",hours:"Tue–Sun 10:00–18:00, closed Mon",tip:"Allow at least 2 hours for the full museum. The treasury (golden collection) requires a separate ticket but is absolutely worth it.",type:"National history museum",website:"https://museum.ge",phone:"+995 32 299 8022"},
+  {id:60,nbhd:"mtatsminda",name:"Mtatsminda TV Tower Hike",cat:"nature",emoji:"📡",address:"Mtatsminda Mountain, above funicular",lat:41.6900,lng:44.7870,search:"Mtatsminda TV Tower hike Tbilisi",note:"One of the best urban hikes in the Caucasus. The trail up to the Mtatsminda TV Tower takes about 90 minutes from the city and rewards you with a 360-degree panorama over Tbilisi and the surrounding mountains. On a clear day you can see all the way to the Greater Caucasus range.",hours:"Always accessible",tip:"Start early morning to beat the heat in summer. Bring water. The trail begins near Turtle Lake — follow the signs for the TV Tower."},
+  {id:61,nbhd:"vake",name:"Lisi Lake",cat:"nature",emoji:"🏊",address:"Lisi, above Vake",lat:41.7144,lng:44.7551,search:"Lisi Lake Tbilisi swimming",note:"Tbilisi's favourite swimming lake sits in the hills above Vake and has been beautifully developed in recent years with walking paths, restaurants and thermal baths at the water's edge. On hot summer days the whole city seems to come here. I love it in autumn when the crowds thin and the surrounding trees turn gold.",hours:"Always accessible; thermal baths daily",tip:"The thermal baths on the lake edge are a wonderful way to end a summer day at the lake. Come on a weekday to avoid weekend crowds."},
+  {id:62,nbhd:"avlabari",name:"Mtkvarze Terrace Bars",cat:"cafe",emoji:"🌊",address:"Left Embankment, Avlabari",lat:41.6919,lng:44.8175,search:"Mtkvarze riverside bar Tbilisi embankment",note:"The Left Embankment running through Avlabari has become one of Tbilisi's most vibrant evening destinations — a strip of bar terraces right on the river with views back across to the old town and the Metekhi cliff. On warm evenings, the whole strip comes alive. This is where I bring friends who want the quintessential Tbilisi summer experience.",hours:"Bars open from approx 17:00 daily (seasonal)",tip:"Arrive before sunset to get a riverside table. Come on a warm Thursday or Friday evening for the best atmosphere."},
+  {id:63,nbhd:"mtatsminda",name:"Cafe Linville (Lagidze Water Fountain)",cat:"food",emoji:"🥤",address:"Rustaveli Ave / Freedom Square area",lat:41.6951,lng:44.8000,search:"Lagidze Water fountain Tbilisi Rustaveli",note:"Lagidze Water is one of Georgia's most beloved traditions — naturally carbonated water flavoured with fruit and flower syrups, drunk from a fountain. The original recipe dates from 1887. You can find Lagidze Water fountains at several spots along Rustaveli Avenue. It's one of those utterly Georgian experiences that costs almost nothing and tastes like nowhere else on earth.",hours:"Daily approx 9:00–21:00",tip:"Try the cream soda and tarragon flavours — these are the classic Georgian combinations. The tarragon one is an acquired taste but totally addictive."},
+  {id:64,nbhd:"mtatsminda",name:"Tbilisi Metro (Stations as Art)",cat:"landmark",emoji:"🚇",address:"Various stations, citywide",lat:41.6951,lng:44.8082,search:"Tbilisi Metro Soviet station art mosaic",note:"The Tbilisi Metro is a Soviet-era underground system with stations that are genuine works of art — mosaic murals, chandeliers, carved reliefs and sweeping socialist realism. Rustaveli and Liberty Square stations are the most spectacular. Riding the metro is not just a way to get around — it's a cultural experience in itself, and costs about 20 cents.",hours:"Daily approx 6:00–00:00",tip:"Buy a Metro card at the ticket booth (10 GEL deposit). The Rustaveli station mosaic on the platform is one of the most beautiful in the system — stop and look up.",type:"Soviet underground / public art"}
 ];
 
 const CC={landmark:"#e8724a",food:"#f0c060",cafe:"#6b9e6e",church:"#6090c8",market:"#c08060",soviet:"#9080a8",nature:"#50906a"};
@@ -1285,6 +1603,150 @@ function updatePulse(place){
   pulse.style.left = x + 'px';
   pulse.style.top  = y + 'px';
 }
+
+
+// ══ NEIGHBOURHOOD STORIES ════════════════════════════════════
+const NBHD_META = {
+  'old-town':   { label: 'Old Town & Kala',    icon: '🏰' },
+  'sololaki':   { label: 'Sololaki',            icon: '🌿' },
+  'avlabari':   { label: 'Avlabari',            icon: '⛪' },
+  'vera':       { label: 'Vera & Stamba',       icon: '☕' },
+  'chugureti':  { label: 'Chugureti & Fabrika', icon: '🏭' },
+  'mtatsminda': { label: 'Mtatsminda',          icon: '🎭' },
+  'vake':       { label: 'Vake',                icon: '🌲' },
+};
+const CL_STORIES = {
+  landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
+  church:'Church', market:'Market', soviet:'Soviet Heritage', nature:'Nature'
+};
+
+let storyPlaces = [], storyIdx = 0, storyTimer = null, storyFillTimer = null;
+const STORY_DURATION = 6000; // ms per slide
+
+function openStories(nbhd){
+  storyPlaces = PLACES.filter(p => p.nbhd === nbhd);
+  if(!storyPlaces.length) return;
+  storyIdx = 0;
+  document.getElementById('stories-overlay').classList.add('open');
+  const meta = NBHD_META[nbhd] || { label: nbhd, icon: '📍' };
+  document.getElementById('stories-nbhd-name').textContent = meta.label;
+  document.getElementById('stories-icon').textContent = meta.icon;
+  buildProgressBars();
+  showStorySlide(0);
+}
+
+function buildProgressBars(){
+  const bar = document.getElementById('stories-progress');
+  bar.innerHTML = storyPlaces.map((_,i) =>
+    `<div class="stories-seg"><div class="stories-seg-fill" id="sfill-${i}"></div></div>`
+  ).join('');
+}
+
+function showStorySlide(idx){
+  clearTimeout(storyTimer);
+  cancelAnimationFrame(storyFillTimer);
+  storyIdx = idx;
+  const p = storyPlaces[idx];
+  if(!p) { closeStories(); return; }
+
+  // Update progress bars
+  storyPlaces.forEach((_,i) => {
+    const fill = document.getElementById('sfill-'+i);
+    if(!fill) return;
+    fill.style.transition = 'none';
+    if(i < idx)       { fill.style.width = '100%'; }
+    else if(i === idx){ fill.style.width = '0%'; }
+    else              { fill.style.width = '0%'; }
+  });
+
+  // Animate current bar
+  const activeFill = document.getElementById('sfill-'+idx);
+  if(activeFill){
+    requestAnimationFrame(() => {
+      activeFill.style.transition = `width ${STORY_DURATION}ms linear`;
+      activeFill.style.width = '100%';
+    });
+  }
+
+  // Background — use photo cache if available, else gradient
+  const bg = document.getElementById('stories-bg');
+  bg.style.backgroundImage = '';
+  if(photoCache[p.id]){
+    bg.style.backgroundImage = `url(${photoCache[p.id]})`;
+  } else {
+    // Trigger photo load
+    getPhoto(p, url => {
+      if(url && storyIdx === idx){
+        bg.style.backgroundImage = `url(${url})`;
+      }
+    });
+    // Colour gradient fallback
+    const colors = {
+      landmark:'135deg,#1a3a5c,#2a5298',
+      food:'135deg,#7a3020,#c06040',
+      cafe:'135deg,#2a4a2a,#4a7a4a',
+      church:'135deg,#2a2a5c,#4a4a9c',
+      market:'135deg,#5c3a1a,#9c6a3a',
+      soviet:'135deg,#3a1a5c,#6a3a9c',
+      nature:'135deg,#1a4a2a,#3a8a4a',
+    };
+    bg.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
+  }
+
+  // Content
+  document.getElementById('stories-badge').innerHTML =
+    `<span>${p.emoji}</span> ${CL_STORIES[p.cat]||p.cat}`;
+  document.getElementById('stories-name').textContent = p.name;
+  document.getElementById('stories-note').textContent = p.note || '';
+  document.getElementById('stories-tip').textContent = p.tip ? '💡 ' + p.tip : '';
+  document.getElementById('stories-count').textContent = `${idx+1} / ${storyPlaces.length}`;
+
+  // Auto-advance
+  storyTimer = setTimeout(() => storiesNext(), STORY_DURATION);
+}
+
+function storiesNext(){
+  if(storyIdx < storyPlaces.length - 1){
+    showStorySlide(storyIdx + 1);
+  } else {
+    closeStories();
+  }
+}
+function storiesPrev(){
+  if(storyIdx > 0) showStorySlide(storyIdx - 1);
+}
+function closeStories(){
+  clearTimeout(storyTimer);
+  document.getElementById('stories-overlay').classList.remove('open');
+}
+function storiesOpenDetail(){
+  const p = storyPlaces[storyIdx];
+  if(!p) return;
+  closeStories();
+  openDetail(p.id);
+  // On mobile, open the detail sheet
+  setTimeout(()=>{
+    if(window.innerWidth < 768){
+      document.getElementById('detail-sheet').classList.add('open');
+      document.getElementById('sheet').classList.remove('open');
+    }
+  }, 100);
+}
+function storiesMaps(){
+  const p = storyPlaces[storyIdx];
+  if(p) window.open(`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,'_blank');
+}
+
+// Swipe down to close stories
+(function(){
+  let startY = 0;
+  const el = document.getElementById('stories-overlay');
+  if(!el) return;
+  el.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchend', e => {
+    if(e.changedTouches[0].clientY - startY > 60) closeStories();
+  }, {passive:true});
+})();
 
 // ── SHEET TOGGLE (mobile) ─────────────────────────────────────
 function openSheet(){
