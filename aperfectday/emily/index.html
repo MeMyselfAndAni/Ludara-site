@@ -40,46 +40,55 @@ header {
   position: absolute;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 14px 16px 10px;
-  background: linear-gradient(to bottom, rgba(245,240,234,0.97) 0%, rgba(245,240,234,0) 100%);
+  padding: 10px 16px 10px;
+  background: rgba(245,240,234,0.98);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
+  border-bottom: 2px solid var(--terracotta);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
-.header-title {
-  pointer-events: all;
+.header-title { pointer-events: all; display: flex; flex-direction: column; gap: 1px; }
+.header-byline {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--terracotta);
+  font-weight: 700;
 }
 h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 400;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: var(--text);
-  line-height: 1.2;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
 }
-h1 em { font-style: italic; color: var(--terracotta); }
-.blog-tag {
-  font-size: 0.6rem;
+h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
+.header-sub {
+  font-size: 0.58rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--text2);
-  margin-top: 2px;
+  color: var(--text3);
+  font-weight: 500;
 }
 .header-btn {
   pointer-events: all;
-  background: white;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  color: var(--text2);
-  font-size: 0.7rem;
-  padding: 6px 12px;
+  background: var(--terracotta);
+  border: none;
+  color: white;
+  font-size: 0.68rem;
+  padding: 8px 14px;
   border-radius: 20px;
   text-decoration: none;
   font-family: 'Inter', sans-serif;
+  font-weight: 600;
   transition: all 0.2s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
-.header-btn:hover { background: var(--surface2); color: var(--text); }
+.header-btn:hover { background: #b05030; }
 
 /* ── MAP ── */
 #map {
@@ -91,7 +100,7 @@ h1 em { font-style: italic; color: var(--terracotta); }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 70px; left: 0; right: 0;
+  top: 82px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -284,7 +293,7 @@ h1 em { font-style: italic; color: var(--terracotta); }
 }
 .chevron { color: var(--text3); font-size: 0.8rem; flex-shrink: 0; }
 
-/* ── DETAIL SHEET ── */
+/* ── DETAIL HEADER — compact image beside title ── */
 .detail-sheet {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -296,103 +305,132 @@ h1 em { font-style: italic; color: var(--terracotta); }
   max-height: 85dvh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.7);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.13);
+  overflow: hidden;
 }
 .detail-sheet.open { transform: translateY(0); }
 
-/* ── HERO IMAGE - clean, no overlay ── */
-.detail-hero {
-  width: 100%;
-  height: 220px;
+.detail-header-row {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px 14px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   position: relative;
+}
+/* Back button — takes user back to list */
+.detail-back-btn {
+  position: absolute;
+  top: 12px; left: 12px;
   background: var(--surface3);
-  overflow: hidden;
+  border: none;
+  color: var(--text);
+  height: 28px;
+  padding: 0 10px 0 6px;
+  border-radius: 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 3px;
+  z-index: 4;
+  font-family: 'Inter', sans-serif;
 }
-.detail-hero img.hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.detail-hero-fallback {
-  font-size: 4rem;
-  position: relative;
-  z-index: 1;
-}
-/* No dark gradient — image shows fully */
-.detail-hero-gradient { display: none; }
-
-/* Title block sits BELOW the image, in detail-body */
-.detail-hero-text { display: none; }
-
 .detail-close-btn {
   position: absolute;
   top: 12px; right: 12px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(8px);
+  background: var(--surface3);
   border: none;
-  color: var(--text);
-  width: 32px; height: 32px;
+  color: var(--text2);
+  width: 28px; height: 28px;
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 0.85rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 4;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.15);
 }
-.photo-credit {
+.detail-img-box {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+  margin-top: 32px;
+}
+.detail-img-box img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.detail-img-box .photo-credit {
   position: absolute;
-  bottom: 6px; right: 10px;
-  font-size: 0.5rem;
-  color: rgba(255,255,255,0.7);
-  z-index: 4;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  bottom: 3px; right: 4px;
+  font-size: 0.45rem;
+  color: rgba(255,255,255,0.6);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
-.detail-body {
+.detail-title-col {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 16px 18px 32px;
-}
-.detail-body::-webkit-scrollbar { display: none; }
-
-/* Title in body */
-.detail-title-block {
-  margin-bottom: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
+  min-width: 0;
+  padding-top: 34px;
+  padding-right: 32px;
 }
 .detail-cat {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  color: var(--text3);
 }
 .detail-cat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .detail-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   line-height: 1.2;
   color: var(--text);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .detail-type {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text2);
   font-style: italic;
+  margin-bottom: 10px;
 }
+.detail-quick-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.detail-quick-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: var(--text2);
+}
+.detail-quick-item .dqi-icon { font-size: 0.75rem; }
+.detail-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 14px 16px 32px;
+}
+.detail-body::-webkit-scrollbar { display: none; }
 
 .emily-note {
   background: var(--surface2);
@@ -497,10 +535,9 @@ h1 em { font-style: italic; color: var(--terracotta); }
   .detail-sheet {
     left: 300px; right: 0;
     top: auto; bottom: 0;
-    max-height: 50dvh;
+    max-height: 55dvh;
     border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   }
-  .detail-hero { height: 200px; }
 
   header { left: 300px; }
 }
@@ -538,8 +575,9 @@ h1 em { font-style: italic; color: var(--terracotta); }
 <!-- Header -->
 <header>
   <div class="header-title">
-    <h1>Emily Lush's <em>Tbilisi</em></h1>
-    <div class="blog-tag">wander-lush.org · 35 curated places</div>
+    <div class="header-byline">Emily Lush · Wander-Lush.org</div>
+    <h1><em>Tbilisi</em> Guide</h1>
+    <div class="header-sub">35 curated places · Georgia</div>
   </div>
   <a class="header-btn" href="https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/" target="_blank">Blog ↗</a>
 </header>
@@ -578,28 +616,25 @@ h1 em { font-style: italic; color: var(--terracotta); }
 
 <!-- Detail sheet -->
 <div class="detail-sheet" id="detail-sheet">
-  <div class="detail-hero" id="detail-hero">
+  <div class="detail-header-row">
+    <button class="detail-back-btn" onclick="backToList()">‹ List</button>
     <button class="detail-close-btn" onclick="closeDetail()">✕</button>
-    <span class="detail-hero-fallback" id="detail-emoji">📍</span>
-    <div class="detail-hero-gradient"></div>
-    <div class="detail-hero-text">
+    <div class="detail-img-box" id="detail-img-box">
+      <span id="detail-emoji">📍</span>
+      <span class="photo-credit" id="photo-credit"></span>
+    </div>
+    <div class="detail-title-col">
       <div class="detail-cat" id="detail-cat"></div>
       <div class="detail-title" id="detail-title"></div>
       <div class="detail-type" id="detail-type"></div>
+      <div class="detail-quick-meta" id="detail-quick-meta"></div>
     </div>
-    <span class="photo-credit" id="photo-credit"></span>
   </div>
-  <div class="detail-body">
-    <div class="detail-title-block">
-      <div class="detail-cat" id="detail-cat"></div>
-      <div class="detail-title" id="detail-title"></div>
-      <div class="detail-type" id="detail-type"></div>
-    </div>
+  <div class="detail-body" id="detail-body">
     <div class="emily-note">
       <span id="detail-note"></span>
       <span class="emily-by">— Emily Lush, Wander-Lush</span>
     </div>
-    <div class="meta-list" id="detail-meta"></div>
     <div class="tip-box" id="detail-tip" style="display:none">
       <span class="tip-icon">💡</span>
       <div>
@@ -607,9 +642,8 @@ h1 em { font-style: italic; color: var(--terracotta); }
         <div class="tip-text" id="detail-tip-text"></div>
       </div>
     </div>
-    <div class="action-row">
-      <a class="btn-primary" id="btn-maps" href="#" target="_blank">Open in Maps</a>
-      <a class="btn-secondary" id="btn-blog" href="#" target="_blank">Read More ↗</a>
+    <div class="action-row" id="detail-actions">
+      <a class="btn-primary" id="btn-maps" href="#" target="_blank">📍 Open in Maps</a>
     </div>
   </div>
 </div>
@@ -806,11 +840,11 @@ function openDetail(id){
   document.getElementById('detail-note').textContent=p.note;
   document.getElementById('detail-emoji').textContent=p.emoji;
 
-  // Meta
-  let meta='';
-  if(p.hours) meta+=`<div class="meta-item"><span class="meta-icon">🕐</span><span class="meta-label">Hours</span><span class="meta-val">${p.hours}</span></div>`;
-  if(p.address) meta+=`<div class="meta-item"><span class="meta-icon">📍</span><span class="meta-label">Address</span><span class="meta-val">${p.address}</span></div>`;
-  document.getElementById('detail-meta').innerHTML=meta;
+  // Quick meta
+  let qmeta='';
+  if(p.hours) qmeta+=`<div class="detail-quick-item"><span class="dqi-icon">🕐</span><span>${p.hours}</span></div>`;
+  if(p.address) qmeta+=`<div class="detail-quick-item"><span class="dqi-icon">📍</span><span>${p.address}</span></div>`;
+  document.getElementById('detail-quick-meta').innerHTML=qmeta;
 
   // Tip
   if(p.tip){
@@ -820,14 +854,23 @@ function openDetail(id){
     document.getElementById('detail-tip').style.display='none';
   }
 
-  document.getElementById('btn-maps').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+' Tbilisi Georgia')}`;
-  document.getElementById('btn-blog').href=p.blog||'https://wander-lush.org';
+  // Action buttons - Maps always shown, website for food/cafe
+  const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+' Tbilisi Georgia')}`;
+  let actions=`<a class="btn-primary" id="btn-maps" href="${mapsUrl}" target="_blank">📍 Open in Maps</a>`;
+  if((p.cat==='food'||p.cat==='cafe') && p.blog){
+    actions+=`<a class="btn-secondary" id="btn-blog" href="${p.blog}" target="_blank">🌐 Website</a>`;
+  }
+  document.getElementById('detail-actions').innerHTML=actions;
 
-  // Photo
-  const heroEl=document.getElementById('detail-hero');
+  // Scroll detail body to top
+  const body=document.getElementById('detail-body');
+  if(body) body.scrollTop=0;
+
+  // Photo — compact square
+  const imgBox=document.getElementById('detail-img-box');
   const emojiEl=document.getElementById('detail-emoji');
   emojiEl.style.display='block';
-  const oldImg=heroEl.querySelector('img.hero-img');
+  const oldImg=imgBox.querySelector('img.detail-sq-img');
   if(oldImg) oldImg.remove();
   document.getElementById('photo-credit').innerHTML='';
 
@@ -836,20 +879,29 @@ function openDetail(id){
       emojiEl.style.display='none';
       const img=document.createElement('img');
       img.src=data.url;
-      img.className='hero-img';
-      heroEl.insertBefore(img, heroEl.firstChild);
+      img.className='detail-sq-img';
+      img.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;';
+      imgBox.insertBefore(img, imgBox.firstChild);
       if(data.attr){
         const tmp=document.createElement('div');
         tmp.innerHTML=data.attr;
-        document.getElementById('photo-credit').textContent='Photo: '+(tmp.querySelector('a')?.textContent||'Google');
+        document.getElementById('photo-credit').textContent='© '+(tmp.querySelector('a')?.textContent||'Google');
       }
     }
   });
 
-  // Show detail sheet, close list on mobile
+  // Show detail sheet — always on top, close list on mobile
   document.getElementById('detail-sheet').classList.add('open');
   if(window.innerWidth < 768){
     document.getElementById('sheet').classList.remove('open');
+  }
+}
+
+function backToList(){
+  // Close detail, reopen list
+  document.getElementById('detail-sheet').classList.remove('open');
+  if(window.innerWidth < 768){
+    document.getElementById('sheet').classList.add('open');
   }
 }
 
