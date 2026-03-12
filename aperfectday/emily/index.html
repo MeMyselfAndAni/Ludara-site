@@ -525,11 +525,18 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     width: 300px;
     border-radius: 0;
     max-height: none;
-    transform: translateX(0) !important;
+    transform: translateX(0);
     box-shadow: 2px 0 16px rgba(0,0,0,0.08);
     display: flex;
   }
   .sheet.open { transform: none; }
+  .sheet.desktop-hidden {
+    transform: translateX(-300px) !important;
+    box-shadow: none;
+  }
+  .sheet.desktop-hidden ~ #map { left: 0 !important; }
+  .sheet.desktop-hidden ~ .filter-bar { left: 0 !important; }
+  .sheet.desktop-hidden ~ #nbhd-bar { left: 0 !important; width: 100% !important; }
   .sheet-handle-area { display: none; }
   .sheet-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
 
@@ -825,13 +832,21 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 #stories-overlay.open { display: flex; }
 
+.stories-bg-color {
+  position: absolute;
+  inset: 0;
+  transition: background 0.3s;
+}
 .stories-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.7);
-  transition: background-image 0.4s;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.stories-bg.loaded {
+  opacity: 0.7;
 }
 .stories-gradient {
   position: absolute;
@@ -1104,6 +1119,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 <!-- Stories overlay -->
 <div id="stories-overlay">
+  <div class="stories-bg-color" id="stories-bg-color"></div>
   <div class="stories-bg" id="stories-bg"></div>
   <div class="stories-gradient"></div>
   <div class="stories-progress" id="stories-progress"></div>
@@ -1698,7 +1714,8 @@ function showStorySlide(idx){
     });
   }
 
-  // Background — always set gradient first so screen is never black
+  // Background — color layer shows instantly, photo fades in on top
+  const bgColor = document.getElementById('stories-bg-color');
   const bg = document.getElementById('stories-bg');
   const colors = {
     landmark:'135deg,#1a3a5c 0%,#2a5298 100%',
@@ -1709,15 +1726,25 @@ function showStorySlide(idx){
     soviet:'135deg,#3a1a5c 0%,#6a3a9c 100%',
     nature:'135deg,#1a4a2a 0%,#3a8a4a 100%',
   };
-  bg.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
+  // Always show gradient immediately
+  bgColor.style.background = `linear-gradient(${colors[p.cat]||'135deg,#1a3a5c,#2a5298'})`;
+  bg.classList.remove('loaded');
   bg.style.backgroundImage = '';
+  const loadImg = (url) => {
+    const img = new Image();
+    img.onload = () => {
+      if(storyIdx === idx){
+        bg.style.backgroundImage = `url(${url})`;
+        bg.classList.add('loaded');
+      }
+    };
+    img.src = url;
+  };
   if(photoCache[p.id] && photoCache[p.id].url){
-    bg.style.backgroundImage = `url(${photoCache[p.id].url})`;
+    loadImg(photoCache[p.id].url);
   } else {
     fetchPhoto(p, result => {
-      if(result && storyIdx === idx){
-        bg.style.backgroundImage = `url(${result.url})`;
-      }
+      if(result && storyIdx === idx) loadImg(result.url);
     });
   }
 
@@ -1778,21 +1805,50 @@ function storiesMaps(){
 
 // ── SHEET TOGGLE (mobile) ─────────────────────────────────────
 function openSheet(){
-  document.getElementById('sheet').classList.add('open');
+  const s = document.getElementById('sheet');
+  s.classList.add('open');
+  s.classList.remove('desktop-hidden');
   document.getElementById('detail-sheet').classList.remove('open');
+  if(window.innerWidth >= 768){
+    document.getElementById('map').style.left = '';
+    document.querySelector('.filter-bar').style.left = '';
+    const nb = document.getElementById('nbhd-bar');
+    if(nb){ nb.style.left=''; nb.style.width=''; nb.style.right=''; }
+    const btn = document.getElementById('sidebar-reopen');
+    if(btn) btn.style.display = 'none';
+  }
 }
 function closeSheet(){
   const s = document.getElementById('sheet');
-  s.classList.remove('open');
-  // On mobile the Places bar stays visible so map is accessible
-  // Also deselect any active pin so map feels fresh
+  if(window.innerWidth >= 768){
+    s.classList.add('desktop-hidden');
+    document.getElementById('map').style.left = '0';
+    document.querySelector('.filter-bar').style.left = '0';
+    const nb = document.getElementById('nbhd-bar');
+    if(nb){ nb.style.left='0'; nb.style.width='100%'; nb.style.right='0'; }
+    // Show a reopen button
+    let btn = document.getElementById('sidebar-reopen');
+    if(!btn){
+      btn = document.createElement('button');
+      btn.id = 'sidebar-reopen';
+      btn.innerHTML = '☰';
+      btn.style.cssText = 'position:absolute;top:16px;left:16px;z-index:600;background:white;border:1px solid #ddd;border-radius:8px;padding:8px 12px;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15);';
+      btn.onclick = openSheet;
+      document.body.appendChild(btn);
+    }
+    btn.style.display = 'block';
+  } else {
+    s.classList.remove('open');
+  }
 }
 function toggleSheet(){
   const s=document.getElementById('sheet');
-  if(s.classList.contains('open')){
-    closeSheet();
+  const isHidden = s.classList.contains('desktop-hidden');
+  const isOpen = s.classList.contains('open');
+  if(window.innerWidth >= 768){
+    if(isHidden){ openSheet(); } else { closeSheet(); }
   } else {
-    openSheet();
+    if(isOpen){ closeSheet(); } else { openSheet(); }
   }
 }
 </script>
