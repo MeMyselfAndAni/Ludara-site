@@ -141,15 +141,38 @@ function closeDetail(){
   AID=null;
   document.getElementById('detail-sheet').classList.remove('open');
   document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('active'));
+  // On mobile: reopen the list so it stays visible after closing a detail
+  if(window.innerWidth < 768){
+    openSheet();
+  }
 }
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
   AF=cat;
-  closeDetail();
+  // Close detail panel but keep list visible
+  document.getElementById('detail-sheet').classList.remove('open');
+  if(AID && markers[AID]){
+    const prev=PLACES.find(x=>x.id===AID);
+    if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
+  }
+  AID=null;
+  document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('active'));
+
   document.querySelectorAll('.pill:not(.pill-opennow)').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
   applyFilters();
+
+  // On desktop, ensure sidebar is open when user picks a filter
+  if(window.innerWidth >= 768){
+    const s = document.getElementById('sheet');
+    if(s.classList.contains('desktop-hidden')) openSheet();
+  }
+  // On mobile, open the sheet to show the filtered list
+  if(window.innerWidth < 768){
+    openSheet();
+  }
+
   const vis=PLACES.filter(p=>(cat==='all'||p.cat===cat)&&(!openNowActive||isOpenNow(p)));
   if(vis.length){
     const b=new google.maps.LatLngBounds();
