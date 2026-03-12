@@ -61,67 +61,110 @@
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
-<div id="nbhd-label" style="position:absolute;bottom:108px;left:14px;z-index:351;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#555;pointer-events:none;">Explore by neighbourhood</div>
+<!-- Neighbourhood bar — floats over map, draggable vertically -->
 <div id="nbhd-bar">
-  <div class="nbhd-bubble" onclick="openStories('old-town')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
-    <span class="nbhd-label">Old Town</span>
+  <div class="nbhd-bar-handle" id="nbhd-handle">
+    <span class="nbhd-bar-label">Neighbourhoods</span>
+    <div class="nbhd-handle-grip">⠿</div>
   </div>
-  <div class="nbhd-bubble" onclick="openStories('sololaki')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
-    <span class="nbhd-label">Sololaki</span>
-  </div>
-  <div class="nbhd-bubble" onclick="openStories('avlabari')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
-    <span class="nbhd-label">Avlabari</span>
-  </div>
-  <div class="nbhd-bubble" onclick="openStories('vera')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
-    <span class="nbhd-label">Vera</span>
-  </div>
-  <div class="nbhd-bubble" onclick="openStories('chugureti')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
-    <span class="nbhd-label">Chugureti</span>
-  </div>
-  <div class="nbhd-bubble" onclick="openStories('mtatsminda')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
-    <span class="nbhd-label">Mtatsminda</span>
-  </div>
-  <div class="nbhd-bubble" onclick="openStories('vake')">
-    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
-    <span class="nbhd-label">Vake</span>
+  <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('old-town')" ontouchend="openStories('old-town')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
+      <span class="nbhd-label">Old Town</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('sololaki')" ontouchend="openStories('sololaki')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
+      <span class="nbhd-label">Sololaki</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('avlabari')" ontouchend="openStories('avlabari')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
+      <span class="nbhd-label">Avlabari</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vera')" ontouchend="openStories('vera')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
+      <span class="nbhd-label">Vera</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('chugureti')" ontouchend="openStories('chugureti')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
+      <span class="nbhd-label">Chugureti</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('mtatsminda')" ontouchend="openStories('mtatsminda')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
+      <span class="nbhd-label">Mtatsminda</span>
+    </div>
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vake')" ontouchend="openStories('vake')">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
+      <span class="nbhd-label">Vake</span>
+    </div>
   </div>
 </div>
 
-<!-- Stories overlay -->
-<div id="stories-overlay">
-  <div class="stories-bg-color" id="stories-bg-color"></div>
-  <div class="stories-bg" id="stories-bg"></div>
-  <div class="stories-gradient"></div>
-  <div class="stories-progress" id="stories-progress"></div>
-  <div class="stories-header">
-    <div class="stories-nbhd-icon" id="stories-icon"></div>
-    <div>
-      <div class="stories-nbhd-name" id="stories-nbhd-name"></div>
+<!-- Neighbourhood dim + card overlay -->
+<div id="nbhd-dim" onclick="closeStories()"></div>
+<div id="nbhd-cards">
+  <div class="nbhd-card-header">
+    <div class="nbhd-card-header-title">
+      <span id="nbhd-card-icon"></span>
+      <span id="nbhd-card-label"></span>
     </div>
-    <span class="stories-count" id="stories-count"></span>
-    <button class="stories-close" onclick="closeStories()">✕</button>
+    <button class="nbhd-card-close" onclick="closeStories()">✕</button>
   </div>
-  <div class="stories-tap-left"  onclick="storiesPrev()"></div>
-  <div class="stories-tap-right" onclick="storiesNext()"></div>
-  <div class="stories-content">
-    <div class="stories-cat-badge" id="stories-badge"></div>
-    <div class="stories-place-name" id="stories-name"></div>
-    <div class="stories-note" id="stories-note"></div>
-    <div class="stories-tip" id="stories-tip"></div>
-    <div class="stories-actions">
-      <button class="stories-btn stories-btn-primary" onclick="storiesOpenDetail()">See full details →</button>
-      <button class="stories-btn stories-btn-secondary" onclick="storiesMaps()">📍 Maps</button>
+  <div class="nbhd-card">
+    <div class="nbhd-card-img-wrap">
+      <div class="nbhd-card-img-placeholder" id="card-placeholder"></div>
+      <img class="nbhd-card-img" id="card-img" alt="">
+    </div>
+    <div class="nbhd-card-body">
+      <div class="nbhd-card-badge" id="card-badge"></div>
+      <div class="nbhd-card-name" id="card-name"></div>
+      <div class="nbhd-card-note" id="card-note"></div>
+      <div class="nbhd-card-footer">
+        <div class="nbhd-card-actions">
+          <button class="nbhd-card-btn primary" onclick="storiesOpenDetail()">Full details →</button>
+          <button class="nbhd-card-btn" onclick="storiesMaps()">📍 Maps</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="nbhd-card-counter" id="card-counter"></span>
+          <div class="nbhd-card-nav">
+            <button id="card-prev" onclick="storiesPrev()">←</button>
+            <button id="card-next" onclick="storiesNext()">→</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Stories overlay kept as empty shell for swipe listener compatibility -->
+<div id="stories-overlay"></div>
 
 <div id="pin-pulse"></div>
+
+<!-- Favourites panel -->
+<div id="fav-panel">
+  <div class="fav-panel-header">
+    <div class="fav-panel-title">♡ My Favourites</div>
+    <button class="fav-panel-close" onclick="toggleFavPanel()">✕</button>
+  </div>
+  <div id="fav-list" class="fav-list"></div>
+  <div class="fav-panel-footer">
+    <button class="fav-trip-btn" id="fav-trip-btn" onclick="planFavTrip()">🗺 Plan a trip with these</button>
+  </div>
+</div>
+
+<!-- Trip plan overlay -->
+<div id="trip-overlay">
+  <div class="trip-panel">
+    <div class="trip-header">
+      <div class="trip-title">🗺 Your Favourite Places Trip</div>
+      <button class="trip-close" onclick="closeTripPlan()">✕</button>
+    </div>
+    <div id="trip-content" class="trip-content"></div>
+    <div class="trip-footer">
+      <button class="trip-maps-btn" onclick="openTripInMaps()">Open all in Google Maps</button>
+    </div>
+  </div>
+</div>
 
 <!-- List toggle (mobile only) -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
@@ -142,6 +185,10 @@
   </div>
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">64 Places</span>
+    <button class="fav-panel-btn" id="fav-panel-btn" onclick="toggleFavPanel()" title="My Favourites">
+      <span id="fav-panel-icon">♡</span>
+      <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
+    </button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -151,6 +198,7 @@
 <div class="detail-sheet" id="detail-sheet">
   <div class="detail-header-row">
     <button class="detail-back-btn" onclick="backToList()">‹ List</button>
+    <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
     <button class="detail-close-btn" onclick="closeDetail()">✕</button>
     <div class="detail-img-box" id="detail-img-box">
       <span id="detail-emoji">📍</span>
@@ -187,6 +235,7 @@
 <script src="map.js"></script>
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
+<script src="ui-favourites.js"></script>
 
 <!-- Google Maps (loads last, calls initMap as callback) -->
 <script async defer

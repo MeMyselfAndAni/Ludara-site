@@ -47,6 +47,7 @@ function openDetail(id){
 
   AID=id;
   markers[id].setIcon(makeIcon(p,true));
+  if(typeof syncFavBtn === 'function') syncFavBtn(id);
   markers[id].setZIndex(999);
   updatePulse(p);
   map.panTo({lat:p.lat, lng:p.lng});
