@@ -8,6 +8,12 @@ function saveFavs(){
   updateFavUI();
 }
 
+// Sync in-memory favourites from localStorage (called after external writes)
+function refreshFavourites(){
+  favourites = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  updateFavUI();
+}
+
 function updateFavUI(){
   const count = favourites.length;
 

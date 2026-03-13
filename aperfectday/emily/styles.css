@@ -441,9 +441,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
   #nbhd-bar .nbhd-bar-label { display: none; }  /* hide "NEIGHBOURHOODS" text */
   #nbhd-label { display: none; }
-  /* Indent bubbles so first icon aligns under "Tbilisi Guide" (~190px into map area) */
+  /* Indent bubbles so first icon starts under "Wander-Lush" logo (~200px into map area) */
   #nbhd-bar .nbhd-bubbles-row {
-    padding-left: 164px;
+    padding-left: 200px;
   }
 
   /* When sidebar is hidden, stretch bar to left edge */
@@ -1108,6 +1108,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── Photo area ─────────────────────────────────────────────── */
 .pc-photo-wrap {
+  cursor: grab;
+
   position: relative;
   width: 100%;
   height: 240px;
@@ -1335,6 +1337,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     transform: translate(-50%, -50%) scale(1) !important;
     opacity: 1;
   }
-  .pc-photo-wrap { height: 260px; }
+  .pc-photo-wrap {
+  cursor: grab;
+ height: 260px; }
   .pc-body { max-height: calc(82vh - 260px); padding: 14px 18px 18px; }
 }
+
+/* Card dragging */
+#place-card[style*="left"] { cursor: default; }
+#place-card .pc-photo-wrap:active { cursor: grabbing; }

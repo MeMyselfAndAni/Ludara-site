@@ -212,21 +212,25 @@ function isOpenNow(place){
 
 function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
-  const savedIds = isSaved ? (typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces().map(p=>p.id) : []) : null;
+  const savedIds = isSaved
+    ? (typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces().map(p=>p.id) : [])
+    : null;
 
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
-      visible = savedIds.includes(p.id);
+      // Saved mode: show saved places; if category also active, intersect
+      const inSaved = savedIds.includes(p.id);
+      const catOk   = AF === 'all' || p.cat === AF;
+      visible = inSaved && catOk;
     } else {
-      const catOk = AF === 'all' || p.cat === AF;
+      const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
       visible = catOk && openOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);
   });
 
-  // Draw or clear route
   if(isSaved && typeof drawSavedRoute === 'function') drawSavedRoute();
   else if(!isSaved && typeof clearTripRoute === 'function') clearTripRoute();
 

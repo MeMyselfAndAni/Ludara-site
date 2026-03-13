@@ -1,10 +1,9 @@
 // ── UNIFIED PLACE CARD CONTROLLER ────────────────────────────
-// Both list details (openDetail) and neighbourhood browsing
-// use this single component.
+// Both list details and neighbourhood browsing use this single component.
 
-let CARD_PLACE   = null;   // currently displayed place
-let CARD_LIST    = [];     // array when browsing neighbourhood
-let CARD_IDX     = 0;      // current index in CARD_LIST
+let CARD_PLACE   = null;
+let CARD_LIST    = [];
+let CARD_IDX     = 0;
 let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 // AID is declared in data.js
 
@@ -30,36 +29,37 @@ const CAT_GRADIENTS = {
 // ── Open card from list ────────────────────────────────────────
 function openDetail(id){
   CARD_MODE = 'detail';
-  CARD_LIST = [];
+
+  // Build nav list from whatever is currently visible in the list
+  const rows = Array.from(document.querySelectorAll('.place-row'));
+  CARD_LIST = rows.map(r => {
+    const rid = parseInt(r.id.replace('row-',''));
+    return PLACES.find(x => x.id === rid);
+  }).filter(Boolean);
+  if(!CARD_LIST.length) CARD_LIST = PLACES.slice();
+
+  CARD_IDX = CARD_LIST.findIndex(x => x.id === id);
+  if(CARD_IDX < 0) CARD_IDX = 0;
+
   const p = PLACES.find(x => x.id === id);
   if(!p) return;
 
-  // Update active marker
-  if(AID && markers[AID]){
-    const prev = PLACES.find(x => x.id === AID);
-    if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
-  }
-  AID = id;
-  if(markers[id]){ markers[id].setIcon(makeIcon(p,true)); markers[id].setZIndex(10); }
-  if(map) map.panTo({lat:p.lat, lng:p.lng});
+  _activateMarker(p);
 
-  // Show ‹ List, hide prev/next
+  // Show both ‹ List AND ‹ › arrows
   document.getElementById('pc-btn-back').style.display = 'flex';
-  document.getElementById('pc-nav-prev').style.display = 'none';
-  document.getElementById('pc-nav-next').style.display = 'none';
-  document.getElementById('pc-counter').style.display  = 'none';
+  document.getElementById('pc-nav-prev').style.display = 'flex';
+  document.getElementById('pc-nav-next').style.display = 'flex';
+  document.getElementById('pc-counter').style.display  = 'block';
 
+  _refreshNav();
   _populateCard(p);
   _openCard();
 
-  // Hide list on mobile
   if(window.innerWidth < 768){
     document.getElementById('sheet').classList.remove('open');
   }
-  // Desktop backdrop
-  _showDim();
 
-  // Highlight list row
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
   const row = document.getElementById('row-' + id);
   if(row){ row.classList.add('active'); row.scrollIntoView({block:'nearest'}); }
@@ -72,7 +72,6 @@ function openNbhdCard(nbhd){
   if(!CARD_LIST.length){ alert('No places for this neighbourhood yet!'); return; }
   CARD_IDX = 0;
 
-  // Zoom map to neighbourhood
   const NBHD_BOUNDS = {
     'old-town':   {lat:41.6895,lng:44.8100,zoom:16},
     'sololaki':   {lat:41.6920,lng:44.8040,zoom:16},
@@ -85,7 +84,6 @@ function openNbhdCard(nbhd){
   const b = NBHD_BOUNDS[nbhd];
   if(b && map){ map.setCenter({lat:b.lat,lng:b.lng}); map.setZoom(b.zoom); }
 
-  // Hide ‹ List, show prev/next
   document.getElementById('pc-btn-back').style.display = 'none';
   document.getElementById('pc-nav-prev').style.display = 'flex';
   document.getElementById('pc-nav-next').style.display = 'flex';
@@ -93,7 +91,6 @@ function openNbhdCard(nbhd){
 
   _showSlide(0);
   _openCard();
-  _showDim();
 }
 
 function _showSlide(idx){
@@ -101,22 +98,42 @@ function _showSlide(idx){
   const p = CARD_LIST[idx];
   if(!p){ closePlaceCard(); return; }
   if(map) map.panTo({lat:p.lat, lng:p.lng});
-
-  document.getElementById('pc-nav-prev').disabled = (idx === 0);
-  document.getElementById('pc-nav-next').disabled = (idx === CARD_LIST.length - 1);
-  document.getElementById('pc-counter').textContent = (idx + 1) + ' / ' + CARD_LIST.length;
-
+  _activateMarker(p);
+  _refreshNav();
   _populateCard(p);
+
+  // Highlight list row
+  document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
+  const row = document.getElementById('row-' + p.id);
+  if(row){ row.classList.add('active'); row.scrollIntoView({block:'nearest'}); }
+}
+
+function _refreshNav(){
+  const prev = document.getElementById('pc-nav-prev');
+  const next = document.getElementById('pc-nav-next');
+  const counter = document.getElementById('pc-counter');
+  prev.disabled = (CARD_IDX === 0);
+  next.disabled = (CARD_IDX === CARD_LIST.length - 1);
+  counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
 }
 
 function cardPrev(){ if(CARD_IDX > 0) _showSlide(CARD_IDX - 1); }
 function cardNext(){ if(CARD_IDX < CARD_LIST.length - 1) _showSlide(CARD_IDX + 1); }
 
+function _activateMarker(p){
+  if(AID && markers[AID]){
+    const prev = PLACES.find(x => x.id === AID);
+    if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
+  }
+  AID = p.id;
+  if(markers[p.id]){ markers[p.id].setIcon(makeIcon(p,true)); markers[p.id].setZIndex(10); }
+  if(map) map.panTo({lat:p.lat, lng:p.lng});
+}
+
 // ── Populate all fields ───────────────────────────────────────
 function _populateCard(p){
   CARD_PLACE = p;
 
-  // Photo
   const wrap = document.getElementById('pc-photo-wrap');
   const placeholder = document.getElementById('pc-emoji');
   const img = document.getElementById('pc-img');
@@ -150,21 +167,16 @@ function _populateCard(p){
     fetchPhoto(p, result => { if(result?.url) loadPhoto(result.url, result.attr); });
   }
 
-  // Category badge
   const col = CAT_COLORS[p.cat] || '#888';
   document.getElementById('pc-cat').innerHTML =
     `<span class="pc-cat-dot" style="background:${col}"></span><span style="color:${col}">${CAT_LABELS[p.cat] || p.cat}</span>`;
 
-  // Title, type, hours
   document.getElementById('pc-title').textContent = p.name;
   document.getElementById('pc-type').textContent  = p.type || '';
-  const hoursEl = document.getElementById('pc-hours');
-  hoursEl.innerHTML = p.hours ? `🕐 ${p.hours}` : '';
+  document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${p.hours}` : '';
 
-  // Note
   document.getElementById('pc-note').textContent = p.note || '';
 
-  // Tip
   const tipEl = document.getElementById('pc-tip');
   if(p.tip){
     document.getElementById('pc-tip-text').textContent = p.tip;
@@ -173,16 +185,13 @@ function _populateCard(p){
     tipEl.style.display = 'none';
   }
 
-  // Contacts
   let contacts = '';
   if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
   if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
-  // Fav state
   _updateFavBtn();
 
-  // Scroll body to top
   const body = document.getElementById('pc-body');
   if(body) body.scrollTop = 0;
 }
@@ -206,7 +215,11 @@ function cardToggleFav(){
   }
   localStorage.setItem('tbilisi-favs', JSON.stringify(favs));
   _updateFavBtn();
-  if(typeof refreshSavedPill === 'function') refreshSavedPill();
+  // Sync the favourites array in ui-favourites.js
+  if(typeof refreshFavourites === 'function') refreshFavourites();
+  else if(typeof refreshSavedPill === 'function') refreshSavedPill();
+  // Refresh list if saved mode is active
+  if(typeof savedFilterActive !== 'undefined' && savedFilterActive) applyFilters();
 }
 
 // ── Open / close ──────────────────────────────────────────────
@@ -214,16 +227,11 @@ function _openCard(){
   document.getElementById('place-card').classList.add('open');
   document.getElementById('place-card-dim').classList.add('open');
 }
-function _showDim(){
-  // Desktop: dim is the #place-card-dim (already added above)
-  // Nothing extra needed
-}
 
 function closePlaceCard(){
   document.getElementById('place-card').classList.remove('open');
   document.getElementById('place-card-dim').classList.remove('open');
 
-  // Reset active marker
   if(AID && markers[AID]){
     const prev = PLACES.find(x => x.id === AID);
     if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
@@ -243,7 +251,7 @@ function cardBack(){
   if(window.innerWidth < 768) openSheet();
 }
 
-// Keyboard
+// ── Keyboard nav ──────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   const card = document.getElementById('place-card');
   if(!card.classList.contains('open')) return;
@@ -252,7 +260,7 @@ document.addEventListener('keydown', e => {
   if(e.key === 'ArrowLeft')  cardPrev();
 });
 
-// Swipe down to close (mobile)
+// ── Swipe down to close (mobile) ─────────────────────────────
 (function(){
   let startY = 0;
   const el = document.getElementById('place-card');
@@ -262,3 +270,63 @@ document.addEventListener('keydown', e => {
     if(e.changedTouches[0].clientY - startY > 70) closePlaceCard();
   }, {passive:true});
 })();
+
+// ── Draggable card on desktop ─────────────────────────────────
+(function initCardDrag(){
+  const card   = document.getElementById('place-card');
+  const header = document.getElementById('pc-photo-wrap'); // drag from photo area
+  if(!card || !header) return;
+
+  let dragging = false, ox = 0, oy = 0, cx = 0, cy = 0;
+
+  function startDrag(ex, ey){
+    if(window.innerWidth < 768) return;
+    dragging = true;
+    const rect = card.getBoundingClientRect();
+    ox = ex - rect.left;
+    oy = ey - rect.top;
+    card.style.transition = 'none';
+    card.style.cursor = 'grabbing';
+    document.body.style.userSelect = 'none';
+  }
+  function doDrag(ex, ey){
+    if(!dragging) return;
+    cx = ex - ox;
+    cy = ey - oy;
+    // Clamp within viewport
+    const maxX = window.innerWidth  - card.offsetWidth;
+    const maxY = window.innerHeight - card.offsetHeight;
+    cx = Math.max(0, Math.min(maxX, cx));
+    cy = Math.max(0, Math.min(maxY, cy));
+    card.style.left      = cx + 'px';
+    card.style.top       = cy + 'px';
+    card.style.transform = 'none';
+  }
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    card.style.cursor = '';
+    document.body.style.userSelect = '';
+    card.style.transition = '';
+  }
+
+  header.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+  document.addEventListener('mousemove', e => doDrag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', endDrag);
+
+  // Reset position when card is closed/reopened
+  const origOpen = _openCard;
+  window._resetCardPos = function(){
+    card.style.left = '';
+    card.style.top  = '';
+    card.style.transform = '';
+  };
+})();
+
+// Reset card position each time it opens (desktop)
+const _origOpenCard = _openCard;
+function _openCard(){
+  if(window.innerWidth >= 768 && window._resetCardPos) window._resetCardPos();
+  document.getElementById('place-card').classList.add('open');
+  document.getElementById('place-card-dim').classList.add('open');
+}
