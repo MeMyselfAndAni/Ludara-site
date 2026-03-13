@@ -44,8 +44,9 @@ function toggleFav(){
   if(savedFilterActive) applyFilters();
 }
 
-function syncFavBtn(id){
-  const btn = document.getElementById('detail-fav-btn');
+function syncFavBtn(id){ if(typeof _updateFavBtn === "function") _updateFavBtn();
+  // legacy btn sync below:
+  const btn = document.getElementById('pc-btn-fav');
   if(!btn) return;
   const faved = isFav(id);
   btn.textContent = faved ? '♥' : '♡';

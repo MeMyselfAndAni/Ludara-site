@@ -104,43 +104,38 @@
   </div>
 </div>
 
-<!-- Neighbourhood dim + card overlay -->
-<div id="nbhd-dim" onclick="closeStories()"></div>
-<div id="nbhd-cards">
-  <div class="nbhd-card-header">
-    <div class="nbhd-card-header-title">
-      <span id="nbhd-card-icon"></span>
-      <span id="nbhd-card-label"></span>
-    </div>
-    <button class="nbhd-card-close" onclick="closeStories()">✕</button>
+<!-- ── UNIFIED PLACE CARD — used for both list details and neighbourhood browsing ── -->
+<div id="place-card-dim" onclick="closePlaceCard()"></div>
+<div id="place-card">
+  <!-- Photo -->
+  <div class="pc-photo-wrap" id="pc-photo-wrap">
+    <div class="pc-photo-placeholder" id="pc-emoji">📍</div>
+    <img class="pc-photo-img" id="pc-img" alt="">
+    <span class="pc-photo-credit" id="pc-credit"></span>
+    <!-- Floating controls -->
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()">‹ List</button>
+    <button class="pc-btn-close" onclick="closePlaceCard()">✕</button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
+    <!-- Prev/Next arrows (shown in neighbourhood mode) -->
+    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()">‹</button>
+    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()">›</button>
   </div>
-  <div class="nbhd-card">
-    <div class="nbhd-card-img-wrap">
-      <div class="nbhd-card-img-placeholder" id="card-placeholder"></div>
-      <img class="nbhd-card-img" id="card-img" alt="">
-      <button class="nbhd-img-nav prev" id="card-prev" onclick="storiesPrev()" ontouchend="storiesPrev()">‹</button>
-      <button class="nbhd-img-nav next" id="card-next" onclick="storiesNext()" ontouchend="storiesNext()">›</button>
+  <!-- Body -->
+  <div class="pc-body" id="pc-body">
+    <div class="pc-cat" id="pc-cat"></div>
+    <div class="pc-title" id="pc-title"></div>
+    <div class="pc-type" id="pc-type"></div>
+    <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-note-wrap">
+      <div class="pc-note" id="pc-note"></div>
+      <span class="pc-emily-by">— Emily Lush, Wander-Lush</span>
     </div>
-    <div class="nbhd-card-body">
-      <div class="nbhd-card-badge" id="card-badge"></div>
-      <div class="nbhd-card-name" id="card-name"></div>
-      <div class="nbhd-card-type" id="card-type"></div>
-      <div class="nbhd-card-meta" id="card-meta"></div>
-      <div class="nbhd-card-note" id="card-note"></div>
-      <span class="nbhd-card-emily-by">— Emily Lush, Wander-Lush</span>
-      <div class="nbhd-card-tip" id="card-tip" style="display:none">
-        <span class="nbhd-card-tip-label">💡 Emily's Tip</span>
-        <span id="card-tip-text"></span>
-      </div>
-      <a class="nbhd-card-website" id="card-website" href="#" target="_blank" style="display:none"></a>
-      <div class="nbhd-card-footer">
-        <div class="nbhd-card-actions">
-          <button class="nbhd-card-btn primary" onclick="storiesMaps()">📍 Open in Maps</button>
-          <button class="nbhd-card-fav" id="card-fav" onclick="storiesToggleFav()">♡</button>
-        </div>
-        <span class="nbhd-card-counter" id="card-counter"></span>
-      </div>
+    <div class="pc-tip" id="pc-tip" style="display:none">
+      <span class="pc-tip-label">💡 Emily's Tip</span>
+      <span id="pc-tip-text"></span>
     </div>
+    <div class="pc-contacts" id="pc-contacts"></div>
+    <div class="pc-counter" id="pc-counter" style="display:none"></div>
   </div>
 </div>
 
@@ -195,54 +190,13 @@
   </div>
 </div>
 
-<!-- Detail sheet — card format: photo on top, content below -->
-<div class="detail-sheet" id="detail-sheet">
 
-  <!-- Full-width photo + floating controls -->
-  <div class="detail-photo-wrap" id="detail-img-box">
-    <div class="detail-photo-placeholder" id="detail-emoji">📍</div>
-    <span class="photo-credit" id="photo-credit"></span>
-    <button class="detail-back-btn" onclick="backToList()">‹ List</button>
-    <button class="detail-close-btn" onclick="closeDetail()">✕</button>
-    <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
-  </div>
-
-  <!-- Content -->
-  <div class="detail-body" id="detail-body">
-    <!-- Badge + title + heart -->
-    <div class="detail-cat" id="detail-cat"></div>
-    <div class="detail-title-row">
-      <div class="detail-title" id="detail-title"></div>
-    </div>
-    <div class="detail-type" id="detail-type"></div>
-    <div class="detail-quick-meta" id="detail-quick-meta"></div>
-
-    <!-- Emily's note -->
-    <div class="emily-note">
-      <span id="detail-note"></span>
-      <span class="emily-by">— Emily Lush, Wander-Lush</span>
-    </div>
-
-    <!-- Tip -->
-    <div class="tip-box" id="detail-tip" style="display:none">
-      <span class="tip-icon">💡</span>
-      <div>
-        <div class="tip-label">Emily's Tip</div>
-        <div class="tip-text" id="detail-tip-text"></div>
-      </div>
-    </div>
-
-    <!-- Action buttons -->
-    <div class="action-row" id="detail-actions">
-      <a class="btn-primary" id="btn-maps" href="#" target="_blank">📍 Open in Maps</a>
-    </div>
-  </div>
-</div>
 
 <!-- JS modules — load order matters -->
 <script src="data.js"></script>
 <script src="photos.js"></script>
 <script src="map.js"></script>
+<script src="ui-card.js"></script>
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
