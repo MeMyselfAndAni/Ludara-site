@@ -407,17 +407,16 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   header { left: 300px; }
 
-  /* Neighbourhood bar — desktop: pill floats in map area, starts after sidebar */
+  /* Neighbourhood bar — desktop: spans map area, bubbles indented under header text */
   #nbhd-bar {
     position: fixed;
     bottom: 24px;
-    /* Start right after the 300px sidebar, end 24px from right edge */
-    left: 300px;
+    left: 300px;   /* flush with sidebar right edge */
     right: 24px;
     width: auto;
     flex-direction: row;
     align-items: center;
-    padding: 6px 10px 6px 10px;
+    padding: 6px 10px 6px 0;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -428,19 +427,28 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     overflow: visible;
     gap: 0;
     z-index: 450;
+    /* Dragging still works via JS bottom override */
   }
-  /* Hide the drag handle on desktop — not needed */
-  #nbhd-bar .nbhd-bar-handle { display: none; }
+  /* Desktop handle: keep for dragging but minimal — hide text label */
+  #nbhd-bar .nbhd-bar-handle {
+    display: flex;
+    width: 18px;
+    border-right: 1px solid rgba(0,0,0,0.07);
+    margin-right: 4px;
+    padding: 4px 4px 4px 6px;
+  }
+  #nbhd-bar .nbhd-bar-label { display: none; }  /* hide "NEIGHBOURHOODS" text */
   #nbhd-label { display: none; }
-  /* Bubbles start with a left indent matching the Wander-Lush logo width (~170px) */
+  /* Indent bubbles so first icon aligns under "Tbilisi Guide" (~190px into map area) */
   #nbhd-bar .nbhd-bubbles-row {
-    padding-left: 170px;
+    padding-left: 164px;
   }
 
   /* When sidebar is hidden, stretch bar to left edge */
   .sheet.desktop-hidden ~ #nbhd-bar {
     left: 16px !important;
     right: 16px !important;
+    padding-left: 10px !important;
   }
   .sheet.desktop-hidden ~ #nbhd-bar .nbhd-bubbles-row {
     padding-left: 0 !important;

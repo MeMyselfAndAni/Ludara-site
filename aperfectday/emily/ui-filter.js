@@ -87,8 +87,8 @@ function renderList(){
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
   AF=cat;
-  // Close detail panel but keep list visible
-  document.getElementById('detail-sheet').classList.remove('open');
+  // Close detail card
+  if(typeof closePlaceCard === 'function') closePlaceCard();
   if(AID && markers[AID]){
     const prev=PLACES.find(x=>x.id===AID);
     if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
