@@ -3,32 +3,36 @@ function renderList(){
   const el=document.getElementById('places-list');
   let filtered;
 
-  // Saved filter mode — show favourites, optionally filtered by category
+  // Saved filter mode — always show ALL saved places in list (category pill only affects map)
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
-    let allSaved = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
-    // Intersect with category filter if one is active
-    filtered = (AF && AF !== 'all') ? allSaved.filter(p => p.cat === AF) : allSaved;
-    const label = (AF && AF !== 'all') ? `♥ ${filtered.length} Saved · ${CL[AF]||AF}` : `♥ ${allSaved.length} Saved`;
-    document.getElementById('sheet-title').textContent = label;
-    document.getElementById('list-badge').textContent = filtered.length;
+    // Always re-sync from localStorage before rendering to avoid stale array
+    if(typeof refreshFavourites === 'function') refreshFavourites();
+    const allSaved = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
+    filtered = allSaved; // list always shows full saved list
+    const catNote = (AF && AF !== 'all') ? ` · also showing ${CL[AF]||AF} on map` : '';
+    document.getElementById('sheet-title').textContent = `♥ ${allSaved.length} Saved${catNote}`;
+    document.getElementById('list-badge').textContent = allSaved.length;
 
-    // Show/update the plan-trip banner at top of sheet
+    // Show/update the plan-trip banner
     let banner = document.getElementById('saved-mode-banner');
     if(!banner){
       const sheet = document.getElementById('sheet');
       banner = document.createElement('div');
       banner.id = 'saved-mode-banner';
       banner.className = 'saved-mode-banner';
-      banner.innerHTML = `<span>Walking route through your saved places</span>
+      banner.innerHTML = `<span>Interactive trip through your saved places</span>
         <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Full itinerary</button>`;
-      // Insert after sheet-header
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
+    } else {
+      // Update text in case it was set with old wording
+      const span = banner.querySelector('span');
+      if(span) span.textContent = 'Interactive trip through your saved places';
     }
 
-    el.innerHTML = filtered.length === 0
+    el.innerHTML = allSaved.length === 0
       ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
-      : filtered.map((p,i) => `
+      : allSaved.map((p,i) => `
         <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
           <div class="trip-stop-num" style="margin:0 10px 0 4px;flex-shrink:0">${i+1}</div>
           <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
@@ -89,6 +93,18 @@ function renderList(){
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
+  // If clicking the already-active category pill, toggle it off (back to 'all')
+  if(AF === cat && cat !== 'all'){
+    AF = 'all';
+    document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
+    document.querySelector('.pill[onclick*="all"]')?.classList.add('active');
+    if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+      document.getElementById('pill-saved').classList.add('active');
+    }
+    applyFilters();
+    return;
+  }
+
   AF=cat;
   if(typeof closePlaceCard === 'function') closePlaceCard();
   if(AID && markers[AID]){
@@ -212,6 +228,8 @@ function isOpenNow(place){
 
 function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+  // Sync favourites from localStorage before filtering
+  if(isSaved && typeof refreshFavourites === 'function') refreshFavourites();
   const savedIds = isSaved
     ? (typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces().map(p=>p.id) : [])
     : null;
@@ -219,10 +237,10 @@ function applyFilters(){
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
-      // Saved mode: show saved places; if category also active, intersect
-      const inSaved = savedIds.includes(p.id);
-      const catOk   = AF === 'all' || p.cat === AF;
-      visible = inSaved && catOk;
+      // Saved mode: show saved places PLUS any active category filter (union, not intersection)
+      const inSaved  = savedIds.includes(p.id);
+      const inCat    = AF === 'all' || p.cat === AF;
+      visible = inSaved || (AF !== 'all' && inCat);
     } else {
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
