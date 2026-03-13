@@ -14,7 +14,6 @@ function initMap(){
   placesService = new google.maps.places.PlacesService(map);
 
   PLACES.forEach(p => addMarker(p));
-  drawNbhdCircles();
   renderList();
 
   // On desktop, open list automatically
@@ -36,26 +35,30 @@ const NBHD_CIRCLES = [
   { id:'vake',       lat:41.7045, lng:44.7715, radius:700,  label:'Vake',       color:'#50906a' },
 ];
 
-let nbhdCircles = [];
-function drawNbhdCircles(){
-  nbhdCircles.forEach(c => c.setMap(null));
-  nbhdCircles = [];
-  NBHD_CIRCLES.forEach(n => {
-    const circle = new google.maps.Circle({
-      map,
-      center: {lat:n.lat, lng:n.lng},
-      radius: n.radius,
-      fillColor: n.color,
-      fillOpacity: 0.08,
-      strokeColor: n.color,
-      strokeOpacity: 0.45,
-      strokeWeight: 1.5,
-      clickable: true,
-      zIndex: 0,
-    });
-    circle.addListener('click', () => openStories(n.id));
-    nbhdCircles.push(circle);
+let activeNbhdCircle = null;
+
+function showNbhdCircle(nbhdId){
+  // Remove previous circle
+  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
+  if(!nbhdId) return;
+  const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
+  if(!n || !map) return;
+  activeNbhdCircle = new google.maps.Circle({
+    map,
+    center: {lat:n.lat, lng:n.lng},
+    radius: n.radius,
+    fillColor: n.color,
+    fillOpacity: 0.10,
+    strokeColor: n.color,
+    strokeOpacity: 0.55,
+    strokeWeight: 2,
+    clickable: false,
+    zIndex: 0,
   });
+}
+
+function clearNbhdCircle(){
+  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
 }
 
 // ── MARKERS ───────────────────────────────────────────────────

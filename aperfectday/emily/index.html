@@ -72,32 +72,33 @@
     <span class="nbhd-bar-label">Neighbourhoods</span>
     <div class="nbhd-handle-grip">⠿</div>
   </div>
+  <button class="nbhd-close-btn" id="nbhd-close-btn" onclick="closeNbhdBar()" title="Hide neighbourhood bar">✕</button>
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('old-town')" ontouchend="openStories('old-town')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('old-town')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
       <span class="nbhd-label">Old Town</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('sololaki')" ontouchend="openStories('sololaki')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('sololaki')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
       <span class="nbhd-label">Sololaki</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('avlabari')" ontouchend="openStories('avlabari')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('avlabari')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
       <span class="nbhd-label">Avlabari</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vera')" ontouchend="openStories('vera')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vera')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
       <span class="nbhd-label">Vera</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('chugureti')" ontouchend="openStories('chugureti')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('chugureti')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
       <span class="nbhd-label">Chugureti</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('mtatsminda')" ontouchend="openStories('mtatsminda')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('mtatsminda')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
       <span class="nbhd-label">Mtatsminda</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vake')" ontouchend="openStories('vake')">
+    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vake')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
       <span class="nbhd-label">Vake</span>
     </div>
@@ -105,7 +106,7 @@
 </div>
 
 <!-- ── UNIFIED PLACE CARD — used for both list details and neighbourhood browsing ── -->
-<div id="place-card-dim" onclick="closePlaceCard()"></div>
+<div id="place-card-dim" onclick="closePlaceCard(true)"></div>
 <div id="place-card">
   <!-- Photo -->
   <div class="pc-photo-wrap" id="pc-photo-wrap">
@@ -114,7 +115,7 @@
     <span class="pc-photo-credit" id="pc-credit"></span>
     <!-- Floating controls -->
     <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
-    <button class="pc-btn-close" onclick="closePlaceCard()">✕</button>
+    <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
     <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
     <!-- Prev/Next arrows (shown in neighbourhood mode) -->
     <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
@@ -207,5 +208,6 @@
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU&libraries=places&callback=initMap">
 </script>
 
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 </body>
 </html>

@@ -93,7 +93,7 @@ function closeSheet(){
       btn = document.createElement('button');
       btn.id = 'sidebar-reopen';
       btn.innerHTML = '☰';
-      btn.style.cssText = 'position:absolute;top:16px;left:16px;z-index:600;background:white;border:1px solid #ddd;border-radius:8px;padding:8px 12px;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15);';
+      btn.style.cssText = 'position:fixed;top:14px;left:16px;z-index:600;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:7px 11px;font-size:1rem;cursor:pointer;color:white;';
       btn.onclick = openSheet;
       document.body.appendChild(btn);
     }
@@ -121,19 +121,38 @@ function alignNbhdBar(){
   if(!logo || !bar) return;
   // Right edge of logo relative to the map (map starts at 300px)
   const logoRight = logo.getBoundingClientRect().right;
-  const mapLeft   = 300; // sidebar width
-  const indent    = Math.max(60, logoRight - mapLeft + 8); // 8px breathing room
-  // Subtract handle width (~26px) since handle sits before bubbles
-  const handleW = 26;
-  bar.style.setProperty('--nbhd-indent', (indent - handleW) + 'px');
+  const mapLeft   = 300; // sidebar width px
+  // indent = how far into the map the first bubble should start
+  // = right edge of logo - map left edge + small gap
+  const indent    = Math.max(20, logoRight - mapLeft + 6);
+  // Handle area is ~22px; subtract so bubble aligns under logo right edge
+  const handleW   = 22;
+  const paddingLeft = Math.max(10, indent - handleW);
+  bar.style.setProperty('--nbhd-indent', paddingLeft + 'px');
+  // Also set directly on the row as fallback
+  const row = document.getElementById('nbhd-bubbles-row');
+  if(row) row.style.paddingLeft = paddingLeft + 'px';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Run after fonts load (Cormorant Garamond is italic and wider)
-  if(document.fonts?.ready){
-    document.fonts.ready.then(alignNbhdBar);
-  } else {
-    setTimeout(alignNbhdBar, 400);
-  }
+  // Run multiple times to catch font loading
+  setTimeout(alignNbhdBar, 100);
+  setTimeout(alignNbhdBar, 600);
+  setTimeout(alignNbhdBar, 1500);
+  if(document.fonts?.ready) document.fonts.ready.then(alignNbhdBar);
   window.addEventListener('resize', alignNbhdBar);
 });
+
+// ── Nbhd bar show/hide ────────────────────────────────────────
+function closeNbhdBar(){
+  const bar = document.getElementById('nbhd-bar');
+  const btn = document.getElementById('nbhd-show-btn');
+  if(bar) bar.classList.add('hidden');
+  if(btn) btn.classList.add('visible');
+}
+function openNbhdBar(){
+  const bar = document.getElementById('nbhd-bar');
+  const btn = document.getElementById('nbhd-show-btn');
+  if(bar) bar.classList.remove('hidden');
+  if(btn) btn.classList.remove('visible');
+}

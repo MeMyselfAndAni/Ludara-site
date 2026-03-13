@@ -84,6 +84,9 @@ function openNbhdCard(nbhd){
   const b = NBHD_BOUNDS[nbhd];
   if(b && map){ map.setCenter({lat:b.lat,lng:b.lng}); map.setZoom(b.zoom); }
 
+  // Show neighbourhood circle on map
+  if(typeof showNbhdCircle === 'function') showNbhdCircle(nbhd);
+
   document.getElementById('pc-btn-back').style.display = 'none';
   document.getElementById('pc-nav-prev').style.display = 'flex';
   document.getElementById('pc-nav-next').style.display = 'flex';
@@ -224,11 +227,18 @@ function cardToggleFav(){
 
 // ── Open / close ──────────────────────────────────────────────
 function _openCard(){
+  // Reset any drag-applied inline position before opening
+  if(window.innerWidth >= 768){
+    const card = document.getElementById('place-card');
+    card.style.left = '';
+    card.style.top  = '';
+    card.style.transform = '';
+  }
   document.getElementById('place-card').classList.add('open');
   document.getElementById('place-card-dim').classList.add('open');
 }
 
-function closePlaceCard(){
+function closePlaceCard(reopenList){
   document.getElementById('place-card').classList.remove('open');
   document.getElementById('place-card-dim').classList.remove('open');
 
@@ -240,15 +250,17 @@ function closePlaceCard(){
   CARD_PLACE = null;
   CARD_LIST  = [];
 
+  // Clear neighbourhood circle
+  if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
+
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
-  // On mobile, reopen list
-  if(window.innerWidth < 768) openSheet();
+  // Only reopen list on mobile when user explicitly closes (cardBack / ✕ button)
+  if(reopenList && window.innerWidth < 768) openSheet();
 }
 
 function cardBack(){
-  closePlaceCard();
-  if(window.innerWidth < 768) openSheet();
+  closePlaceCard(true); // user action — reopen list on mobile
 }
 
 // ── Keyboard nav ──────────────────────────────────────────────
@@ -323,10 +335,4 @@ document.addEventListener('keydown', e => {
   };
 })();
 
-// Reset card position each time it opens (desktop)
-const _origOpenCard = _openCard;
-function _openCard(){
-  if(window.innerWidth >= 768 && window._resetCardPos) window._resetCardPos();
-  document.getElementById('place-card').classList.add('open');
-  document.getElementById('place-card-dim').classList.add('open');
-}
+// (card position reset happens in closePlaceCard)
