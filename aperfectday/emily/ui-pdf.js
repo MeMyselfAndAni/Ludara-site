@@ -315,11 +315,40 @@ function generatePDF(){
     page-break-inside: avoid;
   }
 
+  /* Branding footer — appears on every printed page */
+  .pdf-brand-footer {
+    text-align: center;
+    padding: 20px 0 28px;
+    border-top: 1px solid #e8e4dc;
+    margin-top: 20px;
+  }
+  .pdf-brand-footer-label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #aaa;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .pdf-brand-footer-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: #1a3a5c;
+    font-weight: 400;
+  }
+  .pdf-brand-footer-url {
+    font-size: 0.6rem;
+    color: #b8960a;
+    letter-spacing: 0.06em;
+  }
+
   @media print {
     body { margin: 0; }
     .pdf-cover { page-break-after: always; }
     .pdf-card { page-break-inside: avoid; }
     .pdf-walk { page-break-inside: avoid; }
+    .pdf-brand-footer { page-break-inside: avoid; }
     @page { margin: 0; size: A4; }
   }
 </style>
@@ -328,7 +357,7 @@ function generatePDF(){
 
 <!-- COVER -->
 <div class="pdf-cover">
-  <div class="pdf-cover-logo">Wander-Lush · A Perfect Day</div>
+  <div class="pdf-cover-logo">Wander-Lush · A Perfect Day by Ludara</div>
   <div class="pdf-cover-title">Tbilisi</div>
   <div class="pdf-cover-subtitle">Your personal day guide</div>
   <div class="pdf-cover-divider"></div>
@@ -353,6 +382,13 @@ function generatePDF(){
 <!-- PLACE CARDS -->
 <div class="pdf-places">
   ${cards}
+</div>
+
+<!-- BRANDING FOOTER -->
+<div class="pdf-brand-footer">
+  <div class="pdf-brand-footer-label">Interactive map guide created with</div>
+  <div class="pdf-brand-footer-name">A Perfect Day</div>
+  <div class="pdf-brand-footer-url">ludara.ai</div>
 </div>
 
 </body>

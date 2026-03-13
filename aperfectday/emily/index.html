@@ -41,6 +41,10 @@
       <div class="header-sub">64 curated places · by Emily Lush</div>
     </div>
   </div>
+  <div class="header-ludara">
+    <span class="header-ludara-text">Interactive map by</span>
+    <a class="header-ludara-brand" href="https://ludara.ai" target="_blank">A Perfect Day · Ludara</a>
+  </div>
   <a class="header-btn" href="https://wander-lush.org/unique-things-to-do-in-tbilisi-georgia/" target="_blank">Blog ↗</a>
 </header>
 
@@ -120,11 +124,19 @@
     <div class="nbhd-card-body">
       <div class="nbhd-card-badge" id="card-badge"></div>
       <div class="nbhd-card-name" id="card-name"></div>
+      <div class="nbhd-card-type" id="card-type"></div>
+      <div class="nbhd-card-meta" id="card-meta"></div>
       <div class="nbhd-card-note" id="card-note"></div>
+      <span class="nbhd-card-emily-by">— Emily Lush, Wander-Lush</span>
+      <div class="nbhd-card-tip" id="card-tip" style="display:none">
+        <span class="nbhd-card-tip-label">💡 Emily's Tip</span>
+        <span id="card-tip-text"></span>
+      </div>
+      <a class="nbhd-card-website" id="card-website" href="#" target="_blank" style="display:none"></a>
       <div class="nbhd-card-footer">
         <div class="nbhd-card-actions">
-          <button class="nbhd-card-btn primary" onclick="storiesOpenDetail()">Full details →</button>
-          <button class="nbhd-card-btn" onclick="storiesMaps()">📍 Maps</button>
+          <button class="nbhd-card-btn primary" onclick="storiesMaps()">📍 Open in Maps</button>
+          <button class="nbhd-card-fav" id="card-fav" onclick="storiesToggleFav()">♡</button>
         </div>
         <span class="nbhd-card-counter" id="card-counter"></span>
       </div>
@@ -177,6 +189,10 @@
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
+  <div class="list-footer-brand">
+    <span>Interactive map by</span>
+    <a href="https://ludara.ai" target="_blank">A Perfect Day · Ludara</a>
+  </div>
 </div>
 
 <!-- Detail sheet — card format: photo on top, content below -->
