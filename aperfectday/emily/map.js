@@ -16,9 +16,9 @@ function initMap(){
   PLACES.forEach(p => addMarker(p));
   renderList();
 
-  // On desktop, open list automatically
+  // On desktop, open list panel automatically
   if(window.innerWidth >= 768){
-    document.getElementById('sheet').classList.add('open');
+    openSheet();
   }
 
   document.getElementById('loading').style.display='none';

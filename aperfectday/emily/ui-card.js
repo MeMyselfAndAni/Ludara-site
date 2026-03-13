@@ -286,53 +286,51 @@ document.addEventListener('keydown', e => {
 // ── Draggable card on desktop ─────────────────────────────────
 (function initCardDrag(){
   const card   = document.getElementById('place-card');
-  const header = document.getElementById('pc-photo-wrap'); // drag from photo area
-  if(!card || !header) return;
+  const handle = document.getElementById('pc-photo-wrap');
+  if(!card || !handle) return;
 
-  let dragging = false, ox = 0, oy = 0, cx = 0, cy = 0;
+  let dragging = false, startMouseX = 0, startMouseY = 0, startCardX = 0, startCardY = 0;
 
-  function startDrag(ex, ey){
+  function startDrag(e){
     if(window.innerWidth < 768) return;
-    dragging = true;
+    // Freeze card at its current rendered position (resolve CSS calc + transform)
     const rect = card.getBoundingClientRect();
-    ox = ex - rect.left;
-    oy = ey - rect.top;
+    card.style.left      = rect.left + 'px';
+    card.style.top       = rect.top  + 'px';
+    card.style.right     = 'auto';
+    card.style.bottom    = 'auto';
+    card.style.transform = 'none';
     card.style.transition = 'none';
+    startCardX  = rect.left;
+    startCardY  = rect.top;
+    startMouseX = e.clientX;
+    startMouseY = e.clientY;
+    dragging = true;
     card.style.cursor = 'grabbing';
     document.body.style.userSelect = 'none';
+    e.preventDefault();
   }
-  function doDrag(ex, ey){
+  function doDrag(e){
     if(!dragging) return;
-    cx = ex - ox;
-    cy = ey - oy;
-    // Clamp within viewport
-    const maxX = window.innerWidth  - card.offsetWidth;
-    const maxY = window.innerHeight - card.offsetHeight;
-    cx = Math.max(0, Math.min(maxX, cx));
-    cy = Math.max(0, Math.min(maxY, cy));
-    card.style.left      = cx + 'px';
-    card.style.top       = cy + 'px';
-    card.style.transform = 'none';
+    const dx = e.clientX - startMouseX;
+    const dy = e.clientY - startMouseY;
+    let nx = startCardX + dx;
+    let ny = startCardY + dy;
+    nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  nx));
+    ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, ny));
+    card.style.left = nx + 'px';
+    card.style.top  = ny + 'px';
   }
   function endDrag(){
     if(!dragging) return;
     dragging = false;
     card.style.cursor = '';
     document.body.style.userSelect = '';
-    card.style.transition = '';
   }
 
-  header.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-  document.addEventListener('mousemove', e => doDrag(e.clientX, e.clientY));
-  document.addEventListener('mouseup', endDrag);
-
-  // Reset position when card is closed/reopened
-  const origOpen = _openCard;
-  window._resetCardPos = function(){
-    card.style.left = '';
-    card.style.top  = '';
-    card.style.transform = '';
-  };
+  handle.addEventListener('mousedown', startDrag);
+  document.addEventListener('mousemove', doDrag);
+  document.addEventListener('mouseup',   endDrag);
 })();
 
 // (card position reset happens in closePlaceCard)

@@ -373,52 +373,80 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
 }
 
-/* ── DESKTOP LAYOUT (≥768px) ── */
+/* ══ DESKTOP LAYOUT (≥768px) — full-screen map, floating panels ══ */
 @media (min-width: 768px) {
-  .list-toggle { display: none; }
-  #nbhd-label { display: none; }
-  .places-list { padding-bottom: 160px; }
 
+  /* Map fills entire screen */
+  #map { left: 0; top: 0; right: 0; bottom: 0; }
+
+  /* Header full-width */
+  header { left: 0; right: 0; }
+
+  /* Filter bar full-width below header */
+  .filter-bar { left: 0; right: 0; }
+
+  /* Hide the mobile browse button */
+  .list-toggle { display: none !important; }
+
+  /* ── Floating list panel — right side ── */
   .sheet {
-    position: absolute;
-    top: 0; bottom: 0; left: 0;
-    right: auto;
-    width: 300px;
-    border-radius: 0;
+    position: fixed;
+    top: 130px;
+    right: 20px;
+    bottom: 100px;
+    left: auto;
+    width: 310px;
+    border-radius: 16px;
     max-height: none;
-    transform: translateX(0);
-    box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+    transform: translateX(360px);
+    transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.10);
     display: flex;
     z-index: 300;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.07);
   }
-  .sheet.open { transform: none; }
-  .sheet.desktop-hidden {
-    transform: translateX(-300px) !important;
-    box-shadow: none;
-  }
-  .sheet.desktop-hidden ~ #map { left: 0 !important; }
-  .sheet.desktop-hidden ~ .filter-bar { left: 0 !important; }
-  .sheet.desktop-hidden ~ #nbhd-bar { left: 0 !important; width: 100% !important; }
+  .sheet.open { transform: translateX(0); }
+  .sheet.desktop-hidden { transform: translateX(360px) !important; }
   .sheet-handle-area { display: none; }
   .sheet-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+  .places-list { padding-bottom: 60px; }
 
-  #map { left: 300px; }
-  .filter-bar { left: 300px; }
+  /* ── Browse button — top-right, always visible on desktop ── */
+  #list-toggle {
+    display: flex !important;
+    position: fixed;
+    top: 140px;
+    right: 20px;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    z-index: 310;
+    background: var(--accent);
+    color: white;
+    border-radius: 50px;
+    padding: 9px 18px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(26,58,92,0.4);
+    gap: 8px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  /* When list is open, button hides behind panel */
+  .sheet.open ~ #list-toggle,
+  #list-toggle.hidden { opacity: 0; pointer-events: none; }
 
-  /* desktop detail removed */
-
-  header { left: 300px; }
-
-  /* Neighbourhood bar — desktop: spans map area, bubbles indented under header text */
+  /* ── Neighbourhood bar — bottom left, full width with scrolling ── */
   #nbhd-bar {
     position: fixed;
-    bottom: 24px;
-    left: 300px;   /* flush with sidebar right edge */
-    right: 24px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     width: auto;
     flex-direction: row;
     align-items: center;
-    padding: 6px 10px 6px 0;
+    padding: 6px 12px;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -426,48 +454,52 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     border-radius: 18px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.14);
     flex-wrap: nowrap;
-    overflow: visible;
-    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
     z-index: 450;
-    /* Dragging still works via JS bottom override */
+    gap: 0;
   }
-  /* Desktop handle: keep for dragging but minimal — hide text label */
+  #nbhd-bar::-webkit-scrollbar { display: none; }
+  /* Handle — drag grip on left */
   #nbhd-bar .nbhd-bar-handle {
     display: flex;
-    width: 18px;
+    width: 20px;
+    flex-shrink: 0;
+    cursor: grab;
+    padding: 4px 6px;
     border-right: 1px solid rgba(0,0,0,0.07);
-    margin-right: 4px;
-    padding: 4px 4px 4px 6px;
+    margin-right: 6px;
   }
-  #nbhd-bar .nbhd-bar-label { display: none; }  /* hide "NEIGHBOURHOODS" text */
-  #nbhd-label { display: none; }
-  /* padding-left set dynamically by JS to align under Wander-Lush logo */
-  #nbhd-bar .nbhd-bubbles-row {
-    padding-left: var(--nbhd-indent, 160px);
-  }
+  #nbhd-bar .nbhd-bar-label { display: none; }
+  /* Bubbles start immediately — no indent needed */
+  #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
-  /* When sidebar is hidden, stretch bar to left edge */
-  .sheet.desktop-hidden ~ #nbhd-bar {
-    left: 16px !important;
-    right: 16px !important;
-    padding-left: 10px !important;
-  }
-  .sheet.desktop-hidden ~ #nbhd-bar .nbhd-bubbles-row {
-    padding-left: 0 !important;
-  }
-  .sheet.desktop-hidden ~ #nbhd-bar .nbhd-bar-handle {
-    display: flex !important;
-  }
-
-  /* Slightly smaller bubbles on desktop */
-  .nbhd-ring { width: 50px; height: 50px; }
-  .nbhd-ring-inner { font-size: 1.2rem; }
+  .nbhd-ring { width: 52px; height: 52px; }
+  .nbhd-ring-inner { font-size: 1.25rem; }
   .nbhd-label { font-size: 0.60rem; }
   .nbhd-bubble { gap: 3px; }
 
-  /* Neighbourhood card: centre in map area (right of 300px sidebar) */
-  /* nbhd-cards desktop removed */
+  /* ── Place card — centre of screen ── */
+  #place-card {
+    bottom: auto;
+    left: 50%;
+    top: 50%;
+    right: auto;
+    transform: translate(-50%, -50%) scale(0.96);
+    width: min(480px, calc(100vw - 80px));
+    max-height: 82vh;
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  #place-card.open {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  .pc-photo-wrap { cursor: grab; height: 260px; }
+  .pc-body { max-height: calc(82vh - 260px); padding: 14px 18px 18px; }
 }
+
 
 .loading {
   position: absolute;
@@ -1319,28 +1351,30 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   margin-top: 4px;
 }
 
-/* ── DESKTOP overrides ───────────────────────────────────────── */
+/* ── DESKTOP place-card — centred on full screen ─────────────── */
 @media (min-width: 768px) {
   #place-card {
-    /* Centred floating card in map area */
     bottom: auto;
-    left: calc(300px + (100vw - 300px) / 2);
+    left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%) scale(0.96) !important;
-    width: min(500px, calc(100vw - 340px));
+    transform: translate(-50%, -50%) scale(0.95);
+    width: min(480px, calc(100vw - 80px));
     max-height: 82vh;
     border-radius: 18px;
     opacity: 0;
     transition: opacity 0.22s ease, transform 0.22s ease;
   }
   #place-card.open {
-    transform: translate(-50%, -50%) scale(1) !important;
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
-  .pc-photo-wrap {
-  cursor: grab;
- height: 260px; }
-  .pc-body { max-height: calc(82vh - 260px); padding: 14px 18px 18px; }
+  /* When dragged, transform is cleared by JS — no !important fights */
+  #place-card.dragging {
+    transition: none;
+    transform: none;
+  }
+  .pc-photo-wrap { cursor: grab; height: 240px; }
+  .pc-body { max-height: calc(82vh - 240px); padding: 14px 18px 18px; }
 }
 
 /* Card dragging */

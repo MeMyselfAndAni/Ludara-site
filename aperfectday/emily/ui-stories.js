@@ -69,52 +69,27 @@ function openSheet(){
   const s = document.getElementById('sheet');
   s.classList.add('open');
   s.classList.remove('desktop-hidden');
-  document.getElementById('detail-sheet').classList.remove('open');
-  if(window.innerWidth >= 768){
-    document.getElementById('map').style.left = '';
-    document.querySelector('.filter-bar').style.left = '';
-    const nb = document.getElementById('nbhd-bar');
-    if(nb){ nb.style.left=''; nb.style.width=''; nb.style.right=''; }
-    const btn = document.getElementById('sidebar-reopen');
-    if(btn) btn.style.display = 'none';
-  }
+  // Hide the browse button (panel covers it)
+  const btn = document.getElementById('list-toggle');
+  if(btn) btn.classList.add('hidden');
 }
 function closeSheet(){
   const s = document.getElementById('sheet');
-  if(window.innerWidth >= 768){
-    s.classList.add('desktop-hidden');
-    document.getElementById('map').style.left = '0';
-    document.querySelector('.filter-bar').style.left = '0';
-    const nb = document.getElementById('nbhd-bar');
-    if(nb){ nb.style.left='0'; nb.style.width='100%'; nb.style.right='0'; }
-    // Show a reopen button
-    let btn = document.getElementById('sidebar-reopen');
-    if(!btn){
-      btn = document.createElement('button');
-      btn.id = 'sidebar-reopen';
-      btn.innerHTML = '☰';
-      btn.style.cssText = 'position:fixed;top:14px;left:16px;z-index:600;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:7px 11px;font-size:1rem;cursor:pointer;color:white;';
-      btn.onclick = openSheet;
-      document.body.appendChild(btn);
-    }
-    btn.style.display = 'block';
-  } else {
-    s.classList.remove('open');
-  }
+  s.classList.remove('open');
+  s.classList.add('desktop-hidden');
+  // Show the browse button again
+  const btn = document.getElementById('list-toggle');
+  if(btn) btn.classList.remove('hidden');
 }
 function toggleSheet(){
-  const s=document.getElementById('sheet');
-  const isHidden = s.classList.contains('desktop-hidden');
+  const s = document.getElementById('sheet');
   const isOpen = s.classList.contains('open');
-  if(window.innerWidth >= 768){
-    if(isHidden){ openSheet(); } else { closeSheet(); }
-  } else {
-    if(isOpen){ closeSheet(); } else { openSheet(); }
-  }
+  if(isOpen){ closeSheet(); } else { openSheet(); }
 }
 
-// ── Align nbhd bar indent under Wander-Lush logo ─────────────
+// ── Align nbhd bar indent (no-op on desktop now — bubbles start left) ──
 function alignNbhdBar(){
+  return; // nbhd bar now starts from left edge on desktop
   if(window.innerWidth < 768) return;
   const logo = document.querySelector('.header-title .wl-logo');
   const bar  = document.getElementById('nbhd-bar');
