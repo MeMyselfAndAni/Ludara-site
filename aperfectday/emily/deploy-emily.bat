@@ -9,7 +9,7 @@ set DEPLOY_DIR=%REPO_DIR%\aperfectday\emily
 
 echo.
 echo ═══════════════════════════════════════════════
-echo   Deploying Emily Tbilisi Guide
+echo   Deploying Emily Tbilisi Guide + Pitch Page
 echo   Target: ludara.ai/aperfectday/emily
 echo ═══════════════════════════════════════════════
 echo.
@@ -28,9 +28,9 @@ if not exist "%DEPLOY_DIR%" (
   mkdir "%DEPLOY_DIR%"
 )
 
-:: Copy all 7 files
+:: Copy all 9 files
 echo Copying files...
-for %%F in (index.html styles.css data.js photos.js map.js ui-filter.js ui-stories.js) do (
+for %%F in (index.html styles.css data.js photos.js map.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js) do (
   if exist "%%F" (
     copy /Y "%%F" "%DEPLOY_DIR%\%%F" >nul
     echo   ✓ %%F
@@ -39,11 +39,19 @@ for %%F in (index.html styles.css data.js photos.js map.js ui-filter.js ui-stori
   )
 )
 
+:: Copy pitch page to /pitch/emily/
+if not exist "%REPO_DIR%\pitch\emily" mkdir "%REPO_DIR%\pitch\emily"
+if exist "emily-pitch.html" (
+  copy /Y "emily-pitch.html" "%REPO_DIR%\pitch\emily\index.html" >nul
+  echo   ✓ emily-pitch.html → pitch/emily/index.html
+)
+
 :: Git add, commit, push
 cd /d "%REPO_DIR%"
 echo.
 echo Running git add...
 git add aperfectday/emily/
+git add pitch/emily/
 
 echo Running git commit...
 git commit -m "Update Emily Tbilisi guide - %DATE% %TIME%"

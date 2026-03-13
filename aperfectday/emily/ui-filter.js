@@ -180,10 +180,24 @@ function openDetail(id){
     }
   });
 
-  // Show detail sheet — always on top, close list on mobile
-  document.getElementById('detail-sheet').classList.add('open');
+  // Show detail sheet
+  const ds = document.getElementById('detail-sheet');
+  ds.classList.add('open');
+
   if(window.innerWidth < 768){
+    // Mobile: full-screen, hide list
     document.getElementById('sheet').classList.remove('open');
+  } else {
+    // Desktop: add backdrop dim div if not present
+    let dim = document.getElementById('detail-dim');
+    if(!dim){
+      dim = document.createElement('div');
+      dim.id = 'detail-dim';
+      dim.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.38);z-index:499;cursor:pointer;';
+      dim.onclick = closeDetail;
+      document.body.appendChild(dim);
+    }
+    dim.style.display = 'block';
   }
 }
 
@@ -203,6 +217,9 @@ function closeDetail(){
   AID=null;
   document.getElementById('detail-sheet').classList.remove('open');
   document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('active'));
+  // Hide desktop backdrop
+  const dim = document.getElementById('detail-dim');
+  if(dim) dim.style.display = 'none';
   // On mobile: reopen the list so it stays visible after closing a detail
   if(window.innerWidth < 768){
     openSheet();

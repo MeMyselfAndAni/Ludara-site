@@ -149,8 +149,20 @@ function drawSavedRoute(){
       suppressInfoWindows: true,
       polylineOptions: {
         strokeColor:   '#e00040',
-        strokeOpacity: 0.85,
-        strokeWeight:  4,
+        strokeOpacity: 1,
+        strokeWeight:  0,        // hide the solid line
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor:    '#e00040',
+            fillOpacity:  1,
+            strokeColor:  '#e00040',
+            strokeWeight: 0,
+            scale: 4,
+          },
+          offset: '0',
+          repeat: '14px',
+        }],
       }
     });
     tripRenderers.push(renderer);

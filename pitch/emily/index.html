@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Perfect Day · For Emily Lush</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #0d1a2e;
+    --gold:   #b8960a;
+    --cream:  #f8f4ec;
+    --muted:  #6b7280;
+    --accent: #1a3a5c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(184,150,10,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(42,114,152,0.22) 0%, transparent 50%);
+  }
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    color: white;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 56px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: white;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border-radius: 2px;
+    transition: all 0.2s;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .hero-cta:hover { background: #9a7c08; transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+  .section-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #3a4a5c;
+    max-width: 640px;
+  }
+
+  /* ── DEMO STRIP ── */
+  .demo-strip {
+    background: var(--accent);
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .demo-strip h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .demo-strip p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .demo-btn:hover { background: var(--gold); color: white; }
+
+  /* ── HOW IT WORKS ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+  }
+  .step {
+    padding: 28px 24px;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-top: 3px solid var(--gold);
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: rgba(184,150,10,0.2);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .step-body { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── WHAT YOU GET ── */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 48px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: white;
+  }
+  .feature {
+    padding: 28px 28px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    border-right: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .feature:nth-child(2n) { border-right: none; }
+  .feature-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+  .feature-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 4px; }
+  .feature-body { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── MONEY ── */
+  .money {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 48px;
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .money-calc .calc-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .money-calc .calc-line:last-child { border: none; }
+  .money-calc .calc-line strong { color: var(--ink); font-size: 0.95rem; }
+  .calc-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0 0;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    border-top: 2px solid var(--ink) !important;
+  }
+  .calc-total .amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .money-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+  .money-note strong { color: var(--ink); }
+
+  /* ── PAYMENTS ── */
+  .payments {
+    background: #f0f4f8;
+    border-left: 4px solid var(--accent);
+    padding: 24px 28px;
+    margin-top: 24px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #3a4a5c;
+  }
+  .payments strong { color: var(--accent); }
+
+  /* ── EMILY NOTE ── */
+  .emily-section {
+    background: var(--ink);
+    padding: 80px 40px;
+    text-align: center;
+  }
+  .emily-section blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.85);
+    max-width: 680px;
+    margin: 0 auto 32px;
+    line-height: 1.5;
+  }
+  .emily-section cite {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* ── CTA FOOTER ── */
+  .cta-footer {
+    background: var(--gold);
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .cta-footer h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .cta-footer p {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+  }
+  .cta-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 16px 36px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .cta-email:hover { background: var(--ink); color: white; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 0.7; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    section { padding: 60px 24px; }
+    .money { grid-template-columns: 1fr; padding: 32px 24px; }
+    .features { grid-template-columns: 1fr; }
+    .feature:nth-child(2n) { border-right: 1px solid rgba(0,0,0,0.06); }
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">An invitation · For Emily Lush</div>
+  <h1 class="hero-title">A <em>Perfect</em><br>Day</h1>
+  <p class="hero-sub">Your Tbilisi expertise, reimagined as a living interactive guide</p>
+  <a href="https://ludara.ai/aperfectday/emily" target="_blank" class="hero-cta">
+    See the live demo →
+  </a>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll
+  </div>
+</div>
+
+<!-- THE IDEA -->
+<section>
+  <div class="section-label">The idea</div>
+  <h2 class="section-title">You wrote the guide once.<br><em>Sell it forever.</em></h2>
+  <p class="section-body">
+    You've already done the hard work — years exploring Tbilisi, 250+ posts, an $18 ebook tens of thousands of people have bought.
+    <br><br>
+    "A Perfect Day" turns your existing knowledge into an interactive map guide that travellers can use in real time, on their phone, walking the streets of Tbilisi. Your notes, your tips, your voice — but alive on a map instead of buried in a PDF.
+    <br><br>
+    We built a demo using your blog posts. It took one afternoon. <strong>You don't need to write a single new word.</strong>
+  </p>
+</section>
+
+<!-- DEMO -->
+<div class="demo-strip">
+  <h2>See it working right now</h2>
+  <p>64 of your Tbilisi places, fully interactive, on a live map</p>
+  <a href="https://ludara.ai/aperfectday/emily" target="_blank" class="demo-btn">
+    Open the Tbilisi demo ↗
+  </a>
+</div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Simple for you.<br><em>Magical for your readers.</em></h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">You approve your places</div>
+      <div class="step-body">We extract your places from your blog. You review, add or remove anything. Takes an hour, not a week.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">One URL, forever</div>
+      <div class="step-body">Your guide lives at <strong>ludara.ai/aperfectday/emily</strong>. You share it anywhere — newsletter, Instagram, blog post.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Readers pay once</div>
+      <div class="step-body">Free browsing, paid unlock ($9–15). No accounts. No subscriptions. One click buys them the full guide + PDF download.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">You get 70%</div>
+      <div class="step-body">Every sale, automatically. We handle hosting, payments, updates. You do nothing after setup.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT READERS GET -->
+<section style="padding-top:0">
+  <div class="section-label">What readers get</div>
+  <h2 class="section-title">More than an ebook.<br><em>A companion for the day.</em></h2>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🗺</div>
+      <div>
+        <div class="feature-title">Interactive map</div>
+        <div class="feature-body">All your places on a live Google Map. Filter by category, neighbourhood, or "open now". Works offline once loaded.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">♥</div>
+      <div>
+        <div class="feature-title">Save & route</div>
+        <div class="feature-body">Readers heart their favourites and instantly get a real walking route between them — with your tips at each stop.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📄</div>
+      <div>
+        <div class="feature-title">Beautiful PDF guide</div>
+        <div class="feature-body">One tap generates a print-ready day guide: cover page, photos, your notes, Emily's tips, QR codes for every place.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🏘</div>
+      <div>
+        <div class="feature-title">Neighbourhood cards</div>
+        <div class="feature-body">Tap any neighbourhood bubble to browse its places in a visual card format — great for deciding where to spend the morning.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📍</div>
+      <div>
+        <div class="feature-title">Open in Google Maps</div>
+        <div class="feature-body">One button exports their saved route directly to Google Maps walking directions on their phone.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">✍️</div>
+      <div>
+        <div class="feature-title">Your voice throughout</div>
+        <div class="feature-body">Every place shows your note and tip, attributed to you. Not generic content — your actual writing, your personality.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONEY -->
+<section style="padding-top:0">
+  <div class="section-label">The numbers</div>
+  <h2 class="section-title">Your ebook earns once.<br><em>This earns every month.</em></h2>
+  <div class="money">
+    <div class="money-calc">
+      <div class="calc-line"><span>Guide price</span><span>$12</span></div>
+      <div class="calc-line"><span>Your share (70%)</span><span>$8.40</span></div>
+      <div class="calc-line"><span>100 sales / month</span><span></span></div>
+      <div class="calc-line calc-total"><span>Monthly revenue</span><span class="amount">$840</span></div>
+      <div class="calc-line" style="border:none;margin-top:8px"><span style="font-size:0.72rem;color:#999">Your ebook gets ~200 downloads/mo at $18 = $3,600 gross, ~$2,500 after fees. This is additive — not a replacement.</span></div>
+    </div>
+    <div class="money-note">
+      <strong>No risk for you.</strong> We build it. We host it. We handle payments. If zero people buy it, you've lost nothing — we've lost the build time.
+      <br><br>
+      You promote it the same way you promote your ebook: one link in your Tbilisi posts. Your existing audience is already looking for exactly this.
+      <br><br>
+      <strong>Tbilisi is just the start.</strong> Kutaisi, Batumi, Sighnaghi — each city you know becomes another guide, each earning passively.
+    </div>
+  </div>
+
+  <div class="payments">
+    <strong>On payments:</strong> We know Tbilisi means Georgian readers and CIS travellers. PayPal has wide coverage there; Stripe works for most international cards. We'll use both — PayPal for local/regional buyers, Stripe for international — so nobody hits a checkout wall. You don't touch any of this; it's our problem to solve.
+  </div>
+</section>
+
+<!-- EMILY QUOTE SECTION -->
+<div class="emily-section">
+  <blockquote>
+    "I will always have a soft spot for Tbilisi — it's simply one of the best places to drink, eat, shop, work and socialise under one roof."
+  </blockquote>
+  <cite>— Emily Lush, Wander-Lush · already in the guide</cite>
+</div>
+
+<!-- WHAT WE NEED FROM YOU -->
+<section>
+  <div class="section-label">Next steps</div>
+  <h2 class="section-title">What we need<br><em>from you.</em></h2>
+  <p class="section-body">
+    Almost nothing. The demo is already built. Here's what happens next:
+  </p>
+  <div class="steps" style="margin-top:32px">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Try the demo</div>
+      <div class="step-body">Browse your places on the map. Save favourites. Generate a PDF. Tell us what's wrong, missing, or exciting.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Add your places</div>
+      <div class="step-body">Send us a list of any places we missed, or corrections to notes. We do the technical work.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">One mention</div>
+      <div class="step-body">Add "Get the interactive guide →" to your Tbilisi posts. That's the entire marketing plan.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-footer">
+  <h2>Let's talk.</h2>
+  <p>Reply to this email or tap below — we'd love 20 minutes to show you what's possible.</p>
+  <a href="mailto:hello@ludara.ai?subject=A Perfect Day — Tbilisi Guide&body=Hi, I tried the demo and I'm interested in talking more." class="cta-email">
+    ✉ Reply to this email
+  </a>
+</div>
+
+</body>
+</html>

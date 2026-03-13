@@ -148,7 +148,8 @@
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
-      <button class="trip-maps-btn" onclick="openTripInMaps()">Open all in Google Maps</button>
+      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
     </div>
   </div>
 </div>
@@ -229,6 +230,7 @@
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
+<script src="ui-pdf.js"></script>
 
 <!-- Google Maps (loads last, calls initMap as callback) -->
 <script async defer
