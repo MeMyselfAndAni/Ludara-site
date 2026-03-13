@@ -159,14 +159,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── BOTTOM SHEET (List) ── */
 .sheet {
-  position: absolute;
+  position: fixed;          /* fixed — never causes page reflow or jump */
   bottom: 0; left: 0; right: 0;
   z-index: 300;
   background: var(--surface);
   border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
-  transform: translateY(100%);
+  transform: translateY(105%);
   transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-  max-height: 70dvh;
+  max-height: 72dvh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
@@ -350,27 +350,26 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
-  #map { bottom: 56px !important; }
+  /* Map full height — overlays float on top, no layout reflow */
+  /* #map bottom intentionally NOT set — stays full height */
   #nbhd-bar {
     position: fixed;
     left: 0; right: 0;
-    bottom: 64px; /* above the list-toggle button */
+    bottom: 72px; /* above the Browse button */
     padding: 6px 10px 8px;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid rgba(0,0,0,0.07);
     flex-wrap: nowrap;
-    overflow: visible;
+    overflow-x: auto;
+    scrollbar-width: none;
     z-index: 410;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   }
-  /* When sheet is open, nbhd-bar docks just above it */
-  .sheet.open ~ #nbhd-bar,
-  body.sheet-open #nbhd-bar {
-    bottom: 0;
-    z-index: 410;
-  }
+  #nbhd-bar::-webkit-scrollbar { display: none; }
+  /* When sheet is open, nbhd-bar hides (sheet covers it) */
+  .sheet.open ~ #nbhd-bar { display: none; }
 }
 
 /* ══ DESKTOP LAYOUT (≥768px) — full-screen map, floating panels ══ */
@@ -1049,18 +1048,21 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .header-ludara-brand:hover { color: var(--gold, #b8960a); }
 
 /* Hide on very small screens */
-@media (max-width: 480px) {
-  /* Show on mobile but compact */
-  .header-ludara {
-    display: flex;
-    margin-right: 8px;
+@media (max-width: 767px) {
+  /* ── Mobile header: just logo left + Blog right. Strip everything else ── */
+  header {
+    padding: 8px 14px;
   }
-  .header-ludara-text { display: none; }  /* hide "Interactive map by" label */
-  .header-ludara-brand {
-    font-size: 0.58rem;
-    color: rgba(255,255,255,0.6);
-    white-space: nowrap;
-  }
+  .header-divider { display: none; }
+  .header-text { display: none; }          /* hide "Tbilisi Guide / 64 places" */
+  .header-ludara { display: none; }        /* hide "Interactive map by Ludara" */
+
+  /* Make Wander-Lush logo slightly smaller */
+  .wl-logo { font-size: 1.05rem !important; }
+  h1 { display: none; }
+
+  /* Filter bar sits just below the slimmer header */
+  .filter-bar { top: 52px; }
 }
 
 /* List panel — sticky footer */

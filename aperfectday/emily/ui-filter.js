@@ -3,15 +3,23 @@ function renderList(){
   const el=document.getElementById('places-list');
   let filtered;
 
-  // Saved filter mode — always show ALL saved places in list (category pill only affects map)
+  // Saved filter mode — list ALWAYS shows ALL saved places; category pill only adds icons on map
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
-    // Always re-sync from localStorage before rendering to avoid stale array
-    if(typeof refreshFavourites === 'function') refreshFavourites();
-    const allSaved = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
-    filtered = allSaved; // list always shows full saved list
-    const catNote = (AF && AF !== 'all') ? ` · also showing ${CL[AF]||AF} on map` : '';
-    document.getElementById('sheet-title').textContent = `♥ ${allSaved.length} Saved${catNote}`;
-    document.getElementById('list-badge').textContent = allSaved.length;
+    // Force re-read from localStorage — never trust stale in-memory array
+    const rawFavs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+    const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
+    // Nearest-neighbour sort if 2+ places
+    let sorted = allSaved;
+    if(allSaved.length >= 2){
+      let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
+      const out = [pool.shift()];
+      while(pool.length){ const last=out[out.length-1]; let bi=0,bd=Infinity; pool.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} }); out.push(pool.splice(bi,1)[0]); }
+      sorted = out;
+    }
+    filtered = sorted;
+    const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
+    document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
+    document.getElementById('list-badge').textContent = sorted.length;
 
     // Show/update the plan-trip banner
     let banner = document.getElementById('saved-mode-banner');
@@ -228,19 +236,18 @@ function isOpenNow(place){
 
 function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
-  // Sync favourites from localStorage before filtering
-  if(isSaved && typeof refreshFavourites === 'function') refreshFavourites();
+  // Read saved IDs directly from localStorage — never stale
   const savedIds = isSaved
-    ? (typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces().map(p=>p.id) : [])
+    ? JSON.parse(localStorage.getItem('tbilisi-favs') || '[]').map(Number)
     : null;
 
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
-      // Saved mode: show saved places PLUS any active category filter (union, not intersection)
-      const inSaved  = savedIds.includes(p.id);
-      const inCat    = AF === 'all' || p.cat === AF;
-      visible = inSaved || (AF !== 'all' && inCat);
+      // UNION: show all saved places AND all places matching category pill
+      const inSaved = savedIds.includes(p.id);
+      const inCat   = AF !== 'all' && p.cat === AF;
+      visible = inSaved || inCat;
     } else {
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
