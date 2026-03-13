@@ -57,15 +57,69 @@ function showStorySlide(idx){
   // Pan map to this place
   if(map) map.panTo({lat: p.lat, lng: p.lng});
 
-  // Badge, name, note
-  document.getElementById('card-badge').textContent = p.emoji + '  ' + (CL_STORIES[p.cat] || p.cat);
+  // ── Populate all fields ──────────────────────────────────────
+  const catColors = {
+    landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
+    church:'#6090c8', market:'#c08060', soviet:'#9080a8', nature:'#50906a'
+  };
+  const badge = document.getElementById('card-badge');
+  badge.textContent = p.emoji + '  ' + (CL_STORIES[p.cat] || p.cat).toUpperCase();
+  badge.style.color = catColors[p.cat] || '#888';
+
   document.getElementById('card-name').textContent = p.name;
+
+  // Type
+  const typeEl = document.getElementById('card-type');
+  if(typeEl){ typeEl.textContent = p.type || ''; typeEl.style.display = p.type ? '' : 'none'; }
+
+  // Meta: hours + address
+  const metaEl = document.getElementById('card-meta');
+  if(metaEl){
+    metaEl.innerHTML = '';
+    if(p.hours){
+      const row = document.createElement('div');
+      row.className = 'nbhd-card-meta-item';
+      row.innerHTML = `<span>🕐</span><span>${p.hours}</span>`;
+      metaEl.appendChild(row);
+    }
+    if(p.address){
+      const row = document.createElement('div');
+      row.className = 'nbhd-card-meta-item';
+      row.innerHTML = `<span>📍</span><span>${p.address}</span>`;
+      metaEl.appendChild(row);
+    }
+  }
+
+  // Note
   document.getElementById('card-note').textContent = p.note || '';
+
+  // Tip
+  const tipBox  = document.getElementById('card-tip');
+  const tipText = document.getElementById('card-tip-text');
+  if(tipBox && tipText){
+    if(p.tip){ tipText.textContent = p.tip; tipBox.style.display = ''; }
+    else { tipBox.style.display = 'none'; }
+  }
+
+  // Website
+  const websiteEl = document.getElementById('card-website');
+  if(websiteEl){
+    if(p.website){
+      websiteEl.href = p.website;
+      websiteEl.textContent = '🌐 ' + p.website.replace('https://','').replace('http://','');
+      websiteEl.style.display = '';
+    } else { websiteEl.style.display = 'none'; }
+  }
+
+  // Heart / fav
+  updateCardFav();
+
+  // Counter + nav arrows
   document.getElementById('card-counter').textContent = (idx + 1) + ' / ' + storyPlaces.length;
   document.getElementById('card-prev').disabled = (idx === 0);
   document.getElementById('card-next').disabled = (idx === storyPlaces.length - 1);
 
-  // Photo: gradient placeholder first, then fade photo in
+  // ── Photo ────────────────────────────────────────────────────
   const placeholder = document.getElementById('card-placeholder');
   const img = document.getElementById('card-img');
   const gradients = {
@@ -104,6 +158,32 @@ function showStorySlide(idx){
   }
 }
 
+function updateCardFav(){
+  const btn = document.getElementById('card-fav');
+  if(!btn) return;
+  const p = storyPlaces[storyIdx];
+  if(!p) return;
+  const favs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  const saved = favs.includes(p.id);
+  btn.textContent = saved ? '♥' : '♡';
+  btn.classList.toggle('faved', saved);
+}
+
+function storiesToggleFav(){
+  const p = storyPlaces[storyIdx];
+  if(!p) return;
+  let favs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  if(favs.includes(p.id)){
+    favs = favs.filter(id => id !== p.id);
+  } else {
+    favs.push(p.id);
+  }
+  localStorage.setItem('tbilisi-favs', JSON.stringify(favs));
+  updateCardFav();
+  // Also refresh the saved pill count in the filter bar
+  if(typeof refreshSavedPill === 'function') refreshSavedPill();
+}
+
 function storiesNext(){
   if(storyIdx < storyPlaces.length - 1) showStorySlide(storyIdx + 1);
 }
@@ -115,18 +195,8 @@ function closeStories(){
   document.getElementById('nbhd-dim').classList.remove('open');
   storyPlaces = []; storyIdx = 0;
 }
-function storiesOpenDetail(){
-  const p = storyPlaces[storyIdx];
-  if(!p) return;
-  closeStories();
-  openDetail(p.id);
-  if(window.innerWidth < 768){
-    setTimeout(()=>{
-      document.getElementById('detail-sheet').classList.add('open');
-      document.getElementById('sheet').classList.remove('open');
-    }, 100);
-  }
-}
+// storiesOpenDetail removed — cards now show full details inline
+
 function storiesMaps(){
   const p = storyPlaces[storyIdx];
   if(p) window.open(`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,'_blank');
