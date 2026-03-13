@@ -3,10 +3,13 @@ function renderList(){
   const el=document.getElementById('places-list');
   let filtered;
 
-  // Saved filter mode — show only favourites, in route order
+  // Saved filter mode — show favourites, optionally filtered by category
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
-    filtered = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
-    document.getElementById('sheet-title').textContent = `♥ ${filtered.length} Saved`;
+    let allSaved = (typeof getSortedFavPlaces === 'function') ? getSortedFavPlaces() : [];
+    // Intersect with category filter if one is active
+    filtered = (AF && AF !== 'all') ? allSaved.filter(p => p.cat === AF) : allSaved;
+    const label = (AF && AF !== 'all') ? `♥ ${filtered.length} Saved · ${CL[AF]||AF}` : `♥ ${allSaved.length} Saved`;
+    document.getElementById('sheet-title').textContent = label;
     document.getElementById('list-badge').textContent = filtered.length;
 
     // Show/update the plan-trip banner at top of sheet
@@ -87,7 +90,6 @@ function renderList(){
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
   AF=cat;
-  // Close detail card
   if(typeof closePlaceCard === 'function') closePlaceCard();
   if(AID && markers[AID]){
     const prev=PLACES.find(x=>x.id===AID);
@@ -96,8 +98,13 @@ function fc(el,cat){
   AID=null;
   document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('active'));
 
-  document.querySelectorAll('.pill:not(.pill-opennow)').forEach(p=>p.classList.remove('active'));
+  // Deactivate category pills but keep saved + opennow state
+  document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
+  // Keep saved pill highlighted if saved is active
+  if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+    document.getElementById('pill-saved').classList.add('active');
+  }
   applyFilters();
 
   // On desktop, ensure sidebar is open when user picks a filter
@@ -105,10 +112,8 @@ function fc(el,cat){
     const s = document.getElementById('sheet');
     if(s.classList.contains('desktop-hidden')) openSheet();
   }
-  // On mobile, open the sheet to show the filtered list
-  if(window.innerWidth < 768){
-    openSheet();
-  }
+  // On mobile: DON'T open the list — just filter map markers
+  // User taps "Browse all places" button if they want the list
 
   const vis=PLACES.filter(p=>(cat==='all'||p.cat===cat)&&(!openNowActive||isOpenNow(p)));
   if(vis.length){

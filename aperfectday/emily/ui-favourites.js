@@ -66,21 +66,16 @@ function toggleSavedFilter(el){
       alert('Tap ♡ on any place to save it here.');
       return;
     }
-    // Deactivate category + openNow pills
-    AF = 'all';
-    document.querySelectorAll('.pill:not(.pill-saved):not(.pill-opennow)').forEach(p => p.classList.remove('active'));
-    document.getElementById('pill-saved').classList.add('active');
-
+    // Keep current category filter — Saved now intersects with it
+    // (user can still tap Landmarks, Restaurants etc to filter saved places)
     applyFilters();
-    openSheet();
+    // Only open sheet on desktop; mobile user taps "Browse all places"
+    if(window.innerWidth >= 768) openSheet();
     drawSavedRoute();
   } else {
     clearTripRoute();
-    // Remove saved banner if present
     const banner = document.getElementById('saved-mode-banner');
     if(banner) banner.remove();
-    AF = 'all';
-    document.querySelector('.pill').classList.add('active'); // re-activate All
     applyFilters();
   }
 }
