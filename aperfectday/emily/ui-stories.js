@@ -112,3 +112,28 @@ function toggleSheet(){
     if(isOpen){ closeSheet(); } else { openSheet(); }
   }
 }
+
+// ── Align nbhd bar indent under Wander-Lush logo ─────────────
+function alignNbhdBar(){
+  if(window.innerWidth < 768) return;
+  const logo = document.querySelector('.header-title .wl-logo');
+  const bar  = document.getElementById('nbhd-bar');
+  if(!logo || !bar) return;
+  // Right edge of logo relative to the map (map starts at 300px)
+  const logoRight = logo.getBoundingClientRect().right;
+  const mapLeft   = 300; // sidebar width
+  const indent    = Math.max(60, logoRight - mapLeft + 8); // 8px breathing room
+  // Subtract handle width (~26px) since handle sits before bubbles
+  const handleW = 26;
+  bar.style.setProperty('--nbhd-indent', (indent - handleW) + 'px');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Run after fonts load (Cormorant Garamond is italic and wider)
+  if(document.fonts?.ready){
+    document.fonts.ready.then(alignNbhdBar);
+  } else {
+    setTimeout(alignNbhdBar, 400);
+  }
+  window.addEventListener('resize', alignNbhdBar);
+});

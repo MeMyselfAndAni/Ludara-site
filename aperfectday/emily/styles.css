@@ -441,9 +441,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
   #nbhd-bar .nbhd-bar-label { display: none; }  /* hide "NEIGHBOURHOODS" text */
   #nbhd-label { display: none; }
-  /* Indent bubbles so first icon starts under "Wander-Lush" logo (~200px into map area) */
+  /* padding-left set dynamically by JS to align under Wander-Lush logo */
   #nbhd-bar .nbhd-bubbles-row {
-    padding-left: 200px;
+    padding-left: var(--nbhd-indent, 160px);
   }
 
   /* When sidebar is hidden, stretch bar to left edge */
@@ -1185,7 +1185,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .pc-btn-fav.faved { color: #e00040; background: rgba(0,0,0,0.52); }
 .pc-btn-fav:active { transform: scale(1.2); }
-/* ‹ › prev/next — centred sides, only visible in nbhd mode */
+/* ‹ › prev/next — centred sides, shown in both detail and nbhd mode */
 .pc-btn-nav {
   top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.88);
@@ -1194,7 +1194,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   border-radius: 50%;
   font-size: 1.3rem; font-weight: 700;
   box-shadow: 0 2px 8px rgba(0,0,0,0.22);
-  display: none; /* shown only in nbhd mode via JS */
+  /* display controlled by JS (openDetail / openNbhdCard) */
 }
 .pc-btn-nav.prev { left: 10px; }
 .pc-btn-nav.next { right: 60px; } /* offset left of heart */

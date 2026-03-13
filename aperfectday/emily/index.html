@@ -113,12 +113,12 @@
     <img class="pc-photo-img" id="pc-img" alt="">
     <span class="pc-photo-credit" id="pc-credit"></span>
     <!-- Floating controls -->
-    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()">‹ List</button>
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
     <button class="pc-btn-close" onclick="closePlaceCard()">✕</button>
     <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
     <!-- Prev/Next arrows (shown in neighbourhood mode) -->
-    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()">‹</button>
-    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()">›</button>
+    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
+    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
   </div>
   <!-- Body -->
   <div class="pc-body" id="pc-body">
