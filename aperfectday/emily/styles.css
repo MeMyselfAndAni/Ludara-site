@@ -127,12 +127,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── PLACES LIST BTN ── */
 .list-toggle {
   position: fixed;
-  right: 0px;              /* flush to right edge */
-  bottom: 290px;           /* well above +/- zoom buttons */
+  right: -28px;            /* offset so rotated pill sits fully on screen */
+  bottom: 300px;           /* above +/- zoom buttons */
   top: auto;
   left: auto;
   transform: rotate(-90deg);
-  transform-origin: right center;
+  transform-origin: center center;
   z-index: 420;
   background: rgba(26,58,92,0.72);   /* semi-transparent */
   backdrop-filter: blur(6px);
@@ -359,49 +359,74 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
-  /* Map full height — overlays float on top, no layout reflow */
-  /* #map bottom intentionally NOT set — stays full height */
+  /* ── Neighbourhood bar: tight, half-height, with X close button ── */
   #nbhd-bar {
     position: fixed;
     left: 0; right: 0;
     bottom: 0;
-    padding: 1px 8px 2px;
+    padding: 4px 6px 6px;      /* safe-area bottom on notched phones */
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid rgba(0,0,0,0.08);
-    border-radius: 14px 14px 0 0;
+    border-radius: 10px 10px 0 0;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
     z-index: 410;
-    box-shadow: 0 -3px 16px rgba(0,0,0,0.10);
-    /* drag down to dismiss — JS handles touch */
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
     touch-action: pan-x;
+    align-items: center;
   }
   #nbhd-bar::-webkit-scrollbar { display: none; }
 
-  /* Full-size icons, minimal padding — bar height comes from tight margins only */
-  #nbhd-bar .nbhd-ring { width: 52px; height: 52px; }
-  #nbhd-bar .nbhd-ring-inner { font-size: 1.15rem; }
-  #nbhd-bar .nbhd-label { font-size: 0.50rem; }
-  #nbhd-bar .nbhd-bubble { gap: 1px; padding: 0 3px; }
-  #nbhd-bar .nbhd-bubbles-row { gap: 4px; padding: 0; }
+  /* Override ALL base bubble/ring sizing for mobile */
+  #nbhd-bar .nbhd-ring {
+    width: 48px; height: 48px;
+    padding: 2px;
+  }
+  #nbhd-bar .nbhd-ring-inner { font-size: 1.1rem; border-width: 2px; }
+  #nbhd-bar .nbhd-label { font-size: 0.48rem; line-height: 1; margin-top: 1px; }
+  #nbhd-bar .nbhd-bubble { gap: 2px; padding: 0 4px; }
+  #nbhd-bar .nbhd-bubbles-row { gap: 2px; padding: 0; align-items: center; }
 
-  /* Show drag handle and close button on mobile */
+  /* Drag handle — minimal */
   #nbhd-bar .nbhd-bar-handle {
     display: flex;
-    cursor: grab;
-    width: 22px;
+    width: 18px;
     flex-shrink: 0;
     border-right: 1px solid rgba(0,0,0,0.07);
     margin-right: 4px;
-    padding: 2px 4px;
+    padding: 2px 3px;
+    align-self: center;
   }
-  .nbhd-close-btn { display: flex; }
+  #nbhd-bar .nbhd-handle-grip { font-size: 0.6rem; }
+  #nbhd-bar .nbhd-bar-label { display: none; }
+
+  /* X close button — top-right, always visible */
+  .nbhd-close-btn {
+    display: flex !important;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 22px; height: 22px;
+    font-size: 0.68rem;
+    background: rgba(0,0,0,0.12);
+    flex-shrink: 0;
+    margin-left: 0;
+  }
 
   /* When sheet is open, nbhd-bar hides */
   .sheet.open ~ #nbhd-bar { display: none; }
+
+  /* ── Browse all places: above +/- zoom, fully on screen ── */
+  .list-toggle {
+    right: -28px !important;
+    bottom: 300px !important;
+    top: auto !important;
+    transform: rotate(-90deg) !important;
+    transform-origin: center center !important;
+  }
 }
 
 /* ══ DESKTOP LAYOUT (≥768px) — full-screen map, floating panels ══ */
