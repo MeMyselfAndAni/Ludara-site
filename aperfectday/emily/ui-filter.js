@@ -134,29 +134,48 @@ function openDetail(id){
   document.getElementById('detail-actions').innerHTML=actions;
 
   // Scroll detail body to top
-  const body=document.getElementById('detail-body');
-  if(body) body.scrollTop=0;
+  const body = document.getElementById('detail-body');
+  if(body) body.scrollTop = 0;
 
-  // Photo — compact square
-  const imgBox=document.getElementById('detail-img-box');
-  const emojiEl=document.getElementById('detail-emoji');
-  emojiEl.style.display='block';
-  const oldImg=imgBox.querySelector('img.detail-sq-img');
+  // Photo — full-width top image (card format)
+  const imgWrap   = document.getElementById('detail-img-box');
+  const placeholder = document.getElementById('detail-emoji');
+  placeholder.style.opacity = '1';
+
+  // Remove old photo if any
+  const oldImg = imgWrap.querySelector('img.detail-main-img');
   if(oldImg) oldImg.remove();
-  document.getElementById('photo-credit').innerHTML='';
+  document.getElementById('photo-credit').innerHTML = '';
 
-  fetchPhoto(p, data=>{
+  // Set gradient background based on category
+  const gradients = {
+    landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
+    food:    'linear-gradient(135deg,#7a3020,#c06040)',
+    cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
+    church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
+    market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
+    soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
+    nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
+  };
+  imgWrap.style.background = gradients[p.cat] || gradients.landmark;
+  placeholder.textContent = p.emoji;
+
+  fetchPhoto(p, data => {
     if(data?.url){
-      emojiEl.style.display='none';
-      const img=document.createElement('img');
-      img.src=data.url;
-      img.className='detail-sq-img';
-      img.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;';
-      imgBox.insertBefore(img, imgBox.firstChild);
+      const img = document.createElement('img');
+      img.className = 'detail-main-img';
+      img.alt = p.name;
+      // Insert behind buttons but in front of placeholder
+      imgWrap.insertBefore(img, imgWrap.querySelector('.photo-credit'));
+      img.onload = () => {
+        img.classList.add('loaded');
+        placeholder.style.opacity = '0';
+      };
+      img.src = data.url;
       if(data.attr){
-        const tmp=document.createElement('div');
-        tmp.innerHTML=data.attr;
-        document.getElementById('photo-credit').textContent='© '+(tmp.querySelector('a')?.textContent||'Google');
+        const tmp = document.createElement('div');
+        tmp.innerHTML = data.attr;
+        document.getElementById('photo-credit').textContent = '© '+(tmp.querySelector('a')?.textContent||'Google');
       }
     }
   });

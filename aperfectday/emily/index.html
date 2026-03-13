@@ -178,30 +178,35 @@
   <div class="places-list" id="places-list"></div>
 </div>
 
-<!-- Detail sheet -->
+<!-- Detail sheet — card format: photo on top, content below -->
 <div class="detail-sheet" id="detail-sheet">
-  <div class="detail-header-row">
+
+  <!-- Full-width photo + floating controls -->
+  <div class="detail-photo-wrap" id="detail-img-box">
+    <div class="detail-photo-placeholder" id="detail-emoji">📍</div>
+    <span class="photo-credit" id="photo-credit"></span>
     <button class="detail-back-btn" onclick="backToList()">‹ List</button>
     <button class="detail-close-btn" onclick="closeDetail()">✕</button>
-    <div class="detail-img-box" id="detail-img-box">
-      <span id="detail-emoji">📍</span>
-      <span class="photo-credit" id="photo-credit"></span>
-    </div>
-    <div class="detail-title-col">
-      <div class="detail-cat" id="detail-cat"></div>
-      <div class="detail-title-row">
-        <div class="detail-title" id="detail-title"></div>
-        <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
-      </div>
-      <div class="detail-type" id="detail-type"></div>
-      <div class="detail-quick-meta" id="detail-quick-meta"></div>
-    </div>
+    <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFav()" title="Save to favourites">♡</button>
   </div>
+
+  <!-- Content -->
   <div class="detail-body" id="detail-body">
+    <!-- Badge + title + heart -->
+    <div class="detail-cat" id="detail-cat"></div>
+    <div class="detail-title-row">
+      <div class="detail-title" id="detail-title"></div>
+    </div>
+    <div class="detail-type" id="detail-type"></div>
+    <div class="detail-quick-meta" id="detail-quick-meta"></div>
+
+    <!-- Emily's note -->
     <div class="emily-note">
       <span id="detail-note"></span>
       <span class="emily-by">— Emily Lush, Wander-Lush</span>
     </div>
+
+    <!-- Tip -->
     <div class="tip-box" id="detail-tip" style="display:none">
       <span class="tip-icon">💡</span>
       <div>
@@ -209,6 +214,8 @@
         <div class="tip-text" id="detail-tip-text"></div>
       </div>
     </div>
+
+    <!-- Action buttons -->
     <div class="action-row" id="detail-actions">
       <a class="btn-primary" id="btn-maps" href="#" target="_blank">📍 Open in Maps</a>
     </div>

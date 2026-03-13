@@ -84,48 +84,103 @@ function toggleSavedFilter(el){
   }
 }
 
+// ── ROUTE DRAWING (real walking path via Directions API) ─────
+let tripPolyline  = null;   // kept as stub — renderers replace it
+let tripMarkers   = [];
+let tripRenderers = [];     // DirectionsRenderer instances
+
+function clearTripRoute(){
+  tripMarkers.forEach(m => m.setMap(null));
+  tripMarkers = [];
+  tripRenderers.forEach(r => r.setMap(null));
+  tripRenderers = [];
+  if(tripPolyline){ tripPolyline.setMap(null); tripPolyline = null; }
+}
+
 function drawSavedRoute(){
   if(!savedFilterActive || favourites.length < 2){ clearTripRoute(); return; }
-
   const places = getSortedFavPlaces();
   if(places.length < 2){ clearTripRoute(); return; }
-
   clearTripRoute();
-  const path = places.map(p => ({lat: p.lat, lng: p.lng}));
 
-  tripPolyline = new google.maps.Polyline({
-    path, geodesic: true,
-    strokeColor: '#e00040',
-    strokeOpacity: 0.8,
-    strokeWeight: 3,
-    map
-  });
-
+  // Place numbered markers first (instant feedback)
   places.forEach((p, i) => {
     const div = document.createElement('div');
     div.style.cssText = `
-      width:22px;height:22px;border-radius:50%;
-      background:#e00040;border:2px solid white;
-      color:white;font-size:0.65rem;font-weight:700;
+      width:24px;height:24px;border-radius:50%;
+      background:#e00040;border:2.5px solid white;
+      color:white;font-size:0.68rem;font-weight:700;
       display:flex;align-items:center;justify-content:center;
-      box-shadow:0 2px 6px rgba(0,0,0,0.3);`;
+      box-shadow:0 2px 8px rgba(0,0,0,0.35);
+      font-family:'Inter',sans-serif;`;
     div.textContent = i + 1;
-    const m = (typeof google.maps.marker !== 'undefined' && google.maps.marker.AdvancedMarkerElement)
+    const m = (window.google?.maps?.marker?.AdvancedMarkerElement)
       ? new google.maps.marker.AdvancedMarkerElement({ map, position:{lat:p.lat,lng:p.lng}, content:div })
       : new google.maps.Marker({ map, position:{lat:p.lat,lng:p.lng},
-          label:{text:String(i+1),color:'white',fontSize:'10px',fontWeight:'bold'} });
+          label:{text:String(i+1),color:'white',fontSize:'11px',fontWeight:'bold'},
+          icon:{path:google.maps.SymbolPath.CIRCLE,scale:12,
+                fillColor:'#e00040',fillOpacity:1,strokeColor:'white',strokeWeight:2} });
     tripMarkers.push(m);
   });
 
-  // Fit map to show all saved places
+  // Fit bounds immediately
   const b = new google.maps.LatLngBounds();
   places.forEach(p => b.extend({lat:p.lat,lng:p.lng}));
   map.fitBounds(b, {top:80, right:20, bottom:120, left: window.innerWidth>=768 ? 320 : 20});
+
+  // Request real walking directions — chunk into segments of max 10 stops (8 waypoints)
+  const CHUNK = 10;
+  const dirSvc = new google.maps.DirectionsService();
+
+  for(let start=0; start < places.length-1; start += CHUNK-1){
+    const chunk = places.slice(start, start + CHUNK);
+    if(chunk.length < 2) break;
+
+    const origin      = {lat: chunk[0].lat, lng: chunk[0].lng};
+    const destination = {lat: chunk[chunk.length-1].lat, lng: chunk[chunk.length-1].lng};
+    const waypoints   = chunk.slice(1,-1).map(p => ({
+      location: {lat:p.lat, lng:p.lng},
+      stopover: true
+    }));
+
+    const renderer = new google.maps.DirectionsRenderer({
+      map,
+      suppressMarkers: true,          // we draw our own numbered markers
+      suppressInfoWindows: true,
+      polylineOptions: {
+        strokeColor:   '#e00040',
+        strokeOpacity: 0.85,
+        strokeWeight:  4,
+      }
+    });
+    tripRenderers.push(renderer);
+
+    dirSvc.route({
+      origin, destination, waypoints,
+      travelMode: google.maps.TravelMode.WALKING,
+      optimizeWaypoints: false,
+    }, (result, status) => {
+      if(status === 'OK'){
+        renderer.setDirections(result);
+      }
+      // On failure (quota etc) fall back to straight dotted line for this chunk
+      else {
+        const fallback = new google.maps.Polyline({
+          path: chunk.map(p=>({lat:p.lat,lng:p.lng})),
+          geodesic: true,
+          strokeColor:   '#e00040',
+          strokeOpacity: 0.5,
+          strokeWeight:  3,
+          strokePattern: [{ icon:{path:'M 0,-1 0,1',strokeOpacity:1,scale:3}, offset:'0', repeat:'12px' }],
+          map
+        });
+        tripMarkers.push(fallback); // reuse array for cleanup
+      }
+    });
+  }
 }
 
 // ── TRIP PLANNER ─────────────────────────────────────────────
-let tripPolyline = null;
-let tripMarkers  = [];
 
 function haversineM(a, b){
   const R = 6371000;
@@ -156,11 +211,7 @@ function getSortedFavPlaces(){
   return sorted;
 }
 
-function clearTripRoute(){
-  if(tripPolyline){ tripPolyline.setMap(null); tripPolyline=null; }
-  tripMarkers.forEach(m=>m.setMap(null));
-  tripMarkers=[];
-}
+// clearTripRoute defined above with renderer support
 
 function planFavTrip(){
   if(favourites.length < 2){ alert('Add at least 2 favourites first!'); return; }
