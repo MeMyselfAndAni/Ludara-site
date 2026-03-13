@@ -117,11 +117,12 @@ function drawSavedRoute(){
       font-family:'Inter',sans-serif;`;
     div.textContent = i + 1;
     const m = (window.google?.maps?.marker?.AdvancedMarkerElement)
-      ? new google.maps.marker.AdvancedMarkerElement({ map, position:{lat:p.lat,lng:p.lng}, content:div })
+      ? new google.maps.marker.AdvancedMarkerElement({ map, position:{lat:p.lat,lng:p.lng}, content:div, zIndex:9000+i })
       : new google.maps.Marker({ map, position:{lat:p.lat,lng:p.lng},
+          zIndex: 9000 + i,
           label:{text:String(i+1),color:'white',fontSize:'11px',fontWeight:'bold'},
-          icon:{path:google.maps.SymbolPath.CIRCLE,scale:12,
-                fillColor:'#e00040',fillOpacity:1,strokeColor:'white',strokeWeight:2} });
+          icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,
+                fillColor:'#e00040',fillOpacity:1,strokeColor:'white',strokeWeight:2.5} });
     tripMarkers.push(m);
   });
 

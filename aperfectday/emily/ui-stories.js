@@ -131,3 +131,46 @@ function openNbhdBar(){
   if(bar) bar.classList.remove('hidden');
   if(btn) btn.classList.remove('visible');
 }
+
+// ── Mobile: swipe-down to dismiss nbhd bar ────────────────────
+(function initNbhdSwipe(){
+  const bar = document.getElementById('nbhd-bar');
+  if(!bar) return;
+  let startY = 0, dragging = false;
+
+  bar.addEventListener('touchstart', e => {
+    if(window.innerWidth >= 768) return;
+    // Only drag from handle area or top of bar — not from bubbles
+    const handle = document.getElementById('nbhd-handle');
+    if(!handle) return;
+    const rect = handle.getBoundingClientRect();
+    const touch = e.touches[0];
+    // Allow drag if touching anywhere on bar (within top 20px = handle zone)
+    const barRect = bar.getBoundingClientRect();
+    if(touch.clientY > barRect.top + 28) return; // only from top strip
+    startY = touch.clientY;
+    dragging = true;
+    bar.style.transition = 'none';
+  }, { passive: true });
+
+  bar.addEventListener('touchmove', e => {
+    if(!dragging) return;
+    const dy = e.touches[0].clientY - startY;
+    if(dy > 0) bar.style.transform = `translateY(${dy}px)`;
+  }, { passive: true });
+
+  bar.addEventListener('touchend', e => {
+    if(!dragging) return;
+    dragging = false;
+    bar.style.transition = '';
+    const dy = e.changedTouches[0].clientY - startY;
+    if(dy > 60) {
+      // Swiped down enough — dismiss
+      bar.style.transform = '';
+      closeNbhdBar();
+    } else {
+      // Snap back
+      bar.style.transform = '';
+    }
+  });
+})();

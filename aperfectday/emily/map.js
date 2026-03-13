@@ -131,6 +131,7 @@ function addMarker(p){
     icon: makeIcon(p, false),
     title: p.name,
     optimized: false,
+    zIndex: 10,   // low — trip number markers (zIndex 9000+) always render on top
   });
   marker.addListener('click', ()=> openDetail(p.id));
   markers[p.id] = marker;
