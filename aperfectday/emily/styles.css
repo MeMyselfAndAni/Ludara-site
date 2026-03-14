@@ -358,48 +358,26 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .btn-secondary:hover { background: var(--accent); color: white; }
 
 
-/* ── Neighbourhood label row — sits above the bar ── */
-.nbhd-label-row {
+
+
+
+/* ── Neighbourhood title — floats just above the bar, always visible ── */
+#nbhd-title {
   position: fixed;
   left: 0; right: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;   /* clicks pass through to map */
-  z-index: 411;
-}
-.nbhd-label-row .nbhd-close-btn {
-  position: absolute;
-  right: 10px;
-  pointer-events: all;
-}
-.nbhd-bar-label {
-  font-size: 0.55rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: rgba(0,0,0,0.55);
-  writing-mode: horizontal-tb;
-  transform: none;
-  text-align: center;
-  line-height: 1;
+  letter-spacing: 0.18em;
+  color: rgba(26,58,92,0.75);
+  pointer-events: none;
+  z-index: 412;
+  /* Mobile default: bar is bottom:0, bar height ~76px */
+  bottom: 80px;
 }
-.nbhd-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.10);
-  font-size: 0.68rem;
-  cursor: pointer;
-  pointer-events: all;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
-.nbhd-close-btn:hover { background: rgba(0,0,0,0.22); }
+#nbhd-title.hidden { display: none; }
 
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
@@ -446,22 +424,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
   #nbhd-bar .nbhd-handle-grip { font-size: 0.6rem; }
   /* Label floats above the bar */
-  #nbhd-bar .nbhd-bar-label {
-    display: block !important;
-    writing-mode: horizontal-tb;
-    transform: none;
-    font-size: 0.52rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    color: rgba(255,255,255,0.92);
-    text-align: center;
-    position: fixed;
-    bottom: 100px;
-    left: 0; right: 0;
-    z-index: 411;
-    pointer-events: none;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-  }
+  #nbhd-bar 
 
   /* nbhd-close-btn: styled globally above */
 
@@ -548,12 +511,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   #list-toggle.hidden { opacity: 0; pointer-events: none; }
 
   /* ── Neighbourhood bar — bottom left, full width with scrolling ── */
-  .nbhd-label-row {
-    bottom: 92px;   /* bar height ~80px + 8px bar-bottom + 4px gap */
-    left: 12px;
-    right: 12px;
-    justify-content: center;
-  }
+  
+  #nbhd-title { bottom: 94px; }  /* bar bottom:8px + bar height ~82px + 4px */
   #nbhd-bar {
     position: fixed;
     bottom: 8px;
@@ -587,21 +546,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     margin-right: 6px;
   }
   /* Neighbourhoods label — visible on desktop */
-  #nbhd-bar .nbhd-bar-label {
-    display: block;
-    writing-mode: horizontal-tb;
-    transform: none;
-    font-size: 0.46rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: rgba(0,0,0,0.45);
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding: 0 8px 0 2px;
-    border-right: 1px solid rgba(0,0,0,0.08);
-    margin-right: 4px;
-    align-self: center;
-  }
+  #nbhd-bar 
   /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
@@ -898,17 +843,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   touch-action: none;      /* needed so touchmove fires */
 }
 .nbhd-bar-handle:active { cursor: grabbing; }
-.nbhd-bar-label {
-  font-size: 0.44rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text3);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  white-space: nowrap;
-}
+
 .nbhd-handle-grip {
   font-size: 0.75rem;
   color: var(--text3);
