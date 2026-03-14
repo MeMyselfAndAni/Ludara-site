@@ -138,3 +138,53 @@ function addMarker(p){
 }
 
 // ── PLACES PHOTO FETCH ────────────────────────────────────────
+
+function showNbhdCircleAnimated(nbhdId){
+  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
+  const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
+  if(!n || !map) return;
+
+  // Start tiny, expand to full radius over 600ms
+  const fullRadius = n.radius;
+  const steps = 30;
+  const duration = 600;
+  let step = 0;
+
+  activeNbhdCircle = new google.maps.Circle({
+    map,
+    center: {lat:n.lat, lng:n.lng},
+    radius: fullRadius * 0.05,   // start at 5%
+    fillColor: n.color,
+    fillOpacity: 0.0,
+    strokeColor: n.color,
+    strokeOpacity: 0.0,
+    strokeWeight: 2.5,
+    clickable: false,
+    zIndex: 0,
+  });
+
+  const interval = setInterval(() => {
+    step++;
+    const t = step / steps;
+    const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+    activeNbhdCircle.setRadius(fullRadius * (0.05 + 0.95 * ease));
+    activeNbhdCircle.setOptions({
+      fillOpacity: 0.12 * ease,
+      strokeOpacity: 0.6 * ease,
+    });
+    if(step >= steps){
+      clearInterval(interval);
+      // Gentle pulse: slightly expand and contract once
+      setTimeout(() => {
+        if(!activeNbhdCircle) return;
+        activeNbhdCircle.setRadius(fullRadius * 1.08);
+        activeNbhdCircle.setOptions({ strokeOpacity: 0.8 });
+        setTimeout(() => {
+          if(!activeNbhdCircle) return;
+          activeNbhdCircle.setRadius(fullRadius);
+          activeNbhdCircle.setOptions({ strokeOpacity: 0.55, fillOpacity: 0.10 });
+        }, 200);
+      }, 50);
+    }
+  }, duration / steps);
+}

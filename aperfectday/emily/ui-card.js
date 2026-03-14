@@ -81,19 +81,54 @@ function openNbhdCard(nbhd){
     'mtatsminda': {lat:41.6940,lng:44.7960,zoom:15},
     'vake':       {lat:41.7040,lng:44.7720,zoom:14},
   };
+
+  // ── Step 1: dim all non-neighbourhood markers instantly ──
+  PLACES.forEach(p => {
+    if(!markers[p.id]) return;
+    if(p.nbhd === nbhd){
+      markers[p.id].setVisible(true);
+      markers[p.id].setZIndex(20);
+      markers[p.id].setOpacity ? markers[p.id].setOpacity(1) : null;
+    } else {
+      markers[p.id].setOpacity ? markers[p.id].setOpacity(0.15) : markers[p.id].setVisible(false);
+      markers[p.id].setZIndex(1);
+    }
+  });
+
+  // ── Step 2: pan + zoom smoothly to neighbourhood centre ──
   const b = NBHD_BOUNDS[nbhd];
-  if(b && map){ map.setCenter({lat:b.lat,lng:b.lng}); map.setZoom(b.zoom); }
+  if(b && map){
+    map.panTo({lat:b.lat, lng:b.lng});
+    setTimeout(() => map.setZoom(b.zoom), 150);
+  }
 
-  // Show neighbourhood circle on map
-  if(typeof showNbhdCircle === 'function') showNbhdCircle(nbhd);
+  // ── Step 3: draw neighbourhood circle with pulsing entrance ──
+  setTimeout(() => {
+    if(typeof showNbhdCircleAnimated === 'function'){
+      showNbhdCircleAnimated(nbhd);
+    } else if(typeof showNbhdCircle === 'function'){
+      showNbhdCircle(nbhd);
+    }
+  }, 500);
 
-  document.getElementById('pc-btn-back').style.display = 'none';
-  document.getElementById('pc-nav-prev').style.display = 'flex';
-  document.getElementById('pc-nav-next').style.display = 'flex';
-  document.getElementById('pc-counter').style.display  = 'block';
+  // ── Step 4: after animation settles, open the card ──
+  setTimeout(() => {
+    document.getElementById('pc-btn-back').style.display = 'none';
+    document.getElementById('pc-nav-prev').style.display = 'flex';
+    document.getElementById('pc-nav-next').style.display = 'flex';
+    document.getElementById('pc-counter').style.display  = 'block';
+    _showSlide(0);
+    _openCard();
+  }, 1100);
+}
 
-  _showSlide(0);
-  _openCard();
+// Restore all markers when neighbourhood card is closed
+function _nbhdRestoreMarkers(){
+  PLACES.forEach(p => {
+    if(!markers[p.id]) return;
+    markers[p.id].setOpacity ? markers[p.id].setOpacity(1) : markers[p.id].setVisible(true);
+    markers[p.id].setZIndex(10);
+  });
 }
 
 function _showSlide(idx){
@@ -252,6 +287,7 @@ function closePlaceCard(reopenList){
 
   // Clear neighbourhood circle
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
+  if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
 
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
