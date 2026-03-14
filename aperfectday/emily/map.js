@@ -147,7 +147,7 @@ function showNbhdCircleAnimated(nbhdId){
   // Start tiny, expand to full radius over 600ms
   const fullRadius = n.radius;
   const steps = 30;
-  const duration = 600;
+  const duration = 1200;
   let step = 0;
 
   activeNbhdCircle = new google.maps.Circle({
@@ -183,7 +183,7 @@ function showNbhdCircleAnimated(nbhdId){
           if(!activeNbhdCircle) return;
           activeNbhdCircle.setRadius(fullRadius);
           activeNbhdCircle.setOptions({ strokeOpacity: 0.55, fillOpacity: 0.10 });
-        }, 200);
+        }, 400);
       }, 50);
     }
   }, duration / steps);

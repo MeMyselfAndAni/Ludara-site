@@ -99,7 +99,7 @@ function openNbhdCard(nbhd){
   const b = NBHD_BOUNDS[nbhd];
   if(b && map){
     map.panTo({lat:b.lat, lng:b.lng});
-    setTimeout(() => map.setZoom(b.zoom), 150);
+    setTimeout(() => map.setZoom(b.zoom), 300);
   }
 
   // ── Step 3: draw neighbourhood circle with pulsing entrance ──
@@ -109,7 +109,7 @@ function openNbhdCard(nbhd){
     } else if(typeof showNbhdCircle === 'function'){
       showNbhdCircle(nbhd);
     }
-  }, 500);
+  }, 1000);
 
   // ── Step 4: after animation settles, open the card ──
   setTimeout(() => {
@@ -119,7 +119,7 @@ function openNbhdCard(nbhd){
     document.getElementById('pc-counter').style.display  = 'block';
     _showSlide(0);
     _openCard();
-  }, 1100);
+  }, 2200);
 }
 
 // Restore all markers when neighbourhood card is closed
@@ -291,8 +291,8 @@ function closePlaceCard(reopenList){
 
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
-  // Only reopen list on mobile when user explicitly closes (cardBack / ✕ button)
-  if(reopenList && window.innerWidth < 768) openSheet();
+  // Reopen list on mobile only when coming from list mode (not neighbourhood browse)
+  if(reopenList && window.innerWidth < 768 && CARD_MODE !== 'nbhd') openSheet();
 }
 
 function cardBack(){

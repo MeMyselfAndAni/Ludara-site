@@ -401,19 +401,22 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     align-self: center;
   }
   #nbhd-bar .nbhd-handle-grip { font-size: 0.6rem; }
+  /* Label floats above the bar */
   #nbhd-bar .nbhd-bar-label {
-    display: block;
+    display: block !important;
     writing-mode: horizontal-tb;
     transform: none;
-    font-size: 0.50rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    color: rgba(0,0,0,0.55);
+    font-size: 0.52rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.92);
     text-align: center;
-    width: 100%;
-    position: absolute;
-    top: 3px;
+    position: fixed;
+    bottom: 100px;
     left: 0; right: 0;
+    z-index: 411;
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
   }
 
   /* X close button — top-right, always visible */
@@ -433,15 +436,17 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .sheet.open ~ #nbhd-bar { display: none; }
   .sheet.open ~ .list-toggle { display: none !important; }
 
-  /* ── Browse all places: above +/- zoom (~200px), fully on screen ── */
+  /* ── Browse all places: horizontal pill, top-right under filter bar ── */
   .list-toggle {
-    right: -32px !important;
-    bottom: 340px !important;
-    top: auto !important;
-    transform: rotate(-90deg) !important;
-    transform-origin: center center !important;
-    padding: 7px 14px !important;   /* compact so pill isn't too wide when rotated */
-    font-size: 0.65rem !important;
+    top: 92px !important;
+    right: 8px !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    flex-direction: row !important;
+    padding: 7px 12px !important;
+    font-size: 0.68rem !important;
+    writing-mode: horizontal-tb !important;
   }
 }
 
@@ -542,8 +547,23 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     border-right: 1px solid rgba(0,0,0,0.07);
     margin-right: 6px;
   }
-  #nbhd-bar .nbhd-bar-label { display: none; }
-  /* Bubbles start immediately — no indent needed */
+  /* Neighbourhoods label — visible on desktop */
+  #nbhd-bar .nbhd-bar-label {
+    display: block;
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 0.46rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(0,0,0,0.45);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 0 8px 0 2px;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    margin-right: 4px;
+    align-self: center;
+  }
+  /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
   .nbhd-ring { width: 52px; height: 52px; }
@@ -1190,7 +1210,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
 
   /* Filter bar just below the header */
-  .filter-bar { top: 68px; }   /* 8px gap below header */
+  .filter-bar { top: 54px; }   /* flush under compact mobile header */
 }
 
 /* List panel — sticky footer */
