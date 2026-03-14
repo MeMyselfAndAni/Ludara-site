@@ -26,13 +26,13 @@ function initMap(){
 
 // ── NEIGHBOURHOOD CIRCLES ON MAP ──────────────────────────────
 const NBHD_CIRCLES = [
-  { id:'old-town',   lat:41.6895, lng:44.8100, radius:550,  label:'Old Town',   color:'#e8724a' },
-  { id:'sololaki',   lat:41.6930, lng:44.8030, radius:420,  label:'Sololaki',   color:'#9080a8' },
-  { id:'avlabari',   lat:41.6925, lng:44.8195, radius:480,  label:'Avlabari',   color:'#6090c8' },
-  { id:'vera',       lat:41.6995, lng:44.7955, radius:500,  label:'Vera',       color:'#f0c060' },
-  { id:'chugureti',  lat:41.6885, lng:44.7985, radius:480,  label:'Chugureti',  color:'#6b9e6e' },
-  { id:'mtatsminda', lat:41.6945, lng:44.7950, radius:560,  label:'Mtatsminda', color:'#c08060' },
-  { id:'vake',       lat:41.7045, lng:44.7715, radius:700,  label:'Vake',       color:'#50906a' },
+  { id:'old-town',   lat:41.6895, lng:44.8095, radius:1497, label:'Old Town',   color:'#e8724a' },
+  { id:'sololaki',   lat:41.6918, lng:44.8042, radius:287,  label:'Sololaki',   color:'#9080a8' },
+  { id:'avlabari',   lat:41.6913, lng:44.8163, radius:804,  label:'Avlabari',   color:'#6090c8' },
+  { id:'vera',       lat:41.6985, lng:44.7955, radius:418,  label:'Vera',       color:'#f0c060' },
+  { id:'chugureti',  lat:41.6880, lng:44.9920, radius:315,  label:'Chugureti',  color:'#6b9e6e' },
+  { id:'mtatsminda', lat:41.6938, lng:44.7971, radius:1253, label:'Mtatsminda', color:'#c08060' },
+  { id:'vake',       lat:41.7050, lng:44.7730, radius:1622, label:'Vake',       color:'#50906a' },
 ];
 
 let activeNbhdCircle = null;

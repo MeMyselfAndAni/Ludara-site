@@ -68,12 +68,15 @@
 <!-- Neighbourhood bubble bar -->
 <!-- Neighbourhood bar — floats over map, draggable vertically -->
 <div id="nbhd-bar">
-  <div class="nbhd-bar-handle" id="nbhd-handle">
+  <div class="nbhd-top-row">
     <span class="nbhd-bar-label">Neighbourhoods</span>
-    <div class="nbhd-handle-grip">⠿</div>
+    <button class="nbhd-close-btn" id="nbhd-close-btn" onclick="closeNbhdBar()" title="Hide">✕</button>
   </div>
-  <button class="nbhd-close-btn" id="nbhd-close-btn" onclick="closeNbhdBar()" title="Hide neighbourhood bar">✕</button>
-  <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+  <div class="nbhd-bottom-row">
+    <div class="nbhd-bar-handle" id="nbhd-handle">
+      <div class="nbhd-handle-grip">⠿</div>
+    </div>
+    <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
     <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('old-town')">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
       <span class="nbhd-label">Old Town</span>
@@ -102,7 +105,8 @@
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
       <span class="nbhd-label">Vake</span>
     </div>
-  </div>
+    </div><!-- end nbhd-bubbles-row -->
+  </div><!-- end nbhd-bottom-row -->
 </div>
 
 <!-- ── UNIFIED PLACE CARD — used for both list details and neighbourhood browsing ── -->

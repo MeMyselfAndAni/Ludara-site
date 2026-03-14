@@ -357,6 +357,63 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .btn-secondary:hover { background: var(--accent); color: white; }
 
+
+/* ── Neighbourhood bar layout ── */
+#nbhd-bar {
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+.nbhd-top-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 2px;
+  flex-shrink: 0;
+}
+.nbhd-bar-label {
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.14em !important;
+  color: rgba(0,0,0,0.60) !important;
+  writing-mode: horizontal-tb !important;
+  transform: none !important;
+  line-height: 1;
+}
+.nbhd-bottom-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+.nbhd-bottom-row .nbhd-bubbles-row {
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nbhd-bottom-row .nbhd-bubbles-row::-webkit-scrollbar { display: none; }
+/* Close btn now in top-row — reposition */
+.nbhd-close-btn {
+  position: relative !important;
+  top: auto !important; right: auto !important;
+  transform: none !important;
+  margin-left: 0 !important;
+  display: flex !important;
+  width: 22px; height: 22px;
+  font-size: 0.68rem;
+  background: rgba(0,0,0,0.10);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.nbhd-close-btn:hover { background: rgba(0,0,0,0.22); }
+
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
   /* ── Neighbourhood bar: tight, half-height, with X close button ── */
@@ -419,18 +476,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     text-shadow: 0 1px 4px rgba(0,0,0,0.5);
   }
 
-  /* X close button — top-right, always visible */
-  .nbhd-close-btn {
-    display: flex !important;
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    width: 22px; height: 22px;
-    font-size: 0.68rem;
-    background: rgba(0,0,0,0.12);
-    flex-shrink: 0;
-    margin-left: 0;
-  }
+  /* nbhd-close-btn: styled globally above */
 
   /* When sheet is open, hide nbhd-bar and browse button */
   .sheet.open ~ #nbhd-bar { display: none; }
