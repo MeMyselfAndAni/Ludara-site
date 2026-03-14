@@ -121,14 +121,18 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Nbhd bar show/hide ────────────────────────────────────────
 function closeNbhdBar(){
   const bar = document.getElementById('nbhd-bar');
+  const lbl = document.getElementById('nbhd-label-row');
   const btn = document.getElementById('nbhd-show-btn');
   if(bar) bar.classList.add('hidden');
+  if(lbl) lbl.classList.add('hidden');
   if(btn) btn.classList.add('visible');
 }
 function openNbhdBar(){
   const bar = document.getElementById('nbhd-bar');
+  const lbl = document.getElementById('nbhd-label-row');
   const btn = document.getElementById('nbhd-show-btn');
   if(bar) bar.classList.remove('hidden');
+  if(lbl) lbl.classList.remove('hidden');
   if(btn) btn.classList.remove('visible');
 }
 

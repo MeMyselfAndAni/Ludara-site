@@ -16,10 +16,7 @@ function initMap(){
   PLACES.forEach(p => addMarker(p));
   renderList();
 
-  // On desktop, open list panel automatically
-  if(window.innerWidth >= 768){
-    openSheet();
-  }
+  // List starts closed — user opens it with the Places button
 
   document.getElementById('loading').style.display='none';
 }
