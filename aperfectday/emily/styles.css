@@ -368,13 +368,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 0.58rem;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(26,58,92,0.75);
+  color: rgba(26,58,92,0.90);
   pointer-events: none;
   z-index: 412;
-  /* Mobile default: bar is bottom:0, bar height ~76px */
   bottom: 80px;
 }
 #nbhd-title.hidden { display: none; }
@@ -512,7 +511,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   /* ── Neighbourhood bar — bottom left, full width with scrolling ── */
   
-  #nbhd-title { bottom: 94px; }  /* bar bottom:8px + bar height ~82px + 4px */
+  #nbhd-title { bottom: 108px; font-size: 0.78rem; letter-spacing: 0.20em; }
   #nbhd-bar {
     position: fixed;
     bottom: 8px;
