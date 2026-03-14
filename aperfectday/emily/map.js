@@ -16,6 +16,18 @@ function initMap(){
   PLACES.forEach(p => addMarker(p));
   renderList();
 
+
+  // ── Sync all place-count displays from PLACES.length ──
+  (function syncPlaceCount(){
+    const n = PLACES.length;
+    document.querySelectorAll('.place-count-all').forEach(el => el.textContent = n);
+    ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && !el.closest('#sheet')) el.textContent = n;  // don't overwrite filtered count
+    });
+    const title = document.getElementById('sheet-title');
+    if(title && title.textContent.includes('Places')) title.textContent = n + ' Places';
+  })();
   // List starts closed — user opens it with the Places button
 
   document.getElementById('loading').style.display='none';
