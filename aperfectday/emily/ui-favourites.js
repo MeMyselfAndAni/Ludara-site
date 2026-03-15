@@ -65,8 +65,11 @@ function toggleSavedFilter(el){
   savedFilterActive = !savedFilterActive;
   el.classList.toggle('active', savedFilterActive);
 
-  // Exit neighbourhood mode so renderList guard doesn't block the saved list
+  // Fully exit neighbourhood mode
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
+  if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
+  if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
+  if(typeof _clearNbhdList === 'function') _clearNbhdList();
 
   if(savedFilterActive){
     if(favourites.length === 0){

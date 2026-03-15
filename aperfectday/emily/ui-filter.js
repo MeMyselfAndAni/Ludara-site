@@ -1,7 +1,5 @@
 // ── LIST ──────────────────────────────────────────────────────
 function renderList(){
-  // Don't override the list while browsing a neighbourhood
-  if(typeof CARD_MODE !== 'undefined' && CARD_MODE === 'nbhd') return;
   const el=document.getElementById('places-list');
   let filtered;
 
@@ -103,8 +101,11 @@ function renderList(){
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
-  // Exit neighbourhood mode so renderList guard doesn't block
+  // Always exit neighbourhood mode and restore markers + circle
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
+  if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
+  if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
+  if(typeof _clearNbhdList === 'function') _clearNbhdList();
   // If clicking the already-active category pill, toggle it off (back to 'all')
   if(AF === cat && cat !== 'all'){
     AF = 'all';
