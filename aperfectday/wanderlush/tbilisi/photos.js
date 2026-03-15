@@ -1,31 +1,46 @@
 // ── Photo loading — local images first, Google Places API fallback ──
-// Local images expected at: images/{place_id}.jpg
-// Set IMAGES_PATH per guide in index.html as a global variable
-// e.g. <script>const IMAGES_PATH = 'images/';</script>
-
 const photoCache = {};
 
 function fetchPhoto(p, callback){
   // Return cached result immediately
-  if(photoCache[p.id] !== undefined){ callback(photoCache[p.id]); return; }
+  if(photoCache[p.id] !== undefined){
+    callback(photoCache[p.id]);
+    return;
+  }
 
-  // Try local image first — instant, no API call
+  // Try local image first
   const basePath = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   const localUrl = basePath + p.id + '.jpg';
 
-  const img = new Image();
-  img.onload = () => {
-    // Local image exists and loaded
-    photoCache[p.id] = { url: localUrl, attr: '' };
-    callback(photoCache[p.id]);
-  };
-  img.onerror = () => {
-    // Local image missing — fall back to Google Places API
-    if(!placesService){ photoCache[p.id] = null; callback(null); return; }
-    placesService.findPlaceFromQuery({
-      query: p.search,
-      fields: ['photos','place_id','name']
-    }, (results, status) => {
+  // Use fetch to check if local file exists — more reliable than Image() probe
+  fetch(localUrl, { method: 'HEAD' })
+    .then(res => {
+      if(res.ok){
+        // Local file exists — use it
+        photoCache[p.id] = { url: localUrl, attr: '' };
+        callback(photoCache[p.id]);
+      } else {
+        // Fall back to Google Places API
+        _fetchFromGoogle(p, callback);
+      }
+    })
+    .catch(() => {
+      // Network error — try Google
+      _fetchFromGoogle(p, callback);
+    });
+}
+
+function _fetchFromGoogle(p, callback){
+  if(!placesService){
+    photoCache[p.id] = null;
+    callback(null);
+    return;
+  }
+  placesService.findPlaceFromQuery({
+    query: p.search,
+    fields: ['photos','place_id','name']
+  }, (results, status) => {
+    try {
       if(status === google.maps.places.PlacesServiceStatus.OK && results[0]?.photos?.length){
         const photos = results[0].photos;
         let best = photos[0];
@@ -40,7 +55,9 @@ function fetchPhoto(p, callback){
         photoCache[p.id] = null;
         callback(null);
       }
-    });
-  };
-  img.src = localUrl;
+    } catch(e) {
+      photoCache[p.id] = null;
+      callback(null);
+    }
+  });
 }
