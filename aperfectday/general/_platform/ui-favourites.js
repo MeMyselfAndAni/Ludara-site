@@ -110,6 +110,8 @@ function clearTripRoute(){
   if(tripPolyline){ tripPolyline.setMap(null); tripPolyline = null; }
 }
 
+let _routeDurations = {};  // keyed by "fromIdx-toIdx", value = actual seconds from API
+
 function drawSavedRoute(){
   if(!savedFilterActive || favourites.length < 2){ clearTripRoute(); return; }
   const places = getSortedFavPlaces();
@@ -188,6 +190,12 @@ function drawSavedRoute(){
     }, (result, status) => {
       if(status === 'OK'){
         renderer.setDirections(result);
+        // Store actual walking durations from API
+        result.routes[0].legs.forEach((leg, legIdx) => {
+          const fromIdx = start + legIdx;
+          const toIdx   = start + legIdx + 1;
+          _routeDurations[`${fromIdx}-${toIdx}`] = leg.duration.value; // seconds
+        });
       }
       // On failure (quota etc) fall back to straight dotted line for this chunk
       else {
@@ -207,6 +215,25 @@ function drawSavedRoute(){
 }
 
 // ── TRIP PLANNER ─────────────────────────────────────────────
+
+
+// ── Dwell times per category (minutes) ───────────────────────
+const DWELL = {
+  landmark: 25,   // viewpoints, monuments
+  church:   20,   // churches, spiritual sites
+  food:     75,   // restaurants
+  cafe:     40,   // cafés, bars, wine bars
+  market:   35,   // markets
+  soviet:   25,   // soviet heritage sites
+  nature:   40,   // parks, gardens, hikes
+};
+function getDwell(cat){ return DWELL[cat] || 25; }
+function formatMins(mins){
+  if(mins < 60) return `${mins} min`;
+  const h = Math.floor(mins/60);
+  const m = mins % 60;
+  return m === 0 ? `${h}h` : `${h}h ${m}min`;
+}
 
 function haversineM(a, b){
   const R = 6371000;
@@ -243,19 +270,46 @@ function planFavTrip(){
   if(favourites.length < 2){ alert('Add at least 2 favourites first!'); return; }
 
   const places = getSortedFavPlaces();
-  let totalM = 0;
-  for(let i=1;i<places.length;i++) totalM += haversineM(places[i-1],places[i]);
-  const totalMins = Math.round(totalM/80);
+
+  // Calculate totals
+  let totalWalkSecs = 0;
+  let totalDwell = 0;
+  places.forEach((p, i) => {
+    totalDwell += getDwell(p.cat);
+    if(i < places.length - 1){
+      const key = `${i}-${i+1}`;
+      if(_routeDurations[key]){
+        totalWalkSecs += _routeDurations[key];
+      } else {
+        // Fallback: straight-line estimate × 1.35 factor for real streets
+        totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 80 * 60 * 1.35);
+      }
+    }
+  });
+  const totalWalkMins = Math.round(totalWalkSecs / 60);
+  const totalMins     = totalWalkMins + totalDwell;
+  let totalDistM = 0;
+  for(let i=1;i<places.length;i++) totalDistM += haversineM(places[i-1],places[i]);
 
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
       <span>🗺 ${places.length} stops</span>
-      <span>🚶 ~${totalMins} min</span>
-      <span>📏 ${(totalM/1000).toFixed(1)} km</span>
+      <span>⏱ ~${formatMins(totalMins)} total</span>
+      <span>🚶 ${formatMins(totalWalkMins)} walking</span>
+      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
     </div>` +
   places.map((p,i)=>{
-    const dn = i<places.length-1 ? haversineM(p,places[i+1]) : null;
+    const key = `${i}-${i+1}`;
+    let walkToNext = null;
+    if(i < places.length-1){
+      if(_routeDurations[key]){
+        walkToNext = Math.round(_routeDurations[key]/60);
+      } else {
+        walkToNext = Math.round(haversineM(p,places[i+1])/80*1.35);
+      }
+    }
+    const dwell = getDwell(p.cat);
     return `
     <div class="trip-stop" onclick="jumpToTripStop(${p.id})">
       <div class="trip-stop-num">${i+1}</div>
@@ -263,10 +317,11 @@ function planFavTrip(){
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}</div>`:''}
+        <div class="trip-stop-dwell">⏱ ~${dwell} min here</div>
       </div>
       <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
     </div>
-    ${dn!==null?`<div class="trip-connector">↓ ${formatWalk(dn)} walk</div>`:''}`;
+    ${walkToNext!==null?`<div class="trip-connector">🚶 ${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');

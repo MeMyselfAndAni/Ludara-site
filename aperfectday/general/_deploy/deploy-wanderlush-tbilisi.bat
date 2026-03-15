@@ -1,7 +1,6 @@
 @echo off
 :: ─────────────────────────────────────────────────────────────
 :: deploy-wanderlush-tbilisi.bat
-:: Run from anywhere — paths are all absolute
 :: ─────────────────────────────────────────────────────────────
 set ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
 set PLATFORM=%ROOT%\aperfectday\general\_platform
@@ -13,7 +12,13 @@ echo.
 
 if not exist "%GUIDE%" mkdir "%GUIDE%"
 
-:: 1. Copy shared platform files from _platform into guide folder
+:: 1. Delete any stale platform files in guide folder first
+echo Cleaning stale platform files...
+for %%F in (ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js photos.js styles.css) do (
+  if exist "%GUIDE%\%%F" del "%GUIDE%\%%F" >nul
+)
+
+:: 2. Copy fresh platform files from _platform
 echo Copying platform files...
 for %%F in (ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js photos.js styles.css) do (
   if exist "%PLATFORM%\%%F" (
@@ -24,10 +29,7 @@ for %%F in (ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js pho
   )
 )
 
-:: 2. Guide-specific files (index.html, data.js, map.js) already live
-:: in the guide folder — no copy needed, they are edited there directly
-
-:: 3. Git: stage guide folder + push
+:: 3. Git push
 cd /d "%ROOT%"
 git add aperfectday\wanderlush\
 git commit -m "Deploy wanderlush/tbilisi %DATE% %TIME%"
