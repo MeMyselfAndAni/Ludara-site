@@ -317,10 +317,11 @@ function planFavTrip(){
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}</div>`:''}
+        <div class="trip-stop-dwell">⏱ ~${dwell} min here</div>
       </div>
       <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
     </div>
-    ${dn!==null?`<div class="trip-connector">↓ ${formatWalk(dn)} walk</div>`:''}`;
+    ${walkToNext!==null?`<div class="trip-connector">🚶 ${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
