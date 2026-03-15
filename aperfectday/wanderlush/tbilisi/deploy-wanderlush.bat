@@ -1,57 +1,34 @@
 @echo off
 :: ─────────────────────────────────────────────────────────────────────
 :: deploy-wanderlush.bat — Deploy WanderLush Tbilisi Guide to ludara.ai
-:: Run from: C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
+:: Run from the folder containing index.html, styles.css etc.
 :: ─────────────────────────────────────────────────────────────────────
 
 set REPO_DIR=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
 set DEPLOY_DIR=%REPO_DIR%\aperfectday\wanderlush\tbilisi
 
 echo.
-echo ═══════════════════════════════════════════════
+echo ═══════════════════════════════════════════════════
 echo   Deploying WanderLush Tbilisi Guide
 echo   Target: ludara.ai/aperfectday/wanderlush/tbilisi
-echo ═══════════════════════════════════════════════
+echo ═══════════════════════════════════════════════════
 echo.
 
-:: Check we're in the right place
 if not exist "%REPO_DIR%\.git" (
   echo ERROR: Git repo not found at %REPO_DIR%
-  pause
-  exit /b 1
+  pause & exit /b 1
 )
 
-:: Create deploy folder if needed
-if not exist "%DEPLOY_DIR%" (
-  echo Creating deploy folder...
-  mkdir "%DEPLOY_DIR%"
-)
+if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
 
-:: ── Generate timestamp version string (MMDDHHMMSS) ──
-:: This forces Chrome to reload all files on every deploy
-for /f "tokens=1-5 delims=/:. " %%a in ("%DATE% %TIME%") do (
-  set V=%%c%%b%%a%%d%%e
-)
-:: Remove any spaces from the version
-set V=%V: =%
-echo Version stamp: %V%
-
-:: ── Stamp the version into index.html then copy ──
-echo Stamping version into index.html...
-powershell -Command "(Get-Content 'index.html') -replace '\?v=BUILD', ('?v=' + '%V%') | Set-Content '_index_deploy.html'"
-
-:: Copy stamped index.html
-copy /Y "_index_deploy.html" "%DEPLOY_DIR%\index.html" >nul
-del "_index_deploy.html"
-echo   ✓ index.html (v=%V%)
-
-:: Copy all other files unchanged
-for %%F in (styles.css data.js photos.js map.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js) do (
+:: ── Copy all files straight — no version stamping needed ──
+echo Copying files...
+for %%F in (index.html styles.css data.js photos.js map.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js) do (
   if exist "%%F" (
     copy /Y "%%F" "%DEPLOY_DIR%\%%F" >nul
-    echo   ✓ %%F
+    echo   + %%F
   ) else (
-    echo   ✗ %%F NOT FOUND
+    echo   MISSING: %%F
   )
 )
 
@@ -59,22 +36,22 @@ for %%F in (styles.css data.js photos.js map.js ui-card.js ui-filter.js ui-stori
 if not exist "%REPO_DIR%\aperfectday\wanderlush\pitch" mkdir "%REPO_DIR%\aperfectday\wanderlush\pitch"
 if exist "emily-pitch.html" (
   copy /Y "emily-pitch.html" "%REPO_DIR%\aperfectday\wanderlush\pitch\index.html" >nul
-  echo   ✓ emily-pitch.html → wanderlush/pitch/index.html
+  echo   + emily-pitch.html
 )
 
-:: Git add, commit, push
+:: ── Git: stage, commit with timestamp, push ──
 cd /d "%REPO_DIR%"
-echo.
-echo Running git...
-git add aperfectday/wanderlush/
-git commit -m "Deploy WanderLush Tbilisi v%V%"
+git add aperfectday\wanderlush\
+
+:: Timestamp in commit message forces GitHub Pages to redeploy
+set TS=%DATE% %TIME%
+git commit -m "WanderLush deploy %TS%"
 git push
 
 echo.
-echo ═══════════════════════════════════════════════
-echo   Done! Live at: https://ludara.ai/aperfectday/wanderlush/tbilisi
-echo   Chrome cache busted with v=%V%
-echo   (allow 30-60 seconds for GitHub Pages)
-echo ═══════════════════════════════════════════════
+echo ═══════════════════════════════════════════════════
+echo   Done! https://ludara.ai/aperfectday/wanderlush/tbilisi
+echo   Wait 30-60 seconds then Ctrl+Shift+R to reload
+echo ═══════════════════════════════════════════════════
 echo.
 pause
