@@ -58,11 +58,20 @@ function renderList(){
   const banner = document.getElementById('saved-mode-banner');
   if(banner) banner.remove();
 
-  filtered=AF==='all'?PLACES:PLACES.filter(p=>p.cat===AF);
-  if(openNowActive) filtered=filtered.filter(p=>isOpenNow(p));
-  const count=filtered.length;
-  document.getElementById('sheet-title').textContent=`${count} Places`;
-  document.getElementById('list-badge').textContent=count;
+  // Intersection of type filter + neighbourhood filter
+  filtered = PLACES.filter(p => {
+    const catOk  = AF === 'all' || p.cat === AF;
+    const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+    const openOk = !openNowActive || isOpenNow(p);
+    return catOk && nbhdOk && openOk;
+  });
+  const count = filtered.length;
+  const nbhdName = ANF && ANF !== 'all' ? ({
+    'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
+    'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
+  }[ANF] || ANF) + ' · ' : '';
+  document.getElementById('sheet-title').textContent = nbhdName + count + ' Places';
+  document.getElementById('list-badge').textContent = count;
 
   el.innerHTML=filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
@@ -101,10 +110,8 @@ function renderList(){
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
-  // Exit any neighbourhood mode cleanly
+  // Reset card mode
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
-  if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
-  if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
 
   // Close any open place card silently (no list re-open)
   const card = document.getElementById('place-card');
@@ -246,14 +253,16 @@ function applyFilters(){
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
-      // UNION: show all saved places AND all places matching category pill
+      // Saved mode: ignore neighbourhood filter — show ALL saved places
+      // plus any category pill matches (union)
       const inSaved = savedIds.includes(p.id);
       const inCat   = AF !== 'all' && p.cat === AF;
       visible = inSaved || inCat;
     } else {
+      const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
-      visible = catOk && openOk;
+      visible = catOk && openOk && nbhdOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);
   });

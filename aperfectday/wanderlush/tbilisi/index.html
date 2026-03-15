@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Emily Lush's Tbilisi — Wander-Lush</title>
-<link rel="stylesheet" href="styles.css?v=202603151431">
+<link rel="stylesheet" href="styles.css?v=202603151443">
 </head>
 <body>
 
@@ -73,31 +73,35 @@
     <div class="nbhd-handle-grip">⠿</div>
   </div>
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('old-town')">
+    <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
+      <span class="nbhd-label">All</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-old-town" role="button" tabindex="0" onclick="selectNbhd('old-town', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
       <span class="nbhd-label">Old Town</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('sololaki')">
+    <div class="nbhd-bubble" id="nbhd-sololaki" role="button" tabindex="0" onclick="selectNbhd('sololaki', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
       <span class="nbhd-label">Sololaki</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('avlabari')">
+    <div class="nbhd-bubble" id="nbhd-avlabari" role="button" tabindex="0" onclick="selectNbhd('avlabari', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
       <span class="nbhd-label">Avlabari</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vera')">
+    <div class="nbhd-bubble" id="nbhd-vera" role="button" tabindex="0" onclick="selectNbhd('vera', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
       <span class="nbhd-label">Vera</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('chugureti')">
+    <div class="nbhd-bubble" id="nbhd-chugureti" role="button" tabindex="0" onclick="selectNbhd('chugureti', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
       <span class="nbhd-label">Chugureti</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('mtatsminda')">
+    <div class="nbhd-bubble" id="nbhd-mtatsminda" role="button" tabindex="0" onclick="selectNbhd('mtatsminda', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
       <span class="nbhd-label">Mtatsminda</span>
     </div>
-    <div class="nbhd-bubble" role="button" tabindex="0" onclick="openStories('vake')">
+    <div class="nbhd-bubble" id="nbhd-vake" role="button" tabindex="0" onclick="selectNbhd('vake', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
       <span class="nbhd-label">Vake</span>
     </div>
@@ -249,14 +253,14 @@
 </button>
 
 <!-- JS modules — load order matters -->
-<script src="data.js?v=202603151431"></script>
-<script src="photos.js?v=202603151431"></script>
-<script src="map.js?v=202603151431"></script>
-<script src="ui-card.js?v=202603151431"></script>
-<script src="ui-filter.js?v=202603151431"></script>
-<script src="ui-stories.js?v=202603151431"></script>
-<script src="ui-favourites.js?v=202603151431"></script>
-<script src="ui-pdf.js?v=202603151431"></script>
+<script src="data.js?v=202603151443"></script>
+<script src="photos.js?v=202603151443"></script>
+<script src="map.js?v=202603151443"></script>
+<script src="ui-card.js?v=202603151443"></script>
+<script src="ui-filter.js?v=202603151443"></script>
+<script src="ui-stories.js?v=202603151443"></script>
+<script src="ui-favourites.js?v=202603151443"></script>
+<script src="ui-pdf.js?v=202603151443"></script>
 
 <!-- Google Maps (loads last, calls initMap as callback) -->
 <script async defer

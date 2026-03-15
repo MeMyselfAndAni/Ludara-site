@@ -65,13 +65,16 @@ function toggleSavedFilter(el){
   savedFilterActive = !savedFilterActive;
   el.classList.toggle('active', savedFilterActive);
 
-  // Fully exit neighbourhood mode and force list reset
+  // Exit neighbourhood mode completely — reset to All
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
+  if(typeof ANF !== 'undefined') ANF = 'all';
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
   if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
   if(typeof _clearNbhdList === 'function') _clearNbhdList();
-  // Force the list to re-render with current state before saved logic runs
-  if(typeof renderList === 'function') renderList();
+  // Reset all neighbourhood bubble highlights
+  document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
+  const allBtn = document.getElementById('nbhd-all');
+  if(allBtn) allBtn.classList.add('nbhd-active');
 
   if(savedFilterActive){
     if(favourites.length === 0){

@@ -378,6 +378,18 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 #nbhd-title.hidden { display: none; }
 
+
+/* ── Neighbourhood bubble selected state ── */
+.nbhd-bubble.nbhd-active .nbhd-ring {
+  background: linear-gradient(135deg, var(--gold) 0%, #e8a800 60%, #b8960a 100%);
+  box-shadow: 0 3px 12px rgba(184,150,10,0.45);
+  transform: scale(1.08);
+}
+.nbhd-bubble.nbhd-active .nbhd-label {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 /* ── MOBILE map bottom padding for Places bar ── */
 @media (max-width: 767px) {
   /* ── Neighbourhood bar: tight, half-height, with X close button ── */
