@@ -24,10 +24,11 @@ function selectNbhd(nbhd, el){
     else if(typeof showNbhdCircle === 'function') showNbhdCircle(nbhd);
   }
 
-  // Apply combined filters (type + neighbourhood intersection)
-  applyFilters();
+  // Apply filters + update list
+  applyFilters();          // updates map markers
+  if(typeof renderList === 'function') renderList();  // updates list panel
 
-  // Open list panel to show results
+  // Open list panel on desktop
   if(window.innerWidth >= 768){
     if(typeof openSheet === 'function') openSheet();
   }
@@ -63,7 +64,7 @@ const NBHD_BOUNDS = {
 
 let storyPlaces = [], storyIdx = 0;
 
-function openStories(nbhd){ openNbhdCard(nbhd); }
+// openStories removed — selectNbhd handles neighbourhood selection
 
 // Keep these stubs so old HTML references don't break
 function buildProgressBars(){}
