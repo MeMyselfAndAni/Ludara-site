@@ -288,6 +288,8 @@ function closePlaceCard(reopenList){
   // Clear neighbourhood circle
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
   if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
+  // If we were in nbhd mode, restore full list
+  if(CARD_MODE === 'nbhd' && typeof renderList === 'function') renderList();
 
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
