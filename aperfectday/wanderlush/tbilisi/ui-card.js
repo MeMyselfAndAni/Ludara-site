@@ -127,46 +127,33 @@ function openNbhdCard(nbhd){
     'vake':       {lat:41.7040,lng:44.7720,zoom:14},
   };
 
-  // ── Step 1: dim all non-neighbourhood markers instantly ──
+  // Dim non-neighbourhood markers
   PLACES.forEach(p => {
     if(!markers[p.id]) return;
     if(p.nbhd === nbhd){
       markers[p.id].setVisible(true);
       markers[p.id].setZIndex(20);
-      markers[p.id].setOpacity ? markers[p.id].setOpacity(1) : null;
     } else {
-      markers[p.id].setOpacity ? markers[p.id].setOpacity(0.15) : markers[p.id].setVisible(false);
-      markers[p.id].setZIndex(1);
+      markers[p.id].setVisible(false);
     }
   });
 
-  // ── Step 2: pan + zoom smoothly to neighbourhood centre ──
+  // Pan + zoom to neighbourhood
   const b = NBHD_BOUNDS[nbhd];
-  if(b && map){
-    map.panTo({lat:b.lat, lng:b.lng});
-    setTimeout(() => map.setZoom(b.zoom), 300);
-  }
+  if(b && map){ map.panTo({lat:b.lat,lng:b.lng}); map.setZoom(b.zoom); }
 
-  // ── Step 3: draw neighbourhood circle with pulsing entrance ──
-  setTimeout(() => {
-    if(typeof showNbhdCircleAnimated === 'function'){
-      showNbhdCircleAnimated(nbhd);
-    } else if(typeof showNbhdCircle === 'function'){
-      showNbhdCircle(nbhd);
-    }
-  }, 1000);
+  // Draw circle
+  if(typeof showNbhdCircle === 'function') showNbhdCircle(nbhd);
 
-  // ── Step 4: after animation settles, open card + update list ──
-  setTimeout(() => {
-    document.getElementById('pc-btn-back').style.display = 'none';
-    document.getElementById('pc-nav-prev').style.display = 'flex';
-    document.getElementById('pc-nav-next').style.display = 'flex';
-    document.getElementById('pc-counter').style.display  = 'block';
-    _showSlide(0);
-    _openCard();
-    _renderNbhdList(nbhd);
-    if(window.innerWidth >= 768 && typeof openSheet === 'function') openSheet();
-  }, 2200);
+  // Open card and update list immediately
+  document.getElementById('pc-btn-back').style.display = 'none';
+  document.getElementById('pc-nav-prev').style.display = 'flex';
+  document.getElementById('pc-nav-next').style.display = 'flex';
+  document.getElementById('pc-counter').style.display  = 'block';
+  _showSlide(0);
+  _openCard();
+  _renderNbhdList(nbhd);
+  if(window.innerWidth >= 768 && typeof openSheet === 'function') openSheet();
 }
 
 // Restore all markers when neighbourhood card is closed

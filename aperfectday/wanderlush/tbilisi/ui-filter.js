@@ -66,7 +66,7 @@ function renderList(){
     return catOk && nbhdOk && openOk;
   });
   const count = filtered.length;
-  const nbhdName = ANF && ANF !== 'all' ? ({
+  const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
     'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
   }[ANF] || ANF) + ' · ' : '';

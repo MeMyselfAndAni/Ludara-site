@@ -1,3 +1,41 @@
+
+// ── Neighbourhood filter (works with type filter as intersection) ──
+function selectNbhd(nbhd, el){
+  // Toggle off if already active
+  if(ANF === nbhd && nbhd !== 'all'){
+    nbhd = 'all';
+  }
+  ANF = nbhd;
+
+  // Update bubble active states
+  document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
+  if(nbhd === 'all'){
+    const allBtn = document.getElementById('nbhd-all');
+    if(allBtn) allBtn.classList.add('nbhd-active');
+  } else {
+    if(el) el.classList.add('nbhd-active');
+  }
+
+  // Show/clear neighbourhood circle on map
+  if(nbhd === 'all'){
+    if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
+  } else {
+    if(typeof showNbhdCircleAnimated === 'function') showNbhdCircleAnimated(nbhd);
+    else if(typeof showNbhdCircle === 'function') showNbhdCircle(nbhd);
+  }
+
+  // Apply combined filters (type + neighbourhood intersection)
+  applyFilters();
+
+  // Open list panel to show results
+  if(window.innerWidth >= 768){
+    if(typeof openSheet === 'function') openSheet();
+  }
+}
+
+// Keep openStories as alias for backwards compat
+function openStories(nbhd){ selectNbhd(nbhd, document.getElementById('nbhd-' + nbhd)); }
+
 const NBHD_META = {
   'old-town':   { label: 'Old Town & Kala',    icon: '🏰' },
   'sololaki':   { label: 'Sololaki',            icon: '🌿' },
@@ -47,7 +85,9 @@ const STORY_DURATION = 6000;
 
 // Keyboard nav
 document.addEventListener('keydown', e => {
-  if(!document.getElementById('nbhd-cards').classList.contains('open')) return;
+  const nc = document.getElementById('nbhd-cards');
+  if(!nc) return;
+  if(!nc.classList.contains('open')) return;
   if(e.key === 'ArrowRight') storiesNext();
   if(e.key === 'ArrowLeft')  storiesPrev();
   if(e.key === 'Escape')     closeStories();
