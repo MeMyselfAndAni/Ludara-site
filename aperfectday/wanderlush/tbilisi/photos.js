@@ -1,63 +1,52 @@
-// ── Photo loading — local images first, Google Places API fallback ──
+// ── Photo loading — local first, Google Places API fallback ──
 const photoCache = {};
 
 function fetchPhoto(p, callback){
-  // Return cached result immediately
+  // Return cached immediately
   if(photoCache[p.id] !== undefined){
     callback(photoCache[p.id]);
     return;
   }
 
-  // Try local image first
+  // Always try local image first — let the browser handle 404 via onerror
   const basePath = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   const localUrl = basePath + p.id + '.jpg';
 
-  // Use fetch to check if local file exists — more reliable than Image() probe
-  fetch(localUrl, { method: 'HEAD' })
-    .then(res => {
-      if(res.ok){
-        // Local file exists — use it
-        photoCache[p.id] = { url: localUrl, attr: '' };
-        callback(photoCache[p.id]);
-      } else {
-        // Fall back to Google Places API
-        _fetchFromGoogle(p, callback);
-      }
-    })
-    .catch(() => {
-      // Network error — try Google
-      _fetchFromGoogle(p, callback);
-    });
-}
+  const testImg = new Image();
 
-function _fetchFromGoogle(p, callback){
-  if(!placesService){
-    photoCache[p.id] = null;
-    callback(null);
-    return;
-  }
-  placesService.findPlaceFromQuery({
-    query: p.search,
-    fields: ['photos','place_id','name']
-  }, (results, status) => {
-    try {
-      if(status === google.maps.places.PlacesServiceStatus.OK && results[0]?.photos?.length){
+  testImg.onload = function(){
+    photoCache[p.id] = { url: localUrl, attr: '' };
+    callback(photoCache[p.id]);
+  };
+
+  testImg.onerror = function(){
+    // Local file missing — fall back to Google Places API
+    if(!window.placesService){
+      photoCache[p.id] = null;
+      callback(null);
+      return;
+    }
+    window.placesService.findPlaceFromQuery({
+      query: p.search,
+      fields: ['photos']
+    }, function(results, status){
+      if(status === google.maps.places.PlacesServiceStatus.OK &&
+         results && results[0] && results[0].photos && results[0].photos.length){
         const photos = results[0].photos;
         let best = photos[0];
-        for(const ph of photos){
-          if((ph.width/ph.height) > (best.width/best.height)) best = ph;
+        for(var i=1; i<photos.length; i++){
+          if((photos[i].width/photos[i].height) > (best.width/best.height)) best = photos[i];
         }
-        const url  = best.getUrl({maxWidth:1200, maxHeight:600});
-        const attr = best.html_attributions[0] || '';
-        photoCache[p.id] = { url, attr };
+        var url  = best.getUrl({maxWidth:1200, maxHeight:600});
+        var attr = (best.html_attributions && best.html_attributions[0]) || '';
+        photoCache[p.id] = { url: url, attr: attr };
         callback(photoCache[p.id]);
       } else {
         photoCache[p.id] = null;
         callback(null);
       }
-    } catch(e) {
-      photoCache[p.id] = null;
-      callback(null);
-    }
-  });
+    });
+  };
+
+  testImg.src = localUrl;
 }
