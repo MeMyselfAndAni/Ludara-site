@@ -66,6 +66,51 @@ function openDetail(id){
 }
 
 // ── Open card from neighbourhood bubble ───────────────────────
+
+// ── Neighbourhood list rendering ──────────────────────────────
+const NBHD_NAMES = {
+  'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
+  'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
+};
+
+function _renderNbhdList(nbhd){
+  const places = PLACES.filter(p => p.nbhd === nbhd);
+  const name   = NBHD_NAMES[nbhd] || nbhd;
+  const count  = places.length;
+  // Update sheet title and all count badges
+  const title = document.getElementById('sheet-title');
+  if(title) title.textContent = name + ' · ' + count + ' places';
+  ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = count;
+  });
+  document.querySelectorAll('.place-count-all').forEach(el => el.textContent = count);
+  // Render list rows
+  const el = document.getElementById('places-list');
+  if(!el) return;
+  el.innerHTML = places.map(p => `
+    <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
+      <div class="cat-pip" style="background:${CC[p.cat]}"></div>
+      <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
+      <div class="place-info">
+        <div class="place-name">${p.name}</div>
+        <div class="place-type">${CL[p.cat]}</div>
+        <div class="place-addr">${p.address}</div>
+      </div>
+      <span class="chevron">›</span>
+    </div>`).join('');
+}
+
+function _clearNbhdList(){
+  // Restore full count on all badges
+  const n = PLACES.length;
+  ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = n;
+  });
+  document.querySelectorAll('.place-count-all').forEach(el => el.textContent = n);
+}
+
 function openNbhdCard(nbhd){
   CARD_MODE = 'nbhd';
   CARD_LIST = PLACES.filter(p => p.nbhd === nbhd);
@@ -288,8 +333,11 @@ function closePlaceCard(reopenList){
   // Clear neighbourhood circle
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
   if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
-  // If we were in nbhd mode, restore full list
-  if(CARD_MODE === 'nbhd' && typeof renderList === 'function') renderList();
+  // If we were in nbhd mode, restore full count badges then re-render full list
+  if(CARD_MODE === 'nbhd'){
+    _clearNbhdList();
+    if(typeof renderList === 'function') renderList();
+  }
 
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
