@@ -332,19 +332,18 @@ function closePlaceCard(reopenList){
   CARD_PLACE = null;
   CARD_LIST  = [];
 
-  // Clear neighbourhood circle
+  // Clear neighbourhood circle and restore all markers
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
   if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
-  // If we were in nbhd mode, restore full count badges then re-render full list
-  if(CARD_MODE === 'nbhd'){
-    _clearNbhdList();
-    if(typeof renderList === 'function') renderList();
-  }
+  // Always reset counts and re-render full list
+  if(typeof _clearNbhdList === 'function') _clearNbhdList();
+  CARD_MODE = 'detail';
+  if(typeof renderList === 'function') renderList();
 
   document.querySelectorAll('.place-row').forEach(r => r.classList.remove('active'));
 
-  // Reopen list on mobile only when coming from list mode (not neighbourhood browse)
-  if(reopenList && window.innerWidth < 768 && CARD_MODE !== 'nbhd') openSheet();
+  // Reopen list on mobile when user explicitly closes a card
+  if(reopenList && window.innerWidth < 768) openSheet();
 }
 
 function cardBack(){

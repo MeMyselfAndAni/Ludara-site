@@ -396,7 +396,6 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     scrollbar-width: none;
     z-index: 410;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
-    touch-action: pan-x;
     align-items: center;
   }
   #nbhd-bar::-webkit-scrollbar { display: none; }
