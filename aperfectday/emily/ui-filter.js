@@ -101,56 +101,51 @@ function renderList(){
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
-  // Always exit neighbourhood mode and restore markers + circle
+  // Exit any neighbourhood mode cleanly
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
   if(typeof _nbhdRestoreMarkers === 'function') _nbhdRestoreMarkers();
-  if(typeof _clearNbhdList === 'function') _clearNbhdList();
-  // If clicking the already-active category pill, toggle it off (back to 'all')
-  if(AF === cat && cat !== 'all'){
-    AF = 'all';
-    document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
-    document.querySelector('.pill[onclick*="all"]')?.classList.add('active');
-    if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
-      document.getElementById('pill-saved').classList.add('active');
-    }
-    applyFilters();
-    return;
-  }
 
-  AF=cat;
-  if(typeof closePlaceCard === 'function') closePlaceCard();
-  if(AID && markers[AID]){
-    const prev=PLACES.find(x=>x.id===AID);
-    if(prev){ markers[AID].setIcon(makeIcon(prev,false)); markers[AID].setZIndex(1); }
-  }
-  AID=null;
-  document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('active'));
+  // Close any open place card silently (no list re-open)
+  const card = document.getElementById('place-card');
+  if(card) card.classList.remove('open');
+  const dim = document.getElementById('place-card-dim');
+  if(dim) dim.classList.remove('open');
+  AID = null;
 
-  // Deactivate category pills but keep saved + opennow state
+  // Toggle pill off if already active
+  if(AF === cat && cat !== 'all') cat = 'all';
+  AF = cat;
+
+  // Update pill states
   document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  // Keep saved pill highlighted if saved is active
+  if(cat === 'all'){
+    document.querySelector('.pill[onclick*="all"]')?.classList.add('active');
+  } else {
+    el.classList.add('active');
+  }
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
     document.getElementById('pill-saved').classList.add('active');
   }
+
+  // Update map markers
   applyFilters();
 
-  // On desktop, ensure sidebar is open when user picks a filter
-  if(window.innerWidth >= 768){
-    const s = document.getElementById('sheet');
-    if(s.classList.contains('desktop-hidden')) openSheet();
-  }
-  // On mobile: DON'T open the list — just filter map markers
-  // User taps "Browse all places" button if they want the list
-
-  const vis=PLACES.filter(p=>(cat==='all'||p.cat===cat)&&(!openNowActive||isOpenNow(p)));
-  if(vis.length){
-    const b=new google.maps.LatLngBounds();
+  // Fit map to visible places
+  const vis = PLACES.filter(p=>(AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p)));
+  if(vis.length && map){
+    const b = new google.maps.LatLngBounds();
     vis.forEach(p=>b.extend({lat:p.lat,lng:p.lng}));
     map.fitBounds(b,{top:120,right:20,bottom:100,left:window.innerWidth>=768?320:20});
   }
-  // Force list render regardless of prior state
+
+  // On desktop open the sheet
+  if(window.innerWidth >= 768){
+    const s = document.getElementById('sheet');
+    if(s && s.classList.contains('desktop-hidden')) openSheet();
+  }
+
+  // Always force-render the list last
   renderList();
 }
 
