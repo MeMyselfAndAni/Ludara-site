@@ -150,6 +150,8 @@ function fc(el,cat){
     vis.forEach(p=>b.extend({lat:p.lat,lng:p.lng}));
     map.fitBounds(b,{top:120,right:20,bottom:100,left:window.innerWidth>=768?320:20});
   }
+  // Force list render regardless of prior state
+  renderList();
 }
 
 // ── MY LOCATION ───────────────────────────────────────────────
