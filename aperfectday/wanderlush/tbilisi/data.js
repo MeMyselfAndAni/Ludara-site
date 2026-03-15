@@ -70,5 +70,4 @@ const CL={landmark:"Landmark",food:"Restaurant",cafe:"Café & Bar",church:"Churc
 const API_KEY = 'AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU';
 
 let map, markers={}, placesService, AID=null, AF='all', ANF='all'; // ANF = active neighbourhood filter
-let photoCache={};
 
