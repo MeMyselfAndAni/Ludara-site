@@ -156,7 +156,7 @@ function openNbhdCard(nbhd){
     }
   }, 1000);
 
-  // ── Step 4: after animation settles, open the card ──
+  // ── Step 4: after animation settles, open card + update list ──
   setTimeout(() => {
     document.getElementById('pc-btn-back').style.display = 'none';
     document.getElementById('pc-nav-prev').style.display = 'flex';
@@ -164,6 +164,8 @@ function openNbhdCard(nbhd){
     document.getElementById('pc-counter').style.display  = 'block';
     _showSlide(0);
     _openCard();
+    _renderNbhdList(nbhd);
+    if(window.innerWidth >= 768 && typeof openSheet === 'function') openSheet();
   }, 2200);
 }
 

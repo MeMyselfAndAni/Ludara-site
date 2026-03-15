@@ -1,5 +1,7 @@
 // ── LIST ──────────────────────────────────────────────────────
 function renderList(){
+  // Don't override the list while browsing a neighbourhood
+  if(typeof CARD_MODE !== 'undefined' && CARD_MODE === 'nbhd') return;
   const el=document.getElementById('places-list');
   let filtered;
 
