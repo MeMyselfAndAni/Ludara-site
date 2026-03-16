@@ -211,7 +211,7 @@ function _populateCard(p){
   const img = document.getElementById('pc-img');
   wrap.style.background = CAT_GRADIENTS[p.cat] || CAT_GRADIENTS.landmark;
   placeholder.textContent = p.emoji;
-  placeholder.style.opacity = '1';
+  placeholder.style.opacity = '0';  // hide emoji immediately
   img.classList.remove('loaded');
   img.src = '';
   document.getElementById('pc-credit').textContent = '';
