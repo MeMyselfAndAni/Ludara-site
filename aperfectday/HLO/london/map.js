@@ -21,17 +21,19 @@ function initMap(){
   map = new google.maps.Map(document.getElementById('map'), {
     center: MAP_CENTER,
     zoom: MAP_ZOOM,
-    mapId: 'DEMO_MAP_ID',
-    disableDefaultUI: false,
-    zoomControl: true,
     mapTypeControl: false,
     streetViewControl: false,
     fullscreenControl: false,
+    zoomControl: true,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
+    gestureHandling: 'greedy'
   });
+
   placesService = new google.maps.places.PlacesService(map);
   PLACES.forEach(p => addMarker(p));
   renderList();
 
+  // Sync all place-count displays
   const n = PLACES.length;
   document.querySelectorAll('.place-count-all').forEach(el => el.textContent = n);
   ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
@@ -42,6 +44,9 @@ function initMap(){
   if(title) title.textContent = n + ' Places';
 
   setTimeout(preloadAllPhotos, 1500);
+
+  // ── HIDE THE LOADING SCREEN ──
+  document.getElementById('loading').style.display = 'none';
 }
 
 function showNbhdCircle(nbhdId){
@@ -50,10 +55,16 @@ function showNbhdCircle(nbhdId){
   const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
   if(!n || !map) return;
   activeNbhdCircle = new google.maps.Circle({
-    map, center:{lat:n.lat,lng:n.lng}, radius:n.radius,
-    fillColor:n.color, fillOpacity:0.10,
-    strokeColor:n.color, strokeOpacity:0.55, strokeWeight:2,
-    clickable:false, zIndex:0,
+    map,
+    center: { lat: n.lat, lng: n.lng },
+    radius: n.radius,
+    fillColor: n.color,
+    fillOpacity: 0.10,
+    strokeColor: n.color,
+    strokeOpacity: 0.55,
+    strokeWeight: 2,
+    clickable: false,
+    zIndex: 0,
   });
 }
 
@@ -66,7 +77,7 @@ function showNbhdCircleAnimated(nbhdId){
   const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
   if(!n || !map) return;
   const fullRadius = n.radius;
-  let step = 0; const steps = 30; const duration = 600;
+  let step = 0; const steps = 30; const duration = 1200;
   activeNbhdCircle = new google.maps.Circle({
     map, center:{lat:n.lat,lng:n.lng}, radius:fullRadius*0.05,
     fillColor:n.color, fillOpacity:0.0,
@@ -77,18 +88,18 @@ function showNbhdCircleAnimated(nbhdId){
     step++;
     const ease = 1 - Math.pow(1 - step/steps, 3);
     activeNbhdCircle.setRadius(fullRadius*(0.05+0.95*ease));
-    activeNbhdCircle.setOptions({fillOpacity:0.12*ease, strokeOpacity:0.6*ease});
+    activeNbhdCircle.setOptions({ fillOpacity:0.12*ease, strokeOpacity:0.6*ease });
     if(step >= steps){
       clearInterval(interval);
       setTimeout(() => {
         if(!activeNbhdCircle) return;
         activeNbhdCircle.setRadius(fullRadius*1.08);
-        activeNbhdCircle.setOptions({strokeOpacity:0.8});
+        activeNbhdCircle.setOptions({ strokeOpacity:0.8 });
         setTimeout(() => {
           if(!activeNbhdCircle) return;
           activeNbhdCircle.setRadius(fullRadius);
-          activeNbhdCircle.setOptions({strokeOpacity:0.55, fillOpacity:0.10});
-        }, 200);
+          activeNbhdCircle.setOptions({ strokeOpacity:0.55, fillOpacity:0.10 });
+        }, 400);
       }, 50);
     }
   }, duration/steps);
@@ -105,6 +116,7 @@ function makeIcon(p, active){
       </radialGradient>
       <filter id="ashadow" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.55)"/>
+        <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="rgba(0,0,0,0.35)"/>
       </filter></defs>
       <circle cx="${s/2}" cy="${s/2}" r="${s/2-2}" fill="white" filter="url(#ashadow)"/>
       <circle cx="${s/2}" cy="${s/2}" r="${s/2-5}" fill="url(#ag)" stroke="white" stroke-width="2"/>
@@ -117,10 +129,12 @@ function makeIcon(p, active){
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">
     <defs><radialGradient id="g${p.id}" cx="33%" cy="27%" r="72%">
       <stop offset="0%" stop-color="rgba(255,255,255,0.72)"/>
+      <stop offset="45%" stop-color="rgba(255,255,255,0.08)"/>
       <stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
     </radialGradient>
     <filter id="sh${p.id}" x="-35%" y="-35%" width="170%" height="170%">
       <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" flood-color="rgba(0,0,0,0.5)"/>
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.25)"/>
     </filter></defs>
     <circle cx="${s/2}" cy="${s/2}" r="${s/2-1}" fill="white" filter="url(#sh${p.id})"/>
     <circle cx="${s/2}" cy="${s/2}" r="${s/2-3.5}" fill="${color}" stroke="white" stroke-width="2"/>
