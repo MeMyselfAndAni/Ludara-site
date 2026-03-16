@@ -1,16 +1,16 @@
 // ══ FAVOURITES ══════════════════════════════════════════════
 // Persisted in localStorage
-let favourites = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+let favourites = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
 let savedFilterActive = false;
 
 function saveFavs(){
-  localStorage.setItem('tbilisi-favs', JSON.stringify(favourites));
+  localStorage.setItem(FAVS_KEY, JSON.stringify(favourites));
   updateFavUI();
 }
 
 // Sync in-memory favourites from localStorage (called after external writes)
 function refreshFavourites(){
-  favourites = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  favourites = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   updateFavUI();
 }
 

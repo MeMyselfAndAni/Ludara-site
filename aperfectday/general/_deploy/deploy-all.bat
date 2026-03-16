@@ -1,15 +1,38 @@
 @echo off
-:: ─────────────────────────────────────────────────────────────
-:: deploy-all.bat — Push _platform files to ALL active guides
-:: Skips guides whose folder doesn't exist yet
-:: ─────────────────────────────────────────────────────────────
+:: ═══════════════════════════════════════════════════════════════
+:: deploy-all.bat — Deploy _platform files to ALL active guides
+:: Runs QA check first and blocks deploy if errors found
+::
+:: To add a new guide:
+::   1. Add it to the GUIDES list below
+::   2. Also add it to qa-check.js GUIDES array
+:: ═══════════════════════════════════════════════════════════════
 setlocal enabledelayedexpansion
+
 set ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
 set PLATFORM=%ROOT%\aperfectday\general\_platform
+set SCRIPT=%ROOT%\aperfectday\general\_deploy\qa-check.js
+
+:: ── Run QA first ─────────────────────────────────────────────
+echo.
+echo Running QA checks before deploy...
+echo.
+node "%SCRIPT%"
+
+if errorlevel 1 (
+  echo.
+  echo ═══════════════════════════════════════════════════
+  echo  ❌ DEPLOY BLOCKED — fix QA errors first
+  echo  Run qa-check.bat to see the full list of issues
+  echo ═══════════════════════════════════════════════════
+  echo.
+  pause
+  exit /b 1
+)
 
 echo.
 echo ══════════════════════════════════════════
-echo   Deploying platform to ALL guides
+echo   QA passed — deploying platform files
 echo ══════════════════════════════════════════
 echo.
 
@@ -38,7 +61,7 @@ git push
 
 echo.
 echo ══════════════════════════════════════════
-echo   Done
+echo   Done — all guides updated
 echo ══════════════════════════════════════════
 echo.
 pause

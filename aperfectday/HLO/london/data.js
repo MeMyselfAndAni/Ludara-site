@@ -968,4 +968,6 @@ const CL = {
 };
 
 // localStorage key — unique per guide
-const FAVS_KEY = 'london-favs';
+const FAVS_KEY      = 'london-favs';
+const BLOGGER_NAME  = 'Hand Luggage Only';
+const GUIDE_CITY    = 'London';

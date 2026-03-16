@@ -134,22 +134,4 @@ function drawNbhdCircles() {
   });
 }
 
-// ── LOCATE ME ────────────────────────────────────────────────────────────────
-let userMarker = null;
-function locateMe() {
-  if (!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition(pos => {
-    const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    if (userMarker) userMarker.setMap(null);
-    userMarker = new google.maps.Marker({
-      position: loc, map: map, title: 'You are here',
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        fillColor: '#4285F4', fillOpacity: 1,
-        strokeColor: '#fff', strokeWeight: 3, scale: 10
-      }
-    });
-    map.panTo(loc);
-    map.setZoom(15);
-  });
-}
+

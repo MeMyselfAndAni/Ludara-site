@@ -27,12 +27,13 @@ function generatePDF(){
       church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
       market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
       soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
+      pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
       nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
     }[p.cat] || 'linear-gradient(135deg,#1a3a5c,#2a5298)';
 
     const catColors = {
       landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
-      church:'#6090c8', market:'#c08060', soviet:'#9080a8', nature:'#50906a'
+      church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
     };
 
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
@@ -56,7 +57,7 @@ function generatePDF(){
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
-        ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — Emily Lush, Wander-Lush</span></div>` : ''}
+        ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</span></div>` : ''}
         ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 Emily's Tip</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
@@ -357,8 +358,8 @@ function generatePDF(){
 
 <!-- COVER -->
 <div class="pdf-cover">
-  <div class="pdf-cover-logo">Wander-Lush · A Perfect Day by Ludara</div>
-  <div class="pdf-cover-title">Tbilisi</div>
+  <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
+  <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
   <div class="pdf-cover-subtitle">Your personal day guide</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
@@ -375,7 +376,7 @@ function generatePDF(){
       <div class="pdf-stat-label">km</div>
     </div>
   </div>
-  <div class="pdf-cover-by">Curated by Emily Lush</div>
+  <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
   <div class="pdf-cover-date">${date}</div>
 </div>
 

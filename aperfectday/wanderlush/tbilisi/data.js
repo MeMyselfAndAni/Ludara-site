@@ -71,5 +71,7 @@ const API_KEY = 'AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU';
 
 let map, markers={}, placesService, AID=null, AF='all', ANF='all'; // ANF = active neighbourhood filter
 
-const FAVS_KEY = 'tbilisi-favs';
+const FAVS_KEY      = 'tbilisi-favs';
+const BLOGGER_NAME  = 'Wander-Lush';
+const GUIDE_CITY    = 'Tbilisi';
 

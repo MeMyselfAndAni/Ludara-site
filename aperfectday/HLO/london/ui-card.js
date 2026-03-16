@@ -9,12 +9,12 @@ let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 
 const CAT_COLORS = {
   landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
-  church:'#6090c8', market:'#c08060', soviet:'#9080a8', nature:'#50906a'
+  church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
 };
 const CAT_LABELS = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
   church:'Church & Spiritual', market:'Market & Shopping',
-  soviet:'Soviet Heritage', nature:'Nature & Views'
+  soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature & Views'
 };
 const CAT_GRADIENTS = {
   landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
@@ -23,6 +23,7 @@ const CAT_GRADIENTS = {
   church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
   market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
   soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
+  pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
   nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
 };
 
@@ -272,20 +273,20 @@ function _populateCard(p){
 function _updateFavBtn(){
   const btn = document.getElementById('pc-btn-fav');
   if(!btn || !CARD_PLACE) return;
-  const favs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  const favs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   const saved = favs.includes(CARD_PLACE.id);
   btn.textContent = saved ? '♥' : '♡';
   btn.classList.toggle('faved', saved);
 }
 function cardToggleFav(){
   if(!CARD_PLACE) return;
-  let favs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+  let favs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   if(favs.includes(CARD_PLACE.id)){
     favs = favs.filter(id => id !== CARD_PLACE.id);
   } else {
     favs.push(CARD_PLACE.id);
   }
-  localStorage.setItem('tbilisi-favs', JSON.stringify(favs));
+  localStorage.setItem(FAVS_KEY, JSON.stringify(favs));
   _updateFavBtn();
   // Sync the favourites array in ui-favourites.js
   if(typeof refreshFavourites === 'function') refreshFavourites();

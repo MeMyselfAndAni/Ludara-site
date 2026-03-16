@@ -48,7 +48,7 @@ const NBHD_META = {
 };
 const CL_STORIES = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
-  church:'Church', market:'Market', soviet:'Soviet Heritage', nature:'Nature'
+  church:'Church', market:'Market', soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature'
 };
 
 // Neighbourhood map bounds for zoom-to
