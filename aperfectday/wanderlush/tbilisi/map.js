@@ -28,6 +28,9 @@ function initMap(){
     const title = document.getElementById('sheet-title');
     if(title && title.textContent.includes('Places')) title.textContent = n + ' Places';
   })();
+  // Preload all place images in background after map settles
+  setTimeout(preloadAllPhotos, 1500);
+
   // List starts closed — user opens it with the Places button
 
   document.getElementById('loading').style.display='none';
