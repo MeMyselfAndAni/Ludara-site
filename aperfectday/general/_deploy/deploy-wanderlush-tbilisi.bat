@@ -1,28 +1,31 @@
 @echo off
-set ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
-set PLATFORM=%ROOT%\aperfectday\general\_platform
-set GUIDE=%ROOT%\aperfectday\wanderlush\tbilisi
+REM ─── deploy-wanderlush-tbilisi.bat ────────────────────────────────────────
+
+SET ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
+SET GUIDE=%ROOT%\aperfectday\wanderlush\tbilisi
+SET PLATFORM=%ROOT%\aperfectday\general\_platform
 
 echo.
-echo Deploying: WanderLush / Tbilisi
+echo Deploying Wanderlush Tbilisi...
 echo.
 
-:: Clean and copy platform files
-for %%F in (ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js photos.js styles.css) do (
-  if exist "%GUIDE%\%%F" del "%GUIDE%\%%F" >nul
-  copy /Y "%PLATFORM%\%%F" "%GUIDE%\%%F" >nul
-  echo   + %%F
-)
+echo Syncing platform files...
+xcopy /Y "%PLATFORM%\styles.css"        "%GUIDE%\"
+xcopy /Y "%PLATFORM%\photos.js"         "%GUIDE%\"
+xcopy /Y "%PLATFORM%\ui-card.js"        "%GUIDE%\"
+xcopy /Y "%PLATFORM%\ui-filter.js"      "%GUIDE%\"
+xcopy /Y "%PLATFORM%\ui-stories.js"     "%GUIDE%\"
+xcopy /Y "%PLATFORM%\ui-favourites.js"  "%GUIDE%\"
+xcopy /Y "%PLATFORM%\ui-pdf.js"         "%GUIDE%\"
 
-:: Git — force add images and all guide files
+echo.
+echo Pushing to live server via git...
 cd /d "%ROOT%"
-git add -f aperfectday/wanderlush/tbilisi/images/
-git add aperfectday/wanderlush/tbilisi/
-git commit -m "Deploy wanderlush/tbilisi %DATE% %TIME%"
+git add -A
+git commit -m "Deploy Wanderlush Tbilisi %DATE% %TIME%"
 git push
 
 echo.
-echo Done: https://ludara.ai/aperfectday/wanderlush/tbilisi
-echo Ctrl+Shift+R to reload
+echo Done! Live at: ludara.ai/aperfectday/wanderlush/tbilisi/
 echo.
 pause

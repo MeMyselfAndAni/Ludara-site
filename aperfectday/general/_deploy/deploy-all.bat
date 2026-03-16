@@ -1,30 +1,20 @@
 @echo off
-:: ═══════════════════════════════════════════════════════════════
-:: deploy-all.bat — Deploy _platform files to ALL active guides
-:: Runs QA check first and blocks deploy if errors found
-::
-:: To add a new guide:
-::   1. Add it to the GUIDES list below
-::   2. Also add it to qa-check.js GUIDES array
-:: ═══════════════════════════════════════════════════════════════
-setlocal enabledelayedexpansion
+REM ─── deploy-all.bat — Deploy ALL guides ───────────────────────────────────
+REM Runs QA first, then syncs platform files to every guide and git pushes.
 
-set ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
-set PLATFORM=%ROOT%\aperfectday\general\_platform
-set SCRIPT=%ROOT%\aperfectday\general\_deploy\qa-check.js
+SET ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
+SET PLATFORM=%ROOT%\aperfectday\general\_platform
+SET SCRIPT=%ROOT%\aperfectday\general\_deploy\qa-check.js
 
-:: ── Run QA first ─────────────────────────────────────────────
+REM ── Run QA first ─────────────────────────────────────────────────────────
 echo.
-echo Running QA checks before deploy...
+echo Running QA checks...
 echo.
 node "%SCRIPT%"
 
 if errorlevel 1 (
   echo.
-  echo ═══════════════════════════════════════════════════
-  echo  ❌ DEPLOY BLOCKED — fix QA errors first
-  echo  Run qa-check.bat to see the full list of issues
-  echo ═══════════════════════════════════════════════════
+  echo ❌ DEPLOY BLOCKED — fix QA errors first.
   echo.
   pause
   exit /b 1
@@ -32,36 +22,43 @@ if errorlevel 1 (
 
 echo.
 echo ══════════════════════════════════════════
-echo   QA passed — deploying platform files
+echo   QA passed — deploying all guides
 echo ══════════════════════════════════════════
 echo.
 
-:: ── Add new guides to this list when ready ───────────────────
+REM ── Add new guides here when ready ───────────────────────────────────────
 set GUIDES=wanderlush\tbilisi HLO\london
 
 for %%G in (%GUIDES%) do (
+  setlocal enabledelayedexpansion
   set GUIDE=%ROOT%\aperfectday\%%G
 
   if not exist "!GUIDE!\index.html" (
-    echo Guide: %%G  [SKIPPED - not built yet]
+    echo Guide %%G — SKIPPED ^(folder not found^)
   ) else (
     echo Guide: %%G
-    for %%F in (ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js photos.js styles.css) do (
-      copy /Y "%PLATFORM%\%%F" "!GUIDE!\%%F" >nul
-      echo   + %%F
-    )
+    xcopy /Y "%PLATFORM%\styles.css"        "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\photos.js"         "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\ui-card.js"        "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\ui-filter.js"      "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\ui-stories.js"     "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\ui-favourites.js"  "!GUIDE!\" >nul
+    xcopy /Y "%PLATFORM%\ui-pdf.js"         "!GUIDE!\" >nul
+    echo   platform files synced
   )
+  endlocal
   echo.
 )
 
+REM ── Git push everything ───────────────────────────────────────────────────
 cd /d "%ROOT%"
-git add aperfectday\
-git commit -m "Platform update all guides %DATE% %TIME%"
+git add -A
+git commit -m "Deploy all guides %DATE% %TIME%"
 git push
 
 echo.
 echo ══════════════════════════════════════════
-echo   Done — all guides updated
+echo   Done — all guides live
 echo ══════════════════════════════════════════
 echo.
 pause
