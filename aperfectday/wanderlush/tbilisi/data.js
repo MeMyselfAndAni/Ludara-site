@@ -71,3 +71,9 @@ const API_KEY = 'AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU';
 
 let map, markers={}, placesService, AID=null, AF='all', ANF='all'; // ANF = active neighbourhood filter
 
+// ── GLOBALS ──
+let map, markers={}, placesService, AID=null, AF='all', ANF='all';
+const CC = { ... };
+const CL = { ... };
+const FAVS_KEY = 'tbilisi-favs';   // ← ADD THIS LINE
+

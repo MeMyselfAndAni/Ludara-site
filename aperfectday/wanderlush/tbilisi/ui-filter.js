@@ -6,7 +6,7 @@ function renderList(){
   // Saved filter mode — list ALWAYS shows ALL saved places; category pill only adds icons on map
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
     // Force re-read from localStorage — never trust stale in-memory array
-    const rawFavs = JSON.parse(localStorage.getItem('tbilisi-favs') || '[]');
+    const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
     const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
     // Nearest-neighbour sort if 2+ places
     let sorted = allSaved;
@@ -85,19 +85,17 @@ function renderList(){
       <span class="chevron">›</span>
     </div>`).join('');
 
-  // Lazy-load thumbnails
+  // Lazy-load thumbnails from local images folder
+  const imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   filtered.forEach(p=>{
-    placesService.findPlaceFromQuery({
-      query: p.search,
-      fields:['photos']
-    }, (results, status)=>{
-      const thumb=document.getElementById(`thumb-${p.id}`);
-      if(!thumb) return;
-      if(status===google.maps.places.PlacesServiceStatus.OK && results[0]?.photos?.length){
-        const url = results[0].photos[0].getUrl({maxWidth:96, maxHeight:96});
-        thumb.innerHTML=`<img src="${url}" alt="${p.name}" loading="lazy">`;
-      }
-    });
+    const thumb = document.getElementById(`thumb-${p.id}`);
+    if(!thumb) return;
+    const img = new Image();
+    img.onload = () => {
+      thumb.innerHTML = `<img src="${imgBase}${p.id}.jpg" alt="${p.name}" loading="lazy">`;
+    };
+    // If local image missing, keep emoji placeholder — no API call
+    img.src = imgBase + p.id + '.jpg';
   });
 }
 
@@ -247,7 +245,7 @@ function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
   // Read saved IDs directly from localStorage — never stale
   const savedIds = isSaved
-    ? JSON.parse(localStorage.getItem('tbilisi-favs') || '[]').map(Number)
+    ? JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number)
     : null;
 
   PLACES.forEach(p => {
