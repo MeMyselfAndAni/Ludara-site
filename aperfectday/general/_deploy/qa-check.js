@@ -134,6 +134,40 @@ function checkMapJsBanned(guideDir, guideName) {
   }
   if (clean) pass(`${guideName}/map.js — no duplicate platform declarations`);
 }
+// ── CHECK 3b: map.js has required lines ──────────────────────────────────────
+function checkMapJsRequired(guideDir, guideName) {
+  const fpath = path.join(guideDir, 'map.js');
+  if (!fileExists(fpath)) return;
+  const content = readFile(fpath);
+
+  // Must hide the loading screen — without this the spinner covers the map forever
+  if (!content.includes("getElementById('loading')") && !content.includes('getElementById("loading")')) {
+    fail(`${guideName}/map.js — missing loading screen dismissal: document.getElementById('loading').style.display='none' — map will load but spinner covers it forever`);
+  } else {
+    pass(`${guideName}/map.js — loading screen is dismissed`);
+  }
+
+  // Must call renderList
+  if (!content.includes('renderList()')) {
+    fail(`${guideName}/map.js — missing renderList() call — places list will be empty`);
+  } else {
+    pass(`${guideName}/map.js — renderList() called`);
+  }
+
+  // Must call addMarker or PLACES.forEach
+  if (!content.includes('addMarker') && !content.includes('initMarkers')) {
+    fail(`${guideName}/map.js — missing addMarker/initMarkers call — no pins on map`);
+  } else {
+    pass(`${guideName}/map.js — markers are added`);
+  }
+
+  // Must NOT call openPlaceCard (platform uses openDetail)
+  if (content.includes('openPlaceCard')) {
+    fail(`${guideName}/map.js — calls openPlaceCard() which does not exist — use openDetail() instead`);
+  }
+}
+
+
 
 // ── CHECK 4: data.js has FAVS_KEY and no platform-only functions ─────────────
 function checkDataJs(guideDir, guideName) {
@@ -396,6 +430,7 @@ for (const guide of GUIDES) {
   favsKeys[guide.name] = favsKey;
 
   checkMapJsBanned(guideDir, guide.name);
+  checkMapJsRequired(guideDir, guide.name);
   checkNeighbourhoods(guideDir, guide.name);
   checkPlaceCount(guideDir, guide.name);
   checkCategories(guideDir, guide.name);
