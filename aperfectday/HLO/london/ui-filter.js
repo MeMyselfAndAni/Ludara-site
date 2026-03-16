@@ -92,10 +92,10 @@ function renderList(){
     if(!thumb) return;
     const img = new Image();
     img.onload = () => {
-      thumb.innerHTML = `<img src="${imgBase}${p.id}.jpg" alt="${p.name}" loading="lazy">`;
+      thumb.innerHTML = `<img src="${imgBase}place-${p.id}.jpg" alt="${p.name}" loading="lazy">`;
     };
     // If local image missing, keep emoji placeholder — no API call
-    img.src = imgBase + p.id + '.jpg';
+    img.src = imgBase + 'place-' + p.id + '.jpg';
   });
 }
 
