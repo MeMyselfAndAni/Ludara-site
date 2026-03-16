@@ -17,7 +17,7 @@ xcopy /Y "%PLATFORM%\ui-filter.js"      "%GUIDE%\"
 xcopy /Y "%PLATFORM%\ui-stories.js"     "%GUIDE%\"
 xcopy /Y "%PLATFORM%\ui-favourites.js"  "%GUIDE%\"
 xcopy /Y "%PLATFORM%\ui-pdf.js"         "%GUIDE%\"
-xcopy /Y "%PLATFORM%\favicon.svg" "%GUIDE%\"
+xcopy /Y "%PLATFORM%\favicon.svg"       "%GUIDE%\"
 
 echo.
 echo Pushing to live server via git...

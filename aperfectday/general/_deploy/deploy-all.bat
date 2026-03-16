@@ -44,7 +44,7 @@ for %%G in (%GUIDES%) do (
     xcopy /Y "%PLATFORM%\ui-stories.js"     "!GUIDE!\" >nul
     xcopy /Y "%PLATFORM%\ui-favourites.js"  "!GUIDE!\" >nul
     xcopy /Y "%PLATFORM%\ui-pdf.js"         "!GUIDE!\" >nul
-    xcopy /Y "%PLATFORM%\favicon.svg" "%GUIDE%\"
+    xcopy /Y "%PLATFORM%\favicon.svg"         "!GUIDE!\" >nul
     echo   platform files synced
   )
   endlocal
