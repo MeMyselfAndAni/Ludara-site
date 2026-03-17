@@ -8,8 +8,7 @@ function initMap() {
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-
-  L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=V3bgGWhyO1Rik6g1non6', {
+L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=V3bgGWhyO1Rik6g1non6&language=en', {
     attribution: '© <a href="https://www.maptiler.com">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 20,
     tileSize: 512,
