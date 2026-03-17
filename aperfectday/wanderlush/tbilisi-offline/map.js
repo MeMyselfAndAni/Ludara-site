@@ -8,11 +8,10 @@ function initMap() {
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  // CARTO Voyager tiles — English language labels, clean design
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
+  // Stadia Alidade Smooth — English labels, clean modern style, free tier
+  L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://stadiamaps.com/">Stadia Maps</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 20,
   }).addTo(map);
 
   PLACES.forEach(p => addMarker(p));
@@ -167,7 +166,7 @@ async function saveForOffline() {
     for (let dx = -pad; dx <= pad; dx++) {
       for (let dy = -pad; dy <= pad; dy++) {
         const sub = ['a','b','c','d'][Math.abs(c.x+dx) % 4];
-        tiles.push(`https://${sub}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${c.x+dx}/${c.y+dy}.png`);
+        tiles.push(`https://tiles.stadiamaps.com/tiles/alidade_smooth/${zoom}/${c.x+dx}/${c.y+dy}.png`);
       }
     }
   }
