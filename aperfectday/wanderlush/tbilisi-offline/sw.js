@@ -29,6 +29,8 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Skip non-http requests (chrome-extension, data:, etc.)
+  if (!event.request.url.startsWith('http')) return;
   const url = new URL(event.request.url);
 
   // OSM tiles — cache-first, then network
