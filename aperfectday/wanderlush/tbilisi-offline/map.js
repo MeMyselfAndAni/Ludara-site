@@ -166,7 +166,7 @@ async function saveForOffline() {
     for (let dx = -pad; dx <= pad; dx++) {
       for (let dy = -pad; dy <= pad; dy++) {
         const sub = ['a','b','c','d'][Math.abs(c.x+dx) % 4];
-        tiles.push(`https://maps.wikimedia.org/osm-intl/${zoom}/${c.x+dx}/${c.y+dy}.png`);
+        tiles.push(`https://${'abc'[Math.abs(c.x+dx) % 3]}.maps.wikimedia.org/osm-intl/${zoom}/${c.x+dx}/${c.y+dy}.png?lang=en`);
       }
     }
   }

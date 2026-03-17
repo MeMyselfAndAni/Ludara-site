@@ -1,6 +1,6 @@
 // sw.js — Service Worker for offline map support
 const APP_CACHE  = 'tbilisi-app-v1';
-const TILE_CACHE = 'wiki-tiles-v1';
+const TILE_CACHE = 'wikimedia-en-v1';
 
 const APP_FILES = [
   './', './index.html', './data.js', './map.js', './styles.css',
@@ -32,7 +32,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   // OSM tiles — cache-first, then network
-  if (url.hostname.endsWith('tile.openstreetmap.org') || url.hostname.endsWith('basemaps.cartocdn.com') || url.hostname.endsWith('maps.wikimedia.org') || url.hostname.endsWith('stadiamaps.com')) {
+  if (url.hostname.endsWith('tile.openstreetmap.org') || url.hostname.endsWith('basemaps.cartocdn.com') || url.hostname === 'maps.wikimedia.org' || (url.hostname.endsWith('.maps.wikimedia.org')) || url.hostname.endsWith('stadiamaps.com')) {
     event.respondWith(
       caches.open(TILE_CACHE).then(cache =>
         cache.match(event.request).then(cached => {
