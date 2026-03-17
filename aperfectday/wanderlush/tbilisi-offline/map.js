@@ -1,8 +1,3 @@
-// ── GLOBALS ───────────────────────────────────────────────────
-let map, placesService = null;
-let markers = {};
-let AF = 'all', ANF = 'all', AID = null;
-
 // ── MAP INIT (Leaflet + OpenStreetMap) ────────────────────────
 function initMap() {
   map = L.map('map', {
