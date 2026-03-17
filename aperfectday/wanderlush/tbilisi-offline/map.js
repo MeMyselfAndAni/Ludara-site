@@ -8,8 +8,10 @@ function initMap() {
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  // CARTO Voyager tiles — English language labels, clean design
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
     maxZoom: 19,
   }).addTo(map);
 
@@ -122,10 +124,26 @@ function addMarker(p) {
     if (m === null) { if (map.hasLayer(this)) map.removeLayer(this); }
     else            { if (!map.hasLayer(this)) this.addTo(m); }
   };
+  // Shims for Google Maps API compatibility in ui-card.js
+  marker.setZIndex = function(z) { this.setZIndexOffset(z); };
+  marker.setOpacity = function(o) { this.setOpacity(o); };
+
   marker.on('click', () => openDetail(p.id));
   marker.addTo(map);
   markers[p.id] = marker;
 }
+
+// Shim map.panTo to accept both {lat,lng} object and [lat,lng] array
+const _origPanTo = L.Map.prototype.panTo;
+L.Map.prototype.panTo = function(latlng, options) {
+  if (latlng && typeof latlng === 'object' && !Array.isArray(latlng) && 'lat' in latlng) {
+    latlng = [latlng.lat, latlng.lng];
+  }
+  return _origPanTo.call(this, latlng, options);
+};
+
+// Shim map.setZoom (Leaflet already has this, just for safety)
+// Shim map.getBounds, getZoom, fitBounds already exist in Leaflet natively
 
 // ── OFFLINE SAVE ──────────────────────────────────────────────
 function latLngToTile(lat, lng, z) {
@@ -148,8 +166,8 @@ async function saveForOffline() {
     const c = latLngToTile(lat, lng, zoom);
     for (let dx = -pad; dx <= pad; dx++) {
       for (let dy = -pad; dy <= pad; dy++) {
-        const sub = ['a','b','c'][Math.abs(c.x+dx) % 3];
-        tiles.push(`https://${sub}.tile.openstreetmap.org/${zoom}/${c.x+dx}/${c.y+dy}.png`);
+        const sub = ['a','b','c','d'][Math.abs(c.x+dx) % 4];
+        tiles.push(`https://${sub}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${c.x+dx}/${c.y+dy}.png`);
       }
     }
   }
