@@ -8,10 +8,12 @@ function initMap() {
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  // Stadia Alidade Smooth — English labels, clean modern style, free tier
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19,
+
+  L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=V3bgGWhyO1Rik6g1non6', {
+    attribution: '© <a href="https://www.maptiler.com">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 20,
+    tileSize: 512,
+    zoomOffset: -1,
   }).addTo(map);
 
   PLACES.forEach(p => addMarker(p));
@@ -166,7 +168,7 @@ async function saveForOffline() {
     for (let dx = -pad; dx <= pad; dx++) {
       for (let dy = -pad; dy <= pad; dy++) {
         const sub = ['a','b','c','d'][Math.abs(c.x+dx) % 4];
-        tiles.push(`https://${'abc'[Math.abs(c.x+dx) % 3]}.maps.wikimedia.org/osm-intl/${zoom}/${c.x+dx}/${c.y+dy}.png?lang=en`);
+        tiles.push(`https://api.maptiler.com/maps/streets-v2/${zoom}/${c.x+dx}/${c.y+dy}.png?key=V3bgGWhyO1Rik6g1non6`);
       }
     }
   }
