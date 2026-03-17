@@ -72,15 +72,13 @@ let tripRenderers = [];
 let _routeDurations = {};
 
 function clearTripRoute(){
-  tripMarkers.forEach(m => {
-    try { if(map.hasLayer(m)) map.removeLayer(m); } catch(e){}
-  });
+  tripMarkers.forEach(m => { try { m.remove(); } catch(e){} });
   tripMarkers = [];
-  tripRenderers.forEach(r => {
-    try { if(map.hasLayer(r)) map.removeLayer(r); } catch(e){}
-  });
   tripRenderers = [];
-  if(tripPolyline){ try { map.removeLayer(tripPolyline); } catch(e){} tripPolyline = null; }
+  if(tripPolyline && map.getSource('trip-route')){
+    map.getSource('trip-route').setData({ type: 'Feature', geometry: { type: 'LineString', coordinates: [] } });
+  }
+  tripPolyline = null;
 }
 
 function drawSavedRoute(){
@@ -89,31 +87,41 @@ function drawSavedRoute(){
   if(places.length < 2){ clearTripRoute(); return; }
   clearTripRoute();
 
-  // Numbered markers
+  // Numbered markers via MapLibre
   places.forEach((p, i) => {
-    const marker = L.marker([p.lat, p.lng], {
-      icon: L.divIcon({
-        html: `<div style="width:24px;height:24px;border-radius:50%;background:#e00040;border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;">${i+1}</div>`,
-        className: '',
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-      }),
-      zIndexOffset: 9000 + i,
-    }).addTo(map);
+    const el = document.createElement('div');
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#e00040;border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
+    el.textContent = i + 1;
+    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+      .setLngLat([p.lng, p.lat])
+      .addTo(map);
     tripMarkers.push(marker);
   });
 
-  // Dotted polyline (works offline)
-  tripPolyline = L.polyline(places.map(p => [p.lat, p.lng]), {
-    color: '#e00040', weight: 3, opacity: 0.65, dashArray: '8, 10',
-  }).addTo(map);
+  // Dotted route line via MapLibre GeoJSON
+  const routeGeoJSON = {
+    type: 'Feature',
+    geometry: { type: 'LineString', coordinates: places.map(p => [p.lng, p.lat]) }
+  };
+  if (map.getSource('trip-route')) {
+    map.getSource('trip-route').setData(routeGeoJSON);
+  } else {
+    map.addSource('trip-route', { type: 'geojson', data: routeGeoJSON });
+    map.addLayer({
+      id: 'trip-route-line',
+      type: 'line',
+      source: 'trip-route',
+      paint: { 'line-color': '#e00040', 'line-width': 3, 'line-opacity': 0.65, 'line-dasharray': [2, 2] }
+    });
+  }
+  tripPolyline = { _isMapLibreLayer: true };
 
   // Fit bounds
-  const bounds = L.latLngBounds(places.map(p => [p.lat, p.lng]));
-  map.fitBounds(bounds, {
-    paddingTopLeft:     [window.innerWidth >= 768 ? 320 : 20, 80],
-    paddingBottomRight: [20, 120]
-  });
+  const lngs = places.map(p=>p.lng), lats = places.map(p=>p.lat);
+  map.fitBounds(
+    [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+    { padding: { top:80, bottom:120, left: window.innerWidth>=768?320:20, right:20 } }
+  );
 }
 
 // ── DWELL TIMES ───────────────────────────────────────────────
@@ -192,7 +200,7 @@ function planFavTrip(){
 
 function jumpToTripStop(id){
   const p = PLACES.find(x=>x.id===id);
-  if(p) map.panTo([p.lat, p.lng]);
+  if(p) map.panTo([p.lng, p.lat]);
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 

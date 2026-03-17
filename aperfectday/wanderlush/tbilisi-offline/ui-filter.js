@@ -109,14 +109,14 @@ function fc(el,cat){
 
   applyFilters();
 
-  // Fit Leaflet map to visible places
+  // Fit MapLibre map to visible places
   const vis = PLACES.filter(p=>(AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p)));
   if(vis.length && map){
-    const bounds = L.latLngBounds(vis.map(p => [p.lat, p.lng]));
-    map.fitBounds(bounds, {
-      paddingTopLeft:     [window.innerWidth >= 768 ? 320 : 20, 120],
-      paddingBottomRight: [20, 100]
-    });
+    const lngs = vis.map(p => p.lng), lats = vis.map(p => p.lat);
+    map.fitBounds(
+      [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+      { padding: { top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 } }
+    );
   }
 
   if(window.innerWidth >= 768){
@@ -139,20 +139,16 @@ function locateMe(){
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      if(userMarker) map.removeLayer(userMarker);
+      if(userMarker) userMarker.remove();
 
-      userMarker = L.marker([lat, lng], {
-        icon: L.divIcon({
-          html: '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>',
-          className: '',
-          iconSize: [20, 20],
-          iconAnchor: [10, 10],
-        }),
-        zIndexOffset: 1000,
-      }).addTo(map);
-      userMarker.setMap = function(m) { if(m === null) map.removeLayer(this); };
+      const dotEl = document.createElement('div');
+      dotEl.innerHTML = '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>';
+      userMarker = new maplibregl.Marker({ element: dotEl, anchor: 'center' })
+        .setLngLat([lng, lat])
+        .addTo(map);
+      userMarker.setMap = function(m) { if(m === null) this.remove(); };
 
-      map.panTo([lat, lng]);
+      map.panTo([lng, lat]);  // MapLibre: [lng, lat]
       if(map.getZoom() < 14) map.setZoom(15);
     },
     err => {

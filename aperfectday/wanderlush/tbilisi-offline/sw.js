@@ -1,19 +1,17 @@
-// sw.js — Service Worker for offline map support
-const APP_CACHE  = 'tbilisi-app-v1';
-const TILE_CACHE = 'wikimedia-en-v1';
+// sw.js — Service Worker for offline map support (MapLibre + MapTiler)
+const APP_CACHE  = 'tbilisi-app-v2';
+const TILE_CACHE = 'maptiler-tiles-v1';
 
 const APP_FILES = [
   './', './index.html', './data.js', './map.js', './styles.css',
   './photos.js', './ui-card.js', './ui-filter.js', './ui-favourites.js',
   './ui-pdf.js', './ui-stories.js', './favicon.svg',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(APP_CACHE)
-      .then(cache => cache.addAll(APP_FILES.filter(f => f.startsWith('.'))))
+      .then(cache => cache.addAll(APP_FILES))
       .then(() => self.skipWaiting())
   );
 });
@@ -29,12 +27,13 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Skip non-http requests (chrome-extension, data:, etc.)
+  // Skip non-http requests (chrome-extension etc.)
   if (!event.request.url.startsWith('http')) return;
+
   const url = new URL(event.request.url);
 
-  // OSM tiles — cache-first, then network
-  if (url.hostname.endsWith('tile.openstreetmap.org') || url.hostname.endsWith('basemaps.cartocdn.com') || url.hostname === 'maps.wikimedia.org' || (url.hostname.endsWith('.maps.wikimedia.org')) || url.hostname.endsWith('stadiamaps.com')) {
+  // MapTiler tiles + style + fonts + sprites — cache first
+  if (url.hostname.includes('maptiler.com') || url.hostname.includes('maplibre')) {
     event.respondWith(
       caches.open(TILE_CACHE).then(cache =>
         cache.match(event.request).then(cached => {
@@ -43,22 +42,6 @@ self.addEventListener('fetch', event => {
             if (res.ok) cache.put(event.request, res.clone());
             return res;
           }).catch(() => new Response('', { status: 503 }));
-        })
-      )
-    );
-    return;
-  }
-
-  // Leaflet CDN — cache-first
-  if (url.hostname === 'unpkg.com') {
-    event.respondWith(
-      caches.open(TILE_CACHE).then(cache =>
-        cache.match(event.request).then(cached => {
-          if (cached) return cached;
-          return fetch(event.request).then(res => {
-            if (res.ok) cache.put(event.request, res.clone());
-            return res;
-          });
         })
       )
     );
@@ -81,7 +64,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // App files — cache-first
+  // App files — cache first, fallback to network
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
