@@ -6,7 +6,7 @@ function initMap() {
     zoomControl: false,
   });
 
-  L.control.zoom({ position: 'centerright' }).addTo(map);
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
