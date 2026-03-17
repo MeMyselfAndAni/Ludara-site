@@ -6,6 +6,9 @@
 <title>Emily Lush's Tbilisi — Wander-Lush (Offline)</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
+<!-- Leaflet — must load before all other scripts -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
   .lci { background: none !important; border: none !important; }
@@ -281,13 +284,9 @@
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
-<!-- Leaflet (replaces Google Maps — works offline after first load) -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // Leaflet custom icon fix
-  document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-  });
+  // All scripts loaded — now safe to init the map
+  window.addEventListener('load', initMap);
 </script>
 </body>
 </html>
