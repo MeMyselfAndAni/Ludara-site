@@ -40,24 +40,20 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 16;
       else if(circle.radius < 1500) zoom = 15;
       else zoom = 14;
-      // Use flyTo — more reliable than fitBounds on mobile Safari
+      // Debug: show alert to confirm code is reached on iPhone
       const isMobile = window.innerWidth < 768;
-
-      // Calculate zoom from radius
-      // fitBounds often silently fails on iPhone, flyTo is rock solid
-      const delay = isMobile ? 350 : 120;
+      console.log('selectNbhd pan: circle=', circle.lng, circle.lat, 'zoom=', zoom, 'isMobile=', isMobile);
 
       setTimeout(() => {
-        map.resize(); // recalc canvas size
-        setTimeout(() => {
-          map.flyTo({
-            center: [circle.lng, circle.lat],
-            zoom: zoom,
-            duration: 1000,
-            essential: true  // bypass reduced-motion settings on iOS
-          });
-        }, 50);
-      }, delay);
+        try {
+          map.resize();
+          console.log('map.resize() done, center before:', map.getCenter());
+          map.jumpTo({ center: [circle.lng, circle.lat], zoom: zoom });
+          console.log('map.jumpTo() called, center after:', map.getCenter());
+        } catch(e) {
+          alert('Pan error: ' + e.message);
+        }
+      }, 400);
     }
   }
 
