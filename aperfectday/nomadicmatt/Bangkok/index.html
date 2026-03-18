@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <title>A Perfect Day in Bangkok — by Nomadic Matt</title>
+  <meta name="description" content="Matt's curated one-day guide to Bangkok — temples, street food, markets, nightlife, and hidden gems from someone who lived here for two years." />
+  <meta name="theme-color" content="#e8724a" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="A Perfect Day in Bangkok — Nomadic Matt" />
+  <meta property="og:description" content="33 hand-picked places from Matt's two years living in Bangkok. Temples, street food, markets, bars, and the perfect river cruise." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://ludara.ai/aperfectday/nomadicmatt/bangkok/" />
+  <meta property="og:image"       content="images/place-1.jpg" />
+
+  <!-- MapLibre GL JS -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+
+  <!-- Platform shared stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+  <!-- PWA manifest (optional, enhances offline) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+</head>
+
+<body>
+
+  <!-- ─── Loading overlay ─────────────────────────────────────────── -->
+  <div id="loading">
+    <div class="loading-inner">
+      <div class="loading-spinner"></div>
+      <p>Loading Bangkok…</p>
+    </div>
+  </div>
+
+  <!-- ─── Top header bar ──────────────────────────────────────────── -->
+  <header id="app-header">
+    <div class="header-left">
+      <div class="guide-brand">
+        <span class="guide-city">Bangkok</span>
+        <span class="guide-blogger">by Nomadic Matt</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="btn-offline" class="header-btn" title="Save for offline use">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Offline</span>
+      </button>
+      <button id="btn-favourites" class="header-btn" title="My saved places">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Saved</span>
+      </button>
+      <button id="btn-trip" class="header-btn" title="My trip plan">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+        <span>Trip</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── Neighbourhood filter bar ────────────────────────────────── -->
+  <nav id="nbhd-bar" aria-label="Filter by neighbourhood">
+    <button class="nbhd-btn active" data-nbhd="all">All</button>
+    <button class="nbhd-btn" data-nbhd="old-city"
+            style="--nbhd-color: #e8724a">Old City</button>
+    <button class="nbhd-btn" data-nbhd="chinatown"
+            style="--nbhd-color: #d4a043">Chinatown</button>
+    <button class="nbhd-btn" data-nbhd="silom"
+            style="--nbhd-color: #4a90d9">Silom &amp; Siam</button>
+    <button class="nbhd-btn" data-nbhd="sukhumvit"
+            style="--nbhd-color: #7b68c8">Sukhumvit</button>
+    <button class="nbhd-btn" data-nbhd="riverside"
+            style="--nbhd-color: #4ab8a0">Riverside</button>
+    <button class="nbhd-btn" data-nbhd="thonglor"
+            style="--nbhd-color: #c8687b">Thong Lo</button>
+  </nav>
+
+  <!-- ─── Category filter bar ─────────────────────────────────────── -->
+  <nav id="cat-bar" aria-label="Filter by category">
+    <button class="cat-btn active" data-cat="all">All</button>
+    <button class="cat-btn" data-cat="landmark">Landmarks</button>
+    <button class="cat-btn" data-cat="food">Food</button>
+    <button class="cat-btn" data-cat="cafe">Bars &amp; Cafés</button>
+    <button class="cat-btn" data-cat="church">Temples</button>
+    <button class="cat-btn" data-cat="market">Markets</button>
+    <button class="cat-btn" data-cat="nature">Nature</button>
+  </nav>
+
+  <!-- ─── Map container ───────────────────────────────────────────── -->
+  <div id="map"></div>
+
+  <!-- ─── Places list panel (desktop right / mobile bottom sheet) ─── -->
+  <aside id="list-panel">
+    <div id="list-header">
+      <span id="list-count"></span>
+      <button id="btn-close-list" aria-label="Close list">✕</button>
+    </div>
+    <div id="list-scroll">
+      <ul id="places-list" role="list"></ul>
+    </div>
+  </aside>
+
+  <!-- ─── Place detail card (slide-up panel) ──────────────────────── -->
+  <div id="place-card" class="card-hidden" role="dialog" aria-modal="true" aria-label="Place details">
+    <div id="card-drag-handle"></div>
+    <div id="card-inner">
+      <!-- populated by ui-card.js -->
+    </div>
+  </div>
+
+  <!-- ─── Favourites panel ────────────────────────────────────────── -->
+  <div id="favs-panel" class="side-panel panel-hidden" role="dialog" aria-label="Saved places">
+    <div class="panel-header">
+      <h2>Saved Places</h2>
+      <button class="panel-close" data-close="favs-panel">✕</button>
+    </div>
+    <div class="panel-body">
+      <ul id="favs-list" role="list"></ul>
+      <p id="favs-empty" class="panel-empty">Tap ♡ on any place to save it here.</p>
+    </div>
+  </div>
+
+  <!-- ─── Trip planner panel ──────────────────────────────────────── -->
+  <div id="trip-panel" class="side-panel panel-hidden" role="dialog" aria-label="Trip planner">
+    <div class="panel-header">
+      <h2>My Trip</h2>
+      <button class="panel-close" data-close="trip-panel">✕</button>
+    </div>
+    <div class="panel-body">
+      <ul id="trip-list" role="list"></ul>
+      <p id="trip-empty" class="panel-empty">Add places to build your walking route.</p>
+      <div id="trip-actions">
+        <button id="btn-route" class="btn-primary">Show Route</button>
+        <button id="btn-pdf"   class="btn-secondary">Download PDF</button>
+        <button id="btn-clear-trip" class="btn-ghost">Clear Trip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Stories / highlights panel ─────────────────────────────── -->
+  <div id="stories-panel" class="panel-hidden"></div>
+
+  <!-- ─── Panel backdrop ──────────────────────────────────────────── -->
+  <div id="panel-backdrop" class="backdrop-hidden"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCRIPTS — load order is critical, do not reorder
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- 1. MapLibre GL JS -->
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <!-- 2. Images path (must precede photos.js) -->
+  <script>const IMAGES_PATH = "images/";</script>
+
+  <!-- 3. Global map variable (must exist before map.js calls it) -->
+  <script>let map;</script>
+
+  <!-- 4. Place data -->
+  <script src="data.js"></script>
+
+  <!-- 5. Photo manifest -->
+  <script src="photos.js"></script>
+
+  <!-- 6. Shared map core — MUST come before map.js -->
+  <script src="map-core.js"></script>
+
+  <!-- 7. Guide-specific map config & initMap() -->
+  <script src="map.js"></script>
+
+  <!-- 8. UI modules -->
+  <script src="ui-card.js"></script>
+  <script src="ui-filter.js"></script>
+  <script src="ui-stories.js"></script>
+  <script src="ui-favourites.js"></script>
+  <script src="ui-pdf.js"></script>
+
+  <!-- 9. Service worker registration (offline support) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+
+    // Offline button wires to shared function
+    document.getElementById('btn-offline')?.addEventListener('click', () => {
+      if (typeof saveForOffline === 'function') saveForOffline();
+    });
+  </script>
+
+</body>
+</html>
