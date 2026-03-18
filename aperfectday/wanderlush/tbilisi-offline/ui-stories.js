@@ -40,18 +40,33 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 16;
       else if(circle.radius < 1500) zoom = 15;
       else zoom = 14;
-      // Debug: show alert to confirm code is reached on iPhone
-      const isMobile = window.innerWidth < 768;
-      console.log('selectNbhd pan: circle=', circle.lng, circle.lat, 'zoom=', zoom, 'isMobile=', isMobile);
+      // Show visible debug toast on screen
+      function _dbg(msg) {
+        let d = document.getElementById('_dbg_toast');
+        if (!d) {
+          d = document.createElement('div');
+          d.id = '_dbg_toast';
+          d.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:red;color:white;padding:8px 16px;border-radius:8px;z-index:99999;font-size:13px;max-width:90vw;text-align:center;';
+          document.body.appendChild(d);
+        }
+        d.textContent = msg;
+        d.style.display = 'block';
+      }
+
+      _dbg('Step1: circle=' + circle.lng.toFixed(4) + ',' + circle.lat.toFixed(4));
 
       setTimeout(() => {
+        _dbg('Step2: inside setTimeout, map=' + (typeof map));
         try {
           map.resize();
-          console.log('map.resize() done, center before:', map.getCenter());
+          _dbg('Step3: jumpTo ' + circle.lng.toFixed(4));
           map.jumpTo({ center: [circle.lng, circle.lat], zoom: zoom });
-          console.log('map.jumpTo() called, center after:', map.getCenter());
+          setTimeout(() => {
+            const c = map.getCenter();
+            _dbg('Step4 done: center=' + c.lng.toFixed(4) + ',' + c.lat.toFixed(4));
+          }, 500);
         } catch(e) {
-          alert('Pan error: ' + e.message);
+          _dbg('ERROR: ' + e.message);
         }
       }, 400);
     }
