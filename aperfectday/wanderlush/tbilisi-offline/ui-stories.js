@@ -1,33 +1,16 @@
 
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
-  // INLINE DEBUG + PAN — runs before everything
-  if(nbhd !== 'all'){
-    // Show toast
-    var t = document.getElementById('_t');
-    if(!t){ t=document.createElement('div'); t.id='_t';
-      t.style.cssText='position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:10px;z-index:999999;font-size:14px;font-family:monospace;';
-      document.body.appendChild(t); }
-    t.innerHTML = 'nbhd:'+nbhd+'<br>map:'+(typeof map)+'<br>maplibre:'+(typeof maplibregl);
-
-    // Direct pan — no external function
-    if(map && map.setCenter){
-      var coords = {
-        'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
-        'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
-        'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
-        'vake':      [44.7730,41.7050]
-      };
-      var c = coords[nbhd];
-      if(c){ 
-        t.innerHTML += '<br>setCenter:'+c[0]+','+c[1];
-        map.setCenter(c); 
-        map.setZoom(14);
-        t.innerHTML += '<br>DONE';
-      }
-    } else {
-      t.innerHTML += '<br>map.setCenter NOT available';
-    }
+  // Pan map to neighbourhood center
+  if(nbhd !== 'all' && map && map.setCenter){
+    var coords = {
+      'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
+      'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
+      'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
+      'vake':      [44.7730,41.7050]
+    };
+    var c = coords[nbhd];
+    if(c){ map.setCenter(c); map.setZoom(14); }
   }
   // Toggle off if already active
   if(ANF === nbhd && nbhd !== 'all'){
@@ -36,48 +19,6 @@ function selectNbhd(nbhd, el){
   ANF = nbhd;
 
   // DEBUG — show toast on screen
-  (function showToast(msg){
-    let t = document.getElementById('_toast');
-    if(!t){ t = document.createElement('div'); t.id='_toast';
-      t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:12px;font-family:monospace;white-space:pre-wrap;';
-      document.body.appendChild(t); }
-    t.textContent += msg + '\n';
-    t.style.display='block';
-  })('selectNbhd called: ' + nbhd + ' | panToNbhd=' + (typeof panToNbhd) + ' | map=' + (typeof map));
-
-  // Pan map immediately — synchronous, before anything else
-  if(nbhd !== 'all'){
-    const NBHD_FALLBACK = {
-      'old-town':   { lat:41.6895, lng:44.8095, zoom:14 },
-      'sololaki':   { lat:41.6918, lng:44.8042, zoom:16 },
-      'avlabari':   { lat:41.6913, lng:44.8163, zoom:15 },
-      'vera':       { lat:41.6965, lng:44.7955, zoom:15 },
-      'chugureti':  { lat:41.6887, lng:44.9920, zoom:14 },
-      'mtatsminda': { lat:41.6938, lng:44.7971, zoom:14 },
-      'vake':       { lat:41.7050, lng:44.7730, zoom:13 },
-    };
-    const fc = NBHD_FALLBACK[nbhd];
-    (function showToast(msg){
-      let t = document.getElementById('_toast');
-      if(!t){ t = document.createElement('div'); t.id='_toast';
-        t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:12px;font-family:monospace;white-space:pre-wrap;';
-        document.body.appendChild(t); }
-      t.textContent += msg + '\n';
-    })('fc=' + JSON.stringify(fc) + ' | panToNbhd type=' + typeof panToNbhd);
-    if(fc && typeof panToNbhd === 'function'){
-      try {
-        panToNbhd(fc.lng, fc.lat, fc.zoom);
-        (function showToast(msg){ document.getElementById('_toast').textContent += msg+'\n'; })('panToNbhd called OK');
-      } catch(e) {
-        (function showToast(msg){ document.getElementById('_toast').textContent += msg+'\n'; })('ERROR: '+e.message);
-      }
-    }
-  }
-
-  // Update bubble active states
-  document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
-  if(nbhd === 'all'){
-    const allBtn = document.getElementById('nbhd-all');
     if(allBtn) allBtn.classList.add('nbhd-active');
   } else {
     if(el) el.classList.add('nbhd-active');
@@ -95,34 +36,7 @@ function selectNbhd(nbhd, el){
   applyFilters();          // updates map markers
   if(typeof renderList === 'function') renderList();  // updates list panel
 
-  // Smoothly pan and zoom to neighbourhood circle center
-  if(nbhd !== 'all' && map){
-    // Use built circles if available, fallback to hardcoded centers
-    const NBHD_FALLBACK = {
-      'old-town':   { lat:41.6895, lng:44.8095, radius:1200 },
-      'sololaki':   { lat:41.6918, lng:44.8042, radius:300  },
-      'avlabari':   { lat:41.6913, lng:44.8163, radius:700  },
-      'vera':       { lat:41.6965, lng:44.7955, radius:400  },
-      'chugureti':  { lat:41.6887, lng:44.9920, radius:800  },
-      'mtatsminda': { lat:41.6938, lng:44.7971, radius:1100 },
-      'vake':       { lat:41.7050, lng:44.7730, radius:1500 },
-    };
-    const circle =
-      (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length && NBHD_CIRCLES.find(x => x.id === nbhd))
-      ? NBHD_CIRCLES.find(x => x.id === nbhd)
-      : NBHD_FALLBACK[nbhd];
-    if(circle){
-      // Calculate zoom from radius: bigger radius = zoom out more
-      let zoom = 15;
-      if(circle.radius < 100)  zoom = 16;      // tiny dot
-      else if(circle.radius < 400)  zoom = 16; // small area
-      else if(circle.radius < 800)  zoom = 15;
-      else if(circle.radius < 1500) zoom = 14;
-      else zoom = 13;
-      // pan moved to top of selectNbhd
-    }
-  }
-
+  // Pan map to neighbourhood center — simple and reliable on all devices
   // When zooming back to All, fit all visible places
   if(nbhd === 'all' && map){
     const vis = PLACES.filter(p => AF === 'all' || p.cat === AF);
@@ -329,31 +243,18 @@ function openNbhdBar(){
 })();
 
 
-// ── iPhone Safari fix ────────────────────────────────────────
+// ── iPhone Safari touch fix ──────────────────────────────────
 window.addEventListener('load', function() {
-  // Show load confirmation
-  var t = document.createElement('div');
-  t.id = '_toast';
-  t.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:13px;font-family:monospace;white-space:pre-wrap;max-height:60vh;overflow:auto;';
-  document.body.appendChild(t);
-  t.textContent = 'load fired\n';
-
-  var bubbles = document.querySelectorAll('.nbhd-bubble');
-  t.textContent += 'bubbles found: ' + bubbles.length + '\n';
-
-  bubbles.forEach(function(bubble) {
+  document.querySelectorAll('.nbhd-bubble').forEach(function(bubble) {
     var startY = 0;
     bubble.addEventListener('touchstart', function(e) {
       startY = e.touches[0].clientY;
-      t.textContent += 'start:' + bubble.id + '\n';
     }, {passive:true});
     bubble.addEventListener('touchend', function(e) {
       var dy = Math.abs(e.changedTouches[0].clientY - startY);
-      t.textContent += 'end:' + bubble.id + ' dy=' + Math.round(dy) + '\n';
       if(dy > 10) return;
       e.preventDefault();
       var nbhd = bubble.id.replace('nbhd-','');
-      t.textContent += 'selectNbhd:' + nbhd + '\n';
       selectNbhd(nbhd, bubble);
     }, {passive:false});
   });
