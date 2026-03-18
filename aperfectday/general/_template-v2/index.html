@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Emily Lush's Tbilisi — Wander-Lush (Offline)</title>
+<title>BLOGGER_NAME's Tbilisi — BLOG_NAME (Offline)</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
   /* MapLibre marker fix */
   .mgl-marker { background: none !important; border: none !important; }
@@ -23,10 +22,10 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-logo-row">
-      <span class="wl-logo">Wander-Lush</span>
+      <span class="wl-logo">BLOG_NAME</span>
     </div>
-    <h2 class="splash-title">Tbilisi Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">63</span> hand-picked places by <strong>Emily Lush</strong> — photographer, writer and travel blogger based in Batumi. Every place on this map has been personally visited and recommended.</p>
+    <h2 class="splash-title">CITY Guide</h2>
+    <p class="splash-sub"><span class="place-count-all">0</span> hand-picked places by <strong>BLOGGER_NAME</strong> — BLOGGER_DESCRIPTION</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://wander-lush.org" target="_blank">wander-lush.org</a>
@@ -37,19 +36,19 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading Tbilisi…</div>
+  <div class="loading-text">Loading CITY…</div>
 </div>
 
 <!-- Header -->
 <header>
   <div class="header-title">
     <a href="https://wander-lush.org" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
-      <span class="wl-logo">Wander-Lush</span>
+      <span class="wl-logo">BLOG_NAME</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>Tbilisi</em> Guide</h1>
-      <div class="header-sub"><span class="place-count-all">63</span> hand-picked places<span class="header-sub-by"> · by Emily Lush</span></div>
+      <div class="header-sub"><span class="place-count-all">0</span> hand-picked places<span class="header-sub-by"> · by BLOGGER_NAME</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -84,39 +83,16 @@
     <div class="nbhd-handle-grip">⠿</div>
   </div>
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+    <!-- TODO: Add neighbourhood buttons here, one per neighbourhood in map.js -->
+    <!-- Example:
     <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
+      <div class="nbhd-ring" style="border-color:#aaa"></div>
+      <span class="nbhd-emoji">🌍</span>
       <span class="nbhd-label">All</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-old-town" role="button" tabindex="0" onclick="selectNbhd('old-town', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
-      <span class="nbhd-label">Old Town</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-sololaki" role="button" tabindex="0" onclick="selectNbhd('sololaki', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
-      <span class="nbhd-label">Sololaki</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-avlabari" role="button" tabindex="0" onclick="selectNbhd('avlabari', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">⛪</div></div>
-      <span class="nbhd-label">Avlabari</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-vera" role="button" tabindex="0" onclick="selectNbhd('vera', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">☕</div></div>
-      <span class="nbhd-label">Vera</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-chugureti" role="button" tabindex="0" onclick="selectNbhd('chugureti', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏭</div></div>
-      <span class="nbhd-label">Chugureti</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-mtatsminda" role="button" tabindex="0" onclick="selectNbhd('mtatsminda', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎭</div></div>
-      <span class="nbhd-label">Mtatsminda</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-vake" role="button" tabindex="0" onclick="selectNbhd('vake', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
-      <span class="nbhd-label">Vake</span>
-    </div>
-  </div><!-- end nbhd-bubbles-row -->
+    -->
+  </div>
+  <!-- end nbhd-bubbles-row -->
 </div><!-- end nbhd-bar -->
 
 <!-- ── UNIFIED PLACE CARD — used for both list details and neighbourhood browsing ── -->
@@ -143,7 +119,7 @@
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <span class="pc-emily-by">— Emily Lush, Wander-Lush</span>
+      <span class="pc-emily-by">— BLOGGER_NAME, BLOG_NAME</span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
       <span class="pc-tip-label">💡 Emily's Tip</span>
@@ -274,10 +250,11 @@
 
 <!-- JS modules — load order matters -->
 <script>const IMAGES_PATH = "images/";</script>
-<script src="data.js"></script>
+<script>let map;</script>
+  <script src="data.js"></script>
 <script src="photos.js"></script>
-<script src="map.js"></script>
 <script src="map-core.js"></script>
+  <script src="map.js"></script>
 <script src="ui-card.js"></script>
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
@@ -291,34 +268,7 @@
   window.addEventListener('load', initMap);
 </script>
 
-<script>
-// GLOBAL TOUCH DEBUG — remove after fixing
-(function(){
-  function toast(msg){
-    let t = document.getElementById('_gtd');
-    if(!t){
-      t = document.createElement('div');
-      t.id = '_gtd';
-      t.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:#006;color:#fff;padding:8px;border-radius:8px;z-index:99999;font-size:11px;font-family:monospace;max-height:200px;overflow:auto;';
-      document.body.appendChild(t);
-    }
-    t.innerHTML += msg + '<br>';
-    t.style.display = 'block';
-  }
 
-  // Log every touch on the whole document
-  document.addEventListener('touchstart', function(e){
-    const el = e.target;
-    toast('TOUCH: ' + el.tagName + ' id=' + (el.id||'none') + ' cls=' + (el.className||'').substring(0,30));
-  }, {passive:true});
-
-  // Log every click
-  document.addEventListener('click', function(e){
-    const el = e.target;
-    toast('CLICK: ' + el.tagName + ' id=' + (el.id||'none'));
-  }, {passive:true});
-})();
-</script>
 
 </body>
 </html>

@@ -69,6 +69,6 @@ const CC={landmark:"#e8724a",food:"#f0c060",cafe:"#6b9e6e",church:"#6090c8",mark
 const CL={landmark:"Landmark",food:"Restaurant",cafe:"Café & Bar",church:"Church & Spiritual",market:"Market & Shopping",soviet:"Soviet Heritage",nature:"Nature & Views"};
 const API_KEY = 'AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU';
 
-let map, markers={}, placesService, AID=null, AF='all', ANF='all'; // ANF = active neighbourhood filter
+// Global state — map is declared in index.html, markers/AID/AF/ANF in map-core.js
 
 

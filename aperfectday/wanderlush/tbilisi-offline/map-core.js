@@ -1,3 +1,9 @@
+// ── GLOBAL STATE ─────────────────────────────────────────────
+let markers = {};
+let AID = null;      // active place ID
+let AF  = 'all';     // active category filter
+let ANF = 'all';     // active neighbourhood filter
+
 // ── MAP CORE — shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
