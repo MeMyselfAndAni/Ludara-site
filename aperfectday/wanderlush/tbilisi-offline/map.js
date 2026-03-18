@@ -46,6 +46,9 @@ function initMap() {
       paint: { 'line-color': ['get', 'color'], 'line-opacity': 0.55, 'line-width': 2 }
     });
 
+    // Build neighbourhood circles from actual place data
+    NBHD_CIRCLES = buildNbhdCircles();
+
     // Add markers after style loads
     PLACES.forEach(p => addMarker(p));
     renderList();
@@ -73,16 +76,55 @@ function initMap() {
   }
 }
 
-// ── NEIGHBOURHOOD CIRCLES (GeoJSON polygon approach) ──────────
-const NBHD_CIRCLES = [
-  { id:'old-town',   lat:41.6895, lng:44.8095, radius:1497, color:'#e8724a' },
-  { id:'sololaki',   lat:41.6918, lng:44.8042, radius:287,  color:'#9080a8' },
-  { id:'avlabari',   lat:41.6913, lng:44.8163, radius:804,  color:'#6090c8' },
-  { id:'vera',       lat:41.6985, lng:44.7955, radius:418,  color:'#f0c060' },
-  { id:'chugureti',  lat:41.6880, lng:44.7990, radius:315,  color:'#6b9e6e' },
-  { id:'mtatsminda', lat:41.6938, lng:44.7971, radius:1253, color:'#c08060' },
-  { id:'vake',       lat:41.7050, lng:44.7730, radius:1622, color:'#50906a' },
-];
+// ── NEIGHBOURHOOD CIRCLES — dynamically calculated from place data ─
+const NBHD_COLORS = {
+  'old-town':'#e8724a','sololaki':'#9080a8','avlabari':'#6090c8',
+  'vera':'#f0c060','chugureti':'#6b9e6e','mtatsminda':'#c08060','vake':'#50906a'
+};
+
+// Known approximate centers (used to filter outliers only)
+const NBHD_APPROX_CENTERS = {
+  'old-town':   { lat:41.6895, lng:44.8095 },
+  'sololaki':   { lat:41.6918, lng:44.8042 },
+  'avlabari':   { lat:41.6913, lng:44.8163 },
+  'vera':       { lat:41.6985, lng:44.7955 },
+  'chugureti':  { lat:41.6887, lng:44.9920 },  // eastern Tbilisi
+  'mtatsminda': { lat:41.6938, lng:44.7971 },
+  'vake':       { lat:41.7050, lng:44.7730 },
+};
+
+function _haversineM(a, b) {
+  const R = 6371000, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
+  const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+
+function buildNbhdCircles() {
+  const circles = [];
+  for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
+    const approxCenter = NBHD_APPROX_CENTERS[nbhd];
+    // Get places in this neighbourhood, filter outliers > 3km from approx center
+    const ps = PLACES.filter(p => p.nbhd === nbhd &&
+      _haversineM(approxCenter, p) < 5000);  // 5km to include outliers like Chronicles of Georgia
+
+    if (ps.length === 0) {
+      // No valid places — tiny 40m dot to show neighbourhood exists but is empty
+      circles.push({ id:nbhd, lat:approxCenter.lat, lng:approxCenter.lng, radius:40, color });
+    } else {
+      // Centroid of valid places
+      const clat = ps.reduce((s,p)=>s+p.lat,0)/ps.length;
+      const clng = ps.reduce((s,p)=>s+p.lng,0)/ps.length;
+      // Radius = max distance from centroid to any place + 20% padding, min 80m
+      const maxDist = Math.max(...ps.map(p => _haversineM({lat:clat,lng:clng}, p)));
+      const radius = Math.max(maxDist * 1.20, 80);
+      circles.push({ id:nbhd, lat:clat, lng:clng, radius, color });
+    }
+  }
+  return circles;
+}
+
+// Built after PLACES is loaded
+let NBHD_CIRCLES = [];
 let activeNbhdCircle = null;
 let _nbhdAnimInterval = null;
 

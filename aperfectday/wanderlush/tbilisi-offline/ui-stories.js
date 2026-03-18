@@ -28,17 +28,24 @@ function selectNbhd(nbhd, el){
   applyFilters();          // updates map markers
   if(typeof renderList === 'function') renderList();  // updates list panel
 
-  // Smoothly pan and zoom map to neighbourhood circle center
+  // Smoothly pan and zoom to neighbourhood circle center
   if(nbhd !== 'all' && map){
-    const b = NBHD_BOUNDS[nbhd];
-    if(b){
-      // Small delay so the circle animation starts first
+    const circle = (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length)
+      ? NBHD_CIRCLES.find(x => x.id === nbhd) : null;
+    if(circle){
+      // Calculate zoom from radius: bigger radius = zoom out more
+      let zoom = 16;
+      if(circle.radius < 100)  zoom = 17;      // tiny dot
+      else if(circle.radius < 400)  zoom = 17; // small area
+      else if(circle.radius < 800)  zoom = 16;
+      else if(circle.radius < 1500) zoom = 15;
+      else zoom = 14;
       setTimeout(() => {
         map.easeTo({
-          center: [b.lng, b.lat],
-          zoom: b.zoom,
+          center: [circle.lng, circle.lat],
+          zoom,
           duration: 900,
-          easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t  // ease-in-out
+          easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t
         });
       }, 120);
     }
@@ -82,13 +89,13 @@ const CL_STORIES = {
 
 // Neighbourhood map bounds for zoom-to
 const NBHD_BOUNDS = {
-  'old-town':   { lat:41.6895, lng:44.8100, zoom:16 },
-  'sololaki':   { lat:41.6920, lng:44.8040, zoom:16 },
-  'avlabari':   { lat:41.6920, lng:44.8190, zoom:16 },
-  'vera':       { lat:41.6990, lng:44.7960, zoom:15 },
-  'chugureti':  { lat:41.6890, lng:44.7990, zoom:15 },
-  'mtatsminda': { lat:41.6940, lng:44.7960, zoom:15 },
-  'vake':       { lat:41.7040, lng:44.7720, zoom:14 },
+  'old-town':   { zoom:15 },   // radius 1497m
+  'sololaki':   { zoom:17 },   // radius 287m  — tiny, zoom in close
+  'avlabari':   { zoom:16 },   // radius 804m
+  'vera':       { zoom:16 },   // radius 418m
+  'chugureti':  { zoom:16 },   // radius 315m
+  'mtatsminda': { zoom:15 },   // radius 1253m
+  'vake':       { zoom:14 },   // radius 1622m — large area
 };
 
 let storyPlaces = [], storyIdx = 0;
