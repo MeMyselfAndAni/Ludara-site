@@ -58,7 +58,7 @@ function generatePDF(){
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
         ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</span></div>` : ''}
-        ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 Emily's Tip</span> ${p.tip}</div>` : ''}
+        ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
           <span class="pdf-qr-label">Scan for Google Maps</span>
@@ -73,7 +73,7 @@ function generatePDF(){
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A Perfect Day · Tbilisi</title>
+<title>A Perfect Day · ${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }

@@ -57,8 +57,7 @@ function renderList(){
   });
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
-    'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
-    'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
+    // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
   document.getElementById('sheet-title').textContent = nbhdName + count + ' Places';
   document.getElementById('list-badge').textContent = count;

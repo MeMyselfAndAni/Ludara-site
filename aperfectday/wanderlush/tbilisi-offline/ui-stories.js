@@ -28,14 +28,9 @@ function selectNbhd(nbhd, el){
 
   // Pan map to neighbourhood center
   if(nbhd !== 'all' && map && map.setCenter){
-    var coords = {
-      'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
-      'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
-      'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
-      'vake':      [44.7730,41.7050]
-    };
-    var c = coords[nbhd];
-    if(c){ map.setCenter(c); map.setZoom(14); }
+    // Use NBHD_APPROX_CENTERS from guide-specific map.js
+    var center = (typeof NBHD_APPROX_CENTERS !== 'undefined') ? NBHD_APPROX_CENTERS[nbhd] : null;
+    if(center){ map.setCenter([center.lng, center.lat]); map.setZoom(14); }
   }
 
   // When selecting All — fit all visible places
@@ -59,30 +54,14 @@ function selectNbhd(nbhd, el){
 // Keep openStories as alias for backwards compat
 function openStories(nbhd){ selectNbhd(nbhd, document.getElementById('nbhd-' + nbhd)); }
 
-const NBHD_META = {
-  'old-town':   { label: 'Old Town & Kala',    icon: '🏰' },
-  'sololaki':   { label: 'Sololaki',            icon: '🌿' },
-  'avlabari':   { label: 'Avlabari',            icon: '⛪' },
-  'vera':       { label: 'Vera & Stamba',       icon: '☕' },
-  'chugureti':  { label: 'Chugureti & Fabrika', icon: '🏭' },
-  'mtatsminda': { label: 'Mtatsminda',          icon: '🎭' },
-  'vake':       { label: 'Vake',                icon: '🌲' },
-};
+// NBHD_META defined in guide-specific map.js
 const CL_STORIES = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
   church:'Church', market:'Market', soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature'
 };
 
 // Neighbourhood map bounds for zoom-to
-const NBHD_BOUNDS = {
-  'old-town':   { zoom:15 },   // radius 1497m
-  'sololaki':   { zoom:17 },   // radius 287m  — tiny, zoom in close
-  'avlabari':   { zoom:16 },   // radius 804m
-  'vera':       { zoom:16 },   // radius 418m
-  'chugureti':  { zoom:16 },   // radius 315m
-  'mtatsminda': { zoom:15 },   // radius 1253m
-  'vake':       { zoom:14 },   // radius 1622m — large area
-};
+// NBHD_BOUNDS removed — zoom computed from circle radius
 
 let storyPlaces = [], storyIdx = 0;
 
