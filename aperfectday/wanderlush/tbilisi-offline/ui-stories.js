@@ -40,38 +40,23 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 16;
       else if(circle.radius < 1500) zoom = 15;
       else zoom = 14;
-      // Delay longer on mobile to let UI settle, then resize map first
+      // Use flyTo — more reliable than fitBounds on mobile Safari
       const isMobile = window.innerWidth < 768;
-      const delay = isMobile ? 300 : 120;
+
+      // Calculate zoom from radius
+      // fitBounds often silently fails on iPhone, flyTo is rock solid
+      const delay = isMobile ? 350 : 120;
 
       setTimeout(() => {
-        // Force MapLibre to recalculate container size (important on iPhone)
-        map.resize();
-
-        // Measure actual UI elements for precise padding
-        const filterBar    = document.querySelector('.filter-bar');
-        const nbhdBar      = document.getElementById('nbhd-bar');
-        const sheet        = document.getElementById('sheet');
-        const topPad    = (filterBar ? filterBar.offsetHeight : 0) + 20;
-        const bottomPad = isMobile
-          ? (nbhdBar ? nbhdBar.offsetHeight + 20 : 160) + 60
-          : 80;
-        const leftPad   = (!isMobile && sheet && !sheet.classList.contains('desktop-hidden'))
-          ? 340 : 30;
-
-        const padding = { top: topPad, bottom: bottomPad, left: leftPad, right: 30 };
-
-        // Calculate bounds from circle radius
-        const R = 6371000;
-        const dLat = (circle.radius / R) * (180 / Math.PI);
-        const dLng = dLat / Math.cos(circle.lat * Math.PI / 180);
-
-        map.fitBounds(
-          [[circle.lng - dLng, circle.lat - dLat],
-           [circle.lng + dLng, circle.lat + dLat]],
-          { padding, duration: 800,
-            easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t }
-        );
+        map.resize(); // recalc canvas size
+        setTimeout(() => {
+          map.flyTo({
+            center: [circle.lng, circle.lat],
+            zoom: zoom,
+            duration: 1000,
+            essential: true  // bypass reduced-motion settings on iOS
+          });
+        }, 50);
       }, delay);
     }
   }
