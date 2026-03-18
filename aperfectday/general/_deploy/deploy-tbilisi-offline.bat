@@ -13,12 +13,13 @@ xcopy /Y "%PLATFORM%\ui-favourites.js"   "%GUIDE%\" >nul
 xcopy /Y "%PLATFORM%\ui-pdf.js"          "%GUIDE%\" >nul
 xcopy /Y "%PLATFORM%\ui-stories.js"      "%GUIDE%\" >nul
 xcopy /Y "%PLATFORM%\sw.js"              "%GUIDE%\" >nul
+xcopy /Y "%PLATFORM%\favicon.svg"        "%GUIDE%\" >nul
 echo   Done.
 
 echo.
 echo Pushing to git...
 cd /d "%ROOT%"
-git add aperfectday\wanderlush\tbilisi-offline\
+git add -A
 git commit -m "Update tbilisi-offline %DATE% %TIME%"
 git push
 
