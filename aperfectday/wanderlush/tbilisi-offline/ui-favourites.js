@@ -81,47 +81,108 @@ function clearTripRoute(){
   tripPolyline = null;
 }
 
+function _ensureRouteLayer(){
+  if(!map.getSource('trip-route')){
+    map.addSource('trip-route', { type:'geojson', data:{type:'FeatureCollection',features:[]} });
+    map.addLayer({
+      id: 'trip-route-line', type: 'line', source: 'trip-route',
+      paint: { 'line-color':'#e00040', 'line-width':4, 'line-opacity':0.85 }
+    });
+  }
+}
+
+function _setRouteGeoJSON(geojson){
+  _ensureRouteLayer();
+  map.getSource('trip-route').setData(geojson);
+  tripPolyline = { _isMapLibreLayer: true };
+}
+
+function _fitRouteBounds(places){
+  const lngs = places.map(p=>p.lng), lats = places.map(p=>p.lat);
+  map.fitBounds(
+    [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+    { padding:{ top:80, bottom:120, left:window.innerWidth>=768?320:20, right:20 } }
+  );
+}
+
+function _addNumberedMarkers(places){
+  places.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#e00040;border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
+    el.textContent = i + 1;
+    const marker = new maplibregl.Marker({ element:el, anchor:'center' })
+      .setLngLat([p.lng, p.lat]).addTo(map);
+    tripMarkers.push(marker);
+  });
+}
+
+function _drawStraightRoute(places){
+  _setRouteGeoJSON({
+    type: 'Feature',
+    geometry: { type:'LineString', coordinates:places.map(p=>[p.lng,p.lat]) }
+  });
+}
+
+async function _fetchOSRMRoute(places){
+  // OSRM walking route — real streets
+  // Chunk into segments of max 10 stops (OSRM limit)
+  const allCoords = [];
+  const CHUNK = 10;
+  for(let i = 0; i < places.length - 1; i += CHUNK - 1){
+    const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
+    const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
+    const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if(data.code === 'Ok' && data.routes && data.routes[0]){
+        const segCoords = data.routes[0].geometry.coordinates;
+        // Avoid duplicating the join point between chunks
+        if(allCoords.length > 0) segCoords.shift();
+        allCoords.push(...segCoords);
+
+        // Store actual durations for trip planner
+        data.routes[0].legs.forEach((leg, legIdx) => {
+          const fromIdx = i + legIdx;
+          const toIdx   = i + legIdx + 1;
+          _routeDurations[`${fromIdx}-${toIdx}`] = leg.duration;
+        });
+      }
+    } catch(e) {
+      console.warn('OSRM chunk failed, using straight line for this segment');
+      // Fallback: add straight line for this chunk
+      chunk.forEach(p => allCoords.push([p.lng, p.lat]));
+    }
+  }
+  return allCoords;
+}
+
 function drawSavedRoute(){
   if(!savedFilterActive || favourites.length < 2){ clearTripRoute(); return; }
   const places = getSortedFavPlaces();
   if(places.length < 2){ clearTripRoute(); return; }
   clearTripRoute();
 
-  // Numbered markers via MapLibre
-  places.forEach((p, i) => {
-    const el = document.createElement('div');
-    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#e00040;border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
-    el.textContent = i + 1;
-    const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
-      .setLngLat([p.lng, p.lat])
-      .addTo(map);
-    tripMarkers.push(marker);
-  });
+  // Draw numbered markers immediately
+  _addNumberedMarkers(places);
 
-  // Dotted route line via MapLibre GeoJSON
-  const routeGeoJSON = {
-    type: 'Feature',
-    geometry: { type: 'LineString', coordinates: places.map(p => [p.lng, p.lat]) }
-  };
-  if (map.getSource('trip-route')) {
-    map.getSource('trip-route').setData(routeGeoJSON);
-  } else {
-    map.addSource('trip-route', { type: 'geojson', data: routeGeoJSON });
-    map.addLayer({
-      id: 'trip-route-line',
-      type: 'line',
-      source: 'trip-route',
-      paint: { 'line-color': '#e00040', 'line-width': 3, 'line-opacity': 0.65, 'line-dasharray': [2, 2] }
+  // Draw straight line first as placeholder
+  _drawStraightRoute(places);
+  _fitRouteBounds(places);
+
+  // If online, fetch real walking route from OSRM and replace
+  if(navigator.onLine){
+    _fetchOSRMRoute(places).then(coords => {
+      if(coords && coords.length > 1){
+        _setRouteGeoJSON({
+          type: 'Feature',
+          geometry: { type:'LineString', coordinates: coords }
+        });
+      }
+    }).catch(() => {
+      // Keep straight line on failure
     });
   }
-  tripPolyline = { _isMapLibreLayer: true };
-
-  // Fit bounds
-  const lngs = places.map(p=>p.lng), lats = places.map(p=>p.lat);
-  map.fitBounds(
-    [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
-    { padding: { top:80, bottom:120, left: window.innerWidth>=768?320:20, right:20 } }
-  );
 }
 
 // ── DWELL TIMES ───────────────────────────────────────────────
