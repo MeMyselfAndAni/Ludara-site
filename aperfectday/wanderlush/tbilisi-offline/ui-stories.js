@@ -52,12 +52,14 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 15;
       else if(circle.radius < 1500) zoom = 14;
       else zoom = 13;
-      // Pan map to neighbourhood center
+      // Pan map — stop any current animation first, then pan
+      map.stop(); // cancel any in-progress camera movement
       setTimeout(() => {
+        map.stop();
         map.resize();
         map.setCenter([circle.lng, circle.lat]);
         map.setZoom(zoom);
-      }, 400);
+      }, 500);
     }
   }
 
