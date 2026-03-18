@@ -58,38 +58,38 @@ function initMap() {
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
   map.on('load', () => {
-    // Force English labels
-    map.getStyle().layers.forEach(layer => {
-      if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-        try {
-          map.setLayoutProperty(layer.id, 'text-field', [
-            'coalesce', ['get', 'name:en'], ['get', 'name']
-          ]);
-        } catch(e) {}
+    try {
+      // Dismiss spinner immediately
+      const loadingEl = document.getElementById('loading');
+      if(loadingEl) loadingEl.style.display = 'none';
+
+      // Force English labels
+      map.getStyle().layers.forEach(layer => {
+        if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+          try { map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name:en'], ['get', 'name']]); } catch(e) {}
+        }
+      });
+
+      // Build neighbourhood circles
+      NBHD_CIRCLES = buildNbhdCircles();
+
+      // Clear any leftover trip route
+      if(!map.getSource('trip-route')){
+        map.addSource('trip-route', { type:'geojson', data:{type:'Feature',geometry:{type:'LineString',coordinates:[]}} });
+        map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
+          paint:{'line-color':'#e00040','line-width':4,'line-opacity':0.85} });
       }
-    });
 
-    // Build neighbourhood circles from actual place data
-    NBHD_CIRCLES = buildNbhdCircles();
+      // Add markers + init UI
+      PLACES.forEach(p => addMarker(p));
+      if(typeof applyFilters==='function') applyFilters();
+      if(typeof renderList==='function') renderList();
+      if(typeof initFavourites==='function') initFavourites();
+      if(typeof alignNbhdBar==='function') alignNbhdBar();
 
-    // Clear any leftover trip route
-    if(!map.getSource('trip-route')){
-      map.addSource('trip-route', { type:'geojson', data:{type:'Feature',geometry:{type:'LineString',coordinates:[]}} });
-      map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
-        paint:{'line-color':'#e00040','line-width':4,'line-opacity':0.85} });
+    } catch(err) {
+      const el = document.getElementById('loading');
+      if(el){ el.style.display='flex'; el.innerHTML='<div style="color:red;padding:20px;font-size:12px;font-family:monospace;">ERROR: '+err.message+'</div>'; }
     }
-
-    // Hide loading spinner
-    const loadingEl = document.getElementById('loading');
-    if(loadingEl) loadingEl.style.display = 'none';
-
-    // Add markers
-    PLACES.forEach(p => addMarker(p));
-
-    // Init UI
-    if(typeof applyFilters==='function') applyFilters();
-    if(typeof renderList==='function') renderList();
-    if(typeof initFavourites==='function') initFavourites();
-    if(typeof alignNbhdBar==='function') alignNbhdBar();
   });
 }
