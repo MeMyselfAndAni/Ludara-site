@@ -1,0 +1,90 @@
+// ── GUIDE CONFIG — the ONLY file you edit for each new guide ──
+// Replace all values marked with TODO
+
+const MAPTILER_KEY   = 'V3bgGWhyO1Rik6g1non6';  // shared key
+const MAP_CENTER     = [44.8100, 41.6918];        // TODO: [lng, lat] of city center
+const MAP_ZOOM       = 14;                         // TODO: starting zoom level
+const OFFLINE_CENTER = { lat: 41.6918, lng: 44.8100 }; // TODO: same as MAP_CENTER
+
+const GUIDE_CITY     = 'Tbilisi';                 // TODO: city name (used in PDF title)
+const BLOGGER_NAME   = 'Emily';                   // TODO: blogger first name (used in tips)
+
+// Neighbourhood colors — one per neighbourhood, consistent palette
+const NBHD_COLORS = {
+  'old-town':   '#e8724a',
+  'sololaki':   '#9080a8',
+  'avlabari':   '#6090c8',
+  'vera':       '#f0c060',
+  'chugureti':  '#6b9e6e',
+  'mtatsminda': '#c08060',
+  'vake':       '#50906a',
+};
+
+// Neighbourhood display labels — shown in cards and filter bar
+const NBHD_LABELS = {
+  'old-town':   'Old Town',
+  'sololaki':   'Sololaki',
+  'avlabari':   'Avlabari',
+  'vera':       'Vera',
+  'chugureti':  'Chugureti',
+  'mtatsminda': 'Mtatsminda',
+  'vake':       'Vake',
+};
+
+// Neighbourhood approximate centers — used to compute dynamic circles
+// and filter out misplaced pins. 3-5km radius from true center.
+const NBHD_APPROX_CENTERS = {
+  'old-town':   { lat:41.6895, lng:44.8095 },
+  'sololaki':   { lat:41.6918, lng:44.8042 },
+  'avlabari':   { lat:41.6913, lng:44.8163 },
+  'vera':       { lat:41.6985, lng:44.7955 },
+  'chugureti':  { lat:41.6887, lng:44.9920 },
+  'mtatsminda': { lat:41.6938, lng:44.7971 },
+  'vake':       { lat:41.7050, lng:44.7730 },
+};
+
+// ── MAP INIT — do not edit below this line ────────────────────
+function initMap() {
+  map = new maplibregl.Map({
+    container: 'map',
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
+    center: MAP_CENTER,
+    zoom: MAP_ZOOM,
+    attributionControl: false,
+  });
+
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+  map.on('load', () => {
+    // Force English labels
+    map.getStyle().layers.forEach(layer => {
+      if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+        try {
+          map.setLayoutProperty(layer.id, 'text-field', [
+            'coalesce', ['get', 'name:en'], ['get', 'name']
+          ]);
+        } catch(e) {}
+      }
+    });
+
+    // Build neighbourhood circles from actual place data
+    NBHD_CIRCLES = buildNbhdCircles();
+
+    // Clear any leftover trip route
+    if(!map.getSource('trip-route')){
+      map.addSource('trip-route', { type:'geojson', data:{type:'Feature',geometry:{type:'LineString',coordinates:[]}} });
+      map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
+        paint:{'line-color':'#e00040','line-width':4,'line-opacity':0.85} });
+    }
+
+    // Add markers
+    PLACES.forEach(p => addMarker(p));
+
+    // Init UI
+    if(typeof applyFilters==='function') applyFilters();
+    if(typeof renderList==='function') renderList();
+    if(typeof initFavourites==='function') initFavourites();
+    if(typeof alignNbhdBar==='function') alignNbhdBar();
+  });
+}
