@@ -27,10 +27,27 @@ function selectNbhd(nbhd, el){
   if(typeof renderList === 'function') renderList();
 
   // Pan map to neighbourhood center
-  if(nbhd !== 'all' && map && map.setCenter){
-    // Use NBHD_APPROX_CENTERS from guide-specific map.js
-    var center = (typeof NBHD_APPROX_CENTERS !== 'undefined') ? NBHD_APPROX_CENTERS[nbhd] : null;
-    if(center){ map.setCenter([center.lng, center.lat]); map.setZoom(14); }
+  if(nbhd !== 'all' && map){
+    // Use actual circle data to fit bounds perfectly
+    var circle = (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length)
+      ? NBHD_CIRCLES.find(function(x){ return x.id === nbhd; }) : null;
+    // Fallback to approx center if circles not built yet
+    if(!circle && typeof NBHD_APPROX_CENTERS !== 'undefined' && NBHD_APPROX_CENTERS[nbhd]){
+      var c = NBHD_APPROX_CENTERS[nbhd];
+      circle = { lat: c.lat, lng: c.lng, radius: 800 };
+    }
+    if(circle){
+      // Calculate bounds from circle radius with padding for UI panels
+      var R = 6371000;
+      var dLat = (circle.radius * 1.4 / R) * (180 / Math.PI);
+      var dLng = dLat / Math.cos(circle.lat * Math.PI / 180);
+      var isMobile = window.innerWidth < 768;
+      map.fitBounds(
+        [[circle.lng - dLng, circle.lat - dLat], [circle.lng + dLng, circle.lat + dLat]],
+        { padding: { top: 80, bottom: isMobile ? 180 : 80, left: isMobile ? 20 : 340, right: 20 },
+          duration: 800 }
+      );
+    }
   }
 
   // When selecting All — fit all visible places

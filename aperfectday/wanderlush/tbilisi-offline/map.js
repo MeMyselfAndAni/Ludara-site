@@ -75,6 +75,8 @@ function initMap() {
 
       // Init map sources and layers (circles, trip route)
       initMapSources();
+      // Clear any stale route from previous session
+      if(map.getSource('trip-route')) map.getSource('trip-route').setData({type:'Feature',geometry:{type:'LineString',coordinates:[]}});
 
       // Add markers + init UI
       PLACES.forEach(p => addMarker(p));

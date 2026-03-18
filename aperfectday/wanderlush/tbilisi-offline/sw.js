@@ -1,6 +1,6 @@
 // sw.js — Service Worker for offline map support (MapLibre + MapTiler)
-const APP_CACHE  = 'aperfectday-app-v1';
-const TILE_CACHE = 'maptiler-tiles-v1';
+const APP_CACHE  = 'aperfectday-app-v2';
+const TILE_CACHE = 'maptiler-tiles-v2';
 
 const APP_FILES = [
   './', './index.html', './data.js', './map.js', './styles.css',
