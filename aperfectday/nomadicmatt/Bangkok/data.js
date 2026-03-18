@@ -1,5 +1,5 @@
 // A Perfect Day — Nomadic Matt / Bangkok
-// data.js — 33 places curated from nomadicmatt.com
+// data.js — 53 places curated from nomadicmatt.com
 // DO NOT add GUIDE_CITY, BLOGGER_NAME, FAVS_KEY, map, or global state here.
 
 const PLACES = [
@@ -642,12 +642,6 @@ const PLACES = [
     phone: "+66 2 690 1000",
     website: "https://www.siamparagon.co.th",
   },
-
-];
-
-// ─── ADDITIONAL PLACES (34–53) ───────────────────────────────────────────────
-
-// Appended to reach ~53 places total
 
   // ─── OLD CITY (additional) ──────────────────────────────────────────────────
 
