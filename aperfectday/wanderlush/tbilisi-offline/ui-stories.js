@@ -52,14 +52,9 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 15;
       else if(circle.radius < 1500) zoom = 14;
       else zoom = 13;
-      // Pan map — stop any current animation first, then pan
-      map.stop(); // cancel any in-progress camera movement
-      setTimeout(() => {
-        map.stop();
-        map.resize();
-        map.setCenter([circle.lng, circle.lat]);
-        map.setZoom(zoom);
-      }, 500);
+      // Call pan via dedicated function in map.js
+      const _lng = circle.lng, _lat = circle.lat, _zoom = zoom;
+      setTimeout(() => { panToNbhd(_lng, _lat, _zoom); }, 500);
     }
   }
 

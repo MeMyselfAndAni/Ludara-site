@@ -364,3 +364,15 @@ async function saveForOffline() {
     btn.style.background = '#2a7a4a';
   }
 }
+
+// ── PAN TO NEIGHBOURHOOD — called from ui-stories.js ─────────
+function panToNbhd(lng, lat, zoom) {
+  if (!map) return;
+  try {
+    map.stop();
+    map.setCenter([lng, lat]);
+    map.setZoom(zoom);
+  } catch(e) {
+    console.warn('panToNbhd failed:', e);
+  }
+}
