@@ -41,12 +41,22 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 1500) zoom = 15;
       else zoom = 14;
       setTimeout(() => {
-        map.easeTo({
-          center: [circle.lng, circle.lat],
-          zoom,
-          duration: 900,
-          easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t
-        });
+        // On mobile, offset center upward to account for bottom sheet/navbar
+        const isMobile = window.innerWidth < 768;
+        const padding = isMobile
+          ? { top: 80, bottom: 200, left: 20, right: 20 }
+          : { top: 120, bottom: 80, left: 320, right: 20 };
+
+        // Use fitBounds to perfectly frame the circle
+        const R = 6371000;
+        const dLat = (circle.radius / R) * (180 / Math.PI);
+        const dLng = dLat / Math.cos(circle.lat * Math.PI / 180);
+        map.fitBounds(
+          [[circle.lng - dLng, circle.lat - dLat],
+           [circle.lng + dLng, circle.lat + dLat]],
+          { padding, duration: 900,
+            easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t }
+        );
       }, 120);
     }
   }
