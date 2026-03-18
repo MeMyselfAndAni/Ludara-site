@@ -132,7 +132,7 @@ async function _fetchOSRMRoute(places){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
     // foot.router.project-osrm.org is the dedicated walking profile server
-    const url = `https://foot.router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`;
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
       const data = await res.json();
