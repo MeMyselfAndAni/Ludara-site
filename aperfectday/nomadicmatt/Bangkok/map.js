@@ -49,15 +49,15 @@ function initMap() {
     attributionControl: false,
   });
 
-  map.addControl(new maplibregl.NavigationControl(), 'top-right');
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
-  map.addControl(
-    new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true,
-    }),
-    'top-right'
-  );
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+  map.on('error', function(e) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
+    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
+    document.body.appendChild(d);
+  });
 
   map.on('load', () => {
     try {
@@ -93,15 +93,9 @@ function initMap() {
       if (typeof initFavourites === 'function') initFavourites();
       if (typeof alignNbhdBar   === 'function') alignNbhdBar();
 
-    } catch (err) {
-      const loadingEl = document.getElementById('loading');
-      if (loadingEl) {
-        loadingEl.innerHTML =
-          '<p style="color:red;padding:20px;text-align:center;">Map failed to load. Please refresh the page.</p>';
-      }
-      console.error('Map load error:', err);
+    } catch(err) {
+      const el = document.getElementById('loading');
+      if(el){ el.style.display='flex'; el.innerHTML='<div style="color:red;padding:20px;font-size:12px;font-family:monospace;">ERROR: '+err.message+'</div>'; }
     }
   });
 }
-
-initMap();
