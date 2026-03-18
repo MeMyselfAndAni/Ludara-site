@@ -28,6 +28,35 @@ function selectNbhd(nbhd, el){
   applyFilters();          // updates map markers
   if(typeof renderList === 'function') renderList();  // updates list panel
 
+  // Smoothly pan and zoom map to neighbourhood circle center
+  if(nbhd !== 'all' && map){
+    const b = NBHD_BOUNDS[nbhd];
+    if(b){
+      // Small delay so the circle animation starts first
+      setTimeout(() => {
+        map.easeTo({
+          center: [b.lng, b.lat],
+          zoom: b.zoom,
+          duration: 900,
+          easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t  // ease-in-out
+        });
+      }, 120);
+    }
+  }
+
+  // When zooming back to All, fit all visible places
+  if(nbhd === 'all' && map){
+    const vis = PLACES.filter(p => AF === 'all' || p.cat === AF);
+    if(vis.length){
+      const lngs = vis.map(p=>p.lng), lats = vis.map(p=>p.lat);
+      map.fitBounds(
+        [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+        { padding:{ top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 },
+          duration: 700 }
+      );
+    }
+  }
+
   // Open list panel on desktop
   if(window.innerWidth >= 768){
     if(typeof openSheet === 'function') openSheet();
