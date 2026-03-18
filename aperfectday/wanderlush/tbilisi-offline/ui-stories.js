@@ -271,22 +271,25 @@ function openNbhdBar(){
 // Catches touches even if DOMContentLoaded already fired
 (function fixNbhdTouchEvents(){
   function attachListeners() {
-    const bar = document.getElementById('nbhd-bar');
-    if (!bar) return;
+    // Attach directly to each bubble — bypasses bar-level interference
+    document.querySelectorAll('.nbhd-bubble').forEach(function(bubble) {
+      let touchStartY = 0;
 
-    // Remove any existing touch listener first
-    bar.removeEventListener('touchend', bar._nbhdTouchHandler);
+      bubble.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
 
-    bar._nbhdTouchHandler = function(e) {
-      // Find the bubble that was touched
-      const bubble = e.target.closest('.nbhd-bubble');
-      if (!bubble) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const nbhd = bubble.id.replace('nbhd-', '');
-      selectNbhd(nbhd, bubble);
-    };
-    bar.addEventListener('touchend', bar._nbhdTouchHandler, { passive: false });
+      bubble.addEventListener('touchend', function(e) {
+        // Only treat as tap if finger didn't move much (not a swipe)
+        const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+        if (dy > 10) return; // was a swipe, ignore
+
+        e.preventDefault();
+        e.stopPropagation();
+        const nbhd = bubble.id.replace('nbhd-', '');
+        selectNbhd(nbhd, bubble);
+      }, { passive: false });
+    });
   }
 
   // Try immediately, then again after load
