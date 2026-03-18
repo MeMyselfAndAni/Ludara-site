@@ -1,16 +1,14 @@
 // A Perfect Day — Nomadic Matt / Bangkok
 // map.js — guide-specific config
-// Only this file + index.html + data.js + images/ live permanently in the guide folder.
 
-const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
-const MAP_CENTER        = [100.5018, 13.7480];   // [lng, lat] — central Bangkok
-const MAP_ZOOM          = 13;
-const OFFLINE_CENTER    = { lat: 13.7480, lng: 100.5018 };
-const GUIDE_CITY        = 'Bangkok';
-const BLOGGER_NAME      = 'Matt';
+const MAPTILER_KEY   = 'V3bgGWhyO1Rik6g1non6';
+const MAP_CENTER     = [100.5018, 13.7480];   // [lng, lat]
+const MAP_ZOOM       = 13;
+const OFFLINE_CENTER = { lat: 13.7480, lng: 100.5018 };
+const GUIDE_CITY     = 'Bangkok';
+const BLOGGER_NAME   = 'Matt';
 
-// ─── Neighbourhood palette ──────────────────────────────────────────────────
-// ─── Category colours (used by map-core.js makeIconHTML) ────────────────────
+// Category colours — used by map-core.js to colour emoji pins
 const CC = {
   'landmark': '#e8724a',
   'food':     '#f0c060',
@@ -21,16 +19,28 @@ const CC = {
   'nature':   '#50906a',
 };
 
-const NBHD_COLORS = {
-  'old-city':   '#e8724a',   // warm terracotta — historic temples & palaces
-  'chinatown':  '#d4a043',   // golden amber — lanterns & noodle steam
-  'silom':      '#4a90d9',   // sky blue — modern parks & culture
-  'sukhumvit':  '#7b68c8',   // indigo — shopping & skytrain energy
-  'riverside':  '#4ab8a0',   // teal — the Chao Phraya
-  'thonglor':   '#c8687b',   // rose — fashionable nightlife district
+// Category labels — used by ui-filter.js to show human-readable names in the list
+const CL = {
+  'landmark': 'Landmark',
+  'food':     'Restaurant',
+  'cafe':     'Bar & Café',
+  'church':   'Temple',
+  'market':   'Market',
+  'soviet':   'Soviet',
+  'nature':   'Nature',
 };
 
-// ─── Display labels ─────────────────────────────────────────────────────────
+// Neighbourhood colours (animated circles on map)
+const NBHD_COLORS = {
+  'old-city':   '#e8724a',
+  'chinatown':  '#d4a043',
+  'silom':      '#4a90d9',
+  'sukhumvit':  '#7b68c8',
+  'riverside':  '#4ab8a0',
+  'thonglor':   '#c8687b',
+};
+
+// Neighbourhood display labels
 const NBHD_LABELS = {
   'old-city':   'Old City',
   'chinatown':  'Chinatown',
@@ -40,7 +50,7 @@ const NBHD_LABELS = {
   'thonglor':   'Thong Lo',
 };
 
-// ─── Approximate geographic centers (used for circle + pan) ─────────────────
+// Neighbourhood approximate centers (used for circle size + map pan)
 const NBHD_APPROX_CENTERS = {
   'old-city':   { lat: 13.7510, lng: 100.4927 },
   'chinatown':  { lat: 13.7401, lng: 100.5097 },
@@ -50,7 +60,7 @@ const NBHD_APPROX_CENTERS = {
   'thonglor':   { lat: 13.7228, lng: 100.5847 },
 };
 
-// ─── Map initialisation ──────────────────────────────────────────────────────
+// Map init — DO NOT call initMap() here. index.html fires it via window.addEventListener('load', initMap)
 function initMap() {
   map = new maplibregl.Map({
     container: 'map',
@@ -73,36 +83,23 @@ function initMap() {
   map.on('load', () => {
     try {
       const loadingEl = document.getElementById('loading');
-      if (loadingEl) loadingEl.style.display = 'none';
+      if(loadingEl) loadingEl.style.display = 'none';
 
-      // Force English map labels
       map.getStyle().layers.forEach(layer => {
         if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-          try {
-            map.setLayoutProperty(layer.id, 'text-field', [
-              'coalesce',
-              ['get', 'name:en'],
-              ['get', 'name'],
-            ]);
-          } catch (e) { /* some layers reject this — safe to ignore */ }
+          try { map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name:en'], ['get', 'name']]); } catch(e) {}
         }
       });
 
-      // Build neighbourhood circles + init shared sources
       NBHD_CIRCLES = buildNbhdCircles();
       initMapSources();
+      if(map.getSource('trip-route')) map.getSource('trip-route').setData({type:'Feature',geometry:{type:'LineString',coordinates:[]}});
 
-      // Clear any stale route data
-      if (map.getSource('trip-route')) {
-        map.getSource('trip-route').setData({ type: 'FeatureCollection', features: [] });
-      }
-
-      // Drop all markers + wire up shared UI
       PLACES.forEach(p => addMarker(p));
-      if (typeof applyFilters   === 'function') applyFilters();
-      if (typeof renderList     === 'function') renderList();
-      if (typeof initFavourites === 'function') initFavourites();
-      if (typeof alignNbhdBar   === 'function') alignNbhdBar();
+      if(typeof applyFilters==='function')   applyFilters();
+      if(typeof renderList==='function')     renderList();
+      if(typeof initFavourites==='function') initFavourites();
+      if(typeof alignNbhdBar==='function')   alignNbhdBar();
 
     } catch(err) {
       const el = document.getElementById('loading');
