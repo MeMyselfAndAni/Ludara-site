@@ -306,7 +306,7 @@ window.addEventListener('load', function() {
   // Show load confirmation
   var t = document.createElement('div');
   t.id = '_toast';
-  t.style.cssText = 'position:fixed;top:60px;left:10px;right:10px;background:#900;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:11px;font-family:monospace;white-space:pre-wrap;max-height:200px;overflow:auto;';
+  t.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:13px;font-family:monospace;white-space:pre-wrap;max-height:60vh;overflow:auto;';
   document.body.appendChild(t);
   t.textContent = 'load fired\n';
 
