@@ -47,6 +47,14 @@ function initMap() {
   });
 
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+
+  // Visible error handler
+  map.on('error', function(e) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
+    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
+    document.body.appendChild(d);
+  });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
   map.on('load', () => {
@@ -70,6 +78,10 @@ function initMap() {
       map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
         paint:{'line-color':'#e00040','line-width':4,'line-opacity':0.85} });
     }
+
+    // Hide loading spinner
+    const loadingEl = document.getElementById('loading');
+    if(loadingEl) loadingEl.style.display = 'none';
 
     // Add markers
     PLACES.forEach(p => addMarker(p));
