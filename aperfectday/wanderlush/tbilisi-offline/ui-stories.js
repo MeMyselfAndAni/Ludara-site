@@ -7,8 +7,18 @@ function selectNbhd(nbhd, el){
   }
   ANF = nbhd;
 
+  // DEBUG — show toast on screen
+  (function showToast(msg){
+    let t = document.getElementById('_toast');
+    if(!t){ t = document.createElement('div'); t.id='_toast';
+      t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:12px;font-family:monospace;white-space:pre-wrap;';
+      document.body.appendChild(t); }
+    t.textContent += msg + '\n';
+    t.style.display='block';
+  })('selectNbhd called: ' + nbhd + ' | panToNbhd=' + (typeof panToNbhd) + ' | map=' + (typeof map));
+
   // Pan map immediately — synchronous, before anything else
-  if(nbhd !== 'all' && typeof panToNbhd === 'function'){
+  if(nbhd !== 'all'){
     const NBHD_FALLBACK = {
       'old-town':   { lat:41.6895, lng:44.8095, zoom:14 },
       'sololaki':   { lat:41.6918, lng:44.8042, zoom:16 },
@@ -19,7 +29,21 @@ function selectNbhd(nbhd, el){
       'vake':       { lat:41.7050, lng:44.7730, zoom:13 },
     };
     const fc = NBHD_FALLBACK[nbhd];
-    if(fc) panToNbhd(fc.lng, fc.lat, fc.zoom);
+    (function showToast(msg){
+      let t = document.getElementById('_toast');
+      if(!t){ t = document.createElement('div'); t.id='_toast';
+        t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:12px;font-family:monospace;white-space:pre-wrap;';
+        document.body.appendChild(t); }
+      t.textContent += msg + '\n';
+    })('fc=' + JSON.stringify(fc) + ' | panToNbhd type=' + typeof panToNbhd);
+    if(fc && typeof panToNbhd === 'function'){
+      try {
+        panToNbhd(fc.lng, fc.lat, fc.zoom);
+        (function showToast(msg){ document.getElementById('_toast').textContent += msg+'\n'; })('panToNbhd called OK');
+      } catch(e) {
+        (function showToast(msg){ document.getElementById('_toast').textContent += msg+'\n'; })('ERROR: '+e.message);
+      }
+    }
   }
 
   // Update bubble active states
