@@ -304,23 +304,34 @@ function openNbhdBar(){
 // ── iPhone Safari fix — use event delegation on nbhd-bar ────
 // Catches touches even if DOMContentLoaded already fired
 (function fixNbhdTouchEvents(){
+  function _toast(msg) {
+    let t = document.getElementById('_toast');
+    if(!t){ t=document.createElement('div'); t.id='_toast';
+      t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#900;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:11px;font-family:monospace;white-space:pre-wrap;max-height:200px;overflow:auto;';
+      document.body.appendChild(t); }
+    t.textContent += msg + '\n';
+  }
+
   function attachListeners() {
-    // Attach directly to each bubble — bypasses bar-level interference
-    document.querySelectorAll('.nbhd-bubble').forEach(function(bubble) {
+    const bubbles = document.querySelectorAll('.nbhd-bubble');
+    _toast('attachListeners: found ' + bubbles.length + ' bubbles');
+
+    bubbles.forEach(function(bubble) {
       let touchStartY = 0;
 
       bubble.addEventListener('touchstart', function(e) {
         touchStartY = e.touches[0].clientY;
+        _toast('touchstart on: ' + bubble.id);
       }, { passive: true });
 
       bubble.addEventListener('touchend', function(e) {
-        // Only treat as tap if finger didn't move much (not a swipe)
         const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
-        if (dy > 10) return; // was a swipe, ignore
-
+        _toast('touchend on: ' + bubble.id + ' dy=' + dy);
+        if (dy > 10) return;
         e.preventDefault();
         e.stopPropagation();
         const nbhd = bubble.id.replace('nbhd-', '');
+        _toast('calling selectNbhd: ' + nbhd);
         selectNbhd(nbhd, bubble);
       }, { passive: false });
     });
