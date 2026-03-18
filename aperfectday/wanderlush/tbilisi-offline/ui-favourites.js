@@ -124,33 +124,31 @@ function _drawStraightRoute(places){
 }
 
 async function _fetchOSRMRoute(places){
-  // OSRM walking route — real streets
-  // Chunk into segments of max 10 stops (OSRM limit)
+  // OSRM foot routing — uses dedicated walking server
   const allCoords = [];
   const CHUNK = 10;
+
   for(let i = 0; i < places.length - 1; i += CHUNK - 1){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
-    const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    // foot.router.project-osrm.org is the dedicated walking profile server
+    const url = `https://foot.router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
       const data = await res.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
         const segCoords = data.routes[0].geometry.coordinates;
-        // Avoid duplicating the join point between chunks
         if(allCoords.length > 0) segCoords.shift();
         allCoords.push(...segCoords);
-
-        // Store actual durations for trip planner
+        // Store actual walking durations
         data.routes[0].legs.forEach((leg, legIdx) => {
-          const fromIdx = i + legIdx;
-          const toIdx   = i + legIdx + 1;
-          _routeDurations[`${fromIdx}-${toIdx}`] = leg.duration;
+          _routeDurations[`${i+legIdx}-${i+legIdx+1}`] = leg.duration;
         });
+      } else {
+        chunk.forEach(p => allCoords.push([p.lng, p.lat]));
       }
     } catch(e) {
-      console.warn('OSRM chunk failed, using straight line for this segment');
-      // Fallback: add straight line for this chunk
+      console.warn('OSRM walking failed, using straight line');
       chunk.forEach(p => allCoords.push([p.lng, p.lat]));
     }
   }
