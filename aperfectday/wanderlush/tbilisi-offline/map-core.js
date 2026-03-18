@@ -8,6 +8,26 @@ let ANF = 'all';     // active neighbourhood filter
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
 
+
+// ── MAP SOURCES + LAYERS INIT ─────────────────────────────────
+// Called from map.js after map.on('load')
+function initMapSources() {
+  // Neighbourhood circle
+  if(!map.getSource('nbhd-circle')){
+    map.addSource('nbhd-circle', { type:'geojson', data:{ type:'FeatureCollection', features:[] } });
+    map.addLayer({ id:'nbhd-fill', type:'fill', source:'nbhd-circle',
+      paint:{ 'fill-color':['get','color'], 'fill-opacity':0 } });
+    map.addLayer({ id:'nbhd-line', type:'line', source:'nbhd-circle',
+      paint:{ 'line-color':['get','color'], 'line-width':2.5, 'line-opacity':0 } });
+  }
+  // Trip route
+  if(!map.getSource('trip-route')){
+    map.addSource('trip-route', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates:[] } } });
+    map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
+      paint:{ 'line-color':'#e00040', 'line-width':4, 'line-opacity':0.85 } });
+  }
+}
+
 // ── NEIGHBOURHOOD CIRCLES — dynamically calculated from place data ─
 
 

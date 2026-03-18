@@ -73,12 +73,8 @@ function initMap() {
       // Build neighbourhood circles
       NBHD_CIRCLES = buildNbhdCircles();
 
-      // Clear any leftover trip route
-      if(!map.getSource('trip-route')){
-        map.addSource('trip-route', { type:'geojson', data:{type:'Feature',geometry:{type:'LineString',coordinates:[]}} });
-        map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
-          paint:{'line-color':'#e00040','line-width':4,'line-opacity':0.85} });
-      }
+      // Init map sources and layers (circles, trip route)
+      initMapSources();
 
       // Add markers + init UI
       PLACES.forEach(p => addMarker(p));
