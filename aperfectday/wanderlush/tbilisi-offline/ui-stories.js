@@ -46,12 +46,12 @@ function selectNbhd(nbhd, el){
       : NBHD_FALLBACK[nbhd];
     if(circle){
       // Calculate zoom from radius: bigger radius = zoom out more
-      let zoom = 16;
-      if(circle.radius < 100)  zoom = 17;      // tiny dot
-      else if(circle.radius < 400)  zoom = 17; // small area
-      else if(circle.radius < 800)  zoom = 16;
-      else if(circle.radius < 1500) zoom = 15;
-      else zoom = 14;
+      let zoom = 15;
+      if(circle.radius < 100)  zoom = 16;      // tiny dot
+      else if(circle.radius < 400)  zoom = 16; // small area
+      else if(circle.radius < 800)  zoom = 15;
+      else if(circle.radius < 1500) zoom = 14;
+      else zoom = 13;
       // Show visible debug toast on screen
       function _dbg(msg) {
         let d = document.getElementById('_dbg_toast');
@@ -290,15 +290,30 @@ function openNbhdBar(){
 })();
 
 
-// ── iPhone Safari fix — div onclick unreliable, add touchend ──
+// ── iPhone Safari fix — use event delegation on nbhd-bar ────
+// Catches touches even if DOMContentLoaded already fired
 (function fixNbhdTouchEvents(){
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.nbhd-bubble').forEach(function(el) {
-      el.addEventListener('touchend', function(e) {
-        e.preventDefault(); // prevent ghost click delay
-        const nbhd = el.id.replace('nbhd-', '');
-        selectNbhd(nbhd === 'all' ? 'all' : nbhd, el);
-      }, { passive: false });
-    });
-  });
+  function attachListeners() {
+    const bar = document.getElementById('nbhd-bar');
+    if (!bar) return;
+
+    // Remove any existing touch listener first
+    bar.removeEventListener('touchend', bar._nbhdTouchHandler);
+
+    bar._nbhdTouchHandler = function(e) {
+      // Find the bubble that was touched
+      const bubble = e.target.closest('.nbhd-bubble');
+      if (!bubble) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const nbhd = bubble.id.replace('nbhd-', '');
+      selectNbhd(nbhd, bubble);
+    };
+    bar.addEventListener('touchend', bar._nbhdTouchHandler, { passive: false });
+  }
+
+  // Try immediately, then again after load
+  attachListeners();
+  document.addEventListener('DOMContentLoaded', attachListeners);
+  window.addEventListener('load', attachListeners);
 })();
