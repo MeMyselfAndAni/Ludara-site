@@ -10,6 +10,17 @@ const GUIDE_CITY        = 'Bangkok';
 const BLOGGER_NAME      = 'Matt';
 
 // ─── Neighbourhood palette ──────────────────────────────────────────────────
+// ─── Category colours (used by map-core.js makeIconHTML) ────────────────────
+const CC = {
+  'landmark': '#e8724a',
+  'food':     '#f0c060',
+  'cafe':     '#6b9e6e',
+  'church':   '#6090c8',
+  'market':   '#c08060',
+  'soviet':   '#9080a8',
+  'nature':   '#50906a',
+};
+
 const NBHD_COLORS = {
   'old-city':   '#e8724a',   // warm terracotta — historic temples & palaces
   'chinatown':  '#d4a043',   // golden amber — lanterns & noodle steam
