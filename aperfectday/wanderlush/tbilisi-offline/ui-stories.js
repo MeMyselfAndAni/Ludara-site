@@ -288,3 +288,17 @@ function openNbhdBar(){
     }
   });
 })();
+
+
+// ── iPhone Safari fix — div onclick unreliable, add touchend ──
+(function fixNbhdTouchEvents(){
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.nbhd-bubble').forEach(function(el) {
+      el.addEventListener('touchend', function(e) {
+        e.preventDefault(); // prevent ghost click delay
+        const nbhd = el.id.replace('nbhd-', '');
+        selectNbhd(nbhd === 'all' ? 'all' : nbhd, el);
+      }, { passive: false });
+    });
+  });
+})();
