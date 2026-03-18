@@ -7,6 +7,21 @@ function selectNbhd(nbhd, el){
   }
   ANF = nbhd;
 
+  // Pan map immediately — synchronous, before anything else
+  if(nbhd !== 'all' && typeof panToNbhd === 'function'){
+    const NBHD_FALLBACK = {
+      'old-town':   { lat:41.6895, lng:44.8095, zoom:14 },
+      'sololaki':   { lat:41.6918, lng:44.8042, zoom:16 },
+      'avlabari':   { lat:41.6913, lng:44.8163, zoom:15 },
+      'vera':       { lat:41.6965, lng:44.7955, zoom:15 },
+      'chugureti':  { lat:41.6887, lng:44.9920, zoom:14 },
+      'mtatsminda': { lat:41.6938, lng:44.7971, zoom:14 },
+      'vake':       { lat:41.7050, lng:44.7730, zoom:13 },
+    };
+    const fc = NBHD_FALLBACK[nbhd];
+    if(fc) panToNbhd(fc.lng, fc.lat, fc.zoom);
+  }
+
   // Update bubble active states
   document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
   if(nbhd === 'all'){
@@ -52,9 +67,7 @@ function selectNbhd(nbhd, el){
       else if(circle.radius < 800)  zoom = 15;
       else if(circle.radius < 1500) zoom = 14;
       else zoom = 13;
-      // Call pan via dedicated function in map.js
-      const _lng = circle.lng, _lat = circle.lat, _zoom = zoom;
-      setTimeout(() => { panToNbhd(_lng, _lat, _zoom); }, 500);
+      // pan moved to top of selectNbhd
     }
   }
 
