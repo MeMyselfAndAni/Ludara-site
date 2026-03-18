@@ -1,4 +1,6 @@
 // ══ FAVOURITES ══════════════════════════════════════════════
+// Unique key per guide so favourites don't mix between cities
+const FAVS_KEY = 'favs_' + window.location.pathname.replace(/\//g,'_');
 let favourites = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
 let savedFilterActive = false;
 
