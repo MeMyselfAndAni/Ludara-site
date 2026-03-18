@@ -30,8 +30,20 @@ function selectNbhd(nbhd, el){
 
   // Smoothly pan and zoom to neighbourhood circle center
   if(nbhd !== 'all' && map){
-    const circle = (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length)
-      ? NBHD_CIRCLES.find(x => x.id === nbhd) : null;
+    // Use built circles if available, fallback to hardcoded centers
+    const NBHD_FALLBACK = {
+      'old-town':   { lat:41.6895, lng:44.8095, radius:1200 },
+      'sololaki':   { lat:41.6918, lng:44.8042, radius:300  },
+      'avlabari':   { lat:41.6913, lng:44.8163, radius:700  },
+      'vera':       { lat:41.6965, lng:44.7955, radius:400  },
+      'chugureti':  { lat:41.6887, lng:44.9920, radius:800  },
+      'mtatsminda': { lat:41.6938, lng:44.7971, radius:1100 },
+      'vake':       { lat:41.7050, lng:44.7730, radius:1500 },
+    };
+    const circle =
+      (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length && NBHD_CIRCLES.find(x => x.id === nbhd))
+      ? NBHD_CIRCLES.find(x => x.id === nbhd)
+      : NBHD_FALLBACK[nbhd];
     if(circle){
       // Calculate zoom from radius: bigger radius = zoom out more
       let zoom = 16;
