@@ -1,24 +1,14 @@
 
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
-  // Pan map to neighbourhood center
-  if(nbhd !== 'all' && map && map.setCenter){
-    var coords = {
-      'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
-      'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
-      'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
-      'vake':      [44.7730,41.7050]
-    };
-    var c = coords[nbhd];
-    if(c){ map.setCenter(c); map.setZoom(14); }
-  }
   // Toggle off if already active
-  if(ANF === nbhd && nbhd !== 'all'){
-    nbhd = 'all';
-  }
+  if(ANF === nbhd && nbhd !== 'all'){ nbhd = 'all'; }
   ANF = nbhd;
 
-  // DEBUG — show toast on screen
+  // Update bubble active states
+  document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
+  if(nbhd === 'all'){
+    const allBtn = document.getElementById('nbhd-all');
     if(allBtn) allBtn.classList.add('nbhd-active');
   } else {
     if(el) el.classList.add('nbhd-active');
@@ -33,19 +23,29 @@ function selectNbhd(nbhd, el){
   }
 
   // Apply filters + update list
-  applyFilters();          // updates map markers
-  if(typeof renderList === 'function') renderList();  // updates list panel
+  applyFilters();
+  if(typeof renderList === 'function') renderList();
 
-  // Pan map to neighbourhood center — simple and reliable on all devices
-  // When zooming back to All, fit all visible places
+  // Pan map to neighbourhood center
+  if(nbhd !== 'all' && map && map.setCenter){
+    var coords = {
+      'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
+      'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
+      'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
+      'vake':      [44.7730,41.7050]
+    };
+    var c = coords[nbhd];
+    if(c){ map.setCenter(c); map.setZoom(14); }
+  }
+
+  // When selecting All — fit all visible places
   if(nbhd === 'all' && map){
     const vis = PLACES.filter(p => AF === 'all' || p.cat === AF);
     if(vis.length){
       const lngs = vis.map(p=>p.lng), lats = vis.map(p=>p.lat);
       map.fitBounds(
         [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
-        { padding:{ top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 },
-          duration: 700 }
+        { padding:{ top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 }, duration:700 }
       );
     }
   }
