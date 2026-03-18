@@ -301,44 +301,32 @@ function openNbhdBar(){
 })();
 
 
-// ── iPhone Safari fix — use event delegation on nbhd-bar ────
-// Catches touches even if DOMContentLoaded already fired
-(function fixNbhdTouchEvents(){
-  function _toast(msg) {
-    let t = document.getElementById('_toast');
-    if(!t){ t=document.createElement('div'); t.id='_toast';
-      t.style.cssText='position:fixed;top:60px;left:10px;right:10px;background:#900;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:11px;font-family:monospace;white-space:pre-wrap;max-height:200px;overflow:auto;';
-      document.body.appendChild(t); }
-    t.textContent += msg + '\n';
-  }
+// ── iPhone Safari fix ────────────────────────────────────────
+window.addEventListener('load', function() {
+  // Show load confirmation
+  var t = document.createElement('div');
+  t.id = '_toast';
+  t.style.cssText = 'position:fixed;top:60px;left:10px;right:10px;background:#900;color:#fff;padding:10px;border-radius:8px;z-index:99999;font-size:11px;font-family:monospace;white-space:pre-wrap;max-height:200px;overflow:auto;';
+  document.body.appendChild(t);
+  t.textContent = 'load fired\n';
 
-  function attachListeners() {
-    const bubbles = document.querySelectorAll('.nbhd-bubble');
-    _toast('attachListeners: found ' + bubbles.length + ' bubbles');
+  var bubbles = document.querySelectorAll('.nbhd-bubble');
+  t.textContent += 'bubbles found: ' + bubbles.length + '\n';
 
-    bubbles.forEach(function(bubble) {
-      let touchStartY = 0;
-
-      bubble.addEventListener('touchstart', function(e) {
-        touchStartY = e.touches[0].clientY;
-        _toast('touchstart on: ' + bubble.id);
-      }, { passive: true });
-
-      bubble.addEventListener('touchend', function(e) {
-        const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
-        _toast('touchend on: ' + bubble.id + ' dy=' + dy);
-        if (dy > 10) return;
-        e.preventDefault();
-        e.stopPropagation();
-        const nbhd = bubble.id.replace('nbhd-', '');
-        _toast('calling selectNbhd: ' + nbhd);
-        selectNbhd(nbhd, bubble);
-      }, { passive: false });
-    });
-  }
-
-  // Try immediately, then again after load
-  attachListeners();
-  document.addEventListener('DOMContentLoaded', attachListeners);
-  window.addEventListener('load', attachListeners);
-})();
+  bubbles.forEach(function(bubble) {
+    var startY = 0;
+    bubble.addEventListener('touchstart', function(e) {
+      startY = e.touches[0].clientY;
+      t.textContent += 'start:' + bubble.id + '\n';
+    }, {passive:true});
+    bubble.addEventListener('touchend', function(e) {
+      var dy = Math.abs(e.changedTouches[0].clientY - startY);
+      t.textContent += 'end:' + bubble.id + ' dy=' + Math.round(dy) + '\n';
+      if(dy > 10) return;
+      e.preventDefault();
+      var nbhd = bubble.id.replace('nbhd-','');
+      t.textContent += 'selectNbhd:' + nbhd + '\n';
+      selectNbhd(nbhd, bubble);
+    }, {passive:false});
+  });
+});
