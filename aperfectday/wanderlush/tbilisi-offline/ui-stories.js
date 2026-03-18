@@ -1,6 +1,34 @@
 
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
+  // INLINE DEBUG + PAN — runs before everything
+  if(nbhd !== 'all'){
+    // Show toast
+    var t = document.getElementById('_t');
+    if(!t){ t=document.createElement('div'); t.id='_t';
+      t.style.cssText='position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:10px;z-index:999999;font-size:14px;font-family:monospace;';
+      document.body.appendChild(t); }
+    t.innerHTML = 'nbhd:'+nbhd+'<br>map:'+(typeof map)+'<br>maplibre:'+(typeof maplibregl);
+
+    // Direct pan — no external function
+    if(map && map.setCenter){
+      var coords = {
+        'old-town':  [44.8095,41.6895], 'sololaki': [44.8042,41.6918],
+        'avlabari':  [44.8163,41.6913], 'vera':     [44.7955,41.6965],
+        'chugureti': [44.9920,41.6887], 'mtatsminda':[44.7971,41.6938],
+        'vake':      [44.7730,41.7050]
+      };
+      var c = coords[nbhd];
+      if(c){ 
+        t.innerHTML += '<br>setCenter:'+c[0]+','+c[1];
+        map.setCenter(c); 
+        map.setZoom(14);
+        t.innerHTML += '<br>DONE';
+      }
+    } else {
+      t.innerHTML += '<br>map.setCenter NOT available';
+    }
+  }
   // Toggle off if already active
   if(ANF === nbhd && nbhd !== 'all'){
     nbhd = 'all';
