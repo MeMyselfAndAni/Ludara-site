@@ -1,0 +1,71 @@
+@echo off
+REM ============================================================
+REM  deploy-anais-mexicocity.bat
+REM  Deploys The Curious Mexican / Mexico City guide (v2 MapLibre)
+REM
+REM  Run from:  C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\aperfectday\general\_deploy\
+REM  Live at:   https://ludara.ai/aperfectday/thecuriousmexican/MexicoCity/
+REM ============================================================
+
+set GUIDE=thecuriousmexican\MexicoCity
+
+echo.
+echo ==========================================================
+echo  Deploying: %GUIDE%
+echo ==========================================================
+echo.
+
+REM ── Root of the repo (two levels up from _deploy\) ────────────────────────
+set REPO_ROOT=%~dp0..\..
+
+REM ── Source (shared platform files) and destination (guide folder) ──────────
+set PLATFORM=%REPO_ROOT%\general\_platform-v2
+set DEST=%REPO_ROOT%\%GUIDE%
+
+REM ── Sanity checks ──────────────────────────────────────────────────────────
+if not exist "%PLATFORM%" (
+  echo ERROR: _platform-v2 folder not found at %PLATFORM%
+  pause & exit /b 1
+)
+if not exist "%DEST%" (
+  echo ERROR: Guide folder not found at %DEST%
+  echo        Create it and add map.js, index.html, data.js, images\ first.
+  pause & exit /b 1
+)
+
+REM ── Copy all shared platform files into the guide folder ───────────────────
+echo Copying shared platform files...
+copy /Y "%PLATFORM%\map-core.js"       "%DEST%\map-core.js"
+copy /Y "%PLATFORM%\styles.css"        "%DEST%\styles.css"
+copy /Y "%PLATFORM%\photos.js"         "%DEST%\photos.js"
+copy /Y "%PLATFORM%\ui-card.js"        "%DEST%\ui-card.js"
+copy /Y "%PLATFORM%\ui-filter.js"      "%DEST%\ui-filter.js"
+copy /Y "%PLATFORM%\ui-favourites.js"  "%DEST%\ui-favourites.js"
+copy /Y "%PLATFORM%\ui-pdf.js"         "%DEST%\ui-pdf.js"
+copy /Y "%PLATFORM%\ui-stories.js"     "%DEST%\ui-stories.js"
+copy /Y "%PLATFORM%\sw.js"             "%DEST%\sw.js"
+copy /Y "%PLATFORM%\favicon.svg"       "%DEST%\favicon.svg"
+echo Done.
+echo.
+
+REM ── Git: stage, commit, push ───────────────────────────────────────────────
+cd /d "%REPO_ROOT%"
+
+echo Staging all changes...
+git add -A
+
+echo.
+echo Committing...
+git commit -m "Deploy %GUIDE% — The Curious Mexican Mexico City guide"
+
+echo.
+echo Pushing to GitHub...
+git push
+
+echo.
+echo ==========================================================
+echo  Done! Live in ~30s at:
+echo  https://ludara.ai/aperfectday/thecuriousmexican/MexicoCity/
+echo ==========================================================
+echo.
+pause
