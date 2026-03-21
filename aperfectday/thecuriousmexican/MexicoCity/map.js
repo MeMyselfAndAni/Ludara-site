@@ -8,6 +8,7 @@ const MAP_ZOOM          = 12;
 const OFFLINE_CENTER    = { lat: 19.4326, lng: -99.1332 };
 const GUIDE_CITY        = 'Mexico City';
 const BLOGGER_NAME      = 'Anais';
+const FAVS_KEY          = 'apd-favs-thecuriousmexican-mexicocity';
 
 // ─── Category colours (used by map-core.js makeIconHTML) ─────────────────────
 // MUST be present in every guide's map.js. Keys must match cat values in data.js.
