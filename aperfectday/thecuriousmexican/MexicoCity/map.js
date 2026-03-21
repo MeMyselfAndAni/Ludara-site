@@ -21,6 +21,17 @@ const CC = {
   'nature':   '#3a8c5e',   // verde mexicano
 };
 
+// ─── Category labels (used by map-core.js for filter UI) ─────────────────────
+const CL = {
+  'landmark': 'Landmarks',
+  'food':     'Restaurants',
+  'cafe':     'Bars & Mezcal',
+  'church':   'Churches',
+  'market':   'Markets',
+  'soviet':   'Soviet',
+  'nature':   'Parks',
+};
+
 // ─── Neighbourhood palette ────────────────────────────────────────────────────
 const NBHD_COLORS = {
   'centro':   '#c8522a',   // terracotta — historic adobe and stone
