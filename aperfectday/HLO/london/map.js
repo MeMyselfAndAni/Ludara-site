@@ -76,6 +76,12 @@ function showNbhdCircleAnimated(nbhdId){
   if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
   const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
   if(!n || !map) return;
+
+  // Pan and zoom map to fit this neighbourhood
+  const tempCircle = new google.maps.Circle({ center:{lat:n.lat,lng:n.lng}, radius:n.radius });
+  map.fitBounds(tempCircle.getBounds(), { top:80, right:20, bottom:80, left:20 });
+  tempCircle.setMap(null);
+
   const fullRadius = n.radius;
   let step = 0; const steps = 30; const duration = 1200;
   activeNbhdCircle = new google.maps.Circle({
