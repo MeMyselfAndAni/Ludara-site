@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Curious Mexican — Mexico City Guide</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+<style>
+  /* MapLibre marker fix */
+  .mgl-marker { background: none !important; border: none !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
+  .maplibregl-ctrl-attrib { font-size: 9px !important; }
+</style>
+</head>
+<body>
+
+<!-- Welcome Splash -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-logo-row">
+      <span class="wl-logo">The Curious Mexican</span>
+    </div>
+    <h2 class="splash-title">Mexico City Guide</h2>
+    <p class="splash-sub"><span class="place-count-all">41</span> hand-picked places by <strong>Anais Martinez</strong> — born and raised in CDMX, food writer, NYT contributor, and one of the city's most trusted culinary voices. Every single place on this map is one she personally loves.</p>
+    <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
+    <div class="splash-footer">
+      <a href="https://www.thecuriousmexican.com" target="_blank">thecuriousmexican.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading Mexico City…</div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-title">
+    <a href="https://www.thecuriousmexican.com" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+      <span class="wl-logo">The Curious Mexican</span>
+    </a>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <h1><em>Mexico City</em> Guide</h1>
+      <div class="header-sub"><span class="place-count-all">41</span> hand-picked places<span class="header-sub-by"> · by Anais Martinez</span></div>
+    </div>
+  </div>
+  <div class="header-ludara">
+    <span class="header-ludara-text">Interactive map by</span>
+    <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
+  </div>
+  <a class="header-btn" href="https://www.thecuriousmexican.com/favorite-spots-2024/" target="_blank">Blog ↗</a>
+</header>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#c8522a"></span>Landmarks</button>
+  <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#e8b840"></span>Restaurants</button>
+  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#7c56bc"></span>Bars &amp; Mezcal</button>
+  <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#c8487a"></span>Markets</button>
+  <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#3a8c5e"></span>Parks</button>
+  <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
+</div>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Neighbourhood bubble bar -->
+<div id="nbhd-title">Neighbourhoods</div>
+<div id="nbhd-bar">
+  <div class="nbhd-bar-handle" id="nbhd-handle">
+    <div class="nbhd-handle-grip">⠿</div>
+  </div>
+  <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+    <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
+      <span class="nbhd-label">All</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-centro" role="button" tabindex="0" onclick="selectNbhd('centro', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏺</div></div>
+      <span class="nbhd-label">Centro</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-roma" role="button" tabindex="0" onclick="selectNbhd('roma', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
+      <span class="nbhd-label">Roma Norte</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-condesa" role="button" tabindex="0" onclick="selectNbhd('condesa', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌻</div></div>
+      <span class="nbhd-label">Condesa</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-polanco" role="button" tabindex="0" onclick="selectNbhd('polanco', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
+      <span class="nbhd-label">Polanco</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-coyoacan" role="button" tabindex="0" onclick="selectNbhd('coyoacan', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎨</div></div>
+      <span class="nbhd-label">Coyoacán</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-juarez" role="button" tabindex="0" onclick="selectNbhd('juarez', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🥃</div></div>
+      <span class="nbhd-label">Juárez</span>
+    </div>
+  </div><!-- end nbhd-bubbles-row -->
+</div><!-- end nbhd-bar -->
+
+<!-- Place card -->
+<div id="place-card-dim" onclick="closePlaceCard(true)"></div>
+<div id="place-card">
+  <!-- Photo -->
+  <div class="pc-photo-wrap" id="pc-photo-wrap">
+    <div class="pc-photo-placeholder" id="pc-emoji">📍</div>
+    <img class="pc-photo-img" id="pc-img" alt="">
+    <span class="pc-photo-credit" id="pc-credit"></span>
+    <!-- Floating controls -->
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
+    <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
+    <!-- Prev/Next arrows -->
+    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
+    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
+  </div>
+  <!-- Body -->
+  <div class="pc-body" id="pc-body">
+    <div class="pc-cat" id="pc-cat"></div>
+    <div class="pc-title" id="pc-title"></div>
+    <div class="pc-type" id="pc-type"></div>
+    <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-note-wrap">
+      <div class="pc-note" id="pc-note"></div>
+      <span class="pc-emily-by">— Anais Martinez, The Curious Mexican</span>
+    </div>
+    <div class="pc-tip" id="pc-tip" style="display:none">
+      <span class="pc-tip-label">💡 Anais's Tip</span>
+      <span id="pc-tip-text"></span>
+    </div>
+    <div class="pc-contacts" id="pc-contacts"></div>
+    <div class="pc-counter" id="pc-counter" style="display:none"></div>
+  </div>
+</div>
+
+<!-- Stories overlay — empty shell for swipe listener compatibility -->
+<div id="stories-overlay"></div>
+
+<div id="pin-pulse"></div>
+
+<!-- Trip plan overlay -->
+<div id="trip-overlay">
+  <div class="trip-panel">
+    <div class="trip-header">
+      <div class="trip-title">🗺 Your Favourite Places Trip</div>
+      <button class="trip-close" onclick="closeTripPlan()">✕</button>
+    </div>
+    <div id="trip-content" class="trip-content"></div>
+    <div class="trip-footer">
+      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
+    </div>
+  </div>
+</div>
+
+<!-- List toggle (mobile only) -->
+<button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
+  <span class="list-toggle-icon">☰</span>
+  <span class="list-toggle-label">Places</span>
+  <span class="count-badge" id="list-badge">41</span>
+</button>
+
+<!-- Save for offline button -->
+<button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
+  position:fixed; bottom:180px; right:12px; z-index:1000;
+  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">
+  📥 Save offline
+</button>
+
+<button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
+</button>
+
+<!-- Desktop: Browse all places button (top-right) -->
+<button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
+  <span id="list-toggle-desktop-icon">☰</span>
+  <span>Places</span>
+  <span id="list-badge-desktop">41</span>
+</button>
+
+<!-- Places list sheet -->
+<div class="sheet" id="sheet">
+  <div class="sheet-handle-area" onclick="toggleSheet()">
+    <div class="sheet-handle"></div>
+  </div>
+  <div class="sheet-header">
+    <span class="sheet-title" id="sheet-title">41 Places</span>
+    <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
+    <button class="sheet-close" onclick="toggleSheet()">✕</button>
+  </div>
+  <div class="places-list" id="places-list"></div>
+  <div class="list-footer-brand">
+    <span>Interactive map by</span>
+    <a href="https://ludara.ai" target="_blank">A Perfect Day · Ludara.AI</a>
+  </div>
+</div>
+
+<!-- Saved Panel -->
+<div id="saved-panel" class="saved-panel">
+  <div class="saved-panel-header">
+    <div class="saved-panel-title">♥ Your Saved Places</div>
+    <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
+  </div>
+  <div class="saved-value-props">
+    <div class="saved-vp">
+      <span class="saved-vp-icon">🗺</span>
+      <div>
+        <div class="saved-vp-title">Walking Route</div>
+        <div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div>
+      </div>
+    </div>
+    <div class="saved-vp">
+      <span class="saved-vp-icon">📄</span>
+      <div>
+        <div class="saved-vp-title">PDF Day Guide</div>
+        <div class="saved-vp-desc">Print your personalised guide to take along on your journey</div>
+      </div>
+    </div>
+    <div class="saved-vp">
+      <span class="saved-vp-icon">🖼</span>
+      <div>
+        <div class="saved-vp-title">Map Screenshot</div>
+        <div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div>
+      </div>
+    </div>
+  </div>
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+  </div>
+  <div class="saved-place-list" id="saved-place-list">
+    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+  </div>
+</div>
+
+<!-- Desktop: floating list toggle button -->
+<button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
+  <span class="desktop-list-btn-icon">☰</span>
+  <span>Places</span>
+  <span class="desktop-list-count" id="desktop-list-count">41</span>
+</button>
+
+<!-- JS modules — load order matters -->
+<script>const IMAGES_PATH = "images/";</script>
+<script>let map;</script>
+<script src="data.js"></script>
+<script src="photos.js"></script>
+<script src="map-core.js"></script>
+<script src="map.js"></script>
+<script src="ui-card.js"></script>
+<script src="ui-filter.js"></script>
+<script src="ui-stories.js"></script>
+<script src="ui-favourites.js"></script>
+<script src="ui-pdf.js"></script>
+
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+</body>
+</html>
