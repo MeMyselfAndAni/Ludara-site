@@ -23,7 +23,7 @@ if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR);
 // All images are Sam's own photography from drizzleanddip.com
 const IMAGES = {
   1:  'https://drizzleanddip.com/wp-content/uploads/2025/12/main-amura-pic.jpg',           // Amura
-  2:  'https://drizzleanddip.com/wp-content/uploads/2021/09/O6A0323.jpg',                   // Fyn
+  2:  'https://drizzleanddip.com/wp-content/uploads/2021/09/IMG_1069.jpg',                  // Fyn — hero food shot (O6A0323 was too dark)
   3:  'https://drizzleanddip.com/wp-content/uploads/2023/03/DSF5849.jpg',                   // Salon Pot Luck
   4:  'https://drizzleanddip.com/wp-content/uploads/2023/07/DSF7880.jpg',                   // Pier
   5:  'https://drizzleanddip.com/wp-content/uploads/2023/07/pier-1.jpg',                    // COY (reuse Pier shot)
