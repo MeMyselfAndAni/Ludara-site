@@ -1,0 +1,5 @@
+Extract attraction information (restaurants, bars, clubs, landmarks, hotels, entertainment places, shopping areas, nature parks etc) from the sources provided. Summarize all in data.sj
+Each entry should appear only once. Make sure same entry is not appearing under slightly different names. Can compare by the link to website for each entry for example.
+Each entry should be assigned to the correct neighborhood. Double check this!
+Description for each entry should be exactly taken from the source. No extra word added or removed! It is crucial for this project to reference only source material. 
+Each entry should be assigned to the correct category: restaurants, bars, clubs, landmarks, hotels, entertainment places, shopping areas, nature park. If entry satisfied two categories, it can appear in both.
