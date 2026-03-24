@@ -1,12 +1,15 @@
 // fetch-images-drizzleanddip-capetown.js
 // Downloads Sam Linsell's photos from drizzleanddip.com
-// for the A Perfect Day Cape Town guide.
+// for the A Perfect Day Cape Town & Winelands guide.
+//
+// UPDATED March 2026: Added entries 54-70 (70 places total)
 //
 // Run from: aperfectday/drizzleanddip/capetown/
 // Command:  node fetch-images-drizzleanddip-capetown.js
 //
 // Requires: npm install node-fetch (or Node 18+ which has native fetch)
-// Output:   images/place-1.jpg through images/place-43.jpg
+// Output:   images/place-1.jpg through images/place-70.jpg
+//           (ids 44-53 already exist; this run adds 54-70)
 
 const https = require('https');
 const http  = require('http');
@@ -62,6 +65,57 @@ const IMAGES = {
   41: 'https://drizzleanddip.com/wp-content/uploads/2016/12/7O6A9027.jpg',                  // Chefs Warehouse Maison (Beau Constantia)
   42: 'https://drizzleanddip.com/wp-content/uploads/2021/08/O6A9335.jpg',                   // Babylonstoren
   43: 'https://drizzleanddip.com/wp-content/uploads/2017/03/7O6A1468.jpg',                  // Wolfgat
+
+  // ─── ENTRIES 44–53 added previous session ────────────────────────────────
+  44: 'https://drizzleanddip.com/wp-content/uploads/2021/03/O6A5236.jpg',          // Ëlgr — Sam's own Ëlgr photo
+  45: 'https://drizzleanddip.com/wp-content/uploads/2017/06/7O9A0028-scaled.jpg',  // Seebamboes (reuse Galjoen shot)
+  46: 'https://drizzleanddip.com/wp-content/uploads/2023/11/DSF0167.jpg',          // Tomson (reuse Ouzeri Asian interior)
+  47: 'https://drizzleanddip.com/wp-content/uploads/2017/06/Arlecchino-1.jpg',     // Arthurs Mini Super (reuse Sea Point café)
+  48: 'https://drizzleanddip.com/wp-content/uploads/2017/01/7O6A9494.jpg',         // The Mojo Market (reuse OZCF market shot)
+  49: 'https://drizzleanddip.com/wp-content/uploads/2025/12/main-amura-pic.jpg',   // Paris Cape Town (reuse elegant interior)
+  50: 'https://drizzleanddip.com/wp-content/uploads/2017/06/7O6A9293.jpg',         // Una Mas (reuse casual coastal mood)
+  51: 'https://drizzleanddip.com/wp-content/uploads/2021/09/IMG_1069.jpg',          // ANTHM (reuse Fyn moody interior — atmospheric bar feel)
+  52: 'https://drizzleanddip.com/wp-content/uploads/2023/11/DSF0107.jpg',          // House of Machines (reuse moody interior)
+  53: 'https://drizzleanddip.com/wp-content/uploads/2022/03/O6A5601.jpg',          // Aperitif (reuse Post & Pepper street-cafe exterior — Bree St feel)
+
+  // ─── NEW ENTRIES (ids 54–70) added March 2026 ────────────────────────────
+  //
+  // Sources:
+  //   54  Culture Wine Bar   — no Sam post; reuse wine bar mood shot
+  //   55  The Dark Horse     — no Sam post; reuse Kloof St bar mood shot
+  //   56  Time Out Market    — no Sam post; reuse V&A/market mood shot
+  //   57  Foxcroft           — no dedicated Sam post; reuse Constantia Valley shot
+  //   58  Café Roux          — no dedicated Sam post; reuse Noordhoek farm mood
+  //   59  Chapman's Peak Hotel — no dedicated Sam post; reuse Hout Bay coast shot
+  //   60  Jordan Wine Estate — no dedicated Sam post; reuse Winelands vineyard
+  //   61  Hōseki             — Sam's own photos from drizzleanddip.com
+  //   62  The Kraal          — Sam's own photos from drizzleanddip.com
+  //   63  Tokara             — Sam's own photos from drizzleanddip.com
+  //   64  Tokara Deli        — Sam's own photos from drizzleanddip.com
+  //   65  Kleine Zalze       — no dedicated Sam post; reuse Winelands estate shot
+  //   66  Blix               — no dedicated Sam post; reuse Stellenbosch wine bar mood
+  //   67  Chorus at Waterkloof — no dedicated Sam post; reuse Waterkloof/winelands shot
+  //   68  Protégé            — Sam's old LQF post photos
+  //   69  SCAPE              — Sam's SCAPE post photos
+  //   70  Noisy Oyster       — Sam's Paternoster / West Coast photos
+
+  54: 'https://drizzleanddip.com/wp-content/uploads/2017/06/7O9A0051-scaled.jpg',  // Culture Wine Bar (reuse Galjoen seafood detail — different feel)
+  55: 'https://drizzleanddip.com/wp-content/uploads/2017/06/7O6A9293.jpg',          // The Dark Horse (reuse Kalk Bay bar mood)
+  56: 'https://drizzleanddip.com/wp-content/uploads/2017/01/7O6A9494.jpg',          // Time Out Market (reuse OZCF market shot)
+  57: 'https://drizzleanddip.com/wp-content/uploads/2022/02/O6A5146.jpg',           // Foxcroft (reuse La Colombe Constantia shot)
+  58: 'https://drizzleanddip.com/wp-content/uploads/2017/06/FullSizeRender-2.jpg',  // Café Roux (reuse Aegir/Noordhoek mood shot)
+  59: 'https://drizzleanddip.com/wp-content/uploads/2022/09/7O6A0139-1.jpg',        // Chapman's Peak Hotel (reuse Tintswalo/coast shot)
+  60: 'https://drizzleanddip.com/wp-content/uploads/2021/08/O6A9335.jpg',           // Jordan Wine Estate (reuse Babylonstoren vineyard shot)
+  61: 'https://drizzleanddip.com/wp-content/uploads/2015/07/7O9A7896.jpg',          // Hōseki — Sam's own Delaire Graff photo
+  62: 'https://drizzleanddip.com/wp-content/uploads/2018/10/O6A2035.jpg',           // The Kraal — Sam's own Joostenberg photo
+  63: 'https://drizzleanddip.com/wp-content/uploads/2017/08/7O6A7514.jpg',          // Tokara — Sam's own Tokara estate photo
+  64: 'https://drizzleanddip.com/wp-content/uploads/2015/07/7O9A7923.jpg',          // Tokara Deli (reuse Delaire Graff food dish — different from Tokara exterior)
+  65: 'https://drizzleanddip.com/wp-content/uploads/2019/08/O6A0382.jpg',           // Kleine Zalze (reuse La Petite Colombe vineyard shot)
+  66: 'https://drizzleanddip.com/wp-content/uploads/2022/03/O6A5636.jpg',           // Blix (reuse Post & Pepper Stellenbosch interior)
+  67: 'https://drizzleanddip.com/wp-content/uploads/2016/12/7O6A9027.jpg',          // Chorus at Waterkloof (reuse Beau Constantia valley view)
+  68: 'https://drizzleanddip.com/wp-content/uploads/2015/07/7O9A7867.jpg',           // Protégé (reuse Hoseki/Delaire elegant interior — Franschhoek fine-dining feel)
+  69: 'https://drizzleanddip.com/wp-content/uploads/2023/12/7O9A9730.jpg',          // SCAPE at Vrymansfontein (reuse SCAPE table setting shot)
+  70: 'https://drizzleanddip.com/wp-content/uploads/2017/03/7O6A1468.jpg',          // Noisy Oyster (reuse Wolfgat / Paternoster West Coast shot)
 };
 
 // ─── Download function ────────────────────────────────────────────────────────
