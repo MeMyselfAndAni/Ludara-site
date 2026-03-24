@@ -123,7 +123,7 @@ const PLACES = [
     // SOURCE: https://drizzleanddip.com/2017/06/29/my-guide-to-eating-out-in-cape-town/
     note: "Ouzeri is a trendy eatery on Cape Town's Wale Street, known for its contemporary Cypriot and Greek cuisine, and it's one of my absolute faves. Chef Nic Charalambous draws from his Cypriot and Greek heritage, family recipes, and culinary traditions to create a modern interpretation and incorporate carefully sourced South African produce. Ouzeri continues to balance contemporary and authentic Cypriot Greek cooking, highlighting regional cuisine and local ingredients.",
     hours: 'Check website for current hours',
-    tip: "It's one of my absolute faves.",,
+    tip: "It's one of my absolute faves.",
     type: 'Cypriot-Greek Restaurant',
     blog: 'https://drizzleanddip.com/2023/11/07/ouzeri-a-cypriot-greek-restaurant-in-cape-town/',
     phone: '',
