@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Drizzle &amp; Dip — Cape Town Guide</title>
+<title>Drizzle &amp; Dip — Cape Town &amp; Winelands Guide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
@@ -12,7 +12,8 @@
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
-  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; }
+  .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
@@ -23,7 +24,7 @@
     <div class="splash-logo-row">
       <span class="wl-logo">Drizzle &amp; Dip</span>
     </div>
-    <h2 class="splash-title">Cape Town Guide</h2>
+    <h2 class="splash-title">Cape Town &amp; Winelands Guide</h2>
     <p class="splash-sub"><span class="place-count-all">43</span> hand-picked places by <strong>Sam Linsell</strong> — award-winning Cape Town food writer, photographer and recipe creator.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
@@ -35,7 +36,7 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading Cape Town…</div>
+  <div class="loading-text">Loading Cape Town &amp; Winelands…</div>
 </div>
 
 <!-- Header -->
@@ -46,7 +47,7 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Cape Town</em> Guide</h1>
+      <h1><em>Cape Town &amp; Winelands</em> Guide</h1>
       <div class="header-sub"><span class="place-count-all">43</span> hand-picked places<span class="header-sub-by"> · by Sam</span></div>
     </div>
   </div>

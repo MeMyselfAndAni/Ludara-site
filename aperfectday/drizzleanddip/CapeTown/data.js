@@ -1,4 +1,4 @@
-// A Perfect Day — Drizzle & Dip / Cape Town
+// A Perfect Day — Drizzle & Dip / Cape Town & Winelands
 // data.js — 43 hand-picked places by Sam Linsell
 //
 // ✅ ALL notes corrected to Sam's actual published words from:
