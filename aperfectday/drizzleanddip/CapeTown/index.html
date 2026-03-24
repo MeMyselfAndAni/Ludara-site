@@ -12,6 +12,7 @@
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; }
 </style>
 </head>
 <body>
@@ -84,11 +85,11 @@
     </div>
     <div class="nbhd-bubble" id="nbhd-city" role="button" tabindex="0" onclick="selectNbhd('city', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏙️</div></div>
-      <span class="nbhd-label">City &amp; Sea Point</span>
+      <span class="nbhd-label">City &amp;<br>Sea Point</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-peninsula" role="button" tabindex="0" onclick="selectNbhd('peninsula', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌊</div></div>
-      <span class="nbhd-label">Southern Peninsula</span>
+      <span class="nbhd-label">S. Peninsula</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-stellenbosch" role="button" tabindex="0" onclick="selectNbhd('stellenbosch', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🍷</div></div>
@@ -96,7 +97,7 @@
     </div>
     <div class="nbhd-bubble" id="nbhd-franschhoek" role="button" tabindex="0" onclick="selectNbhd('franschhoek', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌸</div></div>
-      <span class="nbhd-label">Franschhoek &amp; Paarl</span>
+      <span class="nbhd-label">Franschhoek<br>&amp; Paarl</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-west-coast" role="button" tabindex="0" onclick="selectNbhd('west-coast', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🐚</div></div>
@@ -128,7 +129,7 @@
       <span class="pc-emily-by">— Sam, Drizzle &amp; Dip</span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Sam's Tip</span>
+      <span class="pc-tip-label">💡 Visitor Tip</span>
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>

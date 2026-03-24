@@ -474,7 +474,7 @@ const PLACES = [
 
   {
     id: 24,
-    nbhd: 'city',
+    nbhd: 'peninsula',
     name: 'Salsify at The Roundhouse',
     cat: 'landmark',
     emoji: '🌊',
@@ -678,7 +678,7 @@ const PLACES = [
 
   {
     id: 34,
-    nbhd: 'stellenbosch',
+    nbhd: 'franschhoek',
     name: 'Arum at Boschendal',
     cat: 'landmark',
     emoji: '🔥',
