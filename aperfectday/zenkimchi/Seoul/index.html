@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ZenKimchi Seoul Food Guide</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Neighbourhood bubbles — aligned, two-line labels */
+    .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+    /* Place card photos — show full image, dark bg for portrait images */
+    .pc-photo-img { object-fit: contain !important; background: #111; }
+    .pc-photo-wrap { background: #111; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SPLASH SCREEN ════════════════════════════════════════════════════════ -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="wl-logo">ZenKimchi</div>
+    <h1 class="splash-title">Seoul</h1>
+    <p class="splash-sub">
+      46 places · Joe McPherson · Seoul's #1 Korean food authority since 2004,
+      consultant to Anthony Bourdain, Andrew Zimmern, Lonely Planet & CNN Travel
+    </p>
+    <button class="splash-btn" onclick="document.getElementById('splash').style.display='none'">
+      Open the Guide →
+    </button>
+    <div class="splash-footer">
+      <a href="https://zenkimchi.com" target="_blank">zenkimchi.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HEADER ════════════════════════════════════════════════════════════════ -->
+<header id="app-header">
+  <a class="header-title" href="https://zenkimchi.com" target="_blank">
+    <span class="wl-logo">ZenKimchi</span>
+  </a>
+  <div class="header-text">
+    <h1>Seoul <em>Food Guide</em></h1>
+    <span class="header-sub">46 places · Joe McPherson</span>
+  </div>
+  <a class="header-btn" href="https://zenkimchi.com/zenkimchi-korean-food-journal/" target="_blank">Blog ↗</a>
+</header>
+
+<!-- ═══ FILTER PILLS ══════════════════════════════════════════════════════════ -->
+<div id="filter-bar">
+  <button class="pill active" onclick="fc(this,'all')">All</button>
+  <button class="pill" onclick="fc(this,'food')">🥩 Restaurants</button>
+  <button class="pill" onclick="fc(this,'pub')">🍗 Chicken & Bars</button>
+  <button class="pill" onclick="fc(this,'market')">🛒 Markets</button>
+  <button class="pill" onclick="fc(this,'cafe')">☕ Cafés</button>
+  <button class="pill" onclick="fc(this,'landmark')">🛁 Experiences</button>
+</div>
+
+<!-- ═══ NEIGHBOURHOOD BAR ══════════════════════════════════════════════════════ -->
+<div id="nbhd-bar">
+  <div class="nbhd-bubble" id="nbhd-mapo" role="button" tabindex="0" onclick="selectNbhd('nbhd-mapo', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🥩</div></div>
+    <span class="nbhd-label">Mapo &<br>Gongdeok</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-hongdae" role="button" tabindex="0" onclick="selectNbhd('nbhd-hongdae', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🎸</div></div>
+    <span class="nbhd-label">Hongdae &<br>Mangwon</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-jongno" role="button" tabindex="0" onclick="selectNbhd('nbhd-jongno', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
+    <span class="nbhd-label">Jongno &<br>Insadong</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-euljiro" role="button" tabindex="0" onclick="selectNbhd('nbhd-euljiro', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌃</div></div>
+    <span class="nbhd-label">Euljiro &<br>Myeongdong</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-itaewon" role="button" tabindex="0" onclick="selectNbhd('nbhd-itaewon', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌍</div></div>
+    <span class="nbhd-label">Itaewon &<br>Yongsan</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-gangnam" role="button" tabindex="0" onclick="selectNbhd('nbhd-gangnam', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">💎</div></div>
+    <span class="nbhd-label">Gangnam &<br>Jamsil</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-noryangjin" role="button" tabindex="0" onclick="selectNbhd('nbhd-noryangjin', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🐟</div></div>
+    <span class="nbhd-label">Noryangjin &<br>Yeouido</span>
+  </div>
+</div>
+
+<!-- ═══ MAP ═══════════════════════════════════════════════════════════════════ -->
+<div id="map"></div>
+<div id="loading">
+  <div class="loading-inner">
+    <div class="loading-logo">ZenKimchi</div>
+    <div class="loading-text">Loading Seoul…</div>
+  </div>
+</div>
+
+<!-- ═══ PLACE CARD (mobile bottom sheet + desktop panel) ══════════════════════ -->
+<div id="place-card" class="place-card hidden">
+  <div class="pc-drag-handle"></div>
+  <button class="pc-close" onclick="closeCard()">✕</button>
+
+  <div class="pc-photo-wrap">
+    <img id="pc-photo" class="pc-photo-img" src="" alt="" loading="lazy" />
+  </div>
+
+  <div class="pc-body">
+    <div class="pc-tags">
+      <span id="pc-cat-badge" class="pc-cat-badge"></span>
+      <span id="pc-nbhd-badge" class="pc-nbhd-badge"></span>
+    </div>
+    <h2 id="pc-name" class="pc-name"></h2>
+    <p id="pc-note" class="pc-note"></p>
+    <div id="pc-tip-wrap" class="pc-tip-wrap hidden">
+      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <p id="pc-tip" class="pc-tip"></p>
+    </div>
+    <div id="pc-meta" class="pc-meta"></div>
+    <div id="pc-links" class="pc-links"></div>
+    <div class="pc-emily-by" id="pc-by">— Joe, ZenKimchi</div>
+  </div>
+</div>
+
+<!-- ═══ PLACES LIST (mobile bottom sheet + desktop panel) ════════════════════ -->
+<div id="list-panel">
+  <div class="list-header">
+    <span class="list-badge">46</span>
+    <span class="list-title">Places</span>
+    <button class="list-close" onclick="toggleList(false)">✕</button>
+  </div>
+  <div id="list-items"></div>
+</div>
+
+<!-- ═══ BOTTOM NAV (mobile) ══════════════════════════════════════════════════ -->
+<nav id="bottom-nav">
+  <button onclick="toggleList(true)">☰ List</button>
+  <button onclick="showFavs()">♡ Saved</button>
+  <button onclick="showTrip()">🗺 Trip</button>
+</nav>
+
+<!-- ═══ SHEET OVERLAY ════════════════════════════════════════════════════════ -->
+<div id="sheet-overlay" class="hidden" onclick="closeSheet()"></div>
+
+<!-- ═══ FAVOURITES SHEET ══════════════════════════════════════════════════════ -->
+<div id="favs-sheet" class="sheet hidden">
+  <div class="sheet-header">
+    <h3 class="sheet-title">♡ Saved Places</h3>
+    <button onclick="closeSheet()">✕</button>
+  </div>
+  <div id="favs-list"></div>
+  <div class="sheet-footer">
+    <button onclick="downloadPDF()">⬇ Download PDF</button>
+  </div>
+</div>
+
+<!-- ═══ TRIP PLANNER SHEET ═══════════════════════════════════════════════════ -->
+<div id="trip-sheet" class="sheet hidden">
+  <div class="sheet-header">
+    <h3 class="sheet-title">🗺 Trip Planner</h3>
+    <button onclick="closeSheet()">✕</button>
+  </div>
+  <div id="trip-list"></div>
+  <div class="sheet-footer">
+    <button onclick="calcRoute()">Get Walking Route</button>
+    <button onclick="downloadPDF()">⬇ Download PDF</button>
+  </div>
+</div>
+
+<!-- ═══ DESKTOP PLACES LIST (right panel) ════════════════════════════════════ -->
+<div id="desktop-list">
+  <div class="desktop-list-header">
+    <span id="desktop-list-count">46 places</span>
+    <input id="desktop-search" type="text" placeholder="Search…" oninput="filterSearch(this.value)" />
+  </div>
+  <div id="desktop-list-items"></div>
+</div>
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════════════ -->
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script src="map-core.js"></script>
+<script src="photos.js"></script>
+<script src="ui-card.js"></script>
+<script src="ui-filter.js"></script>
+<script src="ui-favourites.js"></script>
+<script src="ui-pdf.js"></script>
+<script src="ui-stories.js"></script>
+<script>
+  // Register service worker for offline support
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+<script>
+  window.addEventListener('load', initMap);
+</script>
+</body>
+</html>

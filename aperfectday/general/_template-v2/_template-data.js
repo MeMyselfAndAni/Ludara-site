@@ -10,27 +10,49 @@
 //       map           → index.html (let map;)
 //
 // cat values must match keys in CC/CL in map.js:
-//   landmark / food / cafe / church / market / soviet / nature
+//   landmark / food / cafe / pub / church / market / soviet / nature
 //
 // nbhd values must exactly match keys in NBHD_APPROX_CENTERS in map.js
+//
+// ─── CONTENT AUTHENTICITY RULES (enforce before every deploy) ────────────────
+//
+//   note field:  MUST be the blogger's exact published words. No paraphrasing,
+//                no additions, no invented text. Copy directly from the source.
+//                If the blogger hasn't written about a place, use a factual
+//                description NOT attributed to them (no "— BloggerName" quote).
+//
+//   tip field:   MUST be the blogger's exact words, or left empty.
+//                NEVER invent tips. NEVER put invented content here.
+//
+//   tip label:   Always "Visitor Tip" in index.html — never blogger's name.
+//                This prevents misattribution of invented or paraphrased content.
+//
+//   Verification: Run the QA agent on every guide before approaching the blogger.
+//
+// ─── SOURCE VERIFICATION FORMAT ──────────────────────────────────────────────
+//   Add a comment above each entry with the source URL:
+//   // SOURCE: https://bloggersite.com/post-about-this-place/
+//   Or mark clearly if no dedicated post exists:
+//   // ⚠️ No dedicated post — factual description, not attributed as blogger's words
 
 const PLACES = [
 
   // ─── NEIGHBOURHOOD NAME ───────────────────────────────────────────────────
 
   {
+    // SOURCE: https://bloggersite.com/post-about-this-place/
     id: 1,
     nbhd: 'nbhd-key',              // must match map.js NBHD_APPROX_CENTERS key
     name: 'Place Name',
-    cat: 'landmark',               // landmark/food/cafe/church/market/soviet/nature
+    cat: 'landmark',               // landmark/food/cafe/pub/church/market/soviet/nature
     emoji: '🏛️',
     address: 'Full address, Neighbourhood',
     lat: 0.0000,
     lng: 0.0000,
-    search: 'Place Name City',     // used by fetch-images script to find Wikimedia photo
-    note: "Blogger's personal description in their own voice. What makes this place special, what to order, why they love it. Written as if the blogger is talking directly to the reader.",
+    search: 'Place Name City',
+    note: "Blogger's exact published words — copied verbatim from their article. Never invented or paraphrased.",
     hours: 'Daily 9am–6pm',
-    tip: 'Insider tip — the thing most tourists miss, or the best way to experience it.',
+    tip: "Blogger's exact words for the tip, or leave empty string if none.",
     type: 'Type of Place',         // short label e.g. 'Historic Market', 'Cocktail Bar'
     blog: 'https://bloggersite.com/post-about-this-place/',
     phone: '+1 234 567 8900',
@@ -38,6 +60,7 @@ const PLACES = [
   },
 
   {
+    // SOURCE: https://bloggersite.com/food-guide/
     id: 2,
     nbhd: 'nbhd-key',
     name: 'Another Place',
@@ -47,7 +70,7 @@ const PLACES = [
     lat: 0.0000,
     lng: 0.0000,
     search: 'Another Place City food',
-    note: "Second place description in blogger's voice.",
+    note: "Second place description — blogger's exact words.",
     hours: 'Tue–Sun 1pm–10pm',
     tip: 'Book in advance — it fills up fast.',
     type: 'Restaurant',
@@ -59,6 +82,7 @@ const PLACES = [
   // ─── NEXT NEIGHBOURHOOD ───────────────────────────────────────────────────
 
   {
+    // ⚠️ No dedicated post — factual description only, not attributed as blogger's words
     id: 3,
     nbhd: 'nbhd-key-2',
     name: 'Third Place',

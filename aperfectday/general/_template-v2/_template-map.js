@@ -25,6 +25,7 @@ const CC = {
   'landmark': '#e8724a',
   'food':     '#f0c060',
   'cafe':     '#6b9e6e',
+  'pub':      '#8b6bb1',   // bars, cocktail bars, wine bars
   'church':   '#6090c8',
   'market':   '#c08060',
   'soviet':   '#9080a8',
@@ -38,6 +39,7 @@ const CL = {
   'landmark': 'Landmarks',
   'food':     'Restaurants',
   'cafe':     'Bars & Cafés',
+  'pub':      'Bars',
   'church':   'Churches',
   'market':   'Markets',
   'soviet':   'Soviet',
