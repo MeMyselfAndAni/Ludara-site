@@ -306,8 +306,8 @@ const PLACES = [
   },
 
   {
-    // SOURCE: RSS feed / ZenKimchi itinerary content
-    // ✅ Verified exact words from source
+    // ⚠️ Source: ZenKimchi RSS/itinerary — text confirmed Joe's voice but exact article unverified
+    // Run QA agent to locate original article before outreach
     id: 15,
     nbhd: 'nbhd-jongno',
     name: 'Tosokchon 토속촌',
@@ -321,7 +321,7 @@ const PLACES = [
     hours: 'Daily 10am–10pm',
     tip: '',
     type: 'Samgyetang (Ginseng Chicken Soup)',
-    blog: 'https://zenkimchi.com/search/kimchi/',
+    blog: 'https://zenkimchi.com/zenkimchi-korean-food-journal/',
     website: '',
   },
 
@@ -421,7 +421,7 @@ const PLACES = [
     hours: 'Daily lunch and dinner, busiest weekends',
     tip: '',
     type: 'Bossam with Oysters',
-    blog: 'https://zenkimchi.com/search/kimchi/',
+    blog: 'https://zenkimchi.com/zenkimchi-korean-food-journal/',
     website: '',
   },
 
@@ -951,6 +951,151 @@ const PLACES = [
     tip: '',
     type: 'Naengmyeon (Cold Noodles)',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
+    website: '',
+  },
+
+  // ─── NEW: CAFÉS ───────────────────────────────────────────────────────────
+
+  {
+    // SOURCE: https://zenkimchi.com/tour-tips/what-kind-of-traveler-are-you-heres-how-to-do-seoul-right/
+    // ✅ Verified exact words from source
+    id: 47,
+    nbhd: 'nbhd-mapo',
+    name: 'Anthracite Coffee 안트라시트',
+    cat: 'cafe',
+    emoji: '☕',
+    address: '19 Tojeong-ro 37-gil, Hapjeong, Mapo-gu, Seoul (Hapjeong Station exit 1)',
+    lat: 37.5504,
+    lng: 126.9083,
+    search: 'Anthracite Coffee 안트라시트 Hapjeong Seoul',
+    note: "Work from: Anthracite (coffee and coal vibes), Daelim Changgo, or any place with an outlet and moody lighting. Seoul has insane Wi-Fi, but work culture is intense. If you camp at a café for 6 hours, buy a second drink. Otherwise, you're the foreign freeloader.",
+    hours: 'Daily 9am–10pm',
+    tip: '',
+    type: 'Specialty Coffee',
+    blog: 'https://zenkimchi.com/tour-tips/what-kind-of-traveler-are-you-heres-how-to-do-seoul-right/',
+    website: 'https://anthracitecoffee.com',
+  },
+
+  {
+    // SOURCE: https://zenkimchi.com/zenkimchi-get-immersed-in-korea/the-authentic-korean-chicken-and-beer-experience/
+    // ✅ Verified exact words from source
+    id: 48,
+    nbhd: 'nbhd-hongdae',
+    name: 'Convenience Store Bar 편의점 야외 술자리',
+    cat: 'cafe',
+    emoji: '🏪',
+    address: 'Any GS25, CU or 7-Eleven near Hongdae, Mangwon or Euljiro — pick the one with outdoor tables',
+    lat: 37.5560,
+    lng: 126.9255,
+    search: 'convenience store bar Seoul outdoor tables',
+    note: "One of the great charms of living in South Korea is the convenience store bars. Tables usually sit outside convenience stores and bodegas (called 'Super' in Korean). Just grab some drinks, cups, and snacks. You have yourself a cheap all-night drinking spot.",
+    hours: '24 hours',
+    tip: "Triangle kimbap (₩1,200), instant ramen (₩900), cold beer (₩2,500). Korea's most democratic nightlife.",
+    type: 'Outdoor Convenience Store Bar',
+    blog: 'https://zenkimchi.com/zenkimchi-get-immersed-in-korea/the-authentic-korean-chicken-and-beer-experience/',
+    website: '',
+  },
+
+  {
+    // SOURCE: https://zenkimchi.com/tour-tips/the-curmudgeons-guide-to-insa-dong/
+    // ✅ Verified exact words from source
+    id: 49,
+    nbhd: 'nbhd-jongno',
+    name: 'Sol-ip Makgeolli Bar 솔입막걸리 (Insadong)',
+    cat: 'pub',
+    emoji: '🍶',
+    address: 'North side of Insadong, across the street in a back alley, Jongno-gu',
+    lat: 37.5752,
+    lng: 126.9858,
+    search: 'Sol-ip Makgeolli bar Insadong Seoul 솔입막걸리',
+    note: "It's not a very Korean name, but you will never forget this place. It specializes in makgeolli from different regions of Korea in various flavors. The menu is upgraded Korean fusion, but the good kind of Korean fusion. Get the American Potato Pancake (미국감자전). Fresh grated potatoes fried up as a pancake, topped with sour cream and bacon.",
+    hours: 'Daily from 5pm',
+    tip: 'Upgrade your makgeolli with a dusting of pine needle powder on top (Sol-eep Makkolli 솔입막걸리).',
+    type: 'Makgeolli Bar',
+    blog: 'https://zenkimchi.com/tour-tips/the-curmudgeons-guide-to-insa-dong/',
+    website: '',
+  },
+
+  // ─── NEW: LANDMARKS & EXPERIENCES ────────────────────────────────────────
+
+  {
+    // SOURCE G: https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/
+    // ✅ Verified exact words from source
+    id: 50,
+    nbhd: 'nbhd-jongno',
+    name: 'Gyeongbokgung Palace 경복궁',
+    cat: 'landmark',
+    emoji: '🏯',
+    address: '161 Sajik-ro, Jongno-gu, Seoul (Gyeongbokgung Station exit 5)',
+    lat: 37.5796,
+    lng: 126.9770,
+    search: 'Gyeongbokgung Palace Seoul 경복궁',
+    note: "Wear a hanbok (free entry), get there early (before the tour buses), and actually take in the architecture—not just the selfie potential. Don't bother with a rushed group tour. Instead, spend time wandering, then hit the National Folk Museum behind it.",
+    hours: 'Wed–Mon 9am–6pm (closed Tue)',
+    tip: 'Avoid peak weekend crowds; also skip the Changing of the Guard if you\'re low on time—it\'s more cosplay than ceremony.',
+    type: 'Royal Palace',
+    blog: 'https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/',
+    website: 'https://www.royalpalace.go.kr',
+  },
+
+  {
+    // SOURCE G: https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/
+    // ✅ Verified exact words from source
+    id: 51,
+    nbhd: 'nbhd-jongno',
+    name: 'Inwangsan & Eungbongsan Hike 인왕산',
+    cat: 'landmark',
+    emoji: '⛰️',
+    address: 'Inwangsan: Hongjecheon-ro trailhead, Seodaemun-gu | Eungbongsan: Majang-dong, Seongdong-gu',
+    lat: 37.5843,
+    lng: 126.9543,
+    search: 'Inwangsan hike Seoul mountain shrine',
+    note: "Forget Namsan Tower. These hikes have better views, fewer tourists, and no overpriced elevator tickets. Plus, you might pass a shrine or a shamanic altar along the way.",
+    hours: 'Open year-round; best at dawn',
+    tip: 'Best for: Hikers, photographers, temple nerds. Avoid rainy days unless you like slipping on wet pine needles.',
+    type: 'City Mountain Hike',
+    blog: 'https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/',
+    website: '',
+  },
+
+  {
+    // SOURCE: https://zenkimchi.com/tour-tips/10-unique-korean-souvenirs-seoul/
+    // ✅ Verified exact words from source
+    id: 52,
+    nbhd: 'nbhd-itaewon',
+    name: 'Hamilton Shirts 해밀턴 셔츠',
+    cat: 'landmark',
+    emoji: '👔',
+    address: 'Itaewon-ro, Yongsan-gu, Seoul (near Hamilton Hotel)',
+    lat: 37.5352,
+    lng: 126.9948,
+    search: 'Hamilton Shirts Itaewon Seoul tailor made',
+    note: "I personally like to get tailor made shirts from Hamilton Shirts. They have my specs on file. I just choose the fabric and the style, and they ship it to me within ten days. They will even ship overseas–something to keep in mind.",
+    hours: 'Mon–Sat 10am–7pm',
+    tip: '',
+    type: 'Custom Tailor',
+    blog: 'https://zenkimchi.com/tour-tips/10-unique-korean-souvenirs-seoul/',
+    phone: '02-792-5596',
+    website: '',
+  },
+
+  {
+    // SOURCE: https://zenkimchi.com/category/tour-tips/ (Jan 2026 price guide)
+    // ✅ Verified exact words from source
+    id: 53,
+    nbhd: 'nbhd-euljiro',
+    name: 'Dongmyo Flea Market 동묘벼룩시장',
+    cat: 'market',
+    emoji: '🕹️',
+    address: 'Dongmyo-dong, Jongno-gu, Seoul (Dongmyo Station, Line 1 & 6, exit 3)',
+    lat: 37.5721,
+    lng: 127.0163,
+    search: 'Dongmyo flea market 동묘 벼룩시장 Seoul vintage',
+    note: "Instead of battling crowds in Myeongdong, head east to Dongmyo. It's a sprawling flea market that's part thrift paradise, part living museum of random Korean antiques. Think vintage leather jackets from the '80s next to dusty LPs and mountains of ajumma pants. You never know what you'll find, and that's half the fun. More importantly, it still feels real—no cloned cosmetic shops or tourist-pandering stalls in sight.",
+    hours: 'Daily 9am–6pm (best Sat–Sun)',
+    tip: 'If you want an adventure (and bargains), Dongmyo is the treasure hunt you didn\'t know you needed.',
+    type: 'Vintage Flea Market',
+    blog: 'https://zenkimchi.com/category/tour-tips/',
     website: '',
   },
 

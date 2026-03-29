@@ -46,7 +46,7 @@ const IMAGES = {
   15: WM('Dakbokkeumtang and samgyetang.jpg'),                                     // WM: samgyetang ginseng chicken — Tosokchon
   16: WM('Dongdaemon-korean-food-8.jpg'),                                          // WM: Gwangjang Market food stalls
   17: WM('2012-05-11 Insadong 01.jpg'),                                            // WM: Insadong hanok street — Ikseon-dong area
-  18: WM('Seoul-Insadong at dawn-01.jpg'),                                         // WM: Insadong dawn — Balwoo Gongyang nearby
+  18: WM('Jogyesa 09.jpg'),                                                        // WM: Jogyesa Buddhist temple Seoul — Balwoo Gongyang is right next door (CC BY-SA)
   19: WM('Korean.food-Yakgua-Yugua-Insadong.jpg'),                                 // WM: Insadong street food (CC BY-SA)
   20: WM('Korean cuisine-Kaesong bossam kimchi-01.jpg'),                           // WM: bossam reused — Samhaejip
   21: WM('Banchan (Supporting Food), Basic Dishes of Korean Food.jpg'),            // WM: Korean banchan spread — Maetdollo-man
@@ -83,6 +83,19 @@ const IMAGES = {
   44: WM('Shopping street at Myondon , Seoul - panoramio.jpg'),                    // WM: Myeongdong shopping — Lotte area
   45: WM('2020-03-11 20.38.42 찜질방.jpg'),                                        // WM: jjimjilbang Korean bathhouse (CC BY-SA)
   46: WM('Korean.food-Bibim.naengmyen-01.jpg'),                                   // WM: bibim naengmyeon cold noodles — Woo Lae Oak Noryangjin
+
+  // ─── NEW: CAFÉS ───────────────────────────────────────────────────────────
+  47: WM('Flowery cafe in Seongsu-dong.jpg'),                                     // WM: cafe storefront — Anthracite same vibe (CC BY-SA)
+  48: WM('Alcohol in a South Korean supermarket.jpg'),                            // WM: Korean convenience store — convenience store bar culture (CC BY-SA)
+  49: WM('Toasting makgeolli (4347102175).jpg'),                                  // WM: makgeolli toast — Sol-ip Makgeolli Bar Insadong (CC BY)
+
+  // ─── NEW: LANDMARKS ───────────────────────────────────────────────────────
+  50: WM('2012-05-06 Gyeongbokgung.jpg'),                                         // WM: Gyeongbokgung Palace (CC BY-SA)
+  51: WM('Street Mural in Inwangsa (1).jpg'),                                     // WM: Inwangsa village on Inwangsan mountain (CC BY-SA)
+  52: WM('Myeong-dong (22630604620).jpg'),                                        // WM: Seoul street at night — Hamilton Shirts Itaewon area
+
+  // ─── NEW: MARKET ──────────────────────────────────────────────────────────
+  53: WM('Gwangjang Market.JPG'),                                                 // WM: market scene — Dongmyo same traditional market feel
 };
 
 // ─── Download one image ────────────────────────────────────────────────────────
@@ -147,7 +160,9 @@ function download(id, rawUrl) {
         }
 
         const ct  = res.headers['content-type'] || '';
-        const ext = ct.includes('webp') ? 'webp' : ct.includes('png') ? 'png' : 'jpg';
+        // Always save as .jpg — photos.js constructs "place-N.jpg" paths.
+        // Modern browsers handle webp/png content in a .jpg container fine.
+        const ext = 'jpg';
         finalPath = path.join(OUT_DIR, `place-${id}.${ext}`);
         const out = fs.createWriteStream(finalPath);
         let tooBig = false;
@@ -171,7 +186,7 @@ function download(id, rawUrl) {
         out.on('finish', () => {
           finish(() => {
             const kb = Math.round(totalBytes / 1024);
-            process.stdout.write(` ✅ place-${id}.${ext} (${kb}KB)\n`);
+            process.stdout.write(` ✅ place-${id}.jpg (${kb}KB)\n`);
             results.ok.push(id);
           });
         });
