@@ -248,6 +248,32 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
+<!-- Override platform's openTripInMaps — runs AFTER ui-pdf.js so it wins -->
+<script>
+function openTripInMaps() {
+  // FAVS_KEY is now defined (from ui-favourites.js loaded above)
+  let ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
+
+  const places = PLACES.filter(p => ids.includes(p.id));
+  if (!places.length) {
+    alert('Tap ♡ on places to save them first.');
+    return;
+  }
+
+  // Named waypoints: "Jeong Daepo BBQ Seoul" → readable Google Maps route
+  const stops = places.map(p =>
+    encodeURIComponent(p.search || p.name + ' Seoul Korea')
+  );
+
+  const url = stops.length === 1
+    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
+    : 'https://www.google.com/maps/dir/' + stops.join('/');
+
+  window.open(url, '_blank');
+}
+</script>
+
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 <script>

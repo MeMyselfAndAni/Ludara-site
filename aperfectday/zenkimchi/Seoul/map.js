@@ -137,32 +137,3 @@ function initMap() {
   });
 }
 // ⚠️ DO NOT call initMap() here — index.html fires it via window.addEventListener('load', initMap)
-
-// ─── Override: open trip in Google Maps with named places ─────────────────────
-// Replaces the platform's coordinate-only URL with named waypoints so Google Maps
-// shows each place by name rather than bare GPS coordinates.
-function openTripInMaps() {
-  // Read saved place IDs from localStorage (FAVS_KEY is set in ui-favourites.js)
-  const key = (typeof FAVS_KEY !== 'undefined') ? FAVS_KEY : 'apd_favs_' + GUIDE_CITY;
-  let ids = [];
-  try { ids = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
-
-  const places = PLACES.filter(p => ids.includes(p.id));
-
-  if (!places.length) {
-    alert('Tap ♡ on places to save them first, then open the trip.');
-    return;
-  }
-
-  // Build named waypoints using the search field ("Place Name Seoul")
-  // Google Maps dir/ format: /dir/Stop+1+Seoul/Stop+2+Seoul/Stop+3+Seoul
-  const stops = places.map(p =>
-    encodeURIComponent((p.search || p.name + ' Seoul, Korea'))
-  );
-
-  const url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-
-  window.open(url, '_blank');
-}
