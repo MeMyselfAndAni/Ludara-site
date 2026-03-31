@@ -67,7 +67,7 @@ const ARTICLES = {
   31: 'French cuisine',           // Clos Maggiore
   32: 'Tapas',                    // Barrafina
   33: 'Gin',                      // Mr Fogg's Gin Parlour
-  34: 'Inigo Jones',              // St Paul's Church CG — no WP image, use the architect
+  34: 'Baroque architecture',     // St Paul's CG
   35: "Ronnie Scott's Jazz Club",
   36: 'Chinatown, London',
   37: 'Cocktail',                 // Opium — different from Chinatown
@@ -80,7 +80,7 @@ const ARTICLES = {
 
   // NOTTING HILL — all distinct
   43: 'Portobello Road',
-  44: 'British cuisine',          // Core — chef portrait not suitable for place card
+  44: 'Michelin Guide',           // Core by Clare Smyth — the rating that defines it
   45: 'Italian cuisine',          // Luna Rossa
   46: 'Greek cuisine',            // Kalamaras
   47: 'Electric Cinema, Notting Hill',
@@ -99,8 +99,13 @@ const ARTICLES = {
   57: 'Market hall',              // Greenwich Market — 'Greenwich, London' has no image
   58: 'Greenwich Park',
 
-  // SHOREDITCH & SPITALFIELDS
-  63: "Dennis Severs' House",
+  // HARRY POTTER & NEW RESTAURANTS
+  67: 'St Pancras railway station', // Platform 9¾ — adjacent to King's Cross
+  68: 'Somerset House',             // Australia House — both grand Strand buildings
+  69: 'Israeli cuisine',              // The Palomar
+  70: 'Appam',                        // Hoppers
+  71: 'Boundary Estate',              // Rochelle Canteen
+  72: 'Venison',                      // Rules — their signature game meat
   64: 'Columbia Road Flower Market',
   65: 'Beigel Bake',
   66: 'Shoreditch',
@@ -110,17 +115,9 @@ const ARTICLES = {
 const SKIP = new Set([6, 10, 39, 51]);
 
 // ── IDs that had duplicate/wrong images — delete before re-downloading ────────
-const FORCE_REFRESH = new Set([
-  12, 13, 15,           // were all Borough Market
-  14,                   // specialty coffee → espresso
-  17, 18, 19, 20, 22, 61, // were all Bermondsey
-  27,                   // was same as 25 (20 Fenchurch Street)
-  31, 33, 34,           // were all Covent Garden
-  37,                   // was same as 36 (Chinatown)
-  44, 45, 46,           // were all Notting Hill (44 also had a chef portrait)
-  48, 49, 50,           // museum logos → specific exhibits
-  57,                   // Greenwich market
-]);
+// Empty — all duplicates have been resolved. Add IDs here only when you want to
+// force a specific image to be re-downloaded.
+const FORCE_REFRESH = new Set([]);
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function fetchJSON(url) {
