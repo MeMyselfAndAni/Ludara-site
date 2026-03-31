@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TODO_BLOGGER_BRAND — TODO_CITY Guide</title><!-- [1] -->
+<title>A Perfect Day — London Guide</title><!-- [1] -->
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
@@ -16,9 +16,10 @@
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
   /* Place card photos — show full image without cropping; dark bg for portrait images */
-  /* !important required — ui-card.js sets background via inline style (category colour) */
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
+  /* Hide blogger attribution line — neutral guide has no attributed author */
+  .pc-emily-by { display: none !important; }
 </style>
 </head>
 <body>
@@ -27,13 +28,13 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-logo-row">
-      <span class="wl-logo">TODO_BLOGGER_BRAND</span><!-- [2] -->
+      <span class="wl-logo">A Perfect Day</span><!-- [2] -->
     </div>
-    <h2 class="splash-title">TODO_CITY Guide</h2><!-- [3] -->
-    <p class="splash-sub"><span class="place-count-all">TODO_COUNT</span> hand-picked places by <strong>TODO_BLOGGER_FULL_NAME</strong> — TODO_ONE_LINE_BIO.</p><!-- [4] -->
+    <h2 class="splash-title">London Guide</h2><!-- [3] -->
+    <p class="splash-sub"><span class="place-count-all">62</span> hand-picked places across London's best neighbourhoods — restaurants, markets, museums, pubs, parks and hidden gems, curated for the curious traveller.</p><!-- [4] -->
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="TODO_BLOGGER_WEBSITE" target="_blank">TODO_BLOGGER_DOMAIN</a><!-- [5] -->
+      <a href="https://ludara.ai" target="_blank">ludara.ai</a><!-- [5] -->
     </div>
   </div>
 </div>
@@ -41,40 +42,40 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading TODO_CITY…</div>
+  <div class="loading-text">Loading London…</div>
 </div>
 
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="TODO_BLOGGER_WEBSITE" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
-      <span class="wl-logo">TODO_BLOGGER_BRAND</span>
+    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
+      <span class="wl-logo">A Perfect Day</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>TODO_CITY</em> Guide</h1><!-- [7] -->
-      <div class="header-sub"><span class="place-count-all">TODO_COUNT</span> hand-picked places<span class="header-sub-by"> · by TODO_BLOGGER_FIRST_NAME</span></div><!-- [8] -->
+      <h1><em>London</em> Guide</h1><!-- [7] -->
+      <div class="header-sub"><span class="place-count-all">62</span> hand-picked places</div><!-- [8] no "by" line — neutral guide -->
     </div>
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
     <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
-  <a class="header-btn" href="TODO_BLOGGER_CITY_POST_URL" target="_blank">Blog ↗</a><!-- [9] -->
+  <!-- [9] No blog button — neutral guide has no linked blog post -->
 </header>
 
 <!-- Filter bar -->
-<!-- [10] Adjust category labels to suit the city. Keep onclick="fc(this,'CATKEY')" exactly as-is. -->
-<!-- Remove 'soviet' pill if not relevant. Change 'Churches' to 'Temples' if appropriate. -->
+<!-- [10] Adjusted for London: Heritage instead of Churches, Pubs & Bars, Cafés & Coffee -->
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#e8724a"></span>Landmarks</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#f0c060"></span>Restaurants</button>
-  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Bars &amp; Cafés</button>
-  <button class="pill" onclick="fc(this,'church')"><span class="dot" style="background:#6090c8"></span>Churches</button>
+  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Cafés &amp; Coffee</button>
+  <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#8b6bb1"></span>Pubs &amp; Bars</button>
+  <button class="pill" onclick="fc(this,'church')"><span class="dot" style="background:#6090c8"></span>Heritage</button>
   <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#c08060"></span>Markets</button>
-  <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#50906a"></span>Nature</button>
+  <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#50906a"></span>Nature &amp; Views</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
@@ -82,33 +83,69 @@
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
-<!-- [11] One nbhd-bubble div per neighbourhood. -->
-<!-- id must be "nbhd-" + key. selectNbhd argument must be just the key (no "nbhd-" prefix). -->
-<!-- Keys must exactly match map.js NBHD_COLORS / NBHD_LABELS / NBHD_APPROX_CENTERS -->
+<!-- [11] Keys match map.js NBHD_COLORS/LABELS/APPROX_CENTERS and data.js nbhd values -->
 <div id="nbhd-title">Neighbourhoods</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
     <div class="nbhd-handle-grip">⠿</div>
   </div>
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+
     <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
       <span class="nbhd-label">All</span>
     </div>
-    <!-- Copy and paste this block for each neighbourhood: -->
-    <div class="nbhd-bubble" id="nbhd-TODO-KEY-1" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-1', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
-      <span class="nbhd-label">TODO Display Name 1</span>
+
+    <div class="nbhd-bubble" id="nbhd-westminster" role="button" tabindex="0" onclick="selectNbhd('westminster', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">👑</div></div>
+      <span class="nbhd-label">Westminster</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-TODO-KEY-2" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-2', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
-      <span class="nbhd-label">TODO Display Name 2</span>
+
+    <div class="nbhd-bubble" id="nbhd-southbank" role="button" tabindex="0" onclick="selectNbhd('southbank', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎡</div></div>
+      <span class="nbhd-label">South Bank</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-TODO-KEY-3" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-3', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🍽️</div></div>
-      <span class="nbhd-label">TODO Display Name 3</span>
+
+    <div class="nbhd-bubble" id="nbhd-borough" role="button" tabindex="0" onclick="selectNbhd('borough', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🛒</div></div>
+      <span class="nbhd-label">Borough &amp;<br>Bermondsey</span>
     </div>
-    <!-- Add more as needed -->
+
+    <div class="nbhd-bubble" id="nbhd-city" role="button" tabindex="0" onclick="selectNbhd('city', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
+      <span class="nbhd-label">The City</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-covent-garden" role="button" tabindex="0" onclick="selectNbhd('covent-garden', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌹</div></div>
+      <span class="nbhd-label">Covent Garden<br>&amp; Soho</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-camden" role="button" tabindex="0" onclick="selectNbhd('camden', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎸</div></div>
+      <span class="nbhd-label">Camden &amp;<br>King's Cross</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-notting-hill" role="button" tabindex="0" onclick="selectNbhd('notting-hill', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎨</div></div>
+      <span class="nbhd-label">Notting Hill</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-kensington" role="button" tabindex="0" onclick="selectNbhd('kensington', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🦕</div></div>
+      <span class="nbhd-label">Kensington</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-greenwich" role="button" tabindex="0" onclick="selectNbhd('greenwich', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">⚓</div></div>
+      <span class="nbhd-label">Greenwich</span>
+    </div>
+
+    <div class="nbhd-bubble" id="nbhd-shoreditch" role="button" tabindex="0" onclick="selectNbhd('shoreditch', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🕯️</div></div>
+      <span class="nbhd-label">Shoreditch &amp;<br>Spitalfields</span>
+    </div>
+
   </div>
 </div>
 
@@ -132,10 +169,11 @@
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <span class="pc-emily-by">— TODO_BLOGGER_FIRST_NAME, TODO_BLOGGER_BRAND</span><!-- [12] -->
+      <!-- [12] No pc-emily-by attribution — neutral guide (hidden via CSS above) -->
+      <span class="pc-emily-by"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name (prevents misattribution) -->
+      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] Always "Visitor Tip" -->
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -162,11 +200,11 @@
 </div>
 
 <!-- List toggle (mobile) -->
-<!-- [14] Update TODO_COUNT in all three places below -->
+<!-- [14] Count = 58 in all four places below -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
-  <span class="count-badge" id="list-badge">TODO_COUNT</span>
+  <span class="count-badge" id="list-badge">62</span>
 </button>
 
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
@@ -184,7 +222,7 @@
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
-  <span id="list-badge-desktop">TODO_COUNT</span>
+  <span id="list-badge-desktop">62</span>
 </button>
 
 <!-- Places list sheet -->
@@ -193,7 +231,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">TODO_COUNT Places</span>
+    <span class="sheet-title" id="sheet-title">62 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
@@ -212,7 +250,7 @@
   </div>
   <div class="saved-value-props">
     <div class="saved-vp"><span class="saved-vp-icon">🗺</span><div><div class="saved-vp-title">Walking Route</div><div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div></div></div>
-    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your journey</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your London journey</div></div></div>
     <div class="saved-vp"><span class="saved-vp-icon">🖼</span><div><div class="saved-vp-title">Map Screenshot</div><div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div></div></div>
   </div>
   <div class="saved-panel-actions">
@@ -228,7 +266,7 @@
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
   <span>Places</span>
-  <span class="desktop-list-count" id="desktop-list-count">TODO_COUNT</span>
+  <span class="desktop-list-count" id="desktop-list-count">62</span>
 </button>
 
 <!-- JS modules — load order is critical, do not reorder -->
@@ -244,8 +282,7 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Override platform's openTripInMaps — must be AFTER ui-pdf.js so it wins.
-     Opens saved places as named waypoints in Google Maps (not bare GPS coords). -->
+<!-- Override platform's openTripInMaps — must be AFTER ui-pdf.js so it wins -->
 <script>
 function openTripInMaps() {
   let ids = [];
@@ -262,7 +299,7 @@ function openTripInMaps() {
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
-<!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
+<!-- [15] Keep exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
   window.addEventListener('load', initMap);
 </script>
