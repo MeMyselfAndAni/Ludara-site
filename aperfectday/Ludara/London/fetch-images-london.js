@@ -45,12 +45,12 @@ const ARTICLES = {
   16: 'Bermondsey',                // Bermondsey Street
   17: 'Flat white',                // WatchHouse: coffee art
   18: 'Croquette',                 // José: iconic Spanish snack
-  19: 'Art exhibition',            // White Cube
+  19: 'Installation art',           // White Cube — modern, not Victorian engraving
   20: 'Glassblowing',             // London Glassblowing: molten glass
   21: 'Pie and mash',
   22: 'Sunday roast',             // The Garrison
-  60: 'Smithfield, London',       // St John Restaurant
-  61: 'Street food',              // Maltby Street Market
+  60: 'Bone marrow',                // St John — their most famous dish
+  61: 'Viaduct',                    // Maltby Street — railway arches
 
   // THE CITY — 25 and 27 now distinct
   23: 'Tower Bridge',
@@ -104,7 +104,7 @@ const ARTICLES = {
   68: 'Somerset House',             // Australia House — both grand Strand buildings
   69: 'Israeli cuisine',              // The Palomar
   70: 'Appam',                        // Hoppers
-  71: 'Boundary Estate',              // Rochelle Canteen
+  71: 'Kitchen garden',             // Rochelle Canteen — their garden space
   72: 'Venison',                      // Rules — their signature game meat
   64: 'Columbia Road Flower Market',
   65: 'Beigel Bake',
@@ -117,7 +117,7 @@ const SKIP = new Set([6, 10, 39, 51]);
 // ── IDs that had duplicate/wrong images — delete before re-downloading ────────
 // Empty — all duplicates have been resolved. Add IDs here only when you want to
 // force a specific image to be re-downloaded.
-const FORCE_REFRESH = new Set([]);
+const FORCE_REFRESH = new Set([19, 60, 61, 71]); // wrong images — replace
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function fetchJSON(url) {
