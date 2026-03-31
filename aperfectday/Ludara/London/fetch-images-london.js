@@ -49,8 +49,8 @@ const ARTICLES = {
   20: 'Glassblowing',             // London Glassblowing: molten glass
   21: 'Pie and mash',
   22: 'Sunday roast',             // The Garrison
-  60: 'Bone marrow',                // St John — their most famous dish
-  61: 'Viaduct',                    // Maltby Street — railway arches
+  60: 'Smithfield Market, London',   // St John — beside Smithfield
+  61: 'Maltby Street Market',        // direct article
 
   // THE CITY — 25 and 27 now distinct
   23: 'Tower Bridge',
@@ -105,7 +105,7 @@ const ARTICLES = {
   69: 'Israeli cuisine',              // The Palomar
   70: 'Appam',                        // Hoppers
   71: 'Kitchen garden',             // Rochelle Canteen — their garden space
-  72: 'Venison',                      // Rules — their signature game meat
+  72: 'English cuisine',              // Rules — classic British cooking
   64: 'Columbia Road Flower Market',
   65: 'Beigel Bake',
   66: 'Shoreditch',
@@ -117,7 +117,7 @@ const SKIP = new Set([6, 10, 39, 51]);
 // ── IDs that had duplicate/wrong images — delete before re-downloading ────────
 // Empty — all duplicates have been resolved. Add IDs here only when you want to
 // force a specific image to be re-downloaded.
-const FORCE_REFRESH = new Set([19, 60, 61, 71]); // wrong images — replace
+const FORCE_REFRESH = new Set([60, 61, 72]); // wrong images — replace
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function fetchJSON(url) {
