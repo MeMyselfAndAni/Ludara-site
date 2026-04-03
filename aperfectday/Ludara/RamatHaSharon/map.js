@@ -30,20 +30,20 @@ const CL = {
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
 const NBHD_COLORS = {
-  'nbhd-sokolov': '#e8724a',
-  'nbhd-park':    '#50906a',
+  'sokolov': '#e8724a',
+  'park':    '#50906a',
 };
 
 // ─── Neighbourhood display labels ─────────────────────────────────────────────
 const NBHD_LABELS = {
-  'nbhd-sokolov': 'Sokolov & Center',
-  'nbhd-park':    'Parks & North',
+  'sokolov': 'Sokolov & Center',
+  'park':    'Parks & North',
 };
 
 // ─── Neighbourhood approximate centers ───────────────────────────────────────
 const NBHD_APPROX_CENTERS = {
-  'nbhd-sokolov': { lat: 32.145617, lng: 34.839814 },
-  'nbhd-park':    { lat: 32.139039, lng: 34.845795  },
+  'sokolov': { lat: 32.145617, lng: 34.839814 },
+  'park':    { lat: 32.139039, lng: 34.845795  },
 };
 
 // ─── Map init ────────────────────────────────────────────────────────────────

@@ -8,7 +8,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.2 (3,602 reviews)
     id: 1,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Reviva and Celia',
     cat: 'cafe',
     emoji: '🥐',
@@ -28,7 +28,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.0 (1,083 reviews)
     id: 2,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Cafe 111',
     cat: 'cafe',
     emoji: '☕',
@@ -48,7 +48,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.6 (180 reviews)
     id: 3,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Lila Pizza',
     cat: 'food',
     emoji: '🍕',
@@ -68,7 +68,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.3 (894 reviews)
     id: 4,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Pizza Porto',
     cat: 'food',
     emoji: '🍕',
@@ -88,7 +88,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.1 (2,770 reviews)
     id: 5,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Assaf Artisanal',
     cat: 'cafe',
     emoji: '🥖',
@@ -109,7 +109,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews + Ontopo ✅ Rating 4.2 (80 reviews)
     id: 6,
-    nbhd: 'nbhd-park',
+    nbhd: 'park',
     name: 'La Terrazza',
     cat: 'cafe',
     emoji: '🌿',
@@ -129,7 +129,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.2 (1,126 reviews)
     id: 7,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Soko 77',
     cat: 'pub',
     emoji: '🍺',
@@ -150,7 +150,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.1 (725 reviews)
     id: 8,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Sushi Bar',
     cat: 'food',
     emoji: '🍣',
@@ -170,7 +170,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews + Ontopo ✅ Rating 4.8 (72 reviews)
     id: 9,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Vineria',
     cat: 'pub',
     emoji: '🍷',
@@ -190,7 +190,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.5 (28 reviews)
     id: 10,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Dali Wine Bar',
     cat: 'pub',
     emoji: '🍷',
@@ -210,7 +210,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.2 (114 reviews)
     id: 11,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Sophia Wine Salon',
     cat: 'pub',
     emoji: '🍷',
@@ -230,7 +230,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.6 (78 reviews)
     id: 12,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Beleza Wine Bar',
     cat: 'pub',
     emoji: '🎶',
@@ -250,7 +250,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.4 (2,860 reviews)
     id: 13,
-    nbhd: 'nbhd-park',
+    nbhd: 'park',
     name: 'Park Ramat HaSharon',
     cat: 'nature',
     emoji: '🌳',
@@ -270,7 +270,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.9 (12 reviews)
     id: 14,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Municipal Gallery',
     cat: 'landmark',
     emoji: '🎨',
@@ -290,7 +290,7 @@ const PLACES = [
   {
     // SOURCE: Google Maps + Google Reviews ✅ Rating 4.2 (90 reviews)
     id: 15,
-    nbhd: 'nbhd-sokolov',
+    nbhd: 'sokolov',
     name: 'Geological Museum',
     cat: 'landmark',
     emoji: '💎',

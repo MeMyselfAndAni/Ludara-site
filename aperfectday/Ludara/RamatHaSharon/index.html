@@ -260,6 +260,18 @@ function openTripInMaps() {
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
+
+<script>
+// Hide neighbourhood bubbles that have no places
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key; }).length;
+    if (count === 0) bubble.style.display = 'none';
+  });
+});
+</script>
 <script>
   window.addEventListener('load', initMap);
 </script>
