@@ -18,12 +18,7 @@
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
-  /* User location dot — red */
-  .maplibregl-user-location-dot { background-color: #e8162a !important; }
-  .maplibregl-user-location-dot::before { background-color: #e8162a !important; }
-  .maplibregl-user-location-dot::after { background-color: rgba(232,22,42,0.3) !important; }
-  .maplibregl-user-location-accuracy-circle { background-color: rgba(232,22,42,0.1) !important; }
-  /* Compass/geolocate control button — keep white, do NOT change */
+  /* Compass/geolocate control button — keep white */
   .maplibregl-ctrl-geolocate { background-color: white !important; }
 </style>
 </head>
@@ -266,6 +261,46 @@ function openTripInMaps() {
 }
 </script>
 
+
+<script>
+// Force user location dot to red — MutationObserver catches it whenever it appears
+(function() {
+  function paintDotRed() {
+    // Try all known MapLibre location dot class names across versions
+    var selectors = [
+      '.maplibregl-user-location-dot',
+      '.maplibregl-user-location-dot-outer',
+      '[class*="user-location-dot"]',
+      '[class*="user_location"]',
+    ];
+    selectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        el.style.setProperty('background-color', '#e8162a', 'important');
+        el.style.setProperty('border-color', '#e8162a', 'important');
+        el.style.setProperty('box-shadow', '0 0 0 2px rgba(232,22,42,0.4)', 'important');
+      });
+    });
+    // Also tint the accuracy circle faint red
+    document.querySelectorAll('.maplibregl-user-location-accuracy-circle, [class*="accuracy-circle"]').forEach(function(el) {
+      el.style.setProperty('background-color', 'rgba(232,22,42,0.12)', 'important');
+    });
+  }
+
+  // Watch for any new elements added to the map container
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (node.nodeType === 1) paintDotRed();
+      });
+    });
+  });
+
+  window.addEventListener('load', function() {
+    var mapEl = document.getElementById('map');
+    if (mapEl) observer.observe(mapEl, { childList: true, subtree: true });
+  });
+})();
+</script>
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 
