@@ -46,10 +46,10 @@ const NBHD_LABELS = {
 
 // ─── Neighbourhood approximate centers ───────────────────────────────────────
 const NBHD_APPROX_CENTERS = {
-  'nbhd-sokolov': { lat: 32.1460, lng: 34.8400 },
-  'nbhd-ahuza':   { lat: 32.1560, lng: 34.8460 },
-  'nbhd-glilot':  { lat: 32.1300, lng: 34.8320 },
-  'nbhd-park':    { lat: 32.1520, lng: 34.8340 },
+  'nbhd-sokolov': { lat: 32.145617, lng: 34.839814 },
+  'nbhd-ahuza':   { lat: 32.1560,   lng: 34.8460   },
+  'nbhd-glilot':  { lat: 32.1300,   lng: 34.8320   },
+  'nbhd-park':    { lat: 32.139039, lng: 34.845795  },
 };
 
 // ─── Map init ────────────────────────────────────────────────────────────────
