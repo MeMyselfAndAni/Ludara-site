@@ -16,6 +16,7 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 </style>
 </head>
 <body>
@@ -114,6 +115,7 @@
     <div class="pc-cat" id="pc-cat"></div>
     <div class="pc-title" id="pc-title"></div>
     <div class="pc-type" id="pc-type"></div>
+    <div class="pc-address" id="pc-address"></div>
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
@@ -227,6 +229,20 @@
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
+
+<script>
+// Populate address on card open by watching pc-title changes
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  var addrEl  = document.getElementById('pc-address');
+  if (!titleEl || !addrEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+</script>
 
 <script>
 function openTripInMaps() {
