@@ -262,45 +262,6 @@ function openTripInMaps() {
 </script>
 
 
-<script>
-// Force user location dot to red — MutationObserver catches it whenever it appears
-(function() {
-  function paintDotRed() {
-    // Try all known MapLibre location dot class names across versions
-    var selectors = [
-      '.maplibregl-user-location-dot',
-      '.maplibregl-user-location-dot-outer',
-      '[class*="user-location-dot"]',
-      '[class*="user_location"]',
-    ];
-    selectors.forEach(function(sel) {
-      document.querySelectorAll(sel).forEach(function(el) {
-        el.style.setProperty('background-color', '#e8162a', 'important');
-        el.style.setProperty('border-color', '#e8162a', 'important');
-        el.style.setProperty('box-shadow', '0 0 0 2px rgba(232,22,42,0.4)', 'important');
-      });
-    });
-    // Also tint the accuracy circle faint red
-    document.querySelectorAll('.maplibregl-user-location-accuracy-circle, [class*="accuracy-circle"]').forEach(function(el) {
-      el.style.setProperty('background-color', 'rgba(232,22,42,0.12)', 'important');
-    });
-  }
-
-  // Watch for any new elements added to the map container
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      m.addedNodes.forEach(function(node) {
-        if (node.nodeType === 1) paintDotRed();
-      });
-    });
-  });
-
-  window.addEventListener('load', function() {
-    var mapEl = document.getElementById('map');
-    if (mapEl) observer.observe(mapEl, { childList: true, subtree: true });
-  });
-})();
-</script>
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 
@@ -318,7 +279,8 @@ window.addEventListener('load', function() {
 
 
 
-<!-- ── LOCATE ME — uses MapLibre GeolocateControl ───────────── -->
+
+<!-- ── LOCATE ME — custom red dot via geolocate event ──────── -->
 <script>
 window.addEventListener('load', function() {
   var origInitMap = window.initMap;
@@ -326,48 +288,75 @@ window.addEventListener('load', function() {
     origInitMap();
     map.on('load', function() {
 
+      // Use GeolocateControl only for permission + tracking — hide its dot
       var geolocate = new maplibregl.GeolocateControl({
         positionOptions: { enableHighAccuracy: true },
         trackUserLocation: true,
-        showUserHeading: true,
-        showAccuracyCircle: true,
+        showUserHeading: false,
+        showAccuracyCircle: false,  // hide built-in dot and circle
       });
       map.addControl(geolocate, 'bottom-right');
 
-      // Style the native compass button to match our UI, keep it visible as fallback
-      setTimeout(function() {
-        var nativeBtn = document.querySelector('.maplibregl-ctrl-geolocate');
-        if (nativeBtn) nativeBtn.title = 'Show my location';
-      }, 200);
+      // Hide MapLibre's own dot via CSS injected into head
+      var styleEl = document.createElement('style');
+      styleEl.textContent = '.maplibregl-user-location-dot, .maplibregl-user-location-accuracy-circle { display: none !important; }';
+      document.head.appendChild(styleEl);
+
+      // Our own red dot marker
+      var redDotEl = document.createElement('div');
+      redDotEl.style.cssText = [
+        'width:16px', 'height:16px', 'border-radius:50%',
+        'background:#e8162a', 'border:3px solid white',
+        'box-shadow:0 2px 8px rgba(232,22,42,0.5)',
+        'pointer-events:none'
+      ].join(';');
+      var redDotMarker = new maplibregl.Marker({ element: redDotEl, anchor: 'center' });
+
+      var firstFix = true;
+
+      // Update our red dot whenever position comes in
+      geolocate.on('geolocate', function(e) {
+        var lat = e.coords.latitude;
+        var lng = e.coords.longitude;
+        redDotMarker.setLngLat([lng, lat]).addTo(map);
+        if (firstFix) {
+          firstFix = false;
+          map.panTo([lng, lat], { duration: 800 });
+        }
+      });
+
+      // Remove red dot when tracking ends
+      geolocate.on('trackuserlocationend', function() {
+        redDotMarker.remove();
+        firstFix = true;
+      });
+      geolocate.on('error', function() {
+        redDotMarker.remove();
+        firstFix = true;
+      });
 
       var ASKED_KEY = 'apd_location_asked';
-      var locBtn = document.getElementById('locate-btn');
 
-      // Show a friendly toast above the button before triggering browser prompt
       function showLocationToast(onConfirm) {
         var existing = document.getElementById('loc-toast');
-        if (existing) { existing.remove(); }
-
+        if (existing) existing.remove();
         var toast = document.createElement('div');
         toast.id = 'loc-toast';
         toast.style.cssText = [
-          'position:fixed','bottom:140px','right:10px','z-index:9999',
-          'background:#1a3a5c','color:white','border-radius:12px',
-          'padding:12px 16px','max-width:220px','font-size:0.82rem',
-          'line-height:1.4','box-shadow:0 4px 16px rgba(0,0,0,0.3)',
-          'animation:fadeIn 0.2s ease'
+          'position:fixed', 'bottom:140px', 'right:10px', 'z-index:9999',
+          'background:#1a3a5c', 'color:white', 'border-radius:12px',
+          'padding:12px 16px', 'max-width:220px', 'font-size:0.82rem',
+          'line-height:1.4', 'box-shadow:0 4px 16px rgba(0,0,0,0.3)'
         ].join(';');
         toast.innerHTML = [
           '<strong>📍 Show my location</strong><br>',
           '<span style="opacity:0.85">Your browser will ask permission to access your location.</span><br><br>',
           '<div style="display:flex;gap:8px">',
-          '  <button id="loc-yes" style="flex:1;padding:7px;border-radius:8px;border:none;background:#e8162a;color:white;font-weight:600;cursor:pointer">Allow</button>',
-          '  <button id="loc-no"  style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:white;cursor:pointer">Not now</button>',
+          '<button id="loc-yes" style="flex:1;padding:7px;border-radius:8px;border:none;background:#e8162a;color:white;font-weight:600;cursor:pointer">Allow</button>',
+          '<button id="loc-no" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:white;cursor:pointer">Not now</button>',
           '</div>'
         ].join('');
-
         document.body.appendChild(toast);
-
         document.getElementById('loc-yes').onclick = function() {
           toast.remove();
           localStorage.setItem(ASKED_KEY, '1');
@@ -377,19 +366,14 @@ window.addEventListener('load', function() {
           toast.remove();
           localStorage.setItem(ASKED_KEY, 'declined');
         };
-
-        // Auto-dismiss after 8 seconds
         setTimeout(function() { if (toast.parentNode) toast.remove(); }, 8000);
       }
 
       window.locateMe = function() {
         var asked = localStorage.getItem(ASKED_KEY);
         if (!asked) {
-          // First time ever — show our friendly toast before browser asks
           showLocationToast(function() { geolocate.trigger(); });
         } else {
-          // Already answered before — go straight to trigger
-          // (iOS Safari may still ask per-session — that's browser behaviour, not our code)
           geolocate.trigger();
         }
       };
