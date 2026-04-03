@@ -7,7 +7,6 @@
 //   node fetch-images-universal.js
 //
 // Re-verify existing images (fix mismatches):
-//   node fetch-images-universal.js --reverify
 //
 // Vision verification (recommended):
 //   Set ANTHROPIC_API_KEY as an environment variable before running.
@@ -30,10 +29,52 @@ const readline = require('readline');
 
 const OUTPUT_DIR  = path.join(__dirname, 'images');
 const API_KEY     = process.env.ANTHROPIC_API_KEY || '';
-const REVERIFY    = process.argv.includes('--reverify');
+// --force = clear cache and re-verify/re-fetch everything
+// --skip=1,2,3 = skip specific place IDs
+const FORCE       = process.argv.includes('--force');
 const SKIP_IDS    = process.argv.find(a => a.startsWith('--skip='))
   ? process.argv.find(a => a.startsWith('--skip=')).replace('--skip=','').split(',').map(Number)
   : [];
+
+
+// ── VERIFICATION CACHE ────────────────────────────────────────────
+// Stores {id: {ok: bool, size: int, mtime: int}} in images/.verified.json
+// Images are re-checked only if size or mtime changed since last verify.
+const CACHE_FILE = path.join(OUTPUT_DIR.replace(/images$/, ''), 'images', '.verified.json');
+
+function loadCache() {
+  try {
+    if (fs.existsSync(CACHE_FILE)) return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+  } catch(e) {}
+  return {};
+}
+
+function saveCache(cache) {
+  try {
+    if (!fs.existsSync(path.dirname(CACHE_FILE))) fs.mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
+  } catch(e) {}
+}
+
+function imageFingerprint(filePath) {
+  try {
+    const s = fs.statSync(filePath);
+    return { size: s.size, mtime: s.mtimeMs };
+  } catch(e) { return null; }
+}
+
+function isCacheValid(cache, id, filePath) {
+  const entry = cache[String(id)];
+  if (!entry || !entry.ok) return false;
+  const fp = imageFingerprint(filePath);
+  if (!fp) return false;
+  return fp.size === entry.size && Math.abs(fp.mtime - entry.mtime) < 2000;
+}
+
+function cacheResult(cache, id, filePath, ok) {
+  const fp = imageFingerprint(filePath);
+  cache[String(id)] = { ok, ...(fp || {}), ts: Date.now() };
+}
 
 // ── LANGUAGE MAP ──────────────────────────────────────────────────
 const LANGUAGE_MAP = {
@@ -406,6 +447,7 @@ async function fetchPlace(place, lang, translations) {
       fs.renameSync(tmpPath, dest);
       const kb = Math.round(fs.statSync(dest).size / 1024);
       console.log('  ✅ ' + kb + 'KB\n');
+      const c = loadCache(); cacheResult(c, place.id, dest, true); saveCache(c);
       return 'ok';
     } catch(e) {
       // rename may fail cross-device — try copy+delete
@@ -424,82 +466,6 @@ async function fetchPlace(place, lang, translations) {
   return 'failed';
 }
 
-// ── REVERIFY MODE ─────────────────────────────────────────────────
-async function reverify(PLACES, lang, translations) {
-  console.log('\n══════════════════════════════════════════════════');
-  console.log('  REVERIFY MODE — checking existing images');
-  if (!API_KEY) {
-    console.log('  ⚠️  ANTHROPIC_API_KEY not set — cannot verify images.');
-    console.log('  Set it first: set ANTHROPIC_API_KEY=sk-ant-...');
-    process.exit(1);
-  }
-  console.log('══════════════════════════════════════════════════\n');
-
-  const toRefetch = [];
-
-  for (const place of PLACES) {
-    const dest = path.join(OUTPUT_DIR, 'place-' + place.id + '.jpg');
-    if (SKIP_IDS.includes(place.id)) {
-      console.log('place-' + place.id + ' ' + place.name + ': ⏭  skipped (--skip)');
-      continue;
-    }
-    if (!fs.existsSync(dest)) {
-      console.log('place-' + place.id + ' ' + place.name + ': no image, will fetch');
-      toRefetch.push(place);
-      continue;
-    }
-    process.stdout.write('place-' + place.id + ' ' + place.name + ': checking... ');
-    const matches = await verifyImage(dest, place);
-    if (matches) {
-      console.log('✅ ok');
-    } else {
-      console.log('❌ MISMATCH — will re-fetch');
-      fs.unlink(dest, () => {});
-      toRefetch.push(place);
-    }
-  }
-
-  if (!toRefetch.length) {
-    console.log('\n  All images verified — no mismatches found! ✅\n');
-    return;
-  }
-
-  console.log('\n  Re-fetching ' + toRefetch.length + ' mismatched images...\n');
-  const results = { ok: [], failed: [] };
-  for (const place of toRefetch) {
-    const result = await fetchPlace(place, lang, translations);
-    const bak = path.join(OUTPUT_DIR, 'place-' + place.id + '_bak.jpg');
-    if (result === 'ok') {
-      results.ok.push(place.name);
-      if (fs.existsSync(bak)) fs.unlink(bak, () => {});  // clean up backup
-    } else {
-      // Re-fetch failed — restore backup so the guide still has an image
-      if (fs.existsSync(bak)) {
-        const dest = path.join(OUTPUT_DIR, 'place-' + place.id + '.jpg');
-        fs.copyFileSync(bak, dest);
-        fs.unlink(bak, () => {});
-        console.log('  ↩️  Restored original image for ' + place.name + '\n');
-        results.restored.push(place.name);
-      } else {
-        results.failed.push({ id: place.id, name: place.name });
-      }
-    }
-    await new Promise(r => setTimeout(r, 300));
-  }
-
-  console.log('══════════════════════════════════════════════════');
-  console.log('  Reverify complete');
-  console.log('  ✅ Fixed: ' + results.ok.length + '  ↩️  Restored: ' + results.restored.length + '  ❌ Still missing: ' + results.failed.length);
-  if (results.restored.length) {
-    console.log('\n  Restored originals (no better match found) — review manually if needed:');
-    results.restored.forEach(n => console.log('    ' + n));
-  }
-  if (results.failed.length) {
-    console.log('\n  Still needs manual images:');
-    results.failed.forEach(p => console.log('    place-' + p.id + '.jpg  →  ' + p.name));
-  }
-  console.log('══════════════════════════════════════════════════\n');
-}
 
 // ── MAIN ─────────────────────────────────────────────────────────
 async function run() {
@@ -515,7 +481,7 @@ async function run() {
   console.log('  Places:     ' + PLACES.length);
   console.log('  Output:     ' + OUTPUT_DIR);
   console.log('  Verify:     ' + (API_KEY ? '✅ Claude vision active' : '⚠️  No API key — verification skipped'));
-  console.log('  Mode:       ' + (REVERIFY ? 'REVERIFY existing images' : 'fetch missing images'));
+  console.log('  Mode:       smart (fetch missing + verify unverified + resize)' + (FORCE ? ' [FORCE]' : ''));
   if (SKIP_IDS.length) console.log('  Skipping:   place IDs ' + SKIP_IDS.join(', '));
   if (!LANGUAGE_MAP[COUNTRY]) {
     console.log('  ⚠️  "' + COUNTRY + '" not in language map — searching in English only.');
@@ -529,6 +495,11 @@ async function run() {
 
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
+  if (FORCE && fs.existsSync(CACHE_FILE)) {
+    fs.unlinkSync(CACHE_FILE);
+    console.log('\n  Cache cleared (--force mode).');
+  }
+
   // Pre-translate place names
   const translations = {};
   if (lang.code !== 'en') {
@@ -541,41 +512,64 @@ async function run() {
     }
   }
 
-  // REVERIFY MODE
-  if (REVERIFY) {
-    await reverify(PLACES, lang, translations);
-    return;
-  }
+  // SMART MODE — one command does everything
+  const cache = loadCache();
+  const results = { ok: [], verified: [], skipped: [], failed: [] };
 
-  // NORMAL FETCH MODE
-  console.log('\n  Fetching images...\n');
-  const results = { ok: [], skipped: [], failed: [] };
-
+  // ── PASS 1: Verify existing images not yet in cache ───────────────
+  console.log('\n  Pass 1: checking existing images...\n');
+  let needCheck = 0;
   for (const place of PLACES) {
+    if (SKIP_IDS.includes(place.id)) continue;
     const dest = path.join(OUTPUT_DIR, 'place-' + place.id + '.jpg');
-
-    if (fs.existsSync(dest) && fs.statSync(dest).size > 10000) {
-      console.log('place-' + place.id + ' ' + place.name + ': ⏭  exists');
+    if (!fs.existsSync(dest) || fs.statSync(dest).size <= 10000) continue;
+    if (isCacheValid(cache, place.id, dest)) {
+      console.log('place-' + place.id + ' ' + place.name + ': ✅ already verified');
       results.skipped.push(place.name);
       continue;
     }
+    needCheck++;
+    if (!API_KEY) {
+      cacheResult(cache, place.id, dest, true); saveCache(cache);
+      console.log('place-' + place.id + ' ' + place.name + ': ✅ accepted (no API key)');
+      results.skipped.push(place.name);
+      continue;
+    }
+    process.stdout.write('place-' + place.id + ' ' + place.name + ': verifying... ');
+    const matches = await verifyImage(dest, place);
+    if (matches) {
+      console.log('✅ ok');
+      cacheResult(cache, place.id, dest, true); saveCache(cache);
+      results.verified.push(place.name);
+    } else {
+      console.log('❌ mismatch — will re-fetch');
+      const bak = dest.replace('.jpg', '_bak.jpg');
+      try { fs.copyFileSync(dest, bak); } catch(e) {}
+      fs.unlink(dest, () => {});
+    }
+    await new Promise(r => setTimeout(r, 200));
+  }
+  if (needCheck === 0) console.log('  All existing images already verified ✅');
+
+  // ── PASS 2: Fetch missing images ─────────────────────────────────
+  console.log('\n  Pass 2: fetching missing images...\n');
+  for (const place of PLACES) {
+    if (SKIP_IDS.includes(place.id)) continue;
+    const dest = path.join(OUTPUT_DIR, 'place-' + place.id + '.jpg');
+    if (fs.existsSync(dest) && fs.statSync(dest).size > 10000) continue;
 
     const result = await fetchPlace(place, lang, translations);
-    const bak = path.join(OUTPUT_DIR, 'place-' + place.id + '_bak.jpg');
+    const bak = dest.replace('.jpg', '_bak.jpg');
     if (result === 'ok') {
       results.ok.push(place.name);
-      if (fs.existsSync(bak)) fs.unlink(bak, () => {});  // clean up backup
+      const c = loadCache(); cacheResult(c, place.id, dest, true); saveCache(c);
+      if (fs.existsSync(bak)) fs.unlink(bak, () => {});
+    } else if (fs.existsSync(bak)) {
+      fs.copyFileSync(bak, dest); fs.unlink(bak, () => {});
+      console.log('  ↩️  Restored original for ' + place.name + '\n');
+      results.skipped.push(place.name);
     } else {
-      // Re-fetch failed — restore backup so the guide still has an image
-      if (fs.existsSync(bak)) {
-        const dest = path.join(OUTPUT_DIR, 'place-' + place.id + '.jpg');
-        fs.copyFileSync(bak, dest);
-        fs.unlink(bak, () => {});
-        console.log('  ↩️  Restored original image for ' + place.name + '\n');
-        results.restored.push(place.name);
-      } else {
-        results.failed.push({ id: place.id, name: place.name });
-      }
+      results.failed.push({ id: place.id, name: place.name });
     }
     await new Promise(r => setTimeout(r, 300));
   }
@@ -591,7 +585,8 @@ async function run() {
   console.log('  SUMMARY');
   console.log('══════════════════════════════════════════════════');
   console.log('  ✅ Downloaded:   ' + results.ok.length);
-  console.log('  ⏭  Already had: ' + results.skipped.length);
+  console.log('  🔍 Verified:     ' + (results.verified || []).length);
+  console.log('  ⏭  Unchanged:   ' + results.skipped.length);
   console.log('  ❌ Failed:       ' + results.failed.length);
   if (results.failed.length > 0) {
     console.log('\n  Failed — add images manually:');

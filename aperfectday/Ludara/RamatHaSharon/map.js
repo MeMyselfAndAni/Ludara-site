@@ -31,24 +31,18 @@ const CL = {
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
 const NBHD_COLORS = {
   'nbhd-sokolov': '#e8724a',
-  'nbhd-ahuza':   '#d4a043',
-  'nbhd-glilot':  '#6b9e6e',
   'nbhd-park':    '#50906a',
 };
 
 // ─── Neighbourhood display labels ─────────────────────────────────────────────
 const NBHD_LABELS = {
   'nbhd-sokolov': 'Sokolov & Center',
-  'nbhd-ahuza':   'Ahuza',
-  'nbhd-glilot':  'Glilot & South',
   'nbhd-park':    'Parks & North',
 };
 
 // ─── Neighbourhood approximate centers ───────────────────────────────────────
 const NBHD_APPROX_CENTERS = {
   'nbhd-sokolov': { lat: 32.145617, lng: 34.839814 },
-  'nbhd-ahuza':   { lat: 32.1560,   lng: 34.8460   },
-  'nbhd-glilot':  { lat: 32.1300,   lng: 34.8320   },
   'nbhd-park':    { lat: 32.139039, lng: 34.845795  },
 };
 
