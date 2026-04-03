@@ -8,6 +8,7 @@
 //   [ ] CC and CL both present (both required — map-core.js will throw without them)
 //   [ ] NBHD_COLORS, NBHD_LABELS, NBHD_APPROX_CENTERS all have matching keys
 //   [ ] Neighbourhood keys here match data.js nbhd values AND index.html bubble IDs
+//         Keys are plain words (e.g. 'sokolov') — NO 'nbhd-' prefix in map.js or data.js
 //   [ ] initMap() is NOT called at the bottom of this file
 //   [ ] FAVS_KEY is NOT declared here (it lives in ui-favourites.js)
 
@@ -48,34 +49,36 @@ const CL = {
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
 // Keys must exactly match: data.js nbhd values, index.html bubble IDs (minus 'nbhd-' prefix)
+// Keys must be plain words — e.g. 'sokolov', 'old-town', 'waterfront'
+// ⚠️  NO 'nbhd-' prefix in keys. The 'nbhd-' prefix belongs only on HTML element IDs.
 const NBHD_COLORS = {
-  'TODO-nbhd-1': '#e8724a',
-  'TODO-nbhd-2': '#d4a043',
-  'TODO-nbhd-3': '#4a90d9',
-  'TODO-nbhd-4': '#7b68c8',
-  'TODO-nbhd-5': '#4ab8a0',
-  'TODO-nbhd-6': '#c8687b',
+  'TODO-key-1': '#e8724a',
+  'TODO-key-2': '#d4a043',
+  'TODO-key-3': '#4a90d9',
+  'TODO-key-4': '#7b68c8',
+  'TODO-key-5': '#4ab8a0',
+  'TODO-key-6': '#c8687b',
 };
 
 // ─── Neighbourhood display labels ─────────────────────────────────────────────
 const NBHD_LABELS = {
-  'TODO-nbhd-1': 'TODO Display Name 1',
-  'TODO-nbhd-2': 'TODO Display Name 2',
-  'TODO-nbhd-3': 'TODO Display Name 3',
-  'TODO-nbhd-4': 'TODO Display Name 4',
-  'TODO-nbhd-5': 'TODO Display Name 5',
-  'TODO-nbhd-6': 'TODO Display Name 6',
+  'TODO-key-1': 'TODO Display Name 1',
+  'TODO-key-2': 'TODO Display Name 2',
+  'TODO-key-3': 'TODO Display Name 3',
+  'TODO-key-4': 'TODO Display Name 4',
+  'TODO-key-5': 'TODO Display Name 5',
+  'TODO-key-6': 'TODO Display Name 6',
 };
 
 // ─── Neighbourhood approximate centers ───────────────────────────────────────
 // Used to calculate circle radius and to pan the map when a neighbourhood is selected
 const NBHD_APPROX_CENTERS = {
-  'TODO-nbhd-1': { lat: 0.0000, lng: 0.0000 },
-  'TODO-nbhd-2': { lat: 0.0000, lng: 0.0000 },
-  'TODO-nbhd-3': { lat: 0.0000, lng: 0.0000 },
-  'TODO-nbhd-4': { lat: 0.0000, lng: 0.0000 },
-  'TODO-nbhd-5': { lat: 0.0000, lng: 0.0000 },
-  'TODO-nbhd-6': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-1': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-2': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-3': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-4': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-5': { lat: 0.0000, lng: 0.0000 },
+  'TODO-key-6': { lat: 0.0000, lng: 0.0000 },
 };
 
 // ─── Map initialisation ───────────────────────────────────────────────────────

@@ -13,6 +13,7 @@
 //   landmark / food / cafe / pub / church / market / soviet / nature
 //
 // nbhd values must exactly match keys in NBHD_APPROX_CENTERS in map.js
+// ⚠️  Use plain keys like 'sokolov', 'old-town' — NOT 'nbhd-sokolov' (no nbhd- prefix)
 //
 // ─── CONTENT AUTHENTICITY RULES (enforce before every deploy) ────────────────
 //
@@ -42,7 +43,7 @@ const PLACES = [
   {
     // SOURCE: https://bloggersite.com/post-about-this-place/
     id: 1,
-    nbhd: 'nbhd-key',              // must match map.js NBHD_APPROX_CENTERS key
+    nbhd: 'key',                   // must match map.js NBHD_APPROX_CENTERS key (NO 'nbhd-' prefix)
     name: 'Place Name',
     cat: 'landmark',               // landmark/food/cafe/pub/church/market/soviet/nature
     emoji: '🏛️',
@@ -84,7 +85,7 @@ const PLACES = [
   {
     // ⚠️ No dedicated post — factual description only, not attributed as blogger's words
     id: 3,
-    nbhd: 'nbhd-key-2',
+    nbhd: 'key-2',
     name: 'Third Place',
     cat: 'cafe',
     emoji: '🍸',

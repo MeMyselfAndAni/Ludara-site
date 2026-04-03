@@ -272,6 +272,113 @@ window.addEventListener('load', function() {
   });
 });
 </script>
+
+<!-- ── LOCATE ME — not in map-core.js, implemented here ─────── -->
+<script>
+(function() {
+  var _watchId = null;
+  var _locMarker = null;
+  var _locCircle = null;
+  var _locActive = false;
+
+  window.locateMe = function() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    var btn = document.getElementById('locate-btn');
+
+    // If already active — stop watching and remove marker
+    if (_locActive) {
+      _locActive = false;
+      if (_watchId !== null) { navigator.geolocation.clearWatch(_watchId); _watchId = null; }
+      if (_locMarker) { _locMarker.remove(); _locMarker = null; }
+      if (_locCircle && map.getSource('loc-circle')) {
+        map.getSource('loc-circle').setData({ type:'FeatureCollection', features:[] });
+      }
+      if (btn) btn.style.background = '';
+      return;
+    }
+
+    // First call — request permission + start watching
+    _locActive = true;
+    if (btn) btn.style.background = 'rgba(0,120,255,0.15)';
+
+    // Add accuracy circle source/layer if not present
+    if (!map.getSource('loc-circle')) {
+      map.addSource('loc-circle', { type:'geojson', data:{ type:'FeatureCollection', features:[] } });
+      map.addLayer({ id:'loc-circle-fill', type:'fill', source:'loc-circle',
+        paint:{ 'fill-color':'#0078ff', 'fill-opacity':0.12 } });
+      map.addLayer({ id:'loc-circle-line', type:'line', source:'loc-circle',
+        paint:{ 'line-color':'#0078ff', 'line-width':1.5, 'line-opacity':0.5 } });
+    }
+
+    var firstFix = true;
+
+    function onPos(pos) {
+      var lat = pos.coords.latitude;
+      var lng = pos.coords.longitude;
+      var acc = pos.coords.accuracy; // metres
+
+      // Move or create the blue dot marker
+      if (_locMarker) {
+        _locMarker.setLngLat([lng, lat]);
+      } else {
+        var el = document.createElement('div');
+        el.style.cssText = [
+          'width:18px','height:18px','border-radius:50%',
+          'background:#0078ff','border:3px solid white',
+          'box-shadow:0 0 0 4px rgba(0,120,255,0.25)',
+          'pointer-events:none'
+        ].join(';');
+        _locMarker = new maplibregl.Marker({ element:el, anchor:'center' })
+          .setLngLat([lng, lat])
+          .addTo(map);
+      }
+
+      // Draw accuracy circle
+      if (map.getSource('loc-circle')) {
+        var pts = 64, coords = [];
+        for (var i = 0; i <= pts; i++) {
+          var angle = (i/pts)*2*Math.PI;
+          var dx = (acc/111320)/Math.cos(lat*Math.PI/180);
+          var dy = acc/110540;
+          coords.push([lng + dx*Math.cos(angle), lat + dy*Math.sin(angle)]);
+        }
+        map.getSource('loc-circle').setData({
+          type:'FeatureCollection',
+          features:[{ type:'Feature', properties:{},
+            geometry:{ type:'Polygon', coordinates:[coords] } }]
+        });
+      }
+
+      // Pan to location on first fix only
+      if (firstFix) {
+        firstFix = false;
+        map.panTo([lng, lat], { duration:800 });
+      }
+    }
+
+    function onErr(err) {
+      _locActive = false;
+      if (btn) btn.style.background = '';
+      if (err.code === 1) {
+        alert('Location access was denied. Please allow location access in your browser settings and try again.');
+      } else {
+        alert('Could not get your location. Please try again.');
+      }
+    }
+
+    _watchId = navigator.geolocation.watchPosition(onPos, onErr, {
+      enableHighAccuracy: true,
+      maximumAge: 5000,
+      timeout: 15000
+    });
+  };
+})();
+</script>
+
 <script>
   window.addEventListener('load', initMap);
 </script>
