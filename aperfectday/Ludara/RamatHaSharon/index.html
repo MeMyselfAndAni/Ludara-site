@@ -18,12 +18,13 @@
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
-  /* Geolocation dot — red, visible */
-  .maplibregl-user-location-dot,
+  /* User location dot — red */
+  .maplibregl-user-location-dot { background-color: #e8162a !important; }
   .maplibregl-user-location-dot::before { background-color: #e8162a !important; }
-  .maplibregl-user-location-accuracy-circle { background-color: rgba(232,22,42,0.12) !important; }
-  /* Locate button — highlight when active */
-  .locate-btn.active { background: rgba(232,22,42,0.15) !important; border-color: #e8162a !important; }
+  .maplibregl-user-location-dot::after { background-color: rgba(232,22,42,0.3) !important; }
+  .maplibregl-user-location-accuracy-circle { background-color: rgba(232,22,42,0.1) !important; }
+  /* Compass/geolocate control button — keep white, do NOT change */
+  .maplibregl-ctrl-geolocate { background-color: white !important; }
 </style>
 </head>
 <body>
@@ -348,25 +349,14 @@ window.addEventListener('load', function() {
 
       window.locateMe = function() {
         var asked = localStorage.getItem(ASKED_KEY);
-
-        if (asked === '1' || asked === null) {
-          // Already agreed or never asked yet — trigger directly if agreed,
-          // or show toast first if never asked
-          if (!asked) {
-            showLocationToast(function() { geolocate.trigger(); });
-          } else {
-            geolocate.trigger();
-          }
-        } else if (asked === 'declined') {
-          // Previously declined — show toast again so they can change mind
+        if (!asked) {
+          // First time ever — show our friendly toast before browser asks
           showLocationToast(function() { geolocate.trigger(); });
+        } else {
+          // Already answered before — go straight to trigger
+          // (iOS Safari may still ask per-session — that's browser behaviour, not our code)
+          geolocate.trigger();
         }
-
-        // Toggle active style on our button
-        if (locBtn) locBtn.classList.toggle('active');
-        geolocate.on('trackuserlocationend', function() {
-          if (locBtn) locBtn.classList.remove('active');
-        });
       };
 
     });
