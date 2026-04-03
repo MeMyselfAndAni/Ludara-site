@@ -18,8 +18,7 @@
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
-  /* Compass/geolocate control button — keep white */
-  .maplibregl-ctrl-geolocate { background-color: white !important; }
+
 </style>
 </head>
 <body>
@@ -262,6 +261,95 @@ function openTripInMaps() {
 </script>
 
 
+
+<!-- ── LOCATE ME — direct watchPosition, custom red dot ─────── -->
+<script>
+(function() {
+  var watchId   = null;
+  var redMarker = null;
+  var ASKED_KEY = 'apd_location_asked';
+
+  function makeRedDot() {
+    var el = document.createElement('div');
+    el.style.cssText = [
+      'width:14px', 'height:14px', 'border-radius:50%',
+      'background:#e8162a', 'border:2.5px solid white',
+      'box-shadow:0 0 0 3px rgba(232,22,42,0.35), 0 2px 6px rgba(0,0,0,0.4)',
+      'pointer-events:none', 'z-index:999'
+    ].join(';');
+    return el;
+  }
+
+  function startTracking() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.'); return;
+    }
+    var firstFix = true;
+    watchId = navigator.geolocation.watchPosition(
+      function(pos) {
+        var lat = pos.coords.latitude, lng = pos.coords.longitude;
+        if (!redMarker) {
+          redMarker = new maplibregl.Marker({ element: makeRedDot(), anchor: 'center' })
+            .setLngLat([lng, lat]).addTo(map);
+        } else {
+          redMarker.setLngLat([lng, lat]);
+        }
+        if (firstFix) { firstFix = false; map.panTo([lng, lat], { duration: 800 }); }
+      },
+      function(err) {
+        stopTracking();
+        if (err.code === 1) alert('Location access denied. Enable it in Settings → Safari → Location → ludara.ai.');
+        else alert('Could not get your location. Please try again.');
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+    );
+  }
+
+  function stopTracking() {
+    if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+    if (redMarker)        { redMarker.remove(); redMarker = null; }
+    var btn = document.getElementById('locate-btn');
+    if (btn) btn.style.background = '';
+  }
+
+  function showToast(onConfirm) {
+    var old = document.getElementById('loc-toast');
+    if (old) old.remove();
+    var t = document.createElement('div');
+    t.id = 'loc-toast';
+    t.style.cssText = 'position:fixed;bottom:140px;right:10px;z-index:9999;background:#1a3a5c;color:white;border-radius:12px;padding:12px 16px;max-width:220px;font-size:0.82rem;line-height:1.4;box-shadow:0 4px 16px rgba(0,0,0,0.3)';
+    t.innerHTML = '<strong>📍 Show my location</strong><br><span style="opacity:0.85">Tap Allow — your browser will ask for location permission.</span><br><br>'
+      + '<div style="display:flex;gap:8px">'
+      + '<button id="loc-yes" style="flex:1;padding:7px;border-radius:8px;border:none;background:#e8162a;color:white;font-weight:600;cursor:pointer">Allow</button>'
+      + '<button id="loc-no"  style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:white;cursor:pointer">Not now</button>'
+      + '</div>';
+    document.body.appendChild(t);
+    document.getElementById('loc-yes').onclick = function() {
+      t.remove(); localStorage.setItem(ASKED_KEY, '1'); onConfirm();
+    };
+    document.getElementById('loc-no').onclick = function() {
+      t.remove(); localStorage.setItem(ASKED_KEY, 'declined');
+    };
+    setTimeout(function() { if (t.parentNode) t.remove(); }, 8000);
+  }
+
+  window.locateMe = function() {
+    // If already tracking — stop
+    if (watchId !== null) { stopTracking(); return; }
+
+    var btn = document.getElementById('locate-btn');
+    if (btn) btn.style.background = 'rgba(232,22,42,0.12)';
+
+    var asked = localStorage.getItem(ASKED_KEY);
+    if (!asked) {
+      showToast(startTracking);
+    } else {
+      startTracking();
+    }
+  };
+})();
+</script>
+
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 
@@ -279,109 +367,6 @@ window.addEventListener('load', function() {
 
 
 
-
-<!-- ── LOCATE ME — custom red dot via geolocate event ──────── -->
-<script>
-window.addEventListener('load', function() {
-  var origInitMap = window.initMap;
-  window.initMap = function() {
-    origInitMap();
-    map.on('load', function() {
-
-      // Use GeolocateControl only for permission + tracking — hide its dot
-      var geolocate = new maplibregl.GeolocateControl({
-        positionOptions: { enableHighAccuracy: true },
-        trackUserLocation: true,
-        showUserHeading: false,
-        showAccuracyCircle: false,  // hide built-in dot and circle
-      });
-      map.addControl(geolocate, 'bottom-right');
-
-      // Hide MapLibre's own dot via CSS injected into head
-      var styleEl = document.createElement('style');
-      styleEl.textContent = '.maplibregl-user-location-dot, .maplibregl-user-location-accuracy-circle { display: none !important; }';
-      document.head.appendChild(styleEl);
-
-      // Our own red dot marker
-      var redDotEl = document.createElement('div');
-      redDotEl.style.cssText = [
-        'width:16px', 'height:16px', 'border-radius:50%',
-        'background:#e8162a', 'border:3px solid white',
-        'box-shadow:0 2px 8px rgba(232,22,42,0.5)',
-        'pointer-events:none'
-      ].join(';');
-      var redDotMarker = new maplibregl.Marker({ element: redDotEl, anchor: 'center' });
-
-      var firstFix = true;
-
-      // Update our red dot whenever position comes in
-      geolocate.on('geolocate', function(e) {
-        var lat = e.coords.latitude;
-        var lng = e.coords.longitude;
-        redDotMarker.setLngLat([lng, lat]).addTo(map);
-        if (firstFix) {
-          firstFix = false;
-          map.panTo([lng, lat], { duration: 800 });
-        }
-      });
-
-      // Remove red dot when tracking ends
-      geolocate.on('trackuserlocationend', function() {
-        redDotMarker.remove();
-        firstFix = true;
-      });
-      geolocate.on('error', function() {
-        redDotMarker.remove();
-        firstFix = true;
-      });
-
-      var ASKED_KEY = 'apd_location_asked';
-
-      function showLocationToast(onConfirm) {
-        var existing = document.getElementById('loc-toast');
-        if (existing) existing.remove();
-        var toast = document.createElement('div');
-        toast.id = 'loc-toast';
-        toast.style.cssText = [
-          'position:fixed', 'bottom:140px', 'right:10px', 'z-index:9999',
-          'background:#1a3a5c', 'color:white', 'border-radius:12px',
-          'padding:12px 16px', 'max-width:220px', 'font-size:0.82rem',
-          'line-height:1.4', 'box-shadow:0 4px 16px rgba(0,0,0,0.3)'
-        ].join(';');
-        toast.innerHTML = [
-          '<strong>📍 Show my location</strong><br>',
-          '<span style="opacity:0.85">Your browser will ask permission to access your location.</span><br><br>',
-          '<div style="display:flex;gap:8px">',
-          '<button id="loc-yes" style="flex:1;padding:7px;border-radius:8px;border:none;background:#e8162a;color:white;font-weight:600;cursor:pointer">Allow</button>',
-          '<button id="loc-no" style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:white;cursor:pointer">Not now</button>',
-          '</div>'
-        ].join('');
-        document.body.appendChild(toast);
-        document.getElementById('loc-yes').onclick = function() {
-          toast.remove();
-          localStorage.setItem(ASKED_KEY, '1');
-          onConfirm();
-        };
-        document.getElementById('loc-no').onclick = function() {
-          toast.remove();
-          localStorage.setItem(ASKED_KEY, 'declined');
-        };
-        setTimeout(function() { if (toast.parentNode) toast.remove(); }, 8000);
-      }
-
-      window.locateMe = function() {
-        var asked = localStorage.getItem(ASKED_KEY);
-        if (!asked) {
-          showLocationToast(function() { geolocate.trigger(); });
-        } else {
-          geolocate.trigger();
-        }
-      };
-
-    });
-  };
-});
-</script>
 
 <script>
   window.addEventListener('load', initMap);
