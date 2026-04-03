@@ -440,39 +440,50 @@ window.addEventListener('load', function() {
 </script>
 
 
+
 <script>
-// Override route line and numbered marker colors to match --brand
+// ── Brand color for map elements — reads from CSS variable ───
 window.addEventListener('load', function() {
   var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#e8724a';
 
-  // Update route line color after map loads
-  map.on('load', function() {
-    if (map.getLayer('trip-route-line')) {
-      map.setPaintProperty('trip-route-line', 'line-color', brand);
-    }
-  });
-  // Also update whenever route is drawn (layer may be added later by _ensureRouteLayer)
-  var _orig_ensureRouteLayer = window._ensureRouteLayer;
-  window._ensureRouteLayer = function() {
-    if (_orig_ensureRouteLayer) _orig_ensureRouteLayer();
-    if (map.getLayer('trip-route-line')) {
+  // 1. Intercept initMapSources (called inside map.on('load') in map.js)
+  //    Wrap it to recolor the trip-route-line immediately after creation
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
       map.setPaintProperty('trip-route-line', 'line-color', brand);
     }
   };
 
-  // Monkey-patch _addNumberedMarkers to use brand color
-  var _origAddMarkers = window._addNumberedMarkers;
-  window._addNumberedMarkers = function(places) {
-    // Call original but immediately recolor the markers it creates
-    var before = tripMarkers ? tripMarkers.length : 0;
-    if (_origAddMarkers) _origAddMarkers(places);
-    // Recolor newly added markers
-    if (window.tripMarkers) {
-      tripMarkers.slice(before).forEach(function(marker) {
-        var el = marker.getElement();
-        if (el) el.style.background = brand;
-      });
+  // 2. Intercept _ensureRouteLayer (called by drawSavedRoute each time)
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
     }
+  };
+
+  // 3. Completely replace _addNumberedMarkers with brand-colored version
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = [
+        'width:26px', 'height:26px', 'border-radius:50%',
+        'background:' + brand,
+        'border:2.5px solid white',
+        'color:white', 'font-size:0.68rem', 'font-weight:700',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
+        'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
+      el.textContent = i + 1;
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
+      if (window.tripMarkers) tripMarkers.push(marker);
+    });
   };
 });
 </script>
