@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Ramat HaSharon — A Perfect Day by Ludara</title>
+  <link rel="icon" type="image/svg+xml" href="../../general/_platform-v2/favicon.svg"/>
+  <link rel="stylesheet" href="../../general/_platform-v2/styles.css"/>
+</head>
+<body>
+
+<!-- ══ SPLASH ══════════════════════════════════════════════════════════════ -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="wl-logo">Ludara.AI</div>
+    <h1 class="splash-title">Ramat HaSharon</h1>
+    <p class="splash-sub">20 places curated by <strong>Ludara.AI</strong> — restaurants, cafés, bars, parks & landmarks in Israel's most liveable city.</p>
+    <button class="splash-btn" onclick="document.getElementById('splash').style.display='none'">Explore the guide →</button>
+    <div class="splash-footer">
+      <a href="https://ludara.ai" target="_blank">ludara.ai</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HEADER ═══════════════════════════════════════════════════════════════ -->
+<header class="map-header">
+  <a class="header-title" href="https://ludara.ai" target="_blank">
+    <span class="wl-logo">Ludara.AI</span>
+  </a>
+  <div class="header-text">
+    <h1><em>Ramat HaSharon</em></h1>
+    <p class="header-sub">20 places · test guide</p>
+  </div>
+  <a class="header-btn" href="https://ludara.ai" target="_blank">ludara.ai ↗</a>
+</header>
+
+<!-- ══ NEIGHBOURHOOD BAR ═════════════════════════════════════════════════════ -->
+<div id="nbhd-bar" class="nbhd-bar">
+  <div class="nbhd-bubble" id="nbhd-sokolov" role="button" tabindex="0" onclick="selectNbhd('sokolov', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🛍️</div></div>
+    <span class="nbhd-label">Sokolov<br>&amp; Center</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-ahuza" role="button" tabindex="0" onclick="selectNbhd('ahuza', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌳</div></div>
+    <span class="nbhd-label">Ahuza</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-glilot" role="button" tabindex="0" onclick="selectNbhd('glilot', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">✈️</div></div>
+    <span class="nbhd-label">Glilot<br>&amp; South</span>
+  </div>
+  <div class="nbhd-bubble" id="nbhd-park" role="button" tabindex="0" onclick="selectNbhd('park', this)">
+    <div class="nbhd-ring"><div class="nbhd-ring-inner">🌸</div></div>
+    <span class="nbhd-label">Parks<br>&amp; North</span>
+  </div>
+</div>
+
+<!-- ══ FILTER PILLS ══════════════════════════════════════════════════════════ -->
+<div id="filter-bar" class="filter-bar">
+  <button class="pill pill-active" onclick="fc(this,'all')">All</button>
+  <button class="pill" onclick="fc(this,'food')">🍽 Restaurants</button>
+  <button class="pill" onclick="fc(this,'cafe')">☕ Cafés</button>
+  <button class="pill" onclick="fc(this,'pub')">🍸 Bars</button>
+  <button class="pill" onclick="fc(this,'nature')">🌿 Parks</button>
+  <button class="pill" onclick="fc(this,'landmark')">🏛 Landmarks</button>
+  <button class="pill" onclick="fc(this,'market')">🛒 Markets</button>
+</div>
+
+<!-- ══ MAP ═══════════════════════════════════════════════════════════════════ -->
+<div id="loading" class="loading-overlay">
+  <div class="loading-text">Loading Ramat HaSharon…</div>
+</div>
+<div id="map"></div>
+
+<!-- ══ PLACE CARD ════════════════════════════════════════════════════════════ -->
+<div id="place-card" class="place-card" style="display:none">
+  <button class="pc-close" onclick="closeCard()">✕</button>
+  <div class="pc-photo-wrap">
+    <img id="pc-photo" class="pc-photo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/>
+  </div>
+  <div class="pc-body">
+    <div class="pc-cat" id="pc-cat"></div>
+    <h2 class="pc-name" id="pc-name"></h2>
+    <p class="pc-addr" id="pc-addr"></p>
+    <p class="pc-note" id="pc-note"></p>
+    <div class="pc-tip-wrap" id="pc-tip-wrap" style="display:none">
+      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <p class="pc-tip" id="pc-tip"></p>
+    </div>
+    <div class="pc-emily-by" id="pc-by"></div>
+    <div class="pc-meta">
+      <span id="pc-hours"></span>
+    </div>
+    <div class="pc-actions">
+      <button class="pc-action-btn" id="pc-fav-btn" onclick="toggleFav(currentPlace)">♡ Save</button>
+      <button class="pc-action-btn" id="pc-trip-btn" onclick="addToTrip(currentPlace)">＋ Add to trip</button>
+      <a class="pc-action-btn" id="pc-maps-btn" href="" target="_blank">📍 Directions</a>
+      <a class="pc-action-btn" id="pc-web-btn" href="" target="_blank" style="display:none">🌐 Website</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOTTOM SHEET / LIST ════════════════════════════════════════════════════ -->
+<div id="bottom-sheet" class="bottom-sheet">
+  <div class="bs-handle" onclick="toggleSheet()"></div>
+  <div class="bs-header">
+    <span class="bs-title" id="sheet-title">20 places in Ramat HaSharon</span>
+    <div class="bs-header-actions">
+      <button class="bs-filter-btn" id="open-now-btn" onclick="toggleOpenNow(this)">Open now</button>
+    </div>
+  </div>
+  <div id="place-list" class="place-list"></div>
+</div>
+
+<!-- ══ DESKTOP LIST ═══════════════════════════════════════════════════════════ -->
+<div id="desktop-list" class="desktop-list">
+  <div class="dl-header">
+    <span class="dl-count" id="desktop-list-count">20 places</span>
+    <button class="bs-filter-btn" onclick="toggleOpenNow(this)">Open now</button>
+  </div>
+  <div id="desktop-place-list" class="place-list"></div>
+</div>
+
+<!-- ══ TRIP PLANNER ═══════════════════════════════════════════════════════════ -->
+<div id="trip-panel" class="trip-panel" style="display:none">
+  <div class="trip-header">
+    <h3>My Trip</h3>
+    <button onclick="closeTripPanel()">✕</button>
+  </div>
+  <div id="trip-list" class="trip-list"></div>
+  <div class="trip-footer">
+    <button class="trip-route-btn" onclick="showTripRoute()">Show walking route</button>
+    <button class="trip-pdf-btn" onclick="downloadTripPDF()">Download PDF</button>
+  </div>
+</div>
+
+<!-- ══ FAV / TRIP BUTTONS ════════════════════════════════════════════════════ -->
+<div class="fab-group">
+  <button class="fab" id="fav-fab" onclick="toggleFavPanel()" title="Saved places">♡</button>
+  <button class="fab" id="trip-fab" onclick="toggleTripPanel()" title="My trip">🗺</button>
+</div>
+
+<!-- ══ FAV PANEL ══════════════════════════════════════════════════════════════ -->
+<div id="fav-panel" class="fav-panel" style="display:none">
+  <div class="fav-header">
+    <h3>Saved Places</h3>
+    <button onclick="closeFavPanel()">✕</button>
+  </div>
+  <div id="fav-list" class="fav-list"></div>
+</div>
+
+<!-- ══ SCRIPTS ════════════════════════════════════════════════════════════════ -->
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
+
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script src="../../general/_platform-v2/map-core.js"></script>
+<script src="../../general/_platform-v2/ui-card.js"></script>
+<script src="../../general/_platform-v2/ui-filter.js"></script>
+<script src="../../general/_platform-v2/ui-favourites.js"></script>
+<script src="../../general/_platform-v2/ui-stories.js"></script>
+<script src="../../general/_platform-v2/photos.js"></script>
+<script src="../../general/_platform-v2/ui-pdf.js"></script>
+
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+<style>
+  /* Neighbourhood bubbles */
+  .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+  /* Place card photos */
+  .pc-photo-img { object-fit: contain !important; background: #111; }
+  .pc-photo-wrap { background: #111; }
+</style>
+
+<!-- Service Worker for offline -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('../../general/_platform-v2/sw.js', { scope: './' })
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW error', e));
+  }
+</script>
+
+</body>
+</html>
