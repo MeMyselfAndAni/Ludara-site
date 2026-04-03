@@ -9,6 +9,13 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
+  /* ── BRAND COLOR ─────────────────────────────────────────────
+     Change --brand to update all accent colors in one place.
+     Orange (current):  #e8724a  — matches favicon & landmark pins
+     Red (previous):    #e8162a  — bolder, high contrast
+  ─────────────────────────────────────────────────────────── */
+  :root { --brand: #e8724a; --brand-faint: rgba(232,114,74,0.12); --brand-glow: rgba(232,114,74,0.3); }
+
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
@@ -17,6 +24,10 @@
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+  /* Card nav arrows — symmetric at photo edges */
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
+  .pc-btn-nav.prev { left: 8px !important; right: auto !important; }
+  .pc-btn-nav.next { right: 8px !important; left: auto !important; }
   /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
   #pc-body::after {
@@ -29,8 +40,8 @@
   /* User location dot — red */
   .user-dot-inner {
     width: 14px !important; height: 14px !important; border-radius: 50% !important;
-    background: #e8162a !important; border: 2.5px solid white !important;
-    box-shadow: 0 0 0 3px rgba(232,22,42,0.3), 0 2px 6px rgba(0,0,0,0.35) !important;
+    background: var(--brand) !important; border: 2.5px solid white !important;
+    box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
   }
   .user-dot-outer {
     width: 14px !important; height: 14px !important;
@@ -38,6 +49,11 @@
 
 
 </style>
+
+<script>
+// Read brand color from CSS variable — keeps JS and CSS in sync
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#e8724a';
+</script>
 </head>
 <body>
 
@@ -296,12 +312,31 @@ function _fmtDist(m) {
   return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
 }
 
-// Navigate — opens Google Maps walking directions from user location (if known)
-function navigateToPlace(lat, lng) {
-  var url = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '&travelmode=walking';
+// Navigate — opens Google Maps with current location → all favorites → destination
+function navigateToPlace(destLat, destLng, destName) {
+  // Collect favorite place names for waypoints
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) { return favIds.includes(p.id); });
+
+  // Build stops: origin → favs (excluding destination) → destination
+  var destSearch = encodeURIComponent(destName + ' ' + GUIDE_CITY);
+  var stops = [];
+
   if (window._userLat && window._userLng) {
-    url += '&origin=' + window._userLat + ',' + window._userLng;
+    stops.push(window._userLat + ',' + window._userLng);
   }
+  // Add favorites (excluding the destination itself) as named waypoints
+  favPlaces.forEach(function(p) {
+    if (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001) {
+      stops.push(encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
+    }
+  });
+  stops.push(destSearch);
+
+  var url = stops.length > 1
+    ? 'https://www.google.com/maps/dir/' + stops.join('/')
+    : 'https://www.google.com/maps/search/?api=1&query=' + destSearch;
   window.open(url, '_blank');
 }
 
@@ -346,13 +381,13 @@ window.addEventListener('load', function() {
 
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:#e8162a;border:1.5px solid #e8162a;border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = '';
     if (window._userLat && window._userLng) {
       distStr = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away';
     }
     btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
-    btn.onclick = function() { navigateToPlace(place.lat, place.lng); };
+    btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
 
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
