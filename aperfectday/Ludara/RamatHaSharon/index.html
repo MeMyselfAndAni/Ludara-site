@@ -18,6 +18,16 @@
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
+  /* User location dot — red */
+  .user-dot-inner {
+    width: 14px !important; height: 14px !important; border-radius: 50% !important;
+    background: #e8162a !important; border: 2.5px solid white !important;
+    box-shadow: 0 0 0 3px rgba(232,22,42,0.3), 0 2px 6px rgba(0,0,0,0.35) !important;
+  }
+  .user-dot-outer {
+    width: 14px !important; height: 14px !important;
+  }
+
 
 </style>
 </head>
@@ -262,92 +272,111 @@ function openTripInMaps() {
 
 
 
-<!-- ── LOCATE ME — direct watchPosition, custom red dot ─────── -->
+
+
+
+<!-- ── NAVIGATE + DISTANCES ──────────────────────────────────── -->
 <script>
-(function() {
-  var watchId   = null;
-  var redMarker = null;
-  var ASKED_KEY = 'apd_location_asked';
+// Haversine distance in metres
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
 
-  function makeRedDot() {
-    var el = document.createElement('div');
-    el.style.cssText = [
-      'width:14px', 'height:14px', 'border-radius:50%',
-      'background:#e8162a', 'border:2.5px solid white',
-      'box-shadow:0 0 0 3px rgba(232,22,42,0.35), 0 2px 6px rgba(0,0,0,0.4)',
-      'pointer-events:none', 'z-index:999'
-    ].join(';');
-    return el;
+// Navigate — opens Google Maps walking directions from user location (if known)
+function navigateToPlace(lat, lng) {
+  var url = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '&travelmode=walking';
+  if (window._userLat && window._userLng) {
+    url += '&origin=' + window._userLat + ',' + window._userLng;
   }
+  window.open(url, '_blank');
+}
 
-  function startTracking() {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.'); return;
-    }
-    var firstFix = true;
-    watchId = navigator.geolocation.watchPosition(
-      function(pos) {
-        var lat = pos.coords.latitude, lng = pos.coords.longitude;
-        if (!redMarker) {
-          redMarker = new maplibregl.Marker({ element: makeRedDot(), anchor: 'center' })
-            .setLngLat([lng, lat]).addTo(map);
-        } else {
-          redMarker.setLngLat([lng, lat]);
-        }
-        if (firstFix) { firstFix = false; map.panTo([lng, lat], { duration: 800 }); }
-      },
-      function(err) {
-        stopTracking();
-        if (err.code === 1) alert('Location access denied. Enable it in Settings → Safari → Location → ludara.ai.');
-        else alert('Could not get your location. Please try again.');
-      },
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
-    );
-  }
-
-  function stopTracking() {
-    if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-    if (redMarker)        { redMarker.remove(); redMarker = null; }
-    var btn = document.getElementById('locate-btn');
-    if (btn) btn.style.background = '';
-  }
-
-  function showToast(onConfirm) {
-    var old = document.getElementById('loc-toast');
-    if (old) old.remove();
-    var t = document.createElement('div');
-    t.id = 'loc-toast';
-    t.style.cssText = 'position:fixed;bottom:140px;right:10px;z-index:9999;background:#1a3a5c;color:white;border-radius:12px;padding:12px 16px;max-width:220px;font-size:0.82rem;line-height:1.4;box-shadow:0 4px 16px rgba(0,0,0,0.3)';
-    t.innerHTML = '<strong>📍 Show my location</strong><br><span style="opacity:0.85">Tap Allow — your browser will ask for location permission.</span><br><br>'
-      + '<div style="display:flex;gap:8px">'
-      + '<button id="loc-yes" style="flex:1;padding:7px;border-radius:8px;border:none;background:#e8162a;color:white;font-weight:600;cursor:pointer">Allow</button>'
-      + '<button id="loc-no"  style="flex:1;padding:7px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:white;cursor:pointer">Not now</button>'
-      + '</div>';
-    document.body.appendChild(t);
-    document.getElementById('loc-yes').onclick = function() {
-      t.remove(); localStorage.setItem(ASKED_KEY, '1'); onConfirm();
-    };
-    document.getElementById('loc-no').onclick = function() {
-      t.remove(); localStorage.setItem(ASKED_KEY, 'declined');
-    };
-    setTimeout(function() { if (t.parentNode) t.remove(); }, 8000);
-  }
-
+// Wrap ui-filter.js locateMe to capture coordinates after it runs
+window.addEventListener('load', function() {
+  var _origLocate = window.locateMe;
   window.locateMe = function() {
-    // If already tracking — stop
-    if (watchId !== null) { stopTracking(); return; }
-
-    var btn = document.getElementById('locate-btn');
-    if (btn) btn.style.background = 'rgba(232,22,42,0.12)';
-
-    var asked = localStorage.getItem(ASKED_KEY);
-    if (!asked) {
-      showToast(startTracking);
-    } else {
-      startTracking();
-    }
+    _origLocate();
+    // After getCurrentPosition resolves, read the dot's position from the marker
+    // by watching for the user-dot to appear
+    var attempts = 0;
+    var poll = setInterval(function() {
+      var dot = document.querySelector('.user-dot-inner');
+      if (dot || attempts > 20) {
+        clearInterval(poll);
+        // getCurrentPosition one-shot — get coords directly
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos) {
+            window._userLat = pos.coords.latitude;
+            window._userLng = pos.coords.longitude;
+            updateListDistances();
+          }, null, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
+      attempts++;
+    }, 300);
   };
-})();
+});
+
+// Add Navigate button to place card when it opens
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+
+    // Remove existing nav button
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin:10px 0 4px;padding:9px 18px;background:#e8162a;color:white;border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;border:none;width:100%';
+    var dist = (window._userLat && window._userLng)
+      ? ' · ' + _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away'
+      : '';
+    btn.innerHTML = '🚶 Navigate' + (dist ? '<span style="opacity:0.75;font-weight:400">' + dist + '</span>' : '');
+    btn.onclick = function() { navigateToPlace(place.lat, place.lng); };
+
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+// Update distance badges on list items
+// ui-filter.js renders: <div class="place-row" id="row-N">...<div class="place-name">...</div>...
+function updateListDistances() {
+  if (!window._userLat) return;
+  PLACES.forEach(function(place) {
+    var row = document.getElementById('row-' + place.id);
+    if (!row) return;
+    var badge = row.querySelector('.dist-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'dist-badge';
+      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
+      var nameEl = row.querySelector('.place-name');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+  });
+}
+
+// Re-run after every list render
+window.addEventListener('load', function() {
+  var list = document.getElementById('places-list');
+  if (!list) return;
+  new MutationObserver(function() {
+    if (window._userLat) updateListDistances();
+  }).observe(list, { childList: true, subtree: false });
+});
 </script>
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
