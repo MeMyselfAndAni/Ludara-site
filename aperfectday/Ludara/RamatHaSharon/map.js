@@ -58,10 +58,20 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
   map.on('error', function(e) {
+    var msg = e.error ? e.error.message : JSON.stringify(e);
+    // Ignore transient tile fetch failures — these happen on network hiccups,
+    // browser idle, or brief rate limits. Only fatal errors (bad API key etc) need UI.
+    if (msg && (msg.includes('Failed to fetch') || msg.includes('fetch') || msg.includes('NetworkError') || msg.includes('Load failed'))) {
+      console.warn('Map tile fetch failed (transient):', msg);
+      return;
+    }
+    // Fatal error — show overlay
     var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
-    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
+    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;cursor:pointer;';
+    d.textContent = 'Map error: ' + msg + ' (tap to dismiss)';
+    d.onclick = function() { d.remove(); };
     document.body.appendChild(d);
+    setTimeout(function() { if (d.parentNode) d.remove(); }, 8000);
   });
   map.on('load', () => {
     try {

@@ -297,16 +297,27 @@ window.addEventListener('load', function() {
 </script>
 
 <script>
+// SCENARIO 2: Open in Google Maps from Saved/Itinerary
+// → All saved places as named stops (not coordinates) so Google Maps shows labels
+// → No origin set — user sees stops and can drag to reorder before navigating
 function openTripInMaps() {
-  let ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
-  const places = PLACES.filter(p => ids.includes(p.id));
+  var ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
   if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
-  const url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-  window.open(url, '_blank');
+
+  if (places.length === 1) {
+    var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
+    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+    return;
+  }
+
+  // Use named searches (not coords) so each stop shows its label in Google Maps.
+  // No origin — user adds their starting point and reorders stops as they wish.
+  var stops = places.map(function(p) {
+    return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+  });
+  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
 }
 </script>
 
@@ -328,31 +339,42 @@ function _fmtDist(m) {
   return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
 }
 
-// Navigate — opens Google Maps with current location → all favorites → destination
+// SCENARIO 1: Navigate button on card
+// → Directions to this place only (from current location if known)
+// → Saved places shown as additional labeled pins via saddr/daddr trick
 function navigateToPlace(destLat, destLng, destName) {
-  // Collect favorite place names for waypoints
-  var favIds = [];
-  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var favPlaces = PLACES.filter(function(p) { return favIds.includes(p.id); });
-
-  // Build stops: origin → favs (excluding destination) → destination
-  var destSearch = encodeURIComponent(destName + ' ' + GUIDE_CITY);
-  var stops = [];
+  var dest = destLat + ',' + destLng;
+  var url;
 
   if (window._userLat && window._userLng) {
-    stops.push(window._userLat + ',' + window._userLng);
+    // Direct navigation: current location → destination
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&origin=' + window._userLat + ',' + window._userLng
+      + '&destination=' + dest
+      + '&travelmode=walking';
+  } else {
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&destination=' + dest
+      + '&travelmode=walking';
   }
-  // Add favorites (excluding the destination itself) as named waypoints
-  favPlaces.forEach(function(p) {
-    if (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001) {
-      stops.push(encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
-    }
-  });
-  stops.push(destSearch);
 
-  var url = stops.length > 1
-    ? 'https://www.google.com/maps/dir/' + stops.join('/')
-    : 'https://www.google.com/maps/search/?api=1&query=' + destSearch;
+  // Add saved places as extra stops so they appear as labeled pins on the map
+  // User can see them and optionally add them to the route in Google Maps
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) {
+    return favIds.includes(p.id) &&
+           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
+  });
+  if (favPlaces.length > 0) {
+    // Append saved places as waypoints — they appear as labeled stops in Google Maps
+    // but since destination is already set, user decides if they want to route through them
+    var waypointNames = favPlaces.map(function(p) {
+      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+    });
+    url += '&waypoints=' + waypointNames.join('|');
+  }
+
   window.open(url, '_blank');
 }
 
