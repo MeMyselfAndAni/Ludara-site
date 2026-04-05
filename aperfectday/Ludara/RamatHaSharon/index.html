@@ -26,6 +26,10 @@
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+  .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #ff2a00) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #ff2a00); }
+  .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
   /* Card nav arrows — prev at left edge, next at 52px (clears 48px heart btn) */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
   .pc-btn-nav.prev { left: 8px !important; right: auto !important; }
@@ -256,7 +260,11 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
-    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+    <div class="saved-empty-hint">
+      <div class="saved-empty-icon">♡</div>
+      <div class="saved-empty-title">No saved places yet</div>
+      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
+    </div>
   </div>
 </div>
 
@@ -557,27 +565,58 @@ window.addEventListener('load', function() {
 });
 
 function _showOfflineRouteMsg() {
-  // Remove any existing message first
   var existing = document.getElementById('offline-route-msg');
   if (existing) existing.remove();
 
-  var msg = document.createElement('div');
-  msg.id = 'offline-route-msg';
-  msg.style.cssText = [
-    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
-    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
-    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
-    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
-    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
+  // Backdrop
+  var backdrop = document.createElement('div');
+  backdrop.id = 'offline-route-msg';
+  backdrop.style.cssText = [
+    'position:fixed', 'inset:0', 'z-index:99999',
+    'display:flex', 'align-items:center', 'justify-content:center',
+    'background:rgba(0,0,0,0.45)', 'backdrop-filter:blur(2px)',
+    '-webkit-backdrop-filter:blur(2px)', 'padding:20px'
   ].join(';');
-  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
 
-  // Tap to dismiss
-  msg.onclick = function() { msg.remove(); };
-  document.body.appendChild(msg);
+  // Card
+  var card = document.createElement('div');
+  card.style.cssText = [
+    'background:white', 'border-radius:20px',
+    'padding:28px 24px 22px', 'max-width:300px', 'width:100%',
+    'text-align:center', 'font-family:sans-serif',
+    'box-shadow:0 20px 60px rgba(0,0,0,0.25)',
+    'position:relative', 'animation:_offlineIn 0.2s ease'
+  ].join(';');
 
-  // Auto-dismiss after 5 seconds
-  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+  // Inject keyframe once
+  if (!document.getElementById('_offlineKF')) {
+    var s = document.createElement('style');
+    s.id = '_offlineKF';
+    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
+    document.head.appendChild(s);
+  }
+
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+
+  card.innerHTML =
+    '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;' +
+    'display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
+    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">' +
+    'Walking routes need a connection</div>' +
+    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">' +
+    'Connect to WiFi or mobile data to plan your route.<br>' +
+    'All places, your saved list, and your location still work offline.' +
+    '</div>' +
+    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;' +
+    'background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;' +
+    'cursor:pointer;font-family:sans-serif">Got it</button>';
+
+  backdrop.appendChild(card);
+  document.body.appendChild(backdrop);
+
+  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
+  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
+  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
 }
 </script>
 
