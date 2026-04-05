@@ -528,6 +528,59 @@ window.addEventListener('load', function() {
 
 
 
+
+<script>
+// Offline route detection — wraps planFavTrip and drawSavedRoute
+// to show a clear message instead of silently spinning when offline.
+window.addEventListener('load', function() {
+
+  // Wrap planFavTrip (Full Itinerary button)
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+
+  // Wrap drawSavedRoute (called internally when route is drawn)
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+
+});
+
+function _showOfflineRouteMsg() {
+  // Remove any existing message first
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+
+  var msg = document.createElement('div');
+  msg.id = 'offline-route-msg';
+  msg.style.cssText = [
+    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
+    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
+    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
+    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
+    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
+  ].join(';');
+  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
+
+  // Tap to dismiss
+  msg.onclick = function() { msg.remove(); };
+  document.body.appendChild(msg);
+
+  // Auto-dismiss after 5 seconds
+  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+}
+</script>
+
 <script>
   window.addEventListener('load', initMap);
 </script>

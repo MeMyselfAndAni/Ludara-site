@@ -9,19 +9,67 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
+  /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
+     Presets (uncomment one to use):
+       /* :root { --brand: #e8724a; --brand-faint: rgba(232,114,74,0.12); --brand-glow: rgba(232,114,74,0.3); } Orange */
+       /* :root { --brand: #e8162a; --brand-faint: rgba(232,22,42,0.12);  --brand-glow: rgba(232,22,42,0.3);  } Red */
+       /* :root { --brand: #2a7de1; --brand-faint: rgba(42,125,225,0.12); --brand-glow: rgba(42,125,225,0.3); } Blue */
+  ─────────────────────────────────────────────────────────── */
+  :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.3); }
+
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
-  /* Neighbourhood bubbles — icons + labels aligned, labels wrap to two lines */
+
+  /* Neighbourhood bubbles */
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
-  /* Place card photos — show full image without cropping; dark bg for portrait images */
-  /* !important required — ui-card.js sets background via inline style (category colour) */
+
+  /* Place card photos */
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
+
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+
+  /* Card nav arrows — prev at left, next at 52px (clears 48px heart btn) */
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
+  .pc-btn-nav.prev { left: 8px !important; right: auto !important; }
+  .pc-btn-nav.next { right: 8px !important; left: auto !important; }
+
+  /* ── Brand color overrides — platform styles.css uses #e00040 ── */
+  .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
+  .pill-saved:hover                    { background: var(--brand-faint) !important; }
+  .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+  .pill-saved-count                    { color: var(--brand) !important; }
+  .pill-saved.active .pill-saved-count { color: white !important; }
+  .saved-mode-banner                   { border-bottom-color: var(--brand) !important; color: var(--brand) !important; }
+  .saved-plan-btn                      { background: var(--brand) !important; }
+  .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
+  .pc-btn-fav.faved                    { color: var(--brand) !important; }
+
+  /* Scroll hint — fade at bottom of card body */
+  #pc-body { position: relative; }
+  #pc-body::after {
+    content: ''; pointer-events: none;
+    position: sticky; bottom: 0; left: 0; right: 0;
+    display: block; height: 32px; margin-top: -32px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+  }
+
+  /* User location dot — brand colored */
+  .user-dot-inner {
+    width: 14px !important; height: 14px !important; border-radius: 50% !important;
+    background: var(--brand) !important; border: 2.5px solid white !important;
+    box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
+  }
+  .user-dot-outer { width: 14px !important; height: 14px !important; }
 </style>
+
+<script>
+// Read brand color from CSS — keeps JS and CSS in sync
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+</script>
 </head>
 <body>
 
@@ -66,8 +114,7 @@
 </header>
 
 <!-- Filter bar -->
-<!-- [10] Adjust category labels to suit the city. Keep onclick="fc(this,'CATKEY')" exactly as-is. -->
-<!-- Remove 'soviet' pill if not relevant. Change 'Churches' to 'Temples' if appropriate. -->
+<!-- [10] Adjust category pills to suit the city. Keep onclick="fc(this,'CATKEY')" exactly as-is. -->
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
@@ -84,10 +131,10 @@
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
-<!-- [11] One nbhd-bubble div per neighbourhood. -->
-<!-- id must be "nbhd-" + key. selectNbhd argument must be just the key (no "nbhd-" prefix). -->
-<!-- ⚠️  Keys in NBHD_COLORS/LABELS/APPROX_CENTERS and data.js nbhd field must also have NO "nbhd-" prefix. -->
-<!-- Keys must exactly match map.js NBHD_COLORS / NBHD_LABELS / NBHD_APPROX_CENTERS -->
+<!-- [11] One nbhd-bubble per neighbourhood.
+     id = "nbhd-" + key.  selectNbhd arg = key (no "nbhd-" prefix).
+     ⚠️  Keys here, in map.js NBHD_* objects, and in data.js nbhd field must ALL match
+         and must be plain words — e.g. 'sokolov', 'old-town' — NO 'nbhd-' prefix. -->
 <div id="nbhd-title">Neighbourhoods</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
@@ -98,7 +145,7 @@
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
       <span class="nbhd-label">All</span>
     </div>
-    <!-- Copy and paste this block for each neighbourhood: -->
+    <!-- Copy this block for each neighbourhood: -->
     <div class="nbhd-bubble" id="nbhd-TODO-KEY-1" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-1', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
       <span class="nbhd-label">TODO Display Name 1</span>
@@ -106,10 +153,6 @@
     <div class="nbhd-bubble" id="nbhd-TODO-KEY-2" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-2', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
       <span class="nbhd-label">TODO Display Name 2</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-TODO-KEY-3" role="button" tabindex="0" onclick="selectNbhd('TODO-KEY-3', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🍽️</div></div>
-      <span class="nbhd-label">TODO Display Name 3</span>
     </div>
     <!-- Add more as needed -->
   </div>
@@ -139,7 +182,7 @@
       <span class="pc-emily-by">— TODO_BLOGGER_FIRST_NAME, TODO_BLOGGER_BRAND</span><!-- [12] -->
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name (prevents misattribution) -->
+      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name -->
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -248,23 +291,6 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Override platform's openTripInMaps — must be AFTER ui-pdf.js so it wins.
-     Opens saved places as named waypoints in Google Maps (not bare GPS coords). -->
-<script>
-function openTripInMaps() {
-  let ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
-  const places = PLACES.filter(p => ids.includes(p.id));
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
-  const url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-  window.open(url, '_blank');
-}
-</script>
-
-
 <!-- Address display — populates pc-address when a card opens -->
 <script>
 window.addEventListener('load', function() {
@@ -279,8 +305,189 @@ window.addEventListener('load', function() {
 });
 </script>
 
+<!-- Navigate + Distances -->
+<script>
+// Haversine distance in metres
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
 
-<!-- Hide neighbourhood bubbles that have no places in PLACES array -->
+// SCENARIO 1: Navigate button on card
+// Opens Google Maps: current location → this place.
+// Saved places added as labeled waypoints (user can optionally route through them).
+function navigateToPlace(destLat, destLng, destName) {
+  var dest = destLat + ',' + destLng;
+  var url;
+  if (window._userLat && window._userLng) {
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&origin=' + window._userLat + ',' + window._userLng
+      + '&destination=' + dest + '&travelmode=walking';
+  } else {
+    url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+  }
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) {
+    return favIds.includes(p.id) &&
+           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
+  });
+  if (favPlaces.length > 0) {
+    url += '&waypoints=' + favPlaces.map(function(p) {
+      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+    }).join('|');
+  }
+  window.open(url, '_blank');
+}
+
+// SCENARIO 2: Open in Google Maps from Saved/Itinerary
+// → All saved places as named stops (not coordinates) so Google Maps shows labels
+// → No origin set — user sees stops and can drag to reorder before navigating
+function openTripInMaps() {
+  var ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+
+  if (places.length === 1) {
+    var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
+    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+    return;
+  }
+
+  // Use named searches (not coords) so each stop shows its label in Google Maps.
+  // No origin — user adds their starting point and reorders stops as they wish.
+  var stops = places.map(function(p) {
+    return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+  });
+  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
+}
+
+// Wrap ui-filter.js locateMe to capture coordinates for distance display
+window.addEventListener('load', function() {
+  var _origLocate = window.locateMe;
+  window.locateMe = function() {
+    _origLocate();
+    var attempts = 0;
+    var poll = setInterval(function() {
+      var dot = document.querySelector('.user-dot-inner');
+      if (dot || attempts > 20) {
+        clearInterval(poll);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos) {
+            window._userLat = pos.coords.latitude;
+            window._userLng = pos.coords.longitude;
+            updateListDistances();
+          }, null, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
+      attempts++;
+    }, 300);
+  };
+});
+
+// Navigate button on place card — injected via MutationObserver when card opens
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = (window._userLat && window._userLng)
+      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
+    btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+// Distance badges on list items — updates when location active
+function updateListDistances() {
+  if (!window._userLat) return;
+  PLACES.forEach(function(place) {
+    var row = document.getElementById('row-' + place.id);
+    if (!row) return;
+    var badge = row.querySelector('.dist-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'dist-badge';
+      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
+      var nameEl = row.querySelector('.place-name');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+  });
+}
+window.addEventListener('load', function() {
+  var list = document.getElementById('places-list');
+  if (!list) return;
+  new MutationObserver(function() {
+    if (window._userLat) updateListDistances();
+  }).observe(list, { childList: true, subtree: false });
+});
+</script>
+
+<!-- Brand color overrides for map elements (route line, numbered markers) -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+
+  // Recolor trip-route-line after initMapSources creates it
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+
+  // Recolor route line when redrawn
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+
+  // Replace numbered stop markers with brand-colored version
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = [
+        'width:26px', 'height:26px', 'border-radius:50%',
+        'background:' + brand, 'border:2.5px solid white',
+        'color:white', 'font-size:0.68rem', 'font-weight:700',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)', 'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
+      if (window.tripMarkers) tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- Hide neighbourhood bubbles with no places -->
 <script>
 window.addEventListener('load', function() {
   document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
@@ -293,6 +500,54 @@ window.addEventListener('load', function() {
 </script>
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+
+<script>
+// Offline route detection — wraps planFavTrip and drawSavedRoute
+// to show a clear message instead of silently spinning when offline.
+window.addEventListener('load', function() {
+
+  // Wrap planFavTrip (Full Itinerary button)
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+
+  // Wrap drawSavedRoute (called internally when route is drawn)
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+
+});
+
+function _showOfflineRouteMsg() {
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+
+  var msg = document.createElement('div');
+  msg.id = 'offline-route-msg';
+  msg.style.cssText = [
+    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
+    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
+    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
+    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
+    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
+  ].join(';');
+  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
+  msg.onclick = function() { msg.remove(); };
+  document.body.appendChild(msg);
+  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+}
+</script>
 
 <!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>

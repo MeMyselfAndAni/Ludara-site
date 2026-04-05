@@ -3,12 +3,13 @@
 // Only this file + index.html + data.js + images/ live permanently in the guide folder.
 //
 // ⚠️  CHECKLIST before deploying:
-//   [ ] MAP_CENTER set to [lng, lat] of the city centre (longitude FIRST)
+//   [ ] MAP_CENTER set to [lng, lat] of city centre (longitude FIRST)
 //   [ ] GUIDE_CITY and BLOGGER_NAME filled in
-//   [ ] CC and CL both present (both required — map-core.js will throw without them)
+//   [ ] CC and CL both present (both required — map-core.js throws without them)
 //   [ ] NBHD_COLORS, NBHD_LABELS, NBHD_APPROX_CENTERS all have matching keys
 //   [ ] Neighbourhood keys here match data.js nbhd values AND index.html bubble IDs
 //         Keys are plain words (e.g. 'sokolov') — NO 'nbhd-' prefix in map.js or data.js
+//         The 'nbhd-' prefix belongs ONLY on HTML element IDs (id="nbhd-sokolov")
 //   [ ] initMap() is NOT called at the bottom of this file
 //   [ ] FAVS_KEY is NOT declared here (it lives in ui-favourites.js)
 
@@ -21,12 +22,11 @@ const BLOGGER_NAME      = 'TODO FirstName';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 // ⚠️ REQUIRED — map-core.js throws "CC is not defined" without this
-// Customise colours to suit the city's character, or keep the defaults below.
 const CC = {
   'landmark': '#e8724a',
   'food':     '#f0c060',
   'cafe':     '#6b9e6e',
-  'pub':      '#8b6bb1',   // bars, cocktail bars, wine bars
+  'pub':      '#8b6bb1',
   'church':   '#6090c8',
   'market':   '#c08060',
   'soviet':   '#9080a8',
@@ -35,7 +35,6 @@ const CC = {
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 // ⚠️ REQUIRED — map-core.js throws "CL is not defined" without this
-// Change the display labels to suit the city (e.g. 'Temples' instead of 'Churches')
 const CL = {
   'landmark': 'Landmarks',
   'food':     'Restaurants',
@@ -48,9 +47,8 @@ const CL = {
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
-// Keys must exactly match: data.js nbhd values, index.html bubble IDs (minus 'nbhd-' prefix)
-// Keys must be plain words — e.g. 'sokolov', 'old-town', 'waterfront'
-// ⚠️  NO 'nbhd-' prefix in keys. The 'nbhd-' prefix belongs only on HTML element IDs.
+// ⚠️  Keys must be plain words — NO 'nbhd-' prefix here or in data.js
+// ⚠️  Must match: data.js nbhd values AND index.html selectNbhd() arguments
 const NBHD_COLORS = {
   'TODO-key-1': '#e8724a',
   'TODO-key-2': '#d4a043',
@@ -71,7 +69,6 @@ const NBHD_LABELS = {
 };
 
 // ─── Neighbourhood approximate centers ───────────────────────────────────────
-// Used to calculate circle radius and to pan the map when a neighbourhood is selected
 const NBHD_APPROX_CENTERS = {
   'TODO-key-1': { lat: 0.0000, lng: 0.0000 },
   'TODO-key-2': { lat: 0.0000, lng: 0.0000 },
@@ -83,8 +80,7 @@ const NBHD_APPROX_CENTERS = {
 
 // ─── Map initialisation ───────────────────────────────────────────────────────
 // ⚠️ DEFINE initMap() here but DO NOT CALL IT.
-// index.html calls it via window.addEventListener('load', initMap) after all
-// UI scripts have loaded. Calling it here breaks markers, list, and favourites.
+// index.html fires it via window.addEventListener('load', initMap)
 function initMap() {
   map = new maplibregl.Map({
     container: 'map',
@@ -93,53 +89,47 @@ function initMap() {
     zoom: MAP_ZOOM,
     attributionControl: false,
   });
-
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-
   map.on('error', function(e) {
+    var msg = e.error ? e.error.message : JSON.stringify(e);
+    // Ignore transient tile fetch failures — self-recover on next request
+    if (msg && (msg.includes('Failed to fetch') || msg.includes('fetch') ||
+                msg.includes('NetworkError') || msg.includes('Load failed'))) {
+      console.warn('Map tile fetch failed (transient):', msg);
+      return;
+    }
     var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
-    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
+    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;cursor:pointer;';
+    d.textContent = 'Map error: ' + msg + ' (tap to dismiss)';
+    d.onclick = function() { d.remove(); };
     document.body.appendChild(d);
+    setTimeout(function() { if (d.parentNode) d.remove(); }, 8000);
   });
-
   map.on('load', () => {
     try {
       const loadingEl = document.getElementById('loading');
       if (loadingEl) loadingEl.style.display = 'none';
-
-      // Force English labels on all map tiles
       map.getStyle().layers.forEach(layer => {
         if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-          try {
-            map.setLayoutProperty(layer.id, 'text-field', [
-              'coalesce', ['get', 'name:en'], ['get', 'name'],
-            ]);
-          } catch(e) { /* safe to ignore */ }
+          try { map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name:en'], ['get', 'name']]); } catch(e) {}
         }
       });
-
       NBHD_CIRCLES = buildNbhdCircles();
       initMapSources();
       if (map.getSource('trip-route')) {
         map.getSource('trip-route').setData({ type: 'Feature', geometry: { type: 'LineString', coordinates: [] } });
       }
-
       PLACES.forEach(p => addMarker(p));
       if (typeof applyFilters   === 'function') applyFilters();
       if (typeof renderList     === 'function') renderList();
       if (typeof initFavourites === 'function') initFavourites();
       if (typeof alignNbhdBar   === 'function') alignNbhdBar();
-
     } catch (err) {
       const el = document.getElementById('loading');
-      if (el) {
-        el.style.display = 'flex';
-        el.innerHTML = '<div style="color:red;padding:20px;font-size:12px;font-family:monospace;">ERROR: ' + err.message + '</div>';
-      }
+      if (el) { el.style.display = 'flex'; el.innerHTML = '<div style="color:red;padding:20px;font-size:12px;font-family:monospace;">ERROR: ' + err.message + '</div>'; }
       console.error('Map load error:', err);
     }
   });
 }
-// ⚠️ DO NOT call initMap() here — index.html fires it via window.addEventListener('load', initMap)
+// ⚠️ DO NOT call initMap() here
