@@ -9,17 +9,14 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR ─────────────────────────────────────────────
-     Change --brand to update all accent colors in one place.
-     Orange (current):  #e8724a  — matches favicon & landmark pins
-     Red (previous):    #e8162a  — bolder, high contrast
+  /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
+     Active:  :root { --brand: #ff2a00 ... }
+     Presets (uncomment to use):
+       Orange:     #e8724a  rgba(232,114,74,...)
+       Red:        #e8162a  rgba(232,22,42,...)
+       Blue:       #2a7de1  rgba(42,125,225,...)
   ─────────────────────────────────────────────────────────── */
-  /* ── To change accent color, swap in one of these lines: ──────
-     :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.3); }  Brand orange (current)
-     :root { --brand: #e8162a; --brand-faint: rgba(232,22,42,0.12);  --brand-glow: rgba(232,22,42,0.3);  }  Red
-     :root { --brand: #2a7de1; --brand-faint: rgba(42,125,225,0.12); --brand-glow: rgba(42,125,225,0.3); }  Blue
-  ─────────────────────────────────────────────────────────────── */
-  :root { --brand: #e8724a; --brand-faint: rgba(232,114,74,0.12); --brand-glow: rgba(232,114,74,0.3); }
+  :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
@@ -68,7 +65,7 @@
 
 <script>
 // Read brand color from CSS variable — keeps JS and CSS in sync
-var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#e8724a';
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
 </script>
 </head>
 <body>
@@ -466,7 +463,7 @@ window.addEventListener('load', function() {
 <script>
 // ── Brand color for map elements — reads from CSS variable ───
 window.addEventListener('load', function() {
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#e8724a';
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
 
   // 1. Intercept initMapSources (called inside map.on('load') in map.js)
   //    Wrap it to recolor the trip-route-line immediately after creation
@@ -502,6 +499,10 @@ window.addEventListener('load', function() {
         'z-index:' + (9000 + i)
       ].join(';');
       el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
       var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat([p.lng, p.lat]).addTo(map);
       if (window.tripMarkers) tripMarkers.push(marker);
