@@ -40,10 +40,11 @@
   .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #ff2a00) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #ff2a00); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
-  /* Card nav arrows — prev at left edge, next at 52px (clears 48px heart btn) */
+  /* Card nav arrows — always symmetric, always fully visible */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
-  .pc-btn-nav.prev { left: 8px !important; right: auto !important; }
-  .pc-btn-nav.next { right: 8px !important; left: auto !important; }
+  .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
+  .pc-btn-nav.prev    { left: 14px !important; right: auto !important; }
+  .pc-btn-nav.next    { right: 14px !important; left: auto !important; }
 
   /* ── Brand color overrides for platform styles (styles.css uses #e00040) ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }

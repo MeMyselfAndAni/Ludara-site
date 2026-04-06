@@ -175,9 +175,9 @@ function _showSlide(idx){
 function _refreshNav(){
   const prev = document.getElementById('pc-nav-prev');
   const next = document.getElementById('pc-nav-next');
-  if(prev) prev.removeAttribute('disabled');
-  if(next) next.removeAttribute('disabled');
   const counter = document.getElementById('pc-counter');
+  if(prev){ prev.removeAttribute('disabled'); prev.style.display = 'flex'; }
+  if(next){ next.removeAttribute('disabled'); next.style.display = 'flex'; }
   if(counter) counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
 }
 
@@ -192,6 +192,32 @@ function _activateMarker(p){
   AID = p.id;
   if(markers[p.id]){ markers[p.id].setIcon(makeIcon(p,true)); markers[p.id].setZIndex(10); }
   if(map) map.panTo({lat:p.lat, lng:p.lng});
+}
+
+// ── Position nav buttons inside visible image area ────────────
+// With object-fit:contain, portrait images get side bars.
+// This places both buttons symmetrically over the actual image,
+// not the black bars.
+function _positionNavOverImage(img, wrap){
+  const prev = document.getElementById('pc-nav-prev');
+  const next = document.getElementById('pc-nav-next');
+  if(!prev || !next || !img.naturalWidth) return;
+
+  const wW = wrap.offsetWidth;
+  const wH = wrap.offsetHeight;
+  const iW = img.naturalWidth;
+  const iH = img.naturalHeight;
+
+  // Compute how wide the image actually renders under object-fit:contain
+  const scale    = Math.min(wW / iW, wH / iH);
+  const visW     = iW * scale;
+  const barLeft  = Math.max(0, (wW - visW) / 2);  // black bar width on each side
+
+  const INSET = 14; // px from image edge
+  prev.style.left  = Math.round(barLeft + INSET) + 'px';
+  prev.style.right = 'auto';
+  next.style.right = Math.round(barLeft + INSET) + 'px';
+  next.style.left  = 'auto';
 }
 
 // ── Populate all fields ───────────────────────────────────────
@@ -215,6 +241,7 @@ function _populateCard(p){
       if(CARD_PLACE?.id === captureId){
         img.classList.add('loaded');
         placeholder.style.opacity = '0';
+        _positionNavOverImage(img, wrap);
       }
     };
     img.src = url;
