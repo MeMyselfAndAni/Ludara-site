@@ -7,7 +7,7 @@ REM  Run from:  ...\Ludara-site\aperfectday\general\_deploy\
 REM  Live at:   https://ludara.ai/aperfectday/ludara/london/
 REM ============================================================
 
-set GUIDE=ludara\london
+set GUIDE=Ludara\London
 
 echo.
 echo ==========================================================
