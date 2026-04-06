@@ -173,8 +173,12 @@ function _showSlide(idx){
 }
 
 function _refreshNav(){
+  const prev = document.getElementById('pc-nav-prev');
+  const next = document.getElementById('pc-nav-next');
+  if(prev) prev.removeAttribute('disabled');
+  if(next) next.removeAttribute('disabled');
   const counter = document.getElementById('pc-counter');
-  counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
+  if(counter) counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
 }
 
 function cardPrev(){ _showSlide((CARD_IDX - 1 + CARD_LIST.length) % CARD_LIST.length); }
