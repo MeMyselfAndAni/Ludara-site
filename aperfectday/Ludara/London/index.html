@@ -3,16 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A Perfect Day — London Guide</title><!-- [1] -->
+<title>A Perfect Day — London Guide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — London classic red ───────────────────────────────────────
-     Active:  #c8102e (London red — buses, phone boxes, post boxes)
-     Presets: Navy: #1a3a5c  |  Blue: #2a7de1  |  Orange: #e8724a
-  ──────────────────────────────────────────────────────────────────────────── */
+  /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
+     Active:  :root { --brand: #c8102e ... }
+     Presets (uncomment to use):
+       Orange:     #e8724a  rgba(232,114,74,...)
+       Red:        #e8162a  rgba(232,22,42,...)
+       Blue:       #2a7de1  rgba(42,125,225,...)
+  ─────────────────────────────────────────────────────────── */
   :root { --brand: #c8102e; --brand-faint: rgba(200,16,46,0.12); --brand-glow: rgba(200,16,46,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -22,10 +25,8 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
-  .pc-emily-by { display: none !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
-
-  /* ── List scroll fix ── */
+  /* ── List scroll fix: ensure places-list fills and scrolls within sheet ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
     flex: 1 1 auto !important;
@@ -35,20 +36,17 @@
     max-height: none !important;
     padding-bottom: 60px !important;
   }
-
-  /* ── Saved empty state ── */
   .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
   .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #c8102e) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #c8102e); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
-
-  /* ── Card nav arrows — always visible, always symmetric ── */
+  /* Card nav arrows — always symmetric, always fully visible */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
   .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
   .pc-btn-nav.prev    { left: 14px; right: auto; }
   .pc-btn-nav.next    { right: 14px; left: auto; }
 
-  /* ── Brand color overrides ── */
+  /* ── Brand color overrides for platform styles (styles.css uses #e00040) ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
   .pill-saved:hover                    { background: var(--brand-faint) !important; }
   .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
@@ -58,8 +56,7 @@
   .saved-plan-btn                      { background: var(--brand) !important; }
   .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
   .pc-btn-fav.faved                    { color: var(--brand) !important; }
-
-  /* ── Card body scroll hint ── */
+  /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
   #pc-body::after {
     content: ''; pointer-events: none;
@@ -68,32 +65,37 @@
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
   }
 
-  /* ── User location dot ── */
+  /* User location dot — red */
   .user-dot-inner {
     width: 14px !important; height: 14px !important; border-radius: 50% !important;
     background: var(--brand) !important; border: 2.5px solid white !important;
     box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
   }
-  .user-dot-outer { width: 14px !important; height: 14px !important; }
+  .user-dot-outer {
+    width: 14px !important; height: 14px !important;
+  }
+
+
 </style>
 
 <script>
 // Read brand color from CSS variable — keeps JS and CSS in sync
 var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
 </script>
+</head>
 <body>
 
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-logo-row">
-      <span class="wl-logo">A Perfect Day</span><!-- [2] -->
+      <span class="wl-logo">A Perfect Day</span>
     </div>
-    <h2 class="splash-title">London Guide</h2><!-- [3] -->
-    <p class="splash-sub"><span class="place-count-all">68</span> hand-picked places across London's best neighbourhoods — restaurants, markets, museums, pubs, parks and hidden gems, curated for the curious traveller.</p><!-- [4] -->
+    <h2 class="splash-title">London Guide</h2>
+    <p class="splash-sub"><span class="place-count-all">68</span> hand-picked places across London's best neighbourhoods — restaurants, markets, museums, pubs, parks and hidden gems, curated for the curious traveller.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai" target="_blank">ludara.ai</a><!-- [5] -->
+      <a href="https://ludara.ai" target="_blank">ludara.ai</a>
     </div>
   </div>
 </div>
@@ -107,24 +109,22 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
+    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
       <span class="wl-logo">A Perfect Day</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>London</em> Guide</h1><!-- [7] -->
-      <div class="header-sub"><span class="place-count-all">68</span> hand-picked places</div><!-- [8] no "by" line — neutral guide -->
+      <h1><em>London</em> Guide</h1>
+      <div class="header-sub"><span class="place-count-all">68</span> hand-picked places</div>
     </div>
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
     <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
-  <!-- [9] No blog button — neutral guide has no linked blog post -->
 </header>
 
 <!-- Filter bar -->
-<!-- [10] Adjusted for London: Heritage instead of Churches, Pubs & Bars, Cafés & Coffee -->
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
@@ -142,69 +142,56 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
-<!-- [11] Keys match map.js NBHD_COLORS/LABELS/APPROX_CENTERS and data.js nbhd values -->
 <div id="nbhd-title">Neighbourhoods</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
     <div class="nbhd-handle-grip">⠿</div>
   </div>
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
-
     <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
       <span class="nbhd-label">All</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-westminster" role="button" tabindex="0" onclick="selectNbhd('westminster', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">👑</div></div>
       <span class="nbhd-label">Westminster</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-southbank" role="button" tabindex="0" onclick="selectNbhd('southbank', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎡</div></div>
       <span class="nbhd-label">South Bank</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-borough" role="button" tabindex="0" onclick="selectNbhd('borough', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🛒</div></div>
       <span class="nbhd-label">Borough &amp;<br>Bermondsey</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-city" role="button" tabindex="0" onclick="selectNbhd('city', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏰</div></div>
       <span class="nbhd-label">The City</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-covent-garden" role="button" tabindex="0" onclick="selectNbhd('covent-garden', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌹</div></div>
       <span class="nbhd-label">Covent Garden<br>&amp; Soho</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-camden" role="button" tabindex="0" onclick="selectNbhd('camden', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎸</div></div>
       <span class="nbhd-label">Camden &amp;<br>King's Cross</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-notting-hill" role="button" tabindex="0" onclick="selectNbhd('notting-hill', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎨</div></div>
       <span class="nbhd-label">Notting Hill</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-kensington" role="button" tabindex="0" onclick="selectNbhd('kensington', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🦕</div></div>
       <span class="nbhd-label">Kensington</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-greenwich" role="button" tabindex="0" onclick="selectNbhd('greenwich', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">⚓</div></div>
       <span class="nbhd-label">Greenwich</span>
     </div>
-
     <div class="nbhd-bubble" id="nbhd-shoreditch" role="button" tabindex="0" onclick="selectNbhd('shoreditch', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🕯️</div></div>
       <span class="nbhd-label">Shoreditch &amp;<br>Spitalfields</span>
     </div>
-
   </div>
 </div>
 
@@ -229,11 +216,10 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <!-- [12] No pc-emily-by attribution — neutral guide (hidden via CSS above) -->
-      <span class="pc-emily-by"></span>
+      <span class="pc-emily-by" style="display:none"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] Always "Visitor Tip" -->
+      <span class="pc-tip-label">💡 Visitor Tip</span>
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -260,7 +246,6 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 </div>
 
 <!-- List toggle (mobile) -->
-<!-- [14] Count = 58 in all four places below -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
@@ -310,7 +295,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   </div>
   <div class="saved-value-props">
     <div class="saved-vp"><span class="saved-vp-icon">🗺</span><div><div class="saved-vp-title">Walking Route</div><div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div></div></div>
-    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your London journey</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your journey</div></div></div>
     <div class="saved-vp"><span class="saved-vp-icon">🖼</span><div><div class="saved-vp-title">Map Screenshot</div><div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div></div></div>
   </div>
   <div class="saved-panel-actions">
@@ -319,7 +304,11 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
-    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+    <div class="saved-empty-hint">
+      <div class="saved-empty-icon">♡</div>
+      <div class="saved-empty-title">No saved places yet</div>
+      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
+    </div>
   </div>
 </div>
 
@@ -329,7 +318,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <span class="desktop-list-count" id="desktop-list-count">68</span>
 </button>
 
-<!-- JS modules — load order is critical, do not reorder -->
+<!-- JS — load order is critical, do not reorder -->
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
@@ -342,8 +331,8 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Address display — populates pc-address when a card opens -->
 <script>
+// Populate address on card open by watching pc-title changes
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   var addrEl  = document.getElementById('pc-address');
@@ -356,18 +345,24 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- openTripInMaps — named searches so Google Maps shows place labels -->
 <script>
+// SCENARIO 2: Open in Google Maps from Saved/Itinerary
+// → All saved places as named stops (not coordinates) so Google Maps shows labels
+// → No origin set — user sees stops and can drag to reorder before navigating
 function openTripInMaps() {
   var ids = [];
   try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
   var places = PLACES.filter(function(p) { return ids.includes(p.id); });
   if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+
   if (places.length === 1) {
     var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
     window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
     return;
   }
+
+  // Use named searches (not coords) so each stop shows its label in Google Maps.
+  // No origin — user adds their starting point and reorders stops as they wish.
   var stops = places.map(function(p) {
     return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
   });
@@ -375,8 +370,14 @@ function openTripInMaps() {
 }
 </script>
 
-<!-- Navigate button + distance badges -->
+
+
+
+
+
+<!-- ── NAVIGATE + DISTANCES ──────────────────────────────────── -->
 <script>
+// Haversine distance in metres
 function _distM(lat1, lng1, lat2, lng2) {
   var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
   var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
@@ -387,26 +388,58 @@ function _fmtDist(m) {
   return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
 }
 
+// SCENARIO 1: Navigate button on card
+// → Directions to this place only (from current location if known)
+// → Saved places shown as additional labeled pins via saddr/daddr trick
 function navigateToPlace(destLat, destLng, destName) {
   var dest = destLat + ',' + destLng;
   var url;
+
   if (window._userLat && window._userLng) {
-    url = 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking';
+    // Direct navigation: current location → destination
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&origin=' + window._userLat + ',' + window._userLng
+      + '&destination=' + dest
+      + '&travelmode=walking';
   } else {
-    url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&destination=' + dest
+      + '&travelmode=walking';
   }
+
+  // Add saved places as extra stops so they appear as labeled pins on the map
+  // User can see them and optionally add them to the route in Google Maps
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) {
+    return favIds.includes(p.id) &&
+           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
+  });
+  if (favPlaces.length > 0) {
+    // Append saved places as waypoints — they appear as labeled stops in Google Maps
+    // but since destination is already set, user decides if they want to route through them
+    var waypointNames = favPlaces.map(function(p) {
+      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+    });
+    url += '&waypoints=' + waypointNames.join('|');
+  }
+
   window.open(url, '_blank');
 }
 
+// Wrap ui-filter.js locateMe to capture coordinates after it runs
 window.addEventListener('load', function() {
   var _origLocate = window.locateMe;
   window.locateMe = function() {
     _origLocate();
+    // After getCurrentPosition resolves, read the dot's position from the marker
+    // by watching for the user-dot to appear
     var attempts = 0;
     var poll = setInterval(function() {
       var dot = document.querySelector('.user-dot-inner');
       if (dot || attempts > 20) {
         clearInterval(poll);
+        // getCurrentPosition one-shot — get coords directly
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(pos) {
             window._userLat = pos.coords.latitude;
@@ -420,6 +453,7 @@ window.addEventListener('load', function() {
   };
 });
 
+// Add Navigate button to place card when it opens
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
@@ -427,8 +461,11 @@ window.addEventListener('load', function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
     if (!place) return;
+
+    // Remove existing nav button
     var existing = document.getElementById('pc-nav-btn');
     if (existing) existing.remove();
+
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
@@ -438,11 +475,14 @@ window.addEventListener('load', function() {
     }
     btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
+
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 
+// Update distance badges on list items
+// ui-filter.js renders: <div class="place-row" id="row-N">...<div class="place-name">...</div>...
 function updateListDistances() {
   if (!window._userLat) return;
   PLACES.forEach(function(place) {
@@ -460,6 +500,7 @@ function updateListDistances() {
   });
 }
 
+// Re-run after every list render
 window.addEventListener('load', function() {
   var list = document.getElementById('places-list');
   if (!list) return;
@@ -469,10 +510,15 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Brand color for map route line and numbered markers -->
+
+
 <script>
+// ── Brand color for map elements — reads from CSS variable ───
 window.addEventListener('load', function() {
   var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+
+  // 1. Intercept initMapSources (called inside map.on('load') in map.js)
+  //    Wrap it to recolor the trip-route-line immediately after creation
   var _origInitMapSources = window.initMapSources;
   window.initMapSources = function() {
     if (_origInitMapSources) _origInitMapSources();
@@ -480,6 +526,8 @@ window.addEventListener('load', function() {
       map.setPaintProperty('trip-route-line', 'line-color', brand);
     }
   };
+
+  // 2. Intercept _ensureRouteLayer (called by drawSavedRoute each time)
   var _origEnsure = window._ensureRouteLayer;
   window._ensureRouteLayer = function() {
     if (_origEnsure) _origEnsure();
@@ -487,63 +535,38 @@ window.addEventListener('load', function() {
       map.setPaintProperty('trip-route-line', 'line-color', brand);
     }
   };
+
+  // 3. Completely replace _addNumberedMarkers with brand-colored version
   window._addNumberedMarkers = function(places) {
     places.forEach(function(p, i) {
       var el = document.createElement('div');
-      el.style.cssText = ['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');
+      el.style.cssText = [
+        'width:26px', 'height:26px', 'border-radius:50%',
+        'background:' + brand,
+        'border:2.5px solid white',
+        'color:white', 'font-size:0.68rem', 'font-weight:700',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
+        'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
       el.textContent = i + 1;
       el.style.cursor = 'pointer';
-      el.addEventListener('click', function() { if (typeof openDetail === 'function') openDetail(p.id); });
-      var marker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lng, p.lat]).addTo(map);
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
       if (window.tripMarkers) tripMarkers.push(marker);
     });
   };
 });
 </script>
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
-<!-- Offline route detection modal -->
+
 <script>
-window.addEventListener('load', function() {
-  var _origPlanFavTrip = window.planFavTrip;
-  window.planFavTrip = function() {
-    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
-    if (_origPlanFavTrip) _origPlanFavTrip();
-  };
-  var _origDrawSavedRoute = window.drawSavedRoute;
-  window.drawSavedRoute = function() {
-    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
-    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
-  };
-});
-
-function _showOfflineRouteMsg() {
-  var existing = document.getElementById('offline-route-msg');
-  if (existing) existing.remove();
-  var backdrop = document.createElement('div');
-  backdrop.id = 'offline-route-msg';
-  backdrop.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:20px';
-  var card = document.createElement('div');
-  card.style.cssText = 'background:white;border-radius:20px;padding:28px 24px 22px;max-width:300px;width:100%;text-align:center;font-family:sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative';
-  if (!document.getElementById('_offlineKF')) {
-    var s = document.createElement('style'); s.id = '_offlineKF';
-    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
-    document.head.appendChild(s);
-  }
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-  card.innerHTML = '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
-    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">Walking routes need a connection</div>' +
-    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">Connect to WiFi or mobile data to plan your route.<br>All places, your saved list, and your location still work offline.</div>' +
-    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:sans-serif">Got it</button>';
-  backdrop.appendChild(card);
-  document.body.appendChild(backdrop);
-  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
-  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
-  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
-}
-</script>
-
-<!-- Hide neighbourhood bubbles that have no places -->
-<script>
+// Hide neighbourhood bubbles that have no places
 window.addEventListener('load', function() {
   document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
     if (bubble.id === 'nbhd-all') return;
@@ -554,15 +577,106 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Card swipe + looping — replaces ui-card.js cardNext/cardPrev -->
-<!-- Reads live filtered list so nav always works regardless of SW cache -->
+
+
+
+
 <script>
+// Offline route detection — wraps planFavTrip and drawSavedRoute
+// to show a clear message instead of silently spinning when offline.
 window.addEventListener('load', function() {
+
+  // Wrap planFavTrip (Full Itinerary button)
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+
+  // Wrap drawSavedRoute (called internally when route is drawn)
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+
+});
+
+function _showOfflineRouteMsg() {
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+
+  // Backdrop
+  var backdrop = document.createElement('div');
+  backdrop.id = 'offline-route-msg';
+  backdrop.style.cssText = [
+    'position:fixed', 'inset:0', 'z-index:99999',
+    'display:flex', 'align-items:center', 'justify-content:center',
+    'background:rgba(0,0,0,0.45)', 'backdrop-filter:blur(2px)',
+    '-webkit-backdrop-filter:blur(2px)', 'padding:20px'
+  ].join(';');
+
+  // Card
+  var card = document.createElement('div');
+  card.style.cssText = [
+    'background:white', 'border-radius:20px',
+    'padding:28px 24px 22px', 'max-width:300px', 'width:100%',
+    'text-align:center', 'font-family:sans-serif',
+    'box-shadow:0 20px 60px rgba(0,0,0,0.25)',
+    'position:relative', 'animation:_offlineIn 0.2s ease'
+  ].join(';');
+
+  // Inject keyframe once
+  if (!document.getElementById('_offlineKF')) {
+    var s = document.createElement('style');
+    s.id = '_offlineKF';
+    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
+    document.head.appendChild(s);
+  }
+
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+
+  card.innerHTML =
+    '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;' +
+    'display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
+    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">' +
+    'Walking routes need a connection</div>' +
+    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">' +
+    'Connect to WiFi or mobile data to plan your route.<br>' +
+    'All places, your saved list, and your location still work offline.' +
+    '</div>' +
+    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;' +
+    'background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;' +
+    'cursor:pointer;font-family:sans-serif">Got it</button>';
+
+  backdrop.appendChild(card);
+  document.body.appendChild(backdrop);
+
+  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
+  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
+  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
+}
+</script>
+
+
+<script>
+// ── Card swipe + looping ──────────────────────────────────────────
+// Reads current place from card title, finds it in the visible filtered
+// list, navigates with modulo wrapping — never gets stuck at ends.
+window.addEventListener('load', function() {
+
   function _filteredIds() {
     return Array.from(document.querySelectorAll('.place-row'))
       .map(function(r) { return parseInt(r.id.replace('row-', '')); })
       .filter(function(id) { return !isNaN(id); });
   }
+
   function _currentId() {
     var title = document.getElementById('pc-title');
     if (!title) return null;
@@ -570,6 +684,8 @@ window.addEventListener('load', function() {
     var place = PLACES.find(function(p) { return p.name === name; });
     return place ? place.id : null;
   }
+
+  // Replace cardNext with looping version
   window.cardNext = function() {
     var ids = _filteredIds();
     if (!ids.length) return;
@@ -577,6 +693,8 @@ window.addEventListener('load', function() {
     var idx = ids.indexOf(cur);
     openDetail(ids[(idx + 1) % ids.length]);
   };
+
+  // Replace cardPrev with looping version
   window.cardPrev = function() {
     var ids = _filteredIds();
     if (!ids.length) return;
@@ -584,10 +702,15 @@ window.addEventListener('load', function() {
     var idx = ids.indexOf(cur);
     openDetail(ids[(idx - 1 + ids.length) % ids.length]);
   };
+
+  // Swipe on photo area triggers the same looping navigation
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
   var tx = 0, ty = 0;
-  wrap.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  wrap.addEventListener('touchstart', function(e) {
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+  }, { passive: true });
   wrap.addEventListener('touchend', function(e) {
     var dx = e.changedTouches[0].clientX - tx;
     var dy = e.changedTouches[0].clientY - ty;
@@ -596,10 +719,9 @@ window.addEventListener('load', function() {
     }
   }, { passive: true });
 });
-</script>
 
-<!-- Service Worker registration -->
-<script>
+// ── Service Worker registration ───────────────────────────────────
+// Register on first page load so offline works without tapping "Save offline".
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
