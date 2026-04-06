@@ -31,6 +31,20 @@
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+  /* ── List scroll fix ── */
+  .sheet { display: flex !important; flex-direction: column !important; }
+  .places-list {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    max-height: none !important;
+    padding-bottom: 60px !important;
+  }
+  .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #ff2a00) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #ff2a00); }
+  .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
 
   /* Card nav arrows — prev at left, next at 52px (clears 48px heart btn) */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
@@ -268,7 +282,11 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
-    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+    <div class="saved-empty-hint">
+      <div class="saved-empty-icon">♡</div>
+      <div class="saved-empty-title">No saved places yet</div>
+      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
+    </div>
   </div>
 </div>
 
@@ -546,6 +564,55 @@ function _showOfflineRouteMsg() {
   msg.onclick = function() { msg.remove(); };
   document.body.appendChild(msg);
   setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+}
+</script>
+
+
+<script>
+// Card swipe gestures + looping
+window.addEventListener('load', function() {
+  var wrap = document.getElementById('pc-photo-wrap');
+  if (!wrap) return;
+  var touchStartX = 0, touchStartY = 0;
+  wrap.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  wrap.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) { cardNext(); } else { cardPrev(); }
+    }
+  }, { passive: true });
+  // Looping: wrap cardNext/cardPrev to loop around at ends
+  var _origNext = window.cardNext;
+  var _origPrev = window.cardPrev;
+  window.cardNext = function() {
+    var nextBtn = document.getElementById('pc-nav-next');
+    if (nextBtn && (nextBtn.style.display === 'none' || nextBtn.disabled)) {
+      var firstRow = document.querySelector('.place-row');
+      if (firstRow) { var id = parseInt(firstRow.id.replace('row-', '')); if (id) { openDetail(id); return; } }
+    }
+    if (_origNext) _origNext();
+  };
+  window.cardPrev = function() {
+    var prevBtn = document.getElementById('pc-nav-prev');
+    if (prevBtn && (prevBtn.style.display === 'none' || prevBtn.disabled)) {
+      var rows = document.querySelectorAll('.place-row');
+      if (rows.length) { var id = parseInt(rows[rows.length-1].id.replace('row-','')); if (id) { openDetail(id); return; } }
+    }
+    if (_origPrev) _origPrev();
+  };
+});
+
+// Service Worker registration — register on first visit so guide works offline immediately
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js', { scope: './' })
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
 }
 </script>
 
