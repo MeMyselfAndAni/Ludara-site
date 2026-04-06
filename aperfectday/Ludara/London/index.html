@@ -76,7 +76,11 @@
   }
   .user-dot-outer { width: 14px !important; height: 14px !important; }
 </style>
-</head>
+
+<script>
+// Read brand color from CSS variable — keeps JS and CSS in sync
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+</script>
 <body>
 
 <!-- Welcome Splash -->
@@ -338,23 +342,6 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Override platform's openTripInMaps — must be AFTER ui-pdf.js so it wins -->
-<script>
-function openTripInMaps() {
-  let ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
-  const places = PLACES.filter(p => ids.includes(p.id));
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
-  const url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-  window.open(url, '_blank');
-}
-</script>
-
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
-
 <!-- Address display — populates pc-address when a card opens -->
 <script>
 window.addEventListener('load', function() {
@@ -369,6 +356,192 @@ window.addEventListener('load', function() {
 });
 </script>
 
+<!-- openTripInMaps — named searches so Google Maps shows place labels -->
+<script>
+function openTripInMaps() {
+  var ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+  if (places.length === 1) {
+    var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
+    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+    return;
+  }
+  var stops = places.map(function(p) {
+    return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+  });
+  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
+}
+</script>
+
+<!-- Navigate button + distance badges -->
+<script>
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
+
+function navigateToPlace(destLat, destLng, destName) {
+  var dest = destLat + ',' + destLng;
+  var url;
+  if (window._userLat && window._userLng) {
+    url = 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking';
+  } else {
+    url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+  }
+  window.open(url, '_blank');
+}
+
+window.addEventListener('load', function() {
+  var _origLocate = window.locateMe;
+  window.locateMe = function() {
+    _origLocate();
+    var attempts = 0;
+    var poll = setInterval(function() {
+      var dot = document.querySelector('.user-dot-inner');
+      if (dot || attempts > 20) {
+        clearInterval(poll);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos) {
+            window._userLat = pos.coords.latitude;
+            window._userLng = pos.coords.longitude;
+            updateListDistances();
+          }, null, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
+      attempts++;
+    }, 300);
+  };
+});
+
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = '';
+    if (window._userLat && window._userLng) {
+      distStr = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away';
+    }
+    btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+function updateListDistances() {
+  if (!window._userLat) return;
+  PLACES.forEach(function(place) {
+    var row = document.getElementById('row-' + place.id);
+    if (!row) return;
+    var badge = row.querySelector('.dist-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'dist-badge';
+      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
+      var nameEl = row.querySelector('.place-name');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+  });
+}
+
+window.addEventListener('load', function() {
+  var list = document.getElementById('places-list');
+  if (!list) return;
+  new MutationObserver(function() {
+    if (window._userLat) updateListDistances();
+  }).observe(list, { childList: true, subtree: false });
+});
+</script>
+
+<!-- Brand color for map route line and numbered markers -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = ['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() { if (typeof openDetail === 'function') openDetail(p.id); });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lng, p.lat]).addTo(map);
+      if (window.tripMarkers) tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- Offline route detection modal -->
+<script>
+window.addEventListener('load', function() {
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+});
+
+function _showOfflineRouteMsg() {
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+  var backdrop = document.createElement('div');
+  backdrop.id = 'offline-route-msg';
+  backdrop.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:20px';
+  var card = document.createElement('div');
+  card.style.cssText = 'background:white;border-radius:20px;padding:28px 24px 22px;max-width:300px;width:100%;text-align:center;font-family:sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative';
+  if (!document.getElementById('_offlineKF')) {
+    var s = document.createElement('style'); s.id = '_offlineKF';
+    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
+    document.head.appendChild(s);
+  }
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+  card.innerHTML = '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
+    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">Walking routes need a connection</div>' +
+    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">Connect to WiFi or mobile data to plan your route.<br>All places, your saved list, and your location still work offline.</div>' +
+    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:sans-serif">Got it</button>';
+  backdrop.appendChild(card);
+  document.body.appendChild(backdrop);
+  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
+  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
+  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
+}
+</script>
+
 <!-- Hide neighbourhood bubbles that have no places -->
 <script>
 window.addEventListener('load', function() {
@@ -381,19 +554,43 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Card swipe gestures -->
+<!-- Card swipe + looping — replaces ui-card.js cardNext/cardPrev -->
+<!-- Reads live filtered list so nav always works regardless of SW cache -->
 <script>
 window.addEventListener('load', function() {
+  function _filteredIds() {
+    return Array.from(document.querySelectorAll('.place-row'))
+      .map(function(r) { return parseInt(r.id.replace('row-', '')); })
+      .filter(function(id) { return !isNaN(id); });
+  }
+  function _currentId() {
+    var title = document.getElementById('pc-title');
+    if (!title) return null;
+    var name = title.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    return place ? place.id : null;
+  }
+  window.cardNext = function() {
+    var ids = _filteredIds();
+    if (!ids.length) return;
+    var cur = _currentId();
+    var idx = ids.indexOf(cur);
+    openDetail(ids[(idx + 1) % ids.length]);
+  };
+  window.cardPrev = function() {
+    var ids = _filteredIds();
+    if (!ids.length) return;
+    var cur = _currentId();
+    var idx = ids.indexOf(cur);
+    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
+  };
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
-  var touchStartX = 0, touchStartY = 0;
-  wrap.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
+  var tx = 0, ty = 0;
+  wrap.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
   wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    var dy = e.changedTouches[0].clientY - touchStartY;
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       if (dx < 0) { cardNext(); } else { cardPrev(); }
     }
@@ -406,13 +603,12 @@ window.addEventListener('load', function() {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) { console.log('SW registered:', reg.scope); })
-      .catch(function(err) { console.log('SW registration failed:', err); });
+      .then(function(reg) { console.log('SW registered'); })
+      .catch(function(err) { console.warn('SW failed:', err); });
   });
 }
 </script>
 
-<!-- [15] Keep exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
   window.addEventListener('load', initMap);
 </script>
