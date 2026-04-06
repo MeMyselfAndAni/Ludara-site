@@ -9,13 +9,71 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
+  /* ── BRAND COLOR — edit only the active :root line ──────────────────────
+     Active:    #d4611f (warm terracotta — suits Drizzle & Dip food palette)
+     Presets:   Orange: #e8724a  |  Red: #e8162a  |  Blue: #2a7de1
+  ──────────────────────────────────────────────────────────────────────── */
+  :root { --brand: #d4611f; --brand-faint: rgba(212,97,31,0.12); --brand-glow: rgba(212,97,31,0.3); }
+
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
-  .pc-photo-img { object-fit: contain !important; background: #111; }
-  .pc-photo-wrap { background: #111; }
+  .pc-photo-img { object-fit: contain !important; background: #111 !important; }
+  .pc-photo-wrap { background: #111 !important; }
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+
+  /* ── List scroll fix ── */
+  .sheet { display: flex !important; flex-direction: column !important; }
+  .places-list {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    max-height: none !important;
+    padding-bottom: 60px !important;
+  }
+
+  /* ── Saved empty state ── */
+  .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #d4611f) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #d4611f); }
+  .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
+
+  /* ── Card nav arrows — always visible, always symmetric ── */
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
+  .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
+  .pc-btn-nav.prev    { left: 14px; right: auto; }
+  .pc-btn-nav.next    { right: 14px; left: auto; }
+
+  /* ── Brand color overrides ── */
+  .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
+  .pill-saved:hover                    { background: var(--brand-faint) !important; }
+  .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+  .pill-saved-count                    { color: var(--brand) !important; }
+  .pill-saved.active .pill-saved-count { color: white !important; }
+  .saved-mode-banner                   { border-bottom-color: var(--brand) !important; color: var(--brand) !important; }
+  .saved-plan-btn                      { background: var(--brand) !important; }
+  .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
+  .pc-btn-fav.faved                    { color: var(--brand) !important; }
+
+  /* ── Card body scroll hint ── */
+  #pc-body { position: relative; }
+  #pc-body::after {
+    content: ''; pointer-events: none;
+    position: sticky; bottom: 0; left: 0; right: 0;
+    display: block; height: 32px; margin-top: -32px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+  }
+
+  /* ── User location dot ── */
+  .user-dot-inner {
+    width: 14px !important; height: 14px !important; border-radius: 50% !important;
+    background: var(--brand) !important; border: 2.5px solid white !important;
+    box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
+  }
+  .user-dot-outer { width: 14px !important; height: 14px !important; }
 </style>
 </head>
 <body>
@@ -126,6 +184,7 @@
     <div class="pc-cat" id="pc-cat"></div>
     <div class="pc-title" id="pc-title"></div>
     <div class="pc-type" id="pc-type"></div>
+    <div class="pc-address" id="pc-address"></div>
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
@@ -241,6 +300,78 @@
 <script src="ui-pdf.js"></script>
 
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+<!-- openTripInMaps — opens saved places as named waypoints in Google Maps -->
+<script>
+function openTripInMaps() {
+  let ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
+  const places = PLACES.filter(p => ids.includes(p.id));
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
+  const url = stops.length === 1
+    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
+    : 'https://www.google.com/maps/dir/' + stops.join('/');
+  window.open(url, '_blank');
+}
+</script>
+
+<!-- Address display — populates pc-address when a card opens -->
+<script>
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  var addrEl  = document.getElementById('pc-address');
+  if (!titleEl || !addrEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+</script>
+
+<!-- Hide neighbourhood bubbles that have no places -->
+<script>
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key; }).length;
+    if (count === 0) bubble.style.display = 'none';
+  });
+});
+</script>
+
+<!-- Card swipe gestures -->
+<script>
+window.addEventListener('load', function() {
+  var wrap = document.getElementById('pc-photo-wrap');
+  if (!wrap) return;
+  var touchStartX = 0, touchStartY = 0;
+  wrap.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  wrap.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) { cardNext(); } else { cardPrev(); }
+    }
+  }, { passive: true });
+});
+</script>
+
+<!-- Service Worker registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js', { scope: './' })
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
+}
+</script>
 
 <script>
   window.addEventListener('load', initMap);

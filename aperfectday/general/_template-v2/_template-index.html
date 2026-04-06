@@ -46,10 +46,11 @@
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
 
-  /* Card nav arrows — prev at left, next at 52px (clears 48px heart btn) */
+  /* Card nav arrows — always visible, always symmetric */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
-  .pc-btn-nav.prev { left: 8px !important; right: auto !important; }
-  .pc-btn-nav.next { right: 8px !important; left: auto !important; }
+  .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
+  .pc-btn-nav.prev    { left: 14px; right: auto; }
+  .pc-btn-nav.next    { right: 14px; left: auto; }
 
   /* ── Brand color overrides — platform styles.css uses #e00040 ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
@@ -569,7 +570,7 @@ function _showOfflineRouteMsg() {
 
 
 <script>
-// Card swipe gestures + looping
+// Card swipe gestures
 window.addEventListener('load', function() {
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
@@ -585,25 +586,6 @@ window.addEventListener('load', function() {
       if (dx < 0) { cardNext(); } else { cardPrev(); }
     }
   }, { passive: true });
-  // Looping: wrap cardNext/cardPrev to loop around at ends
-  var _origNext = window.cardNext;
-  var _origPrev = window.cardPrev;
-  window.cardNext = function() {
-    var nextBtn = document.getElementById('pc-nav-next');
-    if (nextBtn && (nextBtn.style.display === 'none' || nextBtn.disabled)) {
-      var firstRow = document.querySelector('.place-row');
-      if (firstRow) { var id = parseInt(firstRow.id.replace('row-', '')); if (id) { openDetail(id); return; } }
-    }
-    if (_origNext) _origNext();
-  };
-  window.cardPrev = function() {
-    var prevBtn = document.getElementById('pc-nav-prev');
-    if (prevBtn && (prevBtn.style.display === 'none' || prevBtn.disabled)) {
-      var rows = document.querySelectorAll('.place-row');
-      if (rows.length) { var id = parseInt(rows[rows.length-1].id.replace('row-','')); if (id) { openDetail(id); return; } }
-    }
-    if (_origPrev) _origPrev();
-  };
 });
 
 // Service Worker registration — register on first visit so guide works offline immediately

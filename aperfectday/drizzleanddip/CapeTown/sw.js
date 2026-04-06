@@ -1,80 +1,118 @@
-// sw.js — Service Worker for offline map support (MapLibre + MapTiler)
-const APP_CACHE  = 'aperfectday-app-v2';
-const TILE_CACHE = 'maptiler-tiles-v2';
+// A Perfect Day — Service Worker v4
+// CACHE FIRST everywhere except OSRM routing.
+// If a resource is in cache, return it IMMEDIATELY — no network request.
+// This prevents the 60-second hang when offline.
 
-const APP_FILES = [
-  './', './index.html', './data.js', './map.js', './styles.css',
-  './photos.js', './ui-card.js', './ui-filter.js', './ui-favourites.js',
-  './ui-pdf.js', './ui-stories.js', './favicon.svg',
+var SHELL_CACHE = 'apd-shell-v5';
+var TILE_CACHE  = 'apd-tiles-v1';
+
+var SHELL_FILES = [
+  './',
+  './index.html',
+  './data.js',
+  './map.js',
+  './photos.js',
+  './map-core.js',
+  './styles.css',
+  './ui-card.js',
+  './ui-filter.js',
+  './ui-favourites.js',
+  './ui-pdf.js',
+  './ui-stories.js',
+  './favicon.svg',
 ];
 
-self.addEventListener('install', event => {
+self.addEventListener('install', function(event) {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(APP_CACHE)
-      .then(cache => cache.addAll(APP_FILES))
-      .then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys
-        .filter(k => k !== APP_CACHE && k !== TILE_CACHE)
-        .map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', event => {
-  // Skip non-http requests (chrome-extension etc.)
-  if (!event.request.url.startsWith('http')) return;
-
-  const url = new URL(event.request.url);
-
-  // MapTiler tiles + style + fonts + sprites — cache first
-  if (url.hostname.includes('maptiler.com') || url.hostname.includes('maplibre')) {
-    event.respondWith(
-      caches.open(TILE_CACHE).then(cache =>
-        cache.match(event.request).then(cached => {
-          if (cached) return cached;
-          return fetch(event.request).then(res => {
-            if (res.ok) cache.put(event.request, res.clone());
-            return res;
-          }).catch(() => new Response('', { status: 503 }));
+    caches.open(SHELL_CACHE).then(function(cache) {
+      return Promise.allSettled(
+        SHELL_FILES.map(function(url) {
+          return fetch(url, { cache: 'reload' }).then(function(res) {
+            if (res.ok) return cache.put(url, res);
+          }).catch(function() {});
         })
-      )
-    );
-    return;
-  }
-
-  // Place images — cache as loaded
-  if (url.pathname.includes('/images/place-')) {
-    event.respondWith(
-      caches.open(APP_CACHE).then(cache =>
-        cache.match(event.request).then(cached => {
-          if (cached) return cached;
-          return fetch(event.request).then(res => {
-            if (res.ok) cache.put(event.request, res.clone());
-            return res;
-          }).catch(() => new Response('', { status: 404 }));
-        })
-      )
-    );
-    return;
-  }
-
-  // App files — cache first, fallback to network
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(res => {
-        if (res.ok && event.request.method === 'GET') {
-          const clone = res.clone();
-          caches.open(APP_CACHE).then(c => c.put(event.request, clone));
-        }
-        return res;
-      }).catch(() => caches.match('./index.html'));
+      );
     })
   );
+});
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+    caches.keys().then(function(keys) {
+      return Promise.all(
+        keys.filter(function(k) {
+          return k.startsWith('apd-shell-') && k !== SHELL_CACHE;
+        }).map(function(k) { return caches.delete(k); })
+      );
+    }).then(function() { return self.clients.claim(); })
+  );
+});
+
+self.addEventListener('fetch', function(event) {
+  if (event.request.method !== 'GET') return;
+  var url = event.request.url;
+
+  // OSRM routing — never intercept, page handles offline gracefully
+  if (url.includes('openstreetmap.de') || url.includes('/routed-')) return;
+
+  // MapTiler tiles — cache first, then network
+  if (url.includes('maptiler.com') || url.includes('api.maptiler')) {
+    event.respondWith(
+      caches.open(TILE_CACHE).then(function(cache) {
+        return cache.match(event.request).then(function(cached) {
+          if (cached) return cached;
+          return fetch(event.request).then(function(res) {
+            if (res.ok) cache.put(event.request, res.clone());
+            return res;
+          }).catch(function() {
+            return new Response('', { status: 503 });
+          });
+        });
+      })
+    );
+    return;
+  }
+
+  // App shell + CDN + images: CACHE FIRST
+  // If in cache: return immediately, background-refresh only if online.
+  // If not cached: fetch, cache, return.
+  event.respondWith(
+    caches.open(SHELL_CACHE).then(function(cache) {
+      return cache.match(event.request).then(function(cached) {
+        if (cached) {
+          if (navigator.onLine) {
+            fetch(event.request).then(function(res) {
+              if (res && res.ok) cache.put(event.request, res);
+            }).catch(function() {});
+          }
+          return cached;
+        }
+        return fetch(event.request).then(function(res) {
+          if (res && res.ok) cache.put(event.request, res.clone());
+          return res;
+        }).catch(function() {
+          if (event.request.mode === 'navigate') {
+            return cache.match('./index.html');
+          }
+          return new Response('', { status: 503 });
+        });
+      });
+    })
+  );
+});
+
+self.addEventListener('message', function(event) {
+  if (!event.data) return;
+  if (event.data.action === 'SAVE_OFFLINE' || event.data.type === 'CACHE_URLS') {
+    caches.open(SHELL_CACHE).then(function(cache) {
+      Promise.allSettled(
+        SHELL_FILES.map(function(url) {
+          return fetch(url, { cache: 'reload' }).then(function(res) {
+            if (res.ok) return cache.put(url, res);
+          }).catch(function() {});
+        })
+      );
+    });
+  }
 });

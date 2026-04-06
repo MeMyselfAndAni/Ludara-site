@@ -176,13 +176,13 @@ function _refreshNav(){
   const prev = document.getElementById('pc-nav-prev');
   const next = document.getElementById('pc-nav-next');
   const counter = document.getElementById('pc-counter');
-  prev.disabled = (CARD_IDX === 0);
-  next.disabled = (CARD_IDX === CARD_LIST.length - 1);
-  counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
+  if(prev){ prev.removeAttribute('disabled'); prev.style.display = 'flex'; }
+  if(next){ next.removeAttribute('disabled'); next.style.display = 'flex'; }
+  if(counter) counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
 }
 
-function cardPrev(){ if(CARD_IDX > 0) _showSlide(CARD_IDX - 1); }
-function cardNext(){ if(CARD_IDX < CARD_LIST.length - 1) _showSlide(CARD_IDX + 1); }
+function cardPrev(){ _showSlide((CARD_IDX - 1 + CARD_LIST.length) % CARD_LIST.length); }
+function cardNext(){ _showSlide((CARD_IDX + 1) % CARD_LIST.length); }
 
 function _activateMarker(p){
   if(AID && markers[AID]){
