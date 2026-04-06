@@ -4,6 +4,33 @@ const FAVS_KEY = 'favs_' + window.location.pathname.replace(/\//g,'_');
 let favourites = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
 let savedFilterActive = false;
 
+// ── Toast notification — replaces browser alert() ────────────
+function _toast(msg, durationMs){
+  durationMs = durationMs || 3000;
+  const existing = document.getElementById('_apd-toast');
+  if(existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = '_apd-toast';
+  const brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#1a3a5c';
+  el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);' +
+    'background:' + brand + ';color:white;padding:12px 22px;border-radius:24px;' +
+    'font-size:0.82rem;font-weight:600;font-family:Inter,sans-serif;' +
+    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:80vw;text-align:center;' +
+    'animation:_apd-fadein 0.2s ease;pointer-events:none;';
+  el.textContent = msg;
+  if(!document.getElementById('_apd-toast-style')){
+    const s = document.createElement('style');
+    s.id = '_apd-toast-style';
+    s.textContent = '@keyframes _apd-fadein{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+    document.head.appendChild(s);
+  }
+  document.body.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, durationMs);
+}
+
+// ── Brand color from CSS variable ─────────────────────────────
+function _brandColor(){ return getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#1a3a5c'; }
+
 function saveFavs(){ localStorage.setItem(FAVS_KEY, JSON.stringify(favourites)); updateFavUI(); }
 function refreshFavourites(){ favourites = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); updateFavUI(); }
 
@@ -53,7 +80,7 @@ function toggleSavedFilter(el){
   if(savedFilterActive){
     if(favourites.length === 0){
       savedFilterActive = false; el.classList.remove('active');
-      alert('Tap ♡ on any place to save it here.');
+      _toast('Tap ♡ on any place to save it here.');
       return;
     }
     applyFilters();
@@ -88,7 +115,7 @@ function _ensureRouteLayer(){
     map.addSource('trip-route', { type:'geojson', data:{type:'FeatureCollection',features:[]} });
     map.addLayer({
       id: 'trip-route-line', type: 'line', source: 'trip-route',
-      paint: { 'line-color':'#e00040', 'line-width':4, 'line-opacity':0.85 }
+      paint: { 'line-color': _brandColor(), 'line-width':4, 'line-opacity':0.85 }
     });
   }
 }
@@ -110,7 +137,7 @@ function _fitRouteBounds(places){
 function _addNumberedMarkers(places){
   places.forEach((p, i) => {
     const el = document.createElement('div');
-    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#e00040;border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
     el.textContent = i + 1;
     const marker = new maplibregl.Marker({ element:el, anchor:'center' })
       .setLngLat([p.lng, p.lat]).addTo(map);
@@ -216,7 +243,7 @@ function getSortedFavPlaces(){
 }
 
 function planFavTrip(){
-  if(favourites.length < 2){ alert('Add at least 2 favourites first!'); return; }
+  if(favourites.length < 2){ _toast('Save at least 2 places first ♡'); return; }
   const places = getSortedFavPlaces();
   let totalWalkSecs = 0, totalDwell = 0;
   places.forEach((p, i) => {
@@ -276,7 +303,7 @@ function openTripInMaps(){
 }
 
 function saveMapImage(){
-  alert('Map screenshot requires internet connection. Please take a screenshot manually.');
+  _toast('Take a screenshot to save the map 📸', 4000);
 }
 
 // Stubs
