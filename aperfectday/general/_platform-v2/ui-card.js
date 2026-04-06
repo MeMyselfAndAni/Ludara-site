@@ -194,32 +194,6 @@ function _activateMarker(p){
   if(map) map.panTo({lat:p.lat, lng:p.lng});
 }
 
-// ── Position nav buttons inside visible image area ────────────
-// With object-fit:contain, portrait images get side bars.
-// This places both buttons symmetrically over the actual image,
-// not the black bars.
-function _positionNavOverImage(img, wrap){
-  const prev = document.getElementById('pc-nav-prev');
-  const next = document.getElementById('pc-nav-next');
-  if(!prev || !next || !img.naturalWidth) return;
-
-  const wW = wrap.offsetWidth;
-  const wH = wrap.offsetHeight;
-  const iW = img.naturalWidth;
-  const iH = img.naturalHeight;
-
-  // Compute how wide the image actually renders under object-fit:contain
-  const scale    = Math.min(wW / iW, wH / iH);
-  const visW     = iW * scale;
-  const barLeft  = Math.max(0, (wW - visW) / 2);  // black bar width on each side
-
-  const INSET = 14; // px from image edge
-  prev.style.left  = Math.round(barLeft + INSET) + 'px';
-  prev.style.right = 'auto';
-  next.style.right = Math.round(barLeft + INSET) + 'px';
-  next.style.left  = 'auto';
-}
-
 // ── Populate all fields ───────────────────────────────────────
 function _populateCard(p){
   CARD_PLACE = p;
@@ -241,7 +215,6 @@ function _populateCard(p){
       if(CARD_PLACE?.id === captureId){
         img.classList.add('loaded');
         placeholder.style.opacity = '0';
-        _positionNavOverImage(img, wrap);
       }
     };
     img.src = url;
