@@ -632,79 +632,67 @@ function _showOfflineRouteMsg() {
 
 
 <script>
-// ── FIX 1: Card swipe gestures + looping ─────────────────────────
+// ── Card swipe + looping ──────────────────────────────────────────
+// Reads current place from card title, finds it in the visible filtered
+// list, navigates with modulo wrapping — never gets stuck at ends.
 window.addEventListener('load', function() {
+
+  function _filteredIds() {
+    return Array.from(document.querySelectorAll('.place-row'))
+      .map(function(r) { return parseInt(r.id.replace('row-', '')); })
+      .filter(function(id) { return !isNaN(id); });
+  }
+
+  function _currentId() {
+    var title = document.getElementById('pc-title');
+    if (!title) return null;
+    var name = title.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    return place ? place.id : null;
+  }
+
+  // Replace cardNext with looping version
+  window.cardNext = function() {
+    var ids = _filteredIds();
+    if (!ids.length) return;
+    var cur = _currentId();
+    var idx = ids.indexOf(cur);
+    openDetail(ids[(idx + 1) % ids.length]);
+  };
+
+  // Replace cardPrev with looping version
+  window.cardPrev = function() {
+    var ids = _filteredIds();
+    if (!ids.length) return;
+    var cur = _currentId();
+    var idx = ids.indexOf(cur);
+    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
+  };
+
+  // Swipe on photo area triggers the same looping navigation
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
-
-  var touchStartX = 0, touchStartY = 0;
-
+  var tx = 0, ty = 0;
   wrap.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
   }, { passive: true });
-
   wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    // Only trigger if horizontal swipe > 40px and not mostly vertical
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       if (dx < 0) { cardNext(); } else { cardPrev(); }
     }
   }, { passive: true });
-
-  // Looping: wrap cardNext and cardPrev so they loop around
-  var _origNext = window.cardNext;
-  var _origPrev = window.cardPrev;
-
-  window.cardNext = function() {
-    // Check if we're at the last card by seeing if next btn is disabled/hidden
-    var nextBtn = document.getElementById('pc-nav-next');
-    if (nextBtn && (nextBtn.style.display === 'none' || nextBtn.disabled)) {
-      // At last card — jump to first
-      var counter = document.getElementById('pc-counter');
-      if (counter && counter.textContent) {
-        var m = counter.textContent.match(/of (\d+)/);
-        if (m) {
-          // Find first place in current filtered list and open it
-          var firstRow = document.querySelector('.place-row');
-          if (firstRow) {
-            var id = parseInt(firstRow.id.replace('row-', ''));
-            if (id) { openDetail(id); return; }
-          }
-        }
-      }
-    }
-    if (_origNext) _origNext();
-  };
-
-  window.cardPrev = function() {
-    var prevBtn = document.getElementById('pc-nav-prev');
-    if (prevBtn && (prevBtn.style.display === 'none' || prevBtn.disabled)) {
-      // At first card — jump to last
-      var rows = document.querySelectorAll('.place-row');
-      if (rows.length) {
-        var lastRow = rows[rows.length - 1];
-        var id = parseInt(lastRow.id.replace('row-', ''));
-        if (id) { openDetail(id); return; }
-      }
-    }
-    if (_origPrev) _origPrev();
-  };
 });
 
-// ── FIX 3: Service Worker registration on page load ───────────────
-// Register SW immediately so the guide works offline after first visit,
-// without requiring the user to tap "Save offline" first.
+// ── Service Worker registration ───────────────────────────────────
+// Register on first page load so offline works without tapping "Save offline".
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) {
-        console.log('SW registered:', reg.scope);
-      })
-      .catch(function(err) {
-        console.log('SW registration failed:', err);
-      });
+      .then(function(reg) { console.log('SW registered'); })
+      .catch(function(err) { console.warn('SW failed:', err); });
   });
 }
 </script>

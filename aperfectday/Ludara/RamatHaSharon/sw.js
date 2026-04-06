@@ -1,13 +1,11 @@
-// A Perfect Day — Service Worker
-// Caches the app shell (page + JS + CSS) on install so the guide loads
-// offline after the very first visit, even without tapping "Save offline".
-// Map tiles are cached on demand and persist for offline map use.
+// A Perfect Day — Service Worker v4
+// CACHE FIRST everywhere except OSRM routing.
+// If a resource is in cache, return it IMMEDIATELY — no network request.
+// This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apd-shell-v3';
+var SHELL_CACHE = 'apd-shell-v4';
 var TILE_CACHE  = 'apd-tiles-v1';
 
-// All files that make up the app shell.
-// These are relative to the SW scope (the guide folder).
 var SHELL_FILES = [
   './',
   './index.html',
@@ -24,16 +22,13 @@ var SHELL_FILES = [
   './favicon.svg',
 ];
 
-// ── INSTALL: cache the app shell immediately ───────────────────────
 self.addEventListener('install', function(event) {
-  self.skipWaiting(); // activate new SW immediately without waiting for old tabs
+  self.skipWaiting();
   event.waitUntil(
     caches.open(SHELL_CACHE).then(function(cache) {
-      // addAll fails silently per file — use individual puts so one missing
-      // image doesn't break the whole cache
       return Promise.allSettled(
         SHELL_FILES.map(function(url) {
-          return fetch(url).then(function(res) {
+          return fetch(url, { cache: 'reload' }).then(function(res) {
             if (res.ok) return cache.put(url, res);
           }).catch(function() {});
         })
@@ -42,63 +37,34 @@ self.addEventListener('install', function(event) {
   );
 });
 
-// ── ACTIVATE: claim all clients immediately ────────────────────────
 self.addEventListener('activate', function(event) {
   event.waitUntil(
-    // Delete old shell caches to free space
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(k) {
           return k.startsWith('apd-shell-') && k !== SHELL_CACHE;
         }).map(function(k) { return caches.delete(k); })
       );
-    }).then(function() {
-      return self.clients.claim(); // take control of all open tabs
-    })
+    }).then(function() { return self.clients.claim(); })
   );
 });
 
-// ── FETCH: serve from cache, fall back to network ─────────────────
 self.addEventListener('fetch', function(event) {
+  if (event.request.method !== 'GET') return;
   var url = event.request.url;
 
-  // Only handle GET requests
-  if (event.request.method !== 'GET') return;
+  // OSRM routing — never intercept, page handles offline gracefully
+  if (url.includes('openstreetmap.de') || url.includes('/routed-')) return;
 
-  // ── Map tiles (MapTiler) ─────────────────────────────────────────
-  // Cache tiles on first use; serve from cache when offline.
+  // MapTiler tiles — cache first, then network
   if (url.includes('maptiler.com') || url.includes('api.maptiler')) {
     event.respondWith(
       caches.open(TILE_CACHE).then(function(cache) {
         return cache.match(event.request).then(function(cached) {
           if (cached) return cached;
-          return fetch(event.request).then(function(response) {
-            if (response.ok) cache.put(event.request, response.clone());
-            return response;
-          }).catch(function() {
-            return new Response('', { status: 503, statusText: 'Offline' });
-          });
-        });
-      })
-    );
-    return;
-  }
-
-  // ── OSRM routing ─────────────────────────────────────────────────
-  // Don't cache routing requests — they need live data and are handled
-  // gracefully by the offline route modal in index.html.
-  if (url.includes('openstreetmap.de') || url.includes('osrm')) return;
-
-  // ── External CDN (MapLibre, unpkg) ───────────────────────────────
-  // Cache on first use; serve from cache when offline.
-  if (url.includes('unpkg.com') || url.includes('cdnjs.')) {
-    event.respondWith(
-      caches.open(SHELL_CACHE).then(function(cache) {
-        return cache.match(event.request).then(function(cached) {
-          if (cached) return cached;
-          return fetch(event.request).then(function(response) {
-            if (response.ok) cache.put(event.request, response.clone());
-            return response;
+          return fetch(event.request).then(function(res) {
+            if (res.ok) cache.put(event.request, res.clone());
+            return res;
           }).catch(function() {
             return new Response('', { status: 503 });
           });
@@ -108,43 +74,41 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // ── App shell + images ───────────────────────────────────────────
-  // Cache first, update cache in background (stale-while-revalidate).
-  // Falls back to index.html for navigation requests so the page
-  // always loads offline.
+  // App shell + CDN + images: CACHE FIRST
+  // If in cache: return immediately, background-refresh only if online.
+  // If not cached: fetch, cache, return.
   event.respondWith(
     caches.open(SHELL_CACHE).then(function(cache) {
       return cache.match(event.request).then(function(cached) {
-        var networkFetch = fetch(event.request).then(function(response) {
-          if (response.ok) cache.put(event.request, response.clone());
-          return response;
+        if (cached) {
+          if (navigator.onLine) {
+            fetch(event.request).then(function(res) {
+              if (res && res.ok) cache.put(event.request, res);
+            }).catch(function() {});
+          }
+          return cached;
+        }
+        return fetch(event.request).then(function(res) {
+          if (res && res.ok) cache.put(event.request, res.clone());
+          return res;
         }).catch(function() {
-          // Network failed — if we had a cached version return it,
-          // otherwise return the cached index.html for navigation requests
-          if (cached) return cached;
           if (event.request.mode === 'navigate') {
             return cache.match('./index.html');
           }
           return new Response('', { status: 503 });
         });
-
-        // Return cache immediately if available (fast), update in background
-        return cached || networkFetch;
       });
     })
   );
 });
 
-// ── MESSAGE: handle saveForOffline trigger ────────────────────────
-// The platform's ui-favourites.js sends a message when "Save offline"
-// is tapped. We re-cache the shell to pick up any updates.
 self.addEventListener('message', function(event) {
   if (!event.data) return;
   if (event.data.action === 'SAVE_OFFLINE' || event.data.type === 'CACHE_URLS') {
     caches.open(SHELL_CACHE).then(function(cache) {
-      return Promise.allSettled(
+      Promise.allSettled(
         SHELL_FILES.map(function(url) {
-          return fetch(url).then(function(res) {
+          return fetch(url, { cache: 'reload' }).then(function(res) {
             if (res.ok) return cache.put(url, res);
           }).catch(function() {});
         })
