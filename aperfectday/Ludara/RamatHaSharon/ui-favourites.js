@@ -6,22 +6,23 @@ let savedFilterActive = false;
 
 // ── Toast notification — replaces browser alert() ────────────
 function _toast(msg, durationMs){
-  durationMs = durationMs || 3000;
+  durationMs = durationMs || 3500;
   const existing = document.getElementById('_apd-toast');
   if(existing) existing.remove();
   const el = document.createElement('div');
   el.id = '_apd-toast';
   const brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#1a3a5c';
-  el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);' +
-    'background:' + brand + ';color:white;padding:12px 22px;border-radius:24px;' +
+  el.style.cssText = 'position:fixed;top:110px;left:50%;transform:translateX(-50%);' +
+    'background:white;color:' + brand + ';padding:12px 22px;border-radius:24px;' +
+    'border:2px solid ' + brand + ';' +
     'font-size:0.82rem;font-weight:600;font-family:Inter,sans-serif;' +
-    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:80vw;text-align:center;' +
-    'animation:_apd-fadein 0.2s ease;pointer-events:none;';
+    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:80vw;text-align:center;' +
+    'animation:_apd-fadein 0.2s ease;pointer-events:none;white-space:nowrap;';
   el.textContent = msg;
   if(!document.getElementById('_apd-toast-style')){
     const s = document.createElement('style');
     s.id = '_apd-toast-style';
-    s.textContent = '@keyframes _apd-fadein{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+    s.textContent = '@keyframes _apd-fadein{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
     document.head.appendChild(s);
   }
   document.body.appendChild(el);
