@@ -1362,10 +1362,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.22);
   /* display controlled by JS (openDetail / openNbhdCard) */
 }
-.pc-btn-nav.prev { left: 10px; }
-.pc-btn-nav.next { right: 60px; } /* offset left of heart */
+.pc-btn-nav.prev { left: 14px; }
+.pc-btn-nav.next { right: 14px; }
 .pc-btn-nav:hover { background: white; }
-.pc-btn-nav:disabled { opacity: 0.3; pointer-events: none; }
+/* no :disabled rule — nav buttons are never disabled */
 
 /* ── Body ───────────────────────────────────────────────────── */
 .pc-body {
