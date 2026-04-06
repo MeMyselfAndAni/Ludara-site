@@ -3,30 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A Perfect Day — London Guide</title>
+<title>A Perfect Day — London Guide</title><!-- [1] -->
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
   /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
-     Active:  :root { --brand: #c8102e ... }
-     Presets (uncomment to use):
-       Orange:     #e8724a  rgba(232,114,74,...)
-       Red:        #e8162a  rgba(232,22,42,...)
-       Blue:       #2a7de1  rgba(42,125,225,...)
+     Presets (uncomment one to use):
+       /* :root { --brand: #e8724a; --brand-faint: rgba(232,114,74,0.12); --brand-glow: rgba(232,114,74,0.3); } Orange */
+       /* :root { --brand: #e8162a; --brand-faint: rgba(232,22,42,0.12);  --brand-glow: rgba(232,22,42,0.3);  } Red */
+       /* :root { --brand: #2a7de1; --brand-faint: rgba(42,125,225,0.12); --brand-glow: rgba(42,125,225,0.3); } Blue */
   ─────────────────────────────────────────────────────────── */
   :root { --brand: #c8102e; --brand-faint: rgba(200,16,46,0.12); --brand-glow: rgba(200,16,46,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
+
+  /* Neighbourhood bubbles */
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+
+  /* Place card photos */
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
+
+  /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
-  /* ── List scroll fix: ensure places-list fills and scrolls within sheet ── */
+  /* ── List scroll fix ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
     flex: 1 1 auto !important;
@@ -40,13 +45,14 @@
   .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #c8102e) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #c8102e); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
-  /* Card nav arrows — always symmetric, always fully visible */
+
+  /* Card nav arrows — always visible, always symmetric */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
   .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
   .pc-btn-nav.prev    { left: 14px; right: auto; }
   .pc-btn-nav.next    { right: 14px; left: auto; }
 
-  /* ── Brand color overrides for platform styles (styles.css uses #e00040) ── */
+  /* ── Brand color overrides — platform styles.css uses #e00040 ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
   .pill-saved:hover                    { background: var(--brand-faint) !important; }
   .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
@@ -56,6 +62,7 @@
   .saved-plan-btn                      { background: var(--brand) !important; }
   .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
   .pc-btn-fav.faved                    { color: var(--brand) !important; }
+
   /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
   #pc-body::after {
@@ -65,21 +72,17 @@
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
   }
 
-  /* User location dot — red */
+  /* User location dot — brand colored */
   .user-dot-inner {
     width: 14px !important; height: 14px !important; border-radius: 50% !important;
     background: var(--brand) !important; border: 2.5px solid white !important;
     box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
   }
-  .user-dot-outer {
-    width: 14px !important; height: 14px !important;
-  }
-
-
+  .user-dot-outer { width: 14px !important; height: 14px !important; }
 </style>
 
 <script>
-// Read brand color from CSS variable — keeps JS and CSS in sync
+// Read brand color from CSS — keeps JS and CSS in sync
 var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
 </script>
 </head>
@@ -89,13 +92,13 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-logo-row">
-      <span class="wl-logo">A Perfect Day</span>
+      <span class="wl-logo">A Perfect Day</span><!-- [2] -->
     </div>
-    <h2 class="splash-title">London Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">68</span> hand-picked places across London's best neighbourhoods — restaurants, markets, museums, pubs, parks and hidden gems, curated for the curious traveller.</p>
+    <h2 class="splash-title">London Guide</h2><!-- [3] -->
+    <p class="splash-sub"><span class="place-count-all">68</span> hand-picked places by <strong>the A Perfect Day team</strong> — hand-picked places across London's best neighbourhoods.</p><!-- [4] -->
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai" target="_blank">ludara.ai</a>
+      <a href="https://ludara.ai" target="_blank">ludara.ai</a><!-- [5] -->
     </div>
   </div>
 </div>
@@ -109,22 +112,24 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
       <span class="wl-logo">A Perfect Day</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>London</em> Guide</h1>
-      <div class="header-sub"><span class="place-count-all">68</span> hand-picked places</div>
+      <h1><em>London</em> Guide</h1><!-- [7] -->
+      <div class="header-sub"><span class="place-count-all">68</span> hand-picked places<span class="header-sub-by"> · by APD</span></div><!-- [8] -->
     </div>
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
     <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
+  <a class="header-btn" href="https://ludara.ai" target="_blank">Blog ↗</a><!-- [9] -->
 </header>
 
 <!-- Filter bar -->
+<!-- [10] Adjust category pills to suit the city. Keep onclick="fc(this,'CATKEY')" exactly as-is. -->
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
@@ -142,6 +147,10 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
+<!-- [11] One nbhd-bubble per neighbourhood.
+     id = "nbhd-" + key.  selectNbhd arg = key (no "nbhd-" prefix).
+     ⚠️  Keys here, in map.js NBHD_* objects, and in data.js nbhd field must ALL match
+         and must be plain words — e.g. 'sokolov', 'old-town' — NO 'nbhd-' prefix. -->
 <div id="nbhd-title">Neighbourhoods</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
@@ -152,6 +161,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
       <span class="nbhd-label">All</span>
     </div>
+    <!-- Copy this block for each neighbourhood: -->
     <div class="nbhd-bubble" id="nbhd-westminster" role="button" tabindex="0" onclick="selectNbhd('westminster', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">👑</div></div>
       <span class="nbhd-label">Westminster</span>
@@ -192,6 +202,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🕯️</div></div>
       <span class="nbhd-label">Shoreditch &amp;<br>Spitalfields</span>
     </div>
+    <!-- Add more as needed -->
   </div>
 </div>
 
@@ -216,10 +227,10 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <span class="pc-emily-by" style="display:none"></span>
+      <span class="pc-emily-by">— APD, A Perfect Day</span><!-- [12] -->
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name -->
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -246,6 +257,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 </div>
 
 <!-- List toggle (mobile) -->
+<!-- [14] Update 68 in all three places below -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
@@ -318,7 +330,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <span class="desktop-list-count" id="desktop-list-count">68</span>
 </button>
 
-<!-- JS — load order is critical, do not reorder -->
+<!-- JS modules — load order is critical, do not reorder -->
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
@@ -331,8 +343,8 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
+<!-- Address display — populates pc-address when a card opens -->
 <script>
-// Populate address on card open by watching pc-title changes
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   var addrEl  = document.getElementById('pc-address');
@@ -345,7 +357,46 @@ window.addEventListener('load', function() {
 });
 </script>
 
+<!-- Navigate + Distances -->
 <script>
+// Haversine distance in metres
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
+
+// SCENARIO 1: Navigate button on card
+// Opens Google Maps: current location → this place.
+// Saved places added as labeled waypoints (user can optionally route through them).
+function navigateToPlace(destLat, destLng, destName) {
+  var dest = destLat + ',' + destLng;
+  var url;
+  if (window._userLat && window._userLng) {
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&origin=' + window._userLat + ',' + window._userLng
+      + '&destination=' + dest + '&travelmode=walking';
+  } else {
+    url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+  }
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) {
+    return favIds.includes(p.id) &&
+           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
+  });
+  if (favPlaces.length > 0) {
+    url += '&waypoints=' + favPlaces.map(function(p) {
+      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+    }).join('|');
+  }
+  window.open(url, '_blank');
+}
+
 // SCENARIO 2: Open in Google Maps from Saved/Itinerary
 // → All saved places as named stops (not coordinates) so Google Maps shows labels
 // → No origin set — user sees stops and can drag to reorder before navigating
@@ -368,78 +419,17 @@ function openTripInMaps() {
   });
   window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
 }
-</script>
 
-
-
-
-
-
-<!-- ── NAVIGATE + DISTANCES ──────────────────────────────────── -->
-<script>
-// Haversine distance in metres
-function _distM(lat1, lng1, lat2, lng2) {
-  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
-  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
-  return R * 2 * Math.asin(Math.sqrt(a));
-}
-function _fmtDist(m) {
-  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
-}
-
-// SCENARIO 1: Navigate button on card
-// → Directions to this place only (from current location if known)
-// → Saved places shown as additional labeled pins via saddr/daddr trick
-function navigateToPlace(destLat, destLng, destName) {
-  var dest = destLat + ',' + destLng;
-  var url;
-
-  if (window._userLat && window._userLng) {
-    // Direct navigation: current location → destination
-    url = 'https://www.google.com/maps/dir/?api=1'
-      + '&origin=' + window._userLat + ',' + window._userLng
-      + '&destination=' + dest
-      + '&travelmode=walking';
-  } else {
-    url = 'https://www.google.com/maps/dir/?api=1'
-      + '&destination=' + dest
-      + '&travelmode=walking';
-  }
-
-  // Add saved places as extra stops so they appear as labeled pins on the map
-  // User can see them and optionally add them to the route in Google Maps
-  var favIds = [];
-  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var favPlaces = PLACES.filter(function(p) {
-    return favIds.includes(p.id) &&
-           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
-  });
-  if (favPlaces.length > 0) {
-    // Append saved places as waypoints — they appear as labeled stops in Google Maps
-    // but since destination is already set, user decides if they want to route through them
-    var waypointNames = favPlaces.map(function(p) {
-      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
-    });
-    url += '&waypoints=' + waypointNames.join('|');
-  }
-
-  window.open(url, '_blank');
-}
-
-// Wrap ui-filter.js locateMe to capture coordinates after it runs
+// Wrap ui-filter.js locateMe to capture coordinates for distance display
 window.addEventListener('load', function() {
   var _origLocate = window.locateMe;
   window.locateMe = function() {
     _origLocate();
-    // After getCurrentPosition resolves, read the dot's position from the marker
-    // by watching for the user-dot to appear
     var attempts = 0;
     var poll = setInterval(function() {
       var dot = document.querySelector('.user-dot-inner');
       if (dot || attempts > 20) {
         clearInterval(poll);
-        // getCurrentPosition one-shot — get coords directly
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(pos) {
             window._userLat = pos.coords.latitude;
@@ -453,7 +443,7 @@ window.addEventListener('load', function() {
   };
 });
 
-// Add Navigate button to place card when it opens
+// Navigate button on place card — injected via MutationObserver when card opens
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
@@ -461,28 +451,21 @@ window.addEventListener('load', function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
     if (!place) return;
-
-    // Remove existing nav button
     var existing = document.getElementById('pc-nav-btn');
     if (existing) existing.remove();
-
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    var distStr = '';
-    if (window._userLat && window._userLng) {
-      distStr = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away';
-    }
+    var distStr = (window._userLat && window._userLng)
+      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
     btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
-
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 
-// Update distance badges on list items
-// ui-filter.js renders: <div class="place-row" id="row-N">...<div class="place-name">...</div>...
+// Distance badges on list items — updates when location active
 function updateListDistances() {
   if (!window._userLat) return;
   PLACES.forEach(function(place) {
@@ -499,8 +482,6 @@ function updateListDistances() {
     badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
   });
 }
-
-// Re-run after every list render
 window.addEventListener('load', function() {
   var list = document.getElementById('places-list');
   if (!list) return;
@@ -510,15 +491,12 @@ window.addEventListener('load', function() {
 });
 </script>
 
-
-
+<!-- Brand color overrides for map elements (route line, numbered markers) -->
 <script>
-// ── Brand color for map elements — reads from CSS variable ───
 window.addEventListener('load', function() {
   var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
 
-  // 1. Intercept initMapSources (called inside map.on('load') in map.js)
-  //    Wrap it to recolor the trip-route-line immediately after creation
+  // Recolor trip-route-line after initMapSources creates it
   var _origInitMapSources = window.initMapSources;
   window.initMapSources = function() {
     if (_origInitMapSources) _origInitMapSources();
@@ -527,7 +505,7 @@ window.addEventListener('load', function() {
     }
   };
 
-  // 2. Intercept _ensureRouteLayer (called by drawSavedRoute each time)
+  // Recolor route line when redrawn
   var _origEnsure = window._ensureRouteLayer;
   window._ensureRouteLayer = function() {
     if (_origEnsure) _origEnsure();
@@ -536,18 +514,16 @@ window.addEventListener('load', function() {
     }
   };
 
-  // 3. Completely replace _addNumberedMarkers with brand-colored version
+  // Replace numbered stop markers with brand-colored version
   window._addNumberedMarkers = function(places) {
     places.forEach(function(p, i) {
       var el = document.createElement('div');
       el.style.cssText = [
         'width:26px', 'height:26px', 'border-radius:50%',
-        'background:' + brand,
-        'border:2.5px solid white',
+        'background:' + brand, 'border:2.5px solid white',
         'color:white', 'font-size:0.68rem', 'font-weight:700',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
-        'font-family:sans-serif',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)', 'font-family:sans-serif',
         'z-index:' + (9000 + i)
       ].join(';');
       el.textContent = i + 1;
@@ -562,11 +538,9 @@ window.addEventListener('load', function() {
   };
 });
 </script>
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
-
+<!-- Hide neighbourhood bubbles with no places -->
 <script>
-// Hide neighbourhood bubbles that have no places
 window.addEventListener('load', function() {
   document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
     if (bubble.id === 'nbhd-all') return;
@@ -577,8 +551,7 @@ window.addEventListener('load', function() {
 });
 </script>
 
-
-
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 
 <script>
@@ -612,125 +585,53 @@ function _showOfflineRouteMsg() {
   var existing = document.getElementById('offline-route-msg');
   if (existing) existing.remove();
 
-  // Backdrop
-  var backdrop = document.createElement('div');
-  backdrop.id = 'offline-route-msg';
-  backdrop.style.cssText = [
-    'position:fixed', 'inset:0', 'z-index:99999',
-    'display:flex', 'align-items:center', 'justify-content:center',
-    'background:rgba(0,0,0,0.45)', 'backdrop-filter:blur(2px)',
-    '-webkit-backdrop-filter:blur(2px)', 'padding:20px'
+  var msg = document.createElement('div');
+  msg.id = 'offline-route-msg';
+  msg.style.cssText = [
+    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
+    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
+    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
+    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
+    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
   ].join(';');
-
-  // Card
-  var card = document.createElement('div');
-  card.style.cssText = [
-    'background:white', 'border-radius:20px',
-    'padding:28px 24px 22px', 'max-width:300px', 'width:100%',
-    'text-align:center', 'font-family:sans-serif',
-    'box-shadow:0 20px 60px rgba(0,0,0,0.25)',
-    'position:relative', 'animation:_offlineIn 0.2s ease'
-  ].join(';');
-
-  // Inject keyframe once
-  if (!document.getElementById('_offlineKF')) {
-    var s = document.createElement('style');
-    s.id = '_offlineKF';
-    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
-    document.head.appendChild(s);
-  }
-
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-
-  card.innerHTML =
-    '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;' +
-    'display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
-    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">' +
-    'Walking routes need a connection</div>' +
-    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">' +
-    'Connect to WiFi or mobile data to plan your route.<br>' +
-    'All places, your saved list, and your location still work offline.' +
-    '</div>' +
-    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;' +
-    'background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;' +
-    'cursor:pointer;font-family:sans-serif">Got it</button>';
-
-  backdrop.appendChild(card);
-  document.body.appendChild(backdrop);
-
-  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
-  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
-  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
+  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
+  msg.onclick = function() { msg.remove(); };
+  document.body.appendChild(msg);
+  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
 }
 </script>
 
 
 <script>
-// ── Card swipe + looping ──────────────────────────────────────────
-// Reads current place from card title, finds it in the visible filtered
-// list, navigates with modulo wrapping — never gets stuck at ends.
+// Card swipe gestures
 window.addEventListener('load', function() {
-
-  function _filteredIds() {
-    return Array.from(document.querySelectorAll('.place-row'))
-      .map(function(r) { return parseInt(r.id.replace('row-', '')); })
-      .filter(function(id) { return !isNaN(id); });
-  }
-
-  function _currentId() {
-    var title = document.getElementById('pc-title');
-    if (!title) return null;
-    var name = title.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    return place ? place.id : null;
-  }
-
-  // Replace cardNext with looping version
-  window.cardNext = function() {
-    var ids = _filteredIds();
-    if (!ids.length) return;
-    var cur = _currentId();
-    var idx = ids.indexOf(cur);
-    openDetail(ids[(idx + 1) % ids.length]);
-  };
-
-  // Replace cardPrev with looping version
-  window.cardPrev = function() {
-    var ids = _filteredIds();
-    if (!ids.length) return;
-    var cur = _currentId();
-    var idx = ids.indexOf(cur);
-    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
-  };
-
-  // Swipe on photo area triggers the same looping navigation
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
-  var tx = 0, ty = 0;
+  var touchStartX = 0, touchStartY = 0;
   wrap.addEventListener('touchstart', function(e) {
-    tx = e.touches[0].clientX;
-    ty = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
   }, { passive: true });
   wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - tx;
-    var dy = e.changedTouches[0].clientY - ty;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       if (dx < 0) { cardNext(); } else { cardPrev(); }
     }
   }, { passive: true });
 });
 
-// ── Service Worker registration ───────────────────────────────────
-// Register on first page load so offline works without tapping "Save offline".
+// Service Worker registration — register on first visit so guide works offline immediately
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) { console.log('SW registered'); })
-      .catch(function(err) { console.warn('SW failed:', err); });
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
   });
 }
 </script>
 
+<!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
   window.addEventListener('load', initMap);
 </script>
