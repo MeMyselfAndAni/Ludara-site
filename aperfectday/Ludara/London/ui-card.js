@@ -266,7 +266,7 @@ function _updateFavBtn(){
   if(!btn || !CARD_PLACE) return;
   const favs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   const saved = favs.includes(CARD_PLACE.id);
-  btn.textContent = saved ? '♥' : '♡';
+  btn.textContent = saved ? '♥\uFE0E' : '♡\uFE0E';
   btn.classList.toggle('faved', saved);
 }
 function cardToggleFav(){

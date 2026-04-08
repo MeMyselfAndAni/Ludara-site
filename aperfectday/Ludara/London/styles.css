@@ -1428,7 +1428,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   color: #333;
   margin-bottom: 6px;
 }
-.pc-blogger-by {
+.pc-blogger-by,
+.pc-emily-by {
   font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
