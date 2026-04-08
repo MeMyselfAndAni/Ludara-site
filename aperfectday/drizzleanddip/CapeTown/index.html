@@ -3,27 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Drizzle &amp; Dip — Cape Town &amp; Winelands Guide</title>
+<title>Drizzle &amp; Dip — Cape Town &amp; Winelands Guide</title><!-- [1] -->
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — edit only the active :root line ──────────────────────
-     Active:    #d4611f (warm terracotta — suits Drizzle & Dip food palette)
-     Presets:   Orange: #e8724a  |  Red: #e8162a  |  Blue: #2a7de1
-  ──────────────────────────────────────────────────────────────────────── */
+  /* ── BRAND COLOR — edit ONLY the active :root line ── */
+  /* Orange: #e8724a | Red: #e8162a | Blue: #2a7de1     */
   :root { --brand: #d4611f; --brand-faint: rgba(212,97,31,0.12); --brand-glow: rgba(212,97,31,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
+
+  /* Neighbourhood bubbles */
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+
+  /* Place card photos */
   .pc-photo-img { object-fit: contain !important; background: #111 !important; }
   .pc-photo-wrap { background: #111 !important; }
-  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
+  /* Address line under place type */
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
   /* ── List scroll fix ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
@@ -34,20 +37,18 @@
     max-height: none !important;
     padding-bottom: 60px !important;
   }
-
-  /* ── Saved empty state ── */
   .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
-  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #d4611f) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #d4611f); }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #c8102e) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #c8102e); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
 
-  /* ── Card nav arrows — always visible, always symmetric ── */
+  /* Card nav arrows — always visible, always symmetric */
   .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
   .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
   .pc-btn-nav.prev    { left: 14px; right: auto; }
   .pc-btn-nav.next    { right: 14px; left: auto; }
 
-  /* ── Brand color overrides ── */
+  /* ── Brand color overrides — platform styles.css uses #e00040 ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
   .pill-saved:hover                    { background: var(--brand-faint) !important; }
   .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
@@ -57,8 +58,11 @@
   .saved-plan-btn                      { background: var(--brand) !important; }
   .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
   .pc-btn-fav.faved                    { color: var(--brand) !important; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.88); }
+  .saved-action-pdf, .saved-action-map { background:white; color:var(--brand); border:1.5px solid var(--brand); }
 
-  /* ── Card body scroll hint ── */
+  /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
   #pc-body::after {
     content: ''; pointer-events: none;
@@ -67,7 +71,7 @@
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
   }
 
-  /* ── User location dot ── */
+  /* User location dot — brand colored */
   .user-dot-inner {
     width: 14px !important; height: 14px !important; border-radius: 50% !important;
     background: var(--brand) !important; border: 2.5px solid white !important;
@@ -75,6 +79,11 @@
   }
   .user-dot-outer { width: 14px !important; height: 14px !important; }
 </style>
+
+<script>
+// Read brand color from CSS — keeps JS and CSS in sync
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#d4611f';
+</script>
 </head>
 <body>
 
@@ -191,7 +200,7 @@
       <span class="pc-emily-by">— Sam, Drizzle &amp; Dip</span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name -->
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -218,6 +227,7 @@
 </div>
 
 <!-- List toggle (mobile) -->
+
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
@@ -276,7 +286,11 @@
     <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
-    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+    <div class="saved-empty-hint">
+      <div class="saved-empty-icon">♡</div>
+      <div class="saved-empty-title">No saved places yet</div>
+      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
+    </div>
   </div>
 </div>
 
@@ -291,30 +305,13 @@
 <script>let map;</script>
 <script src="data.js"></script>
 <script src="photos.js"></script>
-<script src="map-core.js"></script>
+<script src="map-core.js"></script><!-- MUST be before map.js -->
 <script src="map.js"></script>
 <script src="ui-card.js"></script>
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
-
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
-
-<!-- openTripInMaps — opens saved places as named waypoints in Google Maps -->
-<script>
-function openTripInMaps() {
-  let ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
-  const places = PLACES.filter(p => ids.includes(p.id));
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' ' + GUIDE_CITY));
-  const url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-  window.open(url, '_blank');
-}
-</script>
 
 <!-- Address display — populates pc-address when a card opens -->
 <script>
@@ -330,7 +327,189 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Hide neighbourhood bubbles that have no places -->
+<!-- Navigate + Distances -->
+<script>
+// Haversine distance in metres
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
+
+// SCENARIO 1: Navigate button on card
+// Opens Google Maps: current location → this place.
+// Saved places added as labeled waypoints (user can optionally route through them).
+function navigateToPlace(destLat, destLng, destName) {
+  var dest = destLat + ',' + destLng;
+  var url;
+  if (window._userLat && window._userLng) {
+    url = 'https://www.google.com/maps/dir/?api=1'
+      + '&origin=' + window._userLat + ',' + window._userLng
+      + '&destination=' + dest + '&travelmode=walking';
+  } else {
+    url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+  }
+  var favIds = [];
+  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var favPlaces = PLACES.filter(function(p) {
+    return favIds.includes(p.id) &&
+           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
+  });
+  if (favPlaces.length > 0) {
+    url += '&waypoints=' + favPlaces.map(function(p) {
+      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+    }).join('|');
+  }
+  window.open(url, '_blank');
+}
+
+// SCENARIO 2: Open in Google Maps from Saved/Itinerary
+// → All saved places as named stops (not coordinates) so Google Maps shows labels
+// → No origin set — user sees stops and can drag to reorder before navigating
+function openTripInMaps() {
+  var ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+
+  if (places.length === 1) {
+    var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
+    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+    return;
+  }
+
+  // Use named searches (not coords) so each stop shows its label in Google Maps.
+  // No origin — user adds their starting point and reorders stops as they wish.
+  var stops = places.map(function(p) {
+    return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+  });
+  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
+}
+
+// Wrap ui-filter.js locateMe to capture coordinates for distance display
+window.addEventListener('load', function() {
+  var _origLocate = window.locateMe;
+  window.locateMe = function() {
+    _origLocate();
+    var attempts = 0;
+    var poll = setInterval(function() {
+      var dot = document.querySelector('.user-dot-inner');
+      if (dot || attempts > 20) {
+        clearInterval(poll);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos) {
+            window._userLat = pos.coords.latitude;
+            window._userLng = pos.coords.longitude;
+            updateListDistances();
+          }, null, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
+      attempts++;
+    }, 300);
+  };
+});
+
+// Navigate button on place card — injected via MutationObserver when card opens
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = (window._userLat && window._userLng)
+      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
+    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+// Distance badges on list items — updates when location active
+function updateListDistances() {
+  if (!window._userLat) return;
+  PLACES.forEach(function(place) {
+    var row = document.getElementById('row-' + place.id);
+    if (!row) return;
+    var badge = row.querySelector('.dist-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'dist-badge';
+      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
+      var nameEl = row.querySelector('.place-name');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+  });
+}
+window.addEventListener('load', function() {
+  var list = document.getElementById('places-list');
+  if (!list) return;
+  new MutationObserver(function() {
+    if (window._userLat) updateListDistances();
+  }).observe(list, { childList: true, subtree: false });
+});
+</script>
+
+<!-- Brand color overrides for map elements (route line, numbered markers) -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#d4611f';
+
+  // Recolor trip-route-line after initMapSources creates it
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+
+  // Recolor route line when redrawn
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+
+  // Replace numbered stop markers with brand-colored version
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = [
+        'width:26px', 'height:26px', 'border-radius:50%',
+        'background:' + brand, 'border:2.5px solid white',
+        'color:white', 'font-size:0.68rem', 'font-weight:700',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)', 'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
+      if (window.tripMarkers) tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- Hide neighbourhood bubbles with no places -->
 <script>
 window.addEventListener('load', function() {
   document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
@@ -342,8 +521,59 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Card swipe gestures -->
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+
 <script>
+// Offline route detection — wraps planFavTrip and drawSavedRoute
+// to show a clear message instead of silently spinning when offline.
+window.addEventListener('load', function() {
+
+  // Wrap planFavTrip (Full Itinerary button)
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+
+  // Wrap drawSavedRoute (called internally when route is drawn)
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) {
+      _showOfflineRouteMsg();
+      return;
+    }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+
+});
+
+function _showOfflineRouteMsg() {
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+
+  var msg = document.createElement('div');
+  msg.id = 'offline-route-msg';
+  msg.style.cssText = [
+    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
+    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
+    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
+    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
+    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
+  ].join(';');
+  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
+  msg.onclick = function() { msg.remove(); };
+  document.body.appendChild(msg);
+  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+}
+</script>
+
+
+<script>
+// Card swipe gestures
 window.addEventListener('load', function() {
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
@@ -360,10 +590,8 @@ window.addEventListener('load', function() {
     }
   }, { passive: true });
 });
-</script>
 
-<!-- Service Worker registration -->
-<script>
+// Service Worker registration — register on first visit so guide works offline immediately
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
@@ -373,6 +601,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
   window.addEventListener('load', initMap);
 </script>

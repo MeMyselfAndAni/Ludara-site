@@ -460,7 +460,7 @@ window.addEventListener('load', function() {
     if (window._userLat && window._userLng) {
       distStr = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away';
     }
-    btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
 
     var hours = document.getElementById('pc-hours');
