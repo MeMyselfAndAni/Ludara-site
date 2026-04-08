@@ -1023,14 +1023,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── SAVED PILL ──────────────────────────────────────────────── */
 .pill-saved {
-  border-color: #e00040;
-  color: #e00040;
+  border-color: var(--brand, #e00040);
+  color: var(--brand, #e00040);
 }
 .pill-saved:hover { background: #fff0f3; }
 .pill-saved.active {
-  background: #e00040 !important;
+  background: var(--brand, #e00040) !important;
   color: white !important;
-  border-color: #e00040 !important;
+  border-color: var(--brand, #e00040) !important;
 }
 .pill-saved-count {
   background: white;
@@ -1349,7 +1349,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-size: 1.45rem;
   touch-action: manipulation;
 }
-.pc-btn-fav.faved { color: #e00040; background: rgba(0,0,0,0.52); }
+.pc-btn-fav.faved { color: #e00040; background: rgba(0,0,0,0.52); font-family: Arial, sans-serif; }
 .pc-btn-fav:active { transform: scale(1.2); }
 /* ‹ › prev/next — centred sides, shown in both detail and nbhd mode */
 .pc-btn-nav {
@@ -1428,7 +1428,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   color: #333;
   margin-bottom: 6px;
 }
-.pc-blogger-by {
+.pc-blogger-by,
+.pc-emily-by {
   font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
