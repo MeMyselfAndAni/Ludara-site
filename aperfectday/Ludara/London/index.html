@@ -457,7 +457,7 @@ window.addEventListener('load', function() {
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng)
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
-    btn.innerHTML = '🚶 Navigate' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
