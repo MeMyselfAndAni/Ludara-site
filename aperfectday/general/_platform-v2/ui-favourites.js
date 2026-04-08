@@ -67,25 +67,8 @@ function syncFavBtn(id){
 
 // ── SAVED FILTER ──────────────────────────────────────────────
 function toggleSavedFilter(el){
-  const panel = document.getElementById('saved-panel');
-
-  // If panel is open, close it and deactivate
-  if(panel && panel.classList.contains('open')){
-    panel.classList.remove('open');
-    savedFilterActive = false;
-    el.classList.remove('active');
-    clearTripRoute();
-    const banner = document.getElementById('saved-mode-banner');
-    if(banner) banner.remove();
-    applyFilters();
-    return;
-  }
-
-  // Open the panel
-  if(panel) panel.classList.add('open');
-  savedFilterActive = true;
-  el.classList.add('active');
-
+  savedFilterActive = !savedFilterActive;
+  el.classList.toggle('active', savedFilterActive);
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
   if(typeof ANF !== 'undefined') ANF = 'all';
   if(typeof clearNbhdCircle === 'function') clearNbhdCircle();
@@ -95,9 +78,21 @@ function toggleSavedFilter(el){
   const allBtn = document.getElementById('nbhd-all');
   if(allBtn) allBtn.classList.add('nbhd-active');
 
-  applyFilters();
-  if(window.innerWidth >= 768) openSheet();
-  if(favourites.length >= 2) drawSavedRoute();
+  if(savedFilterActive){
+    if(favourites.length === 0){
+      savedFilterActive = false; el.classList.remove('active');
+      _toast('Tap ♡ on any place to save it here.');
+      return;
+    }
+    applyFilters();
+    if(window.innerWidth >= 768) openSheet();
+    drawSavedRoute();
+  } else {
+    clearTripRoute();
+    const banner = document.getElementById('saved-mode-banner');
+    if(banner) banner.remove();
+    applyFilters();
+  }
 }
 
 // ── ROUTE DRAWING (Leaflet polylines — works fully offline) ──
