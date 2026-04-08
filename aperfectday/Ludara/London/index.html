@@ -9,12 +9,8 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
-     Presets (uncomment one to use):
-       /* :root { --brand: #e8724a; --brand-faint: rgba(232,114,74,0.12); --brand-glow: rgba(232,114,74,0.3); } Orange */
-       /* :root { --brand: #e8162a; --brand-faint: rgba(232,22,42,0.12);  --brand-glow: rgba(232,22,42,0.3);  } Red */
-       /* :root { --brand: #2a7de1; --brand-faint: rgba(42,125,225,0.12); --brand-glow: rgba(42,125,225,0.3); } Blue */
-  ─────────────────────────────────────────────────────────── */
+  /* ── BRAND COLOR — edit ONLY the active :root line ── */
+  /* Orange: #e8724a | Red: #e8162a | Blue: #2a7de1     */
   :root { --brand: #c8102e; --brand-faint: rgba(200,16,46,0.12); --brand-glow: rgba(200,16,46,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -62,6 +58,9 @@
   .saved-plan-btn                      { background: var(--brand) !important; }
   .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
   .pc-btn-fav.faved                    { color: var(--brand) !important; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.88); }
+  .saved-action-pdf, .saved-action-map { background:white; color:var(--brand); border:1.5px solid var(--brand); }
 
   /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
