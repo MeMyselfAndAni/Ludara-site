@@ -287,7 +287,7 @@ const PLACES = [
     type: 'Japanese / Sushi',
     blog: '',
     phone: '',
-    website: 'https://kyotogardensushict.com',
+    website: 'https://kyotogarden.co.za/',
   },
 
   {
