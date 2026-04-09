@@ -192,9 +192,9 @@ const PLACES = [
     lng: 100.5785,
     search: "Lumpinee Stadium Muay Thai Bangkok",
     // ✅ [A]+[B] exact
-    note: "Lumpinee Stadium is the best place to watch a fight in Bangkok. While Lumpinee has been hosting Muay Thai fights since the 1950s, the current stadium (which opened in 2014) is huge and can hold up to 15,000 spectators. Matches typically last around 25 minutes unless there is a knockout and there are usually 7-9 fights per night. There are lots of food hawkers here as well so you can grab a bite while you watch the violent spectacle.",
+    note: "Lumpinee Stadium is the best place to watch a fight in Bangkok. While Lumpinee has been hosting Muay Thai fights since the 1950s, the current stadium (which opened in 2014) is huge and can hold up to 5,000 spectators. Matches typically last around 25 minutes unless there is a knockout and there are usually 7-9 fights per night. There are lots of food hawkers here as well so you can grab a bite while you watch the violent spectacle.",
     tip: "Buy tickets on the stadium's website for the best price. Tickets start around 1,600 THB.",
-    hours: "Fight nights: Tue, Fri, Sat at 6pm",
+    hours: "Fight nights: Fri (ONE Championship, 6:30pm) & Sat (Super Champ, 5:30pm)",
     type: "Muay Thai Stadium",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -233,8 +233,8 @@ const PLACES = [
     search: "Raan Jay Fai restaurant Bangkok",
     // ✅ [A] — named by Matt as one of his favorite places to eat
     note: "One of Matt's favorite places to eat in Bangkok.",
-    tip: "One of Matt's favorite places to eat in Bangkok.",
-    hours: "Tue–Sat 2:00pm–midnight",
+    tip: "Walk-in only — no reservations. Arrive early and check @jayfaibangkok on Instagram for seating updates.",
+    hours: "Wed–Sat 9:00am–7:00pm (closed Sun–Tue)",
     type: "Restaurant",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 223 9384",
@@ -530,17 +530,18 @@ const PLACES = [
 
   {
     id: 26,
+    // FIX: moved from Soi 11 (closed 2017) — now at Sukhumvit Soi 50, The Beacon complex
     nbhd: "sukhumvit",
     name: "Cheap Charlie's",
     cat: "cafe",
     emoji: "🍺",
-    address: "Sukhumvit Soi 11, Khlong Toei Nuea, Watthana",
-    lat: 13.7428,
-    lng: 100.5524,
-    search: "Cheap Charlies bar Bangkok Sukhumvit Soi 11",
+    address: "The Beacon, Sukhumvit Soi 50, Phra Khanong, Khlong Toei",
+    lat: 13.7013,
+    lng: 100.5951,
+    search: "Cheap Charlies bar Bangkok Sukhumvit Soi 50 On Nut",
     // ✅ [A] — named by Matt as one of his favorite bars
     note: "One of Matt's favorite bars in Bangkok.",
-    tip: "One of Matt's favorite bars in Bangkok.",
+    tip: "The original Soi 11 bar moved to Sukhumvit Soi 50 (The Beacon complex, near BTS On Nut) — same eclectic décor, same cheap drinks.",
     hours: "Mon–Sat 5:00pm–midnight (closed Sunday)",
     type: "Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
@@ -683,7 +684,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "A huge part of traditional Thai culture revolves around puppetry. They're both incredible art forms and worth the time to see a performance. Head to the Joe Louis Traditional Thai Puppet Theatre, founded in 1985 by Sakorn Yang-keawsot (whose English name was Joe Louis).",
     tip: "If you're lucky, you can see a show at an outdoor festival. Otherwise, head to the Joe Louis Traditional Thai Puppet Theatre.",
-    hours: "Shows at 7:30pm and 9:00pm daily",
+    hours: "Tue–Sun, show at 7:30pm (closed Monday)",
     type: "Traditional Puppet Theatre",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 108 4488",
