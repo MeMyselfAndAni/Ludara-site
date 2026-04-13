@@ -3,7 +3,7 @@ SET ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
 SET PLATFORM=%ROOT%\aperfectday\general\_platform-v2
 SET GUIDE=%ROOT%\aperfectday\wanderlush\tbilisi
 
-echo Syncing platform files into tbilisi-offline...
+echo Syncing platform files into tbilisi...
 xcopy /Y "%PLATFORM%\map-core.js"        "%GUIDE%\" >nul
 xcopy /Y "%PLATFORM%\styles.css"         "%GUIDE%\" >nul
 xcopy /Y "%PLATFORM%\photos.js"          "%GUIDE%\" >nul
