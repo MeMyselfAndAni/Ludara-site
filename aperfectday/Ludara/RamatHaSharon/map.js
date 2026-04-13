@@ -7,6 +7,7 @@ const MAP_ZOOM          = 14;
 const OFFLINE_CENTER    = { lat: 32.1466, lng: 34.8395 };
 const GUIDE_CITY        = 'Ramat HaSharon';
 const BLOGGER_NAME      = 'Ludara';
+const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
 
 // ─── Category colours ────────────────────────────────────────────────────────
 const CC = {
