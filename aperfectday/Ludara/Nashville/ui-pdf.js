@@ -2,7 +2,7 @@
 // Uses browser's print-to-PDF via a hidden printable page
 // No external libraries needed
 
-function generatePDF(){
+async function generatePDF(){
   const places = getSortedFavPlaces();
   if(!places || places.length === 0){
     alert('Save some places first using the ♡ button, then generate your guide.');
@@ -13,9 +13,13 @@ function generatePDF(){
     day: 'numeric', month: 'long', year: 'numeric'
   });
 
-  const totalM = places.reduce((sum, p, i) =>
-    i < places.length-1 ? sum + haversineM(p, places[i+1]) : sum, 0);
-  const totalMins = Math.round(totalM / 80);
+  // Use OSRM stats from planFavTrip() if already fetched, otherwise fetch now
+  const _routeStats = (typeof _lastRouteStats !== 'undefined' && _lastRouteStats)
+    ? _lastRouteStats
+    : await _fetchRouteStats(places);
+
+  const totalM    = _routeStats.distM;
+  const totalMins = _routeStats.walkMins;
 
   // Build HTML for each place card
   const cards = places.map((p, i) => {
@@ -39,8 +43,10 @@ function generatePDF(){
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
     const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(mapsUrl)}`;
 
-    const distNext = i < places.length-1 ? haversineM(p, places[i+1]) : null;
-    const walkNext = distNext ? `<div class="pdf-walk">↓ ${formatWalk(distNext)} walk to next stop</div>` : '';
+    const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
+    const walkNext = i < places.length-1
+      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min walk to next stop</div>`
+      : '';
 
     return `
     <div class="pdf-card">
