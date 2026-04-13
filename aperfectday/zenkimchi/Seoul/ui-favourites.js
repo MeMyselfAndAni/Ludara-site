@@ -243,33 +243,72 @@ function getSortedFavPlaces(){
   return s;
 }
 
-function planFavTrip(){
+// ── SHARED ROUTE STATS — used by both trip overlay and PDF ───
+// Returns { walkMins, distM, legMins[] } using OSRM if online,
+// haversine × 1.35 fallback if offline or fetch fails.
+async function _fetchRouteStats(places) {
+  // Haversine fallback
+  const legMinsHav = [], legSecsHav = [];
+  let distMHav = 0;
+  for (let i = 0; i < places.length - 1; i++) {
+    const d = haversineM(places[i], places[i + 1]);
+    distMHav += d;
+    legSecsHav.push(Math.round(d / 80 * 60 * 1.35));
+    legMinsHav.push(Math.round(d / 80 * 1.35));
+  }
+  const walkMinsHav = Math.round(legSecsHav.reduce((s, x) => s + x, 0) / 60);
+
+  if (!navigator.onLine) return { walkMins: walkMinsHav, distM: distMHav, legMins: legMinsHav };
+
+  try {
+    const coords = places.map(p => p.lng + ',' + p.lat).join(';');
+    const url = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/' + coords + '?overview=false';
+    const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    const data = await res.json();
+    if (data.code === 'Ok' && data.routes && data.routes[0]) {
+      const route = data.routes[0];
+      const legMins = route.legs.map(leg => Math.round(leg.duration / 60));
+      return {
+        walkMins: Math.round(route.duration / 60),
+        distM:    route.distance,
+        legMins:  legMins,
+      };
+    }
+  } catch(e) { /* fall through */ }
+
+  return { walkMins: walkMinsHav, distM: distMHav, legMins: legMinsHav };
+}
+
+// Shared storage so generatePDF() reuses the last planFavTrip() result
+let _lastRouteStats = null;
+
+async function planFavTrip(){
   if(favourites.length < 2){ _toast('Save at least 2 places first ♡'); return; }
   const places = getSortedFavPlaces();
-  let totalWalkSecs = 0, totalDwell = 0;
-  places.forEach((p, i) => {
-    totalDwell += getDwell(p.cat);
-    if(i < places.length-1){
-      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 80 * 60 * 1.35);
-    }
-  });
-  const totalWalkMins = Math.round(totalWalkSecs/60);
-  const totalMins = totalWalkMins + totalDwell;
-  let totalDistM = 0;
-  for(let i=1;i<places.length;i++) totalDistM += haversineM(places[i-1],places[i]);
 
+  let totalDwell = 0;
+  places.forEach(p => totalDwell += getDwell(p.cat));
+
+  // Show overlay immediately with haversine estimate while OSRM loads
   const el = document.getElementById('trip-content');
+  el.innerHTML = '<div style="padding:20px;text-align:center;color:#888;font-size:0.82rem;">Calculating walking times…</div>';
+  document.getElementById('trip-overlay').classList.add('open');
+
+  const stats = await _fetchRouteStats(places);
+  _lastRouteStats = stats;
+
+  const totalMins = stats.walkMins + totalDwell;
+
   el.innerHTML = `
     <div class="trip-summary">
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
-      <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
+      <span>🚶 ${formatMins(stats.walkMins)} walking</span>
+      <span>📏 ${(stats.distM/1000).toFixed(1)} km</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">Walking times are estimates</div>` +
-  places.map((p,i)=>{
-    const walkToNext = i < places.length-1
-      ? Math.round(haversineM(p,places[i+1])/80*1.35) : null;
+  places.map((p, i) => {
+    const walkToNext = i < places.length - 1 ? stats.legMins[i] : null;
     return `
     <div class="trip-stop" onclick="jumpToTripStop(${p.id})">
       <div class="trip-stop-num">${i+1}</div>
@@ -283,8 +322,6 @@ function planFavTrip(){
     </div>
     ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
   }).join('');
-
-  document.getElementById('trip-overlay').classList.add('open');
 }
 
 function jumpToTripStop(id){
