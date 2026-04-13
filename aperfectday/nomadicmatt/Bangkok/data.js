@@ -33,7 +33,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "The palace was built over the course of three years at the end of the 18th century by King Rama I. Hidden behind high concrete walls, you'll see tons of wats (temples), chedis (mound-like structures containing Buddhist relics), carvings, statues, and the famous 15th-century Emerald Buddha. This statue has its robes rotated three times a year by none other than Thailand's king himself. Nearby, you'll find Wat Po with its larger-than-life golden reclining Buddha statue and busy massage school. Even if you're only in Bangkok for a day, you should make it a point to visit the glittering Grand Palace!",
     tip: "Try to get one of the free tours they offer as there is minimal signage in the palace. Be sure to wear clothes that cover your legs, shoulders, and stomach.",
-    hours: "Daily 8:30am–3:30pm",
+    hours: "Daily 08:30–15:30",
     type: "Palace & Temple Complex",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 623 5500",
@@ -53,7 +53,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "Wat Pho, known as the Temple of the Reclining Buddha, is famous for its massive golden reclining Buddha statue. Built in 1832, the statue is 15 meters (49 feet) tall and 46 meters (150 feet) long. It's one of the most popular sights in the city. The temple is the size of a city block and there are tons of reliefs, statues, courtyards, temples, and spires to see. The prestigious Thai Traditional Medical and Massage School is also located on the grounds. When you are done seeing the sights, get in line for a massage (it's considered the best massage school in the country).",
     tip: "Be sure to arrive early in the morning or late in the afternoon, otherwise you'll have to wait at least 45 minutes for your massage. Massages cost 300 THB for 30 minutes.",
-    hours: "Daily 8:00am–6:30pm",
+    hours: "Daily 08:00–18:30",
     type: "Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 662 3553",
@@ -73,7 +73,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "This is a gorgeous Buddhist temple on the edge of the Chao Phraya River opposite the Grand Palace. It has one main spire and four small ones and is so iconic that you'll find it on Thai money. From the top of the main spire, you get sweeping views of the city, making for extraordinary photographs during sunrise and sunset. The intricate tiled facade reflects the light beautifully during sunrise and sunset. It's my favorite temple in the city.",
     tip: "Be sure to get there early as there are now a lot of photoshoots that happen here, so it can get really busy later on during the day.",
-    hours: "Daily 8:00am–6:00pm",
+    hours: "Daily 08:00–18:00",
     type: "Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 891 2185",
@@ -93,7 +93,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "Opened in 2007, this museum highlights the origins of Thailand and its culture. Housed in a 19th-century European-style building, the museum is fully interactive. There are galleries, movies, and multimedia displays that cover culture, history, Buddhism, war, and the making of modern Thailand. The museum does an excellent job of keeping things both fun and educational.",
     tip: "Admission is 100 THB. Open Tuesday–Sunday.",
-    hours: "Tue–Sun 10:00am–6:00pm",
+    hours: "Tue–Sun 10:00–18:00",
     type: "Cultural Museum",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 225 2777",
@@ -113,7 +113,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "Established in 1874, this museum focuses on Thai culture, with highlights that include a large collection of musical instruments, recorded music, ornate royal funeral chariots, and impressive wooden carvings. It houses the largest collection of local art and artifacts and has been undergoing renovations over the past few years so it's slowly becoming more interactive and English-friendly (though some sections still don't have English signs). Nevertheless, it's still incredibly interesting to see the artifacts and items in the collection.",
     tip: "They offer English tours on Wednesdays and Thursdays at 9:30am. Admission is 200 THB.",
-    hours: "Wed–Sun 9:00am–4:00pm",
+    hours: "Wed–Sun 09:00–16:00",
     type: "National Museum",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 224 1333",
@@ -133,7 +133,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Famous for the Giant Swing that meets you at the entrance of the temple, Wat Suthat is one of Bangkok's most memorable tourist sites. The Giant Swing was first constructed in 1784 but was replaced in 2005 with an entirely golden teak one (the temple was added in 1807). Aside from the swing, the temple features a magnificent traditional roof, ancient murals, and hand-carved teak door panels. The huge complex includes multiple large temples on the property as well as smaller statues and courtyards.",
     tip: "The huge complex includes multiple large temples on the property as well as smaller statues and courtyards.",
-    hours: "Daily 9:00am–6:00pm",
+    hours: "Daily 09:00–18:00",
     type: "Temple & Historic Monument",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 221 4804",
@@ -153,7 +153,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "This is one of my favorite temples in the city because of its beautiful golden temple, stunning setting, and wonderful views of the city from the top. At the base of the mountain is an overgrown cemetery for 18th-century plague victims.",
     tip: "Entry to the temple itself is free, but there's a small fee to go to the chedi.",
-    hours: "Daily 8:00am–5:00pm",
+    hours: "Daily 08:00–17:00",
     type: "Temple & Viewpoint",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 621 0576",
@@ -173,7 +173,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Khao San Road is the infamous backpacker/tourist street in Bangkok. All travel roads lead in and out of here. However, it is more than just a transit hub for travelers, offering a fun nightlife, delicious food, plenty of shopping stalls, tons of people watching, and bustling activity day and night. Post-COVID, it's become less of a backpacker street and more of a hub for local Thais. It's still a party though.",
     tip: "For something quieter, check out Soi Rambuttri, which is right next door. That street has more chill bars and quieter music.",
-    hours: "Active all day; peaks from 8pm onwards",
+    hours: "Daily 08:00–02:00",
     type: "Backpacker Street & Nightlife",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -194,7 +194,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Lumpinee Stadium is the best place to watch a fight in Bangkok. While Lumpinee has been hosting Muay Thai fights since the 1950s, the current stadium (which opened in 2014) is huge and can hold up to 5,000 spectators. Matches typically last around 25 minutes unless there is a knockout and there are usually 7-9 fights per night. There are lots of food hawkers here as well so you can grab a bite while you watch the violent spectacle.",
     tip: "Buy tickets on the stadium's website for the best price. Tickets start around 1,600 THB.",
-    hours: "Fight nights: Fri (ONE Championship, 6:30pm) & Sat (Super Champ, 5:30pm)",
+    hours: "Fri 18:30–23:00; Sat 17:30–23:00",
     type: "Muay Thai Stadium",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -214,7 +214,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "This temple is pictured on the back of the 5-baht coin and has 53 Buddha images in the courtyard representing different Buddhist mudras (ritual gestures).",
     tip: "Admission is 20 THB.",
-    hours: "Daily 8:00am–6:00pm",
+    hours: "Daily 08:00–18:00",
     type: "Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 628 6300",
@@ -234,7 +234,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite places to eat
     note: "One of Matt's favorite places to eat in Bangkok.",
     tip: "Walk-in only — no reservations. Arrive early and check @jayfaibangkok on Instagram for seating updates.",
-    hours: "Wed–Sat 9:00am–7:00pm (closed Sun–Tue)",
+    hours: "Wed–Sat 09:00–19:00",
     type: "Restaurant",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 223 9384",
@@ -256,7 +256,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "This is one of the biggest Chinatowns in the world. It's home to delicious restaurants and street food as well as places to shop. But the main draw here is the food; it's one of the cheapest places to eat in the city and there are tons of vendors selling food you've likely never seen anywhere else. If you're a fan of seafood, be sure to spend some time wandering the narrow streets and sampling everything. If you're not sure where to eat, just pick a stall that has lots of locals eating there.",
     tip: "You can eat your weight in street food here and still not break the bank. It's one of the best and cheapest places to eat in the city!",
-    hours: "Best from 6pm onwards",
+    hours: "Daily 18:00–02:00",
     type: "Chinatown Food Street",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -276,7 +276,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Wander among the lilies, birds of paradise, and orchids at Pak Klong Talad, the flower market at the north end of Chinatown.",
     tip: "It's the biggest flower market in the city, with flowers coming in on boats every morning from all over the country.",
-    hours: "Open 24 hours (best midnight–6am)",
+    hours: "Open 24/7",
     type: "Wholesale Flower Market",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -296,7 +296,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "Located in Chinatown, this temple is home to a massive solid-gold Buddha statue (it weighs 6 tons!).",
     tip: "Admission is 40 THB.",
-    hours: "Daily 8:00am–5:00pm",
+    hours: "Daily 08:00–17:00",
     type: "Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 623 1227",
@@ -316,7 +316,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Soi Nana (in Chinatown) is famous for its cocktail bars and quirky art vibe. Some of my favorite bars are Pijiu (Chinese beer bar), Teens of Thailand (first gin bar in Thailand), Ba Hao (four-floor Chinese-inspired bar), El Chiringuito (Spanish tapas), 23 Bar & Gallery (bar in an art space).",
     tip: "Not to be confused with Sukhumvit Soi Nana — this is the Chinatown one near the train station.",
-    hours: "Best 7pm–midnight",
+    hours: "Daily 19:00–00:00",
     type: "Bar Street",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -337,7 +337,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "The two main floating markets in the city are Khlong Lat Mayom and Thaling Chan (the latter being the most popular). Locals will paddle their small boats around the water and you can just shop as they pass you by. It's definitely a unique experience! The markets are chaotic and aromatic and can be a sensory overload.",
     tip: "Arrive early (especially at Thaling Chan) so you can beat the crowds and tour groups. There's a lot of cheap food here too so it's good to come hungry.",
-    hours: "Sat–Sun 9:00am–4:00pm",
+    hours: "Sat–Sun 09:00–16:00",
     type: "Floating Market",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "",
@@ -359,7 +359,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Outdoor enthusiasts will find it hard to tear themselves away from Bangkok's Lumpini Park. Jogging paths, bicycle paths, picnic areas, chess tables, Tai Chi classes, fitness equipment, and rowboats for rent on the lakes offer plenty to do. The tall trees and quiet setting offer a nice reprieve from busy Bangkok. It's one of the few green spaces in the city.",
     tip: "Grab a book, pack a lunch, and come and lounge in the shade and watch the afternoon go by. It's a nice change of pace from the hectic flow of the rest of the city.",
-    hours: "Daily 4:30am–9:00pm",
+    hours: "Daily 04:30–21:00",
     type: "City Park",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 252 7006",
@@ -379,7 +379,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Jim Thompson was a former American spy and silk merchant in Thailand during the 1950s and 1960s. He built his traditional Thai home in Bangkok and decorated it with gorgeous teak wood furniture and a surrounding garden. He vanished mysteriously in 1967 while in Malaysia, and his house is now a monument to traditional Thai architecture and includes a fabulous guided tour about Jim Thompson and traditional Thai lifestyle. A visit here is one of my favorite things to do in the city. And proceeds are used to help underprivileged kids!",
     tip: "Today, you can visit the house and learn about his life, the silk industry, and how and why Thais design their homes the way they do.",
-    hours: "Daily 10:00am–6:00pm",
+    hours: "Daily 10:00–18:00",
     type: "Historic House Museum",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 216 7368",
@@ -399,7 +399,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "If you're a fan of live music, art, and performance, be sure to visit the city's Culture Center to see if anything is happening while you're in town. Opened in 2007, the BACC hosts art, music, theater, film, design, and cultural events in its exhibition and performance spaces. There is also an art library, cafe, gallery, craft shop, and book store here too.",
     tip: "There is also an art library, cafe, gallery, craft shop, and book store here.",
-    hours: "Tue–Sun 10:00am–8:00pm",
+    hours: "Tue–Sun 10:00–20:00",
     type: "Contemporary Art Center",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 214 6630",
@@ -419,7 +419,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Check out MBK for cheap knockoffs and electronics.",
     tip: "Check out MBK for cheap knockoffs and electronics.",
-    hours: "Daily 10:00am–10:00pm",
+    hours: "Daily 10:00–22:00",
     type: "Shopping Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 620 9000",
@@ -439,7 +439,7 @@ const PLACES = [
     // ✅ [B] exact — Matt names this school specifically
     note: "Thai cuisine is one of the most delicious in the world. If you want to learn how to make some of the country's mouth-watering dishes, take a cooking class. You'll learn about Thai cuisine and cooking and be able to take your new knowledge and skills home with you. Prices range from 1,000 THB to 3,300 THB for a 2-3 hour class, which often includes a market visit to pick out ingredients.",
     tip: "Prices range from 1,000 THB to 3,300 THB for a 2-3 hour class, which often includes a market visit to pick out ingredients.",
-    hours: "Morning class 9:00am–1:00pm; Afternoon 2:00pm–6:00pm",
+    hours: "Daily 09:00–13:00; Daily 14:00–18:00",
     type: "Thai Cooking Class",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 632 5734",
@@ -459,7 +459,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "This portrait museum has some amazing portraits of the royal family as well as paintings done by the late king, who was an artist and musician in his spare time. The museum has four different sections that show influences on the art from different periods along with Thai cultural artworks. Highlights include the Royal Paintings of King Rama VI and King Rama IX, along with sculptures of King Rama VI and King Rama IX. It's located in the former Royal Mint building and they have excellent interim contemporary art exhibits from local artists on the ground floor.",
     tip: "It's located in the former Royal Mint building and they have excellent interim contemporary art exhibits from local artists on the ground floor.",
-    hours: "Wed–Sun 9:00am–4:00pm",
+    hours: "Wed–Sun 09:00–16:00",
     type: "Portrait Museum",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 282 2639",
@@ -481,7 +481,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Check out Terminal 21 — my favorite mall and the best place to see stunning internationally themed décor.",
     tip: "My favorite mall and the best place to see stunning internationally themed décor.",
-    hours: "Daily 10:00am–10:00pm",
+    hours: "Daily 10:00–22:00",
     type: "Shopping Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 108 0888",
@@ -501,7 +501,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "Bangkok's weekend market, the largest such market in the world, is an ideal place to buy anything and everything. It has over 15,000 stalls, making it the best place to get gifts, find knockoffs, barter, and eat some good food. You can find everything here and there are some really good eats. Definitely wander around even if you don't plan on buying anything. You can spend hours here and I suggest you do!",
     tip: "It's open on Saturday and Sunday, 9am–6pm. You can spend hours here and I suggest you do!",
-    hours: "Sat–Sun 9:00am–6:00pm",
+    hours: "Sat–Sun 09:00–18:00",
     type: "Outdoor Weekend Market",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 272 4813",
@@ -521,7 +521,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Rot Fai Market (or Train Market) is an authentic open-air bazaar selling an array of vintage collectibles and memorabilia, from antique furniture to hippy fashion and Mao kitsch. The Train Night Market is absolutely one of the coolest markets in Bangkok.",
     tip: "It's open at night Thursday through Sunday.",
-    hours: "Thu–Sun 5:00pm–1:00am",
+    hours: "Thu–Sun 17:00–01:00",
     type: "Night Market",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -542,7 +542,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite bars
     note: "One of Matt's favorite bars in Bangkok.",
     tip: "The original Soi 11 bar moved to Sukhumvit Soi 50 (The Beacon complex, near BTS On Nut) — same eclectic décor, same cheap drinks.",
-    hours: "Mon–Sat 5:00pm–midnight (closed Sunday)",
+    hours: "Mon–Sat 17:00–00:00",
     type: "Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -562,7 +562,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "This small garden is located around the corner from the Chatuchak Weekend Market. There are over 500 butterflies flying around this domed enclosure, which also features a wide range of flowers, ferns, and even some waterfalls. Entry is free and it's open Tuesday-Sunday. The butterfly garden is located next to three sprawling parks to continue your day in nature: Queen Sirikit Gardens, Rod Fai Park, and Chatuchak Park. It's the perfect area to relax and take a stroll.",
     tip: "Entry is free and it's open Tuesday–Sunday.",
-    hours: "Tue–Sun 8:30am–4:30pm",
+    hours: "Tue–Sun 08:30–16:30",
     type: "Butterfly Garden",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 272 4359",
@@ -584,7 +584,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "If you don't want to pay for an (often overpriced) cruise, you can just ride a water taxi up and down the river instead for just a couple of dollars. Start at the central pier, go to the end, and come back. You'll save money and still get an enjoyable tour of the river as it weaves throughout the city.",
     tip: "You can cruise along the Chao Phraya River to see what remains of the old bridges, stilt houses, and colorful flower gardens crowding the waterways.",
-    hours: "Daily 6:00am–7:00pm",
+    hours: "Daily 06:00–19:00",
     type: "River Sightseeing",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "",
@@ -604,7 +604,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "ICONSIAM is the pinnacle of luxury.",
     tip: "ICONSIAM is the pinnacle of luxury.",
-    hours: "Daily 10:00am–10:00pm",
+    hours: "Daily 10:00–22:00",
     type: "Riverside Luxury Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 495 7080",
@@ -624,7 +624,7 @@ const PLACES = [
     // ✅ [A]+[B] exact
     note: "This glitzy spectacle is Bangkok's version of Moulin Rouge. It's a lively cabaret show with show tunes, dancing, K-pop, and elaborate costumes. It's a glamorous, rambunctious night out that is guaranteed to entertain. Calypso Cabaret, founded in 1988, is the best place to see a show in the city.",
     tip: "Calypso Cabaret, founded in 1988, is the best place to see a show in the city.",
-    hours: "Performances at 7:45pm and 9:30pm daily",
+    hours: "Daily 19:45–23:00",
     type: "Cabaret Show",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "+66 2 688 1415",
@@ -644,7 +644,7 @@ const PLACES = [
     // ✅ [A] — Matt names Asiatique as the venue for both Calypso Cabaret and Joe Louis Theatre
     note: "Calypso Cabaret and the Joe Louis Thai Puppet Theatre are both located at Asiatique the Riverfront.",
     tip: "Calypso Cabaret and the Joe Louis Thai Puppet Theatre are both located here.",
-    hours: "Daily 5:00pm–midnight",
+    hours: "Daily 17:00–00:00",
     type: "Riverside Night Market",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 108 4488",
@@ -664,7 +664,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "This folk museum depicts middle-class life in Bangkok during the early to mid-1900s with a collection of three wooden houses filled with family items from that period. The main house was built in 1937 and the interiors show what life looked like for upper-middle-class homes during WWII. It's small, so you don't need a lot of time. It's free, but donations are requested. Entry also includes a guided tour.",
     tip: "It's free, but donations are requested. Entry also includes a guided tour.",
-    hours: "Wed–Sun 10:00am–4:00pm",
+    hours: "Wed–Sun 10:00–16:00",
     type: "Folk History Museum",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 234 6058",
@@ -684,7 +684,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "A huge part of traditional Thai culture revolves around puppetry. They're both incredible art forms and worth the time to see a performance. Head to the Joe Louis Traditional Thai Puppet Theatre, founded in 1985 by Sakorn Yang-keawsot (whose English name was Joe Louis).",
     tip: "If you're lucky, you can see a show at an outdoor festival. Otherwise, head to the Joe Louis Traditional Thai Puppet Theatre.",
-    hours: "Tue–Sun, show at 7:30pm (closed Monday)",
+    hours: "Tue–Sun 19:30–22:00",
     type: "Traditional Puppet Theatre",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 108 4488",
@@ -706,7 +706,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "The city's top-end dining and nightlife lie in this trendy neighborhood, including many Western jazz bars and beer gardens. It's very popular with Bangkok's young middle and upper classes. The neighborhood is very walkable and a great place for a fashionable night out. Popular spots include Beer Belly, a craft beer bar with beer pong and a 2-for-1 happy hour from 5-8 pm, and Rabbit Hole, a swanky bar with creative cocktails.",
     tip: "Popular spots include Beer Belly, a craft beer bar with beer pong and a 2-for-1 happy hour from 5–8 pm, and Rabbit Hole, a swanky bar with creative cocktails.",
-    hours: "Active from 6pm onwards",
+    hours: "Daily 18:00–02:00",
     type: "Upscale Dining & Bar District",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -726,7 +726,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Rabbit Hole — a swanky bar with creative cocktails in Thong Lo. One of Matt's favorite bars.",
     tip: "One of Matt's favorite bars in Bangkok.",
-    hours: "Daily 6:00pm–2:00am",
+    hours: "Daily 18:00–02:00",
     type: "Cocktail Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -746,7 +746,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Beer Belly — a craft beer bar with beer pong and a 2-for-1 happy hour from 5-8 pm in Thong Lo.",
     tip: "A craft beer bar with beer pong and a 2-for-1 happy hour from 5–8 pm.",
-    hours: "Daily 5:00pm–midnight",
+    hours: "Daily 17:00–00:00",
     type: "Craft Beer Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -766,7 +766,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite bars
     note: "One of Matt's favorite bars in Bangkok.",
     tip: "One of Matt's favorite bars in Bangkok.",
-    hours: "Mon–Sat 8:00pm–2:00am",
+    hours: "Mon–Sat 20:00–02:00",
     type: "Cocktail Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -786,7 +786,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite bars
     note: "One of Matt's favorite bars in Bangkok.",
     tip: "One of Matt's favorite bars in Bangkok.",
-    hours: "Daily 11:00am–midnight",
+    hours: "Daily 11:00–00:00",
     type: "Craft Beer Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 662 4478",
@@ -808,7 +808,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Check out Siam Paragon for designer clothes.",
     tip: "Check out Siam Paragon for designer clothes.",
-    hours: "Daily 10:00am–10:00pm",
+    hours: "Daily 10:00–22:00",
     type: "Luxury Shopping Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 690 1000",
@@ -828,7 +828,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Central World has more than 600 stores. Emsphere is full of restaurants that are open until 3am.",
     tip: "Central World has more than 600 stores. Emsphere next door has restaurants open until 3am.",
-    hours: "Daily 10:00am–10:00pm",
+    hours: "Daily 10:00–22:00",
     type: "Mega Shopping Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 021 9999",
@@ -848,7 +848,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "Check out Platinum for cheap, trendy clothes.",
     tip: "Check out Platinum for cheap, trendy clothes.",
-    hours: "Daily 9:00am–8:00pm",
+    hours: "Daily 09:00–20:00",
     type: "Budget Fashion Mall",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 121 8000",
@@ -870,7 +870,7 @@ const PLACES = [
     // ✅ [A] exact
     note: "For something quieter, check out Soi Rambuttri, which is right next door. That street has more chill bars and quieter music.",
     tip: "That street has more chill bars and quieter music.",
-    hours: "Active from 5pm; peaks 9pm onwards",
+    hours: "Daily 17:00–02:00",
     type: "Bar Street",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "",
@@ -890,7 +890,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite bars
     note: "One of Matt's favorite bars in Bangkok.",
     tip: "One of Matt's favorite bars in Bangkok.",
-    hours: "Daily 6:00pm–2:00am",
+    hours: "Daily 18:00–02:00",
     type: "Live Music Bar",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 629 4477",
@@ -910,7 +910,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "This royal temple is home to Thailand's oldest institute for Buddhist monks. It also hosts a weekly amulet market where you can buy amulets to help you with luck, love, money, and more.",
     tip: "Admission is 50 THB.",
-    hours: "Daily 9:00am–6:00pm",
+    hours: "Daily 09:00–18:00",
     type: "Royal Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "",
@@ -930,7 +930,7 @@ const PLACES = [
     // ✅ [B] exact
     note: "Built in the 1840s, this temple is one of the few temples in the entire world with a bronze roof.",
     tip: "Admission is free.",
-    hours: "Daily 9:00am–5:00pm",
+    hours: "Daily 09:00–17:00",
     type: "Buddhist Temple",
     blog: "https://www.nomadicmatt.com/travel-blogs/best-things-to-do-bangkok/",
     phone: "",
@@ -952,7 +952,7 @@ const PLACES = [
     // ✅ [A] — named by Matt as one of his favorite places to eat
     note: "One of Matt's favorite places to eat in Bangkok.",
     tip: "One of Matt's favorite places to eat in Bangkok.",
-    hours: "Daily 4:00pm–midnight",
+    hours: "Daily 16:00–00:00",
     type: "Seafood Restaurant",
     blog: "https://www.nomadicmatt.com/travel-guides/thailand-travel-tips/bangkok/",
     phone: "+66 2 223 4519",

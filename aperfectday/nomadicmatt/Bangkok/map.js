@@ -7,6 +7,7 @@ const MAP_ZOOM       = 13;
 const OFFLINE_CENTER = { lat: 13.7480, lng: 100.5018 };
 const GUIDE_CITY     = 'Bangkok';
 const BLOGGER_NAME   = 'Matt';
+const GUIDE_TIMEZONE = 'Asia/Bangkok';
 
 // Category colours — used by map-core.js to colour emoji pins
 const CC = {
