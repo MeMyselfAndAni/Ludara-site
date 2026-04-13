@@ -7,28 +7,6 @@ const GUIDE_CITY     = 'Tbilisi';
 const BLOGGER_NAME   = 'Emily';
 const GUIDE_TIMEZONE = 'Asia/Tbilisi';
 
-// ─── Category colours ─────────────────────────────────────────────────────────
-const CC = {
-  'landmark': '#e8724a',
-  'food':     '#f0c060',
-  'cafe':     '#6b9e6e',
-  'church':   '#6090c8',
-  'market':   '#c08060',
-  'soviet':   '#9080a8',
-  'nature':   '#50906a',
-};
-
-// ─── Category labels ──────────────────────────────────────────────────────────
-const CL = {
-  'landmark': 'Landmark',
-  'food':     'Restaurant',
-  'cafe':     'Café & Bar',
-  'church':   'Church & Spiritual',
-  'market':   'Market & Shopping',
-  'soviet':   'Soviet Heritage',
-  'nature':   'Nature & Views',
-};
-
 const NBHD_COLORS = {
   'old-town':   '#e8724a',
   'sololaki':   '#9080a8',

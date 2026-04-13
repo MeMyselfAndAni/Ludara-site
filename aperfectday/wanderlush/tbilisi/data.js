@@ -62,3 +62,6 @@ const PLACES = [
 // Global state — map is declared in index.html, markers/AID/AF/ANF in map-core.js
 
 
+
+const CC={landmark:"#e8724a",food:"#f0c060",cafe:"#6b9e6e",church:"#6090c8",market:"#c08060",soviet:"#9080a8",nature:"#50906a"};
+const CL={landmark:"Landmark",food:"Restaurant",cafe:"Café & Bar",church:"Church & Spiritual",market:"Market & Shopping",soviet:"Soviet Heritage",nature:"Nature & Views"};
