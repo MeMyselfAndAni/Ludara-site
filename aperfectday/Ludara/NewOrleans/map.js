@@ -7,14 +7,15 @@ const MAP_ZOOM          = 13;
 const OFFLINE_CENTER    = { lat: 29.9575, lng: -90.0630 };
 const GUIDE_CITY        = 'New Orleans';
 const BLOGGER_NAME      = 'Ludara';
+const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 // New Orleans palette: warm, vibrant, Creole-inspired
 const CC = {
   'landmark': '#c8522a',   // deep Creole orange-red
   'food':     '#d4902a',   // Louisiana gold
-  'cafe':     '#7b68c8',   // purple — Mardi Gras
-  'pub':      '#5a8a3a',   // jazz-bar green
+  'cafe':     '#6b9e6e',   // bayou green — cafés & wine bars
+  'pub':      '#8b6bb1',   // jazz purple — bars & music venues
   'church':   '#4a90d9',   // blue
   'market':   '#b06040',   // French Market brown
   'nature':   '#4a9a70',   // bayou green
@@ -24,7 +25,7 @@ const CC = {
 const CL = {
   'landmark': 'Landmarks',
   'food':     'Restaurants',
-  'cafe':     'Bars & Music',
+  'cafe':     'Cafés & Wine',
   'pub':      'Bars & Music',
   'market':   'Shopping',
   'nature':   'Parks & Nature',
