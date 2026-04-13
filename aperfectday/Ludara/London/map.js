@@ -8,6 +8,7 @@ const MAP_ZOOM          = 12;
 const OFFLINE_CENTER    = { lat: 51.5074, lng: -0.1278 };
 const GUIDE_CITY        = 'London';
 const BLOGGER_NAME      = 'A Perfect Day';
+const GUIDE_TIMEZONE    = 'Europe/London';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
