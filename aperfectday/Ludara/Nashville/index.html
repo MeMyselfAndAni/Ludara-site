@@ -49,8 +49,8 @@
 </head>
 <body>
 
-<!-- Welcome Splash -->
-<div class="splash" id="splash">
+<!-- Welcome Splash — hidden for direct hotel outreach; re-enable by removing style="display:none" -->
+<div class="splash" id="splash" style="display:none">
   <div class="splash-inner">
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span>
@@ -324,6 +324,13 @@ window.addEventListener('load', function() {
 
 <script>
   window.addEventListener('load', initMap);
+</script>
+
+<!-- Auto-dismiss splash for direct outreach — remove this block to restore splash -->
+<script>
+  window.addEventListener('load', function() {
+    if (typeof closeSplash === 'function') closeSplash();
+  });
 </script>
 
 </body>
