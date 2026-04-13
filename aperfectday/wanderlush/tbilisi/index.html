@@ -3,9 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Emily Lush's Tbilisi — Wander-Lush</title>
+<title>Emily Lush's Tbilisi — Wander-Lush (Offline)</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+<style>
+  /* MapLibre marker fix */
+  .mgl-marker { background: none !important; border: none !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
+  .maplibregl-ctrl-attrib { font-size: 9px !important; }
+</style>
 </head>
 <body>
 
@@ -16,7 +25,7 @@
       <span class="wl-logo">Wander-Lush</span>
     </div>
     <h2 class="splash-title">Tbilisi Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">51</span> hand-picked places by <strong>Emily Lush</strong> — photographer, writer and travel blogger based in Batumi. Every place on this map has been personally visited and recommended.</p>
+    <p class="splash-sub"><span class="place-count-all">56</span> hand-picked places by <strong>Emily Lush</strong> — photographer, writer and travel blogger based in Batumi. Every place on this map has been personally visited and recommended.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://wander-lush.org" target="_blank">wander-lush.org</a>
@@ -39,7 +48,7 @@
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>Tbilisi</em> Guide</h1>
-      <div class="header-sub"><span class="place-count-all">51</span> hand-picked places<span class="header-sub-by"> · by Emily Lush</span></div>
+      <div class="header-sub"><span class="place-count-all">56</span> hand-picked places<span class="header-sub-by"> · by Emily Lush</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -170,10 +179,19 @@
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
-  <span class="count-badge" id="list-badge">51</span>
+  <span class="count-badge" id="list-badge">56</span>
 </button>
 
 <!-- My Location button -->
+
+<!-- Save for offline button -->
+<button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
+  position:fixed; bottom:180px; right:12px; z-index:1000;
+  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">
+  📥 Save offline
+</button>
 <button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
 </button>
@@ -183,7 +201,7 @@
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
-  <span id="list-badge-desktop">51</span>
+  <span id="list-badge-desktop">56</span>
 </button>
 
 <!-- Places list sheet -->
@@ -192,7 +210,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">63 Places</span>
+    <span class="sheet-title" id="sheet-title">56 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
@@ -250,25 +268,30 @@
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
   <span>Places</span>
-  <span class="desktop-list-count" id="desktop-list-count">51</span>
+  <span class="desktop-list-count" id="desktop-list-count">56</span>
 </button>
 
 <!-- JS modules — load order matters -->
 <script>const IMAGES_PATH = "images/";</script>
-<script src="data.js"></script>
+<script>let map;</script>
+  <script src="data.js"></script>
 <script src="photos.js"></script>
-<script src="map.js"></script>
+<script src="map-core.js"></script>
+  <script src="map.js"></script>
 <script src="ui-card.js"></script>
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Google Maps (loads last, calls initMap as callback) -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFnO6GpVK_EBLTOMa15zYe9eNWuDJEBEU&libraries=places&callback=initMap">
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+<script>
+  // All scripts loaded — now safe to init the map
+  window.addEventListener('load', initMap);
 </script>
 
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+
 </body>
 </html>

@@ -1,202 +1,116 @@
+// ── GUIDE CONFIG — Wander-Lush Tbilisi ───────────────────────
+const MAPTILER_KEY   = 'V3bgGWhyO1Rik6g1non6';
+const MAP_CENTER     = [44.8100, 41.6918];
+const MAP_ZOOM       = 14;
+const OFFLINE_CENTER = { lat: 41.6918, lng: 44.8100 };
+const GUIDE_CITY     = 'Tbilisi';
+const BLOGGER_NAME   = 'Emily';
+const GUIDE_TIMEZONE = 'Asia/Tbilisi';
+
+// ─── Category colours ─────────────────────────────────────────────────────────
+const CC = {
+  'landmark': '#e8724a',
+  'food':     '#f0c060',
+  'cafe':     '#6b9e6e',
+  'church':   '#6090c8',
+  'market':   '#c08060',
+  'soviet':   '#9080a8',
+  'nature':   '#50906a',
+};
+
+// ─── Category labels ──────────────────────────────────────────────────────────
+const CL = {
+  'landmark': 'Landmark',
+  'food':     'Restaurant',
+  'cafe':     'Café & Bar',
+  'church':   'Church & Spiritual',
+  'market':   'Market & Shopping',
+  'soviet':   'Soviet Heritage',
+  'nature':   'Nature & Views',
+};
+
+const NBHD_COLORS = {
+  'old-town':   '#e8724a',
+  'sololaki':   '#9080a8',
+  'avlabari':   '#6090c8',
+  'vera':       '#f0c060',
+  'chugureti':  '#6b9e6e',
+  'mtatsminda': '#c08060',
+  'vake':       '#50906a',
+};
+
+const NBHD_LABELS = {
+  'old-town':   'Old Town',
+  'sololaki':   'Sololaki',
+  'avlabari':   'Avlabari',
+  'vera':       'Vera',
+  'chugureti':  'Chugureti',
+  'mtatsminda': 'Mtatsminda',
+  'vake':       'Vake',
+};
+
+const NBHD_APPROX_CENTERS = {
+  'old-town':   { lat:41.6895, lng:44.8095 },
+  'sololaki':   { lat:41.6918, lng:44.8042 },
+  'avlabari':   { lat:41.6913, lng:44.8163 },
+  'vera':       { lat:41.6985, lng:44.7955 },
+  'chugureti':  { lat:41.6887, lng:44.8020 },
+  'mtatsminda': { lat:41.6938, lng:44.7971 },
+  'vake':       { lat:41.7050, lng:44.7730 },
+};
+
 // ── MAP INIT ──────────────────────────────────────────────────
-function initMap(){
-  map = new google.maps.Map(document.getElementById('map'),{
-    center:{lat:41.6918, lng:44.8100},
-    zoom:14,
-    mapTypeControl:false,
-    streetViewControl:false,
-    fullscreenControl:false,
-    zoomControl:true,
-    zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_CENTER},
-    gestureHandling:'greedy'
+function initMap() {
+  map = new maplibregl.Map({
+    container: 'map',
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
+    center: MAP_CENTER,
+    zoom: MAP_ZOOM,
+    attributionControl: false,
   });
 
-  placesService = new google.maps.places.PlacesService(map);
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
 
-  PLACES.forEach(p => addMarker(p));
-  renderList();
-
-
-  // ── Sync all place-count displays from PLACES.length ──
-  (function syncPlaceCount(){
-    const n = PLACES.length;
-    document.querySelectorAll('.place-count-all').forEach(el => el.textContent = n);
-    ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el && !el.closest('#sheet')) el.textContent = n;  // don't overwrite filtered count
-    });
-    const title = document.getElementById('sheet-title');
-    if(title && title.textContent.includes('Places')) title.textContent = n + ' Places';
-  })();
-  // Preload all place images in background after map settles
-  setTimeout(preloadAllPhotos, 1500);
-
-  // List starts closed — user opens it with the Places button
-
-  document.getElementById('loading').style.display='none';
-}
-
-// ── NEIGHBOURHOOD CIRCLES ON MAP ──────────────────────────────
-const NBHD_CIRCLES = [
-  { id:'old-town',   lat:41.6895, lng:44.8095, radius:1497, label:'Old Town',   color:'#e8724a' },
-  { id:'sololaki',   lat:41.6918, lng:44.8042, radius:287,  label:'Sololaki',   color:'#9080a8' },
-  { id:'avlabari',   lat:41.6913, lng:44.8163, radius:804,  label:'Avlabari',   color:'#6090c8' },
-  { id:'vera',       lat:41.6985, lng:44.7955, radius:418,  label:'Vera',       color:'#f0c060' },
-  { id:'chugureti',  lat:41.6880, lng:44.9920, radius:315,  label:'Chugureti',  color:'#6b9e6e' },
-  { id:'mtatsminda', lat:41.6938, lng:44.7971, radius:1253, label:'Mtatsminda', color:'#c08060' },
-  { id:'vake',       lat:41.7050, lng:44.7730, radius:1622, label:'Vake',       color:'#50906a' },
-];
-
-let activeNbhdCircle = null;
-
-function showNbhdCircle(nbhdId){
-  // Remove previous circle
-  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
-  if(!nbhdId) return;
-  const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
-  if(!n || !map) return;
-  activeNbhdCircle = new google.maps.Circle({
-    map,
-    center: {lat:n.lat, lng:n.lng},
-    radius: n.radius,
-    fillColor: n.color,
-    fillOpacity: 0.10,
-    strokeColor: n.color,
-    strokeOpacity: 0.55,
-    strokeWeight: 2,
-    clickable: false,
-    zIndex: 0,
+  // Visible error handler
+  map.on('error', function(e) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
+    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
+    document.body.appendChild(d);
   });
-}
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-function clearNbhdCircle(){
-  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
-}
+  map.on('load', () => {
+    try {
+      // Dismiss spinner immediately
+      const loadingEl = document.getElementById('loading');
+      if(loadingEl) loadingEl.style.display = 'none';
 
-// ── MARKERS ───────────────────────────────────────────────────
-function makeIcon(p, active){
-  const color = CC[p.cat] || '#888';
-  const emoji = p.emoji || '📍';
+      // Force English labels
+      map.getStyle().layers.forEach(layer => {
+        if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+          try { map.setLayoutProperty(layer.id, 'text-field', ['coalesce', ['get', 'name:en'], ['get', 'name']]); } catch(e) {}
+        }
+      });
 
-  if(active){
-    // Active: large gold pin with white ring and strong shadow
-    const s = 58;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">
-      <defs>
-        <radialGradient id="ag" cx="35%" cy="28%" r="70%">
-          <stop offset="0%" stop-color="#ffe566"/>
-          <stop offset="60%" stop-color="#f5b800"/>
-          <stop offset="100%" stop-color="#c48a00"/>
-        </radialGradient>
-        <filter id="ashadow" x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.55)"/>
-          <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="rgba(0,0,0,0.35)"/>
-        </filter>
-      </defs>
-      <circle cx="${s/2}" cy="${s/2}" r="${s/2-2}" fill="white" filter="url(#ashadow)"/>
-      <circle cx="${s/2}" cy="${s/2}" r="${s/2-5}" fill="url(#ag)" stroke="white" stroke-width="2"/>
-      <text x="50%" y="54%" font-size="22" text-anchor="middle" dominant-baseline="middle">${emoji}</text>
-    </svg>`;
-    return {
-      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
-      scaledSize: new google.maps.Size(s, s),
-      anchor: new google.maps.Point(s/2, s/2),
-    };
-  }
+      // Build neighbourhood circles
+      NBHD_CIRCLES = buildNbhdCircles();
 
-  // Normal: vivid category color, strong bevel + shadow
-  const s = 46;
-  // Lighten the category color for the top highlight
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">
-    <defs>
-      <radialGradient id="g${p.id}" cx="33%" cy="27%" r="72%">
-        <stop offset="0%" stop-color="rgba(255,255,255,0.72)"/>
-        <stop offset="45%" stop-color="rgba(255,255,255,0.08)"/>
-        <stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
-      </radialGradient>
-      <filter id="sh${p.id}" x="-35%" y="-35%" width="170%" height="170%">
-        <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" flood-color="rgba(0,0,0,0.5)"/>
-        <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.25)"/>
-      </filter>
-    </defs>
-    <!-- outer white ring for contrast on any map bg -->
-    <circle cx="${s/2}" cy="${s/2}" r="${s/2-1}" fill="white" filter="url(#sh${p.id})"/>
-    <!-- main colored circle -->
-    <circle cx="${s/2}" cy="${s/2}" r="${s/2-3.5}" fill="${color}" stroke="white" stroke-width="2"/>
-    <!-- bevel overlay -->
-    <circle cx="${s/2}" cy="${s/2}" r="${s/2-3.5}" fill="url(#g${p.id})"/>
-    <!-- emoji -->
-    <text x="50%" y="54%" font-size="18" text-anchor="middle" dominant-baseline="middle">${emoji}</text>
-  </svg>`;
+      // Init map sources and layers (circles, trip route)
+      initMapSources();
+      // Clear any stale route from previous session
+      if(map.getSource('trip-route')) map.getSource('trip-route').setData({type:'Feature',geometry:{type:'LineString',coordinates:[]}});
 
-  return {
-    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
-    scaledSize: new google.maps.Size(s, s),
-    anchor: new google.maps.Point(s/2, s/2),
-  };
-}
+      // Add markers + init UI
+      PLACES.forEach(p => addMarker(p));
+      if(typeof applyFilters==='function') applyFilters();
+      if(typeof renderList==='function') renderList();
+      if(typeof initFavourites==='function') initFavourites();
+      if(typeof alignNbhdBar==='function') alignNbhdBar();
 
-function addMarker(p){
-  const marker = new google.maps.Marker({
-    position:{lat:p.lat, lng:p.lng},
-    map,
-    icon: makeIcon(p, false),
-    title: p.name,
-    optimized: false,
-    zIndex: 10,   // low — trip number markers (zIndex 9000+) always render on top
-  });
-  marker.addListener('click', ()=> openDetail(p.id));
-  markers[p.id] = marker;
-}
-
-// ── PLACES PHOTO FETCH ────────────────────────────────────────
-
-function showNbhdCircleAnimated(nbhdId){
-  if(activeNbhdCircle){ activeNbhdCircle.setMap(null); activeNbhdCircle = null; }
-  const n = NBHD_CIRCLES.find(x => x.id === nbhdId);
-  if(!n || !map) return;
-
-  // Start tiny, expand to full radius over 600ms
-  const fullRadius = n.radius;
-  const steps = 30;
-  const duration = 1200;
-  let step = 0;
-
-  activeNbhdCircle = new google.maps.Circle({
-    map,
-    center: {lat:n.lat, lng:n.lng},
-    radius: fullRadius * 0.05,   // start at 5%
-    fillColor: n.color,
-    fillOpacity: 0.0,
-    strokeColor: n.color,
-    strokeOpacity: 0.0,
-    strokeWeight: 2.5,
-    clickable: false,
-    zIndex: 0,
-  });
-
-  const interval = setInterval(() => {
-    step++;
-    const t = step / steps;
-    const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
-    activeNbhdCircle.setRadius(fullRadius * (0.05 + 0.95 * ease));
-    activeNbhdCircle.setOptions({
-      fillOpacity: 0.12 * ease,
-      strokeOpacity: 0.6 * ease,
-    });
-    if(step >= steps){
-      clearInterval(interval);
-      // Gentle pulse: slightly expand and contract once
-      setTimeout(() => {
-        if(!activeNbhdCircle) return;
-        activeNbhdCircle.setRadius(fullRadius * 1.08);
-        activeNbhdCircle.setOptions({ strokeOpacity: 0.8 });
-        setTimeout(() => {
-          if(!activeNbhdCircle) return;
-          activeNbhdCircle.setRadius(fullRadius);
-          activeNbhdCircle.setOptions({ strokeOpacity: 0.55, fillOpacity: 0.10 });
-        }, 400);
-      }, 50);
+    } catch(err) {
+      const el = document.getElementById('loading');
+      if(el){ el.style.display='flex'; el.innerHTML='<div style="color:red;padding:20px;font-size:12px;font-family:monospace;">ERROR: '+err.message+'</div>'; }
     }
-  }, duration / steps);
+  });
 }

@@ -70,7 +70,8 @@ function openDetail(id){
 
 // ── Neighbourhood list rendering ──────────────────────────────
 const NBHD_NAMES = {
-  // use NBHD_LABELS
+  'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
+  'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
 };
 
 function _renderNbhdList(nbhd){
@@ -117,7 +118,15 @@ function openNbhdCard(nbhd){
   if(!CARD_LIST.length){ alert('No places for this neighbourhood yet!'); return; }
   CARD_IDX = 0;
 
-  // NBHD_BOUNDS defined in guide-specific map.js
+  const NBHD_BOUNDS = {
+    'old-town':   {lat:41.6895,lng:44.8100,zoom:16},
+    'sololaki':   {lat:41.6920,lng:44.8040,zoom:16},
+    'avlabari':   {lat:41.6920,lng:44.8190,zoom:16},
+    'vera':       {lat:41.6990,lng:44.7960,zoom:15},
+    'chugureti':  {lat:41.6890,lng:44.7990,zoom:15},
+    'mtatsminda': {lat:41.6940,lng:44.7960,zoom:15},
+    'vake':       {lat:41.7040,lng:44.7720,zoom:14},
+  };
 
   // Dim non-neighbourhood markers
   PLACES.forEach(p => {

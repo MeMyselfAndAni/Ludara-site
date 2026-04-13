@@ -2,7 +2,9 @@
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
   // Toggle off if already active
-  if(ANF === nbhd && nbhd !== 'all'){ nbhd = 'all'; }
+  if(ANF === nbhd && nbhd !== 'all'){
+    nbhd = 'all';
+  }
   ANF = nbhd;
 
   // Update bubble active states
@@ -23,44 +25,8 @@ function selectNbhd(nbhd, el){
   }
 
   // Apply filters + update list
-  applyFilters();
-  if(typeof renderList === 'function') renderList();
-
-  // Pan map to neighbourhood center
-  if(nbhd !== 'all' && map){
-    // Use actual circle data to fit bounds perfectly
-    var circle = (typeof NBHD_CIRCLES !== 'undefined' && NBHD_CIRCLES.length)
-      ? NBHD_CIRCLES.find(function(x){ return x.id === nbhd; }) : null;
-    // Fallback to approx center if circles not built yet
-    if(!circle && typeof NBHD_APPROX_CENTERS !== 'undefined' && NBHD_APPROX_CENTERS[nbhd]){
-      var c = NBHD_APPROX_CENTERS[nbhd];
-      circle = { lat: c.lat, lng: c.lng, radius: 800 };
-    }
-    if(circle){
-      // Calculate bounds from circle radius with padding for UI panels
-      var R = 6371000;
-      var dLat = (circle.radius * 1.4 / R) * (180 / Math.PI);
-      var dLng = dLat / Math.cos(circle.lat * Math.PI / 180);
-      var isMobile = window.innerWidth < 768;
-      map.fitBounds(
-        [[circle.lng - dLng, circle.lat - dLat], [circle.lng + dLng, circle.lat + dLat]],
-        { padding: { top: 80, bottom: isMobile ? 180 : 80, left: isMobile ? 20 : 340, right: 20 },
-          duration: 800 }
-      );
-    }
-  }
-
-  // When selecting All — fit all visible places
-  if(nbhd === 'all' && map){
-    const vis = PLACES.filter(p => AF === 'all' || p.cat === AF);
-    if(vis.length){
-      const lngs = vis.map(p=>p.lng), lats = vis.map(p=>p.lat);
-      map.fitBounds(
-        [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
-        { padding:{ top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 }, duration:700 }
-      );
-    }
-  }
+  applyFilters();          // updates map markers
+  if(typeof renderList === 'function') renderList();  // updates list panel
 
   // Open list panel on desktop
   if(window.innerWidth >= 768){
@@ -71,14 +37,30 @@ function selectNbhd(nbhd, el){
 // Keep openStories as alias for backwards compat
 function openStories(nbhd){ selectNbhd(nbhd, document.getElementById('nbhd-' + nbhd)); }
 
-// NBHD_META defined in guide-specific map.js
+const NBHD_META = {
+  'old-town':   { label: 'Old Town & Kala',    icon: '🏰' },
+  'sololaki':   { label: 'Sololaki',            icon: '🌿' },
+  'avlabari':   { label: 'Avlabari',            icon: '⛪' },
+  'vera':       { label: 'Vera & Stamba',       icon: '☕' },
+  'chugureti':  { label: 'Chugureti & Fabrika', icon: '🏭' },
+  'mtatsminda': { label: 'Mtatsminda',          icon: '🎭' },
+  'vake':       { label: 'Vake',                icon: '🌲' },
+};
 const CL_STORIES = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
   church:'Church', market:'Market', soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature'
 };
 
 // Neighbourhood map bounds for zoom-to
-// NBHD_BOUNDS removed — zoom computed from circle radius
+const NBHD_BOUNDS = {
+  'old-town':   { lat:41.6895, lng:44.8100, zoom:16 },
+  'sololaki':   { lat:41.6920, lng:44.8040, zoom:16 },
+  'avlabari':   { lat:41.6920, lng:44.8190, zoom:16 },
+  'vera':       { lat:41.6990, lng:44.7960, zoom:15 },
+  'chugureti':  { lat:41.6890, lng:44.7990, zoom:15 },
+  'mtatsminda': { lat:41.6940, lng:44.7960, zoom:15 },
+  'vake':       { lat:41.7040, lng:44.7720, zoom:14 },
+};
 
 let storyPlaces = [], storyIdx = 0;
 
@@ -237,21 +219,3 @@ function openNbhdBar(){
     }
   });
 })();
-
-
-// ── iPhone Safari touch fix ──────────────────────────────────
-window.addEventListener('load', function() {
-  document.querySelectorAll('.nbhd-bubble').forEach(function(bubble) {
-    var startY = 0;
-    bubble.addEventListener('touchstart', function(e) {
-      startY = e.touches[0].clientY;
-    }, {passive:true});
-    bubble.addEventListener('touchend', function(e) {
-      var dy = Math.abs(e.changedTouches[0].clientY - startY);
-      if(dy > 10) return;
-      e.preventDefault();
-      var nbhd = bubble.id.replace('nbhd-','');
-      selectNbhd(nbhd, bubble);
-    }, {passive:false});
-  });
-});

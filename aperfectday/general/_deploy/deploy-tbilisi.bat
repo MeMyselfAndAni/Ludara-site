@@ -1,7 +1,7 @@
 @echo off
 SET ROOT=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site
 SET PLATFORM=%ROOT%\aperfectday\general\_platform-v2
-SET GUIDE=%ROOT%\aperfectday\wanderlush\tbilisi-offline
+SET GUIDE=%ROOT%\aperfectday\wanderlush\tbilisi
 
 echo Syncing platform files into tbilisi-offline...
 xcopy /Y "%PLATFORM%\map-core.js"        "%GUIDE%\" >nul
@@ -20,9 +20,9 @@ echo.
 echo Pushing to git...
 cd /d "%ROOT%"
 git add -A
-git commit -m "Update tbilisi-offline %DATE% %TIME%"
+git commit -m "Update tbilisi %DATE% %TIME%"
 git push
 
 echo.
-echo Done! Live at: ludara.ai/aperfectday/wanderlush/tbilisi-offline/
+echo Done! Live at: ludara.ai/aperfectday/wanderlush/tbilisi/
 pause

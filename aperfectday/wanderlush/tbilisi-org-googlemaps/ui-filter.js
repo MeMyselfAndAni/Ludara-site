@@ -3,9 +3,12 @@ function renderList(){
   const el=document.getElementById('places-list');
   let filtered;
 
+  // Saved filter mode — list ALWAYS shows ALL saved places; category pill only adds icons on map
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+    // Force re-read from localStorage — never trust stale in-memory array
     const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
     const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
+    // Nearest-neighbour sort if 2+ places
     let sorted = allSaved;
     if(allSaved.length >= 2){
       let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
@@ -18,6 +21,7 @@ function renderList(){
     document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
+    // Show/update the plan-trip banner
     let banner = document.getElementById('saved-mode-banner');
     if(!banner){
       const sheet = document.getElementById('sheet');
@@ -28,6 +32,10 @@ function renderList(){
         <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Full itinerary</button>`;
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
+    } else {
+      // Update text in case it was set with old wording
+      const span = banner.querySelector('span');
+      if(span) span.textContent = 'Interactive trip through your saved places';
     }
 
     el.innerHTML = allSaved.length === 0
@@ -46,9 +54,11 @@ function renderList(){
     return;
   }
 
+  // Remove saved banner if present
   const banner = document.getElementById('saved-mode-banner');
   if(banner) banner.remove();
 
+  // Intersection of type filter + neighbourhood filter
   filtered = PLACES.filter(p => {
     const catOk  = AF === 'all' || p.cat === AF;
     const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
@@ -57,7 +67,8 @@ function renderList(){
   });
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
-    // neighbourhood labels from NBHD_LABELS in guide's map.js
+    'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
+    'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
   }[ANF] || ANF) + ' · ' : '';
   document.getElementById('sheet-title').textContent = nbhdName + count + ' Places';
   document.getElementById('list-badge').textContent = count;
@@ -74,28 +85,44 @@ function renderList(){
       <span class="chevron">›</span>
     </div>`).join('');
 
+  // Lazy-load thumbnails from local images folder
   const imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   filtered.forEach(p=>{
     const thumb = document.getElementById(`thumb-${p.id}`);
     if(!thumb) return;
     const img = new Image();
-    img.onload = () => { thumb.innerHTML = `<img src="${imgBase}place-${p.id}.jpg" alt="${p.name}" loading="lazy">`; };
+    img.onload = () => {
+      thumb.innerHTML = `<img src="${imgBase}place-${p.id}.jpg" alt="${p.name}" loading="lazy">`;
+    };
+    // If local image missing, keep emoji placeholder — no API call
     img.src = imgBase + 'place-' + p.id + '.jpg';
   });
 }
 
+// ── DETAIL ────────────────────────────────────────────────────
+
+
+
+
+
+
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
+  // Reset card mode
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
+
+  // Close any open place card silently (no list re-open)
   const card = document.getElementById('place-card');
   if(card) card.classList.remove('open');
   const dim = document.getElementById('place-card-dim');
   if(dim) dim.classList.remove('open');
   AID = null;
 
+  // Toggle pill off if already active
   if(AF === cat && cat !== 'all') cat = 'all';
   AF = cat;
 
+  // Update pill states
   document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
   if(cat === 'all'){
     document.querySelector('.pill[onclick*="all"]')?.classList.add('active');
@@ -106,22 +133,24 @@ function fc(el,cat){
     document.getElementById('pill-saved').classList.add('active');
   }
 
+  // Update map markers
   applyFilters();
 
-  // Fit MapLibre map to visible places
+  // Fit map to visible places
   const vis = PLACES.filter(p=>(AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p)));
   if(vis.length && map){
-    const lngs = vis.map(p => p.lng), lats = vis.map(p => p.lat);
-    map.fitBounds(
-      [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
-      { padding: { top:120, bottom:100, left: window.innerWidth>=768?320:20, right:20 } }
-    );
+    const b = new google.maps.LatLngBounds();
+    vis.forEach(p=>b.extend({lat:p.lat,lng:p.lng}));
+    map.fitBounds(b,{top:120,right:20,bottom:100,left:window.innerWidth>=768?320:20});
   }
 
+  // On desktop open the sheet
   if(window.innerWidth >= 768){
     const s = document.getElementById('sheet');
     if(s && s.classList.contains('desktop-hidden')) openSheet();
   }
+
+  // Always force-render the list last
   renderList();
 }
 
@@ -129,7 +158,10 @@ function fc(el,cat){
 let userMarker = null;
 function locateMe(){
   const btn = document.getElementById('locate-btn');
-  if(!navigator.geolocation){ alert('Geolocation not supported.'); return; }
+  if(!navigator.geolocation){
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
   btn.classList.add('locating');
   navigator.geolocation.getCurrentPosition(
     pos => {
@@ -138,16 +170,30 @@ function locateMe(){
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      if(userMarker) userMarker.remove();
+      // Remove old marker
+      if(userMarker) userMarker.setMap(null);
 
-      const dotEl = document.createElement('div');
-      dotEl.innerHTML = '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>';
-      userMarker = new maplibregl.Marker({ element: dotEl, anchor: 'center' })
-        .setLngLat([lng, lat])
-        .addTo(map);
-      userMarker.setMap = function(m) { if(m === null) this.remove(); };
+      // Create pulsing dot via OverlayView
+      const dotDiv = document.createElement('div');
+      dotDiv.innerHTML = '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>';
 
-      map.panTo([lng, lat]);  // MapLibre: [lng, lat]
+      userMarker = new google.maps.marker.AdvancedMarkerElement
+        ? new google.maps.marker.AdvancedMarkerElement({
+            map, position:{lat,lng}, content: dotDiv.firstChild
+          })
+        : new google.maps.Marker({
+            map, position:{lat,lng},
+            icon:{
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 8, fillColor:'#1a3a5c', fillOpacity:1,
+              strokeColor:'white', strokeWeight:2.5
+            },
+            title:'You are here'
+          });
+
+      // Pan to location smoothly
+      map.panTo({lat, lng});
+      // Only zoom in if user is far zoomed out
       if(map.getZoom() < 14) map.setZoom(15);
     },
     err => {
@@ -158,6 +204,7 @@ function locateMe(){
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
+
 
 // ── SPLASH ────────────────────────────────────────────────────
 function closeSplash(){
@@ -173,23 +220,30 @@ function toggleOpenNow(el){
 }
 
 function isOpenNow(place){
-  if(!place.hours) return true;
+  if(!place.hours) return true; // no hours = assume open
   const h = place.hours.toLowerCase();
   if(h.includes('always') || h.includes('24 hour') || h.includes('open 24')) return true;
   const now = new Date();
-  const day = now.getDay();
+  const day = now.getDay(); // 0=Sun, 1=Mon...
   const mins = now.getHours() * 60 + now.getMinutes();
+  // Parse simple "HH:MM–HH:MM" patterns
   const match = h.match(/(\d{1,2}):(\d{2})\s*[–\-]\s*(\d{1,2}):(\d{2})/);
-  if(!match) return true;
-  const open  = parseInt(match[1])*60 + parseInt(match[2]);
+  if(!match) return true; // can't parse = assume open
+  const open = parseInt(match[1])*60 + parseInt(match[2]);
   const close = parseInt(match[3])*60 + parseInt(match[4]);
-  if(h.includes('mon–sat') || h.includes('mon-sat')){ if(day === 0) return false; }
-  if(h.includes('tue') && h.includes('sun')){ if(day === 1) return false; }
+  // Check closed days
+  if(h.includes('mon–sat') || h.includes('mon-sat')){
+    if(day === 0) return false; // closed Sunday
+  }
+  if(h.includes('tue') && h.includes('sun')){
+    if(day === 1) return false; // closed Monday
+  }
   return mins >= open && mins <= close;
 }
 
 function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+  // Read saved IDs directly from localStorage — never stale
   const savedIds = isSaved
     ? JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number)
     : null;
@@ -197,6 +251,8 @@ function applyFilters(){
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
+      // Saved mode: ignore neighbourhood filter — show ALL saved places
+      // plus any category pill matches (union)
       const inSaved = savedIds.includes(p.id);
       const inCat   = AF !== 'all' && p.cat === AF;
       visible = inSaved || inCat;
@@ -216,18 +272,27 @@ function applyFilters(){
 }
 function applyOpenNowFilter(){ applyFilters(); }
 
-// ── PIN PULSE — uses Leaflet projection ──────────────────────
+
+// ── PIN PULSE OVERLAY ─────────────────────────────────────────
 function updatePulse(place){
   const pulse = document.getElementById('pin-pulse');
-  if(!place || !map){ if(pulse) pulse.style.display='none'; return; }
-  try {
-    const pt = map.latLngToContainerPoint([place.lat, place.lng]);
-    pulse.style.display = 'block';
-    pulse.style.left = pt.x + 'px';
-    pulse.style.top  = pt.y + 'px';
-  } catch(e) {
-    if(pulse) pulse.style.display = 'none';
-  }
+  if(!place || !map){ pulse.style.display='none'; return; }
+  const proj = map.getProjection();
+  if(!proj){ pulse.style.display='none'; return; }
+  const bounds = map.getBounds();
+  if(!bounds){ pulse.style.display='none'; return; }
+  // Convert lat/lng to pixel position on the map div
+  const mapDiv = document.getElementById('map');
+  const ne = proj.fromLatLngToPoint(bounds.getNorthEast());
+  const sw = proj.fromLatLngToPoint(bounds.getSouthWest());
+  const scale = Math.pow(2, map.getZoom());
+  const pt = proj.fromLatLngToPoint(new google.maps.LatLng(place.lat, place.lng));
+  const x = (pt.x - sw.x) * scale;
+  const y = (pt.y - ne.y) * scale;
+  pulse.style.display = 'block';
+  pulse.style.left = x + 'px';
+  pulse.style.top  = y + 'px';
 }
 
-// ── NEIGHBOURHOOD STORIES ─────────────────────────────────────
+
+// ══ NEIGHBOURHOOD STORIES ════════════════════════════════════

@@ -70,8 +70,7 @@ function openDetail(id){
 
 // ── Neighbourhood list rendering ──────────────────────────────
 const NBHD_NAMES = {
-  'old-town':'Old Town','sololaki':'Sololaki','avlabari':'Avlabari',
-  'vera':'Vera','chugureti':'Chugureti','mtatsminda':'Mtatsminda','vake':'Vake'
+  // use NBHD_LABELS
 };
 
 function _renderNbhdList(nbhd){
@@ -118,15 +117,7 @@ function openNbhdCard(nbhd){
   if(!CARD_LIST.length){ alert('No places for this neighbourhood yet!'); return; }
   CARD_IDX = 0;
 
-  const NBHD_BOUNDS = {
-    'old-town':   {lat:41.6895,lng:44.8100,zoom:16},
-    'sololaki':   {lat:41.6920,lng:44.8040,zoom:16},
-    'avlabari':   {lat:41.6920,lng:44.8190,zoom:16},
-    'vera':       {lat:41.6990,lng:44.7960,zoom:15},
-    'chugureti':  {lat:41.6890,lng:44.7990,zoom:15},
-    'mtatsminda': {lat:41.6940,lng:44.7960,zoom:15},
-    'vake':       {lat:41.7040,lng:44.7720,zoom:14},
-  };
+  // NBHD_BOUNDS defined in guide-specific map.js
 
   // Dim non-neighbourhood markers
   PLACES.forEach(p => {
@@ -185,13 +176,13 @@ function _refreshNav(){
   const prev = document.getElementById('pc-nav-prev');
   const next = document.getElementById('pc-nav-next');
   const counter = document.getElementById('pc-counter');
-  prev.disabled = (CARD_IDX === 0);
-  next.disabled = (CARD_IDX === CARD_LIST.length - 1);
-  counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
+  if(prev){ prev.removeAttribute('disabled'); prev.style.display = 'flex'; }
+  if(next){ next.removeAttribute('disabled'); next.style.display = 'flex'; }
+  if(counter) counter.textContent = (CARD_IDX + 1) + ' / ' + CARD_LIST.length;
 }
 
-function cardPrev(){ if(CARD_IDX > 0) _showSlide(CARD_IDX - 1); }
-function cardNext(){ if(CARD_IDX < CARD_LIST.length - 1) _showSlide(CARD_IDX + 1); }
+function cardPrev(){ _showSlide((CARD_IDX - 1 + CARD_LIST.length) % CARD_LIST.length); }
+function cardNext(){ _showSlide((CARD_IDX + 1) % CARD_LIST.length); }
 
 function _activateMarker(p){
   if(AID && markers[AID]){
