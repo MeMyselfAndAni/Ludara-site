@@ -17,6 +17,7 @@ const MAP_ZOOM          = 12;
 const OFFLINE_CENTER    = { lat: 37.5640, lng: 126.9780 };
 const GUIDE_CITY        = 'Seoul';
 const BLOGGER_NAME      = 'Joe';
+const GUIDE_TIMEZONE    = 'Asia/Seoul';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 // ⚠️ REQUIRED — map-core.js throws "CC is not defined" without this

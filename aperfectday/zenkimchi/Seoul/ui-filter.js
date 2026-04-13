@@ -174,18 +174,59 @@ function toggleOpenNow(el){
 
 function isOpenNow(place){
   if(!place.hours) return true;
-  const h = place.hours.toLowerCase();
-  if(h.includes('always') || h.includes('24 hour') || h.includes('open 24')) return true;
-  const now = new Date();
-  const day = now.getDay();
+  const h = place.hours.toLowerCase().trim();
+  if(h.includes('always') || h.includes('24 hour') || h.includes('24/7') || h.includes('24h') || h.includes('open 24')) return true;
+
+  // Use guide city's local time — requires GUIDE_TIMEZONE constant in map.js
+  // e.g. const GUIDE_TIMEZONE = 'America/Chicago'; (New Orleans / Nashville)
+  //      const GUIDE_TIMEZONE = 'Europe/London';
+  //      const GUIDE_TIMEZONE = 'Asia/Bangkok';
+  const now = (typeof GUIDE_TIMEZONE !== 'undefined' && GUIDE_TIMEZONE)
+    ? new Date(new Date().toLocaleString('en-US', { timeZone: GUIDE_TIMEZONE }))
+    : new Date();
+  const day  = now.getDay(); // 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
   const mins = now.getHours() * 60 + now.getMinutes();
-  const match = h.match(/(\d{1,2}):(\d{2})\s*[–\-]\s*(\d{1,2}):(\d{2})/);
-  if(!match) return true;
-  const open  = parseInt(match[1])*60 + parseInt(match[2]);
-  const close = parseInt(match[3])*60 + parseInt(match[4]);
-  if(h.includes('mon–sat') || h.includes('mon-sat')){ if(day === 0) return false; }
-  if(h.includes('tue') && h.includes('sun')){ if(day === 1) return false; }
-  return mins >= open && mins <= close;
+
+  const DAY = { sun:0, mon:1, tue:2, wed:3, thu:4, fri:5, sat:6 };
+
+  // Handles wrap-around ranges e.g. Wed–Mon (excludes Tue)
+  function dayInRange(from, to){
+    const f = DAY[from], t = DAY[to];
+    if(f === undefined || t === undefined) return true;
+    return f <= t ? (day >= f && day <= t) : (day >= f || day <= t);
+  }
+
+  // Handles midnight-crossing e.g. 22:00–02:00
+  function timeInRange(seg){
+    const m = seg.match(/(\d{1,2}):(\d{2})\s*[–\-]\s*(\d{1,2}):(\d{2})/);
+    if(!m) return true;
+    const open  = +m[1]*60 + +m[2];
+    const close = +m[3]*60 + +m[4];
+    return close < open
+      ? (mins >= open || mins <= close)
+      : (mins >= open && mins <= close);
+  }
+
+  // Split on semicolons — handles "Mon–Fri 11:00–14:00; Daily 18:00–22:00" etc.
+  const segments = h.split(';').map(s => s.trim()).filter(Boolean);
+  let anyRecognised = false;
+
+  for(const seg of segments){
+    const isDaily    = /\bdaily\b/.test(seg);
+    const rangeMatch = seg.match(/\b(mon|tue|wed|thu|fri|sat|sun)[–\-](mon|tue|wed|thu|fri|sat|sun)\b/);
+    const singleMatch = !rangeMatch && seg.match(/\b(mon|tue|wed|thu|fri|sat|sun)\b/);
+
+    if(!isDaily && !rangeMatch && !singleMatch) continue;
+    anyRecognised = true;
+
+    const todayOk = isDaily
+      || (rangeMatch && dayInRange(rangeMatch[1], rangeMatch[2]))
+      || (singleMatch && day === DAY[singleMatch[1]]);
+
+    if(todayOk && timeInRange(seg)) return true;
+  }
+
+  return !anyRecognised; // unrecognised format → assume open; recognised but no match → closed
 }
 
 function applyFilters(){
