@@ -39,7 +39,7 @@ const PLACES = [
     search: 'Zócalo Plaza de la Constitución Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'One of the largest city squares in the world and the historic heart of Mexico City. The Zócalo has been the center of power since the Aztec city of Tenochtitlán. Today it is surrounded by the Metropolitan Cathedral, the Palacio Nacional, and the ruins of the Templo Mayor.',
-    hours: 'Open 24 hours',
+    hours: 'Open 24/7',
     tip: 'Arrive early on a weekday to see the square before the crowds gather.',
     type: 'Historic Main Plaza',
     blog: 'https://www.thecuriousmexican.com',
@@ -59,7 +59,7 @@ const PLACES = [
     search: 'Palacio Nacional Diego Rivera murals Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'Diego Rivera spent 27 years painting the murals on the grand staircase of the National Palace. They depict a sweeping visual history of Mexico from the Aztecs to the revolution. Entry is free with ID.',
-    hours: 'Tue–Sun 9am–5pm',
+    hours: 'Tue–Sun 09:00–17:00',
     tip: 'Entry is free with ID. Photography is allowed.',
     type: 'National Palace & Art Museum',
     blog: 'https://www.thecuriousmexican.com',
@@ -79,7 +79,7 @@ const PLACES = [
     search: 'Palacio de Bellas Artes Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'A stunning Art Nouveau and Art Deco building that took 30 years to build. Inside are murals by Diego Rivera, José Clemente Orozco, and David Alfaro Siqueiros. The building hosts the Ballet Folklórico and major opera performances.',
-    hours: 'Tue–Sun 10am–6pm',
+    hours: 'Tue–Sun 10:00–18:00',
     tip: 'The permanent murals are free to see. Check the schedule for ballet and opera performances.',
     type: 'Arts Palace & Museum',
     blog: 'https://www.thecuriousmexican.com',
@@ -99,7 +99,7 @@ const PLACES = [
     search: 'Templo Mayor Aztec ruins Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'The great Aztec double temple at the heart of Tenochtitlán, demolished by the Spanish in 1521 and rediscovered by electrical workers in 1978. One of the most significant archaeological finds of the 20th century. The museum next door houses the stone disc of the moon goddess Coyolxauhqui.',
-    hours: 'Tue–Sun 9am–5pm',
+    hours: 'Tue–Sun 09:00–17:00',
     tip: 'Budget at least 2 hours for the ruins and the museum. Entry is around 90 MXN.',
     type: 'Aztec Archaeological Site',
     blog: 'https://www.thecuriousmexican.com',
@@ -119,7 +119,7 @@ const PLACES = [
     search: 'Bósforo mezcal bar Centro Histórico Mexico City',
     // ✅ [A][B] exact — appears on every annual list
     note: 'A Mexico City staple in Centro Historico and still the best place to try different agave products from all over the country. Arrive early as it tends to be packed during the weekends.',
-    hours: 'Mon–Sat 1pm–11pm',
+    hours: 'Mon–Sat 13:00–23:00',
     tip: 'Arrive early as it tends to be packed during the weekends.',
     type: 'Legendary Mezcal Bar',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -139,7 +139,7 @@ const PLACES = [
     search: 'El Huequito tacos al pastor Centro Mexico City',
     // ⚠️ Place confirmed; no article with Anais's own description exists
     note: 'Tacos al pastor since 1959. The trompo of pastor spins in the window, shaved fresh onto handmade corn tortillas. One of the most consistent taco stops in Centro Histórico.',
-    hours: 'Daily 9am–midnight',
+    hours: 'Daily 09:00–00:00',
     tip: 'Multiple locations in the city. Stand at the street counter — that is the correct way. Cash only.',
     type: 'Tacos Al Pastor',
     blog: 'https://www.thecuriousmexican.com',
@@ -159,7 +159,7 @@ const PLACES = [
     search: 'La Lagunilla tianguis antiques flea market Mexico City',
     // ⚠️ [H] confirmed as one of Anais's featured markets; no detailed quote available
     note: 'One of the largest and most iconic Sunday tianguis in the city. Vendors sell vintage memorabilia, vinyl records, mid-century furniture, antiques, and street food. Open Sundays only.',
-    hours: 'Sundays 9am–4pm',
+    hours: 'Sun 09:00–16:00',
     tip: 'Come before noon for the best selection. Stay aware of your belongings in the crowds.',
     type: 'Sunday Flea Market & Tianguis',
     blog: 'https://www.thecuriousmexican.com/mexico-citys-markets/',
@@ -179,7 +179,7 @@ const PLACES = [
     search: 'Cantina La Opera Mexico City historic bar',
     // ⚠️ Confirmed CDMX institution; no article with Anais's own description
     note: 'One of the oldest cantinas in Mexico City, open since 1876. High ceilings, carved wooden booths, and Belle Époque décor. Classic cantina food: pozole, enchiladas, chile relleno. There is a bullet hole in the ceiling famously attributed to Pancho Villa.',
-    hours: 'Mon–Sat 1pm–11:30pm, Sun 1pm–7pm',
+    hours: 'Mon–Sat 13:00–23:30; Sun 13:00–19:00',
     tip: 'Sit in one of the old wooden booths for the full historic atmosphere.',
     type: 'Historic Belle Époque Cantina',
     blog: 'https://www.thecuriousmexican.com',
@@ -201,7 +201,7 @@ const PLACES = [
     search: 'Licorería Limantour cocktail bar Roma Norte Mexico City',
     // ✅ [D] exact
     note: 'The classic one. Avoid going to their brother spot in Polanco and just make your way down to Roma. Sit at the bar, talk to the tenders, have fun sipping on their extremely accurate suggestions.',
-    hours: 'Mon–Thu 1pm–1am, Fri–Sun 1pm–2am',
+    hours: 'Mon–Thu 13:00–01:00; Fri–Sun 13:00–02:00',
     tip: 'Sit at the bar and let the bartenders guide you. Regularly placed in the World\'s 50 Best Bars.',
     type: 'World-Class Cocktail Bar',
     blog: 'https://www.thecuriousmexican.com/favs2019/',
@@ -221,7 +221,7 @@ const PLACES = [
     search: 'Contramar seafood restaurant Roma Norte Mexico City',
     // ⚠️ Anais acknowledges it as a CDMX institution but intentionally doesn't write it up
     note: 'One of Mexico City\'s most iconic seafood restaurants. Famous for the tuna tostadas with chipotle mayo and avocado, and the red-and-green whole grilled fish. A CDMX institution you can find on every serious list — for good reason.',
-    hours: 'Daily 1pm–7pm',
+    hours: 'Daily 13:00–19:00',
     tip: 'Reserve in advance — walk-ins during peak Sunday hours can wait over an hour.',
     type: 'Iconic Mexican Seafood',
     blog: 'https://www.thecuriousmexican.com',
@@ -241,7 +241,7 @@ const PLACES = [
     search: 'Panadería Rosetta bakery Roma Norte Mexico City',
     // ⚠️ Confirmed CDMX essential; no article with Anais's own description
     note: 'Chef Elena Reygadas\' bakery in Roma Norte. The guava roll (rollo de guayaba) — a warm, buttery spiral pastry with sweet-tart guava filling — sells out every morning. Coffee is excellent. One of the most visited bakeries in the city.',
-    hours: 'Daily 7:30am–7pm',
+    hours: 'Daily 07:30–19:00',
     tip: 'Go early — the guava rolls sell out. The full Rosetta restaurant is around the corner for evening dining.',
     type: 'Legendary Bakery & Café',
     blog: 'https://www.thecuriousmexican.com',
@@ -261,7 +261,7 @@ const PLACES = [
     search: 'Expendio de Maíz Sin Nombre Michelin star Mexico City',
     // ✅ [A][B] exact
     note: 'Still at the head of my list, the ultimate Mexican Omakase: sit down, let them know food restrictions and be surprised by each dish that comes out of their beautiful, open kitchen. Remember they only take cash.',
-    hours: 'Tue–Sun 12pm–6pm (no reservations)',
+    hours: 'Tue–Sun 12:00–18:00',
     tip: 'No menu, no reservations — arrive when they open to avoid the queue. Cash only.',
     type: 'Michelin-Starred Corn Kitchen',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -281,7 +281,7 @@ const PLACES = [
     search: 'La Clandestina mezcal bar Roma Norte Mexico City',
     // ⚠️ Well-known mezcal bar; Anais has not published her own description
     note: 'One of the most established mezcal bars in Roma Norte, with a selection of around 40 artisanal mezcals from producers around the country. Knowledgeable staff, candlelit back rooms, and a menu of small plates to pair with your drinks.',
-    hours: 'Mon–Sat 1pm–midnight',
+    hours: 'Mon–Sat 13:00–00:00',
     tip: 'Ask the staff for guidance through the mezcal list — they know every bottle and producer.',
     type: 'Mezcal Bar',
     blog: 'https://www.thecuriousmexican.com/where-to-get-mezcal-when-in-mexico-city/',
@@ -301,7 +301,7 @@ const PLACES = [
     search: 'Parque México Condesa oval park Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'A wide, tree-canopied oval park with Art Deco fountains and sculptures. Ringed by extraordinary Art Deco apartment buildings from the 1930s and 40s. Sunday mornings here are a highlight of the Condesa neighborhood.',
-    hours: 'Open 24 hours',
+    hours: 'Open 24/7',
     tip: 'Walk the full oval on a Sunday morning with a coffee from a nearby café.',
     type: 'Art Deco Oval Park',
     blog: 'https://www.thecuriousmexican.com',
@@ -321,7 +321,7 @@ const PLACES = [
     search: 'Gin Chan sushi restaurant Roma Norte Mexico City',
     // ✅ [A] exact
     note: 'Often I\'m asked about the best sushi in town and for me this is it. Come sit at the bar to watch them work on your incredibly fresh food. The eel and foie nigiri is unmissable.',
-    hours: 'Tue–Sun 1:30pm–10:30pm',
+    hours: 'Tue–Sun 13:30–22:30',
     tip: 'Sit at the counter bar — watching the chefs work is part of the experience. Reserve ahead for evenings.',
     type: 'Omakase Sushi Bar',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -341,7 +341,7 @@ const PLACES = [
     search: 'Entonces entonces ramen restaurant Roma Norte Mexico City',
     // ⚠️ [A] confirmed on 2024 list; no detailed quote available
     note: 'A ramen restaurant in Roma Norte from the creators of Jametaro. Rich broths and a casual, warm setting. They also have an attached shop selling clothing and local design objects.',
-    hours: 'Wed–Mon 1pm–9:30pm',
+    hours: 'Wed–Mon 13:00–21:30',
     tip: 'Go hungry. The classic tonkotsu ramen is the order.',
     type: 'Ramen Restaurant',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -361,7 +361,7 @@ const PLACES = [
     search: 'Canton Mexicalli restaurant Roma Norte Mexico City Cachanilla',
     // ✅ [A] exact
     note: 'When Chinese immigrants were left out without a job after finishing railroads in the US, they ended up settling in Northern Mexico. They coined a new type of cuisine called Cachanilla, which is a mix of Chinese elements made with Mexican ingredients and techniques. This is the best spot in the city to get closer to this style of food.',
-    hours: 'Tue–Sun 1pm–9pm',
+    hours: 'Tue–Sun 13:00–21:00',
     tip: 'Come with a group so you can order as much of the menu as possible.',
     type: 'Cachanilla Cuisine (Chinese-Mexican)',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -381,7 +381,7 @@ const PLACES = [
     search: 'Loup Bar natural wine Roma Norte Mexico City',
     // ⚠️ [F] confirmed in her wine bars article; no direct quote available
     note: 'One of the first natural wine bars to open in Mexico City and still one of the best. A well-curated list of small-batch bottles from around Europe and Mexico. Good for a quiet evening of natural wine and small bites.',
-    hours: 'Tue–Sun 2pm–midnight',
+    hours: 'Tue–Sun 14:00–00:00',
     tip: 'Trust the staff\'s recommendations — they know the list deeply.',
     type: 'Natural Wine Bar',
     blog: 'https://www.thecuriousmexican.com/best-wine-bars-in-mexico-city/',
@@ -403,7 +403,7 @@ const PLACES = [
     search: 'Avenida Amsterdam Condesa oval boulevard Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'A wide tree-lined boulevard that traces a complete oval around the old Hipódromo horse racing track. Ringed by Art Deco apartment buildings, boutique cafés, and street food vendors. One full circuit takes about 15 minutes.',
-    hours: 'Open 24 hours',
+    hours: 'Open 24/7',
     tip: 'Start near Parque México and walk the full oval. The Art Deco apartment facades are worth photographing.',
     type: 'Art Deco Oval Boulevard',
     blog: 'https://www.thecuriousmexican.com',
@@ -423,7 +423,7 @@ const PLACES = [
     search: 'Baltra Bar cocktails Condesa Mexico City',
     // ✅ [C] exact
     note: 'Limantour\'s little darker sister located in Condesa has the best Martini nights on Tuesdays and a very laid back, cozy vibe. Get here early as it tends to get really busy at nights.',
-    hours: 'Wed–Mon 4pm–midnight',
+    hours: 'Wed–Mon 16:00–00:00',
     tip: 'Tuesday Martini nights are particularly popular. Get there early.',
     type: 'Creative Cocktail Bar',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2022/',
@@ -443,7 +443,7 @@ const PLACES = [
     search: 'Choza restaurant rooftop Condesa Mexico City Chef Tyler',
     // ✅ [C] exact
     note: 'Easily the one place I\'ve visited the most in the past year and a half. This hidden rooftop eatery is Chef Tyler\'s playground, where he gets to show off his wicked culinary skills (mostly inspired in Thai and Asian street food) with local, seasonal ingredients.',
-    hours: 'Wed–Sun from 2pm',
+    hours: 'Wed–Sun 14:00–22:00',
     tip: 'Reserve in advance — the space is intimate and fills quickly. No sign on the door; ring the bell.',
     type: 'Hidden Rooftop Restaurant',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2022/',
@@ -463,7 +463,7 @@ const PLACES = [
     search: 'Máximo Bistrot farm-to-table Roma Norte Mexico City',
     // ✅ [E] exact
     note: 'By far my favorite fancy eat in the city, my favorite chef with the best, seasonal, locally sourced food. The love and care Eduardo García puts into every dish is completely noticeable.',
-    hours: 'Tue–Sun 1pm–9pm',
+    hours: 'Tue–Sun 13:00–21:00',
     tip: 'Book in advance — consistently popular. Sunday brunch is a particularly special ritual.',
     type: 'Farm-to-Table Fine Dining',
     blog: 'https://www.thecuriousmexican.com/favs2018/',
@@ -483,7 +483,7 @@ const PLACES = [
     search: 'Mari Gold breakfast restaurant San Miguel Chapultepec Mexico City',
     // ✅ [A] exact
     note: 'I could\'ve easily written about Masala y Maíz, but the place is so good and so small that\'s quite hard to get a reso. But the next best thing, is just as good. Hidden away in San Miguel Chapultepec, this breakfast and lunch spot follows the same direction of combining Indian, African and Mexican techniques and ways of using ingredients. Please don\'t call it fusion.',
-    hours: 'Wed–Sun 9am–4pm',
+    hours: 'Wed–Sun 09:00–16:00',
     tip: 'Go for brunch on a weekday to avoid weekend queues.',
     type: 'Indian-African-Mexican Breakfast',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -503,7 +503,7 @@ const PLACES = [
     search: 'Parque España Condesa park Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'The smaller, quieter park of Condesa. Giant ficus trees create an extraordinary canopy. Surrounded by beautiful houses and low-key café terraces. Where Condesa residents run, walk their dogs, and live out their daily routines.',
-    hours: 'Open 24 hours',
+    hours: 'Open 24/7',
     tip: 'Walk between Parque España and Parque México — the route takes you through the heart of Condesa\'s best streets and architecture.',
     type: 'Neighborhood Park',
     blog: 'https://www.thecuriousmexican.com',
@@ -525,7 +525,7 @@ const PLACES = [
     search: 'Museo Nacional Antropología Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'The greatest museum in Mexico, housing an extraordinary collection of pre-Hispanic art and artifacts from the Aztec, Maya, Olmec, Toltec, and Zapotec civilizations. The famous Aztec Sun Stone is here. Budget a full half-day minimum.',
-    hours: 'Tue–Sun 9am–7pm',
+    hours: 'Tue–Sun 09:00–19:00',
     tip: 'Buy your ticket online to skip the queue. Audio guides are available and worth it.',
     type: 'World-Class Archaeological Museum',
     blog: 'https://www.thecuriousmexican.com',
@@ -545,7 +545,7 @@ const PLACES = [
     search: 'Bosque de Chapultepec park Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'Over 680 hectares of urban forest in the middle of one of the world\'s largest cities. The park contains multiple museums, a castle, a zoo, and lakes. It has been a sacred site for over a thousand years. On Sunday mornings it is one of the most joyful places in Mexico City.',
-    hours: 'Tue–Sun 5am–4:30pm',
+    hours: 'Tue–Sun 05:00–16:30',
     tip: 'Weekday mornings are calm and ideal for museum visits. Rent a rowboat on the lake.',
     type: 'Urban Forest & Park',
     blog: 'https://www.thecuriousmexican.com',
@@ -565,7 +565,7 @@ const PLACES = [
     search: 'Castillo de Chapultepec castle Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'Mexico\'s only royal castle, built on a hill in Chapultepec. Home to Emperor Maximilian and Empress Carlota in the 1860s, then served as the residence of presidents. The views of Mexico City from the terraces are among the best in the city.',
-    hours: 'Tue–Sun 9am–5pm',
+    hours: 'Tue–Sun 09:00–17:00',
     tip: 'The walk up the hill from the park entrance takes about 10 minutes. The terrace views and murals on Mexican history are the highlights.',
     type: 'Historic Royal Castle',
     blog: 'https://www.thecuriousmexican.com',
@@ -585,7 +585,7 @@ const PLACES = [
     search: 'Pujol restaurant Polanco Mexico City Enrique Olvera',
     // ⚠️ Anais acknowledges Pujol but intentionally excludes it from her lists
     note: 'Enrique Olvera\'s flagship restaurant, one of the most celebrated in the world and regularly on the World\'s 50 Best Restaurants list. The mole madre — a mole that has been cooking continuously since 2013 — is the centrepiece of the tasting menu. A Mexico City institution.',
-    hours: 'Mon–Sat 1:30pm–10pm',
+    hours: 'Mon–Sat 13:30–22:00',
     tip: 'Book months in advance for the dining room. The taco bar omakase is a slightly more accessible entry point.',
     type: 'World-Class Mexican Fine Dining',
     blog: 'https://www.thecuriousmexican.com',
@@ -605,7 +605,7 @@ const PLACES = [
     search: 'Quintonil restaurant Polanco Mexico City Jorge Vallejo',
     // ⚠️ Anais acknowledges Quintonil but intentionally excludes it from her lists
     note: 'Chef Jorge Vallejo\'s restaurant, deeply rooted in Mexican ingredients and techniques. Regularly in the World\'s 50 Best Restaurants. Known for revelatory vegetable dishes and precise use of Mexican insects. A landmark of contemporary Mexican haute cuisine.',
-    hours: 'Mon–Sat 1:30pm–10pm',
+    hours: 'Mon–Sat 13:30–22:00',
     tip: 'Book well in advance. The tasting menu shows the full range of the kitchen.',
     type: 'Contemporary Mexican Fine Dining',
     blog: 'https://www.thecuriousmexican.com',
@@ -627,7 +627,7 @@ const PLACES = [
     search: 'Museo Frida Kahlo Casa Azul Coyoacán Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'The cobalt-blue house where Frida Kahlo was born, spent most of her life, and died. Her personal belongings, clothing, corsets, medicines, and studio are preserved as she left them. One of the most visited museums in Mexico.',
-    hours: 'Tue–Sun 10am–5:30pm (Sat until 7:30pm)',
+    hours: 'Tue–Sun 10:00–17:30; Sat 10:00–19:30',
     tip: 'Book online in advance — it sells out completely on weekends. Tuesday or Wednesday mornings are the calmest.',
     type: 'Art Museum & Historic House',
     blog: 'https://www.thecuriousmexican.com',
@@ -647,7 +647,7 @@ const PLACES = [
     search: 'Jardín Centenario Coyoacán plaza Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'Two connected plazas at the heart of Coyoacán, lined with restaurants and cafés under flowering trees. This bohemian neighborhood still has the unhurried character of Frida Kahlo\'s era. A beautiful place for a long Sunday afternoon.',
-    hours: 'Open 24 hours',
+    hours: 'Open 24/7',
     tip: 'Weekends are lively but busy. Tuesday or Wednesday gives a calmer experience.',
     type: 'Historic Colonial Plazas',
     blog: 'https://www.thecuriousmexican.com',
@@ -667,7 +667,7 @@ const PLACES = [
     search: 'Mercado de Coyoacán market Mexico City',
     // ⚠️ [H] confirmed as one of Anais's featured markets; no detailed quote
     note: 'A bright, colorful covered market — one of the best in the city for visitors. Famous tostada vendors, a remarkable chile section, and artisan shops lining the surrounding streets. The third essential stop in a Coyoacán day after Frida\'s house and the plazas.',
-    hours: 'Daily 9am–7pm',
+    hours: 'Daily 09:00–19:00',
     tip: 'Start with the tostadas toward the back — tostadas de tinga, de ceviche, de pata.',
     type: 'Traditional Covered Market',
     blog: 'https://www.thecuriousmexican.com/mexico-citys-markets/',
@@ -687,7 +687,7 @@ const PLACES = [
     search: 'El Jarocho café olla Coyoacán Mexico City coffee',
     // ⚠️ Coyoacán institution; no article with Anais's own description
     note: 'A Coyoacán institution since 1953. Coffee brewed in a clay pot with cinnamon and piloncillo, handed through a small window in a paper cup. A couple of musicians in the corner, the smell of wood burning, and the taste of sweet café de olla — an absolute Mexico City staple.',
-    hours: 'Daily 6am–11pm',
+    hours: 'Daily 06:00–23:00',
     tip: 'Order the café de olla — brewed with cinnamon and piloncillo. Walk with your cup to the Jardín Centenario next door.',
     type: 'Historic Café de Olla Stand',
     blog: 'https://www.thecuriousmexican.com',
@@ -707,7 +707,7 @@ const PLACES = [
     search: 'Xochimilco trajineras floating gardens Mexico City',
     // ⚠️ Landmark — factual description only
     note: 'What remains of the ancient system of canals and floating gardens (chinampas) that fed the Aztec empire. Renting a trajinera and floating through the canals is one of the most uniquely Mexican experiences in this city. Other boats come alongside selling food, flowers, and music.',
-    hours: 'Daily 9am–6pm',
+    hours: 'Daily 09:00–18:00',
     tip: 'Sunday is the most vibrant day. Consider a guided tour to navigate the most interesting sections of the canal.',
     type: 'Ancient Chinampas Canal System',
     blog: 'https://www.thecuriousmexican.com',
@@ -729,7 +729,7 @@ const PLACES = [
     search: 'Handshake Speakeasy cocktail bar Juárez Mexico City',
     // ⚠️ Named World\'s Best Bar 2024; no article with Anais\'s own description
     note: 'Named World\'s Best Bar by 50 Best in 2024. A hidden speakeasy in Juárez with one of the most inventive cocktail menus in the city. The space is small — book ahead and skip coming with a large group.',
-    hours: 'Tue–Sun from 6pm',
+    hours: 'Tue–Sun 18:00–23:00',
     tip: 'Book ahead — the wait at the door without a reservation can be significant.',
     type: 'Creative Speakeasy Cocktail Bar',
     blog: 'https://www.thecuriousmexican.com',
@@ -749,7 +749,7 @@ const PLACES = [
     search: 'El Califa de León Michelin star taco Mexico City',
     // ⚠️ First Michelin-starred taco in Mexico; no article with Anais's own description
     note: 'In 2024 this became the first taco stand in Mexico to receive a Michelin star — operating from the same 10x10 foot counter since 1968. The menu is four things: Gaonera (filet mignon), bistec, chuleta, and costilla. You stand to eat. You pay in cash.',
-    hours: 'Mon–Sat 10am–3pm (or until sold out)',
+    hours: 'Mon–Sat 10:00–15:00',
     tip: 'Arrive early — it sells out and the post-Michelin lines are significant. Cash only. Order the Gaonera.',
     type: 'Michelin-Starred Taquería',
     blog: 'https://www.thecuriousmexican.com',
@@ -769,7 +769,7 @@ const PLACES = [
     search: 'Mariscos Orizaba seafood tostadas Juárez Mexico City',
     // ✅ [A] exact
     note: 'A tin stand on Liverpool street with incredibly good tostadas (and seafood dishes in general). Veracruz style dishes are served from 11am to sometime around 6pm. Their seafood tostadas are one of the best stops on our Juarez Highlights.',
-    hours: 'Mon–Sat 11am–6pm',
+    hours: 'Mon–Sat 11:00–18:00',
     tip: 'Order the mixed seafood tostada. A quick, standing meal — come hungry.',
     type: 'Seafood Tostada Stand',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -789,7 +789,7 @@ const PLACES = [
     search: 'Mixiote tacos street stand Juárez Mexico City',
     // ✅ [A] exact
     note: 'Been there since 1986 and still going strong. This street stand is only open Wednesday, Friday and Saturday and it\'s a must when visiting Juarez neighborhood.',
-    hours: 'Wed, Fri, Sat only — 10am–4pm (or sold out)',
+    hours: 'Wed 10:00–16:00; Fri 10:00–16:00; Sat 10:00–16:00',
     tip: 'Only open three days a week — plan your schedule around it. Arrive early because it sells out.',
     type: 'Traditional Mixiote Tacos',
     blog: 'https://www.thecuriousmexican.com/favorite-spots-2024/',
@@ -809,7 +809,7 @@ const PLACES = [
     search: 'Rimessa natural wine shop Roma Mexico City',
     // ✅ [F] exact — note: the ANAIS discount code is for Vinos Chidos, not Rimessa
     note: 'One of the most important Natural Wine suppliers in Mexico decided to finally open a shop in Mexico City. Rimessa is a cool little shop with bottles from all around the world and a small selection of Mexican options. Stay tuned to their socials since they have tons of tastings and pop-ups with different chefs.',
-    hours: 'Mon–Sat 12pm–9pm',
+    hours: 'Mon–Sat 12:00–21:00',
     tip: 'Ask the staff to help you choose. The shop hosts regular pop-up events with visiting chefs.',
     type: 'Natural Wine Shop',
     blog: 'https://www.thecuriousmexican.com/best-wine-bars-in-mexico-city/',
@@ -829,7 +829,7 @@ const PLACES = [
     search: 'Xaman Bar speakeasy cocktail Juárez Mexico City',
     // ✅ [D] exact
     note: 'A little bit of a hidden location. The whole concept will make you feel like you\'re entering a world of mysticism and magic. The drinks are also made with ingredients such as roots, flowers and other great spices. They have huge drinks made to share with your companion.',
-    hours: 'Tue–Sun from 6pm',
+    hours: 'Tue–Sun 18:00–23:00',
     tip: 'Check Google Maps — the entrance can be easy to walk past.',
     type: 'Bohemian Cocktail Speakeasy',
     blog: 'https://www.thecuriousmexican.com/favs2019/',
@@ -849,7 +849,7 @@ const PLACES = [
     search: 'Mercado Jamaica flower market Mexico City',
     // ⚠️ [H] confirmed as one of Anais's featured markets; no detailed quote
     note: 'The largest flower market in Mexico. Over 5,000 varieties of flowers sold every single day. A central hub for Día de Muertos preparations each November. The food court has excellent breakfasts. Come before 9am when the flower wholesalers are most active.',
-    hours: 'Daily 24 hours (flower market most active before 9am)',
+    hours: 'Open 24/7',
     tip: 'Come before 9am when the market is at its most extraordinary. The marigold sections in October–November are unmissable.',
     type: 'Wholesale Flower Market',
     blog: 'https://www.thecuriousmexican.com/mexico-citys-markets/',
