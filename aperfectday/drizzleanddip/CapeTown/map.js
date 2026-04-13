@@ -7,6 +7,7 @@ const MAP_ZOOM          = 11;
 const OFFLINE_CENTER    = { lat: -33.9249, lng: 18.4241 };
 const GUIDE_CITY        = 'Cape Town';
 const BLOGGER_NAME      = 'Sam';
+const GUIDE_TIMEZONE    = 'Africa/Johannesburg';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
