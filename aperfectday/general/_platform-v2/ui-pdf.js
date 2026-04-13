@@ -15,7 +15,7 @@ function generatePDF(){
 
   const totalM = places.reduce((sum, p, i) =>
     i < places.length-1 ? sum + haversineM(p, places[i+1]) : sum, 0);
-  const totalMins = Math.round(totalM / 80);
+  const totalMins = Math.round(totalM * 1.35 / 80);
 
   // Build HTML for each place card
   const cards = places.map((p, i) => {
