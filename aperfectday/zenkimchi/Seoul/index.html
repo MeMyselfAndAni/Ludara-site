@@ -9,54 +9,66 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — edit ONLY the active :root line to change all accent colors ──
-     Active:  :root { --brand: #c8102e ... }
-     Presets (uncomment to use):
-       Orange:     #e8724a  rgba(232,114,74,...)
-       Red:        #e8162a  rgba(232,22,42,...)
-       Blue:       #2a7de1  rgba(42,125,225,...)
-  ─────────────────────────────────────────────────────────── */
-  :root { --brand: #c8102e; --brand-faint: rgba(200,16,46,0.12); --brand-glow: rgba(200,16,46,0.3); }
+  /* ── BRAND COLOR — Korean red ── */
+  :root {
+    --brand: #c8102e;
+    --brand-faint: rgba(200,16,46,0.12);
+    --brand-glow: rgba(200,16,46,0.3);
+  }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
   .maplibregl-ctrl-attrib { font-size: 9px !important; }
+
+  /* Neighbourhood bubbles */
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
-  .pc-photo-img { object-fit: contain !important; background: #111 !important; }
-  .pc-photo-wrap { background: #111 !important; }
-  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
-  /* ── List scroll fix: ensure places-list fills and scrolls within sheet ── */
-  .sheet { display: flex !important; flex-direction: column !important; }
-  .places-list {
-    flex: 1 1 auto !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
-    max-height: none !important;
-    padding-bottom: 60px !important;
-  }
-  .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
-  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #c8102e) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #c8102e); }
-  .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-  .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
-  /* Card nav arrows — always symmetric, always fully visible */
-  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
-  .pc-btn-nav         { opacity: 1 !important; pointer-events: all !important; }
-  .pc-btn-nav.prev    { left: 14px; right: auto; }
-  .pc-btn-nav.next    { right: 14px; left: auto; }
 
-  /* ── Brand color overrides for platform styles (styles.css uses #e00040) ── */
-  .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
-  .pill-saved:hover                    { background: var(--brand-faint) !important; }
-  .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
-  .pill-saved-count                    { color: var(--brand) !important; }
-  .pill-saved.active .pill-saved-count { color: white !important; }
-  .saved-mode-banner                   { border-bottom-color: var(--brand) !important; color: var(--brand) !important; }
-  .saved-plan-btn                      { background: var(--brand) !important; }
-  .saved-plan-btn:hover                { filter: brightness(0.88); background: var(--brand) !important; }
-  .pc-btn-fav.faved                    { color: var(--brand) !important; }
-  /* Scroll hint — fade at bottom of card body */
+  /* Place card photos — full image, category gradient bg */
+  .pc-photo-img { object-fit: contain !important; }
+
+  /* Address line under place type */
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+
+  /* Saved/favourite buttons use brand colour */
+  .saved-action-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; border: none; margin: 4px; background: var(--brand); color: white;
+  }
+  .saved-action-pdf, .saved-action-map {
+    background: white; color: var(--brand); border: 1.5px solid var(--brand);
+  }
+  .pc-btn-fav.faved { color: var(--brand) !important; font-family: Arial !important; }
+  .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+
+  /* Nav buttons always visible */
+  .pc-btn-nav { display: flex !important; opacity: 1 !important; pointer-events: all !important; }
+  .pc-btn-nav.prev { left: 14px; right: auto; }
+  .pc-btn-nav.next { right: 14px; left: auto; }
+
+  /* ── Unified Saved Panel ── */
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
+  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
+  .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
+  .saved-stat-dot { opacity:0.4; }
+  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.88); }
+  /* Saved pill hover */
+  .pill-saved:hover { background: white !important; }
+  .pill-saved.active:hover { background: var(--brand) !important; }
+  /* Enlarged hearts */
+  .pc-btn-fav { font-size: 1.6rem !important; }
+  .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
+  #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
+
+  /* List scroll fix */
+  .sheet { display: flex !important; flex-direction: column !important; }
+  .places-list { flex: 1 1 auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; overscroll-behavior: contain !important; max-height: none !important; padding-bottom: 60px !important; }
+
+  /* Scroll hint at bottom of card body */
   #pc-body { position: relative; }
   #pc-body::after {
     content: ''; pointer-events: none;
@@ -65,43 +77,26 @@
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
   }
 
-  /* User location dot — red */
+  /* User location dot — brand red */
   .user-dot-inner {
     width: 14px !important; height: 14px !important; border-radius: 50% !important;
     background: var(--brand) !important; border: 2.5px solid white !important;
     box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
   }
-  .user-dot-outer {
-    width: 14px !important; height: 14px !important;
-  }
+  .user-dot-outer { width: 14px !important; height: 14px !important; }
 
+  /* Locate button active state */
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
 
-  /* ── Unified Saved Panel ── */
-  .pc-btn-fav { font-size: 1.6rem !important; }
-  .heart-icon { font-size: 1.3em; line-height: 1; }
-  #sheet-clear-btn { display:none; background:none; border:none; color:#aaa; font-size:0.75rem; cursor:pointer; padding:4px 8px; border-radius:8px; flex-shrink:0; margin-right:4px; }
-  #sheet-clear-btn:hover { color:#c00; }
-  .saved-stats-bar { display:flex; gap:14px; padding:10px 16px 8px; font-size:0.78rem; color:#666; border-bottom:1px solid #f0f0f0; flex-shrink:0; }
-  .saved-action-row { display:flex; gap:8px; padding:10px 12px; flex-shrink:0; border-bottom:1px solid #f0f0f0; }
-  .saved-action-row button { flex:1; padding:9px 4px; border:none; border-radius:10px; font-size:0.76rem; font-weight:600; cursor:pointer; background:var(--brand); color:white; font-family:inherit; }
-  .saved-action-row button:hover { filter:brightness(0.88); }
-  .saved-list-item { display:flex; align-items:center; gap:10px; padding:9px 14px; border-bottom:1px solid #f5f5f5; cursor:pointer; }
-  .saved-list-item:hover { background:#fafafa; }
-  .saved-list-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .saved-list-thumb { width:38px; height:38px; border-radius:8px; object-fit:cover; background:#eee; flex-shrink:0; }
-  .saved-list-info { flex:1; min-width:0; }
-  .saved-list-name { font-size:0.83rem; font-weight:600; color:#1a1a1a; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .saved-list-type { font-size:0.72rem; color:#999; }
-  .saved-list-remove { background:none; border:none; color:#ccc; font-size:1rem; cursor:pointer; padding:4px; flex-shrink:0; }
-  .saved-list-remove:hover { color:#e00; }
-  .saved-walk-connector { display:flex; align-items:center; gap:6px; padding:3px 14px 3px 46px; font-size:0.7rem; color:#aaa; }
-  /* Hide old platform saved banner — replaced by unified panel above */
-  .saved-mode-banner { display: none !important; }
-
+  /* Brand color overrides for platform styles */
+  .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
+  .saved-mode-banner                   { display: none !important; }
+  .saved-plan-btn                      { background: var(--brand) !important; }
+  .pc-btn-fav.faved                    { color: var(--brand) !important; }
 </style>
 
 <script>
-// Read brand color from CSS variable — keeps JS and CSS in sync
+// Brand color for JS map elements — keeps JS and CSS in sync
 var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
 </script>
 </head>
@@ -149,8 +144,8 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#e8724a"></span>Restaurants</button>
   <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#d4a043"></span>Chicken &amp; Bars</button>
   <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#6b9e6e"></span>Markets</button>
@@ -213,7 +208,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <span class="pc-photo-credit" id="pc-credit"></span>
     <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
     <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
-    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()"><span class="heart-icon">♡</span></button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
     <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
     <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
   </div>
@@ -250,6 +245,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <div class="trip-footer">
       <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
       <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
+      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
     </div>
   </div>
 </div>
@@ -287,7 +283,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">53 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllFavs()">Clear All</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -300,7 +296,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title">♥ Your Saved Places</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-value-props">
@@ -314,11 +310,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
-    <div class="saved-empty-hint">
-      <div class="saved-empty-icon">♡</div>
-      <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
-    </div>
+    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
   </div>
 </div>
 
@@ -328,7 +320,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <span class="desktop-list-count" id="desktop-list-count">53</span>
 </button>
 
-<!-- JS — load order is critical, do not reorder -->
+<!-- JS modules — load order is critical, do not reorder -->
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
@@ -341,230 +333,23 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
+<!-- Navigate in Google Maps using place search names -->
 <script>
-// ── UNIFIED SAVED PANEL ───────────────────────────────────────────
-// Strategy: intercept toggleSavedFilter directly + MutationObserver
-// safety net so our UI wins regardless of which platform version is deployed.
-
-function _isSavedModeActive() {
-  var pill = document.getElementById('pill-saved');
-  return pill && pill.classList.contains('active');
-}
-
-function _renderSavedContent() {
-  var list = document.getElementById('places-list');
-  if (!list) return;
-  // Already rendered our version — don't flicker
-  if (list.querySelector('.saved-stats-bar')) return;
-
+function openTripInMaps() {
   var ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var places = ids.map(function(id) { return PLACES.find(function(p) { return p.id === id; }); }).filter(Boolean);
-
-  list.innerHTML = '';
-
-  // Update sheet title + Clear All
-  var titleEl  = document.getElementById('sheet-title');
-  var clearBtn = document.getElementById('sheet-clear-btn');
-  if (titleEl) {
-    titleEl.textContent = places.length ? '♥ ' + places.length + ' Saved' : '♥ Saved';
-    titleEl.style.color = 'var(--brand)';
-    titleEl.style.fontWeight = '700';
-  }
-  if (clearBtn) clearBtn.style.display = places.length ? 'block' : 'none';
-
-  if (!places.length) {
-    list.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place to save it here.</div>';
-    return;
-  }
-
-  // Stats bar
-  var totalDist = 0;
-  for (var i = 1; i < places.length; i++) {
-    totalDist += _distM(places[i-1].lat, places[i-1].lng, places[i].lat, places[i].lng);
-  }
-  var walkMins = Math.round(totalDist / 80);
-  var statsBar = document.createElement('div');
-  statsBar.className = 'saved-stats-bar';
-  statsBar.innerHTML =
-    '<span>📍 ' + places.length + ' stops</span>' +
-    '<span>🚶 ~' + (walkMins < 60 ? walkMins + ' min' : Math.floor(walkMins/60) + 'h ' + (walkMins % 60) + 'min') + '</span>' +
-    '<span>📏 ' + (totalDist < 1000 ? Math.round(totalDist) + 'm' : (totalDist/1000).toFixed(1) + 'km') + '</span>';
-  list.appendChild(statsBar);
-
-  // Action buttons
-  var actionRow = document.createElement('div');
-  actionRow.className = 'saved-action-row';
-  actionRow.innerHTML =
-    '<button onclick="openTripInMaps()">🗺 Google Maps</button>' +
-    '<button onclick="generatePDF()">📄 PDF Guide</button>' +
-    '<button onclick="shareItinerary()">🔗 Share</button>';
-  list.appendChild(actionRow);
-
-  // Numbered place list with walk connectors
-  places.forEach(function(place, i) {
-    var item = document.createElement('div');
-    item.className = 'saved-list-item';
-    var imgPath = (typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg';
-    item.innerHTML =
-      '<div class="saved-list-num">' + (i + 1) + '</div>' +
-      '<img class="saved-list-thumb" src="' + imgPath + '" onerror="this.style.display=\'none\'">' +
-      '<div class="saved-list-info"><div class="saved-list-name">' + place.name + '</div>' +
-      '<div class="saved-list-type">' + (place.type || '') + '</div></div>' +
-      '<button class="saved-list-remove" title="Remove">✕</button>';
-    item.querySelector('.saved-list-remove').addEventListener('click', function(e) {
-      e.stopPropagation();
-      var cur = [];
-      try { cur = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(ex) {}
-      cur = cur.filter(function(x) { return x !== place.id; });
-      try { localStorage.setItem(FAVS_KEY, JSON.stringify(cur)); } catch(ex) {}
-      if (typeof updateFavUI === 'function') updateFavUI();
-      _renderSavedContent();
-    });
-    item.addEventListener('click', function(e) {
-      if (!e.target.closest('.saved-list-remove')) openDetail(place.id);
-    });
-    list.appendChild(item);
-
-    if (i < places.length - 1) {
-      var d = _distM(place.lat, place.lng, places[i + 1].lat, places[i + 1].lng);
-      var m = Math.round(d / 80);
-      var conn = document.createElement('div');
-      conn.className = 'saved-walk-connector';
-      conn.textContent = '🚶 ' + (m < 1 ? '< 1' : m) + ' min · ' + (d < 1000 ? Math.round(d) + 'm' : (d/1000).toFixed(1) + 'km');
-      list.appendChild(conn);
-    }
-  });
-}
-
-window.addEventListener('load', function() {
-
-  // 1. Intercept toggleSavedFilter — runs AFTER platform sets pill active class
-  var _origToggleSaved = window.toggleSavedFilter;
-  window.toggleSavedFilter = function(pill) {
-    if (_origToggleSaved) _origToggleSaved(pill);
-    setTimeout(function() {
-      if (_isSavedModeActive()) {
-        _renderSavedContent();
-      } else {
-        // Exiting saved mode — reset title
-        var titleEl = document.getElementById('sheet-title');
-        var clearBtn = document.getElementById('sheet-clear-btn');
-        if (titleEl) { titleEl.style.color = ''; titleEl.style.fontWeight = ''; }
-        if (clearBtn) clearBtn.style.display = 'none';
-      }
-    }, 0);
-  };
-
-  // 2. MutationObserver safety net — catches cases where platform
-  //    re-renders the list after our override (e.g. internal re-renders)
-  var _observing = false;
-  var list = document.getElementById('places-list');
-  if (list) {
-    new MutationObserver(function() {
-      if (_observing) return;
-      if (!_isSavedModeActive()) return;
-      if (list.querySelector('.saved-stats-bar')) return; // already ours
-      _observing = true;
-      requestAnimationFrame(function() {
-        _renderSavedContent();
-        _observing = false;
-      });
-    }).observe(list, { childList: true });
-  }
-
-  // 3. updateFavUI override — keeps fav count badge + title in sync
-  var _origUpdateFavUI = window.updateFavUI;
-  window.updateFavUI = function() {
-    if (_origUpdateFavUI) _origUpdateFavUI();
-    if (_isSavedModeActive()) {
-      // Re-render our panel so counts stay current
-      var savedStats = list && list.querySelector('.saved-stats-bar');
-      if (savedStats) _renderSavedContent(); // refresh counts
-    }
-  };
-
-  // 4. cardNext / cardPrev — use saved IDs when saved mode is active,
-  //    because our panel has no .place-row elements for the default logic
-  var _baseNext = window.cardNext;
-  var _basePrev = window.cardPrev;
-
-  function _savedPlaceIds() {
-    var ids = [];
-    try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-    return ids.filter(function(id) { return PLACES.find(function(p) { return p.id === id; }); });
-  }
-
-  function _cardCurrentId() {
-    var title = document.getElementById('pc-title');
-    if (!title) return null;
-    var name = title.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    return place ? place.id : null;
-  }
-
-  window.cardNext = function() {
-    if (!_isSavedModeActive()) { if (_baseNext) _baseNext(); return; }
-    var ids = _savedPlaceIds();
-    if (!ids.length) return;
-    var idx = ids.indexOf(_cardCurrentId());
-    openDetail(ids[(idx + 1) % ids.length]);
-  };
-
-  window.cardPrev = function() {
-    if (!_isSavedModeActive()) { if (_basePrev) _basePrev(); return; }
-    var ids = _savedPlaceIds();
-    if (!ids.length) return;
-    var idx = ids.indexOf(_cardCurrentId());
-    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
-  };
-});
-
-// ── SHARE ITINERARY ───────────────────────────────────────────────
-function shareItinerary() {
-  var ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  if (!ids.length) { alert('Save some places first.'); return; }
-  var url = window.location.origin + window.location.pathname + '?itinerary=' + ids.join(',');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(function() { alert('Link copied! Share it with anyone.'); });
-  } else {
-    var ta = document.createElement('textarea');
-    ta.value = url; ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    alert('Link copied! Share it with anyone.');
-  }
-}
-
-// ── URL READER: ?itinerary= auto-populates saved ─────────────────
-window.addEventListener('load', function() {
-  var params = new URLSearchParams(window.location.search);
-  var raw = params.get('itinerary');
-  if (!raw) return;
-  var ids = raw.split(',').map(Number).filter(Boolean);
-  if (!ids.length) return;
-  setTimeout(function() {
-    try { localStorage.setItem(FAVS_KEY, JSON.stringify(ids)); } catch(e) {}
-    if (typeof updateFavUI === 'function') updateFavUI();
-    var pill = document.getElementById('pill-saved');
-    if (pill && typeof toggleSavedFilter === 'function') toggleSavedFilter(pill);
-  }, 900);
-});
-
-// ── CLEAR ALL ─────────────────────────────────────────────────────
-function clearAllFavs() {
-  if (!confirm('Clear all saved places?')) return;
-  try { localStorage.setItem(FAVS_KEY, '[]'); } catch(e) {}
-  if (typeof updateFavUI === 'function') updateFavUI();
-  if (typeof renderList === 'function') renderList();
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
+  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+  var stops = places.map(function(p) { return encodeURIComponent(p.search || p.name + ', Seoul'); });
+  var url = stops.length === 1
+    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
+    : 'https://www.google.com/maps/dir/' + stops.join('/');
+  window.open(url, '_blank');
 }
 </script>
 
-
-
+<!-- Address display in place card -->
 <script>
-// Populate address on card open by watching pc-title changes
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   var addrEl  = document.getElementById('pc-address');
@@ -577,101 +362,74 @@ window.addEventListener('load', function() {
 });
 </script>
 
+<!-- Hide neighbourhood bubbles with no places -->
 <script>
-// SCENARIO 2: Open in Google Maps from Saved/Itinerary
-// → All saved places as named stops (not coordinates) so Google Maps shows labels
-// → No origin set — user sees stops and can drag to reorder before navigating
-function openTripInMaps() {
-  var ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-
-  if (places.length === 1) {
-    var q = encodeURIComponent(places[0].search || places[0].name + ', ' + GUIDE_CITY);
-    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
-    return;
-  }
-
-  // Use named searches (not coords) so each stop shows its label in Google Maps.
-  // No origin — user adds their starting point and reorders stops as they wish.
-  var stops = places.map(function(p) {
-    return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key || p.nbhd === bubble.id; }).length;
+    if (count === 0) bubble.style.display = 'none';
   });
-  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
-}
+});
 </script>
 
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
-
-
-
-
-<!-- ── NAVIGATE + DISTANCES ──────────────────────────────────── -->
 <script>
-// Haversine distance in metres
-function _distM(lat1, lng1, lat2, lng2) {
-  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
-  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
-  return R * 2 * Math.asin(Math.sqrt(a));
-}
-function _fmtDist(m) {
-  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
-}
+  window.addEventListener('load', initMap);
+</script>
 
-// SCENARIO 1: Navigate button on card
-// → Directions to this place only (from current location if known)
-// → Saved places shown as additional labeled pins via saddr/daddr trick
+<!-- ── Brand color for map elements (route line, numbered markers) ── -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
+  };
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
+  };
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = ['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() { if (typeof openDetail === 'function') openDetail(p.id); });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lng, p.lat]).addTo(map);
+      if (window.tripMarkers) tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- ── Navigate to place on Google Maps ── -->
+<script>
+function _distM(lat1,lng1,lat2,lng2){var R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180,a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return R*2*Math.asin(Math.sqrt(a));}
+function _fmtDist(m){return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km';}
+
 function navigateToPlace(destLat, destLng, destName) {
   var dest = destLat + ',' + destLng;
-  var url;
-
-  if (window._userLat && window._userLng) {
-    // Direct navigation: current location → destination
-    url = 'https://www.google.com/maps/dir/?api=1'
-      + '&origin=' + window._userLat + ',' + window._userLng
-      + '&destination=' + dest
-      + '&travelmode=walking';
-  } else {
-    url = 'https://www.google.com/maps/dir/?api=1'
-      + '&destination=' + dest
-      + '&travelmode=walking';
-  }
-
-  // Add saved places as extra stops so they appear as labeled pins on the map
-  // User can see them and optionally add them to the route in Google Maps
-  var favIds = [];
-  try { favIds = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var favPlaces = PLACES.filter(function(p) {
-    return favIds.includes(p.id) &&
-           (Math.abs(p.lat - destLat) > 0.0001 || Math.abs(p.lng - destLng) > 0.0001);
-  });
-  if (favPlaces.length > 0) {
-    // Append saved places as waypoints — they appear as labeled stops in Google Maps
-    // but since destination is already set, user decides if they want to route through them
-    var waypointNames = favPlaces.map(function(p) {
-      return encodeURIComponent(p.search || p.name + ', ' + GUIDE_CITY);
-    });
-    url += '&waypoints=' + waypointNames.join('|');
-  }
-
+  var url = window._userLat && window._userLng
+    ? 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking'
+    : 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
   window.open(url, '_blank');
 }
 
-// Wrap ui-filter.js locateMe to capture coordinates after it runs
 window.addEventListener('load', function() {
   var _origLocate = window.locateMe;
   window.locateMe = function() {
     _origLocate();
-    // After getCurrentPosition resolves, read the dot's position from the marker
-    // by watching for the user-dot to appear
     var attempts = 0;
     var poll = setInterval(function() {
-      var dot = document.querySelector('.user-dot-inner');
-      if (dot || attempts > 20) {
+      if (document.querySelector('.user-dot-inner') || attempts > 20) {
         clearInterval(poll);
-        // getCurrentPosition one-shot — get coords directly
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(pos) {
             window._userLat = pos.coords.latitude;
@@ -683,42 +441,29 @@ window.addEventListener('load', function() {
       attempts++;
     }, 300);
   };
-});
-
-// Add Navigate button to place card when it opens
-window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
     if (!place) return;
-
-    // Remove existing nav button
     var existing = document.getElementById('pc-nav-btn');
     if (existing) existing.remove();
-
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:' + BRAND_COLOR + ';border:1.5px solid ' + BRAND_COLOR + ';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    var distStr = '';
-    if (window._userLat && window._userLng) {
-      distStr = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away';
-    }
-    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
-    btn.onclick = function() { navigateToPlace(place.lat, place.lng, place.name); };
-
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+BRAND_COLOR+';border:1.5px solid '+BRAND_COLOR+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = (window._userLat && window._userLng) ? _fmtDist(_distM(window._userLat,window._userLng,place.lat,place.lng))+' away' : '';
+    btn.innerHTML = '🚶 Navigate on Google Maps'+(distStr?'  <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· '+distStr+'</span>':'')+'';
+    btn.onclick = function() { navigateToPlace(place.lat,place.lng,place.name); };
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 
-// Update distance badges on list items
-// ui-filter.js renders: <div class="place-row" id="row-N">...<div class="place-name">...</div>...
 function updateListDistances() {
   if (!window._userLat) return;
   PLACES.forEach(function(place) {
-    var row = document.getElementById('row-' + place.id);
+    var row = document.getElementById('row-'+place.id);
     if (!row) return;
     var badge = row.querySelector('.dist-badge');
     if (!badge) {
@@ -728,232 +473,57 @@ function updateListDistances() {
       var nameEl = row.querySelector('.place-name');
       if (nameEl) nameEl.appendChild(badge);
     }
-    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+    badge.textContent = _fmtDist(_distM(window._userLat,window._userLng,place.lat,place.lng));
   });
 }
-
-// Re-run after every list render
 window.addEventListener('load', function() {
   var list = document.getElementById('places-list');
   if (!list) return;
-  new MutationObserver(function() {
-    if (window._userLat) updateListDistances();
-  }).observe(list, { childList: true, subtree: false });
+  new MutationObserver(function() { if (window._userLat) updateListDistances(); }).observe(list, { childList: true, subtree: false });
 });
 </script>
 
-
-
+<!-- ── Offline route detection ── -->
 <script>
-// ── Brand color for map elements — reads from CSS variable ───
 window.addEventListener('load', function() {
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-
-  // 1. Intercept initMapSources (called inside map.on('load') in map.js)
-  //    Wrap it to recolor the trip-route-line immediately after creation
-  var _origInitMapSources = window.initMapSources;
-  window.initMapSources = function() {
-    if (_origInitMapSources) _origInitMapSources();
-    if (map && map.getLayer('trip-route-line')) {
-      map.setPaintProperty('trip-route-line', 'line-color', brand);
-    }
-  };
-
-  // 2. Intercept _ensureRouteLayer (called by drawSavedRoute each time)
-  var _origEnsure = window._ensureRouteLayer;
-  window._ensureRouteLayer = function() {
-    if (_origEnsure) _origEnsure();
-    if (map && map.getLayer('trip-route-line')) {
-      map.setPaintProperty('trip-route-line', 'line-color', brand);
-    }
-  };
-
-  // 3. Completely replace _addNumberedMarkers with brand-colored version
-  window._addNumberedMarkers = function(places) {
-    places.forEach(function(p, i) {
-      var el = document.createElement('div');
-      el.style.cssText = [
-        'width:26px', 'height:26px', 'border-radius:50%',
-        'background:' + brand,
-        'border:2.5px solid white',
-        'color:white', 'font-size:0.68rem', 'font-weight:700',
-        'display:flex', 'align-items:center', 'justify-content:center',
-        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
-        'font-family:sans-serif',
-        'z-index:' + (9000 + i)
-      ].join(';');
-      el.textContent = i + 1;
-      el.style.cursor = 'pointer';
-      el.addEventListener('click', function() {
-        if (typeof openDetail === 'function') openDetail(p.id);
-      });
-      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
-        .setLngLat([p.lng, p.lat]).addTo(map);
-      if (window.tripMarkers) tripMarkers.push(marker);
-    });
-  };
-});
-</script>
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
-
-
-<script>
-// Hide neighbourhood bubbles that have no places
-window.addEventListener('load', function() {
-  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
-    if (bubble.id === 'nbhd-all') return;
-    var key = bubble.id.replace('nbhd-', '');
-    var count = PLACES.filter(function(p) { return p.nbhd === key || p.nbhd === bubble.id; }).length;
-    if (count === 0) bubble.style.display = 'none';
-  });
-});
-</script>
-
-
-
-
-
-<script>
-// Offline route detection — wraps planFavTrip and drawSavedRoute
-// to show a clear message instead of silently spinning when offline.
-window.addEventListener('load', function() {
-
-  // Wrap planFavTrip (Full Itinerary button)
+  function _showOfflineRouteMsg() {
+    var existing = document.getElementById('offline-route-msg');
+    if (existing) existing.remove();
+    var backdrop = document.createElement('div');
+    backdrop.id = 'offline-route-msg';
+    backdrop.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:20px';
+    var card = document.createElement('div');
+    card.style.cssText = 'background:white;border-radius:20px;padding:28px 24px 22px;max-width:300px;width:100%;text-align:center;font-family:sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative';
+    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
+    card.innerHTML = '<div style="width:52px;height:52px;border-radius:50%;background:'+brand+'1a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>'+'<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px">Walking routes need a connection</div>'+'<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">Connect to WiFi or mobile data to plan your route.<br>All places, your saved list, and your location still work offline.</div>'+'<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;background:'+brand+';color:white;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:sans-serif">Got it</button>';
+    backdrop.appendChild(card);
+    document.body.appendChild(backdrop);
+    document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
+    backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
+    setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
+  }
   var _origPlanFavTrip = window.planFavTrip;
-  window.planFavTrip = function() {
-    if (!navigator.onLine) {
-      _showOfflineRouteMsg();
-      return;
-    }
-    if (_origPlanFavTrip) _origPlanFavTrip();
-  };
-
-  // Wrap drawSavedRoute (called internally when route is drawn)
+  window.planFavTrip = function() { if (!navigator.onLine) { _showOfflineRouteMsg(); return; } if (_origPlanFavTrip) _origPlanFavTrip(); };
   var _origDrawSavedRoute = window.drawSavedRoute;
-  window.drawSavedRoute = function() {
-    if (!navigator.onLine) {
-      _showOfflineRouteMsg();
-      return;
-    }
-    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
-  };
-
+  window.drawSavedRoute = function() { if (!navigator.onLine) { _showOfflineRouteMsg(); return; } if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments); };
 });
-
-function _showOfflineRouteMsg() {
-  var existing = document.getElementById('offline-route-msg');
-  if (existing) existing.remove();
-
-  // Backdrop
-  var backdrop = document.createElement('div');
-  backdrop.id = 'offline-route-msg';
-  backdrop.style.cssText = [
-    'position:fixed', 'inset:0', 'z-index:99999',
-    'display:flex', 'align-items:center', 'justify-content:center',
-    'background:rgba(0,0,0,0.45)', 'backdrop-filter:blur(2px)',
-    '-webkit-backdrop-filter:blur(2px)', 'padding:20px'
-  ].join(';');
-
-  // Card
-  var card = document.createElement('div');
-  card.style.cssText = [
-    'background:white', 'border-radius:20px',
-    'padding:28px 24px 22px', 'max-width:300px', 'width:100%',
-    'text-align:center', 'font-family:sans-serif',
-    'box-shadow:0 20px 60px rgba(0,0,0,0.25)',
-    'position:relative', 'animation:_offlineIn 0.2s ease'
-  ].join(';');
-
-  // Inject keyframe once
-  if (!document.getElementById('_offlineKF')) {
-    var s = document.createElement('style');
-    s.id = '_offlineKF';
-    s.textContent = '@keyframes _offlineIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}';
-    document.head.appendChild(s);
-  }
-
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-
-  card.innerHTML =
-    '<div style="width:52px;height:52px;border-radius:50%;background:' + brand + '1a;' +
-    'display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>' +
-    '<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.3">' +
-    'Walking routes need a connection</div>' +
-    '<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">' +
-    'Connect to WiFi or mobile data to plan your route.<br>' +
-    'All places, your saved list, and your location still work offline.' +
-    '</div>' +
-    '<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;' +
-    'background:' + brand + ';color:white;font-size:0.88rem;font-weight:600;' +
-    'cursor:pointer;font-family:sans-serif">Got it</button>';
-
-  backdrop.appendChild(card);
-  document.body.appendChild(backdrop);
-
-  document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
-  backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
-  setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
-}
 </script>
 
-
+<!-- ── Card swipe + looping navigation ── -->
 <script>
-// ── Card swipe + looping ──────────────────────────────────────────
-// Reads current place from card title, finds it in the visible filtered
-// list, navigates with modulo wrapping — never gets stuck at ends.
 window.addEventListener('load', function() {
-
-  function _filteredIds() {
-    return Array.from(document.querySelectorAll('.place-row'))
-      .map(function(r) { return parseInt(r.id.replace('row-', '')); })
-      .filter(function(id) { return !isNaN(id); });
-  }
-
-  function _currentId() {
-    var title = document.getElementById('pc-title');
-    if (!title) return null;
-    var name = title.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    return place ? place.id : null;
-  }
-
-  // Replace cardNext with looping version
-  window.cardNext = function() {
-    var ids = _filteredIds();
-    if (!ids.length) return;
-    var cur = _currentId();
-    var idx = ids.indexOf(cur);
-    openDetail(ids[(idx + 1) % ids.length]);
-  };
-
-  // Replace cardPrev with looping version
-  window.cardPrev = function() {
-    var ids = _filteredIds();
-    if (!ids.length) return;
-    var cur = _currentId();
-    var idx = ids.indexOf(cur);
-    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
-  };
-
-  // Swipe on photo area triggers the same looping navigation
+  function _filteredIds() { return Array.from(document.querySelectorAll('.place-row')).map(function(r){return parseInt(r.id.replace('row-',''));}).filter(function(id){return !isNaN(id);}); }
+  function _currentId() { var title=document.getElementById('pc-title'); if(!title) return null; var name=title.textContent.trim(); var place=PLACES.find(function(p){return p.name===name;}); return place?place.id:null; }
+  window.cardNext = function() { var ids=_filteredIds(); if(!ids.length) return; var cur=_currentId(); openDetail(ids[(ids.indexOf(cur)+1)%ids.length]); };
+  window.cardPrev = function() { var ids=_filteredIds(); if(!ids.length) return; var cur=_currentId(); openDetail(ids[(ids.indexOf(cur)-1+ids.length)%ids.length]); };
   var wrap = document.getElementById('pc-photo-wrap');
   if (!wrap) return;
-  var tx = 0, ty = 0;
-  wrap.addEventListener('touchstart', function(e) {
-    tx = e.touches[0].clientX;
-    ty = e.touches[0].clientY;
-  }, { passive: true });
-  wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - tx;
-    var dy = e.changedTouches[0].clientY - ty;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx < 0) { cardNext(); } else { cardPrev(); }
-    }
-  }, { passive: true });
+  var tx=0,ty=0;
+  wrap.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+  wrap.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0){cardNext();}else{cardPrev();}}},{passive:true});
 });
 
-// ── Service Worker registration ───────────────────────────────────
-// Register on first page load so offline works without tapping "Save offline".
+// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js', { scope: './' })
@@ -963,8 +533,185 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<!-- ── SHARE ITINERARY & URL READER ── -->
 <script>
-  window.addEventListener('load', initMap);
+function shareItinerary() {
+  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
+  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      _toast('🔗 Link copied! Paste it in an email or message.', 4000);
+    }).catch(function() { _fallbackCopy(url); });
+  } else { _fallbackCopy(url); }
+}
+function _fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
+  document.body.removeChild(ta);
+}
+window.addEventListener('load', function() {
+  var params = new URLSearchParams(window.location.search);
+  var itinerary = params.get('itinerary');
+  if (!itinerary) return;
+  var ids = itinerary.split(',').map(Number).filter(Boolean);
+  if (!ids.length) return;
+  setTimeout(function() {
+    try {
+      favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
+      saveFavs();
+      var pill = document.getElementById('pill-saved');
+      if (pill && !savedFilterActive) toggleSavedFilter(pill);
+    } catch(e) { console.warn('Itinerary load error:', e); }
+  }, 900);
+});
+</script>
+
+<!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
+<script>
+function clearAllSaved() {
+  if (!favourites || favourites.length === 0) return;
+  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
+  favourites = [];
+  saveFavs();
+  clearTripRoute();
+  var pill = document.getElementById('pill-saved');
+  if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
+  if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
+}
+
+(function() {
+  var _origRenderList = window.renderList;
+  window.renderList = function() {
+    var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+    if (!isSaved) {
+      if (typeof clearTripRoute === 'function') clearTripRoute();
+      var sheetClearBtn = document.getElementById('sheet-clear-btn');
+      if (sheetClearBtn) sheetClearBtn.style.display = 'none';
+      var t = document.getElementById('sheet-title');
+      if (t) { t.style.color = ''; t.style.fontWeight = ''; }
+      if (_origRenderList) _origRenderList();
+      return;
+    }
+
+    var rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
+    var places = rawFavs.map(function(id) {
+      return PLACES.find(function(p) { return p.id === id || p.id === +id; });
+    }).filter(Boolean);
+
+    if (places.length >= 2) {
+      var pool = places.slice().sort(function(a,b){ return a.lng - b.lng; });
+      var out = [pool.shift()];
+      while (pool.length) {
+        var last = out[out.length-1], bi=0, bd=Infinity;
+        pool.forEach(function(p,i){ var d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} });
+        out.push(pool.splice(bi,1)[0]);
+      }
+      places = out;
+    }
+
+    var titleEl = document.getElementById('sheet-title');
+    if (titleEl) {
+      titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Saved' : 'Saved Places') + '</span>';
+    }
+    var badge = document.getElementById('list-badge');
+    if (badge) badge.textContent = places.length;
+    var sheetClearBtn = document.getElementById('sheet-clear-btn');
+    if (sheetClearBtn) sheetClearBtn.style.display = places.length > 0 ? 'inline-block' : 'none';
+    var oldBanner = document.getElementById('saved-mode-banner');
+    if (oldBanner) oldBanner.remove();
+
+    var listEl = document.getElementById('places-list');
+    if (!listEl) return;
+
+    if (places.length === 0) {
+      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>';
+      return;
+    }
+
+    var distM = 0;
+    for (var i = 1; i < places.length; i++) {
+      if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+      else distM += _distM(places[i-1].lat, places[i-1].lng, places[i].lat, places[i].lng);
+    }
+    var walkMins = Math.round(distM * 1.35 / 80);
+    function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
+
+    var html =
+      '<div class="saved-stats-bar" style="display:flex">' +
+        '<span>' + places.length + (places.length===1?' stop':' stops') + '</span>' +
+        '<span class="saved-stat-dot">·</span>' +
+        '<span id="saved-stat-walk-sheet">🚶 ' + fmtTime(walkMins) + '</span>' +
+        '<span class="saved-stat-dot">·</span>' +
+        '<span>📏 ' + (distM/1000).toFixed(1) + ' km</span>' +
+      '</div>' +
+      '<div style="display:flex;padding:8px 10px;gap:5px;">' +
+        '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
+        '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
+        '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
+      '</div>';
+
+    places.forEach(function(p, i) {
+      html +=
+        '<div class="place-row ' + (p.id===AID?'active':'') + '" onclick="openDetail(' + p.id + ')" id="row-' + p.id + '">' +
+          '<div class="saved-item-num">' + (i+1) + '</div>' +
+          '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
+          '<div class="place-info">' +
+            '<div class="place-name">' + p.name + '</div>' +
+            '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
+            '<div class="place-addr">' + (p.address||'')+'</div>' +
+          '</div>' +
+          '<span class="chevron">›</span>' +
+        '</div>';
+      if (i < places.length - 1) {
+        html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
+      }
+    });
+
+    listEl.innerHTML = html;
+
+    var imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
+    places.forEach(function(p) {
+      var thumb = document.getElementById('thumb-' + p.id);
+      if (!thumb) return;
+      if (window.photoCache && photoCache[p.id] && photoCache[p.id].url) {
+        thumb.innerHTML = '<img src="' + photoCache[p.id].url + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
+        return;
+      }
+      var img = new Image();
+      img.onload = function() {
+        if (thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
+      };
+      img.src = imgBase + 'place-' + p.id + '.jpg';
+    });
+
+    if (places.length >= 2 && typeof _fetchRouteStats === 'function' && navigator.onLine) {
+      _fetchRouteStats(places).then(function(stats) {
+        var walkEl = document.getElementById('saved-stat-walk-sheet');
+        if (walkEl) walkEl.textContent = '🚶 ' + fmtTime(stats.walkMins);
+        if (stats.legMins) {
+          stats.legMins.forEach(function(mins, i) {
+            var conn = document.getElementById('saved-conn-' + i);
+            if (conn) conn.textContent = '↓ ~' + mins + ' min walk';
+          });
+        }
+      }).catch(function(){});
+    }
+  };
+
+  var _origUpdateFavUI = window.updateFavUI;
+  window.updateFavUI = function() {
+    if (_origUpdateFavUI) _origUpdateFavUI();
+    var pill = document.getElementById('pill-saved');
+    if (pill) {
+      var heartSpan = pill.querySelector('.heart-icon');
+      if (heartSpan) heartSpan.textContent = (typeof favourites !== 'undefined' && favourites.length > 0) ? '♥' : '♡';
+    }
+    var btn = document.getElementById('sheet-clear-btn');
+    if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
+  };
+})();
 </script>
 
 </body>
