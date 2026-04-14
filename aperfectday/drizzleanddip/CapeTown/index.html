@@ -11,7 +11,7 @@
 <style>
   /* ── BRAND COLOR — edit ONLY the active :root line ── */
   /* Orange: #e8724a | Red: #e8162a | Blue: #2a7de1     */
-  :root { --brand: #d4611f; --brand-faint: rgba(212,97,31,0.12); --brand-glow: rgba(212,97,31,0.3); }
+  :root { --brand: #c0392b; --brand-faint: rgba(192,57,43,0.12); --brand-glow: rgba(192,57,43,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
@@ -27,6 +27,10 @@
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+  /* Saved panel — scrollable */
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
+
   /* ── List scroll fix ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
@@ -91,7 +95,7 @@
 
 <script>
 // Read brand color from CSS — keeps JS and CSS in sync
-var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#d4611f';
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c0392b';
 </script>
 </head>
 <body>
@@ -138,8 +142,8 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#e8724a"></span>Fine Dining</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#f0c060"></span>Restaurants</button>
   <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Bars &amp; Cafés</button>
@@ -737,7 +741,7 @@ window.addEventListener('load', function() {
         '<span>📏 ' + (distM/1000).toFixed(1) + ' km</span>' +
       '</div>' +
       '<div style="display:flex;padding:8px 10px;gap:5px;">' +
-        '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Maps</button>' +
+        '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
         '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
         '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
         '<button onclick="clearAllSaved()" style="flex:0;padding:9px 10px;border-radius:12px;border:1.5px solid #c0392b;background:white;color:#c0392b;cursor:pointer;font-size:0.85rem;" title="Clear all">🗑</button>' +
