@@ -22,16 +22,17 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 
   /* Place card photos */
-  .pc-photo-img { object-fit: cover !important; object-position: center 70% !important; }
-  .pc-photo-wrap { background: #111 !important; min-height: 280px !important; }
+  .pc-photo-img { object-fit: cover !important; object-position: center 70% !important; transform: scale(1.35); transform-origin: center 70%; }
+  .pc-photo-wrap { background: #111 !important; overflow: hidden !important; min-height: 280px !important; }
   #place-card .pc-photo-wrap { height: 52vw !important; max-height: 320px !important; min-height: 220px !important; }
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
-  /* Enlarged hearts */
+  /* Enlarged hearts — only the ♡/♥ character, not surrounding text */
   .pc-btn-fav { font-size: 1.6rem !important; }
-  .pill-saved { font-size: 1.1rem !important; letter-spacing: 0.01em; }
-  #saved-panel-count { font-size: 1.1rem !important; }
+  .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
+  #saved-panel-count { color: var(--brand) !important; font-weight: 700; }
+  #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
   .saved-panel { display:flex !important; flex-direction:column !important; }
   #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
 
@@ -146,7 +147,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#e8724a"></span>Fine Dining</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#f0c060"></span>Restaurants</button>
@@ -291,7 +292,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title">♥ Your Saved Places</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-value-props">
@@ -718,7 +719,7 @@ window.addEventListener('load', function() {
 
     // Update sheet header
     var titleEl = document.getElementById('sheet-title');
-    if (titleEl) titleEl.textContent = places.length > 0 ? '♥ ' + places.length + ' Saved' : '♥ Saved Places';
+    if (titleEl) titleEl.innerHTML = places.length > 0 ? '<span class="heart-icon">♥</span> ' + places.length + ' Saved' : '<span class="heart-icon">♥</span> Your Saved Places';
     var badge = document.getElementById('list-badge');
     if (badge) badge.textContent = places.length;
 
@@ -838,6 +839,12 @@ window.addEventListener('load', function() {
 var _origUpdateFavUI = window.updateFavUI;
 window.updateFavUI = function() {
   if (_origUpdateFavUI) _origUpdateFavUI();
+  // Update heart character in pill (span-wrapped, not text node)
+  var pill = document.getElementById('pill-saved');
+  if (pill) {
+    var heartSpan = pill.querySelector('.heart-icon');
+    if (heartSpan) heartSpan.textContent = (typeof favourites !== 'undefined' && favourites.length > 0) ? '♥' : '♡';
+  }
   var btn = document.getElementById('sheet-clear-btn');
   if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
 };
