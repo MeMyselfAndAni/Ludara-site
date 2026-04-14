@@ -102,8 +102,14 @@ function fc(el,cat){
   } else {
     el.classList.add('active');
   }
+  // Deactivate Saved when any category filter is clicked
+  const savedPill = document.getElementById('pill-saved');
+  if(savedPill) savedPill.classList.remove('active');
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
-    document.getElementById('pill-saved').classList.add('active');
+    savedFilterActive = false;
+    if(typeof clearTripRoute === 'function') clearTripRoute();
+    const banner = document.getElementById('saved-mode-banner');
+    if(banner) banner.remove();
   }
 
   applyFilters();
