@@ -11,7 +11,7 @@
 <style>
   /* ── BRAND COLOR — edit ONLY the active :root line ── */
   /* Orange: #e8724a | Red: #e8162a | Blue: #2a7de1     */
-  :root { --brand: #c0392b; --brand-faint: rgba(192,57,43,0.12); --brand-glow: rgba(192,57,43,0.3); }
+  :root { --brand: #f64f2d; --brand-faint: rgba(246,79,45,0.12); --brand-glow: rgba(246,79,45,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
@@ -95,7 +95,7 @@
 
 <script>
 // Read brand color from CSS — keeps JS and CSS in sync
-var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c0392b';
+var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#f64f2d';
 </script>
 </head>
 <body>
@@ -518,7 +518,7 @@ window.addEventListener('load', function() {
       });
       var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat([p.lng, p.lat]).addTo(map);
-      if (window.tripMarkers) tripMarkers.push(marker);
+      tripMarkers.push(marker);
     });
   };
 });
@@ -685,7 +685,12 @@ window.addEventListener('load', function() {
 
   window.renderList = function() {
     var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
-    if (!isSaved) { if (_origRenderList) _origRenderList(); return; }
+    if (!isSaved) {
+      // Ensure route and numbered markers are cleared when leaving saved mode
+      if (typeof clearTripRoute === 'function') clearTripRoute();
+      if (_origRenderList) _origRenderList();
+      return;
+    }
 
     // Sort saved places (nearest-neighbour)
     var rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
@@ -744,7 +749,7 @@ window.addEventListener('load', function() {
         '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
         '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
         '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
-        '<button onclick="clearAllSaved()" style="flex:0;padding:9px 10px;border-radius:12px;border:1.5px solid #c0392b;background:white;color:#c0392b;cursor:pointer;font-size:0.85rem;" title="Clear all">🗑</button>' +
+        '<button onclick="clearAllSaved()" style="flex:0;padding:9px 12px;border-radius:12px;border:1.5px solid #c0392b;background:white;color:#c0392b;cursor:pointer;font-size:0.72rem;font-weight:700;" title="Clear all saved places">🗑 Clear</button>' +
       '</div>';
 
     places.forEach(function(p, i) {
