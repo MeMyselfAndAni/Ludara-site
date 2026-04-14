@@ -22,8 +22,8 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 
   /* Place card photos */
-  .pc-photo-img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center 60% !important; display: block !important; }
-  .pc-photo-wrap { background: #111 !important; overflow: hidden !important; min-height: 300px !important; }
+  .pc-photo-img { width: 100% !important; height: 100% !important; object-fit: contain !important; object-position: center center !important; display: block !important; }
+  .pc-photo-wrap { overflow: hidden !important; }
   #place-card .pc-photo-wrap { height: 65vw !important; max-height: 420px !important; min-height: 280px !important; }
 
   /* Address line under place type */
@@ -59,7 +59,8 @@
 
   /* ── Brand color overrides — platform styles.css uses #e00040 ── */
   .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
-  .pill-saved:hover                    { background: transparent !important; }
+  .pill-saved:hover                    { background: white !important; }
+  .pill-saved.active:hover             { background: var(--brand) !important; }
   .pill-saved.active                   { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
   .pill-saved-count                    { color: var(--brand) !important; }
   .pill-saved.active .pill-saved-count { color: white !important; }
