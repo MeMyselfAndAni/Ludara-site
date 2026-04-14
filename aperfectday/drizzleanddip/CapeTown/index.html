@@ -28,7 +28,10 @@
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
-  /* Saved panel — scrollable */
+  /* Enlarged hearts */
+  .pc-btn-fav { font-size: 1.6rem !important; }
+  .pill-saved { font-size: 1.1rem !important; letter-spacing: 0.01em; }
+  #saved-panel-count { font-size: 1.1rem !important; }
   .saved-panel { display:flex !important; flex-direction:column !important; }
   #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
 
@@ -65,7 +68,7 @@
   .pc-btn-fav.faved                    { color: var(--brand) !important; }
   .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
   .saved-action-btn:hover { filter:brightness(0.88); }
-  .saved-action-pdf, .saved-action-share { background:white; color:var(--brand); border:1.5px solid var(--brand); }
+  .saved-action-pdf, .saved-action-share { background:var(--brand); color:white; border:none; }
   .saved-action-maps { background:var(--brand); color:white; }
 
   /* Unified saved panel elements */
