@@ -63,27 +63,13 @@
   .saved-action-pdf, .saved-action-share { background:white; color:var(--brand); border:1.5px solid var(--brand); }
   .saved-action-maps { background:var(--brand); color:white; }
 
-  /* Unified saved panel header */
-  .saved-header-btns { display:flex; align-items:center; gap:6px; }
-  .saved-clear-icon-btn { background:none; border:none; font-size:1rem; cursor:pointer; padding:4px 6px; border-radius:6px; opacity:0.6; transition:opacity 0.15s; }
-  .saved-clear-icon-btn:hover { opacity:1; }
-
-  /* Stats bar */
+  /* Unified saved panel elements */
+  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
   .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
   .saved-stat-dot { opacity:0.4; }
-
-  /* Place items in unified panel */
-  .saved-item { display:flex; align-items:center; gap:10px; padding:10px 14px; cursor:pointer; border-bottom:1px solid #f0f0f0; transition:background 0.12s; }
-  .saved-item:hover { background:#fafafa; }
-  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .saved-item-thumb { width:44px; height:44px; border-radius:8px; object-fit:cover; background:#eee; flex-shrink:0; }
-  .saved-item-thumb-placeholder { width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,#e8724a,#c05030); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
-  .saved-item-info { flex:1; min-width:0; }
-  .saved-item-name { font-size:0.82rem; font-weight:700; color:#1a1a1a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .saved-item-meta { font-size:0.68rem; color:#888; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .saved-item-remove { background:none; border:none; font-size:1rem; cursor:pointer; color:#ccc; padding:4px; flex-shrink:0; transition:color 0.12s; }
-  .saved-item-remove:hover { color:#e00; }
-  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; }
+  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
+  .saved-action-clear { background:white; color:#c0392b; border:1.5px solid #c0392b; }
+  .trip-share-btn { background:white; color:var(--brand); border:1.5px solid var(--brand); }
 
   /* Scroll hint — fade at bottom of card body */
   #pc-body { position: relative; }
@@ -152,8 +138,8 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)">♡ Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#e8724a"></span>Fine Dining</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#f0c060"></span>Restaurants</button>
   <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Bars &amp; Cafés</button>
@@ -295,37 +281,26 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
-  <!-- Header -->
   <div class="saved-panel-header">
-    <div class="saved-panel-title" id="saved-panel-count">♥ Your Saved Places</div>
-    <div class="saved-header-btns">
-      <button class="saved-clear-icon-btn" id="saved-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none">🗑</button>
-      <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
-    </div>
+    <div class="saved-panel-title">♥ Your Saved Places</div>
+    <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
-
-  <!-- Stats bar — shown when places saved -->
-  <div class="saved-stats-bar" id="saved-stats-bar" style="display:none">
-    <span id="saved-stat-stops"></span>
-    <span class="saved-stat-dot">·</span>
-    <span id="saved-stat-walk"></span>
-    <span class="saved-stat-dot">·</span>
-    <span id="saved-stat-dist"></span>
+  <div class="saved-value-props">
+    <div class="saved-vp"><span class="saved-vp-icon">🗺</span><div><div class="saved-vp-title">Walking Route</div><div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your journey</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">🖼</span><div><div class="saved-vp-title">Map Screenshot</div><div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div></div></div>
   </div>
-
-  <!-- Action buttons — shown when places saved -->
-  <div class="saved-panel-actions" id="saved-panel-actions" style="display:none">
-    <button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()">🗺 Google Maps</button>
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
     <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
-    <button class="saved-action-btn saved-action-share" onclick="shareItinerary()">🔗 Share</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+    <button class="saved-action-btn saved-action-clear" onclick="clearAllSaved()">🗑 Clear All</button>
   </div>
-
-  <!-- Place list — scrollable, populated by renderUnifiedSavedPanel() -->
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">♡</div>
       <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or share your itinerary.</div>
+      <div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or save the map for offline use.</div>
     </div>
   </div>
 </div>
@@ -642,25 +617,48 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', initMap);
 </script>
 
-<!-- ── SHARE ITINERARY & URL READER ── -->
+<!-- ── SHARE ITINERARY, CLEAR ALL & URL READER ── -->
 <script>
+// Share — encodes current saved places into URL and copies to clipboard
 function shareItinerary() {
-  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
-  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
+  if (!favourites || favourites.length === 0) {
+    _toast('Save some places first ♡');
+    return;
+  }
+  const url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(function() {
       _toast('🔗 Link copied! Paste it in an email or message.', 4000);
     }).catch(function() { _fallbackCopy(url); });
-  } else { _fallbackCopy(url); }
+  } else {
+    _fallbackCopy(url);
+  }
 }
+
 function _fallbackCopy(text) {
   var ta = document.createElement('textarea');
-  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
-  document.body.appendChild(ta); ta.focus(); ta.select();
-  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy manually: ' + text, 6000); }
   document.body.removeChild(ta);
 }
-// URL reader — auto-populate Saved from ?itinerary= param
+
+// Clear All — wipes saved places after confirmation
+function clearAllSaved() {
+  if (!favourites || favourites.length === 0) return;
+  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
+  favourites = [];
+  saveFavs();
+  clearTripRoute();
+  // Deactivate saved filter if active
+  var pill = document.getElementById('pill-saved');
+  if (savedFilterActive && pill) toggleSavedFilter(pill);
+  _toast('Saved places cleared.', 2500);
+}
+
+// URL reader — on load, check for ?itinerary= and pre-populate Saved
 window.addEventListener('load', function() {
   var params = new URLSearchParams(window.location.search);
   var itinerary = params.get('itinerary');
@@ -671,134 +669,130 @@ window.addEventListener('load', function() {
     try {
       favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
       saveFavs();
+      // Activate Saved filter so guest sees their itinerary immediately
       var pill = document.getElementById('pill-saved');
       if (pill && !savedFilterActive) toggleSavedFilter(pill);
     } catch(e) { console.warn('Itinerary load error:', e); }
   }, 900);
 });
-</script>
+// ── UNIFIED SAVED PANEL — overrides renderList() in saved mode ──
+(function() {
+  var _origRenderList = window.renderList;
 
-<!-- ── UNIFIED SAVED PANEL RENDERER ── -->
-<script>
-// Renders the unified saved panel: stats, actions and place list
-function renderUnifiedSavedPanel() {
-  var places = getSortedFavPlaces ? getSortedFavPlaces() : (favourites || []).map(function(id){ return PLACES.find(function(p){ return p.id===id; }); }).filter(Boolean);
+  window.renderList = function() {
+    var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+    if (!isSaved) { if (_origRenderList) _origRenderList(); return; }
 
-  var countEl   = document.getElementById('saved-panel-count');
-  var statsBar  = document.getElementById('saved-stats-bar');
-  var actionsEl = document.getElementById('saved-panel-actions');
-  var listEl    = document.getElementById('saved-place-list');
-  var clearBtn  = document.getElementById('saved-clear-btn');
+    // Sort saved places (nearest-neighbour)
+    var rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
+    var places = rawFavs.map(function(id) {
+      return PLACES.find(function(p) { return p.id === id || p.id === +id; });
+    }).filter(Boolean);
 
-  // Update header count
-  if (countEl) countEl.textContent = places.length > 0 ? '♥ ' + places.length + ' Saved' : '♥ Your Saved Places';
+    if (places.length >= 2) {
+      var pool = places.slice().sort(function(a,b){ return a.lng - b.lng; });
+      var out = [pool.shift()];
+      while (pool.length) {
+        var last = out[out.length-1], bi=0, bd=Infinity;
+        pool.forEach(function(p,i){ var d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} });
+        out.push(pool.splice(bi,1)[0]);
+      }
+      places = out;
+    }
 
-  // Show/hide clear button
-  if (clearBtn) clearBtn.style.display = places.length > 0 ? 'inline-flex' : 'none';
+    // Update sheet header
+    var titleEl = document.getElementById('sheet-title');
+    if (titleEl) titleEl.textContent = places.length > 0 ? '♥ ' + places.length + ' Saved' : '♥ Saved Places';
+    var badge = document.getElementById('list-badge');
+    if (badge) badge.textContent = places.length;
 
-  if (places.length === 0) {
-    if (statsBar)  statsBar.style.display  = 'none';
-    if (actionsEl) actionsEl.style.display = 'none';
-    if (listEl) listEl.innerHTML = '<div class="saved-empty-hint"><div class="saved-empty-icon">♡</div><div class="saved-empty-title">No saved places yet</div><div class="saved-empty-body">Tap ♡ on any place to save it here — then plan your route, download a PDF guide, or share your itinerary.</div></div>';
-    return;
-  }
+    // Remove old banner
+    var oldBanner = document.getElementById('saved-mode-banner');
+    if (oldBanner) oldBanner.remove();
 
-  // Show stats and actions
-  if (statsBar)  statsBar.style.display  = 'flex';
-  if (actionsEl) actionsEl.style.display = 'flex';
+    var listEl = document.getElementById('places-list');
+    if (!listEl) return;
 
-  // Quick haversine stats (updates to OSRM below)
-  var distM = 0;
-  for (var i = 1; i < places.length; i++) {
-    if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
-  }
-  var walkMins = Math.round(distM * 1.35 / 80);
-  _updateSavedStats(places.length, walkMins, distM);
+    if (places.length === 0) {
+      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>';
+      return;
+    }
 
-  // Fetch OSRM async for accurate time
-  if (typeof _fetchRouteStats === 'function' && navigator.onLine) {
-    _fetchRouteStats(places).then(function(stats) {
-      _updateSavedStats(places.length, stats.walkMins, stats.distM);
-      _savedLegMins = stats.legMins;
-      _renderSavedList(places, stats.legMins);
-    }).catch(function(){ _renderSavedList(places, null); });
-  } else {
-    _renderSavedList(places, null);
-  }
-}
+    // Quick haversine stats
+    var distM = 0;
+    for (var i = 1; i < places.length; i++) {
+      if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+    }
+    var walkMins = Math.round(distM * 1.35 / 80);
 
-var _savedLegMins = null;
+    function fmtWalk(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60)+'m'; }
 
-function _updateSavedStats(count, walkMins, distM) {
-  var stopsEl = document.getElementById('saved-stat-stops');
-  var walkEl  = document.getElementById('saved-stat-walk');
-  var distEl  = document.getElementById('saved-stat-dist');
-  if (stopsEl) stopsEl.textContent = count + (count === 1 ? ' stop' : ' stops');
-  if (walkEl)  walkEl.textContent  = '🚶 ' + (walkMins < 60 ? '~' + walkMins + 'm' : '~' + Math.floor(walkMins/60) + 'h ' + (walkMins%60) + 'm');
-  if (distEl)  distEl.textContent  = '📏 ' + (distM/1000).toFixed(1) + ' km';
-}
-
-function _renderSavedList(places, legMins) {
-  var listEl = document.getElementById('saved-place-list');
-  if (!listEl) return;
-  var html = '';
-  places.forEach(function(p, i) {
-    var thumb = (window.photoCache && photoCache[p.id] && photoCache[p.id].url)
-      ? '<img class="saved-item-thumb" src="' + photoCache[p.id].url + '" alt="" onerror="this.style.display=\'none\'">'
-      : '<div class="saved-item-thumb-placeholder">' + (p.emoji || '📍') + '</div>';
-    html += '<div class="saved-item" onclick="if(typeof openDetail===\'function\')openDetail(' + p.id + ')">' +
-      '<div class="saved-item-num">' + (i+1) + '</div>' +
-      thumb +
-      '<div class="saved-item-info">' +
-        '<div class="saved-item-name">' + p.name + '</div>' +
-        '<div class="saved-item-meta">' + (p.address || (typeof CL !== 'undefined' && CL[p.cat] ? CL[p.cat] : p.cat)) + '</div>' +
+    // Render stats + actions + place list
+    var html =
+      '<div class="saved-stats-bar" style="display:flex">' +
+        '<span>' + places.length + (places.length===1?' stop':' stops') + '</span>' +
+        '<span class="saved-stat-dot">·</span>' +
+        '<span id="saved-stat-walk-sheet">🚶 ' + fmtWalk(walkMins) + '</span>' +
+        '<span class="saved-stat-dot">·</span>' +
+        '<span>📏 ' + (distM/1000).toFixed(1) + ' km</span>' +
       '</div>' +
-      '<button class="saved-item-remove" onclick="event.stopPropagation();removeFav(event,' + p.id + ');renderUnifiedSavedPanel();" title="Remove">✕</button>' +
-    '</div>';
-    if (i < places.length - 1) {
-      var mins = legMins ? legMins[i] : null;
-      html += '<div class="saved-walk-connector">' + (mins ? '↓ ~' + mins + ' min walk' : '↓') + '</div>';
+      '<div style="display:flex;padding:8px 10px;gap:5px;">' +
+        '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Maps</button>' +
+        '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
+        '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
+        '<button onclick="clearAllSaved()" style="flex:0;padding:9px 10px;border-radius:12px;border:1.5px solid #c0392b;background:white;color:#c0392b;cursor:pointer;font-size:0.85rem;" title="Clear all">🗑</button>' +
+      '</div>';
+
+    places.forEach(function(p, i) {
+      html +=
+        '<div class="place-row ' + (p.id===AID?'active':'') + '" onclick="openDetail(' + p.id + ')" id="row-' + p.id + '">' +
+          '<div class="saved-item-num">' + (i+1) + '</div>' +
+          '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
+          '<div class="place-info">' +
+            '<div class="place-name">' + p.name + '</div>' +
+            '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
+            '<div class="place-addr">' + (p.address||'') + '</div>' +
+          '</div>' +
+          '<span class="chevron">›</span>' +
+        '</div>';
+      if (i < places.length - 1) {
+        html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
+      }
+    });
+
+    listEl.innerHTML = html;
+
+    // Load thumbnails
+    var imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
+    places.forEach(function(p) {
+      var thumb = document.getElementById('thumb-' + p.id);
+      if (!thumb) return;
+      if (window.photoCache && photoCache[p.id] && photoCache[p.id].url) {
+        thumb.innerHTML = '<img src="' + photoCache[p.id].url + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
+        return;
+      }
+      var img = new Image();
+      img.onload = function() {
+        if (thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
+      };
+      img.src = imgBase + 'place-' + p.id + '.jpg';
+    });
+
+    // Update walk times async with OSRM
+    if (places.length >= 2 && typeof _fetchRouteStats === 'function' && navigator.onLine) {
+      _fetchRouteStats(places).then(function(stats) {
+        var walkEl = document.getElementById('saved-stat-walk-sheet');
+        if (walkEl) walkEl.textContent = '🚶 ' + fmtWalk(stats.walkMins);
+        if (stats.legMins) {
+          stats.legMins.forEach(function(mins, i) {
+            var conn = document.getElementById('saved-conn-' + i);
+            if (conn) conn.textContent = '↓ ~' + mins + ' min walk';
+          });
+        }
+      }).catch(function(){});
     }
-  });
-  listEl.innerHTML = html;
-}
-
-// Hook into saveFavs to re-render panel when favourites change
-var _origSaveFavs = window.saveFavs;
-window.saveFavs = function() {
-  if (_origSaveFavs) _origSaveFavs();
-  if (document.getElementById('saved-panel') &&
-      document.getElementById('saved-panel').classList.contains('open')) {
-    renderUnifiedSavedPanel();
-  }
-};
-
-// Hook into toggleSavedFilter to render panel when opened
-var _origToggleSaved = window.toggleSavedFilter;
-window.toggleSavedFilter = function(el) {
-  if (_origToggleSaved) _origToggleSaved(el);
-  setTimeout(function() {
-    if (document.getElementById('saved-panel') &&
-        document.getElementById('saved-panel').classList.contains('open')) {
-      renderUnifiedSavedPanel();
-    }
-  }, 50);
-};
-
-// Updated clearAllSaved
-function clearAllSaved() {
-  if (!favourites || favourites.length === 0) return;
-  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
-  favourites = [];
-  if (typeof saveFavs === 'function') saveFavs();
-  if (typeof clearTripRoute === 'function') clearTripRoute();
-  var pill = document.getElementById('pill-saved');
-  if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) {
-    if (typeof toggleSavedFilter === 'function') toggleSavedFilter(pill);
-  }
-  renderUnifiedSavedPanel();
-  if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
-}
+  };
+})();
 </script>
 
 </body>
