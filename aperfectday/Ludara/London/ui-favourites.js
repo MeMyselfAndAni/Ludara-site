@@ -79,9 +79,6 @@ function toggleSavedFilter(el){
   if(allBtn) allBtn.classList.add('nbhd-active');
 
   if(savedFilterActive){
-    // Deactivate all category pills when Saved is turned on
-    document.querySelectorAll('.pill:not(.pill-saved):not(.pill-opennow)').forEach(p=>p.classList.remove('active'));
-    if(typeof AF !== 'undefined') AF = 'all';
     if(favourites.length === 0){
       savedFilterActive = false; el.classList.remove('active');
       _toast('Tap ♡ on any place to save it here.');
@@ -339,5 +336,56 @@ function removeFav(e,id){
   handle.addEventListener('touchmove',  e=>{ doDrag(e.touches[0].clientY); e.preventDefault(); }, {passive:false});
   handle.addEventListener('touchend',   endDrag, {passive:true});
 })();
+
+// ── ROUTE STATS — used by ui-pdf.js and unified saved panel ──
+// Fetches walking time + distance via OSRM, falls back to haversine
+let _lastRouteStats = null;
+
+function _fetchRouteStats(places) {
+  return new Promise(function(resolve) {
+    if (!places || places.length < 2) {
+      return resolve({ walkMins: 0, distM: 0, legMins: [] });
+    }
+
+    function _hav(a, b) {
+      const R = 6371000, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
+      const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+      return 2*R*Math.asin(Math.sqrt(h));
+    }
+
+    function fallback() {
+      let distM = 0;
+      const legMins = [];
+      for (let i = 1; i < places.length; i++) {
+        const d = _hav(places[i-1], places[i]);
+        distM += d;
+        legMins.push(Math.round(d * 1.35 / 80));
+      }
+      resolve({ walkMins: Math.round(distM * 1.35 / 80), distM, legMins });
+    }
+
+    if (!navigator.onLine) return fallback();
+
+    const coords = places.map(p => p.lng + ',' + p.lat).join(';');
+    const url = 'https://routing.openstreetmap.de/routed-foot/route/v1/walking/' + coords + '?overview=false';
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
+
+    fetch(url, ctrl ? { signal: ctrl.signal } : {})
+      .then(r => r.json())
+      .then(d => {
+        if (timer) clearTimeout(timer);
+        if (d.code !== 'Ok' || !d.routes?.[0]) return fallback();
+        const route = d.routes[0];
+        const legMins = (route.legs || []).map(l => Math.round(l.duration / 60));
+        resolve({
+          walkMins: Math.round(route.duration / 60),
+          distM: route.distance,
+          legMins
+        });
+      })
+      .catch(() => { if (timer) clearTimeout(timer); fallback(); });
+  });
+}
 
 document.addEventListener('DOMContentLoaded', updateFavUI);
