@@ -95,6 +95,8 @@
   .saved-list-remove { background:none; border:none; color:#ccc; font-size:1rem; cursor:pointer; padding:4px; flex-shrink:0; }
   .saved-list-remove:hover { color:#e00; }
   .saved-walk-connector { display:flex; align-items:center; gap:6px; padding:3px 14px 3px 46px; font-size:0.7rem; color:#aaa; }
+  /* Hide old platform saved banner — replaced by unified panel above */
+  .saved-mode-banner { display: none !important; }
 
 </style>
 
@@ -480,6 +482,41 @@ window.addEventListener('load', function() {
       var savedStats = list && list.querySelector('.saved-stats-bar');
       if (savedStats) _renderSavedContent(); // refresh counts
     }
+  };
+
+  // 4. cardNext / cardPrev — use saved IDs when saved mode is active,
+  //    because our panel has no .place-row elements for the default logic
+  var _baseNext = window.cardNext;
+  var _basePrev = window.cardPrev;
+
+  function _savedPlaceIds() {
+    var ids = [];
+    try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+    return ids.filter(function(id) { return PLACES.find(function(p) { return p.id === id; }); });
+  }
+
+  function _cardCurrentId() {
+    var title = document.getElementById('pc-title');
+    if (!title) return null;
+    var name = title.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    return place ? place.id : null;
+  }
+
+  window.cardNext = function() {
+    if (!_isSavedModeActive()) { if (_baseNext) _baseNext(); return; }
+    var ids = _savedPlaceIds();
+    if (!ids.length) return;
+    var idx = ids.indexOf(_cardCurrentId());
+    openDetail(ids[(idx + 1) % ids.length]);
+  };
+
+  window.cardPrev = function() {
+    if (!_isSavedModeActive()) { if (_basePrev) _basePrev(); return; }
+    var ids = _savedPlaceIds();
+    if (!ids.length) return;
+    var idx = ids.indexOf(_cardCurrentId());
+    openDetail(ids[(idx - 1 + ids.length) % ids.length]);
   };
 });
 
