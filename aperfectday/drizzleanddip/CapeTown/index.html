@@ -22,8 +22,9 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 
   /* Place card photos */
-  .pc-photo-img { object-fit: cover !important; }
-  .pc-photo-wrap { background: #111 !important; }
+  .pc-photo-img { object-fit: cover !important; object-position: center 70% !important; }
+  .pc-photo-wrap { background: #111 !important; min-height: 280px !important; }
+  #place-card .pc-photo-wrap { height: 52vw !important; max-height: 320px !important; min-height: 220px !important; }
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
@@ -689,6 +690,8 @@ window.addEventListener('load', function() {
     if (!isSaved) {
       // Ensure route and numbered markers are cleared when leaving saved mode
       if (typeof clearTripRoute === 'function') clearTripRoute();
+      var sheetClearBtn = document.getElementById('sheet-clear-btn');
+      if (sheetClearBtn) sheetClearBtn.style.display = 'none';
       if (_origRenderList) _origRenderList();
       return;
     }
@@ -828,6 +831,13 @@ window.addEventListener('load', function() {
     }
   };
 })();
+// Sync Clear button visibility with saved state
+var _origUpdateFavUI = window.updateFavUI;
+window.updateFavUI = function() {
+  if (_origUpdateFavUI) _origUpdateFavUI();
+  var btn = document.getElementById('sheet-clear-btn');
+  if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
+};
 </script>
 
 </body>
