@@ -696,6 +696,8 @@ window.addEventListener('load', function() {
       if (typeof clearTripRoute === 'function') clearTripRoute();
       var sheetClearBtn = document.getElementById('sheet-clear-btn');
       if (sheetClearBtn) sheetClearBtn.style.display = 'none';
+      var t = document.getElementById('sheet-title');
+      if (t) t.innerHTML = t.textContent; // strip inline styles
       if (_origRenderList) _origRenderList();
       return;
     }
@@ -719,7 +721,9 @@ window.addEventListener('load', function() {
 
     // Update sheet header
     var titleEl = document.getElementById('sheet-title');
-    if (titleEl) titleEl.innerHTML = places.length > 0 ? '<span class="heart-icon">♥</span> ' + places.length + ' Saved' : '<span class="heart-icon">♥</span> Your Saved Places';
+    if (titleEl) {
+      titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Saved' : 'Saved Places') + '</span>';
+    }
     var badge = document.getElementById('list-badge');
     if (badge) badge.textContent = places.length;
 
