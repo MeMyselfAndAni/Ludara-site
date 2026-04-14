@@ -24,7 +24,6 @@
   /* Place card photos */
   .pc-photo-img { width: 100% !important; height: 100% !important; object-fit: contain !important; object-position: center center !important; display: block !important; }
   .pc-photo-wrap { overflow: hidden !important; }
-  #place-card .pc-photo-wrap { height: 65vw !important; max-height: 420px !important; min-height: 280px !important; }
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
@@ -346,6 +345,7 @@ window.addEventListener('load', function() {
     var place = PLACES.find(function(p) { return p.name === name; });
     addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+
 });
 </script>
 
