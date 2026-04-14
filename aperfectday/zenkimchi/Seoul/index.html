@@ -341,99 +341,144 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <script>
 // ── UNIFIED SAVED PANEL ───────────────────────────────────────────
-window.addEventListener('load', function() {
-  var _origRenderList = window.renderList;
+// Strategy: intercept toggleSavedFilter directly + MutationObserver
+// safety net so our UI wins regardless of which platform version is deployed.
 
-  window.renderList = function() {
-    if (!window.savedFilterActive) { if (_origRenderList) _origRenderList(); return; }
-    var ids = [];
-    try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-    var places = ids.map(function(id) { return PLACES.find(function(p) { return p.id === id; }); }).filter(Boolean);
-    var list = document.getElementById('places-list');
-    if (!list) return;
-    list.innerHTML = '';
+function _isSavedModeActive() {
+  var pill = document.getElementById('pill-saved');
+  return pill && pill.classList.contains('active');
+}
 
-    if (!places.length) {
-      list.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place to save it here.</div>';
-      return;
-    }
+function _renderSavedContent() {
+  var list = document.getElementById('places-list');
+  if (!list) return;
+  // Already rendered our version — don't flicker
+  if (list.querySelector('.saved-stats-bar')) return;
 
-    // Stats bar
-    var totalDist = 0;
-    for (var i = 1; i < places.length; i++) {
-      totalDist += _distM(places[i-1].lat, places[i-1].lng, places[i].lat, places[i].lng);
-    }
-    var walkMins = Math.round(totalDist / 80);
-    var statsBar = document.createElement('div');
-    statsBar.className = 'saved-stats-bar';
-    statsBar.innerHTML = '<span>📍 ' + places.length + ' stops</span>' +
-      '<span>🚶 ~' + (walkMins < 60 ? walkMins + ' min' : Math.floor(walkMins/60) + 'h ' + (walkMins % 60) + 'min') + '</span>' +
-      '<span>📏 ' + (totalDist < 1000 ? Math.round(totalDist) + 'm' : (totalDist/1000).toFixed(1) + 'km') + '</span>';
-    list.appendChild(statsBar);
+  var ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
+  var places = ids.map(function(id) { return PLACES.find(function(p) { return p.id === id; }); }).filter(Boolean);
 
-    // Action buttons
-    var actionRow = document.createElement('div');
-    actionRow.className = 'saved-action-row';
-    actionRow.innerHTML =
-      '<button onclick="openTripInMaps()">🗺 Google Maps</button>' +
-      '<button onclick="generatePDF()">📄 PDF Guide</button>' +
-      '<button onclick="shareItinerary()">🔗 Share</button>';
-    list.appendChild(actionRow);
+  list.innerHTML = '';
 
-    // Numbered list with walk connectors
-    places.forEach(function(place, i) {
-      var item = document.createElement('div');
-      item.className = 'saved-list-item';
-      var imgPath = (typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg';
-      item.innerHTML =
-        '<div class="saved-list-num">' + (i + 1) + '</div>' +
-        '<img class="saved-list-thumb" src="' + imgPath + '" onerror="this.style.display='none'">' +
-        '<div class="saved-list-info"><div class="saved-list-name">' + place.name + '</div><div class="saved-list-type">' + (place.type || '') + '</div></div>' +
-        '<button class="saved-list-remove" title="Remove">✕</button>';
-      item.querySelector('.saved-list-remove').addEventListener('click', function(e) {
-        e.stopPropagation();
-        var cur = [];
-        try { cur = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(ex) {}
-        cur = cur.filter(function(x) { return x !== place.id; });
-        try { localStorage.setItem(FAVS_KEY, JSON.stringify(cur)); } catch(ex) {}
-        if (typeof updateFavUI === 'function') updateFavUI();
-        window.renderList();
-      });
-      item.addEventListener('click', function(e) {
-        if (!e.target.closest('.saved-list-remove')) openDetail(place.id);
-      });
-      list.appendChild(item);
+  // Update sheet title + Clear All
+  var titleEl  = document.getElementById('sheet-title');
+  var clearBtn = document.getElementById('sheet-clear-btn');
+  if (titleEl) {
+    titleEl.textContent = places.length ? '♥ ' + places.length + ' Saved' : '♥ Saved';
+    titleEl.style.color = 'var(--brand)';
+    titleEl.style.fontWeight = '700';
+  }
+  if (clearBtn) clearBtn.style.display = places.length ? 'block' : 'none';
 
-      if (i < places.length - 1) {
-        var d = _distM(place.lat, place.lng, places[i + 1].lat, places[i + 1].lng);
-        var m = Math.round(d / 80);
-        var conn = document.createElement('div');
-        conn.className = 'saved-walk-connector';
-        conn.textContent = '🚶 ' + (m < 1 ? '< 1' : m) + ' min · ' + (d < 1000 ? Math.round(d) + 'm' : (d/1000).toFixed(1) + 'km');
-        list.appendChild(conn);
-      }
+  if (!places.length) {
+    list.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place to save it here.</div>';
+    return;
+  }
+
+  // Stats bar
+  var totalDist = 0;
+  for (var i = 1; i < places.length; i++) {
+    totalDist += _distM(places[i-1].lat, places[i-1].lng, places[i].lat, places[i].lng);
+  }
+  var walkMins = Math.round(totalDist / 80);
+  var statsBar = document.createElement('div');
+  statsBar.className = 'saved-stats-bar';
+  statsBar.innerHTML =
+    '<span>📍 ' + places.length + ' stops</span>' +
+    '<span>🚶 ~' + (walkMins < 60 ? walkMins + ' min' : Math.floor(walkMins/60) + 'h ' + (walkMins % 60) + 'min') + '</span>' +
+    '<span>📏 ' + (totalDist < 1000 ? Math.round(totalDist) + 'm' : (totalDist/1000).toFixed(1) + 'km') + '</span>';
+  list.appendChild(statsBar);
+
+  // Action buttons
+  var actionRow = document.createElement('div');
+  actionRow.className = 'saved-action-row';
+  actionRow.innerHTML =
+    '<button onclick="openTripInMaps()">🗺 Google Maps</button>' +
+    '<button onclick="generatePDF()">📄 PDF Guide</button>' +
+    '<button onclick="shareItinerary()">🔗 Share</button>';
+  list.appendChild(actionRow);
+
+  // Numbered place list with walk connectors
+  places.forEach(function(place, i) {
+    var item = document.createElement('div');
+    item.className = 'saved-list-item';
+    var imgPath = (typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg';
+    item.innerHTML =
+      '<div class="saved-list-num">' + (i + 1) + '</div>' +
+      '<img class="saved-list-thumb" src="' + imgPath + '" onerror="this.style.display=\'none\'">' +
+      '<div class="saved-list-info"><div class="saved-list-name">' + place.name + '</div>' +
+      '<div class="saved-list-type">' + (place.type || '') + '</div></div>' +
+      '<button class="saved-list-remove" title="Remove">✕</button>';
+    item.querySelector('.saved-list-remove').addEventListener('click', function(e) {
+      e.stopPropagation();
+      var cur = [];
+      try { cur = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(ex) {}
+      cur = cur.filter(function(x) { return x !== place.id; });
+      try { localStorage.setItem(FAVS_KEY, JSON.stringify(cur)); } catch(ex) {}
+      if (typeof updateFavUI === 'function') updateFavUI();
+      _renderSavedContent();
     });
+    item.addEventListener('click', function(e) {
+      if (!e.target.closest('.saved-list-remove')) openDetail(place.id);
+    });
+    list.appendChild(item);
+
+    if (i < places.length - 1) {
+      var d = _distM(place.lat, place.lng, places[i + 1].lat, places[i + 1].lng);
+      var m = Math.round(d / 80);
+      var conn = document.createElement('div');
+      conn.className = 'saved-walk-connector';
+      conn.textContent = '🚶 ' + (m < 1 ? '< 1' : m) + ' min · ' + (d < 1000 ? Math.round(d) + 'm' : (d/1000).toFixed(1) + 'km');
+      list.appendChild(conn);
+    }
+  });
+}
+
+window.addEventListener('load', function() {
+
+  // 1. Intercept toggleSavedFilter — runs AFTER platform sets pill active class
+  var _origToggleSaved = window.toggleSavedFilter;
+  window.toggleSavedFilter = function(pill) {
+    if (_origToggleSaved) _origToggleSaved(pill);
+    setTimeout(function() {
+      if (_isSavedModeActive()) {
+        _renderSavedContent();
+      } else {
+        // Exiting saved mode — reset title
+        var titleEl = document.getElementById('sheet-title');
+        var clearBtn = document.getElementById('sheet-clear-btn');
+        if (titleEl) { titleEl.style.color = ''; titleEl.style.fontWeight = ''; }
+        if (clearBtn) clearBtn.style.display = 'none';
+      }
+    }, 0);
   };
 
-  // updateFavUI override: brand-red title + Clear All visibility
+  // 2. MutationObserver safety net — catches cases where platform
+  //    re-renders the list after our override (e.g. internal re-renders)
+  var _observing = false;
+  var list = document.getElementById('places-list');
+  if (list) {
+    new MutationObserver(function() {
+      if (_observing) return;
+      if (!_isSavedModeActive()) return;
+      if (list.querySelector('.saved-stats-bar')) return; // already ours
+      _observing = true;
+      requestAnimationFrame(function() {
+        _renderSavedContent();
+        _observing = false;
+      });
+    }).observe(list, { childList: true });
+  }
+
+  // 3. updateFavUI override — keeps fav count badge + title in sync
   var _origUpdateFavUI = window.updateFavUI;
   window.updateFavUI = function() {
     if (_origUpdateFavUI) _origUpdateFavUI();
-    var clearBtn = document.getElementById('sheet-clear-btn');
-    var titleEl  = document.getElementById('sheet-title');
-    var ids = [];
-    try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-    if (window.savedFilterActive) {
-      if (clearBtn && ids.length) clearBtn.style.display = 'block';
-      else if (clearBtn) clearBtn.style.display = 'none';
-      if (titleEl) {
-        titleEl.textContent = ids.length ? '♥ ' + ids.length + ' Saved' : '♥ Saved';
-        titleEl.style.color  = 'var(--brand)';
-        titleEl.style.fontWeight = '700';
-      }
-    } else {
-      if (clearBtn) clearBtn.style.display = 'none';
-      if (titleEl) { titleEl.style.color = ''; titleEl.style.fontWeight = ''; }
+    if (_isSavedModeActive()) {
+      // Re-render our panel so counts stay current
+      var savedStats = list && list.querySelector('.saved-stats-bar');
+      if (savedStats) _renderSavedContent(); // refresh counts
     }
   };
 });
