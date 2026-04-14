@@ -26,7 +26,8 @@
   /* category gradient set by ui-card.js */
 
   /* Address line under place type */
-  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 6px; }
+  .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
   /* ── List scroll fix ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
@@ -242,6 +243,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
     <div class="pc-title" id="pc-title"></div>
     <div class="pc-type" id="pc-type"></div>
     <div class="pc-address" id="pc-address"></div>
+    <div class="pc-awards" id="pc-awards" style="display:none"></div>
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
@@ -363,18 +365,26 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Address display — populates pc-address when a card opens -->
+<!-- Address + Awards display — populates pc-address and pc-awards when a card opens -->
 <script>
 window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  var addrEl  = document.getElementById('pc-address');
-  if (!titleEl || !addrEl) return;
+  var titleEl  = document.getElementById('pc-title');
+  var addrEl   = document.getElementById('pc-address');
+  var awardsEl = document.getElementById('pc-awards');
+  if (!titleEl) return;
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+    if (addrEl) addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+    if (awardsEl) {
+      if (place && place.awards) {
+        awardsEl.textContent = '🏆 ' + place.awards;
+        awardsEl.style.display = '';
+      } else {
+        awardsEl.style.display = 'none';
+      }
+    }
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-
 });
 </script>
 

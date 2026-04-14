@@ -346,6 +346,7 @@ const PLACES = [
     hours: 'Mon–Fri 12:00–15:00, 18:00–22:00; Sat 12:00–15:00, 18:00–22:00',
     tip: 'The bone marrow toast is non-negotiable. The eccles cake with Lancashire cheese at the end is obligatory. Book ahead.',
     type: 'The original nose-to-tail restaurant (since 1994)',
+    awards: '⭐ One Michelin Star · Condé Nast Traveller Lifetime Achievement Award (Fergus Henderson, 2024)',
     website: 'https://stjohnrestaurant.com',
   },
   {
@@ -517,6 +518,7 @@ const PLACES = [
     hours: 'Mon–Sat 12:00–14:30, 17:00–23:00; Sun 12:00–15:30, 17:00–22:00',
     tip: 'Request the conservatory when booking. The set lunch menu is excellent value. Book well ahead for weekends.',
     type: 'French restaurant — one of London\'s most romantic rooms',
+    awards: '3 AA Rosettes (2026) · Wine Spectator Grand Award (2025) · \'Most romantic restaurant in the world\' — Architectural Digest',
     website: 'https://www.closmaggiore.com',
   },
   {
@@ -703,6 +705,7 @@ const PLACES = [
     hours: 'Tue–Sat 12:00–14:00, 18:30–22:00; closed Sun–Mon',
     tip: 'Book weeks ahead. The lunch menu at a significantly lower price delivers the same cooking. The wine pairings are exceptional.',
     type: 'Three Michelin-star restaurant',
+    awards: '⭐⭐⭐ Three Michelin Stars · 5 AA Rosettes · La Liste 98/100 (2025) · World\'s 50 Best #71 (2023)',
     website: 'https://corebyclaresmyth.com',
   },
   {
@@ -811,6 +814,7 @@ const PLACES = [
     hours: 'Mon–Fri 18:00–22:00; Sat 12:00–15:00, 18:00–22:00; Sun 12:00–15:30',
     tip: 'Sunday lunch: book months ahead, not weeks. The set weekday dinner is accessible and the same quality.',
     type: 'London\'s only Michelin-starred pub',
+    awards: '⭐ One Michelin Star · London\'s only Michelin-starred pub · NRA UK Top 100 (2024) · Top 50 Gastropubs UK #1 (2020)',
     website: 'https://www.harwoodarms.com',
   },
 
