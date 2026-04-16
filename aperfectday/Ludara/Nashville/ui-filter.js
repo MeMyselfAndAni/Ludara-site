@@ -165,6 +165,25 @@ function _closeSearch(){
   renderList();
 }
 
+
+// ── Hours display formatter ───────────────────────────────────
+// Converts 24hr time to 12hr AM/PM when TIME_FORMAT === '12h'
+// TIME_FORMAT is defined per guide in map.js (default: '24h')
+function _24to12(hhmm){
+  const parts = hhmm.split(':');
+  const h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return m === 0 ? h12 + ' ' + period : h12 + ':' + String(m).padStart(2,'0') + ' ' + period;
+}
+
+function formatHours(str){
+  if(!str) return str;
+  if(typeof TIME_FORMAT === 'undefined' || TIME_FORMAT !== '12h') return str;
+  return str.replace(/\d{1,2}:\d{2}/g, _24to12);
+}
+
 function renderList(){
   const el=document.getElementById('places-list');
   if(!el) return;
