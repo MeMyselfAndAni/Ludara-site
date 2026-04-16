@@ -12,7 +12,7 @@ const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
 // ─── Category colours ─────────────────────────────────────────────────────────
 // Nashville palette: Tennessee brick, Southern gold, Music Row purple, forest green
 const CC = {
-  'landmark': '#c8622a',   // Tennessee brick
+  'landmark': '#ff2a00',   // Tennessee brick
   'food':     '#d4902a',   // Southern gold
   'cafe':     '#5a8f68',   // Cumberland green
   'pub':      '#6b5b9a',   // Music Row purple
@@ -32,7 +32,7 @@ const CL = {
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
 const NBHD_COLORS = {
-  'downtown':   '#c8622a',   // Brick orange — honky-tonk warmth
+  'downtown':   '#ff2a00',   // Brick orange — honky-tonk warmth
   'germantown': '#5a8a6e',   // Victorian green — historic streets
   'gulch':      '#6b5b9a',   // Deep purple — polished and creative
   'east':       '#d4883a',   // Amber — independent East Nashville energy
