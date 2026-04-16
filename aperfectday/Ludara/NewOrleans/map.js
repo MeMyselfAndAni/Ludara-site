@@ -8,6 +8,7 @@ const OFFLINE_CENTER    = { lat: 29.9575, lng: -90.0630 };
 const GUIDE_CITY        = 'New Orleans';
 const BLOGGER_NAME      = 'Ludara';
 const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
+const TIME_FORMAT       = '12h';               // Display hours in AM/PM for US guides
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 // New Orleans palette: warm, vibrant, Creole-inspired
