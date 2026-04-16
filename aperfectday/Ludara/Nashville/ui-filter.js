@@ -1,40 +1,161 @@
 // ── LIST ──────────────────────────────────────────────────────
+
+// ── Drag-to-reorder helpers ───────────────────────────────────
+const FAVS_ORDER_KEY_PREFIX = 'favs_order_';
+function _favsOrderKey(){ return FAVS_ORDER_KEY_PREFIX + window.location.pathname.replace(/\//g,'_'); }
+function _getSavedOrder(){ try{ return JSON.parse(localStorage.getItem(_favsOrderKey()) || 'null'); }catch(e){ return null; } }
+function _setSavedOrder(ids){ localStorage.setItem(_favsOrderKey(), JSON.stringify(ids)); }
+function _clearSavedOrder(){ localStorage.removeItem(_favsOrderKey()); }
+
+function _applyDragOrder(allSaved){
+  const manualOrder = _getSavedOrder();
+  if(!manualOrder || !manualOrder.length) return null; // no manual order — use auto
+  // Rebuild list in stored order, include any new saves not yet in order at end
+  const orderedIds = manualOrder.filter(id => allSaved.some(p => p.id === id));
+  const inOrder = orderedIds.map(id => allSaved.find(p => p.id === id)).filter(Boolean);
+  const notInOrder = allSaved.filter(p => !orderedIds.includes(p.id));
+  return [...inOrder, ...notInOrder];
+}
+
+function _initDragOnList(el){
+  let dragSrcId = null;
+
+  el.querySelectorAll('.place-row[draggable]').forEach(row => {
+    row.addEventListener('dragstart', function(e){
+      dragSrcId = parseInt(this.dataset.id);
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function(){
+      this.style.opacity = '';
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover', function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      this.classList.add('drag-over');
+    });
+    row.addEventListener('drop', function(e){
+      e.stopPropagation();
+      const targetId = parseInt(this.dataset.id);
+      if(dragSrcId === targetId) return;
+      // Get current displayed order
+      const rows = Array.from(el.querySelectorAll('.place-row[draggable]'));
+      const ids = rows.map(r => parseInt(r.dataset.id));
+      const fromIdx = ids.indexOf(dragSrcId);
+      const toIdx   = ids.indexOf(targetId);
+      if(fromIdx < 0 || toIdx < 0) return;
+      ids.splice(fromIdx, 1);
+      ids.splice(toIdx, 0, dragSrcId);
+      _setSavedOrder(ids);
+      // Re-render with new order
+      if(typeof renderList === 'function') renderList();
+      if(typeof drawSavedRoute === 'function') drawSavedRoute();
+    });
+
+    // Touch drag support
+    let touchDragSrc = null, touchClone = null;
+    row.addEventListener('touchstart', function(e){
+      if(!this.draggable) return;
+      touchDragSrc = this;
+    }, {passive:true});
+    row.addEventListener('touchmove', function(e){
+      if(!touchDragSrc) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const overEl = document.elementFromPoint(touch.clientX, touch.clientY);
+      const overRow = overEl && overEl.closest('.place-row[draggable]');
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      if(overRow && overRow !== touchDragSrc) overRow.classList.add('drag-over');
+    }, {passive:false});
+    row.addEventListener('touchend', function(e){
+      if(!touchDragSrc) return;
+      const touch = e.changedTouches[0];
+      const overEl = document.elementFromPoint(touch.clientX, touch.clientY);
+      const overRow = overEl && overEl.closest('.place-row[draggable]');
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      if(overRow && overRow !== touchDragSrc){
+        const rows = Array.from(el.querySelectorAll('.place-row[draggable]'));
+        const ids = rows.map(r => parseInt(r.dataset.id));
+        const srcId = parseInt(touchDragSrc.dataset.id);
+        const tgtId = parseInt(overRow.dataset.id);
+        const fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+        if(fi >= 0 && ti >= 0){
+          ids.splice(fi, 1);
+          ids.splice(ti, 0, srcId);
+          _setSavedOrder(ids);
+          if(typeof renderList === 'function') renderList();
+          if(typeof drawSavedRoute === 'function') drawSavedRoute();
+        }
+      }
+      touchDragSrc = null;
+    }, {passive:true});
+  });
+}
+
 function renderList(){
   const el=document.getElementById('places-list');
+  if(!el) return;
+  // Fix 2: padding-bottom so last items scroll clear of the neighbourhood bar (~130px)
+  el.style.paddingBottom = '140px';
   let filtered;
 
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
     const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
     const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
-    let sorted = allSaved;
-    if(allSaved.length >= 2){
-      let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
-      const out = [pool.shift()];
-      while(pool.length){ const last=out[out.length-1]; let bi=0,bd=Infinity; pool.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} }); out.push(pool.splice(bi,1)[0]); }
-      sorted = out;
+
+    // Use manual order if set, otherwise auto proximity sort
+    let sorted = _applyDragOrder(allSaved);
+    if(!sorted){
+      sorted = allSaved;
+      if(allSaved.length >= 2){
+        let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
+        const out = [pool.shift()];
+        while(pool.length){ const last=out[out.length-1]; let bi=0,bd=Infinity; pool.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} }); out.push(pool.splice(bi,1)[0]); }
+        sorted = out;
+      }
     }
     filtered = sorted;
     const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
     document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
+    // Banner with auto-sort reset button
     let banner = document.getElementById('saved-mode-banner');
     if(!banner){
       const sheet = document.getElementById('sheet');
       banner = document.createElement('div');
       banner.id = 'saved-mode-banner';
       banner.className = 'saved-mode-banner';
-      banner.innerHTML = `<span>Interactive trip through your saved places</span>
-        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Full itinerary</button>`;
+      const hasManual = !!_getSavedOrder();
+      banner.innerHTML = `<span>Drag ⠿ to reorder stops</span>
+        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Itinerary</button>
+        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">↺ Auto</button>' : ''}`;
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
+    } else {
+      // Update reset button visibility
+      const hasManual = !!_getSavedOrder();
+      let autoBtn = banner.querySelector('.saved-auto-reset');
+      if(hasManual && !autoBtn){
+        const btn = document.createElement('button');
+        btn.className = 'saved-plan-btn saved-auto-reset';
+        btn.style.marginLeft = '4px';
+        btn.textContent = '↺ Auto';
+        btn.onclick = function(){ _clearSavedOrder(); renderList(); if(typeof drawSavedRoute==='function') drawSavedRoute(); };
+        banner.appendChild(btn);
+      } else if(!hasManual && autoBtn){
+        autoBtn.remove();
+      }
     }
 
     el.innerHTML = allSaved.length === 0
       ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
-      : allSaved.map((p,i) => `
-        <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
-          <div class="trip-stop-num" style="margin:0 10px 0 4px;flex-shrink:0">${i+1}</div>
+      : sorted.map((p,i) => `
+        <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
+          <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
+          <div class="trip-stop-num" style="margin:0 8px 0 0;flex-shrink:0">${i+1}</div>
           <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
           <div class="place-info">
             <div class="place-name">${p.name}</div>
@@ -43,6 +164,19 @@ function renderList(){
           </div>
           <span class="chevron">›</span>
         </div>`).join('');
+
+    // Wire up drag events after rendering
+    _initDragOnList(el);
+
+    // Load thumbnails
+    const imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
+    sorted.forEach(p => {
+      const thumb = document.getElementById('thumb-' + p.id);
+      if(!thumb) return;
+      const img = new Image();
+      img.onload = function(){ if(thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">'; };
+      img.src = imgBase + 'place-' + p.id + '.jpg';
+    });
     return;
   }
 
