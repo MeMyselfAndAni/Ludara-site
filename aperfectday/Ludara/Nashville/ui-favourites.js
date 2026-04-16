@@ -80,7 +80,7 @@ function toggleSavedFilter(el){
   // Reset category filter — deactivate all pills, activate All
   if(typeof AF !== 'undefined') AF = 'all';
   document.querySelectorAll('.pill:not(.pill-saved)').forEach(p => p.classList.remove('active'));
-  const allPill = document.querySelector('.pill[onclick*="'all'"]');
+  const allPill = Array.from(document.querySelectorAll('.pill')).find(p => p.getAttribute('onclick') && p.getAttribute('onclick').includes("'all'"));
   if(allPill) allPill.classList.add('active');
 
   if(savedFilterActive){
