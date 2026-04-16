@@ -77,6 +77,11 @@ function toggleSavedFilter(el){
   document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
   const allBtn = document.getElementById('nbhd-all');
   if(allBtn) allBtn.classList.add('nbhd-active');
+  // Reset category filter — deactivate all pills, activate All
+  if(typeof AF !== 'undefined') AF = 'all';
+  document.querySelectorAll('.pill:not(.pill-saved)').forEach(p => p.classList.remove('active'));
+  const allPill = document.querySelector('.pill[onclick*="'all'"]');
+  if(allPill) allPill.classList.add('active');
 
   if(savedFilterActive){
     if(favourites.length === 0){
