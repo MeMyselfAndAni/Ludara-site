@@ -77,6 +77,11 @@ function toggleSavedFilter(el){
   document.querySelectorAll('.nbhd-bubble').forEach(b => b.classList.remove('nbhd-active'));
   const allBtn = document.getElementById('nbhd-all');
   if(allBtn) allBtn.classList.add('nbhd-active');
+  // Reset category filter — deactivate all pills, activate All
+  if(typeof AF !== 'undefined') AF = 'all';
+  document.querySelectorAll('.pill:not(.pill-saved)').forEach(p => p.classList.remove('active'));
+  const allPill = Array.from(document.querySelectorAll('.pill')).find(p => p.getAttribute('onclick') && p.getAttribute('onclick').includes("'all'"));
+  if(allPill) allPill.classList.add('active');
 
   if(savedFilterActive){
     if(favourites.length === 0){
@@ -237,6 +242,16 @@ function formatWalk(m){
 function getSortedFavPlaces(){
   let u = favourites.map(id => PLACES.find(x=>x.id===id)).filter(Boolean);
   if(u.length < 2) return u;
+  // Use manual drag order if set (stored by ui-filter.js helpers)
+  if(typeof _getSavedOrder === 'function'){
+    const manual = _getSavedOrder();
+    if(manual && manual.length){
+      const ordered = manual.map(id => u.find(p=>p.id===id)).filter(Boolean);
+      const rest    = u.filter(p => !manual.includes(p.id));
+      return [...ordered, ...rest];
+    }
+  }
+  // Auto proximity sort
   u.sort((a,b) => a.lng - b.lng);
   const s = [u.shift()];
   while(u.length){ const last=s[s.length-1]; let bi=0,bd=Infinity; u.forEach((p,i)=>{ const d=haversineM(last,p); if(d<bd){bd=d;bi=i;} }); s.push(u.splice(bi,1)[0]); }
@@ -258,6 +273,8 @@ function planFavTrip(){
   let totalDistM = 0;
   for(let i=1;i<places.length;i++) totalDistM += haversineM(places[i-1],places[i]);
 
+  const hasManualOrder = typeof _getSavedOrder === 'function' && !!_getSavedOrder();
+
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
@@ -266,17 +283,20 @@ function planFavTrip(){
       <span>🚶 ${formatMins(totalWalkMins)} walking</span>
       <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
     </div>
-    <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">Walking times are estimates</div>` +
+    <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
+      Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
+    </div>` +
   places.map((p,i)=>{
     const walkToNext = i < places.length-1
       ? Math.round(haversineM(p,places[i+1])/80*1.35) : null;
     return `
-    <div class="trip-stop" onclick="jumpToTripStop(${p.id})">
+    <div class="trip-stop" draggable="true" data-id="${p.id}" onclick="jumpToTripStop(${p.id})" style="cursor:default">
+      <span style="font-size:1.1rem;color:#ccc;padding:0 8px 0 2px;cursor:grab;flex-shrink:0;touch-action:none" class="trip-drag-handle">⠿</span>
       <div class="trip-stop-num">${i+1}</div>
       <div class="trip-stop-info">
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
-        ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}</div>`:''}
+        ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
         <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
       <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
@@ -285,6 +305,73 @@ function planFavTrip(){
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
+
+  // Wire drag-to-reorder on trip-stop rows
+  let dragSrcId = null;
+  const rows = el.querySelectorAll('.trip-stop[draggable]');
+  rows.forEach(function(row){
+    row.addEventListener('dragstart', function(e){
+      dragSrcId = parseInt(this.dataset.id);
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function(){
+      this.style.opacity = '';
+      el.querySelectorAll('.trip-stop').forEach(function(r){ r.style.borderTop = ''; });
+    });
+    row.addEventListener('dragover', function(e){
+      e.preventDefault();
+      el.querySelectorAll('.trip-stop').forEach(function(r){ r.style.borderTop = ''; });
+      this.style.borderTop = '2px solid ' + _brandColor();
+    });
+    row.addEventListener('drop', function(e){
+      e.stopPropagation();
+      const targetId = parseInt(this.dataset.id);
+      if(dragSrcId === targetId) return;
+      const allRows = Array.from(el.querySelectorAll('.trip-stop[draggable]'));
+      const ids = allRows.map(function(r){ return parseInt(r.dataset.id); });
+      const fi = ids.indexOf(dragSrcId), ti = ids.indexOf(targetId);
+      if(fi < 0 || ti < 0) return;
+      ids.splice(fi, 1);
+      ids.splice(ti, 0, dragSrcId);
+      if(typeof _setSavedOrder === 'function') _setSavedOrder(ids);
+      planFavTrip();
+      if(typeof drawSavedRoute === 'function') drawSavedRoute();
+    });
+    // Touch support
+    var touchSrc = null;
+    row.addEventListener('touchstart', function(){ touchSrc = this; }, {passive:true});
+    row.addEventListener('touchmove', function(e){
+      if(!touchSrc) return;
+      e.preventDefault();
+      var touch = e.touches[0];
+      var over = document.elementFromPoint(touch.clientX, touch.clientY);
+      var overRow = over && over.closest('.trip-stop[draggable]');
+      el.querySelectorAll('.trip-stop').forEach(function(r){ r.style.borderTop=''; });
+      if(overRow && overRow !== touchSrc) overRow.style.borderTop = '2px solid ' + _brandColor();
+    }, {passive:false});
+    row.addEventListener('touchend', function(e){
+      if(!touchSrc) return;
+      var touch = e.changedTouches[0];
+      var over = document.elementFromPoint(touch.clientX, touch.clientY);
+      var overRow = over && over.closest('.trip-stop[draggable]');
+      el.querySelectorAll('.trip-stop').forEach(function(r){ r.style.borderTop=''; });
+      if(overRow && overRow !== touchSrc){
+        var allRows = Array.from(el.querySelectorAll('.trip-stop[draggable]'));
+        var ids = allRows.map(function(r){ return parseInt(r.dataset.id); });
+        var srcId = parseInt(touchSrc.dataset.id);
+        var tgtId = parseInt(overRow.dataset.id);
+        var fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+        if(fi >= 0 && ti >= 0){
+          ids.splice(fi,1); ids.splice(ti,0,srcId);
+          if(typeof _setSavedOrder === 'function') _setSavedOrder(ids);
+          planFavTrip();
+          if(typeof drawSavedRoute === 'function') drawSavedRoute();
+        }
+      }
+      touchSrc = null;
+    }, {passive:true});
+  });
 }
 
 function jumpToTripStop(id){

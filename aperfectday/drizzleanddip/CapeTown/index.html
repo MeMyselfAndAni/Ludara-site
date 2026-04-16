@@ -773,17 +773,25 @@ window.addEventListener('load', function() {
         '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
       '</div>';
 
+    var hasManual = typeof _getSavedOrder === 'function' && !!_getSavedOrder();
+    if (hasManual) {
+      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a></div>';
+    } else {
+      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder</div>';
+    }
+
     places.forEach(function(p, i) {
       html +=
-        '<div class="place-row ' + (p.id===AID?'active':'') + '" onclick="openDetail(' + p.id + ')" id="row-' + p.id + '">' +
+        '<div class="place-row ' + (p.id===AID?'active':'') + '" draggable="true" data-id="' + p.id + '" id="row-' + p.id + '">' +
+          '<span style="font-size:1.1rem;color:#ccc;padding:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>' +
           '<div class="saved-item-num">' + (i+1) + '</div>' +
           '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
-          '<div class="place-info">' +
+          '<div class="place-info" onclick="openDetail(' + p.id + ')" style="cursor:pointer;flex:1">' +
             '<div class="place-name">' + p.name + '</div>' +
             '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
             '<div class="place-addr">' + (p.address||'') + '</div>' +
           '</div>' +
-          '<span class="chevron">›</span>' +
+          '<span class="chevron" onclick="openDetail(' + p.id + ')" style="cursor:pointer">›</span>' +
         '</div>';
       if (i < places.length - 1) {
         html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
@@ -791,6 +799,77 @@ window.addEventListener('load', function() {
     });
 
     listEl.innerHTML = html;
+
+    // Auto-sort link
+    var autoLink = document.getElementById('saved-autosort-link');
+    if (autoLink) {
+      autoLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (typeof _clearSavedOrder === 'function') _clearSavedOrder();
+        if (typeof updateFavUI === 'function') updateFavUI();
+      });
+    }
+
+    // Wire drag-to-reorder
+    var dragSrcId = null;
+    listEl.querySelectorAll('.place-row[draggable]').forEach(function(row) {
+      row.addEventListener('dragstart', function(e) {
+        dragSrcId = parseInt(this.dataset.id);
+        this.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      row.addEventListener('dragend', function() {
+        this.style.opacity = '';
+        listEl.querySelectorAll('.place-row').forEach(function(r){ r.style.borderTop=''; });
+      });
+      row.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        listEl.querySelectorAll('.place-row').forEach(function(r){ r.style.borderTop=''; });
+        this.style.borderTop = '2px solid var(--brand)';
+      });
+      row.addEventListener('drop', function(e) {
+        e.stopPropagation();
+        var targetId = parseInt(this.dataset.id);
+        if (dragSrcId === targetId) return;
+        var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+        var ids = allRows.map(function(r){ return parseInt(r.dataset.id); });
+        var fi = ids.indexOf(dragSrcId), ti = ids.indexOf(targetId);
+        if (fi < 0 || ti < 0) return;
+        ids.splice(fi, 1); ids.splice(ti, 0, dragSrcId);
+        if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
+        if (typeof updateFavUI === 'function') updateFavUI();
+      });
+      var touchSrc = null;
+      row.addEventListener('touchstart', function() { touchSrc = this; }, {passive:true});
+      row.addEventListener('touchmove', function(e) {
+        if (!touchSrc) return;
+        e.preventDefault();
+        var touch = e.touches[0];
+        var over = document.elementFromPoint(touch.clientX, touch.clientY);
+        var overRow = over && over.closest('.place-row[draggable]');
+        listEl.querySelectorAll('.place-row').forEach(function(r){ r.style.borderTop=''; });
+        if (overRow && overRow !== touchSrc) overRow.style.borderTop = '2px solid var(--brand)';
+      }, {passive:false});
+      row.addEventListener('touchend', function(e) {
+        if (!touchSrc) return;
+        var touch = e.changedTouches[0];
+        var over = document.elementFromPoint(touch.clientX, touch.clientY);
+        var overRow = over && over.closest('.place-row[draggable]');
+        listEl.querySelectorAll('.place-row').forEach(function(r){ r.style.borderTop=''; });
+        if (overRow && overRow !== touchSrc) {
+          var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+          var ids = allRows.map(function(r){ return parseInt(r.dataset.id); });
+          var srcId = parseInt(touchSrc.dataset.id), tgtId = parseInt(overRow.dataset.id);
+          var fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+          if (fi >= 0 && ti >= 0) {
+            ids.splice(fi, 1); ids.splice(ti, 0, srcId);
+            if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
+            if (typeof updateFavUI === 'function') updateFavUI();
+          }
+        }
+        touchSrc = null;
+      }, {passive:true});
+    });
 
     // Load thumbnails
     var imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
