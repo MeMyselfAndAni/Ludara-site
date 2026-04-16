@@ -1,40 +1,239 @@
 // ── LIST ──────────────────────────────────────────────────────
+
+// ── Drag-to-reorder helpers ───────────────────────────────────
+const FAVS_ORDER_KEY_PREFIX = 'favs_order_';
+function _favsOrderKey(){ return FAVS_ORDER_KEY_PREFIX + window.location.pathname.replace(/\//g,'_'); }
+function _getSavedOrder(){ try{ return JSON.parse(localStorage.getItem(_favsOrderKey()) || 'null'); }catch(e){ return null; } }
+function _setSavedOrder(ids){ localStorage.setItem(_favsOrderKey(), JSON.stringify(ids)); }
+function _clearSavedOrder(){ localStorage.removeItem(_favsOrderKey()); }
+
+function _applyDragOrder(allSaved){
+  const manualOrder = _getSavedOrder();
+  if(!manualOrder || !manualOrder.length) return null; // no manual order — use auto
+  // Rebuild list in stored order, include any new saves not yet in order at end
+  const orderedIds = manualOrder.filter(id => allSaved.some(p => p.id === id));
+  const inOrder = orderedIds.map(id => allSaved.find(p => p.id === id)).filter(Boolean);
+  const notInOrder = allSaved.filter(p => !orderedIds.includes(p.id));
+  return [...inOrder, ...notInOrder];
+}
+
+function _initDragOnList(el){
+  let dragSrcId = null;
+
+  el.querySelectorAll('.place-row[draggable]').forEach(row => {
+    row.addEventListener('dragstart', function(e){
+      dragSrcId = parseInt(this.dataset.id);
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', function(){
+      this.style.opacity = '';
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover', function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      this.classList.add('drag-over');
+    });
+    row.addEventListener('drop', function(e){
+      e.stopPropagation();
+      const targetId = parseInt(this.dataset.id);
+      if(dragSrcId === targetId) return;
+      // Get current displayed order
+      const rows = Array.from(el.querySelectorAll('.place-row[draggable]'));
+      const ids = rows.map(r => parseInt(r.dataset.id));
+      const fromIdx = ids.indexOf(dragSrcId);
+      const toIdx   = ids.indexOf(targetId);
+      if(fromIdx < 0 || toIdx < 0) return;
+      ids.splice(fromIdx, 1);
+      ids.splice(toIdx, 0, dragSrcId);
+      _setSavedOrder(ids);
+      // Re-render with new order
+      if(typeof renderList === 'function') renderList();
+      if(typeof drawSavedRoute === 'function') drawSavedRoute();
+    });
+
+    // Touch drag support
+    let touchDragSrc = null, touchClone = null;
+    row.addEventListener('touchstart', function(e){
+      if(!this.draggable) return;
+      touchDragSrc = this;
+    }, {passive:true});
+    row.addEventListener('touchmove', function(e){
+      if(!touchDragSrc) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const overEl = document.elementFromPoint(touch.clientX, touch.clientY);
+      const overRow = overEl && overEl.closest('.place-row[draggable]');
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      if(overRow && overRow !== touchDragSrc) overRow.classList.add('drag-over');
+    }, {passive:false});
+    row.addEventListener('touchend', function(e){
+      if(!touchDragSrc) return;
+      const touch = e.changedTouches[0];
+      const overEl = document.elementFromPoint(touch.clientX, touch.clientY);
+      const overRow = overEl && overEl.closest('.place-row[draggable]');
+      el.querySelectorAll('.place-row').forEach(r => r.classList.remove('drag-over'));
+      if(overRow && overRow !== touchDragSrc){
+        const rows = Array.from(el.querySelectorAll('.place-row[draggable]'));
+        const ids = rows.map(r => parseInt(r.dataset.id));
+        const srcId = parseInt(touchDragSrc.dataset.id);
+        const tgtId = parseInt(overRow.dataset.id);
+        const fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+        if(fi >= 0 && ti >= 0){
+          ids.splice(fi, 1);
+          ids.splice(ti, 0, srcId);
+          _setSavedOrder(ids);
+          if(typeof renderList === 'function') renderList();
+          if(typeof drawSavedRoute === 'function') drawSavedRoute();
+        }
+      }
+      touchDragSrc = null;
+    }, {passive:true});
+  });
+}
+
+
+// ── Search ────────────────────────────────────────────────────
+let _searchQuery = '';
+
+function _initSearch(){
+  const titleEl = document.getElementById('sheet-title');
+  if(!titleEl || document.getElementById('search-icon-btn')) return;
+
+  // Inject icon button next to title
+  const iconBtn = document.createElement('button');
+  iconBtn.id = 'search-icon-btn';
+  iconBtn.innerHTML = '🔍';
+  iconBtn.title = 'Search places';
+  iconBtn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:1rem;padding:0 0 0 8px;opacity:0.6;flex-shrink:0;line-height:1;';
+  iconBtn.addEventListener('click', _toggleSearch);
+
+  // Wrap title + icon in a flex row
+  const titleWrap = titleEl.parentNode;
+  if(titleWrap){
+    titleWrap.style.display = 'flex';
+    titleWrap.style.alignItems = 'center';
+    titleEl.after(iconBtn);
+  }
+
+  // Create search input (hidden initially)
+  const input = document.createElement('input');
+  input.id = 'search-input';
+  input.type = 'text';
+  input.placeholder = 'Search places...';
+  input.style.cssText = [
+    'display:none','width:100%','padding:7px 12px',
+    'border:1.5px solid var(--brand)','border-radius:20px',
+    'font-size:0.85rem','outline:none','font-family:inherit',
+    'margin:4px 12px 6px','box-sizing:border-box','transition:all 0.2s'
+  ].join(';');
+  input.addEventListener('input', function(){
+    _searchQuery = this.value.trim().toLowerCase();
+    renderList();
+  });
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ _closeSearch(); }
+  });
+
+  // Insert below the sheet header
+  const sheet = document.getElementById('sheet');
+  const header = sheet && sheet.querySelector('.sheet-header');
+  if(header) header.insertAdjacentElement('afterend', input);
+}
+
+function _toggleSearch(){
+  const input = document.getElementById('search-input');
+  const btn   = document.getElementById('search-icon-btn');
+  if(!input) return;
+  if(input.style.display === 'none'){
+    input.style.display = 'block';
+    if(btn) btn.style.opacity = '1';
+    input.focus();
+  } else {
+    _closeSearch();
+  }
+}
+
+function _closeSearch(){
+  const input = document.getElementById('search-input');
+  const btn   = document.getElementById('search-icon-btn');
+  if(input){ input.style.display = 'none'; input.value = ''; }
+  if(btn) btn.style.opacity = '0.6';
+  _searchQuery = '';
+  renderList();
+}
+
 function renderList(){
   const el=document.getElementById('places-list');
+  if(!el) return;
+  // Fix 2: padding-bottom so last items scroll clear of the neighbourhood bar (~130px)
+  el.style.paddingBottom = '140px';
   let filtered;
 
+  // Show/hide search icon depending on mode
+  const _searchIconBtn = document.getElementById('search-icon-btn');
+  const _searchInputEl = document.getElementById('search-input');
+
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+    // Hide search in saved mode
+    if(_searchIconBtn) _searchIconBtn.style.display = 'none';
+    if(_searchInputEl){ _searchInputEl.style.display = 'none'; _searchInputEl.value = ''; _searchQuery = ''; }
     const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
     const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
-    let sorted = allSaved;
-    if(allSaved.length >= 2){
-      let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
-      const out = [pool.shift()];
-      while(pool.length){ const last=out[out.length-1]; let bi=0,bd=Infinity; pool.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} }); out.push(pool.splice(bi,1)[0]); }
-      sorted = out;
+
+    // Use manual order if set, otherwise auto proximity sort
+    let sorted = _applyDragOrder(allSaved);
+    if(!sorted){
+      sorted = allSaved;
+      if(allSaved.length >= 2){
+        let pool = [...allSaved]; pool.sort((a,b)=>a.lng-b.lng);
+        const out = [pool.shift()];
+        while(pool.length){ const last=out[out.length-1]; let bi=0,bd=Infinity; pool.forEach((p,i)=>{ const d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} }); out.push(pool.splice(bi,1)[0]); }
+        sorted = out;
+      }
     }
     filtered = sorted;
     const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
     document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
+    // Banner with auto-sort reset button
     let banner = document.getElementById('saved-mode-banner');
     if(!banner){
       const sheet = document.getElementById('sheet');
       banner = document.createElement('div');
       banner.id = 'saved-mode-banner';
       banner.className = 'saved-mode-banner';
-      banner.innerHTML = `<span>Interactive trip through your saved places</span>
-        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Full itinerary</button>`;
+      const hasManual = !!_getSavedOrder();
+      banner.innerHTML = `<span>Drag ⠿ to reorder stops</span>
+        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Itinerary</button>
+        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">↺ Auto</button>' : ''}`;
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
+    } else {
+      // Update reset button visibility
+      const hasManual = !!_getSavedOrder();
+      let autoBtn = banner.querySelector('.saved-auto-reset');
+      if(hasManual && !autoBtn){
+        const btn = document.createElement('button');
+        btn.className = 'saved-plan-btn saved-auto-reset';
+        btn.style.marginLeft = '4px';
+        btn.textContent = '↺ Auto';
+        btn.onclick = function(){ _clearSavedOrder(); renderList(); if(typeof drawSavedRoute==='function') drawSavedRoute(); };
+        banner.appendChild(btn);
+      } else if(!hasManual && autoBtn){
+        autoBtn.remove();
+      }
     }
 
     el.innerHTML = allSaved.length === 0
       ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
-      : allSaved.map((p,i) => `
-        <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
-          <div class="trip-stop-num" style="margin:0 10px 0 4px;flex-shrink:0">${i+1}</div>
+      : sorted.map((p,i) => `
+        <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
+          <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
+          <div class="trip-stop-num" style="margin:0 8px 0 0;flex-shrink:0">${i+1}</div>
           <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
           <div class="place-info">
             <div class="place-name">${p.name}</div>
@@ -43,23 +242,43 @@ function renderList(){
           </div>
           <span class="chevron">›</span>
         </div>`).join('');
+
+    // Wire up drag events after rendering
+    _initDragOnList(el);
+
+    // Load thumbnails
+    const imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
+    sorted.forEach(p => {
+      const thumb = document.getElementById('thumb-' + p.id);
+      if(!thumb) return;
+      const img = new Image();
+      img.onload = function(){ if(thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">'; };
+      img.src = imgBase + 'place-' + p.id + '.jpg';
+    });
     return;
   }
 
   const banner = document.getElementById('saved-mode-banner');
   if(banner) banner.remove();
 
+  // Show search icon in normal mode
+  if(_searchIconBtn) _searchIconBtn.style.display = '';
+
   filtered = PLACES.filter(p => {
-    const catOk  = AF === 'all' || p.cat === AF;
-    const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
-    const openOk = !openNowActive || isOpenNow(p);
-    return catOk && nbhdOk && openOk;
+    const catOk    = AF === 'all' || p.cat === AF;
+    const nbhdOk   = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+    const openOk   = !openNowActive || isOpenNow(p);
+    const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
+    return catOk && nbhdOk && openOk && searchOk;
   });
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
-  document.getElementById('sheet-title').textContent = nbhdName + count + ' Places';
+  const _titleText = _searchQuery
+    ? (count + ' match' + (count !== 1 ? 'es' : ''))
+    : (nbhdName + count + ' Places');
+  document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
   el.innerHTML=filtered.map(p=>`
@@ -278,3 +497,17 @@ function updatePulse(place){
 }
 
 // ── NEIGHBOURHOOD STORIES ─────────────────────────────────────
+
+// ── Init search on load ───────────────────────────────────────
+if(typeof document !== 'undefined'){
+  document.addEventListener('DOMContentLoaded', function(){
+    // Wait for sheet to be ready
+    var tries = 0;
+    var interval = setInterval(function(){
+      if(document.getElementById('sheet-title') || tries++ > 20){
+        clearInterval(interval);
+        _initSearch();
+      }
+    }, 200);
+  });
+}
