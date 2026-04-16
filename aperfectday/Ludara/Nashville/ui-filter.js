@@ -94,6 +94,77 @@ function _initDragOnList(el){
   });
 }
 
+
+// ── Search ────────────────────────────────────────────────────
+let _searchQuery = '';
+
+function _initSearch(){
+  const titleEl = document.getElementById('sheet-title');
+  if(!titleEl || document.getElementById('search-icon-btn')) return;
+
+  // Inject icon button next to title
+  const iconBtn = document.createElement('button');
+  iconBtn.id = 'search-icon-btn';
+  iconBtn.innerHTML = '🔍';
+  iconBtn.title = 'Search places';
+  iconBtn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:1rem;padding:0 0 0 8px;opacity:0.6;flex-shrink:0;line-height:1;';
+  iconBtn.addEventListener('click', _toggleSearch);
+
+  // Wrap title + icon in a flex row
+  const titleWrap = titleEl.parentNode;
+  if(titleWrap){
+    titleWrap.style.display = 'flex';
+    titleWrap.style.alignItems = 'center';
+    titleEl.after(iconBtn);
+  }
+
+  // Create search input (hidden initially)
+  const input = document.createElement('input');
+  input.id = 'search-input';
+  input.type = 'text';
+  input.placeholder = 'Search places...';
+  input.style.cssText = [
+    'display:none','width:100%','padding:7px 12px',
+    'border:1.5px solid var(--brand)','border-radius:20px',
+    'font-size:0.85rem','outline:none','font-family:inherit',
+    'margin:4px 12px 6px','box-sizing:border-box','transition:all 0.2s'
+  ].join(';');
+  input.addEventListener('input', function(){
+    _searchQuery = this.value.trim().toLowerCase();
+    renderList();
+  });
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ _closeSearch(); }
+  });
+
+  // Insert below the sheet header
+  const sheet = document.getElementById('sheet');
+  const header = sheet && sheet.querySelector('.sheet-header');
+  if(header) header.insertAdjacentElement('afterend', input);
+}
+
+function _toggleSearch(){
+  const input = document.getElementById('search-input');
+  const btn   = document.getElementById('search-icon-btn');
+  if(!input) return;
+  if(input.style.display === 'none'){
+    input.style.display = 'block';
+    if(btn) btn.style.opacity = '1';
+    input.focus();
+  } else {
+    _closeSearch();
+  }
+}
+
+function _closeSearch(){
+  const input = document.getElementById('search-input');
+  const btn   = document.getElementById('search-icon-btn');
+  if(input){ input.style.display = 'none'; input.value = ''; }
+  if(btn) btn.style.opacity = '0.6';
+  _searchQuery = '';
+  renderList();
+}
+
 function renderList(){
   const el=document.getElementById('places-list');
   if(!el) return;
@@ -101,7 +172,14 @@ function renderList(){
   el.style.paddingBottom = '140px';
   let filtered;
 
+  // Show/hide search icon depending on mode
+  const _searchIconBtn = document.getElementById('search-icon-btn');
+  const _searchInputEl = document.getElementById('search-input');
+
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
+    // Hide search in saved mode
+    if(_searchIconBtn) _searchIconBtn.style.display = 'none';
+    if(_searchInputEl){ _searchInputEl.style.display = 'none'; _searchInputEl.value = ''; _searchQuery = ''; }
     const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
     const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
 
@@ -183,17 +261,24 @@ function renderList(){
   const banner = document.getElementById('saved-mode-banner');
   if(banner) banner.remove();
 
+  // Show search icon in normal mode
+  if(_searchIconBtn) _searchIconBtn.style.display = '';
+
   filtered = PLACES.filter(p => {
-    const catOk  = AF === 'all' || p.cat === AF;
-    const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
-    const openOk = !openNowActive || isOpenNow(p);
-    return catOk && nbhdOk && openOk;
+    const catOk    = AF === 'all' || p.cat === AF;
+    const nbhdOk   = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+    const openOk   = !openNowActive || isOpenNow(p);
+    const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
+    return catOk && nbhdOk && openOk && searchOk;
   });
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
-  document.getElementById('sheet-title').textContent = nbhdName + count + ' Places';
+  const _titleText = _searchQuery
+    ? (count + ' match' + (count !== 1 ? 'es' : ''))
+    : (nbhdName + count + ' Places');
+  document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
   el.innerHTML=filtered.map(p=>`
@@ -412,3 +497,17 @@ function updatePulse(place){
 }
 
 // ── NEIGHBOURHOOD STORIES ─────────────────────────────────────
+
+// ── Init search on load ───────────────────────────────────────
+if(typeof document !== 'undefined'){
+  document.addEventListener('DOMContentLoaded', function(){
+    // Wait for sheet to be ready
+    var tries = 0;
+    var interval = setInterval(function(){
+      if(document.getElementById('sheet-title') || tries++ > 20){
+        clearInterval(interval);
+        _initSearch();
+      }
+    }, 200);
+  });
+}
