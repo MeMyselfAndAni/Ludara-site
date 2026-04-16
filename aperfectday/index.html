@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="../favicon.ico">
   <title>A Perfect Day — Interactive City Guides for Hotels · Ludara.AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
@@ -137,6 +137,9 @@
     /* ── GUIDE CARDS (DARK) ── */
     .guide-card { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:20px 22px; text-decoration:none; display:block; transition:border-color .2s,background .2s; }
     .guide-card:hover { border-color:rgba(184,150,90,0.4); background:#1a1d24; text-decoration:none; }
+
+    .guide-flag { font-size: 22px; margin-bottom: 8px; display: block; line-height: 1; }
+    .guide-city { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--dark-text); margin-bottom:2px; }
     .guide-city { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--dark-text); margin-bottom:2px; }
     .guide-by { font-size:12px; color:var(--dark-muted); margin-bottom:14px; }
     .guide-arrow { font-size:13px; color:var(--gold); font-weight:500; }
@@ -363,14 +366,14 @@
       <h2 class="dark">Explore the cities.</h2>
       <p style="color:var(--dark-muted); margin-bottom:20px; font-size:14px; font-weight:300;">Each guide is a fully independent interactive experience, curated for the city it serves.</p>
       <div class="grid-4">
-        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/london/" target="_blank"><div class="guide-city">London</div><div class="guide-by">by Ludara.AI · 71 places</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/zenkimchi/seoul/" target="_blank"><div class="guide-city">Seoul</div><div class="guide-by">by ZenKimchi</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/neworleans/" target="_blank"><div class="guide-city">New Orleans</div><div class="guide-by">by Ludara.AI · ~50 places</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/nashville/" target="_blank"><div class="guide-city">Nashville</div><div class="guide-by">by Ludara.AI · 50 places</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/drizzleanddip/capetown/" target="_blank"><div class="guide-city">Cape Town</div><div class="guide-by">by Drizzle &amp; Dip · ~45 places</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/wanderlush/tbilisi/" target="_blank"><div class="guide-city">Tbilisi</div><div class="guide-by">by Wanderlush</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/nomadicmatt/bangkok/" target="_blank"><div class="guide-city">Bangkok</div><div class="guide-by">by Nomadic Matt</div><div class="guide-arrow">Explore →</div></a>
-        <a class="guide-card" href="https://ludara.ai/aperfectday/thecuriousmexican/mexicocity/" target="_blank"><div class="guide-city">Mexico City</div><div class="guide-by">by The Curious Mexican</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/london/" target="_blank"><div class="guide-city"><span class="guide-flag">🇬🇧</span>London</div><div class="guide-by">by Ludara.AI · 71 places</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/zenkimchi/seoul/" target="_blank"><div class="guide-city"><span class="guide-flag">🇰🇷</span>Seoul</div><div class="guide-by">by ZenKimchi</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/neworleans/" target="_blank"><div class="guide-city"><span class="guide-flag">🇺🇸</span>New Orleans</div><div class="guide-by">by Ludara.AI · ~50 places</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/ludara/nashville/" target="_blank"><div class="guide-city"><span class="guide-flag">🇺🇸</span>Nashville</div><div class="guide-by">by Ludara.AI · 50 places</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/drizzleanddip/capetown/" target="_blank"><div class="guide-city"><span class="guide-flag">🇿🇦</span>Cape Town</div><div class="guide-by">by Drizzle &amp; Dip · ~45 places</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/wanderlush/tbilisi/" target="_blank"><div class="guide-city"><span class="guide-flag">🇬🇪</span>Tbilisi</div><div class="guide-by">by Wanderlush</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/nomadicmatt/bangkok/" target="_blank"><div class="guide-city"><span class="guide-flag">🇹🇭</span>Bangkok</div><div class="guide-by">by Nomadic Matt</div><div class="guide-arrow">Explore →</div></a>
+        <a class="guide-card" href="https://ludara.ai/aperfectday/thecuriousmexican/mexicocity/" target="_blank"><div class="guide-city"><span class="guide-flag">🇲🇽</span>Mexico City</div><div class="guide-by">by The Curious Mexican</div><div class="guide-arrow">Explore →</div></a>
       </div>
     </div>
   </div>
