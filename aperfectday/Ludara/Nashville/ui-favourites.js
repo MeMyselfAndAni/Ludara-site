@@ -232,6 +232,24 @@ function haversineM(a, b){
   const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
   return 2*R*Math.asin(Math.sqrt(h));
 }
+function formatDistanceLocal(meters) {
+  // Local version for ui-favourites.js scope
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet) + ' ft';
+    } else {
+      const miles = feet / 5280;
+      return miles.toFixed(1) + ' mi';
+    }
+  } else {
+    if (meters < 1000) {
+      return Math.round(meters) + ' m';
+    } else {
+      return (meters / 1000).toFixed(1) + ' km';
+    }
+  }
+}
 function formatWalk(m){
   const mins = Math.round(m/80);
   if(mins<2) return '<2 min';
@@ -281,7 +299,7 @@ function planFavTrip(){
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
       <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${formatDistance(totalDistM)}</span>
+      <span>📏 ${formatDistanceLocal(totalDistM)}</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
