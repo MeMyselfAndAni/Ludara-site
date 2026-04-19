@@ -490,6 +490,46 @@ function clearAllSaved() {
       }
     }
 
+    // Function to update the right-side card specifically
+    function updateRightSideCard(places, routeStats, distanceText) {
+      console.log('🔧 DEBUG: updateRightSideCard called with:', distanceText);
+      
+      // Search for the right-side card elements aggressively
+      var rightCardSelectors = [
+        // Common patterns for right-side cards
+        '.right-card', '.side-card', '.trip-card', '.summary-card',
+        '#right-card', '#side-card', '#trip-card', '#summary-card',
+        '[class*="right"]', '[class*="side"]', '[class*="trip"]',
+      ];
+      
+      rightCardSelectors.forEach(function(selector) {
+        try {
+          var elements = document.querySelectorAll(selector);
+          elements.forEach(function(el) {
+            if (el.textContent.includes('4.5') || el.textContent.includes('mi') || el.textContent.includes('km')) {
+              console.log('🔧 DEBUG: Found right card element:', selector, el.textContent);
+              // Update the distance in this element
+              el.innerHTML = el.innerHTML.replace(/[\d.]+\s*(mi|km)/g, distanceText);
+              console.log('🔧 DEBUG: Updated to:', el.textContent);
+            }
+          });
+        } catch(e) {
+          // Ignore invalid selectors
+        }
+      });
+      
+      // Also try to find by walking the DOM tree for text containing "4.5 mi"
+      var allElements = document.querySelectorAll('*');
+      allElements.forEach(function(el) {
+        if (el.textContent.includes('4.5 mi') && el.children.length === 0) {
+          console.log('🔧 DEBUG: Found text node with 4.5 mi:', el.textContent);
+          el.textContent = el.textContent.replace(/[\d.]+\s*mi/g, distanceText);
+          console.log('🔧 DEBUG: Updated text node to:', el.textContent);
+        }
+      });
+    }
+
+
     function displaySavedTrip(places, distM, walkMins) {
       console.log('🔧 DEBUG: displaySavedTrip called with distM:', distM, 'walkMins:', walkMins);
       
@@ -594,29 +634,38 @@ function clearAllSaved() {
             console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
-          if (typeof updateFavUI === 'function') {
-            console.log('🔧 DEBUG: calling updateFavUI after reorder');
-            updateFavUI();
-          }
-          // Also update any right-side card distance displays
-          console.log('🔧 DEBUG: looking for right-side distance elements to update');
-          setTimeout(function() {
-            // Look for common distance display elements that might be the right-side card
-            var distanceElements = document.querySelectorAll('[class*="distance"], [class*="miles"], [class*="mi"], .saved-stat');
-            console.log('🔧 DEBUG: found potential distance elements:', distanceElements.length);
-            // Force update any cached distance displays
-            if (typeof _lastRouteStats !== 'undefined' && _lastRouteStats && _lastRouteStats.distM) {
-              var distanceText = (typeof formatDistance === 'function' ? formatDistance(_lastRouteStats.distM) : ((_lastRouteStats.distM/1000).toFixed(1) + ' km'));
-              console.log('🔧 DEBUG: trying to update right card with:', distanceText);
-              // Update any element that might contain the right-side distance
-              distanceElements.forEach(function(el) {
-                if (el.textContent.includes('mi') || el.textContent.includes('km')) {
-                  console.log('🔧 DEBUG: updating element:', el.textContent, 'to:', distanceText);
-                  el.textContent = el.textContent.replace(/[\d.]+\s*(mi|km)/g, distanceText);
-                }
+          
+          console.log('🔧 DEBUG: skipping updateFavUI to avoid old popup, directly updating right card');
+          
+          // Get places in new order and calculate distance
+          if (typeof favourites !== 'undefined' && favourites.length > 0) {
+            var places = favourites.slice();
+            if (typeof _getSavedOrder === 'function') {
+              var savedOrder = _getSavedOrder();
+              if (savedOrder && savedOrder.length > 0) {
+                var orderedPlaces = [];
+                savedOrder.forEach(function(id) {
+                  var place = places.find(function(p) { 
+                    return p.id == id || p.id === id || String(p.id) === String(id);
+                  });
+                  if (place) orderedPlaces.push(place);
+                });
+                places = orderedPlaces;
+              }
+            }
+            
+            // Calculate new distance and update right-side card directly
+            if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+              _fetchRouteStats(places).then(function(routeStats) {
+                console.log('🔧 DEBUG: Got new route stats for right card:', routeStats);
+                var distanceText = (typeof formatDistance === 'function' ? formatDistance(routeStats.distM) : ((routeStats.distM/1000).toFixed(1) + ' km'));
+                console.log('🔧 DEBUG: New distance text for right card:', distanceText);
+                
+                // Update right-side card specifically
+                updateRightSideCard(places, routeStats, distanceText);
               });
             }
-          }, 300);
+          }
 
         });
 
