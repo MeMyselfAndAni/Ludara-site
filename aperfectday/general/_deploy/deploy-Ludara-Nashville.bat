@@ -30,16 +30,7 @@ if not exist "%DEST%" (
 )
 
 echo Copying shared platform files...
-copy /Y "%PLATFORM%\map-core.js"       "%DEST%\map-core.js"
-copy /Y "%PLATFORM%\styles.css"        "%DEST%\styles.css"
-copy /Y "%PLATFORM%\photos.js"         "%DEST%\photos.js"
-copy /Y "%PLATFORM%\ui-card.js"        "%DEST%\ui-card.js"
-copy /Y "%PLATFORM%\ui-filter.js"      "%DEST%\ui-filter.js"
-copy /Y "%PLATFORM%\ui-favourites.js"  "%DEST%\ui-favourites.js"
-copy /Y "%PLATFORM%\ui-pdf.js"         "%DEST%\ui-pdf.js"
-copy /Y "%PLATFORM%\ui-stories.js"     "%DEST%\ui-stories.js"
-copy /Y "%PLATFORM%\sw.js"             "%DEST%\sw.js"
-copy /Y "%PLATFORM%\favicon.svg"       "%DEST%\favicon.svg"
+xcopy /Y /Q "%PLATFORM%\*.*" "%DEST%\"
 echo Done.
 echo.
 
