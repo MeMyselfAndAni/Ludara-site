@@ -9,6 +9,7 @@ const GUIDE_CITY        = 'Nashville';
 const BLOGGER_NAME      = 'Ludara';
 const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
 const TIME_FORMAT       = '12h';               // Display hours in AM/PM for US guides
+const DISTANCE_UNITS    = 'imperial';         // Use feet/miles for US guides
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 // Nashville palette: Tennessee brick, Southern gold, Music Row purple, forest green

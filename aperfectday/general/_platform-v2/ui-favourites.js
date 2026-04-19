@@ -281,7 +281,7 @@ function planFavTrip(){
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
       <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
+      <span>📏 ${formatDistance(totalDistM)}</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}

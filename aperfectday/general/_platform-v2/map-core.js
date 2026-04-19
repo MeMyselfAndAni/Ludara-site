@@ -37,6 +37,55 @@ function _haversineM(a, b) {
   return 2*R*Math.asin(Math.sqrt(h));
 }
 
+// ── DISTANCE FORMATTING — Imperial vs Metric ─────────────────────────────────
+// DISTANCE_UNITS is defined per guide in map.js: 'imperial' (US) or 'metric' (default)
+function formatDistance(meters) {
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    // Imperial: feet for short distances, miles for long
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet) + ' ft';
+    } else {
+      const miles = feet / 5280;
+      return miles.toFixed(1) + ' mi';
+    }
+  } else {
+    // Metric: meters for short distances, kilometers for long
+    if (meters < 1000) {
+      return Math.round(meters) + ' m';
+    } else {
+      return (meters / 1000).toFixed(1) + ' km';
+    }
+  }
+}
+
+function formatDistanceValue(meters) {
+  // Returns just the number part for calculations/display
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet);
+    } else {
+      return (feet / 5280).toFixed(1);
+    }
+  } else {
+    if (meters < 1000) {
+      return Math.round(meters);
+    } else {
+      return (meters / 1000).toFixed(1);
+    }
+  }
+}
+
+function formatDistanceUnit() {
+  // Returns just the unit label
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    return 'mi'; // Could be ft or mi, but for trip summaries we usually show miles
+  } else {
+    return 'km';
+  }
+}
+
 function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {

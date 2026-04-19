@@ -378,8 +378,8 @@ async function generatePDF(){
       <div class="pdf-stat-label">Walking</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">${(totalM/1000).toFixed(1)}</div>
-      <div class="pdf-stat-label">km</div>
+      <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
+      <div class="pdf-stat-label">${formatDistanceUnit()}</div>
     </div>
   </div>
   <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
