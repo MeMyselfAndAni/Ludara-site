@@ -448,41 +448,55 @@ function clearAllSaved() {
 
     // Use real walking route data (same as PDF)
     function updateTripWithRouteStats(places) {
+      console.log('🔧 DEBUG: updateTripWithRouteStats called with places:', places.map(p => p.name));
+      
       // Always clear cache to force fresh calculation when saved list changes
       if (typeof _lastRouteStats !== 'undefined') {
+        console.log('🔧 DEBUG: clearing _lastRouteStats cache');
         _lastRouteStats = null;
       }
       
       if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+        console.log('🔧 DEBUG: calling _fetchRouteStats');
         _fetchRouteStats(places).then(function(routeStats) {
+          console.log('🔧 DEBUG: _fetchRouteStats resolved with:', routeStats);
           _lastRouteStats = routeStats; // Cache for PDF to use
           displaySavedTrip(places, routeStats.distM, routeStats.walkMins);
-        }).catch(function() {
+        }).catch(function(error) {
+          console.log('🔧 DEBUG: _fetchRouteStats failed:', error);
           // Fallback to straight-line calculation if route fetch fails
           var distM = 0;
           for (var i = 1; i < places.length; i++) {
             if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
           }
           var walkMins = Math.round(distM * 1.35 / 80);
+          console.log('🔧 DEBUG: using fallback calculation, distM:', distM);
           displaySavedTrip(places, distM, walkMins);
         });
       } else {
+        console.log('🔧 DEBUG: using fallback (no _fetchRouteStats or <2 places)');
         // Fallback for single place or missing _fetchRouteStats
         var distM = 0;
         for (var i = 1; i < places.length; i++) {
           if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
         }
         var walkMins = Math.round(distM * 1.35 / 80);
+        console.log('🔧 DEBUG: fallback distM:', distM);
         displaySavedTrip(places, distM, walkMins);
       }
     }
 
     function displaySavedTrip(places, distM, walkMins) {
+      console.log('🔧 DEBUG: displaySavedTrip called with distM:', distM, 'walkMins:', walkMins);
+      
       var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
       // Walk > 3h → show drive time instead
       var showDrive = walkMins > 180;
       var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
+
+      var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
+      console.log('🔧 DEBUG: calculated distanceText:', distanceText);
 
       var html =
         '<div class="saved-stats-bar" style="display:flex">' +
@@ -490,7 +504,7 @@ function clearAllSaved() {
           '<span class="saved-stat-dot">·</span>' +
           '<span id="saved-stat-walk-sheet">' + timeLabel + '</span>' +
           '<span class="saved-stat-dot">·</span>' +
-          '<span>📏 ' + (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km')) + '</span>' +
+          '<span>📏 ' + distanceText + '</span>' +
         '</div>' +
         '<div style="display:flex;padding:8px 10px;gap:5px;">' +
           '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
@@ -554,6 +568,7 @@ function clearAllSaved() {
           this.style.borderTop = '2px solid var(--brand-color, #007acc)';
         });
         row.addEventListener('drop', function(e) {
+          console.log('🔧 DEBUG: drop event fired');
           e.stopPropagation();
           var targetId = parseInt(this.dataset.id);
           if (dragSrcId === targetId) return;
@@ -563,10 +578,15 @@ function clearAllSaved() {
           if (fi < 0 || ti < 0) return;
           ids.splice(fi, 1);
           ids.splice(ti, 0, dragSrcId);
+          console.log('🔧 DEBUG: new order:', ids);
           if (typeof _setSavedOrder === 'function') {
+            console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
-          if (typeof updateFavUI === 'function') updateFavUI();
+          if (typeof updateFavUI === 'function') {
+            console.log('🔧 DEBUG: calling updateFavUI after reorder');
+            updateFavUI();
+          }
         });
 
         // Touch support
@@ -749,6 +769,7 @@ function clearAllSaved() {
 
   var _origUpdateFavUI = window.updateFavUI;
   window.updateFavUI = function() {
+    console.log('🔧 DEBUG: updateFavUI called');
     if (_origUpdateFavUI) _origUpdateFavUI();
     var pill = document.getElementById('pill-saved');
     if (pill) {
@@ -760,9 +781,11 @@ function clearAllSaved() {
     
     // CRITICAL: Also regenerate saved list with fresh route calculation
     if (typeof favourites !== 'undefined' && favourites.length > 0) {
+      console.log('🔧 DEBUG: favourites found, count:', favourites.length);
       var places = favourites.slice(); // get current saved places
       if (typeof _getSavedOrder === 'function') {
         var savedOrder = _getSavedOrder();
+        console.log('🔧 DEBUG: savedOrder:', savedOrder);
         if (savedOrder && savedOrder.length > 0) {
           // Reorder places according to saved order
           var orderedPlaces = [];
@@ -771,9 +794,13 @@ function clearAllSaved() {
             if (place) orderedPlaces.push(place);
           });
           places = orderedPlaces;
+          console.log('🔧 DEBUG: reordered places:', places.map(p => p.name));
         }
       }
+      console.log('🔧 DEBUG: calling updateTripWithRouteStats');
       updateTripWithRouteStats(places); // This will recalculate with fresh route data
+    } else {
+      console.log('🔧 DEBUG: no favourites found');
     }
   };
 })();
