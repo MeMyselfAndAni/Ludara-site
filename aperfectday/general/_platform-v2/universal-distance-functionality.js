@@ -128,7 +128,7 @@ window.addEventListener('load', function() {
       'align-items:center', 
       'justify-content:center',
       'gap:6px',
-      'margin:6px 0 4px',
+      'margin:-2px 0 4px',
       'padding:8px 18px',
       'background:white',
       'color:' + (typeof _brandColor === 'function' ? _brandColor() : 'var(--brand)'),
