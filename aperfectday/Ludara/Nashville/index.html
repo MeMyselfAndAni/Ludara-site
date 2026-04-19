@@ -411,10 +411,18 @@ function clearAllSaved() {
       return;
     }
 
-    var rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
-    var places = rawFavs.map(function(id) {
-      return PLACES.find(function(p) { return p.id === id || p.id === +id; });
-    }).filter(Boolean);
+    // ✅ USE THE AUTHORITATIVE SOURCE - getSortedFavPlaces() from ui-favourites.js
+    var places;
+    
+    console.log('🔧 DEBUG: Using authoritative getSortedFavPlaces function');
+    
+    if (typeof getSortedFavPlaces === 'function') {
+      places = getSortedFavPlaces();
+      console.log('🔧 DEBUG: Got places from authoritative source:', places.map(p => p.name));
+    } else {
+      console.error('🔧 ERROR: getSortedFavPlaces function not available');
+      places = [];
+    }
 
     if (places.length >= 2) {
       var pool = places.slice().sort(function(a,b){ return a.lng - b.lng; });
@@ -683,31 +691,15 @@ function clearAllSaved() {
             _setSavedOrder(ids);
           }
           
-          console.log('🔧 DEBUG: completely regenerating list with new order');
+          console.log('🔧 DEBUG: calling authoritative functions to regenerate');
           
-          // Get places in the new order and regenerate everything
+          // Use AUTHORITATIVE functions - same as map uses
           setTimeout(function() {
-            if (typeof favourites !== 'undefined' && favourites.length > 0) {
-              var places = favourites.slice();
+            if (typeof getSortedFavPlaces === 'function') {
+              var places = getSortedFavPlaces();
+              console.log('🔧 DEBUG: regenerating with authoritative places:', places.map(p => p.name));
               
-              // Reorder according to saved order
-              if (typeof _getSavedOrder === 'function') {
-                var savedOrder = _getSavedOrder();
-                if (savedOrder && savedOrder.length > 0) {
-                  var orderedPlaces = [];
-                  savedOrder.forEach(function(id) {
-                    var place = places.find(function(p) { 
-                      return p.id == id || p.id === id || String(p.id) === String(id);
-                    });
-                    if (place) orderedPlaces.push(place);
-                  });
-                  places = orderedPlaces;
-                }
-              }
-              
-              console.log('🔧 DEBUG: regenerating with places in order:', places.map(p => p.name));
-              
-              // Regenerate the saved list completely
+              // Regenerate the list using authoritative order
               updateTripWithRouteStats(places);
               
               // Also update the map with the same order
@@ -783,21 +775,10 @@ function clearAllSaved() {
                 _setSavedOrder(ids);
               }
               
-              // Completely regenerate list and map
+              // Use AUTHORITATIVE functions only
               setTimeout(function() {
-                if (typeof favourites !== 'undefined' && favourites.length > 0) {
-                  var places = favourites.slice();
-                  if (typeof _getSavedOrder === 'function') {
-                    var savedOrder = _getSavedOrder();
-                    if (savedOrder && savedOrder.length > 0) {
-                      var orderedPlaces = [];
-                      savedOrder.forEach(function(id) {
-                        var place = places.find(function(p) { return p.id == id; });
-                        if (place) orderedPlaces.push(place);
-                      });
-                      places = orderedPlaces;
-                    }
-                  }
+                if (typeof getSortedFavPlaces === 'function') {
+                  var places = getSortedFavPlaces();
                   updateTripWithRouteStats(places);
                   if (typeof drawSavedRoute === 'function') drawSavedRoute();
                 }
