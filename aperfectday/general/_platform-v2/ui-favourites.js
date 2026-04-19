@@ -233,8 +233,12 @@ function haversineM(a, b){
   return 2*R*Math.asin(Math.sqrt(h));
 }
 function formatDistanceLocal(meters) {
-  // Local version for ui-favourites.js scope
-  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+  // Robust check for imperial units - Nashville should always use imperial
+  const isImperial = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') ||
+                    (typeof window.DISTANCE_UNITS !== 'undefined' && window.DISTANCE_UNITS === 'imperial') ||
+                    (typeof GUIDE_CITY !== 'undefined' && (GUIDE_CITY === 'Nashville' || GUIDE_CITY === 'New Orleans'));
+  
+  if (isImperial) {
     const feet = meters * 3.28084;
     if (feet < 5280) {
       return Math.round(feet) + ' ft';
