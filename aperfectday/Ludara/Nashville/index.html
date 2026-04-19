@@ -590,9 +590,9 @@ function clearAllSaved() {
             console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
-          if (typeof updateFavUI === 'function') {
-            console.log('🔧 DEBUG: calling updateFavUI after reorder');
-            updateFavUI();
+          if (typeof planFavTrip === 'function') {
+            console.log('🔧 DEBUG: calling planFavTrip after reorder');
+            planFavTrip();
           }
         });
 
@@ -626,7 +626,7 @@ function clearAllSaved() {
               if (typeof _setSavedOrder === 'function') {
                 _setSavedOrder(ids);
               }
-              if (typeof updateFavUI === 'function') updateFavUI();
+              if (typeof planFavTrip === 'function') planFavTrip();
             }
           }
           touchSrc = null;
@@ -694,7 +694,7 @@ function clearAllSaved() {
         if (fi < 0 || ti < 0) return;
         ids.splice(fi, 1); ids.splice(ti, 0, dragSrcId);
         if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
-        if (typeof updateFavUI === 'function') updateFavUI();
+        if (typeof planFavTrip === 'function') planFavTrip();
       });
       // Touch support
       var touchSrc = null;
@@ -722,7 +722,7 @@ function clearAllSaved() {
           if (fi >= 0 && ti >= 0) {
             ids.splice(fi, 1); ids.splice(ti, 0, srcId);
             if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
-            if (typeof updateFavUI === 'function') updateFavUI();
+            if (typeof planFavTrip === 'function') planFavTrip();
           }
         }
         touchSrc = null;
