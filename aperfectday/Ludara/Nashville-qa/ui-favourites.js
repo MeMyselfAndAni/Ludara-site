@@ -193,20 +193,25 @@ function toggleSavedFilter(el){
   }
 }
 
-// ── UNIVERSAL GOOGLE MAPS INTERCEPTOR ────────────────────────
-// Ensures ALL Google Maps buttons use the authoritative function
+// ── VERY SPECIFIC RED BUTTON INTERCEPTOR ────────────────────
+// Only intercepts the exact RED buttons, preserves all other functionality
 document.addEventListener('click', function(e) {
+  // Debug all clicks to see what's happening
+  if (e.target.onclick && e.target.onclick.toString().includes('openDetail')) {
+    console.log('🔧 Place card click detected, not intercepting');
+    return; // Let normal place card clicks work
+  }
+  
   const target = e.target;
-  const isGoogleMapsButton = (
-    target.textContent?.includes('Google Maps') ||
-    target.textContent?.includes('🗺 Google') ||
-    target.className?.includes('trip-maps') ||
-    target.onclick?.toString().includes('maps.google.com') ||
-    target.href?.includes('maps.google.com')
+  
+  // Only intercept if it's EXACTLY the RED Google Maps button
+  const isExactRedButton = (
+    target.classList.contains('saved-action-btn') && 
+    target.classList.contains('saved-action-maps')
   );
   
-  if (isGoogleMapsButton) {
-    console.log('🔄 Intercepting Google Maps button click - using authoritative function');
+  if (isExactRedButton) {
+    console.log('🔄 Intercepting EXACT RED Google Maps button');
     e.preventDefault();
     e.stopPropagation();
     openTripInMaps();
@@ -225,4 +230,25 @@ window.APD_SavedPlaces = {
   _clearSavedOrder
 };
 
-console.log('✅ A Perfect Day Saved Places Module loaded (Single Source of Truth)');
+// ── ENSURE CORE UI COMPATIBILITY ────────────────────────────
+// Make sure our module doesn't interfere with existing functionality
+(function() {
+  // Wait for other scripts to load, then initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSavedPlaces);
+  } else {
+    initSavedPlaces();
+  }
+  
+  function initSavedPlaces() {
+    // Initialize after a short delay to ensure other scripts are ready
+    setTimeout(() => {
+      console.log('✅ A Perfect Day Saved Places Module loaded (Single Source of Truth)');
+      
+      // Ensure openDetail is available (it should come from ui-card.js)
+      if (typeof window.openDetail !== 'function') {
+        console.warn('⚠️ openDetail function not found - place cards may not work');
+      }
+    }, 100);
+  }
+})();
