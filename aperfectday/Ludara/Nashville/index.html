@@ -678,17 +678,45 @@ function clearAllSaved() {
             _setSavedOrder(ids);
           }
           
-          // Update map route (from original ui-favourites.js logic)
-          if (typeof drawSavedRoute === 'function') {
-            console.log('🔧 DEBUG: calling drawSavedRoute to update map');
-            drawSavedRoute();
+          if (typeof _setSavedOrder === 'function') {
+            console.log('🔧 DEBUG: calling _setSavedOrder');
+            _setSavedOrder(ids);
           }
           
-          // Update list numbers to match map markers
+          console.log('🔧 DEBUG: completely regenerating list with new order');
+          
+          // Get places in the new order and regenerate everything
           setTimeout(function() {
-            console.log('🔧 DEBUG: syncing list numbers with map markers');
-            syncListNumbersWithMap();
-          }, 100);
+            if (typeof favourites !== 'undefined' && favourites.length > 0) {
+              var places = favourites.slice();
+              
+              // Reorder according to saved order
+              if (typeof _getSavedOrder === 'function') {
+                var savedOrder = _getSavedOrder();
+                if (savedOrder && savedOrder.length > 0) {
+                  var orderedPlaces = [];
+                  savedOrder.forEach(function(id) {
+                    var place = places.find(function(p) { 
+                      return p.id == id || p.id === id || String(p.id) === String(id);
+                    });
+                    if (place) orderedPlaces.push(place);
+                  });
+                  places = orderedPlaces;
+                }
+              }
+              
+              console.log('🔧 DEBUG: regenerating with places in order:', places.map(p => p.name));
+              
+              // Regenerate the saved list completely
+              updateTripWithRouteStats(places);
+              
+              // Also update the map with the same order
+              if (typeof drawSavedRoute === 'function') {
+                console.log('🔧 DEBUG: updating map route');
+                drawSavedRoute();
+              }
+            }
+          }, 50);
           
           console.log('🔧 DEBUG: skipping updateFavUI to avoid old popup, directly updating right card');
           
@@ -754,8 +782,26 @@ function clearAllSaved() {
               if (typeof _setSavedOrder === 'function') {
                 _setSavedOrder(ids);
               }
-              if (typeof drawSavedRoute === 'function') drawSavedRoute();
-              setTimeout(function() { syncListNumbersWithMap(); }, 100);
+              
+              // Completely regenerate list and map
+              setTimeout(function() {
+                if (typeof favourites !== 'undefined' && favourites.length > 0) {
+                  var places = favourites.slice();
+                  if (typeof _getSavedOrder === 'function') {
+                    var savedOrder = _getSavedOrder();
+                    if (savedOrder && savedOrder.length > 0) {
+                      var orderedPlaces = [];
+                      savedOrder.forEach(function(id) {
+                        var place = places.find(function(p) { return p.id == id; });
+                        if (place) orderedPlaces.push(place);
+                      });
+                      places = orderedPlaces;
+                    }
+                  }
+                  updateTripWithRouteStats(places);
+                  if (typeof drawSavedRoute === 'function') drawSavedRoute();
+                }
+              }, 50);
             }
           }
           touchSrc = null;
