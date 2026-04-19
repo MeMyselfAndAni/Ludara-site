@@ -233,26 +233,9 @@ function haversineM(a, b){
   return 2*R*Math.asin(Math.sqrt(h));
 }
 function formatDistanceLocal(meters) {
-  // Robust check for imperial units - Nashville should always use imperial
-  const isImperial = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') ||
-                    (typeof window.DISTANCE_UNITS !== 'undefined' && window.DISTANCE_UNITS === 'imperial') ||
-                    (typeof GUIDE_CITY !== 'undefined' && (GUIDE_CITY === 'Nashville' || GUIDE_CITY === 'New Orleans'));
-  
-  if (isImperial) {
-    const feet = meters * 3.28084;
-    if (feet < 5280) {
-      return Math.round(feet) + ' ft';
-    } else {
-      const miles = feet / 5280;
-      return miles.toFixed(1) + ' mi';
-    }
-  } else {
-    if (meters < 1000) {
-      return Math.round(meters) + ' m';
-    } else {
-      return (meters / 1000).toFixed(1) + ' km';
-    }
-  }
+  // TEST VERSION - Always return miles to see if this function runs at all
+  const miles = (meters * 3.28084) / 5280;
+  return miles.toFixed(1) + ' mi TEST';
 }
 function formatWalk(m){
   const mins = Math.round(m/80);
