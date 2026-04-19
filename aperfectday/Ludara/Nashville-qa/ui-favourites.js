@@ -401,10 +401,18 @@ function openTripInMaps(){
   console.log('🔧 openTripInMaps function called');
   
   try {
+    // COMPREHENSIVE DEBUG: Check all ordering sources
+    console.log('🔍 DEBUGGING ORDERING ISSUE:');
+    console.log('🔍 Raw favourites array:', favourites);
+    console.log('🔍 _getSavedOrder() result:', _getSavedOrder());
+    console.log('🔍 localStorage favs_order key:', localStorage.getItem('favs_order_' + window.location.pathname.replace(/\//g,'_')));
+    
     // Force refresh of saved order to avoid timing issues
     console.log('🔧 About to call getSortedFavPlaces');
     const places = getSortedFavPlaces();
     console.log('🔧 getSortedFavPlaces returned:', places);
+    console.log('🔧 Place names in order:', places.map(p => p.name));
+    console.log('🔧 Place IDs in order:', places.map(p => p.id));
     
     if(!places.length) {
       console.log('🔧 No places found, returning');
