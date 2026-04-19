@@ -446,13 +446,13 @@ function clearAllSaved() {
       return;
     }
 
-    // Clear cached route stats when places change - force recalculation
-    if (typeof _lastRouteStats !== 'undefined') {
-      _lastRouteStats = null;
-    }
-
     // Use real walking route data (same as PDF)
     function updateTripWithRouteStats(places) {
+      // Always clear cache to force fresh calculation when saved list changes
+      if (typeof _lastRouteStats !== 'undefined') {
+        _lastRouteStats = null;
+      }
+      
       if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
         _fetchRouteStats(places).then(function(routeStats) {
           _lastRouteStats = routeStats; // Cache for PDF to use
@@ -565,8 +565,6 @@ function clearAllSaved() {
           ids.splice(ti, 0, dragSrcId);
           if (typeof _setSavedOrder === 'function') {
             _setSavedOrder(ids);
-            // Clear route cache since order changed - will recalculate on next updateFavUI
-            if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
           }
           if (typeof updateFavUI === 'function') updateFavUI();
         });
@@ -600,8 +598,6 @@ function clearAllSaved() {
               ids.splice(ti, 0, srcId);
               if (typeof _setSavedOrder === 'function') {
                 _setSavedOrder(ids);
-                // Clear route cache since order changed - will recalculate on next updateFavUI  
-                if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
               }
               if (typeof updateFavUI === 'function') updateFavUI();
             }
