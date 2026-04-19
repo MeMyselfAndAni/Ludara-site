@@ -539,6 +539,13 @@ function clearAllSaved() {
       });
 
       listEl.innerHTML = html;
+      console.log('🔧 DEBUG: innerHTML updated, listEl:', listEl);
+      
+      // Force DOM update to make sure it sticks
+      if (listEl && listEl.parentNode) {
+        listEl.parentNode.appendChild(listEl); // Force reflow
+        console.log('🔧 DEBUG: forced DOM reflow');
+      }
 
       // Auto-sort link
       var autoLink = document.getElementById('saved-autosort-link');
@@ -770,7 +777,14 @@ function clearAllSaved() {
   var _origUpdateFavUI = window.updateFavUI;
   window.updateFavUI = function() {
     console.log('🔧 DEBUG: updateFavUI called');
-    if (_origUpdateFavUI) _origUpdateFavUI();
+    
+    try {
+      if (_origUpdateFavUI) _origUpdateFavUI();
+    } catch (error) {
+      console.log('🔧 DEBUG: original updateFavUI failed:', error);
+      // Continue anyway - our route calculation can still work
+    }
+    
     var pill = document.getElementById('pill-saved');
     if (pill) {
       var heartSpan = pill.querySelector('.heart-icon');
@@ -804,7 +818,7 @@ function clearAllSaved() {
       } else {
         console.log('🔧 DEBUG: no favourites found (deferred)');
       }
-    }, 100); // Small delay to ensure applyFilters completes first
+    }, 200); // Increased delay to ensure everything settles
   };
 })();
 </script>
