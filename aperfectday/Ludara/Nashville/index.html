@@ -799,6 +799,8 @@ function clearAllSaved() {
       if (typeof favourites !== 'undefined' && favourites.length > 0) {
         console.log('🔧 DEBUG: favourites found, count:', favourites.length);
         var places = favourites.slice(); // get current saved places
+        console.log('🔧 DEBUG: places IDs:', places.map(p => p.id));
+        
         if (typeof _getSavedOrder === 'function') {
           var savedOrder = _getSavedOrder();
           console.log('🔧 DEBUG: savedOrder:', savedOrder);
@@ -806,15 +808,42 @@ function clearAllSaved() {
             // Reorder places according to saved order
             var orderedPlaces = [];
             savedOrder.forEach(function(id) {
-              var place = places.find(function(p) { return p.id === id; });
-              if (place) orderedPlaces.push(place);
+              console.log('🔧 DEBUG: looking for place with ID:', id);
+              var place = places.find(function(p) { 
+                // Handle both string and number IDs
+                return p.id == id || p.id === id || String(p.id) === String(id);
+              });
+              if (place) {
+                console.log('🔧 DEBUG: found place:', place.name);
+                orderedPlaces.push(place);
+              } else {
+                console.log('🔧 DEBUG: place not found for ID:', id);
+              }
             });
             places = orderedPlaces;
             console.log('🔧 DEBUG: reordered places:', places.map(p => p.name));
           }
         }
+        
         console.log('🔧 DEBUG: calling updateTripWithRouteStats (deferred)');
-        updateTripWithRouteStats(places); // This will recalculate with fresh route data
+        // Call the function properly - it should be in global scope
+        if (typeof window.updateTripWithRouteStats === 'function') {
+          window.updateTripWithRouteStats(places);
+        } else if (typeof updateTripWithRouteStats === 'function') {
+          updateTripWithRouteStats(places);
+        } else {
+          console.log('🔧 DEBUG: updateTripWithRouteStats function not found in scope');
+          // Fallback: call our function directly inline
+          if (places.length > 0) {
+            console.log('🔧 DEBUG: using fallback direct calculation');
+            var distM = 0;
+            for (var i = 1; i < places.length; i++) {
+              if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+            }
+            var walkMins = Math.round(distM * 1.35 / 80);
+            console.log('🔧 DEBUG: fallback distM:', distM, 'miles:', (distM * 3.28084 / 5280).toFixed(1));
+          }
+        }
       } else {
         console.log('🔧 DEBUG: no favourites found (deferred)');
       }
