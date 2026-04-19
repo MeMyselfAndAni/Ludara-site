@@ -997,6 +997,57 @@ function clearAllSaved() {
     }, 200); // Increased delay to ensure everything settles
   };
 })();
+
+// Add basic Navigate on Google Maps button to place cards
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  
+  new MutationObserver(function() {
+    var name = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    
+    // Remove existing button
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    
+    // Create basic navigate button
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = [
+      'display:inline-flex',
+      'align-items:center', 
+      'justify-content:center',
+      'gap:6px',
+      'margin:10px 0 4px',
+      'padding:8px 18px',
+      'background:white',
+      'color:#c8102e',
+      'border:1.5px solid #c8102e',
+      'border-radius:24px',
+      'font-size:0.82rem',
+      'font-weight:600',
+      'cursor:pointer',
+      'width:100%'
+    ].join(';');
+    
+    btn.innerHTML = '🚶 Navigate on Google Maps';
+    btn.onclick = function() { 
+      var dest = place.lat + ',' + place.lng;
+      var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+      window.open(url, '_blank');
+    };
+    
+    // Insert button after hours element
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) {
+      hours.parentNode.insertBefore(btn, hours.nextSibling);
+    }
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+console.log('✅ Basic Navigate button added');
 </script>
 
 </body>
