@@ -463,7 +463,7 @@ function clearAllSaved() {
         '<span class="saved-stat-dot">·</span>' +
         '<span id="saved-stat-walk-sheet">' + timeLabel + '</span>' +
         '<span class="saved-stat-dot">·</span>' +
-        '<span>📏 ' + (distM/1000).toFixed(1) + ' km</span>' +
+        '<span>📏 ' + (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km')) + '</span>' +
       '</div>' +
       '<div style="display:flex;padding:8px 10px;gap:5px;">' +
         '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
