@@ -779,29 +779,32 @@ function clearAllSaved() {
     var btn = document.getElementById('sheet-clear-btn');
     if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
     
-    // CRITICAL: Also regenerate saved list with fresh route calculation
-    if (typeof favourites !== 'undefined' && favourites.length > 0) {
-      console.log('🔧 DEBUG: favourites found, count:', favourites.length);
-      var places = favourites.slice(); // get current saved places
-      if (typeof _getSavedOrder === 'function') {
-        var savedOrder = _getSavedOrder();
-        console.log('🔧 DEBUG: savedOrder:', savedOrder);
-        if (savedOrder && savedOrder.length > 0) {
-          // Reorder places according to saved order
-          var orderedPlaces = [];
-          savedOrder.forEach(function(id) {
-            var place = places.find(function(p) { return p.id === id; });
-            if (place) orderedPlaces.push(place);
-          });
-          places = orderedPlaces;
-          console.log('🔧 DEBUG: reordered places:', places.map(p => p.name));
+    // CRITICAL: Defer our route calculation until AFTER applyFilters completes
+    setTimeout(function() {
+      console.log('🔧 DEBUG: deferred route calculation starting');
+      if (typeof favourites !== 'undefined' && favourites.length > 0) {
+        console.log('🔧 DEBUG: favourites found, count:', favourites.length);
+        var places = favourites.slice(); // get current saved places
+        if (typeof _getSavedOrder === 'function') {
+          var savedOrder = _getSavedOrder();
+          console.log('🔧 DEBUG: savedOrder:', savedOrder);
+          if (savedOrder && savedOrder.length > 0) {
+            // Reorder places according to saved order
+            var orderedPlaces = [];
+            savedOrder.forEach(function(id) {
+              var place = places.find(function(p) { return p.id === id; });
+              if (place) orderedPlaces.push(place);
+            });
+            places = orderedPlaces;
+            console.log('🔧 DEBUG: reordered places:', places.map(p => p.name));
+          }
         }
+        console.log('🔧 DEBUG: calling updateTripWithRouteStats (deferred)');
+        updateTripWithRouteStats(places); // This will recalculate with fresh route data
+      } else {
+        console.log('🔧 DEBUG: no favourites found (deferred)');
       }
-      console.log('🔧 DEBUG: calling updateTripWithRouteStats');
-      updateTripWithRouteStats(places); // This will recalculate with fresh route data
-    } else {
-      console.log('🔧 DEBUG: no favourites found');
-    }
+    }, 100); // Small delay to ensure applyFilters completes first
   };
 })();
 </script>
