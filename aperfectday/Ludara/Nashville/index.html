@@ -635,6 +635,12 @@ function clearAllSaved() {
             _setSavedOrder(ids);
           }
           
+          // Update map route (from original ui-favourites.js logic)
+          if (typeof drawSavedRoute === 'function') {
+            console.log('🔧 DEBUG: calling drawSavedRoute to update map');
+            drawSavedRoute();
+          }
+          
           console.log('🔧 DEBUG: skipping updateFavUI to avoid old popup, directly updating right card');
           
           // Get places in new order and calculate distance
@@ -699,7 +705,7 @@ function clearAllSaved() {
               if (typeof _setSavedOrder === 'function') {
                 _setSavedOrder(ids);
               }
-              if (typeof planFavTrip === 'function') planFavTrip();
+              if (typeof drawSavedRoute === 'function') drawSavedRoute();
             }
           }
           touchSrc = null;
@@ -767,7 +773,7 @@ function clearAllSaved() {
         if (fi < 0 || ti < 0) return;
         ids.splice(fi, 1); ids.splice(ti, 0, dragSrcId);
         if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
-        if (typeof planFavTrip === 'function') planFavTrip();
+        if (typeof drawSavedRoute === 'function') drawSavedRoute();
       });
       // Touch support
       var touchSrc = null;
@@ -795,7 +801,7 @@ function clearAllSaved() {
           if (fi >= 0 && ti >= 0) {
             ids.splice(fi, 1); ids.splice(ti, 0, srcId);
             if (typeof _setSavedOrder === 'function') _setSavedOrder(ids);
-            if (typeof planFavTrip === 'function') planFavTrip();
+            if (typeof drawSavedRoute === 'function') drawSavedRoute();
           }
         }
         touchSrc = null;
