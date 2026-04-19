@@ -757,6 +757,24 @@ function clearAllSaved() {
     }
     var btn = document.getElementById('sheet-clear-btn');
     if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
+    
+    // CRITICAL: Also regenerate saved list with fresh route calculation
+    if (typeof favourites !== 'undefined' && favourites.length > 0) {
+      var places = favourites.slice(); // get current saved places
+      if (typeof _getSavedOrder === 'function') {
+        var savedOrder = _getSavedOrder();
+        if (savedOrder && savedOrder.length > 0) {
+          // Reorder places according to saved order
+          var orderedPlaces = [];
+          savedOrder.forEach(function(id) {
+            var place = places.find(function(p) { return p.id === id; });
+            if (place) orderedPlaces.push(place);
+          });
+          places = orderedPlaces;
+        }
+      }
+      updateTripWithRouteStats(places); // This will recalculate with fresh route data
+    }
   };
 })();
 </script>
