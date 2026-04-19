@@ -302,9 +302,17 @@
 
 <!-- Navigate in Google Maps using place search names -->
 <script>
-// ✅ CLEANED: openTripInMaps() now comes from ui-favourites.js (authoritative version)
-// No duplicate function needed here - the authoritative version respects drag ordering
-
+function openTripInMaps() {
+  let ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
+  const places = PLACES.filter(p => ids.includes(p.id));
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' Nashville'));
+  const url = stops.length === 1
+    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
+    : 'https://www.google.com/maps/dir/' + stops.join('/');
+  window.open(url, '_blank');
+}
 </script>
 
 <!-- Address display in place card -->
@@ -343,9 +351,22 @@ window.addEventListener('load', function() {
 
 <!-- ── SHARE ITINERARY & URL READER ── -->
 <script>
-// ✅ CLEANED: shareItinerary() now comes from ui-favourites.js (authoritative version)
-// No duplicate function needed here - the authoritative version respects drag ordering
-
+function shareItinerary() {
+  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
+  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      _toast('🔗 Link copied! Paste it in an email or message.', 4000);
+    }).catch(function() { _fallbackCopy(url); });
+  } else { _fallbackCopy(url); }
+}
+function _fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
+  document.body.removeChild(ta);
+}
 window.addEventListener('load', function() {
   var params = new URLSearchParams(window.location.search);
   var itinerary = params.get('itinerary');
@@ -1013,7 +1034,8 @@ window.addEventListener('load', function() {
     
     btn.innerHTML = '🚶 Navigate on Google Maps';
     btn.onclick = function() { 
-      var dest = place.lat + ',' + place.lng;
+      // Use place name instead of coordinates so Google Maps shows business name
+      var dest = encodeURIComponent(place.search || place.name + ', Nashville');
       var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
       window.open(url, '_blank');
     };

@@ -416,12 +416,14 @@ function openTripInMaps(){
     console.log('🗺️ Manual order from localStorage:', _getSavedOrder());
     
     const stops = places.slice(0,8);
-    const origin = encodeURIComponent(`${stops[0].lat},${stops[0].lng}`);
-    const dest   = encodeURIComponent(`${stops[stops.length-1].lat},${stops[stops.length-1].lng}`);
-    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(`${p.lat},${p.lng}`)).join('|');
+    
+    // Use place names instead of coordinates so Google Maps shows business names
+    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', Nashville');
+    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', Nashville');
+    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', Nashville')).join('|');
     
     const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=walking`;
-    console.log('🔧 Opening URL:', url);
+    console.log('🔧 Opening URL with place names:', url);
     
     window.open(url, '_blank');
   } catch (error) {
