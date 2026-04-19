@@ -299,12 +299,26 @@ function planFavTrip(){
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
         <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
-      <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
+
     </div>
     ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
+
+  // Add the missing trip footer with proper Google Maps button
+  const existingFooter = document.querySelector('.trip-footer');
+  if (!existingFooter) {
+    const tripPanel = document.querySelector('.trip-panel');
+    const footer = document.createElement('div');
+    footer.className = 'trip-footer';
+    footer.innerHTML = `
+      <button class="trip-maps-btn" onclick="openTripInMaps()">
+        🗺 Open in Google Maps
+      </button>
+    `;
+    tripPanel.appendChild(footer);
+  }
 
   // Wire drag-to-reorder on trip-stop rows
   let dragSrcId = null;
@@ -379,6 +393,31 @@ function jumpToTripStop(id){
   if(p) map.panTo([p.lng, p.lat]);
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
+
+// ── UNIVERSAL GOOGLE MAPS LINK INTERCEPTOR ──────────────────
+// Intercepts ALL Google Maps links to ensure they use proper ordering
+document.addEventListener('click', function(e) {
+  const target = e.target;
+  
+  // Check if this is a Google Maps button or link
+  const isGoogleMapsButton = (
+    target.textContent?.includes('Google Maps') ||
+    target.textContent?.includes('🗺 Google') ||
+    target.className?.includes('trip-maps') ||
+    target.onclick?.toString().includes('maps.google.com') ||
+    target.href?.includes('maps.google.com')
+  );
+  
+  if (isGoogleMapsButton) {
+    console.log('🔄 Intercepting Google Maps button click');
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Use our proper ordering function
+    openTripInMaps();
+    return false;
+  }
+});
 
 function openTripInMaps(){
   // Force refresh of saved order to avoid timing issues
