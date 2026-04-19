@@ -232,28 +232,6 @@ function haversineM(a, b){
   const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
   return 2*R*Math.asin(Math.sqrt(h));
 }
-function formatDistanceLocal(meters) {
-  // Robust check for imperial units - Nashville should always use imperial
-  const isImperial = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') ||
-                    (typeof window.DISTANCE_UNITS !== 'undefined' && window.DISTANCE_UNITS === 'imperial') ||
-                    (typeof GUIDE_CITY !== 'undefined' && (GUIDE_CITY === 'Nashville' || GUIDE_CITY === 'New Orleans'));
-  
-  if (isImperial) {
-    const feet = meters * 3.28084;
-    if (feet < 5280) {
-      return Math.round(feet) + ' ft';
-    } else {
-      const miles = feet / 5280;
-      return miles.toFixed(1) + ' mi';
-    }
-  } else {
-    if (meters < 1000) {
-      return Math.round(meters) + ' m';
-    } else {
-      return (meters / 1000).toFixed(1) + ' km';
-    }
-  }
-}
 function formatWalk(m){
   const mins = Math.round(m/80);
   if(mins<2) return '<2 min';
@@ -303,7 +281,7 @@ function planFavTrip(){
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
       <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${formatDistanceLocal(totalDistM)}</span>
+      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
@@ -403,8 +381,14 @@ function jumpToTripStop(id){
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 
 function openTripInMaps(){
+  // Force refresh of saved order to avoid timing issues
   const places = getSortedFavPlaces();
   if(!places.length) return;
+  
+  // Debug logging to see actual order being used
+  console.log('🗺️ Opening Google Maps with order:', places.map(p => p.name));
+  console.log('🗺️ Manual order from localStorage:', _getSavedOrder());
+  
   const stops = places.slice(0,8);
   const origin = encodeURIComponent(`${stops[0].lat},${stops[0].lng}`);
   const dest   = encodeURIComponent(`${stops[stops.length-1].lat},${stops[stops.length-1].lng}`);
