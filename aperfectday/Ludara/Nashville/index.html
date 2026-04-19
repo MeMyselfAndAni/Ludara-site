@@ -449,6 +449,8 @@ function clearAllSaved() {
     // Use real walking route data (same as PDF)
     function updateTripWithRouteStats(places) {
       console.log('🔧 DEBUG: updateTripWithRouteStats called with places:', places.map(p => p.name));
+      console.log('🔧 DEBUG: places order IDs:', places.map(p => p.id));
+      console.log('🔧 DEBUG: places coordinates:', places.map(p => `${p.name}: ${p.lat},${p.lng}`));
       
       // Always clear cache to force fresh calculation when saved list changes
       if (typeof _lastRouteStats !== 'undefined') {
@@ -459,7 +461,9 @@ function clearAllSaved() {
       if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
         console.log('🔧 DEBUG: calling _fetchRouteStats');
         _fetchRouteStats(places).then(function(routeStats) {
-          console.log('🔧 DEBUG: _fetchRouteStats resolved with:', routeStats);
+          console.log('🔧 DEBUG: _fetchRouteStats resolved with full stats:', routeStats);
+          console.log('🔧 DEBUG: distM:', routeStats.distM, 'walkMins:', routeStats.walkMins, 'legMins:', routeStats.legMins);
+          console.log('🔧 DEBUG: conversion check: meters:', routeStats.distM, '→ feet:', routeStats.distM * 3.28084, '→ miles:', (routeStats.distM * 3.28084 / 5280).toFixed(2));
           _lastRouteStats = routeStats; // Cache for PDF to use
           displaySavedTrip(places, routeStats.distM, routeStats.walkMins);
         }).catch(function(error) {
@@ -590,10 +594,30 @@ function clearAllSaved() {
             console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
-          if (typeof planFavTrip === 'function') {
-            console.log('🔧 DEBUG: calling planFavTrip after reorder');
-            planFavTrip();
+          if (typeof updateFavUI === 'function') {
+            console.log('🔧 DEBUG: calling updateFavUI after reorder');
+            updateFavUI();
           }
+          // Also update any right-side card distance displays
+          console.log('🔧 DEBUG: looking for right-side distance elements to update');
+          setTimeout(function() {
+            // Look for common distance display elements that might be the right-side card
+            var distanceElements = document.querySelectorAll('[class*="distance"], [class*="miles"], [class*="mi"], .saved-stat');
+            console.log('🔧 DEBUG: found potential distance elements:', distanceElements.length);
+            // Force update any cached distance displays
+            if (typeof _lastRouteStats !== 'undefined' && _lastRouteStats && _lastRouteStats.distM) {
+              var distanceText = (typeof formatDistance === 'function' ? formatDistance(_lastRouteStats.distM) : ((_lastRouteStats.distM/1000).toFixed(1) + ' km'));
+              console.log('🔧 DEBUG: trying to update right card with:', distanceText);
+              // Update any element that might contain the right-side distance
+              distanceElements.forEach(function(el) {
+                if (el.textContent.includes('mi') || el.textContent.includes('km')) {
+                  console.log('🔧 DEBUG: updating element:', el.textContent, 'to:', distanceText);
+                  el.textContent = el.textContent.replace(/[\d.]+\s*(mi|km)/g, distanceText);
+                }
+              });
+            }
+          }, 300);
+
         });
 
         // Touch support
