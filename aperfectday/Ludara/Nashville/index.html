@@ -424,16 +424,7 @@ function clearAllSaved() {
       places = [];
     }
 
-    if (places.length >= 2) {
-      var pool = places.slice().sort(function(a,b){ return a.lng - b.lng; });
-      var out = [pool.shift()];
-      while (pool.length) {
-        var last = out[out.length-1], bi=0, bd=Infinity;
-        pool.forEach(function(p,i){ var d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} });
-        out.push(pool.splice(bi,1)[0]);
-      }
-      places = out;
-    }
+    // ✅ TRUST THE AUTHORITATIVE ORDER COMPLETELY - no additional sorting!
 
     var titleEl = document.getElementById('sheet-title');
     if (titleEl) {
