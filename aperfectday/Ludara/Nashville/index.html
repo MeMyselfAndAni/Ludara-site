@@ -529,6 +529,49 @@ function clearAllSaved() {
       });
     }
 
+    // Function to sync list numbers with map markers after reordering
+    function syncListNumbersWithMap() {
+      console.log('🔧 DEBUG: syncListNumbersWithMap called');
+      
+      // Get the same ordered places that drawSavedRoute uses
+      if (typeof getSortedFavPlaces === 'function') {
+        var sortedPlaces = getSortedFavPlaces();
+        console.log('🔧 DEBUG: sorted places from getSortedFavPlaces:', sortedPlaces.map(p => p.name));
+        
+        // Update the list numbers to match this order
+        sortedPlaces.forEach(function(place, index) {
+          var row = document.getElementById('row-' + place.id);
+          if (row) {
+            var numberEl = row.querySelector('.saved-item-num');
+            if (numberEl) {
+              var oldNumber = numberEl.textContent;
+              var newNumber = (index + 1).toString();
+              numberEl.textContent = newNumber;
+              console.log('🔧 DEBUG: updated', place.name, 'from number', oldNumber, 'to', newNumber);
+            }
+          }
+        });
+      } else if (typeof favourites !== 'undefined' && typeof _getSavedOrder === 'function') {
+        // Fallback: use favourites with saved order
+        var savedOrder = _getSavedOrder();
+        console.log('🔧 DEBUG: using savedOrder fallback:', savedOrder);
+        
+        if (savedOrder && savedOrder.length > 0) {
+          savedOrder.forEach(function(id, index) {
+            var row = document.getElementById('row-' + id);
+            if (row) {
+              var numberEl = row.querySelector('.saved-item-num');
+              if (numberEl) {
+                numberEl.textContent = (index + 1).toString();
+                console.log('🔧 DEBUG: updated row', id, 'to number', index + 1);
+              }
+            }
+          });
+        }
+      }
+    }
+
+
 
     function displaySavedTrip(places, distM, walkMins) {
       console.log('🔧 DEBUG: displaySavedTrip called with distM:', distM, 'walkMins:', walkMins);
@@ -641,6 +684,12 @@ function clearAllSaved() {
             drawSavedRoute();
           }
           
+          // Update list numbers to match map markers
+          setTimeout(function() {
+            console.log('🔧 DEBUG: syncing list numbers with map markers');
+            syncListNumbersWithMap();
+          }, 100);
+          
           console.log('🔧 DEBUG: skipping updateFavUI to avoid old popup, directly updating right card');
           
           // Get places in new order and calculate distance
@@ -706,6 +755,7 @@ function clearAllSaved() {
                 _setSavedOrder(ids);
               }
               if (typeof drawSavedRoute === 'function') drawSavedRoute();
+              setTimeout(function() { syncListNumbersWithMap(); }, 100);
             }
           }
           touchSrc = null;
