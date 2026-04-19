@@ -440,9 +440,6 @@ function openTripInMaps(){
   }
 }
 
-// FORCE OVERRIDE: Make sure this function is used globally
-window.openTripInMaps = openTripInMaps;
-
 function shareItinerary(){
   const places = getSortedFavPlaces();
   if(!places.length) {
