@@ -179,7 +179,7 @@
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <span class="pc-emily-by">— A Perfect Day · Nashville</span>
+      <span class="pc-emily-by">— A Perfect Day · Cape Town</span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
       <span class="pc-tip-label">💡 Visitor Tip</span>
@@ -561,9 +561,11 @@ function clearAllSaved() {
       
       var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
-      // Walk > 3h → show drive time instead
-      var showDrive = walkMins > 180;
-      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
+      
+      // 🚗 Use universal route stats from ui-favourites.js
+      const routeStats = _lastRouteStats || { walkMins: walkMins, travelMode: 'walking' };
+      const timeIcon = (routeStats.travelMode === 'driving') ? '🚗' : '🚶';
+      var timeLabel = timeIcon + ' ' + fmtTime(routeStats.walkMins || walkMins);
 
       var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
       console.log('🔧 DEBUG: calculated distanceText:', distanceText);
@@ -1019,7 +1021,7 @@ window.addEventListener('load', function() {
     btn.innerHTML = '🚶 Navigate on Google Maps';
     btn.onclick = function() { 
       // Use place name instead of coordinates so Google Maps shows business name
-      var dest = encodeURIComponent(place.search || place.name + ', Nashville');
+      var dest = encodeURIComponent(place.search || place.name + ', Cape Town');
       var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
       window.open(url, '_blank');
     };
