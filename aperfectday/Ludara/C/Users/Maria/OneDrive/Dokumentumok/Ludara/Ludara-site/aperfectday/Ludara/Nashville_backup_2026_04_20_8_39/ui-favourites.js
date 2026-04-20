@@ -143,18 +143,8 @@ function _fitRouteBounds(places){
 function _addNumberedMarkers(places){
   places.forEach((p, i) => {
     const el = document.createElement('div');
-    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i)+';cursor:pointer;';
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
     el.textContent = i + 1;
-    
-    // Add click handler to open place card
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-      console.log('🔢 Clicked numbered marker:', p.name);
-      if (typeof openDetail === 'function') {
-        openDetail(p.id);
-      }
-    });
-    
     const marker = new maplibregl.Marker({ element:el, anchor:'center' })
       .setLngLat([p.lng, p.lat]).addTo(map);
     tripMarkers.push(marker);
@@ -242,6 +232,28 @@ function haversineM(a, b){
   const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
   return 2*R*Math.asin(Math.sqrt(h));
 }
+function formatDistanceLocal(meters) {
+  // Robust check for imperial units - Nashville should always use imperial
+  const isImperial = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') ||
+                    (typeof window.DISTANCE_UNITS !== 'undefined' && window.DISTANCE_UNITS === 'imperial') ||
+                    (typeof GUIDE_CITY !== 'undefined' && (GUIDE_CITY === 'Nashville' || GUIDE_CITY === 'New Orleans'));
+  
+  if (isImperial) {
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet) + ' ft';
+    } else {
+      const miles = feet / 5280;
+      return miles.toFixed(1) + ' mi';
+    }
+  } else {
+    if (meters < 1000) {
+      return Math.round(meters) + ' m';
+    } else {
+      return (meters / 1000).toFixed(1) + ' km';
+    }
+  }
+}
 function formatWalk(m){
   const mins = Math.round(m/80);
   if(mins<2) return '<2 min';
@@ -291,7 +303,7 @@ function planFavTrip(){
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
       <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
+      <span>📏 ${formatDistanceLocal(totalDistM)}</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
@@ -309,26 +321,12 @@ function planFavTrip(){
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
         <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
-
+      <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
     </div>
     ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
-
-  // Add the missing trip footer with proper Google Maps button
-  const existingFooter = document.querySelector('.trip-footer');
-  if (!existingFooter) {
-    const tripPanel = document.querySelector('.trip-panel');
-    const footer = document.createElement('div');
-    footer.className = 'trip-footer';
-    footer.innerHTML = `
-      <button class="trip-maps-btn" onclick="openTripInMaps()">
-        🗺 Open in Google Maps
-      </button>
-    `;
-    tripPanel.appendChild(footer);
-  }
 
   // Wire drag-to-reorder on trip-stop rows
   let dragSrcId = null;
@@ -404,75 +402,14 @@ function jumpToTripStop(id){
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 
-// ── GOOGLE MAPS BUTTON FIX ───────────────────────────────────
-// RED buttons call openTripInMaps() directly - no interceptor needed
-
 function openTripInMaps(){
-  console.log('🔧 openTripInMaps function called');
-  
-  try {
-    // COMPREHENSIVE DEBUG: Check all ordering sources
-    console.log('🔍 DEBUGGING ORDERING ISSUE:');
-    console.log('🔍 Raw favourites array:', favourites);
-    console.log('🔍 _getSavedOrder() result:', _getSavedOrder());
-    console.log('🔍 localStorage favs_order key:', localStorage.getItem('favs_order_' + window.location.pathname.replace(/\//g,'_')));
-    
-    // Force refresh of saved order to avoid timing issues
-    console.log('🔧 About to call getSortedFavPlaces');
-    const places = getSortedFavPlaces();
-    console.log('🔧 getSortedFavPlaces returned:', places);
-    console.log('🔧 Place names in order:', places.map(p => p.name));
-    console.log('🔧 Place IDs in order:', places.map(p => p.id));
-    
-    if(!places.length) {
-      console.log('🔧 No places found, returning');
-      return;
-    }
-    
-    // Debug logging to see actual order being used
-    console.log('🗺️ Opening Google Maps with order:', places.map(p => p.name));
-    console.log('🗺️ Manual order from localStorage:', _getSavedOrder());
-    
-    const stops = places.slice(0,8);
-    
-    // Use place names instead of coordinates so Google Maps shows business names
-    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', Nashville');
-    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', Nashville');
-    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', Nashville')).join('|');
-    
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=walking`;
-    console.log('🔧 Opening URL with place names:', url);
-    
-    window.open(url, '_blank');
-  } catch (error) {
-    console.error('🔧 Error in openTripInMaps:', error);
-    _toast('Error opening Google Maps');
-  }
-}
-
-function shareItinerary(){
   const places = getSortedFavPlaces();
-  if(!places.length) {
-    _toast('Save some places first to share your itinerary!');
-    return;
-  }
-  
-  console.log('🔗 Sharing itinerary with order:', places.map(p => p.name));
-  console.log('🔗 Manual order from localStorage:', _getSavedOrder());
-  
-  const placeNames = places.map(p => `${p.emoji} ${p.name}`).join('\n');
-  const text = `Check out my Nashville itinerary:\n\n${placeNames}\n\nCreated with A Perfect Day: ${window.location.href}`;
-  
-  if (navigator.share) {
-    navigator.share({
-      title: 'My Nashville Itinerary',
-      text: text
-    });
-  } else {
-    navigator.clipboard.writeText(text).then(() => {
-      _toast('Itinerary copied to clipboard! 📋');
-    });
-  }
+  if(!places.length) return;
+  const stops = places.slice(0,8);
+  const origin = encodeURIComponent(`${stops[0].lat},${stops[0].lng}`);
+  const dest   = encodeURIComponent(`${stops[stops.length-1].lat},${stops[stops.length-1].lng}`);
+  const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(`${p.lat},${p.lng}`)).join('|');
+  window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=walking`,'_blank');
 }
 
 function saveMapImage(){

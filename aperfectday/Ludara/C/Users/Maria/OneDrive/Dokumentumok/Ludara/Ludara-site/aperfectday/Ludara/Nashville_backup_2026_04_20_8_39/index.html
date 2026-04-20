@@ -302,9 +302,17 @@
 
 <!-- Navigate in Google Maps using place search names -->
 <script>
-// ✅ FIXED: openTripInMaps() now comes ONLY from ui-favourites.js
-// Removed duplicate function that was ignoring manual ordering
-
+function openTripInMaps() {
+  let ids = [];
+  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
+  const places = PLACES.filter(p => ids.includes(p.id));
+  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
+  const stops = places.map(p => encodeURIComponent(p.search || p.name + ' Nashville'));
+  const url = stops.length === 1
+    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
+    : 'https://www.google.com/maps/dir/' + stops.join('/');
+  window.open(url, '_blank');
+}
 </script>
 
 <!-- Address display in place card -->
@@ -1026,8 +1034,7 @@ window.addEventListener('load', function() {
     
     btn.innerHTML = '🚶 Navigate on Google Maps';
     btn.onclick = function() { 
-      // Use place name instead of coordinates so Google Maps shows business name
-      var dest = encodeURIComponent(place.search || place.name + ', Nashville');
+      var dest = place.lat + ',' + place.lng;
       var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
       window.open(url, '_blank');
     };
