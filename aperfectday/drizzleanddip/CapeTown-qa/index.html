@@ -567,14 +567,11 @@ function clearAllSaved() {
     function displaySavedTrip(places, distM, walkMins) {
       console.log('🔧 DEBUG: displaySavedTrip called with distM:', distM, 'walkMins:', walkMins);
       
+      var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
-      
-      // 🚗 NEW: Use universal route stats from ui-favourites.js
-      const routeStats = _lastRouteStats || { walkMins: walkMins, travelMode: 'walking' };
-      const actualTime = routeStats.walkMins;
-      const travelMode = routeStats.travelMode;
-      const timeIcon = (travelMode === 'driving') ? '🚗' : '🚶';
-      var timeLabel = timeIcon + ' ' + fmtTime(actualTime);
+      // Walk > 3h → show drive time instead
+      var showDrive = walkMins > 180;
+      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
 
       var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
       console.log('🔧 DEBUG: calculated distanceText:', distanceText);
@@ -886,24 +883,33 @@ function clearAllSaved() {
       img.src = imgBase + 'place-' + p.id + '.jpg';
     });
 
-    // 🚗 NEW: Use already-calculated route stats from universal function
-    if (places.length >= 2 && _lastRouteStats) {
-      var walkEl = document.getElementById('saved-stat-walk-sheet');
-      if (walkEl) {
-        const timeIcon = (_lastRouteStats.travelMode === 'driving') ? '🚗' : '🚶';
-        walkEl.textContent = timeIcon + ' ' + fmtTime(_lastRouteStats.walkMins);
-      }
-      
-      // Update connectors between places
-      if (_lastRouteStats.legMins) {
-        _lastRouteStats.legMins.forEach(function(mins, i) {
-          var conn = document.getElementById('saved-conn-' + i);
-          if (conn) {
-            const connIcon = (_lastRouteStats.travelMode === 'driving') ? '🚗 drive' : '🚶 walk';
-            conn.textContent = '↓ ~' + mins + ' min ' + connIcon;
-          }
-        });
-      }
+    if (places.length >= 2 && typeof _fetchRouteStats === 'function' && navigator.onLine) {
+      _fetchRouteStats(places).then(function(stats) {
+        var walkEl = document.getElementById('saved-stat-walk-sheet');
+        if (stats.walkMins > 180) {
+          var coords = places.map(function(p){ return p.lng+','+p.lat; }).join(';');
+          fetch('https://routing.openstreetmap.de/routed-car/route/v1/driving/'+coords+'?overview=false', { signal: AbortSignal.timeout(6000) })
+            .then(function(r){ return r.json(); })
+            .then(function(d){
+              if (d.code==='Ok' && d.routes && d.routes[0]) {
+                var dMins = Math.round(d.routes[0].duration / 60);
+                if (walkEl) walkEl.textContent = '🚗 ' + fmtTime(dMins);
+              } else {
+                if (walkEl) walkEl.textContent = '🚗 ' + fmtTime(Math.round(stats.distM / 1000));
+              }
+            }).catch(function(){
+              if (walkEl) walkEl.textContent = '🚗 ' + fmtTime(Math.round(stats.distM / 1000));
+            });
+        } else {
+          if (walkEl) walkEl.textContent = '🚶 ' + fmtTime(stats.walkMins);
+        }
+        if (stats.legMins) {
+          stats.legMins.forEach(function(mins, i) {
+            var conn = document.getElementById('saved-conn-' + i);
+            if (conn) conn.textContent = (stats.walkMins > 180 ? '↓ ~' + Math.round(mins/5) + ' min drive' : '↓ ~' + mins + ' min walk');
+          });
+        }
+      }).catch(function(){});
     }
   };
 

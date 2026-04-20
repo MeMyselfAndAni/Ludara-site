@@ -161,6 +161,79 @@ if exist "%PLATFORM_PATH%\ui-favourites.js" (
         echo ❌ Heart icon toggle function missing
         set /a ERROR_COUNT+=1
     )
+    
+    REM Check for 3-hour driving logic
+    findstr "walkMins > 180" "%PLATFORM_PATH%\ui-favourites.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ 3-hour driving logic exists
+    ) else (
+        echo ❌ 3-hour driving logic missing
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr "routed-car" "%PLATFORM_PATH%\ui-favourites.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ Driving route API calls exist
+    ) else (
+        echo ❌ Driving route functionality missing
+        set /a ERROR_COUNT+=1
+    )
+)
+
+echo.
+echo Checking neighborhood functionality...
+
+REM Check neighborhood functionality
+if exist "%PLATFORM_PATH%\ui-filter.js" (
+    echo ✅ ui-filter.js exists
+    
+    findstr "function applyFilters" "%PLATFORM_PATH%\ui-filter.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ applyFilters function exists
+    ) else (
+        echo ❌ applyFilters function missing - neighborhoods won't work
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr "function alignNbhdBar" "%PLATFORM_PATH%\ui-filter.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ alignNbhdBar function exists
+    ) else (
+        echo ❌ alignNbhdBar function missing - neighborhood bar won't work
+        set /a ERROR_COUNT+=1
+    )
+) else (
+    echo ❌ ui-filter.js missing - neighborhoods won't work at all
+    set /a ERROR_COUNT+=1
+)
+
+REM Check neighborhood data
+if exist "%PLATFORM_PATH%\data.js" (
+    for /f %%A in ('findstr /C:"nbhd:" "%PLATFORM_PATH%\data.js" ^| find /c ":"') do set NBHD_COUNT=%%A
+    if !NBHD_COUNT! gtr 10 (
+        echo ✅ Found !NBHD_COUNT! places with neighborhood assignments
+    ) else (
+        echo ❌ Only !NBHD_COUNT! neighborhood assignments found - need more
+        set /a ERROR_COUNT+=1
+    )
+) else (
+    echo ⚠️  WARNING: data.js not found
+)
+
+if exist "%PLATFORM_PATH%\map.js" (
+    findstr "NBHD_COLORS" "%PLATFORM_PATH%\map.js" >nul
+    if !errorlevel! equ 0 (
+        findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
+        if !errorlevel! equ 0 (
+            echo ✅ Neighborhood configuration exists
+        ) else (
+            echo ❌ NBHD_LABELS missing from map.js
+            set /a ERROR_COUNT+=1
+        )
+    ) else (
+        echo ❌ NBHD_COLORS missing from map.js
+        set /a ERROR_COUNT+=1
+    )
 )
 
 echo.
