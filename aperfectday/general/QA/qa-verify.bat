@@ -245,7 +245,77 @@ if exist "%PLATFORM_PATH%\index.html" (
 
 echo.
 echo ======================================================================
-echo STEP 4: PLATFORM INTEGRITY VERIFICATION
+echo STEP 5: HARDCODED CITY NAME DETECTION
+echo ======================================================================
+
+echo Checking for hardcoded city names in general platform files...
+
+REM Check critical universal files for hardcoded city names that would break other deployments
+set UNIVERSAL_FILES=ui-favourites.js ui-filter.js ui-pdf.js ui-card.js ui-stories.js map-core.js
+
+for %%f in (%UNIVERSAL_FILES%) do (
+    if exist "%PLATFORM_PATH%\%%f" (
+        echo Checking %%f for hardcoded city names...
+        
+        REM Check for Nashville hardcoding (breaks non-Nashville cities)
+        findstr /i "Nashville" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ HARDCODED NASHVILLE found in %%f - breaks other cities
+            set /a ERROR_COUNT+=1
+        )
+        
+        REM Check for Cape Town hardcoding (breaks non-Cape Town cities) 
+        findstr /i "Cape Town" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ HARDCODED CAPE TOWN found in %%f - breaks other cities
+            set /a ERROR_COUNT+=1
+        )
+        
+        REM Check for London hardcoding (breaks non-London cities)
+        findstr /i "London" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ HARDCODED LONDON found in %%f - breaks other cities
+            set /a ERROR_COUNT+=1
+        )
+        
+        REM Check for New Orleans hardcoding (breaks non-New Orleans cities)
+        findstr /i "New Orleans" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ HARDCODED NEW ORLEANS found in %%f - breaks other cities
+            set /a ERROR_COUNT+=1
+        )
+        
+        REM Check for proper use of GUIDE_CITY variable instead
+        findstr "GUIDE_CITY" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ✅ %%f uses GUIDE_CITY variable (universal approach)
+        )
+        
+    ) else (
+        echo ⚠️  %%f not found
+    )
+)
+
+echo.
+echo Checking for generic branding issues...
+
+REM Check for blogger-specific hardcoding in universal files
+for %%f in (%UNIVERSAL_FILES%) do (
+    if exist "%PLATFORM_PATH%\%%f" (
+        REM Check for Sam Linsell hardcoding (should use BLOGGER_NAME)
+        findstr /i "Sam Linsell\|Drizzle.*Dip" "%PLATFORM_PATH%\%%f" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ HARDCODED SAM LINSELL/DRIZZLE DIP found in %%f - should use BLOGGER_NAME
+            set /a ERROR_COUNT+=1
+        )
+    ) else (
+        echo ⚠️  %%f not found for blogger check
+    )
+)
+
+echo.
+echo ======================================================================
+echo STEP 6: PLATFORM INTEGRITY VERIFICATION  
 echo ======================================================================
 
 REM Check for required files
