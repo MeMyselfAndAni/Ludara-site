@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A Perfect Day — Cape Town Guide</title>
+<title>Drizzle &amp; Dip — Cape Town &amp; Winelands Guide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
@@ -74,8 +74,8 @@
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span>
     </div>
-    <h2 class="splash-title">Cape Town Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">50</span> hand-picked places — from world-class wineries and Table Mountain trails to vibrant neighborhoods and coastal dining.</p>
+    <h2 class="splash-title">Drizzle &amp; Dip<br>Cape Town &amp; Winelands Guide</h2>
+    <p class="splash-sub"><span class="place-count-all">70</span> hand-picked places by Sam Linsell — trained chef, award-winning food stylist, recipe developer, photographer and three-time cookbook author based in Cape Town.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
@@ -86,7 +86,7 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading Cape Town…</div>
+  <div class="loading-text">Loading Drizzle &amp; Dip…</div>
 </div>
 
 <!-- Header -->
@@ -97,8 +97,8 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Cape Town</em> Guide</h1>
-      <div class="header-sub"><span class="place-count-all">50</span> hand-picked places<span class="header-sub-by"> · by Ludara</span></div>
+      <h1><em>Drizzle &amp; Dip</em> Guide</h1>
+      <div class="header-sub"><span class="place-count-all">70</span> hand-picked places<span class="header-sub-by"> · by Sam</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -135,25 +135,33 @@
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
       <span class="nbhd-label">All</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-city" role="button" tabindex="0" onclick="selectNbhd('city', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏢</div></div>
-      <span class="nbhd-label">City & Sea Point</span>
+    <div class="nbhd-bubble" id="nbhd-downtown" role="button" tabindex="0" onclick="selectNbhd('downtown', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎸</div></div>
+      <span class="nbhd-label">Downtown</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-peninsula" role="button" tabindex="0" onclick="selectNbhd('peninsula', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏔️</div></div>
-      <span class="nbhd-label">Southern Peninsula</span>
+    <div class="nbhd-bubble" id="nbhd-germantown" role="button" tabindex="0" onclick="selectNbhd('germantown', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
+      <span class="nbhd-label">Germantown</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-stellenbosch" role="button" tabindex="0" onclick="selectNbhd('stellenbosch', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🍷</div></div>
-      <span class="nbhd-label">Stellenbosch</span>
+    <div class="nbhd-bubble" id="nbhd-gulch" role="button" tabindex="0" onclick="selectNbhd('gulch', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">✨</div></div>
+      <span class="nbhd-label">The Gulch</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-franschhoek" role="button" tabindex="0" onclick="selectNbhd('franschhoek', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🇫🇷</div></div>
-      <span class="nbhd-label">Franschhoek & Paarl</span>
+    <div class="nbhd-bubble" id="nbhd-east" role="button" tabindex="0" onclick="selectNbhd('east', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎨</div></div>
+      <span class="nbhd-label">East Nashville</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-west-coast" role="button" tabindex="0" onclick="selectNbhd('west-coast', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌊</div></div>
-      <span class="nbhd-label">West Coast</span>
+    <div class="nbhd-bubble" id="nbhd-12south" role="button" tabindex="0" onclick="selectNbhd('12south', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
+      <span class="nbhd-label">12 South</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-midtown" role="button" tabindex="0" onclick="selectNbhd('midtown', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎓</div></div>
+      <span class="nbhd-label">Midtown</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-parks" role="button" tabindex="0" onclick="selectNbhd('parks', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
+      <span class="nbhd-label">Parks &amp; Day Trips</span>
     </div>
   </div>
 </div>
@@ -179,7 +187,7 @@
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
-      <span class="pc-emily-by">— A Perfect Day · Cape Town</span>
+      <span class="pc-emily-by">— A Perfect Day · Nashville</span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
       <span class="pc-tip-label">💡 Visitor Tip</span>
@@ -561,11 +569,9 @@ function clearAllSaved() {
       
       var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
-      
-      // 🚗 Use universal route stats from ui-favourites.js
-      const routeStats = _lastRouteStats || { walkMins: walkMins, travelMode: 'walking' };
-      const timeIcon = (routeStats.travelMode === 'driving') ? '🚗' : '🚶';
-      var timeLabel = timeIcon + ' ' + fmtTime(routeStats.walkMins || walkMins);
+      // Walk > 3h → show drive time instead
+      var showDrive = walkMins > 180;
+      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
 
       var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
       console.log('🔧 DEBUG: calculated distanceText:', distanceText);
@@ -1021,7 +1027,7 @@ window.addEventListener('load', function() {
     btn.innerHTML = '🚶 Navigate on Google Maps';
     btn.onclick = function() { 
       // Use place name instead of coordinates so Google Maps shows business name
-      var dest = encodeURIComponent(place.search || place.name + ', Cape Town');
+      var dest = encodeURIComponent(place.search || place.name + ', Nashville');
       var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
       window.open(url, '_blank');
     };
