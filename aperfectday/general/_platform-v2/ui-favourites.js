@@ -143,8 +143,18 @@ function _fitRouteBounds(places){
 function _addNumberedMarkers(places){
   places.forEach((p, i) => {
     const el = document.createElement('div');
-    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i)+';cursor:pointer;';
     el.textContent = i + 1;
+    
+    // Add click handler to open place card
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      console.log('🔢 Clicked numbered marker:', p.name);
+      if (typeof openDetail === 'function') {
+        openDetail(p.id);
+      }
+    });
+    
     const marker = new maplibregl.Marker({ element:el, anchor:'center' })
       .setLngLat([p.lng, p.lat]).addTo(map);
     tripMarkers.push(marker);
