@@ -437,7 +437,7 @@ function openTripInMaps(){
     
     // Get travel mode from latest route stats (driving if >3h, walking if ≤3h)
     const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
-    const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'Nashville';
+    const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
     console.log(`🚗 Using travel mode: ${travelMode} for ${cityName}`);
     
     // Use place names instead of coordinates so Google Maps shows business names
@@ -466,11 +466,11 @@ function shareItinerary(){
   console.log('🔗 Manual order from localStorage:', _getSavedOrder());
   
   const placeNames = places.map(p => `${p.emoji} ${p.name}`).join('\n');
-  const text = `Check out my Nashville itinerary:\n\n${placeNames}\n\nCreated with A Perfect Day: ${window.location.href}`;
+  const text = `Check out my ${cityName} itinerary:\n\n${placeNames}\n\nCreated with A Perfect Day: ${window.location.href}`;
   
   if (navigator.share) {
     navigator.share({
-      title: 'My Nashville Itinerary',
+      title: `My ${cityName} Itinerary`,
       text: text
     });
   } else {
