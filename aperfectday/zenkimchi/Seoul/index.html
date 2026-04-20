@@ -540,12 +540,22 @@ function clearAllSaved() {
 
 
     function displaySavedTrip(places, distM, walkMins) {
-      
-      var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
-      // Walk > 3h → show drive time instead
-      var showDrive = walkMins > 180;
-      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
+
+      // Decide walk vs drive from _lastRouteStats.travelMode — this is the SAME
+      // source PDF (ui-pdf.js) and Google Maps (openTripInMaps in ui-favourites.js)
+      // use, so the three systems always agree. When a route is >3h walking,
+      // ui-favourites.js fetches the driving alternative AND overwrites walkMins
+      // with driveMins — meaning a "walkMins < 180" inference here gives the wrong
+      // icon. Fall back to the walkMins>180 heuristic only if _lastRouteStats is
+      // not populated yet (e.g. OSRM fetch failed, haversine fallback in use).
+      var mode = (typeof _lastRouteStats !== 'undefined' && _lastRouteStats && _lastRouteStats.travelMode)
+        ? _lastRouteStats.travelMode
+        : (walkMins > 180 ? 'driving' : 'walking');
+      var showDrive = mode === 'driving';
+      var icon = showDrive ? '🚗' : '🚶';
+      // walkMins is already the correct time (walk or drive) as set upstream
+      var timeLabel = icon + ' ' + fmtTime(walkMins);
 
       var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
 
