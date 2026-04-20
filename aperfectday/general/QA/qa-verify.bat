@@ -59,7 +59,193 @@ if %errorlevel% equ 0 (
 
 echo.
 echo ======================================================================
-echo STEP 2: PLATFORM INTEGRITY VERIFICATION
+echo STEP 3: NEIGHBORHOOD FUNCTIONALITY VERIFICATION
+echo ======================================================================
+
+echo Checking neighborhood data integrity...
+
+REM Check neighborhood data
+if exist "%PLATFORM_PATH%\data.js" (
+    for /f %%A in ('findstr /C:"nbhd:" "%PLATFORM_PATH%\data.js" ^| find /c ":"') do set NBHD_COUNT=%%A
+    if !NBHD_COUNT! gtr 10 (
+        echo ✅ Found !NBHD_COUNT! places with neighborhood assignments
+        
+        REM Check for variety of neighborhoods
+        findstr "nbhd: 'city'" "%PLATFORM_PATH%\data.js" >nul
+        if !errorlevel! equ 0 (
+            echo ✅ City neighborhood found in data
+        ) else (
+            echo ❌ No city neighborhood found - data may be incomplete
+            set /a ERROR_COUNT+=1
+        )
+        
+        REM Check for multiple neighborhood types (not just all city)
+        findstr /C:"nbhd: 'peninsula'" "%PLATFORM_PATH%\data.js" >nul
+        set PENINSULA_FOUND=!errorlevel!
+        findstr /C:"nbhd: 'stellenbosch'" "%PLATFORM_PATH%\data.js" >nul
+        set STELLENBOSCH_FOUND=!errorlevel!
+        
+        if !PENINSULA_FOUND! equ 0 (
+            if !STELLENBOSCH_FOUND! equ 0 (
+                echo ✅ Multiple neighborhood types found
+            ) else (
+                echo ⚠️  Only peninsula found, stellenbosch missing
+            )
+        ) else (
+            echo ❌ Only city neighborhood found - need more variety
+            set /a ERROR_COUNT+=1
+        )
+        
+    ) else (
+        echo ❌ Only !NBHD_COUNT! neighborhood assignments found - need more
+        set /a ERROR_COUNT+=1
+    )
+) else (
+    echo ❌ data.js not found
+    set /a ERROR_COUNT+=1
+)
+
+echo.
+echo Checking neighborhood configuration...
+
+if exist "%PLATFORM_PATH%\map.js" (
+    findstr "NBHD_COLORS" "%PLATFORM_PATH%\map.js" >nul
+    if !errorlevel! equ 0 (
+        findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
+        if !errorlevel! equ 0 (
+            echo ✅ Neighborhood configuration exists
+            
+            REM Check for specific neighborhoods in config
+            findstr "peninsula.*#" "%PLATFORM_PATH%\map.js" >nul
+            if !errorlevel! equ 0 (
+                echo ✅ Peninsula neighborhood configured
+            ) else (
+                echo ❌ Peninsula neighborhood missing from config
+                set /a ERROR_COUNT+=1
+            )
+            
+            findstr "stellenbosch.*#" "%PLATFORM_PATH%\map.js" >nul
+            if !errorlevel! equ 0 (
+                echo ✅ Stellenbosch neighborhood configured
+            ) else (
+                echo ❌ Stellenbosch neighborhood missing from config
+                set /a ERROR_COUNT+=1
+            )
+            
+        ) else (
+            echo ❌ NBHD_LABELS missing from map.js
+            set /a ERROR_COUNT+=1
+        )
+    ) else (
+        echo ❌ NBHD_COLORS missing from map.js
+        set /a ERROR_COUNT+=1
+    )
+) else (
+    echo ❌ map.js not found
+    set /a ERROR_COUNT+=1
+)
+
+echo.
+echo Checking neighborhood UI functionality...
+
+REM Check neighborhood functionality in ui-stories.js (not ui-filter.js!)
+if exist "%PLATFORM_PATH%\ui-stories.js" (
+    echo ✅ ui-stories.js exists
+    
+    findstr "function selectNbhd" "%PLATFORM_PATH%\ui-stories.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ selectNbhd function exists
+    ) else (
+        echo ❌ selectNbhd function missing - neighborhood selection won't work
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr "function alignNbhdBar" "%PLATFORM_PATH%\ui-stories.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ alignNbhdBar function exists in ui-stories.js
+    ) else (
+        echo ❌ alignNbhdBar function missing from ui-stories.js - neighborhood bar won't work
+        set /a ERROR_COUNT+=1
+    )
+    
+    REM Check for neighborhood building logic
+    findstr "NBHD_COLORS" "%PLATFORM_PATH%\ui-stories.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ ui-stories.js references NBHD_COLORS
+    ) else (
+        echo ❌ ui-stories.js doesn't reference NBHD_COLORS - may not build buttons properly
+        set /a ERROR_COUNT+=1
+    )
+    
+) else (
+    echo ❌ ui-stories.js missing - neighborhood functionality won't work at all
+    set /a ERROR_COUNT+=1
+)
+
+REM Check applyFilters in ui-filter.js (this one IS in ui-filter.js)
+if exist "%PLATFORM_PATH%\ui-filter.js" (
+    echo ✅ ui-filter.js exists
+    
+    findstr "function applyFilters" "%PLATFORM_PATH%\ui-filter.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ applyFilters function exists in ui-filter.js
+    ) else (
+        echo ❌ applyFilters function missing - filtering won't work
+        set /a ERROR_COUNT+=1
+    )
+) else (
+    echo ❌ ui-filter.js missing - filtering won't work
+    set /a ERROR_COUNT+=1
+)
+
+echo.
+echo Checking neighborhood HTML structure...
+
+if exist "%PLATFORM_PATH%\index.html" (
+    findstr "nbhd-bar" "%PLATFORM_PATH%\index.html" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ Neighborhood bar HTML structure exists
+        
+        REM Check for hardcoded neighborhoods that might be wrong
+        findstr "nbhd-downtown\|nbhd-germantown\|nbhd-gulch" "%PLATFORM_PATH%\index.html" >nul
+        if !errorlevel! equ 0 (
+            echo ❌ Found Nashville neighborhoods in index.html - wrong city neighborhoods
+            set /a ERROR_COUNT+=1
+        ) else (
+            echo ✅ No Nashville neighborhoods found (good for non-Nashville cities)
+        )
+        
+        REM Check if Cape Town has correct neighborhoods
+        findstr "Cape Town" "%PLATFORM_PATH%\index.html" >nul
+        if !errorlevel! equ 0 (
+            REM This is Cape Town, check for correct neighborhoods
+            findstr "nbhd-city\|nbhd-peninsula\|nbhd-stellenbosch" "%PLATFORM_PATH%\index.html" >nul
+            if !errorlevel! equ 0 (
+                echo ✅ Cape Town neighborhoods found in HTML
+            ) else (
+                echo ❌ Cape Town city but missing Cape Town neighborhoods in HTML
+                set /a ERROR_COUNT+=1
+            )
+        )
+        
+    ) else (
+        echo ❌ No nbhd-bar element in index.html - neighborhoods won't appear
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr "nbhd-handle" "%PLATFORM_PATH%\index.html" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ Neighborhood handle element exists
+    ) else (
+        echo ⚠️  Neighborhood handle missing - may affect drag functionality
+    )
+) else (
+    echo ⚠️  index.html not found for neighborhood HTML check
+)
+
+echo.
+echo ======================================================================
+echo STEP 4: PLATFORM INTEGRITY VERIFICATION
 echo ======================================================================
 
 REM Check for required files
