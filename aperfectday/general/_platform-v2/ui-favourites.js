@@ -435,13 +435,18 @@ function openTripInMaps(){
     
     const stops = places.slice(0,8);
     
-    // Use place names instead of coordinates so Google Maps shows business names
-    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', Nashville');
-    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', Nashville');
-    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', Nashville')).join('|');
+    // Get travel mode from latest route stats (driving if >3h, walking if ≤3h)
+    const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
+    const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'Nashville';
+    console.log(`🚗 Using travel mode: ${travelMode} for ${cityName}`);
     
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=walking`;
-    console.log('🔧 Opening URL with place names:', url);
+    // Use place names instead of coordinates so Google Maps shows business names
+    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);
+    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', ' + cityName);
+    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', ' + cityName)).join('|');
+    
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=${travelMode}`;
+    console.log(`🔧 Opening Google Maps with ${travelMode} mode:`, url);
     
     window.open(url, '_blank');
   } catch (error) {
@@ -516,7 +521,7 @@ let _lastRouteStats = null;
 function _fetchRouteStats(places) {
   return new Promise(function(resolve) {
     if (!places || places.length < 2) {
-      return resolve({ walkMins: 0, distM: 0, legMins: [] });
+      return resolve({ walkMins: 0, distM: 0, legMins: [], travelMode: 'walking' });
     }
 
     function _hav(a, b) {
@@ -525,15 +530,21 @@ function _fetchRouteStats(places) {
       return 2*R*Math.asin(Math.sqrt(h));
     }
 
-    function fallback() {
+    function fallback(travelMode = 'walking') {
       let distM = 0;
       const legMins = [];
       for (let i = 1; i < places.length; i++) {
         const d = _hav(places[i-1], places[i]);
         distM += d;
-        legMins.push(Math.round(d * 1.35 / 80));
+        const mins = travelMode === 'driving' 
+          ? Math.round(d * 1.35 / 833) // ~50km/h vacation driving (city traffic, parking, GPS)
+          : Math.round(d * 1.35 / 67);  // ~4km/h vacation walking (sightseeing, photos, enjoying)
+        legMins.push(mins);
       }
-      resolve({ walkMins: Math.round(distM * 1.35 / 80), distM, legMins });
+      const totalMins = travelMode === 'driving' 
+        ? Math.round(distM * 1.35 / 833)
+        : Math.round(distM * 1.35 / 67);
+      resolve({ walkMins: totalMins, distM, legMins, travelMode, isEstimated: true });
     }
 
     if (!navigator.onLine) return fallback();
@@ -548,13 +559,71 @@ function _fetchRouteStats(places) {
       .then(d => {
         if (timer) clearTimeout(timer);
         if (d.code !== 'Ok' || !d.routes?.[0]) return fallback();
+        
         const route = d.routes[0];
         const legMins = (route.legs || []).map(l => Math.round(l.duration / 60));
-        resolve({
-          walkMins: Math.round(route.duration / 60),
-          distM: route.distance,
-          legMins
-        });
+        const walkMins = Math.round(route.duration / 60);
+        
+        // 🚗 3-HOUR LOGIC: If walking >3h, fetch driving route
+        if (walkMins > 180) {
+          console.log('🚗 Route >3h walking, fetching driving time...');
+          const driveUrl = 'https://routing.openstreetmap.de/routed-car/route/v1/driving/' + coords + '?overview=false';
+          const driveCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          const driveTimer = driveCtrl ? setTimeout(() => driveCtrl.abort(), 8000) : null;
+          
+          fetch(driveUrl, driveCtrl ? { signal: driveCtrl.signal } : {})
+            .then(r => r.json())
+            .then(driveData => {
+              if (driveTimer) clearTimeout(driveTimer);
+              if (driveData.code === 'Ok' && driveData.routes?.[0]) {
+                const driveRoute = driveData.routes[0];
+                const driveLegMins = (driveRoute.legs || []).map(l => Math.round(l.duration / 60));
+                const driveMins = Math.round(driveRoute.duration / 60);
+                console.log(`✅ Driving route: ${driveMins}min (was ${walkMins}min walking)`);
+                _lastRouteStats = {
+                  walkMins: driveMins,
+                  distM: driveRoute.distance || route.distance,
+                  legMins: driveLegMins,
+                  travelMode: 'driving'
+                };
+                resolve(_lastRouteStats);
+              } else {
+                console.log('⚠️ Driving route failed, using estimated drive time');
+                const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving
+                const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
+                _lastRouteStats = {
+                  walkMins: estimatedDriveMins,
+                  distM: route.distance,
+                  legMins: estimatedDriveLegMins,
+                  travelMode: 'driving',
+                  isEstimated: true
+                };
+                resolve(_lastRouteStats);
+              }
+            })
+            .catch(() => {
+              console.log('⚠️ Driving route failed, using estimated drive time');
+              const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving  
+              const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
+              _lastRouteStats = {
+                walkMins: estimatedDriveMins,
+                distM: route.distance,
+                legMins: estimatedDriveLegMins,
+                travelMode: 'driving',
+                isEstimated: true
+              };
+              resolve(_lastRouteStats);
+            });
+        } else {
+          // Walking route ≤3h, use walking
+          _lastRouteStats = {
+            walkMins,
+            distM: route.distance,
+            legMins,
+            travelMode: 'walking'
+          };
+          resolve(_lastRouteStats);
+        }
       })
       .catch(() => { if (timer) clearTimeout(timer); fallback(); });
   });

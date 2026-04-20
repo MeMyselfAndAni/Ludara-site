@@ -109,7 +109,7 @@ async function generatePDF(){
 
     const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
     const walkNext = i < places.length-1
-      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min walk to next stop</div>`
+      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min ${_routeStats.travelMode === 'driving' ? '🚗 drive' : '🚶 walk'} to next stop</div>`
       : '';
 
     return `
@@ -438,8 +438,8 @@ async function generatePDF(){
       <div class="pdf-stat-label">Places</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
-      <div class="pdf-stat-label">Walking</div>
+      <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
+      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : 'Walking'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
