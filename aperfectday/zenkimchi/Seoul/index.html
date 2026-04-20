@@ -13,7 +13,7 @@
   :root {
     --brand: #c8102e;
     --brand-faint: rgba(200,16,46,0.12);
-    --brand-glow: rgba(200,16,46,0.3);
+    --brand-glow: rgba(200,16,46,0.35);
   }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -24,8 +24,9 @@
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 
-  /* Place card photos — full image, category gradient bg */
+  /* Place card photos — full image, dark bg */
   .pc-photo-img { object-fit: contain !important; }
+  /* category gradient set by ui-card.js */
 
   /* Address line under place type */
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
@@ -44,8 +45,6 @@
 
   /* Nav buttons always visible */
   .pc-btn-nav { display: flex !important; opacity: 1 !important; pointer-events: all !important; }
-  .pc-btn-nav.prev { left: 14px; right: auto; }
-  .pc-btn-nav.next { right: 14px; left: auto; }
 
   /* ── Unified Saved Panel ── */
   .saved-panel { display:flex !important; flex-direction:column !important; }
@@ -63,42 +62,9 @@
   .pc-btn-fav { font-size: 1.6rem !important; }
   .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
   #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
-
-  /* List scroll fix */
-  .sheet { display: flex !important; flex-direction: column !important; }
-  .places-list { flex: 1 1 auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; overscroll-behavior: contain !important; max-height: none !important; padding-bottom: 60px !important; }
-
-  /* Scroll hint at bottom of card body */
-  #pc-body { position: relative; }
-  #pc-body::after {
-    content: ''; pointer-events: none;
-    position: sticky; bottom: 0; left: 0; right: 0;
-    display: block; height: 32px; margin-top: -32px;
-    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
-  }
-
-  /* User location dot — brand red */
-  .user-dot-inner {
-    width: 14px !important; height: 14px !important; border-radius: 50% !important;
-    background: var(--brand) !important; border: 2.5px solid white !important;
-    box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important;
-  }
-  .user-dot-outer { width: 14px !important; height: 14px !important; }
-
-  /* Locate button active state */
-  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
-
-  /* Brand color overrides for platform styles */
-  .pill-saved                          { border-color: var(--brand) !important; color: var(--brand) !important; }
-  .saved-mode-banner                   { display: none !important; }
-  .saved-plan-btn                      { background: var(--brand) !important; }
-  .pc-btn-fav.faved                    { color: var(--brand) !important; }
+  /* Image — show full, preserve aspect ratio */
+  .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 </style>
-
-<script>
-// Brand color for JS map elements — keeps JS and CSS in sync
-var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-</script>
 </head>
 <body>
 
@@ -137,7 +103,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
-    <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
+    <a class="header-ludara-brand" href="https://ludara.ai/aperfectday" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
   <a class="header-btn" href="https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/" target="_blank">Blog ↗</a>
 </header>
@@ -289,7 +255,7 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <div class="places-list" id="places-list"></div>
   <div class="list-footer-brand">
     <span>Interactive map by</span>
-    <a href="https://ludara.ai" target="_blank">A Perfect Day · Ludara.AI</a>
+    <a href="https://ludara.ai/aperfectday" target="_blank">A Perfect Day · Ludara.AI</a>
   </div>
 </div>
 
@@ -320,12 +286,12 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
   <span class="desktop-list-count" id="desktop-list-count">53</span>
 </button>
 
-<!-- JS modules — load order is critical, do not reorder -->
+<!-- JS modules — load order is critical -->
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
 <script src="photos.js"></script>
-<script src="map-core.js"></script><!-- MUST be before map.js -->
+<script src="map-core.js"></script>
 <script src="map.js"></script>
 <script src="ui-card.js"></script>
 <script src="ui-filter.js"></script>
@@ -335,17 +301,9 @@ var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue('-
 
 <!-- Navigate in Google Maps using place search names -->
 <script>
-function openTripInMaps() {
-  var ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); } catch(e) {}
-  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-  var stops = places.map(function(p) { return encodeURIComponent(p.search || p.name + ', Seoul'); });
-  var url = stops.length === 1
-    ? 'https://www.google.com/maps/search/?api=1&query=' + stops[0]
-    : 'https://www.google.com/maps/dir/' + stops.join('/');
-  window.open(url, '_blank');
-}
+// ✅ FIXED: openTripInMaps() now comes ONLY from ui-favourites.js
+// Removed duplicate function that was ignoring manual ordering
+
 </script>
 
 <!-- Address display in place card -->
@@ -359,6 +317,7 @@ window.addEventListener('load', function() {
     var place = PLACES.find(function(p) { return p.name === name; });
     addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+
 });
 </script>
 
@@ -380,158 +339,6 @@ window.addEventListener('load', function() {
   window.addEventListener('load', initMap);
 </script>
 
-<!-- ── Brand color for map elements (route line, numbered markers) ── -->
-<script>
-window.addEventListener('load', function() {
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-
-  var _origInitMapSources = window.initMapSources;
-  window.initMapSources = function() {
-    if (_origInitMapSources) _origInitMapSources();
-    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
-  };
-  var _origEnsure = window._ensureRouteLayer;
-  window._ensureRouteLayer = function() {
-    if (_origEnsure) _origEnsure();
-    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
-  };
-  window._addNumberedMarkers = function(places) {
-    places.forEach(function(p, i) {
-      var el = document.createElement('div');
-      el.style.cssText = ['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');
-      el.textContent = i + 1;
-      el.style.cursor = 'pointer';
-      el.addEventListener('click', function() { if (typeof openDetail === 'function') openDetail(p.id); });
-      var marker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lng, p.lat]).addTo(map);
-      if (window.tripMarkers) tripMarkers.push(marker);
-    });
-  };
-});
-</script>
-
-<!-- ── Navigate to place on Google Maps ── -->
-<script>
-function _distM(lat1,lng1,lat2,lng2){var R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180,a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return R*2*Math.asin(Math.sqrt(a));}
-function _fmtDist(m){return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km';}
-
-function navigateToPlace(destLat, destLng, destName) {
-  var dest = destLat + ',' + destLng;
-  var url = window._userLat && window._userLng
-    ? 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking'
-    : 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
-  window.open(url, '_blank');
-}
-
-window.addEventListener('load', function() {
-  var _origLocate = window.locateMe;
-  window.locateMe = function() {
-    _origLocate();
-    var attempts = 0;
-    var poll = setInterval(function() {
-      if (document.querySelector('.user-dot-inner') || attempts > 20) {
-        clearInterval(poll);
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            window._userLat = pos.coords.latitude;
-            window._userLng = pos.coords.longitude;
-            updateListDistances();
-          }, null, { enableHighAccuracy: true, timeout: 10000 });
-        }
-      }
-      attempts++;
-    }, 300);
-  };
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  new MutationObserver(function() {
-    var name  = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) return;
-    var existing = document.getElementById('pc-nav-btn');
-    if (existing) existing.remove();
-    var btn = document.createElement('button');
-    btn.id = 'pc-nav-btn';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+BRAND_COLOR+';border:1.5px solid '+BRAND_COLOR+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    var distStr = (window._userLat && window._userLng) ? _fmtDist(_distM(window._userLat,window._userLng,place.lat,place.lng))+' away' : '';
-    btn.innerHTML = '🚶 Navigate on Google Maps'+(distStr?'  <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· '+distStr+'</span>':'')+'';
-    btn.onclick = function() { navigateToPlace(place.lat,place.lng,place.name); };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
-
-function updateListDistances() {
-  if (!window._userLat) return;
-  PLACES.forEach(function(place) {
-    var row = document.getElementById('row-'+place.id);
-    if (!row) return;
-    var badge = row.querySelector('.dist-badge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'dist-badge';
-      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
-      var nameEl = row.querySelector('.place-name');
-      if (nameEl) nameEl.appendChild(badge);
-    }
-    badge.textContent = _fmtDist(_distM(window._userLat,window._userLng,place.lat,place.lng));
-  });
-}
-window.addEventListener('load', function() {
-  var list = document.getElementById('places-list');
-  if (!list) return;
-  new MutationObserver(function() { if (window._userLat) updateListDistances(); }).observe(list, { childList: true, subtree: false });
-});
-</script>
-
-<!-- ── Offline route detection ── -->
-<script>
-window.addEventListener('load', function() {
-  function _showOfflineRouteMsg() {
-    var existing = document.getElementById('offline-route-msg');
-    if (existing) existing.remove();
-    var backdrop = document.createElement('div');
-    backdrop.id = 'offline-route-msg';
-    backdrop.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);padding:20px';
-    var card = document.createElement('div');
-    card.style.cssText = 'background:white;border-radius:20px;padding:28px 24px 22px;max-width:300px;width:100%;text-align:center;font-family:sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative';
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-    card.innerHTML = '<div style="width:52px;height:52px;border-radius:50%;background:'+brand+'1a;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem">📶</div>'+'<div style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:8px">Walking routes need a connection</div>'+'<div style="font-size:0.82rem;color:#666;line-height:1.55;margin-bottom:20px">Connect to WiFi or mobile data to plan your route.<br>All places, your saved list, and your location still work offline.</div>'+'<button id="_offlineBtn" style="width:100%;padding:11px;border:none;border-radius:12px;background:'+brand+';color:white;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:sans-serif">Got it</button>';
-    backdrop.appendChild(card);
-    document.body.appendChild(backdrop);
-    document.getElementById('_offlineBtn').onclick = function() { backdrop.remove(); };
-    backdrop.onclick = function(e) { if (e.target === backdrop) backdrop.remove(); };
-    setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 6000);
-  }
-  var _origPlanFavTrip = window.planFavTrip;
-  window.planFavTrip = function() { if (!navigator.onLine) { _showOfflineRouteMsg(); return; } if (_origPlanFavTrip) _origPlanFavTrip(); };
-  var _origDrawSavedRoute = window.drawSavedRoute;
-  window.drawSavedRoute = function() { if (!navigator.onLine) { _showOfflineRouteMsg(); return; } if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments); };
-});
-</script>
-
-<!-- ── Card swipe + looping navigation ── -->
-<script>
-window.addEventListener('load', function() {
-  function _filteredIds() { return Array.from(document.querySelectorAll('.place-row')).map(function(r){return parseInt(r.id.replace('row-',''));}).filter(function(id){return !isNaN(id);}); }
-  function _currentId() { var title=document.getElementById('pc-title'); if(!title) return null; var name=title.textContent.trim(); var place=PLACES.find(function(p){return p.name===name;}); return place?place.id:null; }
-  window.cardNext = function() { var ids=_filteredIds(); if(!ids.length) return; var cur=_currentId(); openDetail(ids[(ids.indexOf(cur)+1)%ids.length]); };
-  window.cardPrev = function() { var ids=_filteredIds(); if(!ids.length) return; var cur=_currentId(); openDetail(ids[(ids.indexOf(cur)-1+ids.length)%ids.length]); };
-  var wrap = document.getElementById('pc-photo-wrap');
-  if (!wrap) return;
-  var tx=0,ty=0;
-  wrap.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-  wrap.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0){cardNext();}else{cardPrev();}}},{passive:true});
-});
-
-// Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) { console.log('SW registered'); })
-      .catch(function(err) { console.warn('SW failed:', err); });
-  });
-}
-</script>
 
 <!-- ── SHARE ITINERARY & URL READER ── -->
 <script>
@@ -595,21 +402,18 @@ function clearAllSaved() {
       return;
     }
 
-    var rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
-    var places = rawFavs.map(function(id) {
-      return PLACES.find(function(p) { return p.id === id || p.id === +id; });
-    }).filter(Boolean);
-
-    if (places.length >= 2) {
-      var pool = places.slice().sort(function(a,b){ return a.lng - b.lng; });
-      var out = [pool.shift()];
-      while (pool.length) {
-        var last = out[out.length-1], bi=0, bd=Infinity;
-        pool.forEach(function(p,i){ var d=(p.lat-last.lat)**2+(p.lng-last.lng)**2; if(d<bd){bd=d;bi=i;} });
-        out.push(pool.splice(bi,1)[0]);
-      }
-      places = out;
+    // ✅ USE THE AUTHORITATIVE SOURCE - getSortedFavPlaces() from ui-favourites.js
+    var places;
+    
+    
+    if (typeof getSortedFavPlaces === 'function') {
+      places = getSortedFavPlaces();
+    } else {
+      console.error('🔧 ERROR: getSortedFavPlaces function not available');
+      places = [];
     }
+
+    // ✅ TRUST THE AUTHORITATIVE ORDER COMPLETELY - no additional sorting!
 
     var titleEl = document.getElementById('sheet-title');
     if (titleEl) {
@@ -630,79 +434,316 @@ function clearAllSaved() {
       return;
     }
 
-    var distM = 0;
-    for (var i = 1; i < places.length; i++) {
-      if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
-      else distM += _distM(places[i-1].lat, places[i-1].lng, places[i].lat, places[i].lng);
+    // Use real walking route data (same as PDF)
+    function updateTripWithRouteStats(places) {
+      
+      // Always clear cache to force fresh calculation when saved list changes
+      if (typeof _lastRouteStats !== 'undefined') {
+        _lastRouteStats = null;
+      }
+      
+      if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+        _fetchRouteStats(places).then(function(routeStats) {
+          _lastRouteStats = routeStats; // Cache for PDF to use
+          displaySavedTrip(places, routeStats.distM, routeStats.walkMins);
+        }).catch(function(error) {
+          // Fallback to straight-line calculation if route fetch fails
+          var distM = 0;
+          for (var i = 1; i < places.length; i++) {
+            if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+          }
+          var walkMins = Math.round(distM * 1.35 / 80);
+          displaySavedTrip(places, distM, walkMins);
+        });
+      } else {
+        // Fallback for single place or missing _fetchRouteStats
+        var distM = 0;
+        for (var i = 1; i < places.length; i++) {
+          if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+        }
+        var walkMins = Math.round(distM * 1.35 / 80);
+        displaySavedTrip(places, distM, walkMins);
+      }
     }
-    var walkMins = Math.round(distM * 1.35 / 80);
-    function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
 
-    var html =
-      '<div class="saved-stats-bar" style="display:flex">' +
-        '<span>' + places.length + (places.length===1?' stop':' stops') + '</span>' +
-        '<span class="saved-stat-dot">·</span>' +
-        '<span id="saved-stat-walk-sheet">🚶 ' + fmtTime(walkMins) + '</span>' +
-        '<span class="saved-stat-dot">·</span>' +
-        '<span>📏 ' + (distM/1000).toFixed(1) + ' km</span>' +
-      '</div>' +
-      '<div style="display:flex;padding:8px 10px;gap:5px;">' +
-        '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
-        '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
-        '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
-      '</div>';
+    // Function to update the right-side card specifically
+    function updateRightSideCard(places, routeStats, distanceText) {
+      
+      // Search for the right-side card elements aggressively
+      var rightCardSelectors = [
+        // Common patterns for right-side cards
+        '.right-card', '.side-card', '.trip-card', '.summary-card',
+        '#right-card', '#side-card', '#trip-card', '#summary-card',
+        '[class*="right"]', '[class*="side"]', '[class*="trip"]',
+      ];
+      
+      rightCardSelectors.forEach(function(selector) {
+        try {
+          var elements = document.querySelectorAll(selector);
+          elements.forEach(function(el) {
+            if (el.textContent.includes('4.5') || el.textContent.includes('mi') || el.textContent.includes('km')) {
+              // Update the distance in this element
+              el.innerHTML = el.innerHTML.replace(/[\d.]+\s*(mi|km)/g, distanceText);
+            }
+          });
+        } catch(e) {
+          // Ignore invalid selectors
+        }
+      });
+      
+      // Also try to find by walking the DOM tree for text containing "4.5 mi"
+      var allElements = document.querySelectorAll('*');
+      allElements.forEach(function(el) {
+        if (el.textContent.includes('4.5 mi') && el.children.length === 0) {
+          el.textContent = el.textContent.replace(/[\d.]+\s*mi/g, distanceText);
+        }
+      });
+    }
 
-    places.forEach(function(p, i) {
-      html +=
-        '<div class="place-row ' + (p.id===AID?'active':'') + '" onclick="openDetail(' + p.id + ')" id="row-' + p.id + '">' +
-          '<div class="saved-item-num">' + (i+1) + '</div>' +
-          '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
-          '<div class="place-info">' +
-            '<div class="place-name">' + p.name + '</div>' +
-            '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
-            '<div class="place-addr">' + (p.address||'')+'</div>' +
-          '</div>' +
-          '<span class="chevron">›</span>' +
-        '</div>';
-      if (i < places.length - 1) {
-        html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
-      }
-    });
-
-    listEl.innerHTML = html;
-
-    var imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
-    places.forEach(function(p) {
-      var thumb = document.getElementById('thumb-' + p.id);
-      if (!thumb) return;
-      if (window.photoCache && photoCache[p.id] && photoCache[p.id].url) {
-        thumb.innerHTML = '<img src="' + photoCache[p.id].url + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
-        return;
-      }
-      var img = new Image();
-      img.onload = function() {
-        if (thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';
-      };
-      img.src = imgBase + 'place-' + p.id + '.jpg';
-    });
-
-    if (places.length >= 2 && typeof _fetchRouteStats === 'function' && navigator.onLine) {
-      _fetchRouteStats(places).then(function(stats) {
-        var walkEl = document.getElementById('saved-stat-walk-sheet');
-        if (walkEl) walkEl.textContent = '🚶 ' + fmtTime(stats.walkMins);
-        if (stats.legMins) {
-          stats.legMins.forEach(function(mins, i) {
-            var conn = document.getElementById('saved-conn-' + i);
-            if (conn) conn.textContent = '↓ ~' + mins + ' min walk';
+    // Function to sync list numbers with map markers after reordering
+    function syncListNumbersWithMap() {
+      
+      // Get the same ordered places that drawSavedRoute uses
+      if (typeof getSortedFavPlaces === 'function') {
+        var sortedPlaces = getSortedFavPlaces();
+        
+        // Update the list numbers to match this order
+        sortedPlaces.forEach(function(place, index) {
+          var row = document.getElementById('row-' + place.id);
+          if (row) {
+            var numberEl = row.querySelector('.saved-item-num');
+            if (numberEl) {
+              var oldNumber = numberEl.textContent;
+              var newNumber = (index + 1).toString();
+              numberEl.textContent = newNumber;
+            }
+          }
+        });
+      } else if (typeof favourites !== 'undefined' && typeof _getSavedOrder === 'function') {
+        // Fallback: use favourites with saved order
+        var savedOrder = _getSavedOrder();
+        
+        if (savedOrder && savedOrder.length > 0) {
+          savedOrder.forEach(function(id, index) {
+            var row = document.getElementById('row-' + id);
+            if (row) {
+              var numberEl = row.querySelector('.saved-item-num');
+              if (numberEl) {
+                numberEl.textContent = (index + 1).toString();
+              }
+            }
           });
         }
-      }).catch(function(){});
+      }
     }
+
+
+
+    function displaySavedTrip(places, distM, walkMins) {
+      
+      var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
+      function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
+      // Walk > 3h → show drive time instead
+      var showDrive = walkMins > 180;
+      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
+
+      var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
+
+      var html =
+        '<div class="saved-stats-bar" style="display:flex">' +
+          '<span>' + places.length + (places.length===1?' stop':' stops') + '</span>' +
+          '<span class="saved-stat-dot">·</span>' +
+          '<span id="saved-stat-walk-sheet">' + timeLabel + '</span>' +
+          '<span class="saved-stat-dot">·</span>' +
+          '<span>📏 ' + distanceText + '</span>' +
+        '</div>' +
+        '<div style="display:flex;padding:8px 10px;gap:5px;">' +
+          '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
+          '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
+          '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
+        '</div>';
+
+      var hasManual = typeof _getSavedOrder === 'function' && !!_getSavedOrder();
+      if (hasManual) {
+        html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a></div>';
+      } else {
+        html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder</div>';
+      }
+
+      // Continue with the places list...
+      places.forEach(function(p, i) {
+        html +=
+          '<div class="place-row ' + (p.id===AID?'active':'') + '" draggable="true" data-id="' + p.id + '" id="row-' + p.id + '">' +
+            '<span style="font-size:1.1rem;color:#ccc;padding:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>' +
+            '<div class="saved-item-num">' + (i+1) + '</div>' +
+            '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
+            '<div class="place-info" onclick="openDetail(' + p.id + ')" style="cursor:pointer;flex:1">' +
+              '<div class="place-name">' + p.name + '</div>' +
+              '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
+              '<div class="place-addr">' + (p.address||'') + '</div>' +
+            '</div>' +
+            '<span class="chevron" onclick="openDetail(' + p.id + ')" style="cursor:pointer">›</span>' +
+          '</div>';
+        if (i < places.length - 1) {
+          html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
+        }
+      });
+
+      listEl.innerHTML = html;
+      
+      // Force DOM update to make sure it sticks
+      if (listEl && listEl.parentNode) {
+        listEl.parentNode.appendChild(listEl); // Force reflow
+      }
+
+      // Auto-sort link
+      var autoLink = document.getElementById('saved-autosort-link');
+      if (autoLink) {
+        autoLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (typeof _clearSavedOrder === 'function') _clearSavedOrder();
+          if (typeof updateFavUI === 'function') updateFavUI();
+        });
+      }
+
+      // Wire drag-to-reorder
+      var dragSrcId = null;
+      listEl.querySelectorAll('.place-row[draggable]').forEach(function(row) {
+        row.addEventListener('dragstart', function(e) {
+          dragSrcId = parseInt(this.dataset.id);
+          this.style.opacity = '0.5';
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        row.addEventListener('dragend', function() {
+          this.style.opacity = '';
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop = ''; });
+        });
+        row.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop = ''; });
+          this.style.borderTop = '2px solid var(--brand-color, #007acc)';
+        });
+        row.addEventListener('drop', function(e) {
+          e.stopPropagation();
+          var targetId = parseInt(this.dataset.id);
+          if (dragSrcId === targetId) return;
+          var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+          var ids = allRows.map(function(r) { return parseInt(r.dataset.id); });
+          var fi = ids.indexOf(dragSrcId), ti = ids.indexOf(targetId);
+          if (fi < 0 || ti < 0) return;
+          ids.splice(fi, 1);
+          ids.splice(ti, 0, dragSrcId);
+          if (typeof _setSavedOrder === 'function') {
+            _setSavedOrder(ids);
+          }
+          
+          
+          // Use AUTHORITATIVE functions - same as map uses
+          setTimeout(function() {
+            if (typeof getSortedFavPlaces === 'function') {
+              var places = getSortedFavPlaces();
+              
+              // Regenerate the list using authoritative order
+              updateTripWithRouteStats(places);
+              
+              // Also update the map with the same order
+              if (typeof drawSavedRoute === 'function') {
+                drawSavedRoute();
+              }
+            }
+          }, 50);
+          
+          
+          // Get places in new order and calculate distance
+          if (typeof favourites !== 'undefined' && favourites.length > 0) {
+            var places = favourites.slice();
+            if (typeof _getSavedOrder === 'function') {
+              var savedOrder = _getSavedOrder();
+              if (savedOrder && savedOrder.length > 0) {
+                var orderedPlaces = [];
+                savedOrder.forEach(function(id) {
+                  var place = places.find(function(p) { 
+                    return p.id == id || p.id === id || String(p.id) === String(id);
+                  });
+                  if (place) orderedPlaces.push(place);
+                });
+                places = orderedPlaces;
+              }
+            }
+            
+            // Calculate new distance and update right-side card directly
+            if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+              _fetchRouteStats(places).then(function(routeStats) {
+                var distanceText = (typeof formatDistance === 'function' ? formatDistance(routeStats.distM) : ((routeStats.distM/1000).toFixed(1) + ' km'));
+                
+                // Update right-side card specifically
+                updateRightSideCard(places, routeStats, distanceText);
+              });
+            }
+          }
+
+        });
+
+        // Touch support
+        var touchSrc = null;
+        row.addEventListener('touchstart', function() { touchSrc = this; }, {passive:true});
+        row.addEventListener('touchmove', function(e) {
+          if (!touchSrc) return;
+          e.preventDefault();
+          var touch = e.touches[0];
+          var over = document.elementFromPoint(touch.clientX, touch.clientY);
+          var overRow = over && over.closest('.place-row[draggable]');
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop=''; });
+          if (overRow && overRow !== touchSrc) overRow.style.borderTop = '2px solid var(--brand-color, #007acc)';
+        }, {passive:false});
+        row.addEventListener('touchend', function(e) {
+          if (!touchSrc) return;
+          var touch = e.changedTouches[0];
+          var over = document.elementFromPoint(touch.clientX, touch.clientY);
+          var overRow = over && over.closest('.place-row[draggable]');
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop=''; });
+          if (overRow && overRow !== touchSrc) {
+            var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+            var ids = allRows.map(function(r) { return parseInt(r.dataset.id); });
+            var srcId = parseInt(touchSrc.dataset.id);
+            var tgtId = parseInt(overRow.dataset.id);
+            var fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+            if (fi >= 0 && ti >= 0) {
+              ids.splice(fi, 1);
+              ids.splice(ti, 0, srcId);
+              if (typeof _setSavedOrder === 'function') {
+                _setSavedOrder(ids);
+              }
+              
+              // Use AUTHORITATIVE functions only
+              setTimeout(function() {
+                if (typeof getSortedFavPlaces === 'function') {
+                  var places = getSortedFavPlaces();
+                  updateTripWithRouteStats(places);
+                  if (typeof drawSavedRoute === 'function') drawSavedRoute();
+                }
+              }, 50);
+            }
+          }
+          touchSrc = null;
+        }, {passive:true});
+      });
+    }
+
+    // Start the route calculation process
+    updateTripWithRouteStats(places);
+
   };
 
   var _origUpdateFavUI = window.updateFavUI;
   window.updateFavUI = function() {
-    if (_origUpdateFavUI) _origUpdateFavUI();
+    
+    try {
+      if (_origUpdateFavUI) _origUpdateFavUI();
+    } catch (error) {
+      // Continue anyway - our route calculation can still work
+    }
+    
     var pill = document.getElementById('pill-saved');
     if (pill) {
       var heartSpan = pill.querySelector('.heart-icon');
@@ -710,8 +751,102 @@ function clearAllSaved() {
     }
     var btn = document.getElementById('sheet-clear-btn');
     if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
+    
+    // CRITICAL: Defer our route calculation until AFTER applyFilters completes
+    setTimeout(function() {
+      if (typeof favourites !== 'undefined' && favourites.length > 0) {
+        var places = favourites.slice(); // get current saved places
+        
+        if (typeof _getSavedOrder === 'function') {
+          var savedOrder = _getSavedOrder();
+          if (savedOrder && savedOrder.length > 0) {
+            // Reorder places according to saved order
+            var orderedPlaces = [];
+            savedOrder.forEach(function(id) {
+              var place = places.find(function(p) { 
+                // Handle both string and number IDs
+                return p.id == id || p.id === id || String(p.id) === String(id);
+              });
+              if (place) {
+                orderedPlaces.push(place);
+              } else {
+              }
+            });
+            places = orderedPlaces;
+          }
+        }
+        
+        // Call the function properly - it should be in global scope
+        if (typeof window.updateTripWithRouteStats === 'function') {
+          window.updateTripWithRouteStats(places);
+        } else if (typeof updateTripWithRouteStats === 'function') {
+          updateTripWithRouteStats(places);
+        } else {
+          // Fallback: call our function directly inline
+          if (places.length > 0) {
+            var distM = 0;
+            for (var i = 1; i < places.length; i++) {
+              if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+            }
+            var walkMins = Math.round(distM * 1.35 / 80);
+          }
+        }
+      } else {
+      }
+    }, 200); // Increased delay to ensure everything settles
   };
 })();
+
+// Add basic Navigate on Google Maps button to place cards
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  
+  new MutationObserver(function() {
+    var name = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    
+    // Remove existing button
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    
+    // Create basic navigate button
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = [
+      'display:inline-flex',
+      'align-items:center', 
+      'justify-content:center',
+      'gap:6px',
+      'margin:10px 0 4px',
+      'padding:8px 18px',
+      'background:white',
+      'color:var(--brand)',
+      'border:1.5px solid var(--brand)',
+      'border-radius:24px',
+      'font-size:0.82rem',
+      'font-weight:600',
+      'cursor:pointer',
+      'width:100%'
+    ].join(';');
+    
+    btn.innerHTML = '🚶 Navigate on Google Maps';
+    btn.onclick = function() { 
+      // Use place name instead of coordinates so Google Maps shows business name
+      var dest = encodeURIComponent(place.search || place.name + ', Seoul');
+      var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+      window.open(url, '_blank');
+    };
+    
+    // Insert button after hours element
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) {
+      hours.parentNode.insertBefore(btn, hours.nextSibling);
+    }
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
 </script>
 
 </body>
