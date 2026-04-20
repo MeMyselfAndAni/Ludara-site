@@ -237,7 +237,7 @@ function _populateCard(p){
 
   document.getElementById('pc-title').textContent = p.name;
   document.getElementById('pc-type').textContent  = p.type || '';
-  document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${p.hours}` : '';
+  document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${typeof formatHours === 'function' ? formatHours(p.hours) : p.hours}` : '';
 
   document.getElementById('pc-note').textContent = p.note || '';
 

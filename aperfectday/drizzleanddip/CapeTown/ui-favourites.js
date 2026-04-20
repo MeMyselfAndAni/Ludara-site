@@ -143,8 +143,18 @@ function _fitRouteBounds(places){
 function _addNumberedMarkers(places){
   places.forEach((p, i) => {
     const el = document.createElement('div');
-    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i);
+    el.style.cssText = 'width:24px;height:24px;border-radius:50%;background:' + _brandColor() + ';border:2.5px solid white;color:white;font-size:0.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.35);font-family:sans-serif;z-index:'+(9000+i)+';cursor:pointer;';
     el.textContent = i + 1;
+    
+    // Add click handler to open place card
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      console.log('🔢 Clicked numbered marker:', p.name);
+      if (typeof openDetail === 'function') {
+        openDetail(p.id);
+      }
+    });
+    
     const marker = new maplibregl.Marker({ element:el, anchor:'center' })
       .setLngLat([p.lng, p.lat]).addTo(map);
     tripMarkers.push(marker);
@@ -299,12 +309,26 @@ function planFavTrip(){
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
         <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
-      <button class="trip-stop-map" onclick="event.stopPropagation();window.open('https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}','_blank')">📍</button>
+
     </div>
     ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
+
+  // Add the missing trip footer with proper Google Maps button
+  const existingFooter = document.querySelector('.trip-footer');
+  if (!existingFooter) {
+    const tripPanel = document.querySelector('.trip-panel');
+    const footer = document.createElement('div');
+    footer.className = 'trip-footer';
+    footer.innerHTML = `
+      <button class="trip-maps-btn" onclick="openTripInMaps()">
+        🗺 Open in Google Maps
+      </button>
+    `;
+    tripPanel.appendChild(footer);
+  }
 
   // Wire drag-to-reorder on trip-stop rows
   let dragSrcId = null;
@@ -380,14 +404,80 @@ function jumpToTripStop(id){
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 
+// ── GOOGLE MAPS BUTTON FIX ───────────────────────────────────
+// RED buttons call openTripInMaps() directly - no interceptor needed
+
 function openTripInMaps(){
+  console.log('🔧 openTripInMaps function called');
+  
+  try {
+    // COMPREHENSIVE DEBUG: Check all ordering sources
+    console.log('🔍 DEBUGGING ORDERING ISSUE:');
+    console.log('🔍 Raw favourites array:', favourites);
+    console.log('🔍 _getSavedOrder() result:', _getSavedOrder());
+    console.log('🔍 localStorage favs_order key:', localStorage.getItem('favs_order_' + window.location.pathname.replace(/\//g,'_')));
+    
+    // Force refresh of saved order to avoid timing issues
+    console.log('🔧 About to call getSortedFavPlaces');
+    const places = getSortedFavPlaces();
+    console.log('🔧 getSortedFavPlaces returned:', places);
+    console.log('🔧 Place names in order:', places.map(p => p.name));
+    console.log('🔧 Place IDs in order:', places.map(p => p.id));
+    
+    if(!places.length) {
+      console.log('🔧 No places found, returning');
+      return;
+    }
+    
+    // Debug logging to see actual order being used
+    console.log('🗺️ Opening Google Maps with order:', places.map(p => p.name));
+    console.log('🗺️ Manual order from localStorage:', _getSavedOrder());
+    
+    const stops = places.slice(0,8);
+    
+    // Get travel mode from latest route stats (driving if >3h, walking if ≤3h)
+    const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
+    const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
+    console.log(`🚗 Using travel mode: ${travelMode} for ${cityName}`);
+    
+    // Use place names instead of coordinates so Google Maps shows business names
+    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);
+    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', ' + cityName);
+    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', ' + cityName)).join('|');
+    
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=${travelMode}`;
+    console.log(`🔧 Opening Google Maps with ${travelMode} mode:`, url);
+    
+    window.open(url, '_blank');
+  } catch (error) {
+    console.error('🔧 Error in openTripInMaps:', error);
+    _toast('Error opening Google Maps');
+  }
+}
+
+function shareItinerary(){
   const places = getSortedFavPlaces();
-  if(!places.length) return;
-  const stops = places.slice(0,8);
-  const origin = encodeURIComponent(`${stops[0].lat},${stops[0].lng}`);
-  const dest   = encodeURIComponent(`${stops[stops.length-1].lat},${stops[stops.length-1].lng}`);
-  const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(`${p.lat},${p.lng}`)).join('|');
-  window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=walking`,'_blank');
+  if(!places.length) {
+    _toast('Save some places first to share your itinerary!');
+    return;
+  }
+  
+  console.log('🔗 Sharing itinerary with order:', places.map(p => p.name));
+  console.log('🔗 Manual order from localStorage:', _getSavedOrder());
+  
+  const placeNames = places.map(p => `${p.emoji} ${p.name}`).join('\n');
+  const text = `Check out my ${cityName} itinerary:\n\n${placeNames}\n\nCreated with A Perfect Day: ${window.location.href}`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: `My ${cityName} Itinerary`,
+      text: text
+    });
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      _toast('Itinerary copied to clipboard! 📋');
+    });
+  }
 }
 
 function saveMapImage(){
@@ -431,7 +521,7 @@ let _lastRouteStats = null;
 function _fetchRouteStats(places) {
   return new Promise(function(resolve) {
     if (!places || places.length < 2) {
-      return resolve({ walkMins: 0, distM: 0, legMins: [] });
+      return resolve({ walkMins: 0, distM: 0, legMins: [], travelMode: 'walking' });
     }
 
     function _hav(a, b) {
@@ -440,15 +530,21 @@ function _fetchRouteStats(places) {
       return 2*R*Math.asin(Math.sqrt(h));
     }
 
-    function fallback() {
+    function fallback(travelMode = 'walking') {
       let distM = 0;
       const legMins = [];
       for (let i = 1; i < places.length; i++) {
         const d = _hav(places[i-1], places[i]);
         distM += d;
-        legMins.push(Math.round(d * 1.35 / 80));
+        const mins = travelMode === 'driving' 
+          ? Math.round(d * 1.35 / 833) // ~50km/h vacation driving (city traffic, parking, GPS)
+          : Math.round(d * 1.35 / 67);  // ~4km/h vacation walking (sightseeing, photos, enjoying)
+        legMins.push(mins);
       }
-      resolve({ walkMins: Math.round(distM * 1.35 / 80), distM, legMins });
+      const totalMins = travelMode === 'driving' 
+        ? Math.round(distM * 1.35 / 833)
+        : Math.round(distM * 1.35 / 67);
+      resolve({ walkMins: totalMins, distM, legMins, travelMode, isEstimated: true });
     }
 
     if (!navigator.onLine) return fallback();
@@ -463,13 +559,71 @@ function _fetchRouteStats(places) {
       .then(d => {
         if (timer) clearTimeout(timer);
         if (d.code !== 'Ok' || !d.routes?.[0]) return fallback();
+        
         const route = d.routes[0];
         const legMins = (route.legs || []).map(l => Math.round(l.duration / 60));
-        resolve({
-          walkMins: Math.round(route.duration / 60),
-          distM: route.distance,
-          legMins
-        });
+        const walkMins = Math.round(route.duration / 60);
+        
+        // 🚗 3-HOUR LOGIC: If walking >3h, fetch driving route
+        if (walkMins > 180) {
+          console.log('🚗 Route >3h walking, fetching driving time...');
+          const driveUrl = 'https://routing.openstreetmap.de/routed-car/route/v1/driving/' + coords + '?overview=false';
+          const driveCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          const driveTimer = driveCtrl ? setTimeout(() => driveCtrl.abort(), 8000) : null;
+          
+          fetch(driveUrl, driveCtrl ? { signal: driveCtrl.signal } : {})
+            .then(r => r.json())
+            .then(driveData => {
+              if (driveTimer) clearTimeout(driveTimer);
+              if (driveData.code === 'Ok' && driveData.routes?.[0]) {
+                const driveRoute = driveData.routes[0];
+                const driveLegMins = (driveRoute.legs || []).map(l => Math.round(l.duration / 60));
+                const driveMins = Math.round(driveRoute.duration / 60);
+                console.log(`✅ Driving route: ${driveMins}min (was ${walkMins}min walking)`);
+                _lastRouteStats = {
+                  walkMins: driveMins,
+                  distM: driveRoute.distance || route.distance,
+                  legMins: driveLegMins,
+                  travelMode: 'driving'
+                };
+                resolve(_lastRouteStats);
+              } else {
+                console.log('⚠️ Driving route failed, using estimated drive time');
+                const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving
+                const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
+                _lastRouteStats = {
+                  walkMins: estimatedDriveMins,
+                  distM: route.distance,
+                  legMins: estimatedDriveLegMins,
+                  travelMode: 'driving',
+                  isEstimated: true
+                };
+                resolve(_lastRouteStats);
+              }
+            })
+            .catch(() => {
+              console.log('⚠️ Driving route failed, using estimated drive time');
+              const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving  
+              const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
+              _lastRouteStats = {
+                walkMins: estimatedDriveMins,
+                distM: route.distance,
+                legMins: estimatedDriveLegMins,
+                travelMode: 'driving',
+                isEstimated: true
+              };
+              resolve(_lastRouteStats);
+            });
+        } else {
+          // Walking route ≤3h, use walking
+          _lastRouteStats = {
+            walkMins,
+            distM: route.distance,
+            legMins,
+            travelMode: 'walking'
+          };
+          resolve(_lastRouteStats);
+        }
       })
       .catch(() => { if (timer) clearTimeout(timer); fallback(); });
   });
