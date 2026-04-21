@@ -155,34 +155,8 @@
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌊</div></div>
       <span class="nbhd-label">West Coast</span>
     </div>
-    <div class="nbhd-bubble" id="nbhd-downtown" role="button" tabindex="0" onclick="selectNbhd('downtown', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎸</div></div>
-      <span class="nbhd-label">Downtown</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-germantown" role="button" tabindex="0" onclick="selectNbhd('germantown', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
-      <span class="nbhd-label">Germantown</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-gulch" role="button" tabindex="0" onclick="selectNbhd('gulch', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">✨</div></div>
-      <span class="nbhd-label">The Gulch</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-east" role="button" tabindex="0" onclick="selectNbhd('east', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎨</div></div>
-      <span class="nbhd-label">East Nashville</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-12south" role="button" tabindex="0" onclick="selectNbhd('12south', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌿</div></div>
-      <span class="nbhd-label">12 South</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-midtown" role="button" tabindex="0" onclick="selectNbhd('midtown', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎓</div></div>
-      <span class="nbhd-label">Midtown</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-parks" role="button" tabindex="0" onclick="selectNbhd('parks', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌲</div></div>
-      <span class="nbhd-label">Parks &amp; Day Trips</span>
-    </div>
+
+
   </div>
 </div>
 
@@ -426,11 +400,9 @@ function clearAllSaved() {
     // ✅ USE THE AUTHORITATIVE SOURCE - getSortedFavPlaces() from ui-favourites.js
     var places;
     
-    console.log('🔧 DEBUG: Using authoritative getSortedFavPlaces function');
     
     if (typeof getSortedFavPlaces === 'function') {
       places = getSortedFavPlaces();
-      console.log('🔧 DEBUG: Got places from authoritative source:', places.map(p => p.name));
     } else {
       console.error('🔧 ERROR: getSortedFavPlaces function not available');
       places = [];
@@ -459,51 +431,38 @@ function clearAllSaved() {
 
     // Use real walking route data (same as PDF)
     function updateTripWithRouteStats(places) {
-      console.log('🔧 DEBUG: updateTripWithRouteStats called with places:', places.map(p => p.name));
-      console.log('🔧 DEBUG: places order IDs:', places.map(p => p.id));
-      console.log('🔧 DEBUG: places coordinates:', places.map(p => `${p.name}: ${p.lat},${p.lng}`));
       
       // Always clear cache to force fresh calculation when saved list changes
       if (typeof _lastRouteStats !== 'undefined') {
-        console.log('🔧 DEBUG: clearing _lastRouteStats cache');
         _lastRouteStats = null;
       }
       
       if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
-        console.log('🔧 DEBUG: calling _fetchRouteStats');
         _fetchRouteStats(places).then(function(routeStats) {
-          console.log('🔧 DEBUG: _fetchRouteStats resolved with full stats:', routeStats);
-          console.log('🔧 DEBUG: distM:', routeStats.distM, 'walkMins:', routeStats.walkMins, 'legMins:', routeStats.legMins);
-          console.log('🔧 DEBUG: conversion check: meters:', routeStats.distM, '→ feet:', routeStats.distM * 3.28084, '→ miles:', (routeStats.distM * 3.28084 / 5280).toFixed(2));
           _lastRouteStats = routeStats; // Cache for PDF to use
           displaySavedTrip(places, routeStats.distM, routeStats.walkMins);
         }).catch(function(error) {
-          console.log('🔧 DEBUG: _fetchRouteStats failed:', error);
           // Fallback to straight-line calculation if route fetch fails
           var distM = 0;
           for (var i = 1; i < places.length; i++) {
             if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
           }
           var walkMins = Math.round(distM * 1.35 / 80);
-          console.log('🔧 DEBUG: using fallback calculation, distM:', distM);
           displaySavedTrip(places, distM, walkMins);
         });
       } else {
-        console.log('🔧 DEBUG: using fallback (no _fetchRouteStats or <2 places)');
         // Fallback for single place or missing _fetchRouteStats
         var distM = 0;
         for (var i = 1; i < places.length; i++) {
           if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
         }
         var walkMins = Math.round(distM * 1.35 / 80);
-        console.log('🔧 DEBUG: fallback distM:', distM);
         displaySavedTrip(places, distM, walkMins);
       }
     }
 
     // Function to update the right-side card specifically
     function updateRightSideCard(places, routeStats, distanceText) {
-      console.log('🔧 DEBUG: updateRightSideCard called with:', distanceText);
       
       // Search for the right-side card elements aggressively
       var rightCardSelectors = [
@@ -518,10 +477,8 @@ function clearAllSaved() {
           var elements = document.querySelectorAll(selector);
           elements.forEach(function(el) {
             if (el.textContent.includes('4.5') || el.textContent.includes('mi') || el.textContent.includes('km')) {
-              console.log('🔧 DEBUG: Found right card element:', selector, el.textContent);
               // Update the distance in this element
               el.innerHTML = el.innerHTML.replace(/[\d.]+\s*(mi|km)/g, distanceText);
-              console.log('🔧 DEBUG: Updated to:', el.textContent);
             }
           });
         } catch(e) {
@@ -533,21 +490,17 @@ function clearAllSaved() {
       var allElements = document.querySelectorAll('*');
       allElements.forEach(function(el) {
         if (el.textContent.includes('4.5 mi') && el.children.length === 0) {
-          console.log('🔧 DEBUG: Found text node with 4.5 mi:', el.textContent);
           el.textContent = el.textContent.replace(/[\d.]+\s*mi/g, distanceText);
-          console.log('🔧 DEBUG: Updated text node to:', el.textContent);
         }
       });
     }
 
     // Function to sync list numbers with map markers after reordering
     function syncListNumbersWithMap() {
-      console.log('🔧 DEBUG: syncListNumbersWithMap called');
       
       // Get the same ordered places that drawSavedRoute uses
       if (typeof getSortedFavPlaces === 'function') {
         var sortedPlaces = getSortedFavPlaces();
-        console.log('🔧 DEBUG: sorted places from getSortedFavPlaces:', sortedPlaces.map(p => p.name));
         
         // Update the list numbers to match this order
         sortedPlaces.forEach(function(place, index) {
@@ -558,14 +511,12 @@ function clearAllSaved() {
               var oldNumber = numberEl.textContent;
               var newNumber = (index + 1).toString();
               numberEl.textContent = newNumber;
-              console.log('🔧 DEBUG: updated', place.name, 'from number', oldNumber, 'to', newNumber);
             }
           }
         });
       } else if (typeof favourites !== 'undefined' && typeof _getSavedOrder === 'function') {
         // Fallback: use favourites with saved order
         var savedOrder = _getSavedOrder();
-        console.log('🔧 DEBUG: using savedOrder fallback:', savedOrder);
         
         if (savedOrder && savedOrder.length > 0) {
           savedOrder.forEach(function(id, index) {
@@ -574,7 +525,6 @@ function clearAllSaved() {
               var numberEl = row.querySelector('.saved-item-num');
               if (numberEl) {
                 numberEl.textContent = (index + 1).toString();
-                console.log('🔧 DEBUG: updated row', id, 'to number', index + 1);
               }
             }
           });
@@ -583,18 +533,25 @@ function clearAllSaved() {
     }
 
 
-
     function displaySavedTrip(places, distM, walkMins) {
-      console.log('🔧 DEBUG: displaySavedTrip called with distM:', distM, 'walkMins:', walkMins);
-      
-      var driveMins = Math.round(distM / 1000); // rough 60 km/h = 1000m/min
       function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
-      // Walk > 3h → show drive time instead
-      var showDrive = walkMins > 180;
-      var timeLabel = showDrive ? '🚗 ' + fmtTime(driveMins) : '🚶 ' + fmtTime(walkMins);
+
+      // Decide walk vs drive from _lastRouteStats.travelMode — this is the SAME
+      // source PDF (ui-pdf.js) and Google Maps (openTripInMaps in ui-favourites.js)
+      // use, so the three systems always agree. When a route is >3h walking,
+      // ui-favourites.js fetches the driving alternative AND overwrites walkMins
+      // with driveMins — meaning a "walkMins < 180" inference here gives the wrong
+      // icon. Fall back to the walkMins>180 heuristic only if _lastRouteStats is
+      // not populated yet (e.g. OSRM fetch failed, haversine fallback in use).
+      var mode = (typeof _lastRouteStats !== 'undefined' && _lastRouteStats && _lastRouteStats.travelMode)
+        ? _lastRouteStats.travelMode
+        : (walkMins > 180 ? 'driving' : 'walking');
+      var showDrive = mode === 'driving';
+      var icon = showDrive ? '🚗' : '🚶';
+      // walkMins is already the correct time (walk or drive) as set upstream
+      var timeLabel = icon + ' ' + fmtTime(walkMins);
 
       var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
-      console.log('🔧 DEBUG: calculated distanceText:', distanceText);
 
       var html =
         '<div class="saved-stats-bar" style="display:flex">' +
@@ -637,12 +594,10 @@ function clearAllSaved() {
       });
 
       listEl.innerHTML = html;
-      console.log('🔧 DEBUG: innerHTML updated, listEl:', listEl);
       
       // Force DOM update to make sure it sticks
       if (listEl && listEl.parentNode) {
         listEl.parentNode.appendChild(listEl); // Force reflow
-        console.log('🔧 DEBUG: forced DOM reflow');
       }
 
       // Auto-sort link
@@ -673,7 +628,6 @@ function clearAllSaved() {
           this.style.borderTop = '2px solid var(--brand-color, #007acc)';
         });
         row.addEventListener('drop', function(e) {
-          console.log('🔧 DEBUG: drop event fired');
           e.stopPropagation();
           var targetId = parseInt(this.dataset.id);
           if (dragSrcId === targetId) return;
@@ -683,37 +637,30 @@ function clearAllSaved() {
           if (fi < 0 || ti < 0) return;
           ids.splice(fi, 1);
           ids.splice(ti, 0, dragSrcId);
-          console.log('🔧 DEBUG: new order:', ids);
           if (typeof _setSavedOrder === 'function') {
-            console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
           
           if (typeof _setSavedOrder === 'function') {
-            console.log('🔧 DEBUG: calling _setSavedOrder');
             _setSavedOrder(ids);
           }
           
-          console.log('🔧 DEBUG: calling authoritative functions to regenerate');
           
           // Use AUTHORITATIVE functions - same as map uses
           setTimeout(function() {
             if (typeof getSortedFavPlaces === 'function') {
               var places = getSortedFavPlaces();
-              console.log('🔧 DEBUG: regenerating with authoritative places:', places.map(p => p.name));
               
               // Regenerate the list using authoritative order
               updateTripWithRouteStats(places);
               
               // Also update the map with the same order
               if (typeof drawSavedRoute === 'function') {
-                console.log('🔧 DEBUG: updating map route');
                 drawSavedRoute();
               }
             }
           }, 50);
           
-          console.log('🔧 DEBUG: skipping updateFavUI to avoid old popup, directly updating right card');
           
           // Get places in new order and calculate distance
           if (typeof favourites !== 'undefined' && favourites.length > 0) {
@@ -735,9 +682,7 @@ function clearAllSaved() {
             // Calculate new distance and update right-side card directly
             if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
               _fetchRouteStats(places).then(function(routeStats) {
-                console.log('🔧 DEBUG: Got new route stats for right card:', routeStats);
                 var distanceText = (typeof formatDistance === 'function' ? formatDistance(routeStats.distM) : ((routeStats.distM/1000).toFixed(1) + ' km'));
-                console.log('🔧 DEBUG: New distance text for right card:', distanceText);
                 
                 // Update right-side card specifically
                 updateRightSideCard(places, routeStats, distanceText);
@@ -935,12 +880,10 @@ function clearAllSaved() {
 
   var _origUpdateFavUI = window.updateFavUI;
   window.updateFavUI = function() {
-    console.log('🔧 DEBUG: updateFavUI called');
     
     try {
       if (_origUpdateFavUI) _origUpdateFavUI();
     } catch (error) {
-      console.log('🔧 DEBUG: original updateFavUI failed:', error);
       // Continue anyway - our route calculation can still work
     }
     
@@ -954,57 +897,44 @@ function clearAllSaved() {
     
     // CRITICAL: Defer our route calculation until AFTER applyFilters completes
     setTimeout(function() {
-      console.log('🔧 DEBUG: deferred route calculation starting');
       if (typeof favourites !== 'undefined' && favourites.length > 0) {
-        console.log('🔧 DEBUG: favourites found, count:', favourites.length);
         var places = favourites.slice(); // get current saved places
-        console.log('🔧 DEBUG: places IDs:', places.map(p => p.id));
         
         if (typeof _getSavedOrder === 'function') {
           var savedOrder = _getSavedOrder();
-          console.log('🔧 DEBUG: savedOrder:', savedOrder);
           if (savedOrder && savedOrder.length > 0) {
             // Reorder places according to saved order
             var orderedPlaces = [];
             savedOrder.forEach(function(id) {
-              console.log('🔧 DEBUG: looking for place with ID:', id);
               var place = places.find(function(p) { 
                 // Handle both string and number IDs
                 return p.id == id || p.id === id || String(p.id) === String(id);
               });
               if (place) {
-                console.log('🔧 DEBUG: found place:', place.name);
                 orderedPlaces.push(place);
               } else {
-                console.log('🔧 DEBUG: place not found for ID:', id);
               }
             });
             places = orderedPlaces;
-            console.log('🔧 DEBUG: reordered places:', places.map(p => p.name));
           }
         }
         
-        console.log('🔧 DEBUG: calling updateTripWithRouteStats (deferred)');
         // Call the function properly - it should be in global scope
         if (typeof window.updateTripWithRouteStats === 'function') {
           window.updateTripWithRouteStats(places);
         } else if (typeof updateTripWithRouteStats === 'function') {
           updateTripWithRouteStats(places);
         } else {
-          console.log('🔧 DEBUG: updateTripWithRouteStats function not found in scope');
           // Fallback: call our function directly inline
           if (places.length > 0) {
-            console.log('🔧 DEBUG: using fallback direct calculation');
             var distM = 0;
             for (var i = 1; i < places.length; i++) {
               if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
             }
             var walkMins = Math.round(distM * 1.35 / 80);
-            console.log('🔧 DEBUG: fallback distM:', distM, 'miles:', (distM * 3.28084 / 5280).toFixed(1));
           }
         }
       } else {
-        console.log('🔧 DEBUG: no favourites found (deferred)');
       }
     }, 200); // Increased delay to ensure everything settles
   };
@@ -1047,7 +977,7 @@ window.addEventListener('load', function() {
     btn.innerHTML = '🚶 Navigate on Google Maps';
     btn.onclick = function() { 
       // Use place name instead of coordinates so Google Maps shows business name
-      var dest = encodeURIComponent(place.search || place.name + ', Nashville');
+      var dest = encodeURIComponent(place.search || place.name + ', ' + (typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : ''));
       var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
       window.open(url, '_blank');
     };
@@ -1060,7 +990,6 @@ window.addEventListener('load', function() {
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 
-console.log('✅ Basic Navigate button added');
 </script>
 
 </body>
