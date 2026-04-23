@@ -6,20 +6,54 @@
   <meta name="description" content="Meet the Ludara.AI team and learn our story." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/favicon.svg" type="image/svg">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ludara.AI">
+  <meta property="og:title" content="About — Ludara.AI">
+  <meta property="og:description" content="Meet the Ludara.AI team and learn our story.">
+  <meta property="og:url" content="https://ludara.ai/about">
+  <!-- <meta property="og:image" content="https://ludara.ai/og-image.png"> -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About — Ludara.AI">
+  <meta name="twitter:description" content="Meet the Ludara.AI team and learn our story.">
+
   <style>
-    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d;--img-size:128px;--top-gap:12px}
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--border:#23262d;--gold:#b8965a;--gold-l:#d4b07a;--img-size:128px;--top-gap:12px;
+      --t-h1:clamp(44px,5.5vw,64px);
+      --t-h2:clamp(22px,2.4vw,28px);
+      --t-body:16px;
+      --t-kicker:12px;
+      --gap:12px}
     *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto}
     a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:16px;flex-wrap:wrap}
     .logo a{font-weight:800;color:#fff}
-    .menu{display:flex;gap:18px}
+    .menu{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
     .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
-    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin:8px 0}
+
+    /* Products dropdown */
+    .has-dropdown{position:relative}
+    .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
+    .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
+    .dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
+    .has-dropdown:hover .dropdown,.has-dropdown:focus-within .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .dropdown::before{content:'';position:absolute;top:-6px;left:0;right:0;height:12px}
+    .dropdown a{display:block;padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+    .dropdown a:hover{background:rgba(184,150,90,.10);color:#fff;text-decoration:none}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:10px 0}
     .grid{display:grid;gap:12px;grid-template-columns:1fr} @media(min-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .member{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:12px}
-    .role{color:var(--muted);font-size:14px}
-  
+    .member{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:14px}
+    .role{color:var(--muted)}
+    .footer-links{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-bottom:10px}
+    .footer-links a{color:var(--muted)} .footer-links a:hover{color:#fff}
+
+    /* Headline accent */
+    .serif{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;letter-spacing:-.02em}
+    .serif em{font-style:italic;color:var(--gold-l)}
+    .gold-rule{height:2px;width:56px;background:var(--gold);border-radius:2px;margin:14px 0 10px}
+
     /* Responsive profile grid for Maria's card */
     .profile-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
     .profile-grid .bio{grid-column:1 / -1;margin-top:8px}
@@ -29,7 +63,6 @@
       .profile-grid img{width:var(--img-size);height:var(--img-size);object-fit:cover;border-radius:50%;justify-self:end}
     }
 
-  
     /* Auto-sized spacer for consultants to align with start of bio */
     .consultants .start-align{height:calc(var(--img-size) + var(--top-gap))}
     @media(max-width:799px){
@@ -37,33 +70,41 @@
       .consultants .start-align{height:0}
     }
 
-  
-    /* Compact headings and section spacing */
-    h1, h2 { margin: 2px 0 8px; line-height: 1.2; }
-    h3 { margin: 0 0 6px; }
-
+    /* Unified type rules */
+    h1{font-size:var(--t-h1);line-height:1.1;margin:0 0 var(--gap);font-weight:800;letter-spacing:-.02em}
+    h2,h3{font-size:var(--t-h2);line-height:1.25;margin:0 0 var(--gap);font-weight:700;letter-spacing:-.01em}
+    p{font-size:var(--t-body);line-height:1.6;margin:0 0 var(--gap)}
+    p:last-child{margin-bottom:0}
   </style>
-  <link rel="stylesheet" href="assets/styles/unified.css">
 </head>
 <body>
   <div class="wrap">
-    <nav class="nav">
+    <nav class="nav" aria-label="Primary">
       <div class="logo"><a href="/">Ludara.AI</a></div>
       <div class="menu">
         <a href="/">Home</a>
-        <a href="/product.html">Product</a>
+        <div class="has-dropdown">
+          <a href="/product.html">Products <span class="caret" aria-hidden="true">▾</span></a>
+          <div class="dropdown" role="menu">
+            <a href="/aperfectday/" role="menuitem">A Perfect Day</a>
+            <a href="/product.html#vision" role="menuitem">Broader Vision</a>
+          </div>
+        </div>
         <a class="active" href="/about.html">About</a>
         <a href="/contact.html">Contact</a>
       </div>
     </nav>
 
     <section class="section">
-      <h1>Our story</h1>
+      <h1 class="serif">Our <em>story</em></h1>
+      <div class="gold-rule" aria-hidden="true"></div>
       <p style="color:var(--muted)">At Ludara.AI, we believe that every story can be a personal adventure. After years in R&D, creative technology, and business development, we saw a huge gap: museums, tour sites, educators, and publishers were delivering the same generic content to everyone—missing the chance to truly connect. We built Ludara.AI to change that. Our platform transforms any existing content into deeply personalized, gamified narratives—crafted for each visitor’s background, interests, and emotional triggers. Whether you’re walking through a historic city, exploring an art exhibit, or learning online, Ludara.AI turns static information into an interactive journey that feels made just for you. By blending AI-driven personalization with storytelling and game mechanics, we help cultural institutions, tourism providers, and educational platforms captivate audiences, drive repeat visits, and create lasting emotional bonds.</p>
+      <p style="color:var(--muted);margin-top:12px">Our first product, <a href="/aperfectday/"><strong>A Perfect Day</strong></a>, brings this vision to hotels through interactive, locally-curated city guides. More products are on the way.</p>
     </section>
 
     <section class="section">
-      <h2>Team</h2>
+      <h2 class="serif">Team</h2>
+      <div class="gold-rule" aria-hidden="true"></div>
       <div class="grid">
         <div class="member"><div class="profile-grid"><div><h3>Maria Lando</h3><div class="role">CEO & Founder</div></div><img src="./assets/Maria.jpg" alt="Maria Lando portrait" /><p class="bio" style="color:var(--muted)">Maria Lando is an innovator with 25+ years in R&D, product development, and business growth across movie special effects, fashion tech, medical devices, and education. A lifelong learner and AI enthusiast, she has lived in Russia, the U.S., and Israel, bringing a global perspective to Ludara.AI’s mission of transforming culture, travel, and learning through personalized storytelling.</p></div></div>
         <div class="member consultants">
@@ -75,10 +116,14 @@
       </div>
     </section>
 
-    
-
     <footer class="section" style="text-align:center;color:var(--muted)">
-      © <span id="y"></span> Ludara.AI, Inc.
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/product.html">Products</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      © <span id="y"></span> Ludara LLC · <a href="mailto:maria@ludara.ai">maria@ludara.ai</a>
     </footer>
   </div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>

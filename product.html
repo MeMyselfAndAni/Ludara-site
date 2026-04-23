@@ -2,38 +2,101 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Product — Ludara.AI</title>
-  <meta name="description" content="How Ludara.AI plugs into your content and personas to deliver personalized story modes via API or SDK." />
+  <title>Products — Ludara.AI</title>
+  <meta name="description" content="Ludara.AI products — starting with A Perfect Day, our flagship interactive city-guide platform for hotels. More personalized, gamified experiences on the way." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/favicon.svg" type="image/svg">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ludara.AI">
+  <meta property="og:title" content="Products — Ludara.AI">
+  <meta property="og:description" content="A Perfect Day is live; more personalized, gamified products are on the way.">
+  <meta property="og:url" content="https://ludara.ai/product">
+  <!-- <meta property="og:image" content="https://ludara.ai/og-image.png"> -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Products — Ludara.AI">
+  <meta name="twitter:description" content="A Perfect Day is live; more personalized, gamified products are on the way.">
+
   <style>
-    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d}
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d;--gold:#b8965a;--gold-l:#d4b07a;
+      --t-h1:clamp(44px,5.5vw,64px);
+      --t-h2:clamp(22px,2.4vw,28px);
+      --t-body:16px;
+      --t-kicker:12px;
+      --gap:12px}
+
+    h1{font-size:var(--t-h1);line-height:1.1;margin:0 0 var(--gap);font-weight:800;letter-spacing:-.02em}
+    h2,h3{font-size:var(--t-h2);line-height:1.25;margin:0 0 var(--gap);font-weight:700;letter-spacing:-.01em}
+    p{font-size:var(--t-body);line-height:1.6;margin:0 0 var(--gap)}
+    p:last-child{margin-bottom:0}
+    ul.clean li{font-size:var(--t-body);line-height:1.6}
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:16px;flex-wrap:wrap}
     .logo a{font-weight:800;color:#fff}
-    .menu{display:flex;gap:18px}
+    .menu{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
     .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
-    .hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:14px 0}
-    .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+
+    /* Products dropdown */
+    .has-dropdown{position:relative}
+    .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
+    .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
+    .dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
+    .has-dropdown:hover .dropdown,.has-dropdown:focus-within .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .dropdown::before{content:'';position:absolute;top:-6px;left:0;right:0;height:12px}
+    .dropdown a{display:block;padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+    .dropdown a:hover{background:rgba(184,150,90,.10);color:#fff;text-decoration:none}
+    .hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;margin:14px 0}
+    .kicker,.kicker-gold{color:var(--gold-l);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:var(--t-kicker);margin-bottom:var(--gap)}
     .grid-3{display:grid;gap:16px;grid-template-columns:1fr}
     @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
     .card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:16px}
     ul.clean{margin:0;padding-left:18px}
     .footer{border-top:1px solid var(--border);margin-top:32px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
-  
-    .icon-title { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
-    /* Icon default and category colors */
-.icon{width:34px;height:34px;color:var(--brand);}
-    @media (max-width: 799px) { .icon{width:34px;height:34px;color:var(--brand);} }
+    .footer-links{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-bottom:10px}
+    .footer-links a{color:var(--muted)} .footer-links a:hover{color:#fff}
 
-  
-.icon{width:34px;height:34px;color:var(--brand);}
+    /* Serif + gold accent */
+    .serif{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;letter-spacing:-.02em}
+    .serif em{font-style:italic;color:var(--gold-l)}
+    .gold-rule{height:2px;width:56px;background:var(--gold);border-radius:2px;margin:14px 0 10px}
 
+    .icon-title{display:flex;align-items:center;gap:10px}
+    .icon{width:22px;height:22px;color:var(--gold-l);opacity:.9;flex-shrink:0}
+    .icon-title h3{margin:0}
+
+    /* Flagship featured card */
+    .flagship-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;margin:14px 0;position:relative;overflow:hidden}
+    .flagship-card::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(184,150,90,0.10) 0%,transparent 70%);pointer-events:none}
+    .flagship-card .lead{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(184,150,90,0.3);border-radius:999px;padding:7px 14px 7px 8px;color:var(--gold-l);font-size:14px;font-weight:500;background:linear-gradient(180deg,rgba(184,150,90,0.12),rgba(184,150,90,0.03));text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease,color .18s ease}
+    a.pill:hover{border-color:var(--gold-l);color:#fff;background:linear-gradient(180deg,rgba(184,150,90,0.28),rgba(184,150,90,0.08));box-shadow:0 6px 14px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.12),0 0 0 1px rgba(212,176,122,0.3);transform:translateY(-1px);text-decoration:none}
+    a.pill:active{transform:translateY(0);box-shadow:0 1px 2px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06)}
+    .pill .flag{width:22px;height:16px;display:block;border-radius:3px;object-fit:cover;box-shadow:0 0 0 1px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.5)}
+    .flagship-pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+    .flagship-bullets{display:grid;gap:10px;grid-template-columns:1fr;margin:12px 0 20px}
+    @media(min-width:800px){.flagship-bullets{grid-template-columns:repeat(3,1fr)}}
+    .flagship-bullets div{color:var(--muted);border-left:2px solid var(--gold);padding-left:10px}
+    .flagship-ctas{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-block;background:var(--brand);color:#0b0c10;padding:10px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+    .btn:hover{opacity:.9}
+    .btn-ghost{display:inline-block;border:1px solid var(--border);color:var(--muted);padding:10px 16px;border-radius:10px;font-weight:500;text-decoration:none}
+    .btn-ghost:hover{border-color:var(--brand);color:#fff}
+
+    .vision-note{color:var(--muted);margin:0 0 14px}
+
+    /* Product index — jump-link pills */
+    .product-index{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}
+    .product-index a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:8px 14px;color:var(--muted);font-size:14px;font-weight:500;text-decoration:none;transition:border-color .2s ease,color .2s ease}
+    .product-index a:hover{border-color:var(--gold);color:#fff;text-decoration:none}
+    .product-index a .num{color:var(--gold-l);font-weight:700;letter-spacing:.06em;font-size:var(--t-kicker)}
+
+    /* Section anchor offset so jump-links don't hide under nav */
+    .anchor{scroll-margin-top:16px}
   </style>
-  <link rel="stylesheet" href="assets/styles/unified.css">
 </head>
 <body>
   <div class="wrap">
@@ -41,30 +104,73 @@
       <div class="logo"><a href="/">Ludara.AI</a></div>
       <div class="menu">
         <a href="/">Home</a>
-        <a class="active" href="/product.html">Product</a>
+        <div class="has-dropdown">
+          <a class="active" href="/product.html">Products <span class="caret" aria-hidden="true">▾</span></a>
+          <div class="dropdown" role="menu">
+            <a href="/aperfectday/" role="menuitem">A Perfect Day</a>
+            <a href="/product.html#vision" role="menuitem">Broader Vision</a>
+          </div>
+        </div>
         <a href="/about.html">About</a>
         <a href="/contact.html">Contact</a>
       </div>
     </nav>
 
     <section class="hero">
-      <div class="kicker">Platform</div>
-      <h1 style="margin:6px 0 6px">Plug your content in. Add a persona. Get story out.</h1>
-      <p style="color:var(--muted);margin:0">Built for culture, tourism, wellness, and education. Deliver personalized story modes via API or SDK.</p>
+      <div class="kicker">Products</div>
+      <h1 class="serif">Personalized, gamified storytelling — <em>shipping today, expanding tomorrow.</em></h1>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p style="color:var(--muted);margin:0">Ludara.AI powers experiences that adapt to each person's background, interests, and context. Our flagship product is live now; more are in development.</p>
+
+      <nav class="product-index" aria-label="Products on this page">
+        <a href="#aperfectday"><span class="num">01</span> A Perfect Day</a>
+        <a href="#vision"><span class="num">02</span> Broader Vision</a>
+      </nav>
     </section>
 
-    <section class="card" aria-labelledby="usecases">
-      <div class="kicker" id="usecases">Use cases</div>
-      <div class="grid-3">
+    <!-- FEATURED FLAGSHIP -->
+    <section id="aperfectday" class="flagship-card anchor" aria-labelledby="flagship">
+      <div class="kicker-gold" id="flagship">Live now — Flagship product</div>
+      <h2 class="serif">A Perfect Day — <em>interactive city guides</em> for boutique hotels.</h2>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p class="lead">Curated by locals, fully branded for your hotel, live in two weeks. A guest-facing interactive map plus a concierge tool — online, offline, and as a printable PDF guide. Multilingual for your international guests. Built to feel like a hotel service, not a third-party app.</p>
+
+      <div class="flagship-pills">
+        <a class="pill" href="/aperfectday/ludara/london/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/gb.png" srcset="https://flagcdn.com/w80/gb.png 2x" alt="" aria-hidden="true">London</a>
+        <a class="pill" href="/aperfectday/zenkimchi/seoul/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/kr.png" srcset="https://flagcdn.com/w80/kr.png 2x" alt="" aria-hidden="true">Seoul</a>
+        <a class="pill" href="/aperfectday/ludara/neworleans/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="" aria-hidden="true">New Orleans</a>
+        <a class="pill" href="/aperfectday/drizzleanddip/capetown/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/za.png" srcset="https://flagcdn.com/w80/za.png 2x" alt="" aria-hidden="true">Cape Town</a>
+        <a class="pill" href="/aperfectday/ludara/nashville/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="" aria-hidden="true">Nashville</a>
+        <a class="pill" href="/aperfectday/wanderlush/tbilisi/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/ge.png" srcset="https://flagcdn.com/w80/ge.png 2x" alt="" aria-hidden="true">Tbilisi</a>
+        <a class="pill" href="/aperfectday/nomadicmatt/bangkok/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/th.png" srcset="https://flagcdn.com/w80/th.png 2x" alt="" aria-hidden="true">Bangkok</a>
+        <a class="pill" href="/aperfectday/thecuriousmexican/mexicocity/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/mx.png" srcset="https://flagcdn.com/w80/mx.png 2x" alt="" aria-hidden="true">Mexico City</a>
+      </div>
+
+      <div class="flagship-bullets">
+        <div><strong style="color:var(--text)">8 cities live</strong><br>40–75 hand-picked places per city</div>
+        <div><strong style="color:var(--text)">2 weeks to launch</strong><br>From brief to live, branded guide</div>
+        <div><strong style="color:var(--text)">Works offline</strong><br>No app install required for guests</div>
+      </div>
+
+      <div class="flagship-ctas">
+        <a class="btn" href="/aperfectday/">Explore A Perfect Day →</a>
+      </div>
+    </section>
+
+    <!-- OUR BROADER VISION -->
+    <section id="vision" class="card anchor" aria-labelledby="vision-h" style="padding:26px;margin-top:18px">
+      <div class="kicker">Our broader vision</div>
+      <h2 class="serif" id="vision-h">Where Ludara.AI is headed.</h2>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p class="vision-note">A Perfect Day is the first application of our personalization engine. The same core technology — adaptive narratives, game loops, brand-safe content — opens up a range of directions we're exploring for the future.</p>
+
+      <div class="grid-3" style="margin-top:14px">
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="9"/>
-  <path d="M3 12h18"/>
-  <path d="M12 3a12 12 0 0 1 0 18"/>
-  <path d="M12 3a12 12 0 0 0 0 18"/>
-</svg>
-              <h3>Travel Industry</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a12 12 0 0 1 0 18"/><path d="M12 3a12 12 0 0 0 0 18"/>
+            </svg>
+            <h3 style="margin:0">Travel Industry</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
             <li>Bespoke gamified itineraries for tour agencies</li>
@@ -73,12 +179,10 @@
         </div>
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M3 10l9-5 9 5z"/>
-  <path d="M5 10v8M9 10v8M15 10v8M19 10v8"/>
-  <path d="M3 18h18M2 20h20"/>
-</svg>
-              <h3>Museums & Sites</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 10l9-5 9 5z"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8"/><path d="M3 18h18M2 20h20"/>
+            </svg>
+            <h3 style="margin:0">Museums & Sites</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
             <li>Adaptive “story modes” in audio-guides and websites</li>
@@ -87,11 +191,11 @@
         </div>
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5A1.5 1.5 0 0 1 18.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/>
-  <path d="M4 6h13.5A2.5 2.5 0 0 1 20 8.5V3"/>
-</svg>
-              <h3>Education</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5A1.5 1.5 0 0 1 18.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/>
+              <path d="M4 6h13.5A2.5 2.5 0 0 1 20 8.5V3"/>
+            </svg>
+            <h3 style="margin:0">Education</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
             <li>Transformation of educational materials into interactive personalized apps</li>
@@ -100,13 +204,10 @@
         </div>
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="9" cy="8" r="3"/>
-  <path d="M2 19a7 7 0 0 1 14 0"/>
-  <circle cx="17" cy="9" r="2.5"/>
-  <path d="M21.5 19a5.5 5.5 0 0 0-7.5-4.9"/>
-</svg>
-              <h3>Genealogy Platforms</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="8" r="3"/><path d="M2 19a7 7 0 0 1 14 0"/><circle cx="17" cy="9" r="2.5"/><path d="M21.5 19a5.5 5.5 0 0 0-7.5-4.9"/>
+            </svg>
+            <h3 style="margin:0">Genealogy Platforms</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
             <li>Personal storytelling for ancestry platforms</li>
@@ -115,24 +216,22 @@
         </div>
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M4 14l8-4 8 4-2 6H6l-2-6z"/>
-  <path d="M10 10V6h4v4"/>
-  <path d="M3 20c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/>
-</svg>
-              <h3>Hotels • Resorts • Cruise Lines</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 14l8-4 8 4-2 6H6l-2-6z"/><path d="M10 10V6h4v4"/><path d="M3 20c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/>
+            </svg>
+            <h3 style="margin:0">Hotels, Resorts & Cruise Lines</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
-            <li>Branded city guides for hotels & resorts</li>
+            <li>Branded city guides for hotels & resorts <em>(live today in A Perfect Day)</em></li>
             <li>Personalized on-shore excursions for cruises</li>
           </ul>
         </div>
         <div class="card">
           <div class="icon-title">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M12 21s-6.5-4.8-8.5-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6c-2 3.2-8.5 8-8.5 8z"/>
-</svg>
-              <h3>Wellness</h3>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-6.5-4.8-8.5-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6c-2 3.2-8.5 8-8.5 8z"/>
+            </svg>
+            <h3 style="margin:0">Wellness</h3>
           </div>
           <ul class="clean" style="color:var(--muted)">
             <li>Narrative-driven personalized healing programs</li>
@@ -140,9 +239,19 @@
           </ul>
         </div>
       </div>
+
+      <p style="color:var(--muted);margin-top:18px">Interested in partnering on one of these directions? <a href="/contact.html">Get in touch</a>.</p>
     </section>
 
-    <footer class="footer">© <span id="y"></span> Ludara.AI</footer>
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/product.html">Products</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>© <span id="y"></span> Ludara LLC · <a href="mailto:maria@ludara.ai">maria@ludara.ai</a></div>
+    </footer>
   </div>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>

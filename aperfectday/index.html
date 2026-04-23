@@ -41,10 +41,20 @@
       background: rgba(14,15,18,0.97); backdrop-filter: blur(10px);
     }
     .nav-logo { font-size:15px; font-weight:700; color:var(--dark-text); text-decoration:none; }
-    .nav-links { display:flex; gap:24px; }
+    .nav-links { display:flex; gap:24px; align-items:center; }
     .nav-links a { font-size:14px; color:var(--dark-muted); text-decoration:none; transition:color .15s; }
     .nav-links a:hover { color:var(--dark-text); }
     .nav-links a.active { color:var(--dark-text); font-weight:600; }
+
+    /* Products dropdown */
+    .has-dropdown{position:relative}
+    .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
+    .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
+    .dropdown-nav{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--dark-card);border:1px solid var(--dark-border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
+    .has-dropdown:hover .dropdown-nav,.has-dropdown:focus-within .dropdown-nav,.has-dropdown.open .dropdown-nav{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .dropdown-nav::before{content:'';position:absolute;top:-8px;left:0;right:0;height:14px}
+    .dropdown-nav a{display:block;padding:8px 12px;border-radius:6px;font-size:14px;white-space:nowrap;color:var(--dark-muted)}
+    .dropdown-nav a:hover{background:rgba(184,150,90,.10);color:var(--dark-text)}
 
     /* ── LAYOUT ── */
     .dark-section  { background: var(--dark); padding: 32px 24px; }
@@ -152,9 +162,10 @@
     .cta-wrap p { color:var(--dark-muted); max-width:480px; margin:0 auto 32px; font-weight:300; }
     .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
-    .footer { border-top:1px solid var(--dark-border); padding:20px 24px; color:var(--dark-muted); text-align:center; font-size:13px; }
+    .footer { border-top:1px solid var(--dark-border); padding:24px 24px; color:var(--dark-muted); text-align:center; font-size:13px; }
     .footer a { color:var(--dark-muted); text-decoration:none; }
     .footer a:hover { color:var(--gold-l); }
+    .footer-links { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin-bottom:10px; }
 
     /* ── LIGHTBOX ── */
     #lightbox { display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center; }
@@ -182,8 +193,14 @@
   <a class="nav-logo" href="https://ludara.ai">Ludara.AI</a>
   <div class="nav-links">
     <a href="https://ludara.ai">Home</a>
-    <a href="https://ludara.ai/product">Product</a>
-    <a href="#" class="active">A Perfect Day</a>
+    <div class="has-dropdown">
+      <a href="https://ludara.ai/product" class="active">Products <span class="caret" aria-hidden="true">▾</span></a>
+      <div class="dropdown-nav" role="menu">
+        <a href="https://ludara.ai/aperfectday/" role="menuitem">A Perfect Day</a>
+        <a href="https://ludara.ai/product#vision" role="menuitem">Broader Vision</a>
+      </div>
+    </div>
+    <a href="https://ludara.ai/about">About</a>
     <a href="https://ludara.ai/contact">Contact</a>
   </div>
 </nav>
@@ -395,10 +412,15 @@
 </section>
 
 <footer class="footer">
-  <a href="https://ludara.ai">Ludara.AI</a> &nbsp;·&nbsp;
-  <a href="mailto:maria@ludara.ai">maria@ludara.ai</a> &nbsp;·&nbsp;
-  <span>© 2026</span>
+  <div class="footer-links">
+    <a href="https://ludara.ai">Home</a>
+    <a href="https://ludara.ai/product">Products</a>
+    <a href="https://ludara.ai/about">About</a>
+    <a href="https://ludara.ai/contact">Contact</a>
+  </div>
+  <div>© <span id="apd-y"></span> Ludara LLC · <a href="mailto:maria@ludara.ai">maria@ludara.ai</a></div>
 </footer>
+<script>document.getElementById('apd-y').textContent=new Date().getFullYear()</script>
 
 <!-- LIGHTBOX -->
 <div id="lightbox">
