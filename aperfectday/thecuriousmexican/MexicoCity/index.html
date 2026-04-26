@@ -9,7 +9,7 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  :root { --brand: #c8522a; --brand-faint: rgba(200,82,42,0.12); --brand-glow: rgba(200,82,42,0.3); }
+  :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.35); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
@@ -390,10 +390,22 @@ function clearAllSaved() {
     }
     function updateTrip(pl) {
       if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
-      if (typeof _fetchRouteStats === 'function' && pl.length >= 2) {
-        _fetchRouteStats(pl).then(function(rs) { _lastRouteStats = rs; showTrip(pl, rs.distM, rs.walkMins); })
-          .catch(function() { var d=fallbackDist(pl); showTrip(pl, d, Math.round(d*1.35/58)); });
-      } else { var d=fallbackDist(pl); showTrip(pl, d, Math.round(d*1.35/58)); }
+      // Show immediately with haversine estimate — list appears right away
+      var d = fallbackDist(pl);
+      showTrip(pl, d, Math.round(d * 1.35 / 58));
+      // Update with live OSRM data in background
+      if (typeof _fetchRouteStats === 'function' && pl.length >= 2 && navigator.onLine) {
+        _fetchRouteStats(pl).then(function(rs) {
+          _lastRouteStats = rs;
+          var icon = rs.travelMode === 'driving' ? '🚗' : '🚶';
+          var we = document.getElementById('saved-stat-walk-sheet');
+          if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
+          if (rs.legMins) rs.legMins.forEach(function(m, i) {
+            var c = document.getElementById('saved-conn-' + i);
+            if (c) c.textContent = rs.travelMode === 'driving' ? '\u2193 ~' + m + ' min drive' : '\u2193 ~' + m + ' min walk';
+          });
+        }).catch(function(){});
+      }
     }
     function showTrip(pl, distM, walkMins) {
       var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode) ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
