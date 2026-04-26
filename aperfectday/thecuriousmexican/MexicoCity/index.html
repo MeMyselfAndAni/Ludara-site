@@ -1,4 +1,4 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -11,57 +11,56 @@
 <style>
   :root { --brand: #c8522a; --brand-faint: rgba(200,82,42,0.12); --brand-glow: rgba(200,82,42,0.3); }
 
-  .mgl-marker { background: none \!important; border: none \!important; }
-  .maplibregl-ctrl-bottom-right { bottom: 80px \!important; }
-  .maplibregl-ctrl-attrib { font-size: 9px \!important; }
+  .mgl-marker { background: none !important; border: none !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
+  .maplibregl-ctrl-attrib { font-size: 9px !important; }
   .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-  .nbhd-label { white-space: normal \!important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
-  .pc-photo-img { object-fit: contain \!important; background: #111 \!important; }
-  .pc-photo-wrap { background: #111 \!important; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+  .pc-photo-img { object-fit: contain !important; }
   .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
 
-  .sheet { display: flex \!important; flex-direction: column \!important; }
-  .places-list { flex: 1 1 auto \!important; overflow-y: auto \!important; -webkit-overflow-scrolling: touch \!important; overscroll-behavior: contain \!important; max-height: none \!important; padding-bottom: 60px \!important; }
+  .sheet { display: flex !important; flex-direction: column !important; }
+  .places-list { flex: 1 1 auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; overscroll-behavior: contain !important; max-height: none !important; padding-bottom: 60px !important; }
 
   .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
   .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
 
-  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) \!important; }
-  .pc-btn-nav { display: flex \!important; opacity: 1 \!important; pointer-events: all \!important; }
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
+  .pc-btn-nav { display: flex !important; opacity: 1 !important; pointer-events: all !important; }
   .pc-btn-nav.prev { left: 14px; right: auto; }
   .pc-btn-nav.next { right: 14px; left: auto; }
 
-  .pill-saved { border-color: var(--brand) \!important; color: var(--brand) \!important; }
-  .pill-saved:hover { background: white \!important; }
-  .pill-saved.active { background: var(--brand) \!important; border-color: var(--brand) \!important; color: white \!important; }
-  .pill-saved.active:hover { background: var(--brand) \!important; }
-  .pill-saved-count { color: var(--brand) \!important; }
-  .pill-saved.active .pill-saved-count { color: white \!important; }
-  .saved-mode-banner { border-bottom-color: var(--brand) \!important; color: var(--brand) \!important; }
-  .saved-plan-btn { background: var(--brand) \!important; }
-  .saved-plan-btn:hover { filter: brightness(0.88); background: var(--brand) \!important; }
-  .pc-btn-fav.faved { color: var(--brand) \!important; }
+  .pill-saved { border-color: var(--brand) !important; color: var(--brand) !important; }
+  .pill-saved:hover { background: white !important; }
+  .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+  .pill-saved.active:hover { background: var(--brand) !important; }
+  .pill-saved-count { color: var(--brand) !important; }
+  .pill-saved.active .pill-saved-count { color: white !important; }
+  .saved-mode-banner { border-bottom-color: var(--brand) !important; color: var(--brand) !important; }
+  .saved-plan-btn { background: var(--brand) !important; }
+  .saved-plan-btn:hover { filter: brightness(0.88); background: var(--brand) !important; }
+  .pc-btn-fav.faved { color: var(--brand) !important; }
 
   #pc-body { position: relative; }
   #pc-body::after { content: ''; pointer-events: none; position: sticky; bottom: 0; left: 0; right: 0; display: block; height: 32px; margin-top: -32px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95)); }
 
-  .user-dot-inner { width: 14px \!important; height: 14px \!important; border-radius: 50% \!important; background: var(--brand) \!important; border: 2.5px solid white \!important; box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) \!important; }
-  .user-dot-outer { width: 14px \!important; height: 14px \!important; }
+  .user-dot-inner { width: 14px !important; height: 14px !important; border-radius: 50% !important; background: var(--brand) !important; border: 2.5px solid white !important; box-shadow: 0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important; }
+  .user-dot-outer { width: 14px !important; height: 14px !important; }
 
-  .saved-panel { display:flex \!important; flex-direction:column \!important; }
-  #saved-place-list { flex:1 1 auto \!important; overflow-y:auto \!important; -webkit-overflow-scrolling:touch \!important; overscroll-behavior:contain \!important; }
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
   .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
   .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
   .saved-stat-dot { opacity:0.4; }
   .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
   .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
   .saved-action-btn:hover { filter:brightness(0.88); }
-  .pc-btn-fav { font-size: 1.6rem \!important; }
+  .pc-btn-fav { font-size: 1.6rem !important; }
   .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
   #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
-  .pc-photo-img { width:100% \!important; height:100% \!important; object-fit:contain \!important; object-position:center center \!important; display:block \!important; }
+  .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; }
 </style>
 
 <script>
@@ -69,14 +68,14 @@ var BRAND_COLOR = '#c8522a';
 window.addEventListener('load', function() {
   var c = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();
   if (c) BRAND_COLOR = c;
-  if (typeof CAT_COLORS \!== 'undefined') {
+  if (typeof CAT_COLORS !== 'undefined') {
     CAT_COLORS.landmark = '#c8522a';
     CAT_COLORS.food     = '#e8b840';
     CAT_COLORS.cafe     = '#7c56bc';
     CAT_COLORS.market   = '#c8487a';
     CAT_COLORS.nature   = '#3a8c5e';
   }
-  if (typeof CAT_LABELS \!== 'undefined') CAT_LABELS.cafe = 'Bar & Mezcal';
+  if (typeof CAT_LABELS !== 'undefined') CAT_LABELS.cafe = 'Bar & Mezcal';
   window.GUIDE_CITY = 'Mexico City';
 });
 </script>
@@ -253,21 +252,11 @@ window.addEventListener('load', function() {
     <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">&#x2665;</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">&#x2715;</button>
   </div>
-  <div class="saved-value-props">
-    <div class="saved-vp"><span class="saved-vp-icon">&#x1F5FA;</span><div><div class="saved-vp-title">Walking Route</div><div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div></div></div>
-    <div class="saved-vp"><span class="saved-vp-icon">&#x1F4C4;</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your journey</div></div></div>
-    <div class="saved-vp"><span class="saved-vp-icon">&#x1F5BC;</span><div><div class="saved-vp-title">Map Screenshot</div><div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div></div></div>
-  </div>
-  <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">&#x1F5FA; Full Itinerary</button>
-    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">&#x1F4C4; PDF Guide</button>
-    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">&#x1F5BC; Save Map</button>
-  </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">&#x2661;</div>
       <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap &#x2661; on any place to save it here &mdash; then plan your route, download a PDF guide, or save the map for offline use.</div>
+      <div class="saved-empty-body">Tap &#x2661; on any place to save it here &mdash; then plan your route, download a PDF guide, or share your itinerary.</div>
     </div>
   </div>
 </div>
@@ -298,7 +287,7 @@ window.addEventListener('load', function() {
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   var addrEl  = document.getElementById('pc-address');
-  if (\!titleEl || \!addrEl) return;
+  if (!titleEl || !addrEl) return;
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
@@ -324,11 +313,11 @@ window.addEventListener('load', function() {
 
 <script>
 function shareItinerary() {
-  if (\!favourites || favourites.length === 0) { _toast('Save some places first \u2661'); return; }
+  if (!favourites || favourites.length === 0) { _toast('Save some places first \u2661'); return; }
   var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(function() {
-      _toast('\uD83D\uDD17 Link copied\! Paste it in an email or message.', 4000);
+      _toast('\uD83D\uDD17 Link copied! Paste it in an email or message.', 4000);
     }).catch(function() { _fallbackCopy(url); });
   } else { _fallbackCopy(url); }
 }
@@ -336,22 +325,22 @@ function _fallbackCopy(text) {
   var ta = document.createElement('textarea');
   ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
   document.body.appendChild(ta); ta.focus(); ta.select();
-  try { document.execCommand('copy'); _toast('\uD83D\uDD17 Link copied\!', 4000); }
+  try { document.execCommand('copy'); _toast('\uD83D\uDD17 Link copied!', 4000); }
   catch(e) { _toast('Copy: ' + text, 6000); }
   document.body.removeChild(ta);
 }
 window.addEventListener('load', function() {
   var params = new URLSearchParams(window.location.search);
   var itinerary = params.get('itinerary');
-  if (\!itinerary) return;
+  if (!itinerary) return;
   var ids = itinerary.split(',').map(Number).filter(Boolean);
-  if (\!ids.length) return;
+  if (!ids.length) return;
   setTimeout(function() {
     try {
       favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
       saveFavs();
       var pill = document.getElementById('pill-saved');
-      if (pill && \!savedFilterActive) toggleSavedFilter(pill);
+      if (pill && !savedFilterActive) toggleSavedFilter(pill);
     } catch(e) { console.warn('Itinerary load error:', e); }
   }, 900);
 });
@@ -359,19 +348,19 @@ window.addEventListener('load', function() {
 
 <script>
 function clearAllSaved() {
-  if (\!favourites || favourites.length === 0) return;
-  if (\!confirm('Clear all ' + favourites.length + ' saved places?')) return;
+  if (!favourites || favourites.length === 0) return;
+  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
   favourites = []; saveFavs(); clearTripRoute();
   var pill = document.getElementById('pill-saved');
-  if (typeof savedFilterActive \!== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
+  if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
   if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
 }
 
 (function() {
   var _origRenderList = window.renderList;
   window.renderList = function() {
-    var isSaved = typeof savedFilterActive \!== 'undefined' && savedFilterActive;
-    if (\!isSaved) {
+    var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+    if (!isSaved) {
       if (typeof clearTripRoute === 'function') clearTripRoute();
       var scb = document.getElementById('sheet-clear-btn');
       if (scb) scb.style.display = 'none';
@@ -390,7 +379,7 @@ function clearAllSaved() {
     var ob = document.getElementById('saved-mode-banner');
     if (ob) ob.remove();
     var listEl = document.getElementById('places-list');
-    if (\!listEl) return;
+    if (!listEl) return;
     if (places.length === 0) {
       listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap \u2661 on any place<br>to save it here</div>';
       return;
@@ -400,19 +389,19 @@ function clearAllSaved() {
       var d=0; for(var i=1;i<pl.length;i++) if(typeof haversineM==='function') d+=haversineM(pl[i-1],pl[i]); return d;
     }
     function updateTrip(pl) {
-      if (typeof _lastRouteStats \!== 'undefined') _lastRouteStats = null;
+      if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
       if (typeof _fetchRouteStats === 'function' && pl.length >= 2) {
         _fetchRouteStats(pl).then(function(rs) { _lastRouteStats = rs; showTrip(pl, rs.distM, rs.walkMins); })
           .catch(function() { var d=fallbackDist(pl); showTrip(pl, d, Math.round(d*1.35/58)); });
       } else { var d=fallbackDist(pl); showTrip(pl, d, Math.round(d*1.35/58)); }
     }
     function showTrip(pl, distM, walkMins) {
-      var mode = (typeof _lastRouteStats\!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode) ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
+      var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode) ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
       var icon = mode==='driving' ? '\uD83D\uDE97' : '\uD83D\uDEB6';
       var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
       var html = '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span><span class="saved-stat-dot">\u00b7</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span><span class="saved-stat-dot">\u00b7</span><span>\uD83D\uDCCF '+dist+'</span></div>';
       html += '<div style="display:flex;padding:8px 10px;gap:5px;"><button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">\uD83D\uDDFA Google Maps</button><button class="saved-action-btn" onclick="generatePDF()" style="flex:1">\uD83D\uDCC4 PDF</button><button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">\uD83D\uDD17 Share</button></div>';
-      var hasManual = typeof _getSavedOrder==='function' && \!\!_getSavedOrder();
+      var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
       html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag \u2807 to reorder'+(hasManual?' &nbsp;\u00b7&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">\u21ba Auto-sort</a>':'')+'</div>';
       pl.forEach(function(p,i) {
         html += '<div class="place-row '+(p.id===AID?'active':'')+'" draggable="true" data-id="'+p.id+'" id="row-'+p.id+'"><span style="font-size:1.1rem;color:#ccc;padding:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">\u2807</span><div class="saved-item-num">'+(i+1)+'</div><div class="place-thumb" id="thumb-'+p.id+'">'+(p.emoji||'\uD83D\uDCCD')+'</div><div class="place-info" onclick="openDetail('+p.id+')" style="cursor:pointer;flex:1"><div class="place-name">'+p.name+'</div><div class="place-type">'+(CL[p.cat]||p.cat)+'</div><div class="place-addr">'+(p.address||'')+'</div></div><span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">\u203a</span></div>';
@@ -448,14 +437,14 @@ function clearAllSaved() {
         });
         var ts=null;
         row.addEventListener('touchstart',function(){ts=this;},{passive:true});
-        row.addEventListener('touchmove',function(e){if(\!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or\!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
-        row.addEventListener('touchend',function(e){if(\!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or\!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
+        row.addEventListener('touchmove',function(e){if(!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
+        row.addEventListener('touchend',function(e){if(!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
       });
     }
     function loadThumbs(pl) {
-      var imgBase = typeof IMAGES_PATH\!=='undefined' ? IMAGES_PATH : 'images/';
+      var imgBase = typeof IMAGES_PATH!=='undefined' ? IMAGES_PATH : 'images/';
       pl.forEach(function(p) {
-        var th=document.getElementById('thumb-'+p.id); if(\!th)return;
+        var th=document.getElementById('thumb-'+p.id); if(!th)return;
         if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
         var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
       });
@@ -467,11 +456,11 @@ function clearAllSaved() {
   window.updateFavUI = function() {
     try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
     var pill = document.getElementById('pill-saved');
-    if (pill) { var hs=pill.querySelector('.heart-icon'); if(hs)hs.textContent=(typeof favourites\!=='undefined'&&favourites.length>0)?'\u2665':'\u2661'; }
+    if (pill) { var hs=pill.querySelector('.heart-icon'); if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'\u2665':'\u2661'; }
     var btn = document.getElementById('sheet-clear-btn');
-    if (btn) btn.style.display=(typeof savedFilterActive\!=='undefined'&&savedFilterActive&&typeof favourites\!=='undefined'&&favourites.length>0)?'inline-block':'none';
+    if (btn) btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
     setTimeout(function() {
-      if (typeof favourites\!=='undefined'&&favourites.length>0) {
+      if (typeof favourites!=='undefined'&&favourites.length>0) {
         var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
         if (typeof window.updateTripWithRouteStats==='function') window.updateTripWithRouteStats(pl);
       }
@@ -495,9 +484,9 @@ window.addEventListener('load',function(){
   var _ol=window.locateMe;window.locateMe=function(){_ol();var a=0,poll=setInterval(function(){if(document.querySelector('.user-dot-inner')||a>20){clearInterval(poll);if(navigator.geolocation)navigator.geolocation.getCurrentPosition(function(pos){window._userLat=pos.coords.latitude;window._userLng=pos.coords.longitude;updateListDistances();},null,{enableHighAccuracy:true,timeout:10000});}a++;},300);};
 });
 window.addEventListener('load',function(){
-  var te=document.getElementById('pc-title');if(\!te)return;
+  var te=document.getElementById('pc-title');if(!te)return;
   new MutationObserver(function(){
-    var name=te.textContent.trim();var place=PLACES.find(function(p){return p.name===name;});if(\!place)return;
+    var name=te.textContent.trim();var place=PLACES.find(function(p){return p.name===name;});if(!place)return;
     var ex=document.getElementById('pc-nav-btn');if(ex)ex.remove();
     var btn=document.createElement('button');btn.id='pc-nav-btn';
     btn.style.cssText='display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+BRAND_COLOR+';border:1.5px solid '+BRAND_COLOR+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
@@ -508,16 +497,16 @@ window.addEventListener('load',function(){
   }).observe(te,{childList:true,characterData:true,subtree:true});
 });
 function updateListDistances(){
-  if(\!window._userLat)return;
+  if(!window._userLat)return;
   PLACES.forEach(function(place){
-    var row=document.getElementById('row-'+place.id);if(\!row)return;
+    var row=document.getElementById('row-'+place.id);if(!row)return;
     var badge=row.querySelector('.dist-badge');
-    if(\!badge){badge=document.createElement('span');badge.className='dist-badge';badge.style.cssText='display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';var ne=row.querySelector('.place-name');if(ne)ne.appendChild(badge);}
+    if(!badge){badge=document.createElement('span');badge.className='dist-badge';badge.style.cssText='display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';var ne=row.querySelector('.place-name');if(ne)ne.appendChild(badge);}
     badge.textContent=_fmtDist(_distM(window._userLat,window._userLng,place.lat,place.lng));
   });
 }
 window.addEventListener('load',function(){
-  var list=document.getElementById('places-list');if(\!list)return;
+  var list=document.getElementById('places-list');if(!list)return;
   new MutationObserver(function(){if(window._userLat)updateListDistances();}).observe(list,{childList:true,subtree:false});
 });
 </script>
@@ -533,8 +522,8 @@ window.addEventListener('load',function(){
 
 <script>
 window.addEventListener('load',function(){
-  var _op=window.planFavTrip;window.planFavTrip=function(){if(\!navigator.onLine){_showOfflineRouteMsg();return;}if(_op)_op();};
-  var _od=window.drawSavedRoute;window.drawSavedRoute=function(){if(\!navigator.onLine){_showOfflineRouteMsg();return;}if(_od)_od.apply(this,arguments);};
+  var _op=window.planFavTrip;window.planFavTrip=function(){if(!navigator.onLine){_showOfflineRouteMsg();return;}if(_op)_op();};
+  var _od=window.drawSavedRoute;window.drawSavedRoute=function(){if(!navigator.onLine){_showOfflineRouteMsg();return;}if(_od)_od.apply(this,arguments);};
 });
 function _showOfflineRouteMsg(){
   var ex=document.getElementById('offline-route-msg');if(ex)ex.remove();
@@ -549,11 +538,11 @@ function _showOfflineRouteMsg(){
 
 <script>
 window.addEventListener('load',function(){
-  function fIds(){return Array.from(document.querySelectorAll('.place-row')).map(function(r){return parseInt(r.id.replace('row-',''));}).filter(function(id){return \!isNaN(id);});}
-  function cId(){var t=document.getElementById('pc-title');if(\!t)return null;var p=PLACES.find(function(p){return p.name===t.textContent.trim();});return p?p.id:null;}
-  window.cardNext=function(){var ids=fIds();if(\!ids.length)return;var idx=ids.indexOf(cId());openDetail(ids[(idx+1)%ids.length]);};
-  window.cardPrev=function(){var ids=fIds();if(\!ids.length)return;var idx=ids.indexOf(cId());openDetail(ids[(idx-1+ids.length)%ids.length]);};
-  var wrap=document.getElementById('pc-photo-wrap');if(\!wrap)return;
+  function fIds(){return Array.from(document.querySelectorAll('.place-row')).map(function(r){return parseInt(r.id.replace('row-',''));}).filter(function(id){return !isNaN(id);});}
+  function cId(){var t=document.getElementById('pc-title');if(!t)return null;var p=PLACES.find(function(p){return p.name===t.textContent.trim();});return p?p.id:null;}
+  window.cardNext=function(){var ids=fIds();if(!ids.length)return;var idx=ids.indexOf(cId());openDetail(ids[(idx+1)%ids.length]);};
+  window.cardPrev=function(){var ids=fIds();if(!ids.length)return;var idx=ids.indexOf(cId());openDetail(ids[(idx-1+ids.length)%ids.length]);};
+  var wrap=document.getElementById('pc-photo-wrap');if(!wrap)return;
   var tx=0,ty=0;
   wrap.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
   wrap.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0)cardNext();else cardPrev();}},{passive:true});
