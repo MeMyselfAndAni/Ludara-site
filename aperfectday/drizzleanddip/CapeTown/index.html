@@ -412,17 +412,21 @@ function clearAllSaved() {
 
     function updateTrip(pl) {
       if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
-      if (typeof _fetchRouteStats === 'function' && pl.length >= 2) {
+      // Show immediately with haversine estimate — list appears right away
+      var d = fallbackDist(pl);
+      showTrip(pl, d, Math.round(d * 1.35 / fallbackSpeed()));
+      // Update with live OSRM data in background
+      if (typeof _fetchRouteStats === 'function' && pl.length >= 2 && navigator.onLine) {
         _fetchRouteStats(pl).then(function(rs) {
           _lastRouteStats = rs;
-          showTrip(pl, rs.distM, rs.walkMins);
-        }).catch(function() {
-          var d=fallbackDist(pl);
-          showTrip(pl, d, Math.round(d*1.35/fallbackSpeed()));
-        });
-      } else {
-        var d=fallbackDist(pl);
-        showTrip(pl, d, Math.round(d*1.35/fallbackSpeed()));
+          var icon = rs.travelMode === 'driving' ? '\U0001F697' : '\U0001F6B6';
+          var we = document.getElementById('saved-stat-walk-sheet');
+          if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
+          if (rs.legMins) rs.legMins.forEach(function(m, i) {
+            var c = document.getElementById('saved-conn-' + i);
+            if (c) c.textContent = rs.travelMode === 'driving' ? '\u2193 ~' + m + ' min drive' : '\u2193 ~' + m + ' min walk';
+          });
+        }).catch(function(){});
       }
     }
 
