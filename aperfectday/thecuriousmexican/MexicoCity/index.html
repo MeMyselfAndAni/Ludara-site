@@ -474,10 +474,9 @@ function _distM(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180
 function _fmtDist(m){return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km';}
 function navigateToPlace(dLat,dLng,dName){
   var dest=dLat+','+dLng;
-  var url=window._userLat&&window._userLng?'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking':'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
-  var favIds=[];try{favIds=JSON.parse(localStorage.getItem(FAVS_KEY)||'[]').map(Number);}catch(e){}
-  var fp=PLACES.filter(function(p){return favIds.includes(p.id)&&(Math.abs(p.lat-dLat)>0.0001||Math.abs(p.lng-dLng)>0.0001);});
-  if(fp.length>0)url+='&waypoints='+fp.map(function(p){return encodeURIComponent(p.search||p.name+', '+(window.GUIDE_CITY||'Mexico City'));}).join('|');
+  var url=window._userLat&&window._userLng
+    ?'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
+    :'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
   window.open(url,'_blank');
 }
 window.addEventListener('load',function(){
@@ -511,14 +510,7 @@ window.addEventListener('load',function(){
 });
 </script>
 
-<script>
-window.addEventListener('load',function(){
-  var brand=getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()||'#c8522a';
-  var _oi=window.initMapSources;window.initMapSources=function(){if(_oi)_oi();if(map&&map.getLayer('trip-route-line'))map.setPaintProperty('trip-route-line','line-color',brand);};
-  var _oe=window._ensureRouteLayer;window._ensureRouteLayer=function(){if(_oe)_oe();if(map&&map.getLayer('trip-route-line'))map.setPaintProperty('trip-route-line','line-color',brand);};
-  window._addNumberedMarkers=function(places){places.forEach(function(p,i){var el=document.createElement('div');el.style.cssText=['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');el.textContent=i+1;el.style.cursor='pointer';el.addEventListener('click',function(){if(typeof openDetail==='function')openDetail(p.id);});new maplibregl.Marker({element:el,anchor:'center'}).setLngLat([p.lng,p.lat]).addTo(map);if(window.tripMarkers)tripMarkers.push(marker);});};
-});
-</script>
+
 
 <script>
 window.addEventListener('load',function(){
