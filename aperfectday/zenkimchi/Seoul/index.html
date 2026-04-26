@@ -417,7 +417,7 @@ function clearAllSaved() {
       if (typeof _fetchRouteStats === 'function' && pl.length >= 2 && navigator.onLine) {
         _fetchRouteStats(pl).then(function(rs) {
           _lastRouteStats = rs;
-          var icon = rs.travelMode === 'driving' ? '\U0001F697' : '\U0001F6B6';
+          var icon = rs.travelMode === 'driving' ? '🚗' : '🚶';
           var we = document.getElementById('saved-stat-walk-sheet');
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
