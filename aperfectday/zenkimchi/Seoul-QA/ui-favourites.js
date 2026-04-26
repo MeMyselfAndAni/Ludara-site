@@ -275,7 +275,7 @@ function planFavTrip(){
   places.forEach((p, i) => {
     totalDwell += getDwell(p.cat);
     if(i < places.length-1){
-      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 80 * 60 * 1.35);
+      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 58 * 60 * 1.35);
     }
   });
   const totalWalkMins = Math.round(totalWalkSecs/60);
@@ -538,12 +538,12 @@ function _fetchRouteStats(places) {
         distM += d;
         const mins = travelMode === 'driving' 
           ? Math.round(d * 1.35 / 833) // ~50km/h vacation driving (city traffic, parking, GPS)
-          : Math.round(d * 1.35 / 67);  // ~4km/h vacation walking (sightseeing, photos, enjoying)
+          : Math.round(d * 1.35 / 58);  // ~3.5km/h vacation walking (sightseeing, photos, enjoying)
         legMins.push(mins);
       }
       const totalMins = travelMode === 'driving' 
         ? Math.round(distM * 1.35 / 833)
-        : Math.round(distM * 1.35 / 67);
+        : Math.round(distM * 1.35 / 58);
       resolve({ walkMins: totalMins, distM, legMins, travelMode, isEstimated: true });
     }
 
