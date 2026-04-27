@@ -420,7 +420,8 @@ window.addEventListener('load', function() {
       });
       var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
         .setLngLat([p.lng, p.lat]).addTo(map);
-      if (window.tripMarkers) tripMarkers.push(marker);
+      // tripMarkers is var (not let) in ui-favourites.js so it's on window — always push
+      tripMarkers.push(marker);
     });
   };
 });
@@ -601,6 +602,7 @@ function clearAllSaved() {
 <script>
   window.addEventListener('load', initMap);
 </script>
+
 
 </body>
 </html>
