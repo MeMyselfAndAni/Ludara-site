@@ -11,9 +11,9 @@
 <style>
   /* ── BRAND COLOR — New Orleans deep Creole red ── */
   :root {
-    --brand: #c8522a;
-    --brand-faint: rgba(200,82,42,0.12);
-    --brand-glow: rgba(200,82,42,0.35);
+    --brand: #ff2a00;
+    --brand-faint: rgba(255,42,0,0.12);
+    --brand-glow: rgba(255,42,0,0.35);
   }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -112,7 +112,7 @@
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#c8522a"></span>Landmarks</button>
+  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#ff2a00"></span>Landmarks</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#d4902a"></span>Restaurants</button>
   <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Cafés &amp; Wine</button>
   <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#8b6bb1"></span>Bars &amp; Music</button>
@@ -141,7 +141,7 @@
     </div>
     <div class="nbhd-bubble" id="nbhd-marigny-bywater" role="button" tabindex="0" onclick="selectNbhd('marigny-bywater', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎶</div></div>
-      <span class="nbhd-label">Marigny & Bywater</span>
+      <span class="nbhd-label">Marigny &amp; Bywater</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-treme" role="button" tabindex="0" onclick="selectNbhd('treme', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎺</div></div>
@@ -467,6 +467,13 @@ function clearAllSaved() {
       var al = document.getElementById('saved-autosort-link');
       if (al) al.addEventListener('click', function(e) { e.preventDefault(); if(typeof _clearSavedOrder==='function')_clearSavedOrder(); if(typeof updateFavUI==='function')updateFavUI(); });
       wireDrag(pl); loadThumbs(pl);
+      if (pl.length>=2 && typeof _fetchRouteStats==='function' && navigator.onLine) {
+        _fetchRouteStats(pl).then(function(s) {
+          var we=document.getElementById('saved-stat-walk-sheet');
+          if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
+        }).catch(function(){});
+      }
     }
     function wireDrag(pl) {
       var src=null;
