@@ -1,19 +1,19 @@
 @echo off
 echo ================================
-echo   NASHVILLE-QA GIT COMMIT
+echo   NASHVILLE GIT COMMIT
 echo ================================
 
-set NASHVILLE_QA=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\aperfectday\Ludara\Nashville-qa
+set NASHVILLE=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\aperfectday\Ludara\Nashville
 
 echo.
-echo Navigating to Nashville-qa...
-cd /d "%NASHVILLE_QA%"
+echo Navigating to Nashville...
+cd /d "%NASHVILLE%"
 
 echo Current directory: %CD%
 
 echo.
-echo Adding all changes in Nashville-qa...
-git add -A
+echo Adding all changes in Nashville...
+git add .
 
 echo.
 echo Current status:
@@ -23,7 +23,7 @@ echo.
 set /p commit_msg="Enter commit message (or press Enter for default): "
 
 if "%commit_msg%"=="" (
-    set commit_msg=Nashville-qa: Updates and fixes
+    set commit_msg=Nashville: Updates and fixes
 )
 
 echo.
@@ -31,15 +31,15 @@ echo Committing with message: "%commit_msg%"
 git commit -m "%commit_msg%"
 
 echo.
-echo Pushing Nashville-qa to repository...
+echo Pushing Nashville to repository...
 git push
 
 echo.
 echo ================================
-echo   NASHVILLE-QA COMMITTED!
+echo   NASHVILLE COMMITTED!
 echo ================================
 echo.
-echo ✅ Nashville-qa changes committed and pushed
+echo ✅ Nashville changes committed and pushed
 echo ✅ Ready for live deployment
 echo.
 pause
