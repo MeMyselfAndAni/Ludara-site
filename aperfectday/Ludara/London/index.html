@@ -354,89 +354,22 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Address + Awards display — populates pc-address and pc-awards when a card opens -->
+<!-- Address display — populates pc-address when a card opens (awards handled by ui-card.js) -->
 <script>
 window.addEventListener('load', function() {
-  var titleEl  = document.getElementById('pc-title');
-  var addrEl   = document.getElementById('pc-address');
-  var awardsEl = document.getElementById('pc-awards');
-  if (!titleEl) return;
+  var titleEl = document.getElementById('pc-title');
+  var addrEl  = document.getElementById('pc-address');
+  if (!titleEl || !addrEl) return;
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    if (addrEl) addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
-    if (awardsEl) {
-      if (place && place.awards) {
-        awardsEl.textContent = '🏆 ' + place.awards;
-        awardsEl.style.display = '';
-      } else {
-        awardsEl.style.display = 'none';
-      }
-    }
+    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>
 
-<!-- Navigate + Distances -->
+<!-- Navigate button — injected into card when a place opens, shows distance if location known -->
 <script>
-// Haversine distance in metres
-function _distM(lat1, lng1, lat2, lng2) {
-  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
-  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
-  return R * 2 * Math.asin(Math.sqrt(a));
-}
-function _fmtDist(m) {
-  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
-}
-
-// SCENARIO 2: Open in Google Maps from Saved/Itinerary
-// → All saved places as named stops (not coordinates) so Google Maps shows labels
-// → No origin set — user sees stops and can drag to reorder before navigating
-function openTripInMaps() {
-  var ids = [];
-  try { ids = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number); } catch(e) {}
-  var places = PLACES.filter(function(p) { return ids.includes(p.id); });
-  if (!places.length) { alert('Tap ♡ on places to save them first.'); return; }
-
-  if (places.length === 1) {
-    var q = encodeURIComponent(places[0].search || places[0].name + ', London');
-    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
-    return;
-  }
-
-  // Use named searches (not coords) so each stop shows its label in Google Maps.
-  // No origin — user adds their starting point and reorders stops as they wish.
-  var stops = places.map(function(p) {
-    return encodeURIComponent(p.search || p.name + ', London');
-  });
-  window.open('https://www.google.com/maps/dir/' + stops.join('/'), '_blank');
-}
-
-// Wrap ui-filter.js locateMe to capture coordinates for distance display
-window.addEventListener('load', function() {
-  var _origLocate = window.locateMe;
-  window.locateMe = function() {
-    _origLocate();
-    var attempts = 0;
-    var poll = setInterval(function() {
-      var dot = document.querySelector('.user-dot-inner');
-      if (dot || attempts > 20) {
-        clearInterval(poll);
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            window._userLat = pos.coords.latitude;
-            window._userLng = pos.coords.longitude;
-            updateListDistances();
-          }, null, { enableHighAccuracy: true, timeout: 10000 });
-        }
-      }
-      attempts++;
-    }, 300);
-  };
-});
-
-// Navigate button on place card — injected via MutationObserver when card opens
 window.addEventListener('load', function() {
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
@@ -450,7 +383,7 @@ window.addEventListener('load', function() {
     btn.id = 'pc-nav-btn';
     var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    var distStr = (window._userLat && window._userLng)
+    var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
     btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() {
@@ -463,31 +396,6 @@ window.addEventListener('load', function() {
     var hours = document.getElementById('pc-hours');
     if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
-
-// Distance badges on list items — updates when location active
-function updateListDistances() {
-  if (!window._userLat) return;
-  PLACES.forEach(function(place) {
-    var row = document.getElementById('row-' + place.id);
-    if (!row) return;
-    var badge = row.querySelector('.dist-badge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'dist-badge';
-      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
-      var nameEl = row.querySelector('.place-name');
-      if (nameEl) nameEl.appendChild(badge);
-    }
-    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
-  });
-}
-window.addEventListener('load', function() {
-  var list = document.getElementById('places-list');
-  if (!list) return;
-  new MutationObserver(function() {
-    if (window._userLat) updateListDistances();
-  }).observe(list, { childList: true, subtree: false });
 });
 </script>
 
@@ -508,82 +416,8 @@ window.addEventListener('load', function() {
 <button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
 
 
-<script>
-// Offline route detection — wraps planFavTrip and drawSavedRoute
-// to show a clear message instead of silently spinning when offline.
-window.addEventListener('load', function() {
-
-  // Wrap planFavTrip (Full Itinerary button)
-  var _origPlanFavTrip = window.planFavTrip;
-  window.planFavTrip = function() {
-    if (!navigator.onLine) {
-      _showOfflineRouteMsg();
-      return;
-    }
-    if (_origPlanFavTrip) _origPlanFavTrip();
-  };
-
-  // Wrap drawSavedRoute (called internally when route is drawn)
-  var _origDrawSavedRoute = window.drawSavedRoute;
-  window.drawSavedRoute = function() {
-    if (!navigator.onLine) {
-      _showOfflineRouteMsg();
-      return;
-    }
-    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
-  };
-
-});
-
-function _showOfflineRouteMsg() {
-  var existing = document.getElementById('offline-route-msg');
-  if (existing) existing.remove();
-
-  var msg = document.createElement('div');
-  msg.id = 'offline-route-msg';
-  msg.style.cssText = [
-    'position:fixed', 'bottom:100px', 'left:50%', 'transform:translateX(-50%)',
-    'background:#1a3a5c', 'color:white', 'padding:14px 22px',
-    'border-radius:12px', 'z-index:99999', 'font-size:0.85rem',
-    'font-family:sans-serif', 'text-align:center', 'max-width:300px',
-    'box-shadow:0 4px 16px rgba(0,0,0,0.35)', 'line-height:1.5'
-  ].join(';');
-  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
-  msg.onclick = function() { msg.remove(); };
-  document.body.appendChild(msg);
-  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
-}
-</script>
 
 
-<script>
-// Card swipe gestures
-window.addEventListener('load', function() {
-  var wrap = document.getElementById('pc-photo-wrap');
-  if (!wrap) return;
-  var touchStartX = 0, touchStartY = 0;
-  wrap.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-  wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx < 0) { cardNext(); } else { cardPrev(); }
-    }
-  }, { passive: true });
-});
-
-// Service Worker registration — register on first visit so guide works offline immediately
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) { console.log('SW registered:', reg.scope); })
-      .catch(function(err) { console.log('SW registration failed:', err); });
-  });
-}
-</script>
 
 <!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
@@ -591,40 +425,6 @@ if ('serviceWorker' in navigator) {
 </script>
 
 
-<!-- ── SHARE ITINERARY & URL READER ── -->
-<script>
-function shareItinerary() {
-  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
-  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(function() {
-      _toast('🔗 Link copied! Paste it in an email or message.', 4000);
-    }).catch(function() { _fallbackCopy(url); });
-  } else { _fallbackCopy(url); }
-}
-function _fallbackCopy(text) {
-  var ta = document.createElement('textarea');
-  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
-  document.body.appendChild(ta); ta.focus(); ta.select();
-  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
-  document.body.removeChild(ta);
-}
-window.addEventListener('load', function() {
-  var params = new URLSearchParams(window.location.search);
-  var itinerary = params.get('itinerary');
-  if (!itinerary) return;
-  var ids = itinerary.split(',').map(Number).filter(Boolean);
-  if (!ids.length) return;
-  setTimeout(function() {
-    try {
-      favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
-      saveFavs();
-      var pill = document.getElementById('pill-saved');
-      if (pill && !savedFilterActive) toggleSavedFilter(pill);
-    } catch(e) { console.warn('Itinerary load error:', e); }
-  }, 900);
-});
-</script>
 
 <!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
 <script>
@@ -774,32 +574,6 @@ function clearAllSaved() {
   };
 })();
 
-// Navigate button on place card — this place only, no waypoints
-window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  new MutationObserver(function() {
-    var name = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) return;
-    var existing = document.getElementById('pc-nav-btn');
-    if (existing) existing.remove();
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c8102e';
-    var btn = document.createElement('button');
-    btn.id = 'pc-nav-btn';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    btn.innerHTML = '🚶 Navigate on Google Maps';
-    btn.onclick = function() {
-      var dest = place.lat+','+place.lng;
-      var url = window._userLat && window._userLng
-        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
-        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
-      window.open(url, '_blank');
-    };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
 </script>
 
 
