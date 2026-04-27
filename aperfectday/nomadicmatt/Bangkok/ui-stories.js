@@ -49,7 +49,7 @@ function selectNbhd(nbhd, el){
     }
   }
 
-  // When selecting All — fit all visible places
+  // When selecting All -- fit all visible places
   if(nbhd === 'all' && map){
     const vis = PLACES.filter(p => AF === 'all' || p.cat === AF);
     if(vis.length){
@@ -72,16 +72,16 @@ function openStories(nbhd){ selectNbhd(nbhd, document.getElementById('nbhd-' + n
 
 // NBHD_META defined in guide-specific map.js
 const CL_STORIES = {
-  landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
+  landmark:'Landmark', food:'Restaurant', cafe:'Cafe & Bar',
   church:'Church', market:'Market', soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature'
 };
 
 // Neighbourhood map bounds for zoom-to
-// NBHD_BOUNDS removed — zoom computed from circle radius
+// NBHD_BOUNDS removed -- zoom computed from circle radius
 
 let storyPlaces = [], storyIdx = 0;
 
-// openStories removed — selectNbhd handles neighbourhood selection
+// openStories removed -- selectNbhd handles neighbourhood selection
 
 // Keep these stubs so old HTML references don't break
 function buildProgressBars(){}
@@ -89,16 +89,7 @@ let storyTimer = null, storyFillTimer = null;
 const STORY_DURATION = 6000;
 
 
-
-
-
-
-
-
-
-
-// storiesOpenDetail removed — cards now show full details inline
-
+// storiesOpenDetail removed -- cards now show full details inline
 
 
 // Keyboard nav
@@ -130,6 +121,15 @@ function openSheet(){
   // Hide the browse button (panel covers it)
   const btn = document.getElementById('list-toggle');
   if(btn) btn.classList.add('hidden');
+  // Hide nbhd-bar on mobile so it doesn't cover the bottom of the sheet.
+  // CSS .sheet.open ~ #nbhd-bar rule never fires because nbhd-bar precedes
+  // .sheet in the DOM, so we do it in JS instead.
+  if(window.innerWidth < 768){
+    const bar = document.getElementById('nbhd-bar');
+    if(bar) bar.style.display = 'none';
+    const title = document.getElementById('nbhd-title');
+    if(title) title.style.display = 'none';
+  }
 }
 function closeSheet(){
   const s = document.getElementById('sheet');
@@ -138,6 +138,13 @@ function closeSheet(){
   // Show the browse button again
   const btn = document.getElementById('list-toggle');
   if(btn) btn.classList.remove('hidden');
+  // Restore nbhd-bar on mobile
+  if(window.innerWidth < 768){
+    const bar = document.getElementById('nbhd-bar');
+    if(bar) bar.style.display = '';
+    const title = document.getElementById('nbhd-title');
+    if(title) title.style.display = '';
+  }
 }
 function toggleSheet(){
   const s = document.getElementById('sheet');
@@ -145,7 +152,7 @@ function toggleSheet(){
   if(isOpen){ closeSheet(); } else { openSheet(); }
 }
 
-// ── Align nbhd bar indent (no-op on desktop now — bubbles start left) ──
+// ── Align nbhd bar indent (no-op on desktop now -- bubbles start left) ──
 function alignNbhdBar(){
   return; // nbhd bar now starts from left edge on desktop
   if(window.innerWidth < 768) return;
@@ -202,7 +209,7 @@ function openNbhdBar(){
 
   bar.addEventListener('touchstart', e => {
     if(window.innerWidth >= 768) return;
-    // Only drag from handle area or top of bar — not from bubbles
+    // Only drag from handle area or top of bar -- not from bubbles
     const handle = document.getElementById('nbhd-handle');
     if(!handle) return;
     const rect = handle.getBoundingClientRect();
@@ -227,7 +234,7 @@ function openNbhdBar(){
     bar.style.transition = '';
     const dy = e.changedTouches[0].clientY - startY;
     if(dy > 60) {
-      // Swiped down enough — dismiss
+      // Swiped down enough -- dismiss
       bar.style.transform = '';
       closeNbhdBar();
     } else {
