@@ -372,33 +372,6 @@ window.addEventListener('load', function() {
 });
 </script>
 
-
-
-<!-- Hide neighbourhood bubbles with no places -->
-<script>
-window.addEventListener('load', function() {
-  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
-    if (bubble.id === 'nbhd-all') return;
-    var key = bubble.id.replace('nbhd-', '');
-    var count = PLACES.filter(function(p) { return p.nbhd === key; }).length;
-    if (count === 0) bubble.style.display = 'none';
-  });
-});
-</script>
-
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
-
-
-
-
-
-<!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
-<script>
-  window.addEventListener('load', initMap);
-</script>
-
-
-
 <!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
 <script>
 function clearAllSaved() {
