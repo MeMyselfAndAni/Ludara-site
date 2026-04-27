@@ -80,7 +80,7 @@
 
   /* ── Unified Saved Panel ── */
   .saved-panel { display:flex !important; flex-direction:column !important; }
-  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; padding-bottom: 120px !important; }
   .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
   .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
   .saved-stat-dot { opacity:0.4; }
@@ -487,46 +487,6 @@ function clearAllSaved() {
         row.addEventListener('touchstart',function(){ts=this;},{passive:true});
         row.addEventListener('touchmove',function(e){if(!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
         row.addEventListener('touchend',function(e){if(!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
-      });
-    }
-    function loadThumbs(pl) {
-      var imgBase=typeof IMAGES_PATH!=='undefined'?IMAGES_PATH:'images/';
-      pl.forEach(function(p){
-        var th=document.getElementById('thumb-'+p.id);if(!th)return;
-        if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
-        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
-      });
-    }
-    updateTrip(places);
-  };
-
-  var _origUpdateFavUI = window.updateFavUI;
-  window.updateFavUI = function() {
-    try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
-    var pill=document.getElementById('pill-saved');
-    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
-    var btn=document.getElementById('sheet-clear-btn');
-    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
-    setTimeout(function(){
-      if(typeof favourites!=='undefined'&&favourites.length>0){
-        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
-        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
-      }
-    },200);
-  };
-})();
-
-</script>
-
-
-
-<script>
-  window.addEventListener('load', initMap);
-</script>
-
-</body>
-</html>
-f(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
       });
     }
     function loadThumbs(pl) {
