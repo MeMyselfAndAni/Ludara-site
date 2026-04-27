@@ -13,7 +13,7 @@
   :root {
     --brand: #ff2a00;
     --brand-faint: rgba(255,42,0,0.12);
-    --brand-glow: rgba(255,42,0,0.35);
+    --brand-glow: rgba(200,82,42,0.35);
   }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -64,6 +64,7 @@
   #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
+.pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -112,7 +113,7 @@
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#ff2a00"></span>Landmarks</button>
+  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:var(--brand)"></span>Landmarks</button>
   <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#d4902a"></span>Restaurants</button>
   <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6b9e6e"></span>Cafés &amp; Wine</button>
   <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#8b6bb1"></span>Bars &amp; Music</button>
@@ -141,7 +142,7 @@
     </div>
     <div class="nbhd-bubble" id="nbhd-marigny-bywater" role="button" tabindex="0" onclick="selectNbhd('marigny-bywater', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎶</div></div>
-      <span class="nbhd-label">Marigny &amp; Bywater</span>
+      <span class="nbhd-label">Marigny & Bywater</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-treme" role="button" tabindex="0" onclick="selectNbhd('treme', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🎺</div></div>
@@ -184,6 +185,7 @@
     <div class="pc-title" id="pc-title"></div>
     <div class="pc-type" id="pc-type"></div>
     <div class="pc-address" id="pc-address"></div>
+    <div class="pc-awards" id="pc-awards" style="display:none"></div>
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
@@ -266,6 +268,12 @@
     <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
+  
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+  </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
   </div>
@@ -340,39 +348,65 @@ window.addEventListener('load', function() {
 
 
 <!-- ── SHARE ITINERARY & URL READER ── -->
+
+
+<!-- Navigate button — injected into card when a place opens, shows distance if location known -->
 <script>
-function shareItinerary() {
-  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
-  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(function() {
-      _toast('🔗 Link copied! Paste it in an email or message.', 4000);
-    }).catch(function() { _fallbackCopy(url); });
-  } else { _fallbackCopy(url); }
-}
-function _fallbackCopy(text) {
-  var ta = document.createElement('textarea');
-  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
-  document.body.appendChild(ta); ta.focus(); ta.select();
-  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
-  document.body.removeChild(ta);
-}
 window.addEventListener('load', function() {
-  var params = new URLSearchParams(window.location.search);
-  var itinerary = params.get('itinerary');
-  if (!itinerary) return;
-  var ids = itinerary.split(',').map(Number).filter(Boolean);
-  if (!ids.length) return;
-  setTimeout(function() {
-    try {
-      favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
-      saveFavs();
-      var pill = document.getElementById('pill-saved');
-      if (pill && !savedFilterActive) toggleSavedFilter(pill);
-    } catch(e) { console.warn('Itinerary load error:', e); }
-  }, 900);
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
+      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
+    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() {
+      var dest = place.lat+','+place.lng;
+      var url = window._userLat && window._userLng
+        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
+        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
+      window.open(url, '_blank');
+    };
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>
+
+
+
+<!-- Hide neighbourhood bubbles with no places -->
+<script>
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key; }).length;
+    if (count === 0) bubble.style.display = 'none';
+  });
+});
+</script>
+
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+
+
+
+
+<!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+
 
 <!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
 <script>
@@ -522,33 +556,9 @@ function clearAllSaved() {
   };
 })();
 
-// Navigate button on place card — this place only, no waypoints
-window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  new MutationObserver(function() {
-    var name = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) return;
-    var existing = document.getElementById('pc-nav-btn');
-    if (existing) existing.remove();
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
-    var btn = document.createElement('button');
-    btn.id = 'pc-nav-btn';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    btn.innerHTML = '🚶 Navigate on Google Maps';
-    btn.onclick = function() {
-      var dest = place.lat+','+place.lng;
-      var url = window._userLat && window._userLng
-        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
-        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
-      window.open(url, '_blank');
-    };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
 </script>
+
+
 
 </body>
 </html>
