@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Ludara.AI — Personalized, Gamified Storytelling</title>
+  <meta name="description" content="Ludara.AI turns any content into a personalized, gamified experience for culture, tourism, and education. Our flagship product is A Perfect Day — interactive city guides for hotels." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/favicon.svg" type="image/svg">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ludara.AI">
+  <meta property="og:title" content="Ludara.AI — Personalized, Gamified Storytelling">
+  <meta property="og:description" content="We turn content into personalized, gamified experiences. Our flagship product is A Perfect Day — interactive city guides for hotels.">
+  <meta property="og:url" content="https://ludara.ai/">
+  <!-- <meta property="og:image" content="https://ludara.ai/og-image.png"> -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ludara.AI — Personalized, Gamified Storytelling">
+  <meta name="twitter:description" content="Personalized, gamified storytelling. Flagship: A Perfect Day — interactive city guides for hotels.">
+
+  <style>
+    :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d;--gold:#b8965a;--gold-l:#d4b07a;
+      /* Type scale */
+      --t-h1:clamp(44px,5.5vw,64px);
+      --t-h2:clamp(22px,2.4vw,28px);
+      --t-body:16px;
+      --t-kicker:12px;
+      /* Uniform vertical rhythm */
+      --gap:12px}
+
+    /* Uniform type + margin rules */
+    h1{font-size:var(--t-h1);line-height:1.1;margin:0 0 var(--gap);font-weight:800;letter-spacing:-.02em}
+    h2,h3{font-size:var(--t-h2);line-height:1.25;margin:0 0 var(--gap);font-weight:700;letter-spacing:-.01em}
+    p{font-size:var(--t-body);line-height:1.6;margin:0 0 var(--gap)}
+    p:last-child{margin-bottom:0}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:16px;flex-wrap:wrap}
+    .logo a{font-weight:800;letter-spacing:.3px;color:#fff}
+    .menu{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+
+    /* Products dropdown */
+    .has-dropdown{position:relative}
+    .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
+    .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
+    .dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
+    .has-dropdown:hover .dropdown,.has-dropdown:focus-within .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .dropdown::before{content:'';position:absolute;top:-6px;left:0;right:0;height:12px}
+    .dropdown a{display:block;padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+    .dropdown a:hover{background:rgba(184,150,90,.10);color:#fff;text-decoration:none}
+    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:42px 0}
+    .hero p{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:7px 14px 7px 8px;color:var(--text);font-size:14px;font-weight:500;text-decoration:none;background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));box-shadow:0 1px 2px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+    a.pill:hover{border-color:var(--gold-l);color:#fff;background:linear-gradient(180deg,rgba(184,150,90,0.22),rgba(184,150,90,0.06));box-shadow:0 6px 14px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.10),0 0 0 1px rgba(212,176,122,0.25);transform:translateY(-1px);text-decoration:none}
+    a.pill:active{transform:translateY(0);box-shadow:0 1px 2px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06)}
+    .pill .flag{width:22px;height:16px;display:block;border-radius:3px;object-fit:cover;box-shadow:0 0 0 1px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.5)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px}
+    .kicker,.kicker-gold{color:var(--gold-l);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:var(--t-kicker);margin-bottom:var(--gap)}
+    .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+    .footer-links{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-bottom:10px}
+    .footer-links a{color:var(--muted)} .footer-links a:hover{color:#fff}
+
+    /* Headline accent */
+    .serif{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;letter-spacing:-.02em}
+    .serif em{font-style:italic;color:var(--gold-l)}
+    .gold-rule{height:2px;width:56px;background:var(--gold);border-radius:2px;margin:16px 0 6px}
+
+    /* Why Ludara — tightened */
+    .why{padding:28px}
+    .why .grid-3{margin-top:10px;gap:22px}
+    .why .feature{padding:4px 0}
+    .icon-title{display:flex;align-items:center;gap:10px}
+    .icon{width:22px;height:22px;color:var(--gold-l);opacity:.9;flex-shrink:0}
+    .feature-note{color:var(--muted)}
+
+    .btn{display:inline-block;background:var(--brand);color:#0b0c10;padding:10px 14px;border-radius:10px;font-weight:600;text-decoration:none}
+    .btn:hover{opacity:.9}
+    .btn-ghost{display:inline-block;border:1px solid var(--border);color:var(--muted);padding:10px 14px;border-radius:10px;font-weight:500;text-decoration:none}
+    .btn-ghost:hover{border-color:var(--brand);color:#fff}
+
+    /* Flagship teaser */
+    .flagship{padding:26px}
+    .flagship-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .flagship-sub{color:var(--muted)}
+    .flagship-pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+    .flagship-ctas{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* subtle, opt-in reveal animation */
+    [data-animate]{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    [data-animate].in{opacity:1;transform:none}
+    @media(prefers-reduced-motion:reduce){[data-animate]{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <div class="logo"><a href="/">Ludara.AI</a></div>
+      <div class="menu">
+        <a class="active" href="/">Home</a>
+        <div class="has-dropdown">
+          <a href="/product.html">Products <span class="caret" aria-hidden="true">▾</span></a>
+          <div class="dropdown" role="menu">
+            <a href="/aperfectday/" role="menuitem">A Perfect Day</a>
+            <a href="/product.html#vision" role="menuitem">Broader Vision</a>
+          </div>
+        </div>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <section class="card hero" data-animate>
+      <div>
+        <div class="pill">Ludus → Ludara • Personalized • Gamified</div>
+        <h1 class="serif">Ludara.AI turns any content into a <em>personalized, gamified</em> experience.</h1>
+        <div class="gold-rule" aria-hidden="true"></div>
+        <p>Built for culture, tourism, wellness, and education. From <em>ludus</em> — Latin for “play” and “learn” — we make every journey engaging and personal.</p>
+      </div>
+    </section>
+
+    <section class="card why" aria-labelledby="value" data-animate>
+      <div class="kicker" id="value">Why Ludara</div>
+      <div class="grid-3">
+        <!-- Personalized -->
+        <div class="feature">
+          <h3 class="icon-title">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            </svg>
+            <span>Personalized</span>
+          </h3>
+          <p class="feature-note">Narratives adapt to interests, culture, and language.</p>
+        </div>
+        <!-- Engaging -->
+        <div class="feature">
+          <h3 class="icon-title">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="3 7 7 7 7 3"/><path d="M7 7a7 7 0 0 1 12 5"/><polyline points="21 17 17 17 17 21"/><path d="M17 17a7 7 0 0 1-12-5"/>
+            </svg>
+            <span>Engaging</span>
+          </h3>
+          <p class="feature-note">Interactivity and gamification capture attention and bring people back.</p>
+        </div>
+        <!-- Brand-safe -->
+        <div class="feature">
+          <h3 class="icon-title">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l7 3v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-3z"/>
+              <path d="M9.5 12.5l2 2 3-4"/>
+            </svg>
+            <span>Brand-safe</span>
+          </h3>
+          <p class="feature-note">Curated sources, tone control, and privacy-first design protect your audience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flagship product teaser -->
+    <section class="card flagship" data-animate aria-labelledby="flagship">
+      <div class="flagship-head">
+        <div class="kicker-gold" id="flagship">Our flagship product</div>
+        <a href="/product.html" style="color:var(--muted)">See all products →</a>
+      </div>
+      <h2 class="serif">A Perfect Day — <em>interactive city guides</em> for boutique hotels.</h2>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p class="flagship-sub">Curated by locals, fully branded for your hotel, live in two weeks. A guest-facing interactive map plus a concierge tool — online, offline, and as a printable PDF guide. Multilingual for your international guests.</p>
+      <div class="flagship-pills">
+        <a class="pill" href="/aperfectday/ludara/london/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/gb.png" srcset="https://flagcdn.com/w80/gb.png 2x" alt="" aria-hidden="true">London</a>
+        <a class="pill" href="/aperfectday/zenkimchi/seoul/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/kr.png" srcset="https://flagcdn.com/w80/kr.png 2x" alt="" aria-hidden="true">Seoul</a>
+        <a class="pill" href="/aperfectday/ludara/neworleans/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="" aria-hidden="true">New Orleans</a>
+        <a class="pill" href="/aperfectday/drizzleanddip/capetown/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/za.png" srcset="https://flagcdn.com/w80/za.png 2x" alt="" aria-hidden="true">Cape Town</a>
+        <a class="pill" href="/aperfectday/ludara/nashville/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/us.png" srcset="https://flagcdn.com/w80/us.png 2x" alt="" aria-hidden="true">Nashville</a>
+        <a class="pill" href="/aperfectday/wanderlush/tbilisi/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/ge.png" srcset="https://flagcdn.com/w80/ge.png 2x" alt="" aria-hidden="true">Tbilisi</a>
+        <a class="pill" href="/aperfectday/nomadicmatt/bangkok/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/th.png" srcset="https://flagcdn.com/w80/th.png 2x" alt="" aria-hidden="true">Bangkok</a>
+        <a class="pill" href="/aperfectday/thecuriousmexican/mexicocity/" target="_blank" rel="noopener"><img class="flag" src="https://flagcdn.com/w40/mx.png" srcset="https://flagcdn.com/w80/mx.png 2x" alt="" aria-hidden="true">Mexico City</a>
+      </div>
+      <div class="flagship-ctas">
+        <a class="btn" href="/aperfectday/">Explore A Perfect Day →</a>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="card" data-animate style="text-align:center;margin-top:16px">
+      <h3 style="margin:4px 0 8px">We’re building the future of personalized storytelling.</h3>
+      <p style="color:var(--muted);margin:0 0 14px">If you’re a curious partner or customer—let’s talk.</p>
+      <a class="btn" href="/contact.html">Contact us</a>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/product.html">Products</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div>© <span id="y"></span> Ludara LLC · <a href="mailto:maria@ludara.ai">maria@ludara.ai</a></div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    (function(){
+      const els = document.querySelectorAll('[data-animate]');
+      if(!('IntersectionObserver' in window)) { els.forEach(el=>el.classList.add('in')); return; }
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:0.12});
+      els.forEach(el=>io.observe(el));
+    })();
+  </script>
+</body>
+</html>

@@ -13,7 +13,7 @@ echo Current directory: %CD%
 
 echo.
 echo Adding all changes in Nashville-qa...
-git add -A
+git add .
 
 echo.
 echo Current status:

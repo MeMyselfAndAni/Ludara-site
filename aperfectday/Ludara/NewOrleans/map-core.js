@@ -37,6 +37,55 @@ function _haversineM(a, b) {
   return 2*R*Math.asin(Math.sqrt(h));
 }
 
+// ── DISTANCE FORMATTING — Imperial vs Metric ─────────────────────────────────
+// DISTANCE_UNITS is defined per guide in map.js: 'imperial' (US) or 'metric' (default)
+function formatDistance(meters) {
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    // Imperial: feet for short distances, miles for long
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet) + ' ft';
+    } else {
+      const miles = feet / 5280;
+      return miles.toFixed(1) + ' mi';
+    }
+  } else {
+    // Metric: meters for short distances, kilometers for long
+    if (meters < 1000) {
+      return Math.round(meters) + ' m';
+    } else {
+      return (meters / 1000).toFixed(1) + ' km';
+    }
+  }
+}
+
+function formatDistanceValue(meters) {
+  // Returns just the number part for calculations/display
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    const feet = meters * 3.28084;
+    if (feet < 5280) {
+      return Math.round(feet);
+    } else {
+      return (feet / 5280).toFixed(1);
+    }
+  } else {
+    if (meters < 1000) {
+      return Math.round(meters);
+    } else {
+      return (meters / 1000).toFixed(1);
+    }
+  }
+}
+
+function formatDistanceUnit() {
+  // Returns just the unit label
+  if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
+    return 'mi'; // Could be ft or mi, but for trip summaries we usually show miles
+  } else {
+    return 'km';
+  }
+}
+
 function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
@@ -314,3 +363,99 @@ function panToNbhd(lng, lat, zoom) {
     console.warn('panToNbhd failed:', e);
   }
 }
+
+// ── MAP AUTO-REFRESH & ERROR HANDLING ────────────────────────
+// Prevents "Failed to fetch" errors after long periods of inactivity
+
+function refreshMapTiles() {
+  if (!map || !map.getStyle) return;
+  
+  try {
+    console.log('🗺️ Refreshing map tiles...');
+    
+    // Get current style and reload it to refresh tiles
+    const currentStyle = map.getStyle();
+    if (currentStyle && currentStyle.sources) {
+      // Trigger a style refresh by setting the same style
+      map.setStyle(currentStyle);
+    }
+  } catch (error) {
+    console.warn('Map refresh failed:', error);
+    // Fallback: reload page if map refresh fails
+    setTimeout(() => {
+      console.log('🔄 Map refresh failed, reloading page...');
+      location.reload();
+    }, 2000);
+  }
+}
+
+// Auto-refresh when user returns to tab after long absence
+let lastActiveTime = Date.now();
+let refreshTimeout = null;
+
+function handleVisibilityChange() {
+  if (document.hidden) {
+    // Tab became hidden - record the time
+    lastActiveTime = Date.now();
+  } else {
+    // Tab became visible - check how long it was hidden
+    const hiddenDuration = Date.now() - lastActiveTime;
+    
+    // If hidden for more than 30 minutes, refresh map tiles
+    if (hiddenDuration > 30 * 60 * 1000) { // 30 minutes
+      console.log('🗺️ Tab was hidden for', Math.round(hiddenDuration / 60000), 'minutes, refreshing map');
+      setTimeout(refreshMapTiles, 500); // Small delay to ensure tab is fully active
+    }
+  }
+}
+
+// Listen for visibility changes
+document.addEventListener('visibilitychange', handleVisibilityChange);
+
+// Also refresh on window focus (backup)
+window.addEventListener('focus', function() {
+  const hiddenDuration = Date.now() - lastActiveTime;
+  if (hiddenDuration > 30 * 60 * 1000) {
+    setTimeout(refreshMapTiles, 500);
+  }
+});
+
+// Handle map errors gracefully
+function handleMapError(error) {
+  console.warn('Map error detected:', error);
+  
+  // Clear any existing refresh timeout
+  if (refreshTimeout) {
+    clearTimeout(refreshTimeout);
+  }
+  
+  // Try to refresh tiles first
+  refreshTimeout = setTimeout(() => {
+    console.log('🔄 Attempting to refresh map due to error...');
+    refreshMapTiles();
+    
+    // If refresh doesn't work, reload page after additional delay
+    setTimeout(() => {
+      if (map && map.loaded && !map.loaded()) {
+        console.log('🔄 Map still not working, reloading page...');
+        location.reload();
+      }
+    }, 5000);
+  }, 1000);
+}
+
+// Add error handler when map is initialized
+function addMapErrorHandling() {
+  if (map && map.on) {
+    map.on('error', handleMapError);
+    console.log('✅ Map auto-refresh and error handling initialized');
+  }
+}
+
+// Auto-initialize error handling when map becomes available
+let mapCheckInterval = setInterval(() => {
+  if (typeof map !== 'undefined' && map && map.on) {
+    addMapErrorHandling();
+    clearInterval(mapCheckInterval);
+  }
+}, 500);

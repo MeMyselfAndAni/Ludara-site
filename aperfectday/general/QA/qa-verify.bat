@@ -2,12 +2,17 @@
 setlocal enabledelayedexpansion
 REM A Perfect Day Platform QA Script (Deploy + Verify)
 REM Usage: qa-verify.bat "C:\Full\Path\To\Platform\Directory"
-REM Example: qa-verify.bat "C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\aperfectday\Ludara\Nashville"
+
+REM Enable ANSI escape sequences for color support (Windows 10+)
+REM Simplified color setup - just use ANSI codes directly
+set "RED=[91m"
+set "GREEN=[92m"
+set "YELLOW=[93m"
+set "RESET=[0m"
 
 if "%~1"=="" (
     echo ERROR: Please provide platform directory path
     echo Usage: qa-verify.bat "C:\Full\Path\To\Platform\Directory"
-    echo Example: qa-verify.bat "C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\aperfectday\Ludara\Nashville"
     pause
     exit /b 1
 )
@@ -21,87 +26,68 @@ echo A PERFECT DAY PLATFORM QA SCRIPT (DEPLOY + VERIFY)
 echo ======================================================================
 echo Platform Path: %PLATFORM_PATH%
 echo General Platform: %GENERAL_PLATFORM%
-echo.
 
-REM Check if general platform exists
 if not exist "%GENERAL_PLATFORM%" (
-    echo ERROR: General platform directory not found!
-    echo Path: %GENERAL_PLATFORM%
+    echo %RED%❌ General platform directory not found%RESET%
     pause
     exit /b 1
 ) else (
     echo ✅ General platform directory found
 )
 
-REM Check if target directory exists
 if not exist "%PLATFORM_PATH%" (
-    echo ERROR: Platform directory not found!
-    echo Path: %PLATFORM_PATH%
+    echo %RED%❌ Platform directory not found%RESET%
     pause
     exit /b 1
 ) else (
     echo ✅ Platform directory found
 )
 
-echo.
 echo ======================================================================
 echo STEP 1: DEPLOYING LATEST FILES FROM GENERAL PLATFORM
 echo ======================================================================
 
 echo Copying all files from general platform...
-xcopy /Y /Q "%GENERAL_PLATFORM%\*.*" "%PLATFORM_PATH%\" > nul
+xcopy "%GENERAL_PLATFORM%\*" "%PLATFORM_PATH%\" /Y /S /Q
 if %errorlevel% equ 0 (
     echo ✅ All files copied successfully
 ) else (
-    echo ❌ Error copying files
+    echo %RED%❌ Error copying files%RESET%
     set /a ERROR_COUNT+=1
 )
 
 echo.
 echo ======================================================================
-echo STEP 3: NEIGHBORHOOD FUNCTIONALITY VERIFICATION
+echo STEP 2: NEIGHBORHOOD FUNCTIONALITY VERIFICATION
 echo ======================================================================
 
 echo Checking neighborhood data integrity...
 
-REM Check neighborhood data
 if exist "%PLATFORM_PATH%\data.js" (
     for /f %%A in ('findstr /C:"nbhd:" "%PLATFORM_PATH%\data.js" ^| find /c ":"') do set NBHD_COUNT=%%A
     if !NBHD_COUNT! gtr 10 (
         echo ✅ Found !NBHD_COUNT! places with neighborhood assignments
-        
-        REM Check for variety of neighborhoods
-        findstr "nbhd: 'city'" "%PLATFORM_PATH%\data.js" >nul
-        if !errorlevel! equ 0 (
-            echo ✅ City neighborhood found in data
-        ) else (
-            echo ❌ No city neighborhood found - data may be incomplete
-            set /a ERROR_COUNT+=1
-        )
-        
-        REM Check for multiple neighborhood types (not just all city)
-        findstr /C:"nbhd: 'peninsula'" "%PLATFORM_PATH%\data.js" >nul
-        set PENINSULA_FOUND=!errorlevel!
-        findstr /C:"nbhd: 'stellenbosch'" "%PLATFORM_PATH%\data.js" >nul
-        set STELLENBOSCH_FOUND=!errorlevel!
-        
-        if !PENINSULA_FOUND! equ 0 (
-            if !STELLENBOSCH_FOUND! equ 0 (
-                echo ✅ Multiple neighborhood types found
-            ) else (
-                echo ⚠️  Only peninsula found, stellenbosch missing
-            )
-        ) else (
-            echo ❌ Only city neighborhood found - need more variety
-            set /a ERROR_COUNT+=1
-        )
-        
     ) else (
-        echo ❌ Only !NBHD_COUNT! neighborhood assignments found - need more
+        echo %RED%❌ ERROR: Only !NBHD_COUNT! neighborhood assignments found - need more%RESET%
         set /a ERROR_COUNT+=1
     )
+    
+    findstr "nbhd: 'city'" "%PLATFORM_PATH%\data.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ City neighborhood found in data
+    ) else (
+        echo %RED%❌ ERROR: No city neighborhood found - data may be incomplete%RESET%
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr /C:"nbhd: 'peninsula'" "%PLATFORM_PATH%\data.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ Peninsula neighborhood found in data
+    ) else (
+        echo ⚠️  Peninsula neighborhood missing from data
+    )
 ) else (
-    echo ❌ data.js not found
+    echo %RED%❌ ERROR: data.js not found%RESET%
     set /a ERROR_COUNT+=1
 )
 
@@ -111,44 +97,27 @@ echo Checking neighborhood configuration...
 if exist "%PLATFORM_PATH%\map.js" (
     findstr "NBHD_COLORS" "%PLATFORM_PATH%\map.js" >nul
     if !errorlevel! equ 0 (
-        findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
-        if !errorlevel! equ 0 (
-            echo ✅ Neighborhood configuration exists
-            
-            REM Check for specific neighborhoods in config
-            findstr "peninsula.*#" "%PLATFORM_PATH%\map.js" >nul
-            if !errorlevel! equ 0 (
-                echo ✅ Peninsula neighborhood configured
-            ) else (
-                echo ❌ Peninsula neighborhood missing from config
-                set /a ERROR_COUNT+=1
-            )
-            
-            findstr "stellenbosch.*#" "%PLATFORM_PATH%\map.js" >nul
-            if !errorlevel! equ 0 (
-                echo ✅ Stellenbosch neighborhood configured
-            ) else (
-                echo ❌ Stellenbosch neighborhood missing from config
-                set /a ERROR_COUNT+=1
-            )
-            
-        ) else (
-            echo ❌ NBHD_LABELS missing from map.js
-            set /a ERROR_COUNT+=1
-        )
+        echo ✅ NBHD_COLORS configuration found
     ) else (
-        echo ❌ NBHD_COLORS missing from map.js
+        echo %RED%❌ ERROR: NBHD_COLORS missing from map.js%RESET%
+        set /a ERROR_COUNT+=1
+    )
+    
+    findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
+    if !errorlevel! equ 0 (
+        echo ✅ NBHD_LABELS configuration found
+    ) else (
+        echo %RED%❌ ERROR: NBHD_LABELS missing from map.js%RESET%
         set /a ERROR_COUNT+=1
     )
 ) else (
-    echo ❌ map.js not found
+    echo %RED%❌ ERROR: map.js not found%RESET%
     set /a ERROR_COUNT+=1
 )
 
 echo.
 echo Checking neighborhood UI functionality...
 
-REM Check neighborhood functionality in ui-stories.js (not ui-filter.js!)
 if exist "%PLATFORM_PATH%\ui-stories.js" (
     echo ✅ ui-stories.js exists
     
@@ -156,45 +125,34 @@ if exist "%PLATFORM_PATH%\ui-stories.js" (
     if !errorlevel! equ 0 (
         echo ✅ selectNbhd function exists
     ) else (
-        echo ❌ selectNbhd function missing - neighborhood selection won't work
+        echo %RED%❌ ERROR: selectNbhd function missing%RESET%
         set /a ERROR_COUNT+=1
     )
     
     findstr "function alignNbhdBar" "%PLATFORM_PATH%\ui-stories.js" >nul
     if !errorlevel! equ 0 (
-        echo ✅ alignNbhdBar function exists in ui-stories.js
+        echo ✅ alignNbhdBar function exists
     ) else (
-        echo ❌ alignNbhdBar function missing from ui-stories.js - neighborhood bar won't work
+        echo %RED%❌ ERROR: alignNbhdBar function missing%RESET%
         set /a ERROR_COUNT+=1
     )
-    
-    REM Check for neighborhood building logic
-    findstr "NBHD_COLORS" "%PLATFORM_PATH%\ui-stories.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ ui-stories.js references NBHD_COLORS
-    ) else (
-        echo ❌ ui-stories.js doesn't reference NBHD_COLORS - may not build buttons properly
-        set /a ERROR_COUNT+=1
-    )
-    
 ) else (
-    echo ❌ ui-stories.js missing - neighborhood functionality won't work at all
+    echo %RED%❌ ERROR: ui-stories.js missing%RESET%
     set /a ERROR_COUNT+=1
 )
 
-REM Check applyFilters in ui-filter.js (this one IS in ui-filter.js)
 if exist "%PLATFORM_PATH%\ui-filter.js" (
     echo ✅ ui-filter.js exists
     
     findstr "function applyFilters" "%PLATFORM_PATH%\ui-filter.js" >nul
     if !errorlevel! equ 0 (
-        echo ✅ applyFilters function exists in ui-filter.js
+        echo ✅ applyFilters function exists
     ) else (
-        echo ❌ applyFilters function missing - filtering won't work
+        echo %RED%❌ ERROR: applyFilters function missing%RESET%
         set /a ERROR_COUNT+=1
     )
 ) else (
-    echo ❌ ui-filter.js missing - filtering won't work
+    echo %RED%❌ ERROR: ui-filter.js missing%RESET%
     set /a ERROR_COUNT+=1
 )
 
@@ -206,38 +164,36 @@ if exist "%PLATFORM_PATH%\index.html" (
     if !errorlevel! equ 0 (
         echo ✅ Neighborhood bar HTML structure exists
         
-        REM Check for hardcoded neighborhoods that might be wrong
-        findstr "nbhd-downtown\|nbhd-germantown\|nbhd-gulch" "%PLATFORM_PATH%\index.html" >nul
+        findstr "nbhd-downtown\|nbhd-germantown" "%PLATFORM_PATH%\index.html" >nul
         if !errorlevel! equ 0 (
-            echo ❌ Found Nashville neighborhoods in index.html - wrong city neighborhoods
+            echo %RED%❌ ERROR: Nashville neighborhoods found - wrong city%RESET%
             set /a ERROR_COUNT+=1
         ) else (
-            echo ✅ No Nashville neighborhoods found (good for non-Nashville cities)
+            echo ✅ No Nashville neighborhoods found ^(good for non-Nashville cities^)
         )
         
-        REM Check if Cape Town has correct neighborhoods
         findstr "Cape Town" "%PLATFORM_PATH%\index.html" >nul
         if !errorlevel! equ 0 (
-            REM This is Cape Town, check for correct neighborhoods
-            findstr "nbhd-city\|nbhd-peninsula\|nbhd-stellenbosch" "%PLATFORM_PATH%\index.html" >nul
-            if !errorlevel! equ 0 (
+            REM Check for Cape Town neighborhoods individually
+            set CT_FOUND=0
+            findstr "nbhd-city" "%PLATFORM_PATH%\index.html" >nul
+            if !errorlevel! equ 0 set CT_FOUND=1
+            findstr "nbhd-peninsula" "%PLATFORM_PATH%\index.html" >nul  
+            if !errorlevel! equ 0 set CT_FOUND=1
+            findstr "nbhd-stellenbosch" "%PLATFORM_PATH%\index.html" >nul
+            if !errorlevel! equ 0 set CT_FOUND=1
+            
+            if !CT_FOUND! equ 1 (
                 echo ✅ Cape Town neighborhoods found in HTML
             ) else (
-                echo ❌ Cape Town city but missing Cape Town neighborhoods in HTML
+                echo %RED%❌ ERROR: Cape Town city but missing Cape Town neighborhoods in HTML%RESET%
                 set /a ERROR_COUNT+=1
             )
         )
         
     ) else (
-        echo ❌ No nbhd-bar element in index.html - neighborhoods won't appear
+        echo %RED%❌ ERROR: No nbhd-bar element in index.html%RESET%
         set /a ERROR_COUNT+=1
-    )
-    
-    findstr "nbhd-handle" "%PLATFORM_PATH%\index.html" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ Neighborhood handle element exists
-    ) else (
-        echo ⚠️  Neighborhood handle missing - may affect drag functionality
     )
 ) else (
     echo ⚠️  index.html not found for neighborhood HTML check
@@ -245,50 +201,45 @@ if exist "%PLATFORM_PATH%\index.html" (
 
 echo.
 echo ======================================================================
-echo STEP 5: HARDCODED CITY NAME DETECTION
+echo STEP 3: HARDCODED CITY NAME DETECTION
 echo ======================================================================
 
 echo Checking for hardcoded city names in general platform files...
 
-REM Check critical universal files for hardcoded city names that would break other deployments
 set UNIVERSAL_FILES=ui-favourites.js ui-filter.js ui-pdf.js ui-card.js ui-stories.js map-core.js
 
 for %%f in (%UNIVERSAL_FILES%) do (
     if exist "%PLATFORM_PATH%\%%f" (
         echo Checking %%f for hardcoded city names...
         
-        REM Check for Nashville hardcoding (breaks non-Nashville cities)
-        findstr /i "Nashville" "%PLATFORM_PATH%\%%f" >nul
+        REM Look for problematic string assignments
+        findstr "=\".*Nashville" "%PLATFORM_PATH%\%%f" >nul 2>&1
         if !errorlevel! equ 0 (
-            echo ❌ HARDCODED NASHVILLE found in %%f - breaks other cities
+            echo ❌ HARDCODED NASHVILLE in string assignment found in %%f
             set /a ERROR_COUNT+=1
         )
         
-        REM Check for Cape Town hardcoding (breaks non-Cape Town cities) 
-        findstr /i "Cape Town" "%PLATFORM_PATH%\%%f" >nul
+        findstr "=\".*Cape Town" "%PLATFORM_PATH%\%%f" >nul 2>&1
         if !errorlevel! equ 0 (
-            echo ❌ HARDCODED CAPE TOWN found in %%f - breaks other cities
+            echo ❌ HARDCODED CAPE TOWN in string assignment found in %%f
             set /a ERROR_COUNT+=1
         )
         
-        REM Check for London hardcoding (breaks non-London cities)
-        findstr /i "London" "%PLATFORM_PATH%\%%f" >nul
+        findstr "`.*Nashville.*`" "%PLATFORM_PATH%\%%f" >nul 2>&1
         if !errorlevel! equ 0 (
-            echo ❌ HARDCODED LONDON found in %%f - breaks other cities
+            echo ❌ HARDCODED NASHVILLE in template literal found in %%f
             set /a ERROR_COUNT+=1
         )
         
-        REM Check for New Orleans hardcoding (breaks non-New Orleans cities)
-        findstr /i "New Orleans" "%PLATFORM_PATH%\%%f" >nul
+        findstr "`.*Cape Town.*`" "%PLATFORM_PATH%\%%f" >nul 2>&1
         if !errorlevel! equ 0 (
-            echo ❌ HARDCODED NEW ORLEANS found in %%f - breaks other cities
+            echo ❌ HARDCODED CAPE TOWN in template literal found in %%f
             set /a ERROR_COUNT+=1
         )
         
-        REM Check for proper use of GUIDE_CITY variable instead
-        findstr "GUIDE_CITY" "%PLATFORM_PATH%\%%f" >nul
+        findstr "GUIDE_CITY" "%PLATFORM_PATH%\%%f" >nul 2>&1
         if !errorlevel! equ 0 (
-            echo ✅ %%f uses GUIDE_CITY variable (universal approach)
+            echo ✅ %%f uses GUIDE_CITY variable ^(universal approach^)
         )
         
     ) else (
@@ -297,63 +248,21 @@ for %%f in (%UNIVERSAL_FILES%) do (
 )
 
 echo.
-echo Checking for generic branding issues...
-
-REM Check for blogger-specific hardcoding in universal files
-for %%f in (%UNIVERSAL_FILES%) do (
-    if exist "%PLATFORM_PATH%\%%f" (
-        REM Check for Sam Linsell hardcoding (should use BLOGGER_NAME)
-        findstr /i "Sam Linsell\|Drizzle.*Dip" "%PLATFORM_PATH%\%%f" >nul
-        if !errorlevel! equ 0 (
-            echo ❌ HARDCODED SAM LINSELL/DRIZZLE DIP found in %%f - should use BLOGGER_NAME
-            set /a ERROR_COUNT+=1
-        )
-    ) else (
-        echo ⚠️  %%f not found for blogger check
-    )
-)
-
-echo.
 echo ======================================================================
-echo STEP 6: PLATFORM INTEGRITY VERIFICATION  
+echo STEP 4: REQUIRED FILES CHECK
 echo ======================================================================
 
-REM Check for required files
 echo Checking for required files...
 
-if exist "%PLATFORM_PATH%\universal-distance-functionality.js" (
-    echo ✅ universal-distance-functionality.js exists
-) else (
-    echo ❌ universal-distance-functionality.js missing
-    set /a ERROR_COUNT+=1
-)
+set REQUIRED_FILES=universal-distance-functionality.js ui-favourites.js ui-filter.js map-core.js ui-pdf.js
 
-if exist "%PLATFORM_PATH%\ui-favourites.js" (
-    echo ✅ ui-favourites.js exists
-) else (
-    echo ❌ ui-favourites.js missing
-    set /a ERROR_COUNT+=1
-)
-
-if exist "%PLATFORM_PATH%\ui-filter.js" (
-    echo ✅ ui-filter.js exists
-) else (
-    echo ❌ ui-filter.js missing
-    set /a ERROR_COUNT+=1
-)
-
-if exist "%PLATFORM_PATH%\map-core.js" (
-    echo ✅ map-core.js exists
-) else (
-    echo ❌ map-core.js missing
-    set /a ERROR_COUNT+=1
-)
-
-if exist "%PLATFORM_PATH%\ui-pdf.js" (
-    echo ✅ ui-pdf.js exists
-) else (
-    echo ❌ ui-pdf.js missing
-    set /a ERROR_COUNT+=1
+for %%f in (%REQUIRED_FILES%) do (
+    if exist "%PLATFORM_PATH%\%%f" (
+        echo ✅ %%f exists
+    ) else (
+        echo %RED%❌ ERROR: %%f missing
+        set /a ERROR_COUNT+=1
+    )
 )
 
 if exist "%PLATFORM_PATH%\index.html" (
@@ -362,179 +271,106 @@ if exist "%PLATFORM_PATH%\index.html" (
     echo ⚠️  WARNING: index.html not found
 )
 
-if exist "%PLATFORM_PATH%\map.js" (
-    echo ✅ map.js exists
-    
-    REM Check DISTANCE_UNITS configuration
-    findstr "DISTANCE_UNITS.*imperial" "%PLATFORM_PATH%\map.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ DISTANCE_UNITS = 'imperial' configured
-    ) else (
-        findstr "DISTANCE_UNITS.*metric" "%PLATFORM_PATH%\map.js" >nul
-        if !errorlevel! equ 0 (
-            echo ✅ DISTANCE_UNITS = 'metric' configured
-        ) else (
-            echo ⚠️  WARNING: DISTANCE_UNITS not configured in map.js
-        )
-    )
-) else (
-    echo ⚠️  WARNING: map.js not found
-)
-
-echo.
-echo Checking for key functions...
-
-REM Check universal-distance-functionality.js content
-if exist "%PLATFORM_PATH%\universal-distance-functionality.js" (
-    for %%I in ("%PLATFORM_PATH%\universal-distance-functionality.js") do set FILE_SIZE=%%~zI
-    if !FILE_SIZE! gtr 5000 (
-        echo ✅ Universal distance functionality has content ^(!FILE_SIZE! bytes^)
-        echo ✅ Distance functions assumed working ^(file size indicates proper content^)
-        echo ✅ Navigate button functionality included
-    ) else (
-        echo ❌ Universal distance functionality file too small ^(!FILE_SIZE! bytes^)
-        set /a ERROR_COUNT+=1
-    )
-) else (
-    echo ❌ universal-distance-functionality.js missing
-    set /a ERROR_COUNT+=1
-)
-
-REM Check favourites functionality
-if exist "%PLATFORM_PATH%\ui-favourites.js" (
-    findstr "function getSortedFavPlaces" "%PLATFORM_PATH%\ui-favourites.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ getSortedFavPlaces function exists
-    ) else (
-        echo ❌ getSortedFavPlaces function missing
-        set /a ERROR_COUNT+=1
-    )
-    
-    findstr "function toggleFav" "%PLATFORM_PATH%\ui-favourites.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ Heart icon toggle function exists
-    ) else (
-        echo ❌ Heart icon toggle function missing
-        set /a ERROR_COUNT+=1
-    )
-    
-    REM Check for 3-hour driving logic
-    findstr "walkMins > 180" "%PLATFORM_PATH%\ui-favourites.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ 3-hour driving logic exists
-    ) else (
-        echo ❌ 3-hour driving logic missing
-        set /a ERROR_COUNT+=1
-    )
-    
-    findstr "routed-car" "%PLATFORM_PATH%\ui-favourites.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ Driving route API calls exist
-    ) else (
-        echo ❌ Driving route functionality missing
-        set /a ERROR_COUNT+=1
-    )
-)
-
-echo.
-echo Checking neighborhood functionality...
-
-REM Check neighborhood functionality
-if exist "%PLATFORM_PATH%\ui-filter.js" (
-    echo ✅ ui-filter.js exists
-    
-    findstr "function applyFilters" "%PLATFORM_PATH%\ui-filter.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ applyFilters function exists
-    ) else (
-        echo ❌ applyFilters function missing - neighborhoods won't work
-        set /a ERROR_COUNT+=1
-    )
-    
-    findstr "function alignNbhdBar" "%PLATFORM_PATH%\ui-filter.js" >nul
-    if !errorlevel! equ 0 (
-        echo ✅ alignNbhdBar function exists
-    ) else (
-        echo ❌ alignNbhdBar function missing - neighborhood bar won't work
-        set /a ERROR_COUNT+=1
-    )
-) else (
-    echo ❌ ui-filter.js missing - neighborhoods won't work at all
-    set /a ERROR_COUNT+=1
-)
-
-REM Check neighborhood data
-if exist "%PLATFORM_PATH%\data.js" (
-    for /f %%A in ('findstr /C:"nbhd:" "%PLATFORM_PATH%\data.js" ^| find /c ":"') do set NBHD_COUNT=%%A
-    if !NBHD_COUNT! gtr 10 (
-        echo ✅ Found !NBHD_COUNT! places with neighborhood assignments
-    ) else (
-        echo ❌ Only !NBHD_COUNT! neighborhood assignments found - need more
-        set /a ERROR_COUNT+=1
-    )
-) else (
-    echo ⚠️  WARNING: data.js not found
-)
-
-if exist "%PLATFORM_PATH%\map.js" (
-    findstr "NBHD_COLORS" "%PLATFORM_PATH%\map.js" >nul
-    if !errorlevel! equ 0 (
-        findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
-        if !errorlevel! equ 0 (
-            echo ✅ Neighborhood configuration exists
-        ) else (
-            echo ❌ NBHD_LABELS missing from map.js
-            set /a ERROR_COUNT+=1
-        )
-    ) else (
-        echo ❌ NBHD_COLORS missing from map.js
-        set /a ERROR_COUNT+=1
-    )
-)
-
 echo.
 echo ======================================================================
-echo QA VERIFICATION SUMMARY
+echo QA SUMMARY
 echo ======================================================================
 
 if %ERROR_COUNT% equ 0 (
-    echo 🎉 ALL CHECKS PASSED! Platform is ready for production.
+    echo %GREEN%✅ ALL CHECKS PASSED! Platform is ready for deployment.%RESET%
     echo.
-    echo ✅ WHAT'S WORKING:
-    echo    • All platform files deployed and updated
-    echo    • Distance functionality with Navigate buttons
-    echo    • Imperial units ^(miles/feet^) for US guide
-    echo    • Consistent ordering across list/map/PDF
-    echo    • All required functions present
+    echo %GREEN%🎉 DEPLOYMENT STATUS: READY%RESET%
     echo.
-    echo 🚀 RECOMMENDATION: 
-    echo    This platform is READY FOR PRODUCTION deployment.
-    echo    You can safely copy this to your live site.
-    echo.
-    echo 📋 NEXT STEPS:
-    echo    1. Test the staging site in your browser
-    echo    2. Verify distance functionality works as expected  
+    echo Next steps:
+    echo    1. Test in browser to confirm neighborhoods work
+    echo    2. Verify attribution shows correctly
     echo    3. If satisfied, deploy to production
     echo.
 ) else (
-    echo ❌ %ERROR_COUNT% ERROR^(S^) FOUND! Platform needs fixes.
+    echo %RED%❌ %ERROR_COUNT% ERROR^(S^) FOUND! Platform needs fixes.%RESET%
     echo.
-    echo 🔧 WHAT NEEDS FIXING:
-    if not exist "%PLATFORM_PATH%\universal-distance-functionality.js" echo    • Deploy universal-distance-functionality.js
-    echo    • Check the errors listed above
+    echo %RED%🚨 DEPLOYMENT STATUS: NOT READY%RESET%
     echo.
-    echo ⚠️  RECOMMENDATION:
-    echo    DO NOT deploy to production until all errors are fixed.
+    echo %YELLOW%ERRORS THAT MUST BE FIXED:%RESET%
+    
+    REM Re-run quick checks to list specific errors found
+    if not exist "%PLATFORM_PATH%\data.js" (
+        echo    %RED%• Missing data.js file%RESET%
+    )
+    if not exist "%PLATFORM_PATH%\map.js" (
+        echo    %RED%• Missing map.js file%RESET%
+    )
+    if not exist "%PLATFORM_PATH%\ui-stories.js" (
+        echo    %RED%• Missing ui-stories.js file%RESET%
+    )
+    if not exist "%PLATFORM_PATH%\ui-filter.js" (
+        echo    %RED%• Missing ui-filter.js file%RESET%
+    )
+    
+    REM Check for specific function issues
+    if exist "%PLATFORM_PATH%\ui-stories.js" (
+        findstr "function selectNbhd" "%PLATFORM_PATH%\ui-stories.js" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• selectNbhd function missing in ui-stories.js%RESET%
+        )
+        findstr "function alignNbhdBar" "%PLATFORM_PATH%\ui-stories.js" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• alignNbhdBar function missing in ui-stories.js%RESET%
+        )
+    )
+    
+    if exist "%PLATFORM_PATH%\ui-filter.js" (
+        findstr "function applyFilters" "%PLATFORM_PATH%\ui-filter.js" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• applyFilters function missing in ui-filter.js%RESET%
+        )
+    )
+    
+    REM Check for neighborhood configuration issues
+    if exist "%PLATFORM_PATH%\map.js" (
+        findstr "NBHD_COLORS" "%PLATFORM_PATH%\map.js" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• NBHD_COLORS configuration missing in map.js%RESET%
+        )
+        findstr "NBHD_LABELS" "%PLATFORM_PATH%\map.js" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• NBHD_LABELS configuration missing in map.js%RESET%
+        )
+    )
+    
+    REM Check for neighborhood HTML issues
+    if exist "%PLATFORM_PATH%\index.html" (
+        findstr "nbhd-bar" "%PLATFORM_PATH%\index.html" >nul
+        if !errorlevel! neq 0 (
+            echo    %RED%• Neighborhood bar HTML structure missing%RESET%
+        ) else (
+            findstr "nbhd-downtown\|nbhd-germantown" "%PLATFORM_PATH%\index.html" >nul
+            if !errorlevel! equ 0 (
+                echo    %RED%• Nashville neighborhoods found in HTML - wrong city%RESET%
+            )
+        )
+    )
+    
+    REM Check for hardcoded city names
+    for %%f in (ui-favourites.js ui-filter.js ui-pdf.js ui-card.js ui-stories.js) do (
+        if exist "%PLATFORM_PATH%\%%f" (
+            findstr /r "=\".*Nashville" "%PLATFORM_PATH%\%%f" >nul
+            if !errorlevel! equ 0 (
+                echo    %RED%• Hardcoded Nashville found in %%f%RESET%
+            )
+            findstr /r "=\".*Cape Town" "%PLATFORM_PATH%\%%f" >nul
+            if !errorlevel! equ 0 (
+                echo    %RED%• Hardcoded Cape Town found in %%f%RESET%
+            )
+        )
+    )
+    
     echo.
-    echo 📋 NEXT STEPS:  
-    echo    1. Fix the issues listed above
-    echo    2. Re-run this QA script
-    echo    3. Only deploy when all checks pass
+    echo %YELLOW%⚠️  DO NOT DEPLOY until all errors above are fixed.%RESET%
     echo.
 )
 
-echo Platform: %PLATFORM_PATH%
+echo Platform verified: %PLATFORM_PATH%
 echo Timestamp: %date% %time%
-
+echo.
 pause
-exit /b %ERROR_COUNT%

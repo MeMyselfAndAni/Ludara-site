@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<!--
+  A Perfect Day — Universal Index Template
+  ==========================================
+  This is the canonical index.html for all guides. Substitute every `{{TOKEN}}`
+  below before deploying. See TEMPLATE-SUBSTITUTIONS.md for the full reference +
+  example values per guide type (hotel / blogger / Ludara demo).
+
+  Three supported branding modes:
+    HOTEL   : "A Perfect Day in Nashville by Holston House"   (commercial, primary)
+    BLOGGER : "ZenKimchi — Seoul Food Guide"                  (licensed to a blogger)
+    LUDARA  : "A Perfect Day — Nashville Guide"               (Ludara demo/flagship)
+
+  The "Interactive map by A Perfect Day by Ludara.AI" credit appears on every
+  guide regardless of mode — it is the only element intentionally NOT a placeholder.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>{{GUIDE_TITLE}}</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+  /* ── BRAND COLOR — {{BRAND_COLOR_NAME}} ── */
+  :root {
+    --brand: {{BRAND_COLOR}};
+    --brand-faint: {{BRAND_COLOR_FAINT}};
+    --brand-glow: {{BRAND_COLOR_GLOW}};
+  }
+
+  .mgl-marker { background: none !important; border: none !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
+  .maplibregl-ctrl-attrib { font-size: 9px !important; }
+
+  /* Neighbourhood bubbles */
+  .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 64px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+
+  /* Place card photos — full image, dark bg */
+  .pc-photo-img { object-fit: contain !important; }
+  /* category gradient set by ui-card.js */
+
+  /* Address line under place type */
+  .pc-address { font-size: 0.78rem; color: #888; margin: 2px 0 10px; }
+
+  /* Saved/favourite buttons use brand colour */
+  .saved-action-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; border: none; margin: 4px; background: var(--brand); color: white;
+  }
+  .saved-action-pdf, .saved-action-map {
+    background: white; color: var(--brand); border: 1.5px solid var(--brand);
+  }
+  .pc-btn-fav.faved { color: var(--brand) !important; font-family: Arial !important; }
+  .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+
+  /* Nav buttons always visible */
+  .pc-btn-nav { display: flex !important; opacity: 1 !important; pointer-events: all !important; }
+
+  /* ── Unified Saved Panel ── */
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
+  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
+  .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
+  .saved-stat-dot { opacity:0.4; }
+  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.88); }
+  /* Saved pill hover */
+  .pill-saved:hover { background: white !important; }
+  .pill-saved.active:hover { background: var(--brand) !important; }
+  /* Enlarged hearts */
+  .pc-btn-fav { font-size: 1.6rem !important; }
+  .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
+  #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
+  /* Image — show full, preserve aspect ratio */
+  .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
+</style>
+</head>
+<body>
+
+<!-- Welcome Splash -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-logo-row">
+      <span class="wl-logo">{{BRAND_LABEL}}</span>
+    </div>
+    <h2 class="splash-title">{{SPLASH_TITLE}}</h2>
+    <p class="splash-sub"><span class="place-count-all">{{PLACE_COUNT}}</span> {{SPLASH_SUB}}</p>
+    <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
+    <div class="splash-footer">
+      <a href="{{FOOTER_URL}}" target="_blank">{{FOOTER_LABEL}}</a>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading {{CITY_NAME}}…</div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-title">
+    <a href="{{BRAND_URL}}" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+      <span class="wl-logo">{{BRAND_LABEL}}</span>
+    </a>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <h1><em>{{HEADER_EMPHASIS}}</em> {{HEADER_H1_SUFFIX}}</h1>
+      <div class="header-sub"><span class="place-count-all">{{PLACE_COUNT}}</span> hand-picked places<span class="header-sub-by"> {{BYLINE}}</span></div>
+    </div>
+  </div>
+  <div class="header-ludara">
+    <span class="header-ludara-text">Interactive map by</span>
+    <a class="header-ludara-brand" href="https://ludara.ai/aperfectday" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
+  </div>
+  <a class="header-btn" href="{{HEADER_BTN_URL}}" target="_blank">{{HEADER_BTN_LABEL}}</a>
+</header>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  {{CATEGORY_PILLS}}
+  <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
+</div>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Neighbourhood bubble bar -->
+<div id="nbhd-title">Neighbourhoods</div>
+<div id="nbhd-bar">
+  <div class="nbhd-bar-handle" id="nbhd-handle">
+    <div class="nbhd-handle-grip">⠿</div>
+  </div>
+  <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+    <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
+      <span class="nbhd-label">All</span>
+    </div>
+    {{NEIGHBORHOOD_BUBBLES}}
+  </div>
+</div>
+
+<!-- Place card -->
+<div id="place-card-dim" onclick="closePlaceCard(true)"></div>
+<div id="place-card">
+  <div class="pc-photo-wrap" id="pc-photo-wrap">
+    <div class="pc-photo-placeholder" id="pc-emoji">📍</div>
+    <img class="pc-photo-img" id="pc-img" alt="">
+    <span class="pc-photo-credit" id="pc-credit"></span>
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
+    <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
+    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
+    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
+  </div>
+  <div class="pc-body" id="pc-body">
+    <div class="pc-cat" id="pc-cat"></div>
+    <div class="pc-title" id="pc-title"></div>
+    <div class="pc-type" id="pc-type"></div>
+    <div class="pc-address" id="pc-address"></div>
+    <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-note-wrap">
+      <div class="pc-note" id="pc-note"></div>
+      <span class="pc-emily-by">{{CARD_BYLINE}}</span>
+    </div>
+    <div class="pc-tip" id="pc-tip" style="display:none">
+      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <span id="pc-tip-text"></span>
+    </div>
+    <div class="pc-contacts" id="pc-contacts"></div>
+    <div class="pc-counter" id="pc-counter" style="display:none"></div>
+  </div>
+</div>
+
+<div id="stories-overlay"></div>
+<div id="pin-pulse"></div>
+
+<!-- Trip plan overlay -->
+<div id="trip-overlay">
+  <div class="trip-panel">
+    <div class="trip-header">
+      <div class="trip-title">🗺 Your Favourite Places Trip</div>
+      <button class="trip-close" onclick="closeTripPlan()">✕</button>
+    </div>
+    <div id="trip-content" class="trip-content"></div>
+    <div class="trip-footer">
+      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
+      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
+    </div>
+  </div>
+</div>
+
+<!-- List toggle (mobile) -->
+<button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
+  <span class="list-toggle-icon">☰</span>
+  <span class="list-toggle-label">Places</span>
+  <span class="count-badge" id="list-badge">{{PLACE_COUNT}}</span>
+</button>
+
+<button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
+  position:fixed; bottom:180px; right:12px; z-index:1000;
+  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">
+  📥 Save offline
+</button>
+
+<button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
+</button>
+
+<button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
+  <span id="list-toggle-desktop-icon">☰</span>
+  <span>Places</span>
+  <span id="list-badge-desktop">{{PLACE_COUNT}}</span>
+</button>
+
+<!-- Places list sheet -->
+<div class="sheet" id="sheet">
+  <div class="sheet-handle-area" onclick="toggleSheet()">
+    <div class="sheet-handle"></div>
+  </div>
+  <div class="sheet-header">
+    <span class="sheet-title" id="sheet-title">{{PLACE_COUNT}} Places</span>
+    <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
+    <button class="sheet-close" onclick="toggleSheet()">✕</button>
+  </div>
+  <div class="places-list" id="places-list"></div>
+  <div class="list-footer-brand">
+    <span>Interactive map by</span>
+    <a href="https://ludara.ai/aperfectday" target="_blank">A Perfect Day · Ludara.AI</a>
+  </div>
+</div>
+
+<!-- Saved Panel -->
+<div id="saved-panel" class="saved-panel">
+  <div class="saved-panel-header">
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
+    <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
+  </div>
+  <div class="saved-value-props">
+    <div class="saved-vp"><span class="saved-vp-icon">🗺</span><div><div class="saved-vp-title">Walking Route</div><div class="saved-vp-desc">Interactive route through all your saved places in optimal order</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">📄</span><div><div class="saved-vp-title">PDF Day Guide</div><div class="saved-vp-desc">Print your personalised guide to take along on your journey</div></div></div>
+    <div class="saved-vp"><span class="saved-vp-icon">🖼</span><div><div class="saved-vp-title">Map Screenshot</div><div class="saved-vp-desc">Save the map as an image for your travel album or itinerary doc</div></div></div>
+  </div>
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+  </div>
+  <div class="saved-place-list" id="saved-place-list">
+    <div class="saved-empty-hint">Tap ♡ on any place to save it here</div>
+  </div>
+</div>
+
+<button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
+  <span class="desktop-list-btn-icon">☰</span>
+  <span>Places</span>
+  <span class="desktop-list-count" id="desktop-list-count">{{PLACE_COUNT}}</span>
+</button>
+
+<!-- JS modules — load order is critical -->
+<script>const IMAGES_PATH = "images/";</script>
+<script>let map;</script>
+<script src="data.js"></script>
+<script src="photos.js"></script>
+<script src="map-core.js"></script>
+<script src="map.js"></script>
+<script src="ui-card.js"></script>
+<script src="ui-filter.js"></script>
+<script src="ui-stories.js"></script>
+<script src="ui-favourites.js"></script>
+<script src="ui-pdf.js"></script>
+
+<!-- Navigate in Google Maps using place search names -->
+<script>
+// ✅ FIXED: openTripInMaps() now comes ONLY from ui-favourites.js
+// Removed duplicate function that was ignoring manual ordering
+
+</script>
+
+<!-- Address display in place card -->
+<script>
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  var addrEl  = document.getElementById('pc-address');
+  if (!titleEl || !addrEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+
+});
+</script>
+
+<!-- Hide neighbourhood bubbles with no places -->
+<script>
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key || p.nbhd === bubble.id; }).length;
+    if (count === 0) bubble.style.display = 'none';
+  });
+});
+</script>
+
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show neighbourhoods">🗺 Neighbourhoods</button>
+
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+
+<!-- ── SHARE ITINERARY & URL READER ── -->
+<script>
+function shareItinerary() {
+  if (!favourites || favourites.length === 0) { _toast('Save some places first ♡'); return; }
+  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      _toast('🔗 Link copied! Paste it in an email or message.', 4000);
+    }).catch(function() { _fallbackCopy(url); });
+  } else { _fallbackCopy(url); }
+}
+function _fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); } catch(e) { _toast('Copy: ' + text, 6000); }
+  document.body.removeChild(ta);
+}
+window.addEventListener('load', function() {
+  var params = new URLSearchParams(window.location.search);
+  var itinerary = params.get('itinerary');
+  if (!itinerary) return;
+  var ids = itinerary.split(',').map(Number).filter(Boolean);
+  if (!ids.length) return;
+  setTimeout(function() {
+    try {
+      favourites = ids.filter(function(id) { return PLACES.some(function(p) { return p.id === id; }); });
+      saveFavs();
+      var pill = document.getElementById('pill-saved');
+      if (pill && !savedFilterActive) toggleSavedFilter(pill);
+    } catch(e) { console.warn('Itinerary load error:', e); }
+  }, 900);
+});
+</script>
+
+<!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
+<script>
+function clearAllSaved() {
+  if (!favourites || favourites.length === 0) return;
+  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
+  favourites = [];
+  saveFavs();
+  clearTripRoute();
+  var pill = document.getElementById('pill-saved');
+  if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
+  if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
+}
+
+(function() {
+  var _origRenderList = window.renderList;
+  window.renderList = function() {
+    var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+    if (!isSaved) {
+      if (typeof clearTripRoute === 'function') clearTripRoute();
+      var sheetClearBtn = document.getElementById('sheet-clear-btn');
+      if (sheetClearBtn) sheetClearBtn.style.display = 'none';
+      var t = document.getElementById('sheet-title');
+      if (t) { t.style.color = ''; t.style.fontWeight = ''; }
+      if (_origRenderList) _origRenderList();
+      return;
+    }
+
+    // ✅ USE THE AUTHORITATIVE SOURCE - getSortedFavPlaces() from ui-favourites.js
+    var places;
+    
+    
+    if (typeof getSortedFavPlaces === 'function') {
+      places = getSortedFavPlaces();
+    } else {
+      console.error('🔧 ERROR: getSortedFavPlaces function not available');
+      places = [];
+    }
+
+    // ✅ TRUST THE AUTHORITATIVE ORDER COMPLETELY - no additional sorting!
+
+    var titleEl = document.getElementById('sheet-title');
+    if (titleEl) {
+      titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Saved' : 'Saved Places') + '</span>';
+    }
+    var badge = document.getElementById('list-badge');
+    if (badge) badge.textContent = places.length;
+    var sheetClearBtn = document.getElementById('sheet-clear-btn');
+    if (sheetClearBtn) sheetClearBtn.style.display = places.length > 0 ? 'inline-block' : 'none';
+    var oldBanner = document.getElementById('saved-mode-banner');
+    if (oldBanner) oldBanner.remove();
+
+    var listEl = document.getElementById('places-list');
+    if (!listEl) return;
+
+    if (places.length === 0) {
+      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>';
+      return;
+    }
+
+    // Use real walking route data (same as PDF)
+    function updateTripWithRouteStats(places) {
+      
+      // Always clear cache to force fresh calculation when saved list changes
+      if (typeof _lastRouteStats !== 'undefined') {
+        _lastRouteStats = null;
+      }
+      
+      if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+        _fetchRouteStats(places).then(function(routeStats) {
+          _lastRouteStats = routeStats; // Cache for PDF to use
+          displaySavedTrip(places, routeStats.distM, routeStats.walkMins);
+        }).catch(function(error) {
+          // Fallback to straight-line calculation if route fetch fails
+          var distM = 0;
+          for (var i = 1; i < places.length; i++) {
+            if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+          }
+          var walkMins = Math.round(distM * 1.35 / 80);
+          displaySavedTrip(places, distM, walkMins);
+        });
+      } else {
+        // Fallback for single place or missing _fetchRouteStats
+        var distM = 0;
+        for (var i = 1; i < places.length; i++) {
+          if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+        }
+        var walkMins = Math.round(distM * 1.35 / 80);
+        displaySavedTrip(places, distM, walkMins);
+      }
+    }
+
+    // Function to update the right-side card specifically
+    function updateRightSideCard(places, routeStats, distanceText) {
+      
+      // Search for the right-side card elements aggressively
+      var rightCardSelectors = [
+        // Common patterns for right-side cards
+        '.right-card', '.side-card', '.trip-card', '.summary-card',
+        '#right-card', '#side-card', '#trip-card', '#summary-card',
+        '[class*="right"]', '[class*="side"]', '[class*="trip"]',
+      ];
+      
+      rightCardSelectors.forEach(function(selector) {
+        try {
+          var elements = document.querySelectorAll(selector);
+          elements.forEach(function(el) {
+            if (el.textContent.includes('4.5') || el.textContent.includes('mi') || el.textContent.includes('km')) {
+              // Update the distance in this element
+              el.innerHTML = el.innerHTML.replace(/[\d.]+\s*(mi|km)/g, distanceText);
+            }
+          });
+        } catch(e) {
+          // Ignore invalid selectors
+        }
+      });
+      
+      // Also try to find by walking the DOM tree for text containing "4.5 mi"
+      var allElements = document.querySelectorAll('*');
+      allElements.forEach(function(el) {
+        if (el.textContent.includes('4.5 mi') && el.children.length === 0) {
+          el.textContent = el.textContent.replace(/[\d.]+\s*mi/g, distanceText);
+        }
+      });
+    }
+
+    // Function to sync list numbers with map markers after reordering
+    function syncListNumbersWithMap() {
+      
+      // Get the same ordered places that drawSavedRoute uses
+      if (typeof getSortedFavPlaces === 'function') {
+        var sortedPlaces = getSortedFavPlaces();
+        
+        // Update the list numbers to match this order
+        sortedPlaces.forEach(function(place, index) {
+          var row = document.getElementById('row-' + place.id);
+          if (row) {
+            var numberEl = row.querySelector('.saved-item-num');
+            if (numberEl) {
+              var oldNumber = numberEl.textContent;
+              var newNumber = (index + 1).toString();
+              numberEl.textContent = newNumber;
+            }
+          }
+        });
+      } else if (typeof favourites !== 'undefined' && typeof _getSavedOrder === 'function') {
+        // Fallback: use favourites with saved order
+        var savedOrder = _getSavedOrder();
+        
+        if (savedOrder && savedOrder.length > 0) {
+          savedOrder.forEach(function(id, index) {
+            var row = document.getElementById('row-' + id);
+            if (row) {
+              var numberEl = row.querySelector('.saved-item-num');
+              if (numberEl) {
+                numberEl.textContent = (index + 1).toString();
+              }
+            }
+          });
+        }
+      }
+    }
+
+
+
+    function displaySavedTrip(places, distM, walkMins) {
+      function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60 ? (m%60)+'m' : ''); }
+
+      // Decide walk vs drive from _lastRouteStats.travelMode — this is the SAME
+      // source PDF (ui-pdf.js) and Google Maps (openTripInMaps in ui-favourites.js)
+      // use, so the three systems always agree. When a route is >3h walking,
+      // ui-favourites.js fetches the driving alternative AND overwrites walkMins
+      // with driveMins — meaning a "walkMins < 180" inference here gives the wrong
+      // icon. Fall back to the walkMins>180 heuristic only if _lastRouteStats is
+      // not populated yet (e.g. OSRM fetch failed, haversine fallback in use).
+      var mode = (typeof _lastRouteStats !== 'undefined' && _lastRouteStats && _lastRouteStats.travelMode)
+        ? _lastRouteStats.travelMode
+        : (walkMins > 180 ? 'driving' : 'walking');
+      var showDrive = mode === 'driving';
+      var icon = showDrive ? '🚗' : '🚶';
+      // walkMins is already the correct time (walk or drive) as set upstream
+      var timeLabel = icon + ' ' + fmtTime(walkMins);
+
+      var distanceText = (typeof formatDistance === 'function' ? formatDistance(distM) : ((distM/1000).toFixed(1) + ' km'));
+
+      var html =
+        '<div class="saved-stats-bar" style="display:flex">' +
+          '<span>' + places.length + (places.length===1?' stop':' stops') + '</span>' +
+          '<span class="saved-stat-dot">·</span>' +
+          '<span id="saved-stat-walk-sheet">' + timeLabel + '</span>' +
+          '<span class="saved-stat-dot">·</span>' +
+          '<span>📏 ' + distanceText + '</span>' +
+        '</div>' +
+        '<div style="display:flex;padding:8px 10px;gap:5px;">' +
+          '<button class="saved-action-btn saved-action-maps" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>' +
+          '<button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" style="flex:1">📄 PDF</button>' +
+          '<button class="saved-action-btn saved-action-share" onclick="shareItinerary()" style="flex:1">🔗 Share</button>' +
+        '</div>';
+
+      var hasManual = typeof _getSavedOrder === 'function' && !!_getSavedOrder();
+      if (hasManual) {
+        html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a></div>';
+      } else {
+        html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠿ to reorder</div>';
+      }
+
+      // Continue with the places list...
+      places.forEach(function(p, i) {
+        html +=
+          '<div class="place-row ' + (p.id===AID?'active':'') + '" draggable="true" data-id="' + p.id + '" id="row-' + p.id + '">' +
+            '<span style="font-size:1.1rem;color:#ccc;padding:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>' +
+            '<div class="saved-item-num">' + (i+1) + '</div>' +
+            '<div class="place-thumb" id="thumb-' + p.id + '">' + (p.emoji||'📍') + '</div>' +
+            '<div class="place-info" onclick="openDetail(' + p.id + ')" style="cursor:pointer;flex:1">' +
+              '<div class="place-name">' + p.name + '</div>' +
+              '<div class="place-type">' + (CL[p.cat]||p.cat) + '</div>' +
+              '<div class="place-addr">' + (p.address||'') + '</div>' +
+            '</div>' +
+            '<span class="chevron" onclick="openDetail(' + p.id + ')" style="cursor:pointer">›</span>' +
+          '</div>';
+        if (i < places.length - 1) {
+          html += '<div class="saved-walk-connector" id="saved-conn-' + i + '">↓</div>';
+        }
+      });
+
+      listEl.innerHTML = html;
+      
+      // Force DOM update to make sure it sticks
+      if (listEl && listEl.parentNode) {
+        listEl.parentNode.appendChild(listEl); // Force reflow
+      }
+
+      // Auto-sort link
+      var autoLink = document.getElementById('saved-autosort-link');
+      if (autoLink) {
+        autoLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (typeof _clearSavedOrder === 'function') _clearSavedOrder();
+          if (typeof updateFavUI === 'function') updateFavUI();
+        });
+      }
+
+      // Wire drag-to-reorder
+      var dragSrcId = null;
+      listEl.querySelectorAll('.place-row[draggable]').forEach(function(row) {
+        row.addEventListener('dragstart', function(e) {
+          dragSrcId = parseInt(this.dataset.id);
+          this.style.opacity = '0.5';
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        row.addEventListener('dragend', function() {
+          this.style.opacity = '';
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop = ''; });
+        });
+        row.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop = ''; });
+          this.style.borderTop = '2px solid var(--brand-color, #007acc)';
+        });
+        row.addEventListener('drop', function(e) {
+          e.stopPropagation();
+          var targetId = parseInt(this.dataset.id);
+          if (dragSrcId === targetId) return;
+          var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+          var ids = allRows.map(function(r) { return parseInt(r.dataset.id); });
+          var fi = ids.indexOf(dragSrcId), ti = ids.indexOf(targetId);
+          if (fi < 0 || ti < 0) return;
+          ids.splice(fi, 1);
+          ids.splice(ti, 0, dragSrcId);
+          if (typeof _setSavedOrder === 'function') {
+            _setSavedOrder(ids);
+          }
+          
+          
+          // Use AUTHORITATIVE functions - same as map uses
+          setTimeout(function() {
+            if (typeof getSortedFavPlaces === 'function') {
+              var places = getSortedFavPlaces();
+              
+              // Regenerate the list using authoritative order
+              updateTripWithRouteStats(places);
+              
+              // Also update the map with the same order
+              if (typeof drawSavedRoute === 'function') {
+                drawSavedRoute();
+              }
+            }
+          }, 50);
+          
+          
+          // Get places in new order and calculate distance
+          if (typeof favourites !== 'undefined' && favourites.length > 0) {
+            var places = favourites.slice();
+            if (typeof _getSavedOrder === 'function') {
+              var savedOrder = _getSavedOrder();
+              if (savedOrder && savedOrder.length > 0) {
+                var orderedPlaces = [];
+                savedOrder.forEach(function(id) {
+                  var place = places.find(function(p) { 
+                    return p.id == id || p.id === id || String(p.id) === String(id);
+                  });
+                  if (place) orderedPlaces.push(place);
+                });
+                places = orderedPlaces;
+              }
+            }
+            
+            // Calculate new distance and update right-side card directly
+            if (typeof _fetchRouteStats === 'function' && places.length >= 2) {
+              _fetchRouteStats(places).then(function(routeStats) {
+                var distanceText = (typeof formatDistance === 'function' ? formatDistance(routeStats.distM) : ((routeStats.distM/1000).toFixed(1) + ' km'));
+                
+                // Update right-side card specifically
+                updateRightSideCard(places, routeStats, distanceText);
+              });
+            }
+          }
+
+        });
+
+        // Touch support
+        var touchSrc = null;
+        row.addEventListener('touchstart', function() { touchSrc = this; }, {passive:true});
+        row.addEventListener('touchmove', function(e) {
+          if (!touchSrc) return;
+          e.preventDefault();
+          var touch = e.touches[0];
+          var over = document.elementFromPoint(touch.clientX, touch.clientY);
+          var overRow = over && over.closest('.place-row[draggable]');
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop=''; });
+          if (overRow && overRow !== touchSrc) overRow.style.borderTop = '2px solid var(--brand-color, #007acc)';
+        }, {passive:false});
+        row.addEventListener('touchend', function(e) {
+          if (!touchSrc) return;
+          var touch = e.changedTouches[0];
+          var over = document.elementFromPoint(touch.clientX, touch.clientY);
+          var overRow = over && over.closest('.place-row[draggable]');
+          listEl.querySelectorAll('.place-row').forEach(function(r) { r.style.borderTop=''; });
+          if (overRow && overRow !== touchSrc) {
+            var allRows = Array.from(listEl.querySelectorAll('.place-row[draggable]'));
+            var ids = allRows.map(function(r) { return parseInt(r.dataset.id); });
+            var srcId = parseInt(touchSrc.dataset.id);
+            var tgtId = parseInt(overRow.dataset.id);
+            var fi = ids.indexOf(srcId), ti = ids.indexOf(tgtId);
+            if (fi >= 0 && ti >= 0) {
+              ids.splice(fi, 1);
+              ids.splice(ti, 0, srcId);
+              if (typeof _setSavedOrder === 'function') {
+                _setSavedOrder(ids);
+              }
+              
+              // Use AUTHORITATIVE functions only
+              setTimeout(function() {
+                if (typeof getSortedFavPlaces === 'function') {
+                  var places = getSortedFavPlaces();
+                  updateTripWithRouteStats(places);
+                  if (typeof drawSavedRoute === 'function') drawSavedRoute();
+                }
+              }, 50);
+            }
+          }
+          touchSrc = null;
+        }, {passive:true});
+      });
+    }
+
+    // Start the route calculation process
+    updateTripWithRouteStats(places);
+
+  };
+
+  var _origUpdateFavUI = window.updateFavUI;
+  window.updateFavUI = function() {
+    
+    try {
+      if (_origUpdateFavUI) _origUpdateFavUI();
+    } catch (error) {
+      // Continue anyway - our route calculation can still work
+    }
+    
+    var pill = document.getElementById('pill-saved');
+    if (pill) {
+      var heartSpan = pill.querySelector('.heart-icon');
+      if (heartSpan) heartSpan.textContent = (typeof favourites !== 'undefined' && favourites.length > 0) ? '♥' : '♡';
+    }
+    var btn = document.getElementById('sheet-clear-btn');
+    if (btn) btn.style.display = (typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof favourites !== 'undefined' && favourites.length > 0) ? 'inline-block' : 'none';
+    
+    // CRITICAL: Defer our route calculation until AFTER applyFilters completes
+    setTimeout(function() {
+      if (typeof favourites !== 'undefined' && favourites.length > 0) {
+        var places = favourites.slice(); // get current saved places
+        
+        if (typeof _getSavedOrder === 'function') {
+          var savedOrder = _getSavedOrder();
+          if (savedOrder && savedOrder.length > 0) {
+            // Reorder places according to saved order
+            var orderedPlaces = [];
+            savedOrder.forEach(function(id) {
+              var place = places.find(function(p) { 
+                // Handle both string and number IDs
+                return p.id == id || p.id === id || String(p.id) === String(id);
+              });
+              if (place) {
+                orderedPlaces.push(place);
+              } else {
+              }
+            });
+            places = orderedPlaces;
+          }
+        }
+        
+        // Call the function properly - it should be in global scope
+        if (typeof window.updateTripWithRouteStats === 'function') {
+          window.updateTripWithRouteStats(places);
+        } else if (typeof updateTripWithRouteStats === 'function') {
+          updateTripWithRouteStats(places);
+        } else {
+          // Fallback: call our function directly inline
+          if (places.length > 0) {
+            var distM = 0;
+            for (var i = 1; i < places.length; i++) {
+              if (typeof haversineM === 'function') distM += haversineM(places[i-1], places[i]);
+            }
+            var walkMins = Math.round(distM * 1.35 / 80);
+          }
+        }
+      } else {
+      }
+    }, 200); // Increased delay to ensure everything settles
+  };
+})();
+
+// Add basic Navigate on Google Maps button to place cards
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  
+  new MutationObserver(function() {
+    var name = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    
+    // Remove existing button
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    
+    // Create basic navigate button
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    btn.style.cssText = [
+      'display:inline-flex',
+      'align-items:center', 
+      'justify-content:center',
+      'gap:6px',
+      'margin:10px 0 4px',
+      'padding:8px 18px',
+      'background:white',
+      'color:var(--brand)',
+      'border:1.5px solid var(--brand)',
+      'border-radius:24px',
+      'font-size:0.82rem',
+      'font-weight:600',
+      'cursor:pointer',
+      'width:100%'
+    ].join(';');
+    
+    btn.innerHTML = '🚶 Navigate on Google Maps';
+    btn.onclick = function() { 
+      // Use place name instead of coordinates so Google Maps shows business name
+      var dest = encodeURIComponent(place.search || place.name + ', {{CITY_NAME}}');
+      var url = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+      window.open(url, '_blank');
+    };
+    
+    // Insert button after hours element
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) {
+      hours.parentNode.insertBefore(btn, hours.nextSibling);
+    }
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+
+</script>
+
+</body>
+</html>
