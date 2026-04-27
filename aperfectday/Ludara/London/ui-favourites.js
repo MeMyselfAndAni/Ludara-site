@@ -432,7 +432,7 @@ function shareItinerary() {
   var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(url).then(function() {
-      _toast('🔗 Link copied! Send it to your guest — they\'ll land with your selection ready.', 4500);
+      _toast('🔗 Link copied — opens with your selected places on the map.', 3500);
     }).catch(function() { _fallbackCopy(url); });
   } else {
     _fallbackCopy(url);
