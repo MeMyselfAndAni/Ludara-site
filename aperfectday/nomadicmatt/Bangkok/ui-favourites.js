@@ -91,12 +91,42 @@ function toggleSavedFilter(el){
     }
     applyFilters();
     if(window.innerWidth >= 768) openSheet();
+    // Hide nbhd-bar on mobile so it doesn't overlap saved-place-list items
+    if(window.innerWidth < 768){
+      const bar = document.getElementById('nbhd-bar');
+      if(bar) bar.style.display = 'none';
+      const ttl = document.getElementById('nbhd-title');
+      if(ttl) ttl.style.display = 'none';
+    }
     drawSavedRoute();
   } else {
     clearTripRoute();
     const banner = document.getElementById('saved-mode-banner');
     if(banner) banner.remove();
+    // Restore nbhd-bar on mobile when exiting saved mode
+    if(window.innerWidth < 768){
+      const bar = document.getElementById('nbhd-bar');
+      if(bar) bar.style.display = '';
+      const ttl = document.getElementById('nbhd-title');
+      if(ttl) ttl.style.display = '';
+    }
     applyFilters();
+    // Refit map to all visible places so it isn't stranded on the saved-route zoom
+    try {
+      var vis = PLACES.filter(function(p){
+        return (typeof AF === 'undefined' || AF === 'all' || p.cat === AF) &&
+               (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+      });
+      if (vis.length >= 2 && typeof map !== 'undefined' && map) {
+        var lngs = vis.map(function(p){ return p.lng; });
+        var lats  = vis.map(function(p){ return p.lat; });
+        map.fitBounds(
+          [[Math.min.apply(null,lngs), Math.min.apply(null,lats)],
+           [Math.max.apply(null,lngs), Math.max.apply(null,lats)]],
+          { padding:{ top:120, bottom:100, left: window.innerWidth>=768 ? 320 : 20, right:20 } }
+        );
+      }
+    } catch(e) {}
   }
 }
 
@@ -474,6 +504,22 @@ window.addEventListener('load', function() {
       favourites = validIds;
       saveFavs();
 
+      // Clean the URL immediately so refresh + Clear don't re-apply the shared itinerary
+      if (window.history && window.history.replaceState) {
+        history.replaceState({}, '', window.location.pathname);
+      }
+
+      // Preload photos for all shared places so cards open instantly
+      var imgBase = typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/';
+      validIds.forEach(function(id) {
+        var img = new Image();
+        if (window.photoCache && photoCache[id] && photoCache[id].url) {
+          img.src = photoCache[id].url;
+        } else {
+          img.src = imgBase + 'place-' + id + '.jpg';
+        }
+      });
+
       // Activate saved filter — draws route + shows markers + updates pill
       var pill = document.getElementById('pill-saved');
       if (pill && !savedFilterActive) toggleSavedFilter(pill);
@@ -620,7 +666,7 @@ function _fetchRouteStats(places) {
               resolve(_lastRouteStats);
             });
         } else {
-          // Walking route ≤3h, use walking
+          // Walking route <=3h, use walking
           _lastRouteStats = {
             walkMins,
             distM: route.distance,
