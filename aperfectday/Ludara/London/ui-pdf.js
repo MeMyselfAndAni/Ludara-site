@@ -2,11 +2,75 @@
 // Uses browser's print-to-PDF via a hidden printable page
 // No external libraries needed
 
+async function preloadAllImages(places) {
+  console.log('📸 Loading images for PDF...');
+  
+  const imagePromises = places.map((place, index) => {
+    return new Promise((resolve) => {
+      // Check if image is already cached
+      if (photoCache && photoCache[place.id]?.url) {
+        console.log(`✅ Image ${index + 1}/${places.length}: ${place.name} (cached)`);
+        resolve(true);
+        return;
+      }
+
+      // Try to load the image
+      const img = new Image();
+      const imagePath = (typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg';
+      
+      img.onload = () => {
+        // Cache the loaded image if photoCache exists
+        if (typeof photoCache !== 'undefined') {
+          if (!photoCache[place.id]) {
+            photoCache[place.id] = {};
+          }
+          photoCache[place.id].url = imagePath;
+        }
+        console.log(`✅ Image ${index + 1}/${places.length}: ${place.name} loaded`);
+        resolve(true);
+      };
+      
+      img.onerror = () => {
+        console.warn(`❌ Image ${index + 1}/${places.length}: ${place.name} failed to load`);
+        resolve(false); // Continue even if image fails to load
+      };
+      
+      img.src = imagePath;
+    });
+  });
+  
+  const results = await Promise.all(imagePromises);
+  const loadedCount = results.filter(Boolean).length;
+  console.log(`🎉 Loaded ${loadedCount}/${places.length} images for PDF`);
+  
+  return results;
+}
+
 async function generatePDF(){
   const places = getSortedFavPlaces();
   if(!places || places.length === 0){
     alert('Save some places first using the ♡ button, then generate your guide.');
     return;
+  }
+
+  // Show loading message
+  if (typeof _toast === 'function') {
+    _toast('📸 Loading images for PDF...', 8000);
+  }
+
+  try {
+    // 🔄 FORCE LOAD ALL IMAGES FIRST
+    await preloadAllImages(places);
+    
+    // Show PDF generation message
+    if (typeof _toast === 'function') {
+      _toast('📄 Generating PDF...', 3000);
+    }
+  } catch (error) {
+    console.error('Error loading images:', error);
+    if (typeof _toast === 'function') {
+      _toast('⚠️ Some images failed to load, generating PDF anyway...', 4000);
+    }
   }
 
   const date = new Date().toLocaleDateString('en-GB', {
@@ -45,7 +109,7 @@ async function generatePDF(){
 
     const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
     const walkNext = i < places.length-1
-      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min walk to next stop</div>`
+      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min ${_routeStats.travelMode === 'driving' ? '🚗 drive' : '🚶 walk'} to next stop</div>`
       : '';
 
     return `
@@ -374,12 +438,12 @@ async function generatePDF(){
       <div class="pdf-stat-label">Places</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
-      <div class="pdf-stat-label">Walking</div>
+      <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
+      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : 'Walking'}</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">${(totalM/1000).toFixed(1)}</div>
-      <div class="pdf-stat-label">km</div>
+      <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
+      <div class="pdf-stat-label">${formatDistanceUnit()}</div>
     </div>
   </div>
   <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
