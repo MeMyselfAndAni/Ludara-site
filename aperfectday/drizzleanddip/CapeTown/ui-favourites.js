@@ -149,10 +149,7 @@ function _addNumberedMarkers(places){
     // Add click handler to open place card
     el.addEventListener('click', function(e) {
       e.stopPropagation();
-      console.log('🔢 Clicked numbered marker:', p.name);
-      if (typeof openDetail === 'function') {
-        openDetail(p.id);
-      }
+      if (typeof openDetail === 'function') openDetail(p.id);
     });
     
     const marker = new maplibregl.Marker({ element:el, anchor:'center' })
@@ -193,7 +190,6 @@ async function _fetchOSRMRoute(places){
         chunk.forEach(p => allCoords.push([p.lng, p.lat]));
       }
     } catch(e) {
-      console.warn('OSRM walking failed, using straight line');
       chunk.forEach(p => allCoords.push([p.lng, p.lat]));
     }
   }
@@ -243,7 +239,7 @@ function haversineM(a, b){
   return 2*R*Math.asin(Math.sqrt(h));
 }
 function formatWalk(m){
-  const mins = Math.round(m/80);
+  const mins = Math.round(m/58);
   if(mins<2) return '<2 min';
   if(mins<60) return `~${mins} min`;
   return `~${Math.round(mins/6)/10}h`;
@@ -275,7 +271,7 @@ function planFavTrip(){
   places.forEach((p, i) => {
     totalDwell += getDwell(p.cat);
     if(i < places.length-1){
-      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 80 * 60 * 1.35);
+      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 58 * 60 * 1.35);
     }
   });
   const totalWalkMins = Math.round(totalWalkSecs/60);
@@ -298,7 +294,7 @@ function planFavTrip(){
     </div>` +
   places.map((p,i)=>{
     const walkToNext = i < places.length-1
-      ? Math.round(haversineM(p,places[i+1])/80*1.35) : null;
+      ? Math.round(haversineM(p,places[i+1])/58*1.35) : null;
     return `
     <div class="trip-stop" draggable="true" data-id="${p.id}" onclick="jumpToTripStop(${p.id})" style="cursor:default">
       <span style="font-size:1.1rem;color:#ccc;padding:0 8px 0 2px;cursor:grab;flex-shrink:0;touch-action:none" class="trip-drag-handle">⠿</span>
@@ -408,77 +404,89 @@ function closeTripPlan(){ document.getElementById('trip-overlay').classList.remo
 // RED buttons call openTripInMaps() directly - no interceptor needed
 
 function openTripInMaps(){
-  console.log('🔧 openTripInMaps function called');
-  
   try {
-    // COMPREHENSIVE DEBUG: Check all ordering sources
-    console.log('🔍 DEBUGGING ORDERING ISSUE:');
-    console.log('🔍 Raw favourites array:', favourites);
-    console.log('🔍 _getSavedOrder() result:', _getSavedOrder());
-    console.log('🔍 localStorage favs_order key:', localStorage.getItem('favs_order_' + window.location.pathname.replace(/\//g,'_')));
-    
-    // Force refresh of saved order to avoid timing issues
-    console.log('🔧 About to call getSortedFavPlaces');
     const places = getSortedFavPlaces();
-    console.log('🔧 getSortedFavPlaces returned:', places);
-    console.log('🔧 Place names in order:', places.map(p => p.name));
-    console.log('🔧 Place IDs in order:', places.map(p => p.id));
-    
-    if(!places.length) {
-      console.log('🔧 No places found, returning');
-      return;
-    }
-    
-    // Debug logging to see actual order being used
-    console.log('🗺️ Opening Google Maps with order:', places.map(p => p.name));
-    console.log('🗺️ Manual order from localStorage:', _getSavedOrder());
-    
+    if(!places.length) return;
+
     const stops = places.slice(0,8);
-    
-    // Get travel mode from latest route stats (driving if >3h, walking if ≤3h)
     const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
     const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
-    console.log(`🚗 Using travel mode: ${travelMode} for ${cityName}`);
-    
-    // Use place names instead of coordinates so Google Maps shows business names
+
     const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);
     const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', ' + cityName);
     const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', ' + cityName)).join('|');
-    
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}${waypts?'&waypoints='+waypts:''}&travelmode=${travelMode}`;
-    console.log(`🔧 Opening Google Maps with ${travelMode} mode:`, url);
-    
+
+    const url = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest +
+      (waypts ? '&waypoints=' + waypts : '') + '&travelmode=' + travelMode;
     window.open(url, '_blank');
   } catch (error) {
-    console.error('🔧 Error in openTripInMaps:', error);
     _toast('Error opening Google Maps');
   }
 }
 
-function shareItinerary(){
-  const places = getSortedFavPlaces();
-  if(!places.length) {
-    _toast('Save some places first to share your itinerary!');
+function shareItinerary() {
+  if (!favourites || favourites.length === 0) {
+    _toast('Save some places first ♡');
     return;
   }
-  
-  console.log('🔗 Sharing itinerary with order:', places.map(p => p.name));
-  console.log('🔗 Manual order from localStorage:', _getSavedOrder());
-  
-  const placeNames = places.map(p => `${p.emoji} ${p.name}`).join('\n');
-  const text = `Check out my ${cityName} itinerary:\n\n${placeNames}\n\nCreated with A Perfect Day: ${window.location.href}`;
-  
-  if (navigator.share) {
-    navigator.share({
-      title: `My ${cityName} Itinerary`,
-      text: text
-    });
+  var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      _toast('🔗 Link copied — opens with your selected places on the map.', 3500);
+    }).catch(function() { _fallbackCopy(url); });
   } else {
-    navigator.clipboard.writeText(text).then(() => {
-      _toast('Itinerary copied to clipboard! 📋');
-    });
+    _fallbackCopy(url);
   }
 }
+
+function _fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); _toast('🔗 Link copied!', 4000); }
+  catch(e) { _toast('Copy this link: ' + text, 6000); }
+  document.body.removeChild(ta);
+}
+
+// ── Itinerary URL reader — restores a shared itinerary on page load ───────────
+// When a guest opens a concierge-shared link (?itinerary=3,7,14,22) they land
+// with those places pre-saved, the Saved panel open, and the route drawn.
+window.addEventListener('load', function() {
+  var params = new URLSearchParams(window.location.search);
+  var itinerary = params.get('itinerary');
+  if (!itinerary) return;
+
+  var ids = itinerary.split(',').map(Number).filter(Boolean);
+  if (!ids.length) return;
+
+  // Wait for initMap + all scripts to be ready
+  setTimeout(function() {
+    try {
+      var validIds = ids.filter(function(id) {
+        return PLACES.some(function(p) { return p.id === id; });
+      });
+      if (!validIds.length) return;
+
+      // Restore saved places
+      favourites = validIds;
+      saveFavs();
+
+      // Activate saved filter — draws route + shows markers + updates pill
+      var pill = document.getElementById('pill-saved');
+      if (pill && !savedFilterActive) toggleSavedFilter(pill);
+
+      // Open the sheet on all screen sizes (toggleSavedFilter only opens on desktop)
+      if (typeof openSheet === 'function') openSheet();
+
+      _toast('🗺 ' + validIds.length + ' places loaded — route ready!', 3500);
+    } catch(e) {
+      console.warn('Itinerary load error:', e);
+    }
+  }, 950);
+});
 
 function saveMapImage(){
   _toast('Take a screenshot to save the map 📸', 4000);
@@ -538,12 +546,12 @@ function _fetchRouteStats(places) {
         distM += d;
         const mins = travelMode === 'driving' 
           ? Math.round(d * 1.35 / 833) // ~50km/h vacation driving (city traffic, parking, GPS)
-          : Math.round(d * 1.35 / 67);  // ~4km/h vacation walking (sightseeing, photos, enjoying)
+          : Math.round(d * 1.35 / 58);  // ~3.5km/h vacation walking (sightseeing, photos, enjoying)
         legMins.push(mins);
       }
       const totalMins = travelMode === 'driving' 
         ? Math.round(distM * 1.35 / 833)
-        : Math.round(distM * 1.35 / 67);
+        : Math.round(distM * 1.35 / 58);
       resolve({ walkMins: totalMins, distM, legMins, travelMode, isEstimated: true });
     }
 
@@ -566,7 +574,6 @@ function _fetchRouteStats(places) {
         
         // 🚗 3-HOUR LOGIC: If walking >3h, fetch driving route
         if (walkMins > 180) {
-          console.log('🚗 Route >3h walking, fetching driving time...');
           const driveUrl = 'https://routing.openstreetmap.de/routed-car/route/v1/driving/' + coords + '?overview=false';
           const driveCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
           const driveTimer = driveCtrl ? setTimeout(() => driveCtrl.abort(), 8000) : null;
@@ -588,7 +595,6 @@ function _fetchRouteStats(places) {
                 };
                 resolve(_lastRouteStats);
               } else {
-                console.log('⚠️ Driving route failed, using estimated drive time');
                 const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving
                 const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
                 _lastRouteStats = {
@@ -602,7 +608,6 @@ function _fetchRouteStats(places) {
               }
             })
             .catch(() => {
-              console.log('⚠️ Driving route failed, using estimated drive time');
               const estimatedDriveMins = Math.round(route.distance / 833); // ~50km/h vacation driving  
               const estimatedDriveLegMins = legMins.map(m => Math.round(m * 67 / 833)); // Convert walk to drive time
               _lastRouteStats = {
@@ -630,3 +635,39 @@ function _fetchRouteStats(places) {
 }
 
 document.addEventListener('DOMContentLoaded', updateFavUI);
+
+
+// ── Offline route detection ───────────────────────────────────
+window.addEventListener('load', function() {
+  var _origPlanFavTrip = window.planFavTrip;
+  window.planFavTrip = function() {
+    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
+    if (_origPlanFavTrip) _origPlanFavTrip();
+  };
+  var _origDrawSavedRoute = window.drawSavedRoute;
+  window.drawSavedRoute = function() {
+    if (!navigator.onLine) { _showOfflineRouteMsg(); return; }
+    if (_origDrawSavedRoute) _origDrawSavedRoute.apply(this, arguments);
+  };
+});
+
+function _showOfflineRouteMsg() {
+  var existing = document.getElementById('offline-route-msg');
+  if (existing) existing.remove();
+  var msg = document.createElement('div');
+  msg.id = 'offline-route-msg';
+  msg.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1a3a5c;color:white;padding:14px 22px;border-radius:12px;z-index:99999;font-size:0.85rem;font-family:sans-serif;text-align:center;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,0.35);line-height:1.5';
+  msg.innerHTML = '📶 Walking routes need a connection.<br><span style="opacity:0.75;font-size:0.78rem">Connect to WiFi to plan your route.<br>All places and your location still work offline.</span>';
+  msg.onclick = function() { msg.remove(); };
+  document.body.appendChild(msg);
+  setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
+}
+
+// ── Service Worker registration ───────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js', { scope: './' })
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
+}
