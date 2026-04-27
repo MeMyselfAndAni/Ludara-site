@@ -77,6 +77,25 @@
 
 
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
+
+  /* ── Unified Saved Panel ── */
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; }
+  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
+  .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
+  .saved-stat-dot { opacity:0.4; }
+  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.88); }
+  /* Saved pill hover */
+  .pill-saved:hover { background: white !important; }
+  .pill-saved.active:hover { background: var(--brand) !important; }
+  /* Enlarged hearts */
+  .pc-btn-fav { font-size: 1.6rem !important; }
+  .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
+  #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
+  /* Image — show full, preserve aspect ratio */
+  .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 </style>
 
 
@@ -260,6 +279,7 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">41 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -272,14 +292,8 @@
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title">♥ Your Saved Places</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
-  </div>
-  
-  <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
-    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
-    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
@@ -473,6 +487,46 @@ function clearAllSaved() {
         row.addEventListener('touchstart',function(){ts=this;},{passive:true});
         row.addEventListener('touchmove',function(e){if(!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
         row.addEventListener('touchend',function(e){if(!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
+      });
+    }
+    function loadThumbs(pl) {
+      var imgBase=typeof IMAGES_PATH!=='undefined'?IMAGES_PATH:'images/';
+      pl.forEach(function(p){
+        var th=document.getElementById('thumb-'+p.id);if(!th)return;
+        if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
+        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
+      });
+    }
+    updateTrip(places);
+  };
+
+  var _origUpdateFavUI = window.updateFavUI;
+  window.updateFavUI = function() {
+    try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
+    var pill=document.getElementById('pill-saved');
+    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
+    var btn=document.getElementById('sheet-clear-btn');
+    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
+    setTimeout(function(){
+      if(typeof favourites!=='undefined'&&favourites.length>0){
+        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
+        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
+      }
+    },200);
+  };
+})();
+
+</script>
+
+
+
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+</body>
+</html>
+f(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
       });
     }
     function loadThumbs(pl) {
