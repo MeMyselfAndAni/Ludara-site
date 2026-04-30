@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Perfect Day — City Guides for Hotels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:   #0e0f12;
+      --dark2:  #161820;
+      --gold:   #b8965a;
+      --gold-l: #d4b07a;
+      --border: rgba(184,150,90,0.25);
+      --white:  #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      padding: 22px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 600px) { nav { padding: 18px 24px; } }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 400; letter-spacing: 0.04em;
+      color: var(--gold-l); text-decoration: none;
+    }
+    .nav-logo span { color: rgba(255,255,255,0.65); font-size: 0.88em; }
+    .nav-link {
+      font-size: 0.92rem; font-weight: 400;
+      color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--gold-l); }
+
+    /* WRAPPER */
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    @media (max-width: 600px) { .wrap { padding: 0 24px; } }
+
+    /* TOP: two columns */
+    .top {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 64px;
+      align-items: start;
+      padding: 56px 0 24px;
+    }
+    @media (max-width: 860px) {
+      .top { grid-template-columns: 1fr; gap: 44px; padding: 40px 0 36px; }
+    }
+
+    /* LEFT */
+    .left { display: flex; flex-direction: column; gap: 20px; }
+
+    .eyebrow {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 5vw, 4rem);
+      font-weight: 300; line-height: 1.1; color: var(--white);
+      margin-top: 14px;
+    }
+    h1 em { font-style: italic; color: var(--gold-l); }
+    .pitch {
+      font-size: 0.88rem; font-weight: 300;
+      color: rgba(255,255,255,0.88); line-height: 1.65;
+    }
+    .proof {
+      display: flex; flex-direction: column; gap: 11px;
+      padding: 22px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .proof-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 4px;
+    }
+    .proof-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.92rem; font-weight: 300; color: rgba(255,255,255,0.92);
+    }
+    .proof-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
+
+    /* FORM CARD */
+    .form-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 36px 32px;
+      position: sticky; top: 28px;
+    }
+    @media (max-width: 860px) { .form-card { position: static; } }
+    .form-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 300; color: var(--white);
+      margin-bottom: 6px; line-height: 1.2;
+    }
+    .form-card h2 em { font-style: italic; color: var(--gold-l); }
+    .form-card > p {
+      font-size: 0.9rem; font-weight: 300;
+      color: rgba(255,255,255,0.7); margin-bottom: 26px; line-height: 1.6;
+    }
+    .form { display: flex; flex-direction: column; gap: 13px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.72);
+    }
+    .fg input, .fg textarea {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(184,150,90,0.25);
+      border-radius: 7px; padding: 10px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 300;
+      color: var(--white); outline: none; width: 100%;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .fg input::placeholder, .fg textarea::placeholder { color: rgba(255,255,255,0.32); }
+    .fg input:focus, .fg textarea:focus {
+      border-color: var(--gold); background: rgba(184,150,90,0.05);
+    }
+    .fg textarea { resize: vertical; min-height: 76px; }
+    .submit-btn {
+      width: 100%; background: var(--gold); color: var(--dark);
+      border: none; border-radius: 7px; padding: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.07em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s; margin-top: 2px;
+    }
+    .submit-btn:hover { background: var(--gold-l); transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .form-note {
+      font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.75);
+      text-align: center; margin-top: 2px;
+    }
+    .form-success {
+      display: none; flex-direction: column;
+      align-items: center; gap: 12px; text-align: center; padding: 28px 0;
+    }
+    .form-success.visible { display: flex; }
+    .success-icon {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(184,150,90,0.12); border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: var(--gold-l);
+    }
+    .form-success h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300; color: var(--white);
+    }
+    .form-success p { font-size: 0.88rem; color: rgba(255,255,255,0.65); }
+
+    /* SCREENSHOTS — full width */
+    .strip-section {
+      padding: 20px 0 40px;
+      border-top: 1px solid var(--border);
+    }
+    .strip-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+      margin-bottom: 16px;
+    }
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 600px) { .strip { grid-template-columns: repeat(2,1fr); gap: 10px; } }
+    .strip-item { display: flex; flex-direction: column; align-items: center; }
+    .strip img {
+      width: 100%; border-radius: 10px; display: block;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.55), 0 0 0 1px var(--border);
+    }
+    .strip-cap {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      text-align: center; margin-top: 10px; font-weight: 500; line-height: 1.4;
+    }
+
+    /* SEE HOW IT WORKS LINK */
+    .how-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 1.1rem; font-weight: 500;
+      color: var(--gold-l);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184,150,90,0.35);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .how-link:hover { color: var(--white); border-color: var(--white); }
+    .how-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; flex-shrink: 0; }
+
+    /* CITY BUTTONS — full width */
+    .demos-section {
+      padding: 32px 0 60px;
+      border-top: 1px solid var(--border);
+    }
+    .demos-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+      margin-bottom: 16px;
+    }
+    .city-buttons {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .city-buttons::-webkit-scrollbar { display: none; }
+    @media (max-width: 600px) { .city-buttons { flex-wrap: wrap; overflow-x: visible; } }
+    .city-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(184,150,90,0.28);
+      border-radius: 100px;
+      padding: 8px 13px;
+      white-space: nowrap;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 400;
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    }
+    .city-btn:hover {
+      background: rgba(184,150,90,0.14);
+      border-color: var(--gold-l);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    .city-btn img {
+      width: 18px; height: 13px; border-radius: 2px;
+      object-fit: cover; display: block;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    @media (max-width: 600px) { footer { padding: 20px 24px; justify-content: center; } }
+    footer p { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+    footer a { color: rgba(184,150,90,0.75); text-decoration: none; }
+    footer a:hover { color: var(--gold-l); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="https://ludara.ai" target="_blank">
+      A Perfect Day <span>by Ludara.AI</span>
+    </a>
+    <a class="nav-link" href="https://ludara.ai/aperfectday/" target="_blank">See the full product &#8594;</a>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- TOP: text + form -->
+    <div class="top">
+
+      <div class="left">
+        <div>
+          <p class="eyebrow">Curated city guides for hotels</p>
+          <h1>A <em>concierge-quality</em> guide for your guests</h1>
+        </div>
+        <p class="pitch">
+          We build and maintain a fully branded local guide for your property:
+          restaurants, bars, cultural spots, hidden gems, seasonal events. Your brand, your voice.
+          A few hours of work from your team, and that is it.
+        </p>
+        <p class="pitch" style="margin-top:-14px;">
+          Guests get an interactive map that works all around the city and a PDF they can keep.
+        </p>
+        <div class="proof">
+          <p class="proof-label">Currently building for</p>
+          <div class="proof-item"><span class="proof-dot"></span>A MICHELIN 2-Keys property</div>
+          <div class="proof-item"><span class="proof-dot"></span>A Sofitel Legend</div>
+          <div class="proof-item"><span class="proof-dot"></span>A Hyatt Unbound Collection boutique</div>
+        </div>
+
+        <a class="how-link" href="https://ludara.ai/aperfectday/#see-it-in-action" target="_blank">
+          See how it works — live walkthrough
+          <svg viewBox="0 0 16 16" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </a>
+
+      </div>
+
+      <div class="form-card">
+        <h2>Let's find out if it's a <em>fit</em></h2>
+        <p>Tell us your hotel and city. We will reply within one business day.</p>
+        <form class="form" id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="fg">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+            </div>
+            <div class="fg">
+              <label for="email">Your email</label>
+              <input type="email" id="email" name="email" placeholder="jane@hotel.com" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="fg">
+              <label for="hotel">Hotel</label>
+              <input type="text" id="hotel" name="hotel" placeholder="The Grand Hotel" required />
+            </div>
+            <div class="fg">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" placeholder="London" required />
+            </div>
+          </div>
+          <div class="fg">
+            <label for="message">Anything else? <span style="opacity:0.55;font-size:0.9em;">(optional)</span></label>
+            <textarea id="message" name="message" placeholder="Questions, context, or just say hello..."></textarea>
+          </div>
+          <button type="submit" class="submit-btn" id="submitBtn">Send message</button>
+          <p class="form-note">No commitment. Affordable pricing.</p>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">&#10003;</div>
+          <h3>Message sent</h3>
+          <p>We will be in touch within one business day.</p>
+        </div>
+      </div>
+
+    </div><!-- /top -->
+
+    <!-- SCREENSHOTS — full width -->
+    <div class="strip-section">
+      <p class="strip-label">What your guests see</p>
+      <div class="strip">
+        <div class="strip-item">
+          <img src="https://ludara.ai/assets/images/strip-interactive-map.webp"  alt="Interactive map" loading="lazy" />
+          <p class="strip-cap">Interactive map &amp; filters</p>
+        </div>
+        <div class="strip-item">
+          <img src="https://ludara.ai/assets/images/strip-place-card.webp"       alt="Place card" loading="lazy" />
+          <p class="strip-cap">Place card with description</p>
+        </div>
+        <div class="strip-item">
+          <img src="https://ludara.ai/assets/images/strip-walking-route.webp"    alt="Route planner" loading="lazy" />
+          <p class="strip-cap">Walking route planner</p>
+        </div>
+        <div class="strip-item">
+          <img src="https://ludara.ai/assets/images/strip-navigate-share.webp"   alt="Navigate and share" loading="lazy" />
+          <p class="strip-cap">Navigate, download as PDF or share in a message</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CITY BUTTONS — full width -->
+    <div class="demos-section">
+      <p class="demos-label">Explore live demos</p>
+      <div class="city-buttons">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/london/?utm_source=landing&utm_medium=outreach&utm_campaign=london-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/gb.png" alt="" /> London
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/nashville/?utm_source=landing&utm_medium=outreach&utm_campaign=nashville-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/us.png" alt="" /> Nashville
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/zenkimchi/seoul/?utm_source=landing&utm_medium=outreach&utm_campaign=seoul-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/kr.png" alt="" /> Seoul
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/neworleans/?utm_source=landing&utm_medium=outreach&utm_campaign=neworleans-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/us.png" alt="" /> New Orleans
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/drizzleanddip/capetown/?utm_source=landing&utm_medium=outreach&utm_campaign=capetown-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/za.png" alt="" /> Cape Town
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/wanderlush/tbilisi/?utm_source=landing&utm_medium=outreach&utm_campaign=tbilisi-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/ge.png" alt="" /> Tbilisi
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/nomadicmatt/bangkok/?utm_source=landing&utm_medium=outreach&utm_campaign=bangkok-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/th.png" alt="" /> Bangkok
+        </a>
+        <a class="city-btn" href="https://ludara.ai/aperfectday/thecuriousmexican/mexicocity/?utm_source=landing&utm_medium=outreach&utm_campaign=mexicocity-apr2026" target="_blank">
+          <img src="https://flagcdn.com/w40/mx.png" alt="" /> Mexico City
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <footer>
+    <p>&copy; 2026 <a href="https://ludara.ai" target="_blank">Ludara.AI</a></p>
+    <a class="nav-link" href="https://ludara.ai/aperfectday/" target="_blank">See the full product &#8594;</a>
+  </footer>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      try {
+        const res = await fetch('https://formspree.io/f/mnjwakbo', {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('contactForm').style.display = 'none';
+          document.getElementById('formSuccess').classList.add('visible');
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Send message';
+          alert('Something went wrong. Please try again.');
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send message';
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
+
+</body>
+</html>
