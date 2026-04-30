@@ -68,7 +68,7 @@
     .left { display: flex; flex-direction: column; gap: 20px; }
 
     .eyebrow {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em;
+      font-size: 0.9rem; font-weight: 500; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--gold);
     }
     h1 {
@@ -79,7 +79,7 @@
     }
     h1 em { font-style: italic; color: var(--gold-l); }
     .pitch {
-      font-size: 0.88rem; font-weight: 300;
+      font-size: 0.9rem; font-weight: 300;
       color: rgba(255,255,255,0.88); line-height: 1.65;
     }
     .proof {
@@ -89,7 +89,7 @@
       border-bottom: 1px solid var(--border);
     }
     .proof-label {
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.12em;
       text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 4px;
     }
     .proof-item {
@@ -103,9 +103,11 @@
 
     /* FORM CARD */
     .form-card {
-      background: var(--dark2); border: 1px solid var(--border);
+      background: var(--dark2);
+      border: 1.5px solid rgba(184,150,90,0.7);
       border-radius: 16px; padding: 36px 32px;
       position: sticky; top: 28px;
+      box-shadow: 0 0 28px rgba(184,150,90,0.12), 0 8px 32px rgba(0,0,0,0.4);
     }
     @media (max-width: 860px) { .form-card { position: static; } }
     .form-card h2 {
@@ -123,7 +125,7 @@
     @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
     .fg { display: flex; flex-direction: column; gap: 5px; }
     .fg label {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+      font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em;
       text-transform: uppercase; color: rgba(255,255,255,0.72);
     }
     .fg input, .fg textarea {
@@ -144,14 +146,14 @@
       width: 100%; background: var(--gold); color: var(--dark);
       border: none; border-radius: 7px; padding: 13px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.07em;
+      font-size: 0.9rem; font-weight: 500; letter-spacing: 0.07em;
       text-transform: uppercase; cursor: pointer;
       transition: background 0.2s, transform 0.15s; margin-top: 2px;
     }
     .submit-btn:hover { background: var(--gold-l); transform: translateY(-1px); }
     .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
     .form-note {
-      font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.75);
+      font-size: 0.9rem; font-weight: 400; color: rgba(255,255,255,0.75);
       text-align: center; margin-top: 2px;
     }
     .form-success {
@@ -169,7 +171,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem; font-weight: 300; color: var(--white);
     }
-    .form-success p { font-size: 0.88rem; color: rgba(255,255,255,0.65); }
+    .form-success p { font-size: 0.9rem; color: rgba(255,255,255,0.65); }
 
     /* SCREENSHOTS — full width */
     .strip-section {
@@ -177,7 +179,7 @@
       border-top: 1px solid var(--border);
     }
     .strip-label {
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.12em;
       text-transform: uppercase; color: rgba(255,255,255,0.85);
       margin-bottom: 16px;
     }
@@ -193,7 +195,7 @@
       box-shadow: 0 6px 28px rgba(0,0,0,0.55), 0 0 0 1px var(--border);
     }
     .strip-cap {
-      font-size: 12px; color: rgba(255,255,255,0.5);
+      font-size: 0.9rem; color: rgba(255,255,255,0.5);
       text-align: center; margin-top: 10px; font-weight: 500; line-height: 1.4;
     }
 
@@ -210,13 +212,71 @@
     .how-link:hover { color: var(--white); border-color: var(--white); }
     .how-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; flex-shrink: 0; }
 
+    /* VIDEO SECTION */
+    .video-section {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+    .video-section-label {
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+      margin-bottom: 16px;
+    }
+    .video-grid {
+      display: grid; grid-template-columns: 1fr 2fr; gap: 16px;
+    }
+    @media (max-width: 700px) { .video-grid { grid-template-columns: 1fr; } }
+    .video-embed {
+      border-radius: 10px; overflow: hidden;
+      height: 340px; cursor: pointer; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    @media (max-width: 700px) { .video-embed { height: auto; aspect-ratio: 16/9; } }
+    .video-thumb {
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center top; position: relative;
+    }
+    .video-thumb-contain {
+      background-size: contain; background-repeat: no-repeat;
+      background-position: center center; background-color: #0a0b0f;
+    }
+    .thumb-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.08);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.2s;
+    }
+    .video-embed:hover .thumb-overlay { background: rgba(0,0,0,0.22); }
+    .play-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(184,150,90,0.85); border: 2px solid rgba(212,176,122,0.9);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .watch-label {
+      font-size: 0.9rem; color: rgba(255,255,255,0.85);
+      letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+    }
+    .video-cap { margin-top: 10px; }
+    .video-cap strong { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.92); display: block; margin-bottom: 3px; }
+    .video-cap span { font-size: 0.9rem; color: rgba(255,255,255,0.65); }
+
+    /* LIGHTBOX */
+    #lightbox { display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center; }
+    #lightbox.open { display:flex; }
+    #lightbox-inner { position:relative; width:92vw; max-width:1200px; }
+    #lightbox-inner iframe { width:100%; aspect-ratio:16/9; border:none; border-radius:8px; background:#000; display:block; }
+    #lightbox-close { position:absolute; top:-44px; right:0; background:none; border:none; color:rgba(255,255,255,0.7); font-size:28px; cursor:pointer; padding:8px; }
+    #lightbox-close:hover { color:#fff; }
+    #lightbox-backdrop { position:absolute; inset:0; z-index:-1; }
+
     /* CITY BUTTONS — full width */
     .demos-section {
       padding: 32px 0 60px;
       border-top: 1px solid var(--border);
     }
     .demos-label {
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.12em;
       text-transform: uppercase; color: rgba(255,255,255,0.85);
       margin-bottom: 16px;
     }
@@ -238,7 +298,7 @@
       padding: 8px 13px;
       white-space: nowrap;
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem; font-weight: 400;
+      font-size: 0.9rem; font-weight: 400;
       color: rgba(255,255,255,0.88);
       text-decoration: none;
       transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
@@ -264,7 +324,7 @@
       flex-wrap: wrap; gap: 12px;
     }
     @media (max-width: 600px) { footer { padding: 20px 24px; justify-content: center; } }
-    footer p { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+    footer p { font-size: 0.9rem; color: rgba(255,255,255,0.45); }
     footer a { color: rgba(184,150,90,0.75); text-decoration: none; }
     footer a:hover { color: var(--gold-l); }
   </style>
@@ -304,12 +364,6 @@
           <div class="proof-item"><span class="proof-dot"></span>A Hyatt Unbound Collection boutique</div>
         </div>
 
-        <a class="how-link" href="https://ludara.ai/aperfectday/#see-it-in-action" target="_blank">
-          See how it works — live walkthrough
-          <svg viewBox="0 0 16 16" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 8h10M9 4l4 4-4 4"/>
-          </svg>
-        </a>
 
       </div>
 
@@ -376,9 +430,44 @@
       </div>
     </div>
 
+    <!-- VIDEO SECTION -->
+    <div class="video-section" id="see-it-in-action">
+      <p class="video-section-label">See it in action</p>
+      <div class="video-grid">
+        <div>
+          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1IJbqu2OUYW5G_0hF1jGPDsmVkja8E_aa/preview')" title="Cape Town mobile demo">
+            <div class="video-thumb video-thumb-contain" style="background-image:url('https://ludara.ai/assets/images/video-thumb-cape-town.webp')">
+              <div class="thumb-overlay">
+                <div class="play-btn"><svg width="22" height="22" viewBox="0 0 18 18" fill="none"><path d="M6 4L14 9L6 14V4Z" fill="rgba(255,255,255,0.95)"/></svg></div>
+                <span class="watch-label">Cape Town · Mobile</span>
+              </div>
+            </div>
+          </div>
+          <div class="video-cap">
+            <strong>The Guest Experience — Cape Town Mobile</strong>
+            <span>Interactive map, filters, saved places, offline navigation & PDF guide</span>
+          </div>
+        </div>
+        <div>
+          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1akXNTaZX5suU4SQzS_EWiyYGqn2Vo1kk/preview')" title="London desktop demo">
+            <div class="video-thumb" style="background-image:url('https://ludara.ai/assets/images/video-thumb-london.webp')">
+              <div class="thumb-overlay">
+                <div class="play-btn"><svg width="22" height="22" viewBox="0 0 18 18" fill="none"><path d="M6 4L14 9L6 14V4Z" fill="rgba(255,255,255,0.95)"/></svg></div>
+                <span class="watch-label">London · Desktop</span>
+              </div>
+            </div>
+          </div>
+          <div class="video-cap">
+            <strong>The Concierge Tool — London Desktop</strong>
+            <span>Full desktop walkthrough — building a day plan as a premium confirmation service or at check-in</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- CITY BUTTONS — full width -->
     <div class="demos-section">
-      <p class="demos-label">Explore live demo maps</p>
+      <p class="demos-label">Explore Live Maps</p>
       <div class="city-buttons">
         <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/london/?utm_source=landing&utm_medium=outreach&utm_campaign=london-apr2026" target="_blank">
           <img src="https://flagcdn.com/w40/gb.png" alt="" /> London
@@ -414,7 +503,28 @@
     <a class="nav-link" href="https://ludara.ai/aperfectday/" target="_blank">See the full product &#8594;</a>
   </footer>
 
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <div id="lightbox-inner">
+      <button id="lightbox-close" onclick="closeLightbox()">&#10005;</button>
+      <iframe id="lightbox-iframe" src="" allowfullscreen allow="autoplay"></iframe>
+    </div>
+    <div id="lightbox-backdrop" onclick="closeLightbox()"></div>
+  </div>
+
   <script>
+    function openLightbox(url) {
+      document.getElementById('lightbox-iframe').src = url;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lightbox-iframe').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
