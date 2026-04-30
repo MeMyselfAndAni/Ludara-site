@@ -7,6 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SEY87L8PFW');
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -435,7 +444,7 @@
       <p class="video-section-label">See it in action</p>
       <div class="video-grid">
         <div>
-          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1IJbqu2OUYW5G_0hF1jGPDsmVkja8E_aa/preview')" title="Cape Town mobile demo">
+          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1IJbqu2OUYW5G_0hF1jGPDsmVkja8E_aa/preview', 'capetown_mobile')" title="Cape Town mobile demo">
             <div class="video-thumb video-thumb-contain" style="background-image:url('https://ludara.ai/assets/images/video-thumb-cape-town.webp')">
               <div class="thumb-overlay">
                 <div class="play-btn"><svg width="22" height="22" viewBox="0 0 18 18" fill="none"><path d="M6 4L14 9L6 14V4Z" fill="rgba(255,255,255,0.95)"/></svg></div>
@@ -449,7 +458,7 @@
           </div>
         </div>
         <div>
-          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1akXNTaZX5suU4SQzS_EWiyYGqn2Vo1kk/preview')" title="London desktop demo">
+          <div class="video-embed" onclick="openLightbox('https://drive.google.com/file/d/1akXNTaZX5suU4SQzS_EWiyYGqn2Vo1kk/preview', 'london_desktop')" title="London desktop demo">
             <div class="video-thumb" style="background-image:url('https://ludara.ai/assets/images/video-thumb-london.webp')">
               <div class="thumb-overlay">
                 <div class="play-btn"><svg width="22" height="22" viewBox="0 0 18 18" fill="none"><path d="M6 4L14 9L6 14V4Z" fill="rgba(255,255,255,0.95)"/></svg></div>
@@ -469,28 +478,28 @@
     <div class="demos-section">
       <p class="demos-label">Explore Live Maps</p>
       <div class="city-buttons">
-        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/london/?utm_source=landing&utm_medium=outreach&utm_campaign=london-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/london/?utm_source=landing&utm_medium=outreach&utm_campaign=london-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'london'})">
           <img src="https://flagcdn.com/w40/gb.png" alt="" /> London
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/nashville/?utm_source=landing&utm_medium=outreach&utm_campaign=nashville-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/nashville/?utm_source=landing&utm_medium=outreach&utm_campaign=nashville-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'nashville'})">
           <img src="https://flagcdn.com/w40/us.png" alt="" /> Nashville
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/zenkimchi/seoul/?utm_source=landing&utm_medium=outreach&utm_campaign=seoul-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/zenkimchi/seoul/?utm_source=landing&utm_medium=outreach&utm_campaign=seoul-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'seoul'})">
           <img src="https://flagcdn.com/w40/kr.png" alt="" /> Seoul
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/neworleans/?utm_source=landing&utm_medium=outreach&utm_campaign=neworleans-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/ludara/neworleans/?utm_source=landing&utm_medium=outreach&utm_campaign=neworleans-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'new_orleans'})">
           <img src="https://flagcdn.com/w40/us.png" alt="" /> New Orleans
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/drizzleanddip/capetown/?utm_source=landing&utm_medium=outreach&utm_campaign=capetown-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/drizzleanddip/capetown/?utm_source=landing&utm_medium=outreach&utm_campaign=capetown-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'capetown'})">
           <img src="https://flagcdn.com/w40/za.png" alt="" /> Cape Town
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/wanderlush/tbilisi/?utm_source=landing&utm_medium=outreach&utm_campaign=tbilisi-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/wanderlush/tbilisi/?utm_source=landing&utm_medium=outreach&utm_campaign=tbilisi-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'tbilisi'})">
           <img src="https://flagcdn.com/w40/ge.png" alt="" /> Tbilisi
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/nomadicmatt/bangkok/?utm_source=landing&utm_medium=outreach&utm_campaign=bangkok-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/nomadicmatt/bangkok/?utm_source=landing&utm_medium=outreach&utm_campaign=bangkok-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'bangkok'})">
           <img src="https://flagcdn.com/w40/th.png" alt="" /> Bangkok
         </a>
-        <a class="city-btn" href="https://ludara.ai/aperfectday/thecuriousmexican/mexicocity/?utm_source=landing&utm_medium=outreach&utm_campaign=mexicocity-apr2026" target="_blank">
+        <a class="city-btn" href="https://ludara.ai/aperfectday/thecuriousmexican/mexicocity/?utm_source=landing&utm_medium=outreach&utm_campaign=mexicocity-apr2026" target="_blank" onclick="gtag('event','map_click',{event_category:'engagement',event_label:'mexico_city'})">
           <img src="https://flagcdn.com/w40/mx.png" alt="" /> Mexico City
         </a>
       </div>
@@ -513,10 +522,11 @@
   </div>
 
   <script>
-    function openLightbox(url) {
+    function openLightbox(url, label) {
       document.getElementById('lightbox-iframe').src = url;
       document.getElementById('lightbox').classList.add('open');
       document.body.style.overflow = 'hidden';
+      gtag('event', 'video_play', { event_category: 'engagement', event_label: label || 'unknown' });
     }
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
@@ -539,6 +549,7 @@
         if (res.ok) {
           document.getElementById('contactForm').style.display = 'none';
           document.getElementById('formSuccess').classList.add('visible');
+          gtag('event', 'form_submit', { event_category: 'outreach', event_label: 'hotels_page' });
         } else {
           btn.disabled = false;
           btn.textContent = 'Send message';
