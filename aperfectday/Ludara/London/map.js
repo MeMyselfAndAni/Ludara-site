@@ -1,6 +1,6 @@
 // A Perfect Day — London (neutral city guide)
 // map.js — guide-specific config
-// v2 — March 2026: added Shoreditch & Spitalfields neighbourhood
+// v3 — May 2026: landmark → culture / experience / shop; updated category labels
 
 const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [-0.1278, 51.5074];   // [longitude, latitude]
@@ -12,24 +12,28 @@ const GUIDE_TIMEZONE    = 'Europe/London';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
-  'landmark': '#e8724a',
-  'food':     '#f0c060',
-  'cafe':     '#6b9e6e',
-  'pub':      '#8b6bb1',
-  'church':   '#6090c8',
-  'market':   '#c08060',
-  'nature':   '#50906a',
+  'food':       '#f0c060',
+  'cafe':       '#6b9e6e',
+  'pub':        '#8b6bb1',
+  'church':     '#6090c8',
+  'market':     '#c08060',
+  'nature':     '#50906a',
+  'culture':    '#e8724a',
+  'experience': '#4a8fa8',
+  'shop':       '#9a7b5a',
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'landmark': 'Landmarks',
-  'food':     'Restaurants',
-  'cafe':     'Cafés & Coffee',
-  'pub':      'Pubs & Bars',
-  'church':   'Heritage',
-  'market':   'Markets',
-  'nature':   'Nature & Views',
+  'food':       'Dining',
+  'cafe':       'Café',
+  'pub':        'Bar',
+  'church':     'Heritage',
+  'market':     'Market',
+  'nature':     'Parks & Views',
+  'culture':    'Museums & Galleries',
+  'experience': 'Only in London',
+  'shop':       'Worth Buying',
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
