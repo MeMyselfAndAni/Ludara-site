@@ -76,10 +76,10 @@
       <span class="wl-logo">ZenKimchi</span>
     </div>
     <h2 class="splash-title">Seoul Food Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">53</span> hand-picked places by <strong>Joe McPherson</strong> — Korea's #1 food writer, president of ZenKimchi Experiences, and consultant to Anthony Bourdain, Andrew Zimmern and Lonely Planet.</p>
+    <p class="splash-sub"><span class="place-count-all">65</span> hand-picked places by <strong>Joe McPherson</strong> — Korea's #1 food writer, president of ZenKimchi Experiences, and consultant to Anthony Bourdain, Andrew Zimmern and Lonely Planet.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="https://zenkimchi.com" target="_blank">zenkimchi.com</a>
+      <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai/aperfectday</a>
     </div>
   </div>
 </div>
@@ -93,31 +93,32 @@
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="https://zenkimchi.com" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+    <a href="https://ludara.ai/aperfectday" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
       <span class="wl-logo">ZenKimchi</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>Seoul</em> Food Guide</h1>
-      <div class="header-sub"><span class="place-count-all">53</span> hand-picked places<span class="header-sub-by"> · by Joe</span></div>
+      <div class="header-sub"><span class="place-count-all">65</span> hand-picked places<span class="header-sub-by"> · by Joe</span></div>
     </div>
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
     <a class="header-ludara-brand" href="https://ludara.ai/aperfectday" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
-  <a class="header-btn" href="https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/" target="_blank">Blog ↗</a>
 </header>
 
 <!-- Filter bar -->
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#e8724a"></span>Restaurants</button>
-  <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#d4a043"></span>Chicken &amp; Bars</button>
-  <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#6b9e6e"></span>Markets</button>
-  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6bb1"></span>Cafés</button>
-  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#6090c8"></span>Experiences</button>
+  <button class="pill" onclick="fc(this,'bbq')"><span class="dot" style="background:#c0392b"></span>🔥 Korean BBQ</button>
+  <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#d4a043"></span>🍗 Chimaek &amp; Hof</button>
+  <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#e8724a"></span>🥢 Korean Kitchen</button>
+  <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#6b9e6e"></span>🏮 Markets &amp; Street</button>
+  <button class="pill" onclick="fc(this,'bar')"><span class="dot" style="background:#2c3e7a"></span>🌃 Bars &amp; Night</button>
+  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6bb1"></span>☕ Café Seoul</button>
+  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#6090c8"></span>🏯 Palaces, Art &amp; Parks</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
@@ -222,7 +223,7 @@
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
-  <span class="count-badge" id="list-badge">53</span>
+  <span class="count-badge" id="list-badge">65</span>
 </button>
 
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
@@ -240,7 +241,7 @@
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
-  <span id="list-badge-desktop">53</span>
+  <span id="list-badge-desktop">65</span>
 </button>
 
 <!-- Places list sheet -->
@@ -249,7 +250,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">53 Places</span>
+    <span class="sheet-title" id="sheet-title">65 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
@@ -281,7 +282,7 @@
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
   <span>Places</span>
-  <span class="desktop-list-count" id="desktop-list-count">53</span>
+  <span class="desktop-list-count" id="desktop-list-count">65</span>
 </button>
 
 <!-- JS modules — load order is critical -->
