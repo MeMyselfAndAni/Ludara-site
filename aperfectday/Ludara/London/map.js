@@ -1,6 +1,6 @@
 // A Perfect Day — London (neutral city guide)
 // map.js — guide-specific config
-// v3 — May 2026: landmark → culture / experience / shop; updated category labels
+// v6 — May 2026: Nine-category structure: art, shop, royal, film, books, dining, pub, music, parks
 
 const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [-0.1278, 51.5074];   // [longitude, latitude]
@@ -12,28 +12,28 @@ const GUIDE_TIMEZONE    = 'Europe/London';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
-  'food':       '#f0c060',
-  'cafe':       '#6b9e6e',
-  'pub':        '#8b6bb1',
-  'church':     '#6090c8',
-  'market':     '#c08060',
-  'nature':     '#50906a',
-  'culture':    '#e8724a',
-  'experience': '#4a8fa8',
-  'shop':       '#9a7b5a',
+  'art':    '#e8724a',   // terracotta — galleries & design
+  'shop':   '#9a7b5a',   // warm tan — retail & markets
+  'royal':  '#6090c8',   // royal blue — Crown connections
+  'film':   '#4a5578',   // dark slate — movie locations
+  'dining': '#f0c060',   // golden amber — fine dining
+  'pub':    '#8b6bb1',   // purple — pubs & bars
+  'music':  '#c04444',   // deep red — music venues & history
+  'books':  '#5a7a3a',   // olive green — literary landmarks
+  'parks':  '#3a9a5a',   // fresh green — parks & gardens
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'food':       'Dining',
-  'cafe':       'Café',
-  'pub':        'Bar',
-  'church':     'Heritage',
-  'market':     'Market',
-  'nature':     'Parks & Views',
-  'culture':    'Museums & Galleries',
-  'experience': 'Only in London',
-  'shop':       'Worth Buying',
+  'art':    'Art & Design',
+  'shop':   'Shop',
+  'royal':  'Royal London',
+  'film':   'From the Movies',
+  'dining': 'Fine Dining',
+  'pub':    'Pubs & Bars',
+  'music':  'Music',
+  'books':  'From the Books',
+  'parks':  'Parks & Gardens',
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
