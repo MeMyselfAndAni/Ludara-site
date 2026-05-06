@@ -98,6 +98,19 @@
   #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
+
+  /* ── Splash card redesign — May 2026 ── */
+  .splash-inner        { padding: 40px 32px 32px; max-width: 480px; }
+  .splash-logo-row     { margin-bottom: 4px; }
+  .splash-title        { margin-bottom: 0; letter-spacing: -0.02em; }
+  .splash-divider      { width: 40px; height: 3px; background: var(--brand); border: none;
+                         border-radius: 2px; margin: 18px auto 18px; }
+  .splash-sub          { font-style: italic; font-size: 0.97rem; line-height: 1.72;
+                         color: #555; margin-top: 0; margin-bottom: 24px; }
+  .splash-footer       { margin-top: 22px; font-size: 0.75rem; color: #bbb;
+                         letter-spacing: 0.01em; }
+  .splash-footer a     { color: #999; text-decoration: none; font-weight: 500; }
+  .splash-footer a:hover { color: var(--brand); }
 </style>
 
 <script>
@@ -113,10 +126,11 @@
       <span class="wl-logo">A Perfect Day</span><!-- [2] -->
     </div>
     <h2 class="splash-title">London Guide</h2><!-- [3] -->
-    <p class="splash-sub">Royal palaces, jazz basements, Hitchcock film sets, three-Michelin-star kitchens, and the Soho bar where the Free French drank during the Blitz — <span class="place-count-all">57</span> essential London places chosen because no other city has them.</p><!-- [4] -->
+    <hr class="splash-divider">
+    <p class="splash-sub">Royal palaces, jazz basements, Hitchcock film sets, three-Michelin-star kitchens, and the Soho bar where the Free French drank during the Blitz — <span class="place-count-all">69</span> essential London places chosen because no other city has them.</p><!-- [4] -->
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai" target="_blank">ludara.ai</a><!-- [5] -->
+      <a href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai</a><!-- [5] -->
     </div>
   </div>
 </div>
@@ -130,20 +144,20 @@
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="https://ludara.ai" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
+    <a href="https://ludara.ai/aperfectday/" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;"><!-- [6] -->
       <span class="wl-logo">A Perfect Day</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>London</em> Guide</h1><!-- [7] -->
-      <div class="header-sub"><span class="place-count-all">57</span> hand-picked places<span class="header-sub-by"> · by APD</span></div><!-- [8] -->
+      <div class="header-sub"><span class="place-count-all">69</span> hand-picked places<span class="header-sub-by"> · by Ludara</span></div><!-- [8] -->
     </div>
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
-    <a class="header-ludara-brand" href="https://ludara.ai" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
+    <a class="header-ludara-brand" href="https://ludara.ai/aperfectday/" target="_blank"><span class="ludara-line1">A Perfect Day</span><span class="ludara-line2">by Ludara.AI</span></a>
   </div>
-  <a class="header-btn" href="https://ludara.ai" target="_blank">Blog ↗</a><!-- [9] -->
+  <a class="header-btn" href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai ↗</a><!-- [9] -->
 </header>
 
 <!-- Filter bar -->
@@ -155,9 +169,11 @@
   <button class="pill" onclick="fc(this,'shop')"><span class="dot" style="background:#9a7b5a"></span>Shop</button>
   <button class="pill" onclick="fc(this,'royal')"><span class="dot" style="background:#6090c8"></span>Royal London</button>
   <button class="pill" onclick="fc(this,'film')"><span class="dot" style="background:#4a5578"></span>From the Movies</button>
+  <button class="pill" onclick="fc(this,'books')"><span class="dot" style="background:#5a7a3a"></span>From the Books</button>
   <button class="pill" onclick="fc(this,'dining')"><span class="dot" style="background:#f0c060"></span>Fine Dining</button>
   <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#8b6bb1"></span>Pubs &amp; Bars</button>
   <button class="pill" onclick="fc(this,'music')"><span class="dot" style="background:#c04444"></span>Music</button>
+  <button class="pill" onclick="fc(this,'parks')"><span class="dot" style="background:#3a9a5a"></span>Parks &amp; Gardens</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
@@ -316,7 +332,7 @@
   <div class="places-list" id="places-list"></div>
   <div class="list-footer-brand">
     <span>Interactive map by</span>
-    <a href="https://ludara.ai" target="_blank">A Perfect Day · Ludara.AI</a>
+    <a href="https://ludara.ai/aperfectday/" target="_blank">A Perfect Day · Ludara.AI</a>
   </div>
 </div>
 
