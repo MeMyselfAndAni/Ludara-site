@@ -1,6 +1,6 @@
 // A Perfect Day — London (neutral city guide)
 // map.js — guide-specific config
-// v4 — May 2026: New six-category structure: art, shop, royal, film, dining, pub
+// v5 — May 2026: Seven-category structure: art, shop, royal, film, dining, pub, music
 
 const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [-0.1278, 51.5074];   // [longitude, latitude]
@@ -18,6 +18,7 @@ const CC = {
   'film':   '#4a5578',   // dark slate — movie locations
   'dining': '#f0c060',   // golden amber — fine dining
   'pub':    '#8b6bb1',   // purple — pubs & bars
+  'music':  '#c04444',   // deep red — music venues & history
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
@@ -28,6 +29,7 @@ const CL = {
   'film':   'From the Movies',
   'dining': 'Fine Dining',
   'pub':    'Pubs & Bars',
+  'music':  'Music',
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
