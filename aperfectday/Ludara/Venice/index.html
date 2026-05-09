@@ -10,8 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — Venetian terracotta ── */
-  :root { --brand: #c04a2a; --brand-faint: rgba(192,74,42,0.12); --brand-glow: rgba(192,74,42,0.35); }
+  /* ── BRAND COLOR — platform standard red-orange ── */
+  :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.3); }
 
   .mgl-marker { background: none !important; border: none !important; }
   .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
@@ -38,7 +38,7 @@
     padding-bottom: 60px !important;
   }
   .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
-  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #c04a2a) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #c04a2a); }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand, #ff2a00) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand, #ff2a00); }
   .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
   .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 210px; }
 
@@ -368,7 +368,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">33 Places</span>
+    <span class="sheet-title" id="sheet-title">43 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
@@ -385,6 +385,11 @@
   <div class="saved-panel-header">
     <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
+  </div>
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
@@ -441,7 +446,7 @@ window.addEventListener('load', function() {
     if (existing) existing.remove();
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c04a2a';
+    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
@@ -602,4 +607,74 @@ function clearAllSaved() {
       pl.forEach(function(p){
         var th=document.getElementById('thumb-'+p.id);if(!th)return;
         if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
-        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'plac
+        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
+      });
+    }
+    updateTrip(places);
+  };
+
+  var _origUpdateFavUI = window.updateFavUI;
+  window.updateFavUI = function() {
+    try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
+    var pill=document.getElementById('pill-saved');
+    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
+    var btn=document.getElementById('sheet-clear-btn');
+    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
+    setTimeout(function(){
+      if(typeof favourites!=='undefined'&&favourites.length>0){
+        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
+        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
+      }
+    },200);
+  };
+})();
+</script>
+
+<!-- Brand color for map route line and numbered markers -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = [
+        'width:26px', 'height:26px', 'border-radius:50%',
+        'background:' + brand,
+        'border:2.5px solid white',
+        'color:white', 'font-size:0.68rem', 'font-weight:700',
+        'display:flex', 'align-items:center', 'justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
+        'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
+      tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+</body>
+</html>
