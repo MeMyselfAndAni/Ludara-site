@@ -7,6 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
   /* ── BRAND COLOR — Venetian terracotta ── */
@@ -97,18 +98,78 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 
-  /* ── Splash card ── */
-  .splash-inner        { padding: 40px 32px 32px; max-width: 480px; }
-  .splash-logo-row     { margin-bottom: 4px; }
-  .splash-title        { margin-bottom: 0; letter-spacing: -0.02em; }
-  .splash-divider      { width: 40px; height: 3px; background: var(--brand); border: none;
-                         border-radius: 2px; margin: 18px auto 18px; }
-  .splash-sub          { font-style: italic; font-size: 0.97rem; line-height: 1.72;
-                         color: #555; margin-top: 0; margin-bottom: 24px; }
-  .splash-footer       { margin-top: 22px; font-size: 0.75rem; color: #bbb;
-                         letter-spacing: 0.01em; }
-  .splash-footer a     { color: #999; text-decoration: none; font-weight: 500; }
-  .splash-footer a:hover { color: var(--brand); }
+  /* ── Splash card — Venice, medieval-renaissance ── */
+  .splash { background: #0f0d0a !important; }
+  .splash-inner {
+    padding: 56px 36px 44px;
+    max-width: 400px;
+    text-align: center;
+  }
+  .splash-eyebrow {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.32em;
+    color: #6a5a3a;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .splash-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.4rem, 10vw, 3.6rem);
+    font-weight: 700;
+    color: #d4a84b;
+    line-height: 1.05;
+    letter-spacing: 0.06em;
+    margin: 0 0 8px;
+  }
+  .splash-subtitle {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.38em;
+    color: #6a5a3a;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .splash-ornament {
+    display: block;
+    color: #3a2a14;
+    font-size: 0.9rem;
+    letter-spacing: 0.6em;
+    margin: 0 auto 26px;
+  }
+  .splash-sub {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.97rem;
+    line-height: 1.82;
+    color: #8a7860;
+    margin: 0 0 34px;
+  }
+  .splash-btn {
+    font-family: 'Cinzel Decorative', serif !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase;
+    background: transparent !important;
+    border: 1px solid #5a3e18 !important;
+    color: #d4a84b !important;
+    padding: 13px 36px !important;
+    border-radius: 0 !important;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .splash-btn:hover {
+    background: #d4a84b !important;
+    color: #0f0d0a !important;
+  }
+  .splash-footer {
+    margin-top: 30px;
+    font-size: 0.65rem;
+    color: #3a2e1e;
+    letter-spacing: 0.12em;
+  }
+  .splash-footer a { color: #5a4a2e; text-decoration: none; }
+  .splash-footer a:hover { color: #d4a84b; }
 </style>
 
 <script>
@@ -120,15 +181,14 @@
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
   <div class="splash-inner">
-    <div class="splash-logo-row">
-      <span class="wl-logo">A Perfect Day</span>
-    </div>
-    <h2 class="splash-title">Venice Guide</h2>
-    <hr class="splash-divider">
-    <p class="splash-sub">Palazzi that outlasted empires, bacari unchanged since the Serenissima, Tintoretto buried in his own parish church, gondola workshops built by mountain carpenters, and a lagoon island with a Byzantine cathedral from 639 — <span class="place-count-all">33</span> essential Venice places chosen because no other city has them.</p>
-    <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
+    <div class="splash-eyebrow">A Perfect Day</div>
+    <h1 class="splash-title">Venetia</h1>
+    <div class="splash-subtitle">Serenissima</div>
+    <span class="splash-ornament">— ✦ —</span>
+    <p class="splash-sub">Forty places chosen because no other city has them — Byzantine mosaics, bacari unchanged since the Republic, furnaces blowing glass since 1291, and a lagoon that still hides the world.</p>
+    <button class="splash-btn" onclick="closeSplash()">Enter the City</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai</a>
+      <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
     </div>
   </div>
 </div>
@@ -148,7 +208,7 @@
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>Venice</em> Guide</h1>
-      <div class="header-sub"><span class="place-count-all">33</span> hand-picked places<span class="header-sub-by"> · by Ludara</span></div>
+      <div class="header-sub"><span class="place-count-all">40</span> hand-picked places<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -281,7 +341,7 @@
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
-  <span class="count-badge" id="list-badge">33</span>
+  <span class="count-badge" id="list-badge">40</span>
 </button>
 
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
@@ -299,7 +359,7 @@
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
-  <span id="list-badge-desktop">33</span>
+  <span id="list-badge-desktop">40</span>
 </button>
 
 <!-- Places list sheet -->
@@ -338,7 +398,7 @@
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
   <span>Places</span>
-  <span class="desktop-list-count" id="desktop-list-count">33</span>
+  <span class="desktop-list-count" id="desktop-list-count">40</span>
 </button>
 
 <!-- JS modules — load order is critical, do not reorder -->
@@ -542,28 +602,4 @@ function clearAllSaved() {
       pl.forEach(function(p){
         var th=document.getElementById('thumb-'+p.id);if(!th)return;
         if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
-        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
-      });
-    }
-    updateTrip(places);
-  };
-
-  var _origUpdateFavUI = window.updateFavUI;
-  window.updateFavUI = function() {
-    try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
-    var pill=document.getElementById('pill-saved');
-    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
-    var btn=document.getElementById('sheet-clear-btn');
-    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
-    setTimeout(function(){
-      if(typeof favourites!=='undefined'&&favourites.length>0){
-        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
-        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
-      }
-    },200);
-  };
-})();
-</script>
-
-</body>
-</html>
+        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'plac

@@ -2,8 +2,9 @@
  * download-missing-images.js
  * Two jobs in one script:
  *
- *   1. MISSING  — 8 images fetch-images-universal.js failed to grab
- *   2. REPLACEMENTS — 13 existing images that are wrong or unappetising
+ *   1. MISSING  — 15 images (8 original + 7 expansion places IDs 34–40)
+ *   2. REPLACEMENTS — 12 existing images that are wrong or unappetising
+ *                     (place-7 excluded — already fixed via AnticaAdelaide.webp)
  *
  * Run from the A Perfect Day folder:
  *   node download-missing-images.js
@@ -44,12 +45,12 @@ const MISSING = [
   {
     id:   16,
     name: 'Al Covo',
-    url:  'https://wendy-lyn.com/wp-content/uploads/2020/05/IMG_9109-2.jpg',
+    url:  'https://ristorantealcovo.com/wp-content/uploads/2025/12/AL-COVO_DICEMBRE_2025_ICS0044.jpg',
   },
   {
     id:   26,
     name: 'Osteria Mocenigo',
-    url:  'https://media.evendo.com/locations-resized/RestaurantImages/360x548/12a833eb-88f4-472a-90da-0a672ea9265f',
+    url:  'https://media-cdn.tripadvisor.com/media/photo-f/0a/42/44/93/antipasto-mocenigo.jpg',
   },
   {
     id:   27,
@@ -61,16 +62,49 @@ const MISSING = [
     name: 'Il Pavone',
     url:  'https://veneziaautentica.com/wp-content/uploads/2018/07/Il-Pavone-di-Paolo-Pelosin-Shop.jpg',
   },
+  // ── 7 expansion places (IDs 34–40) added May 2026 ────────────────────────
+  {
+    id:   34,
+    name: 'Museo del Vetro',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-34_blog.jpg',
+  },
+  {
+    id:   35,
+    name: 'Basilica dei Santi Maria e Donato',
+    url:  'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibJLqq9lXGRoWSmyNHO30kEUkPZdxeCNp05fBB0n2GPtnpubwcT65k8qJFELOLAz7YXPYmucxXNxDjEq_DoNbpTzZTZ1MLN0dC_ULJHX1O5Nvm8ZMbQpGxPlKD64CRZIrNhyYy_mOE3Br6py8R0t2ozkNlAEns3FrskV2NfweIMrvTA4xpx2TbvbKDdg/s2560/Murano_Santa_Maria_e_Donato_27022015_07.jpeg',
+  },
+  {
+    id:   36,
+    name: 'Museo del Merletto',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-38_blog.jpg',
+  },
+  {
+    id:   37,
+    name: 'Trattoria al Gatto Nero',
+    url:  'https://www.elizabethminchilli.com/wp-content/uploads/2014/03/Gatto-Nero-Burano-Venice12-1.jpg',
+  },
+  {
+    id:   38,
+    name: 'Cattedrale di Santa Maria Assunta',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2021/01/ven_torcello-14_blog.jpg',
+  },
+  {
+    id:   39,
+    name: 'Locanda Cipriani',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2021/01/ven_torcello-12_blog.jpg',
+  },
+  {
+    id:   40,
+    name: 'Teatro La Fenice',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2020/02/ven_teatro-la-fenice-4_blog.jpg',
+  },
 ];
 
-// ─── 13 existing images that need to be replaced ───────────────────────────
+// ─── 12 existing images that need to be replaced ───────────────────────────
+// Note: place-7 (Antica Adelaide) was fixed manually — AnticaAdelaide.webp
+// was already on disk and converted to place-7.jpg via Python/Pillow.
+// It is intentionally omitted here to avoid overwriting the correct image.
 const REPLACEMENTS = [
-  {
-    id:     7,
-    name:   'Antica Adelaide',
-    reason: 'generic food-flatlay stock photo',
-    url:    'https://visit-venice-italy.global.ssl.fastly.net/pics/restaurants/restaurant-antica-adelaide-venice-01.jpg?width=616&quality=70',
-  },
   {
     id:     19,
     name:   'Gallerie dell\'Accademia',
@@ -92,8 +126,8 @@ const REPLACEMENTS = [
   {
     id:     28,
     name:   'Palazzo Fortuny',
-    reason: 'B&W old photo — replacing with colour building shot',
-    url:    'https://www.meetingvenice.it/sites/default/files/schede/preview/palazzo_fortuny_e_museo.jpg',
+    reason: 'B&W old photo — replacing with interior grand hall (870px, Inexhibit magazine)',
+    url:    'https://www.inexhibit.com/wp-content/uploads/2015/09/Palazzo-Fortuny-museum-Venice-Inexhibit-08.jpg',
   },
   {
     id:     29,
@@ -222,14 +256,14 @@ async function run() {
     console.log('   Run:  npm install sharp    to enable ≤600 px resizing.\n');
   }
 
-  const failedMissing      = await processGroup('MISSING (8 never downloaded)', MISSING);
-  const failedReplacements = await processGroup('REPLACEMENTS (13 bad existing images)', REPLACEMENTS);
+  const failedMissing      = await processGroup('MISSING (15 — original 8 + 7 expansion IDs 34–40)', MISSING);
+  const failedReplacements = await processGroup('REPLACEMENTS (12 bad existing images)', REPLACEMENTS);
 
   const allFailed = [...failedMissing, ...failedReplacements];
 
   console.log('\n─────────────────────────────');
   if (allFailed.length === 0) {
-    console.log('All 21 images downloaded successfully.');
+    console.log('All 27 images downloaded successfully.');
   } else {
     console.log(`\nFailed (${allFailed.length}) — download these manually:`);
     for (const { id, name, url } of allFailed) {
