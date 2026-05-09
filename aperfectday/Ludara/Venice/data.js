@@ -1,5 +1,5 @@
 // A Perfect Day — Venice
-// venice_data_v1.js — 33 curated places
+// venice_data_v1.js — 43 curated places
 //
 // v1 — May 2026
 // Voice: boutique hotel concierge — direct, specific, opinionated
@@ -647,6 +647,55 @@ const PLACES = [
     tip: 'Book a performance rather than just the tour if the programme permits — the acoustic is extraordinary and the sight lines from the boxes are exactly what Verdi intended. Day-of tickets sometimes available from the box office. The tour is worthwhile regardless: 45 minutes, no crowds before 10:00.',
     type: 'Historic opera house — world premieres since 1792, gilded horseshoe interior',
     website: 'https://www.teatrolafenice.it',
+  },
+
+  // ── ADDITIONAL RESTAURANTS ────────────────────────────────────────────────
+
+  {
+    id: 41,
+    nbhd: 'san_polo',
+    name: 'Da Fiore',
+    cat: 'dining',
+    emoji: '🌸',
+    address: 'Calle del Scaleter 2202, San Polo, Venezia',
+    lat: 45.4376, lng: 12.3274,
+    search: 'Da Fiore Venice MICHELIN star restaurant fish seafood Mara Martin San Polo',
+    note: 'Mara Martin runs the kitchen; her husband Maurizio the dining room — the same division since 1978. They held a MICHELIN star for 26 years and then chose to give it back, on their own terms. The menu follows the lagoon strictly: what the fishermen brought, what the season allows. Bigoli in sauce, risotto, eel from the northern lagoon. Nothing is designed to impress; everything is designed to be accurate. Booking two to three weeks ahead is the minimum.',
+    hours: 'Tue–Sat 12:30–14:30, 19:30–22:30; closed Sun–Mon',
+    tip: 'Book two to three weeks ahead — this is not a restaurant where walk-ins happen. Ask Maurizio\'s advice on the wine; he will not oversell. The tasting menu lets the kitchen decide based on what arrived that morning.',
+    type: 'Venetian seafood institution — lagoon sourcing since 1978, San Polo',
+    website: 'https://www.ristorantedafiore.com',
+  },
+  {
+    id: 42,
+    nbhd: 'castello',
+    name: 'Corte Sconta',
+    cat: 'dining',
+    emoji: '🦐',
+    address: 'Calle del Pestrin 3886, Castello, Venezia',
+    lat: 45.4360, lng: 12.3510,
+    search: 'Corte Sconta Venice restaurant hidden courtyard Castello seafood antipasto Bib Gourmand',
+    note: 'The name means hidden courtyard — which it is, on a calle that requires intent to find. MICHELIN Bib Gourmand, consistently respected by the Venetian food community. The antipasto di mare is a sequence of perhaps eight small dishes, each one a different preparation of the morning\'s catch; it is the reason to come. The room fills with regulars who know it is not a discovery — it is the real thing.',
+    hours: 'Tue–Sat 12:30–14:00, 19:00–21:30; closed Sun–Mon and January',
+    tip: 'Order the antipasto di mare and let it run its full course before ordering anything else. Book ahead — the courtyard fills fast in good weather and the interior is not large. The restaurant closes for most of January.',
+    type: 'MICHELIN Bib Gourmand — hidden courtyard, Castello seafood',
+    awards: 'MICHELIN Guide Italia 2026 — Bib Gourmand',
+    website: 'https://www.cortescontavenezia.com',
+  },
+  {
+    id: 43,
+    nbhd: 'cannaregio',
+    name: "Osteria L'Orto dei Mori",
+    cat: 'dining',
+    emoji: '🌿',
+    address: 'Campo dei Mori 3386, Cannaregio, Venezia',
+    lat: 45.4454, lng: 12.3266,
+    search: "Orto dei Mori Venice osteria Cannaregio Madonna dell'Orto local restaurant garden",
+    note: "On Campo dei Mori, two minutes from the Madonna dell'Orto — one of Venice's quietest corners. The menu is short and changes with what arrived at the Rialto market. Creative without being showy: Venetian ingredients, modern technique, no tourist expectations. This is where the Cannaregio neighbourhood eats on a good night. No grand reputation, no MICHELIN citation — just very good food in the right place.",
+    hours: 'Mon, Wed–Sun 12:30–15:00, 19:00–22:30; closed Tue',
+    tip: "The campo outside is one of the most peaceful spots in Venice. Eat early and stay for the quiet. Ask what the kitchen is proud of that day — the menu changes frequently and the staff will tell you.",
+    type: 'Neighbourhood osteria — Cannaregio, creative Venetian, no tourists',
+    website: 'https://osteriaortodeimori.com',
   },
 
 ];

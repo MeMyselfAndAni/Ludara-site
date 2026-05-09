@@ -2,8 +2,8 @@
  * download-missing-images.js
  * Two jobs in one script:
  *
- *   1. MISSING  — 15 images (8 original + 7 expansion places IDs 34–40)
- *   2. REPLACEMENTS — 12 existing images that are wrong or unappetising
+ *   1. MISSING  — 18 images (8 original + 7 expansion IDs 34–40 + 3 new restaurants IDs 41–43)
+ *   2. REPLACEMENTS — 17 existing images that are wrong or unappetising
  *                     (place-7 excluded — already fixed via AnticaAdelaide.webp)
  *
  * Run from the A Perfect Day folder:
@@ -25,7 +25,7 @@ const MISSING = [
   {
     id:   5,
     name: 'Vini da Gigio',
-    url:  'https://vinidagigio.it/wp-content/uploads/2022/12/ViniDaGigio_AFfotografo_24.jpg',
+    url:  'https://vinidagigio.it/wp-content/uploads/2022/12/ViniDaGigio_AFfotografo_29.jpg',
   },
   {
     id:   10,
@@ -50,7 +50,7 @@ const MISSING = [
   {
     id:   26,
     name: 'Osteria Mocenigo',
-    url:  'https://media-cdn.tripadvisor.com/media/photo-f/0a/42/44/93/antipasto-mocenigo.jpg',
+    url:  'https://images.squarespace-cdn.com/content/v1/686ec1ffff951e587a007c40/1752089112670-ISE2JKKQHU0MQCPER8JF/venice-hidden-gem-restaurants-osteria-mocenigo.jpg',
   },
   {
     id:   27,
@@ -66,7 +66,7 @@ const MISSING = [
   {
     id:   34,
     name: 'Museo del Vetro',
-    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-34_blog.jpg',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-31_blog.jpg',
   },
   {
     id:   35,
@@ -76,7 +76,7 @@ const MISSING = [
   {
     id:   36,
     name: 'Museo del Merletto',
-    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-38_blog.jpg',
+    url:  'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-37_blog.jpg',
   },
   {
     id:   37,
@@ -98,9 +98,28 @@ const MISSING = [
     name: 'Teatro La Fenice',
     url:  'https://imagesofvenice.com/wp-content/uploads/2020/02/ven_teatro-la-fenice-4_blog.jpg',
   },
+  // ── 3 new restaurants added May 2026 ─────────────────────────────────────
+  {
+    id:   41,
+    name: 'Da Fiore',
+    // Photo by Valeria Necchio, sourced from veneziaristoranti.it (Buona Accoglienza association)
+    url:  'https://veneziaristoranti.it/wp-content/uploads/2023/10/da-fiore-c-valeria-necchio-6-681x1024.jpg',
+  },
+  {
+    id:   42,
+    name: 'Corte Sconta',
+    // Sourced from Palazzo San Luca hotel blog (Feb 2025 article about the restaurant)
+    url:  'https://palazzosanluca.com/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-29-at-17.12.14_cd5965f4.jpg',
+  },
+  {
+    id:   43,
+    name: "Osteria L'Orto dei Mori",
+    // NOTE: no hotlinkable URL found — save place-43.jpg manually from the restaurant's website or TripAdvisor
+    url:  'https://osteriaortodeimori.com/wp-content/uploads/orto-dei-mori.jpg',
+  },
 ];
 
-// ─── 12 existing images that need to be replaced ───────────────────────────
+// ─── 17 existing images that need to be replaced ───────────────────────────
 // Note: place-7 (Antica Adelaide) was fixed manually — AnticaAdelaide.webp
 // was already on disk and converted to place-7.jpg via Python/Pillow.
 // It is intentionally omitted here to avoid overwriting the correct image.
@@ -109,13 +128,13 @@ const REPLACEMENTS = [
     id:     19,
     name:   'Gallerie dell\'Accademia',
     reason: 'museum logo only — replacing with Veronese painting',
-    url:    'https://www.gallerieaccademia.it/sites/default/files/styles/whats_on/public/2022-08/203%20Veronese%20Convito%20in%20casa%20Levi%20COVER.jpg?itok=YQ1grBp1',
+    url:    'https://imagesofvenice.com/wp-content/uploads/2022/01/ven_museum-guide-9_blog.jpg',
   },
   {
     id:     20,
     name:   'Punta della Dogana',
     reason: 'very low-res distant aerial (13 KB)',
-    url:    'https://imagesofvenice.com/wp-content/uploads/2022/02/ven_museum-guide-41A_blog.jpg',
+    url:    'https://veneziaautentica.com/wp-content/uploads/2020/03/Punta-dogana-Venice.jpg',
   },
   {
     id:     25,
@@ -145,7 +164,7 @@ const REPLACEMENTS = [
     id:     9,
     name:   'Fondamenta della Misericordia',
     reason: 'non-descriptive image — replacing with canal-side evening walk photo',
-    url:    'https://hotelarcadia.net/wp-content/uploads/2025/03/1920x840-16-articolo.jpg',
+    url:    'https://veneziaautentica.com/wp-content/uploads/2016/06/_sam9321.jpg',
   },
   {
     id:     12,
@@ -157,7 +176,7 @@ const REPLACEMENTS = [
     id:     13,
     name:   'Antiche Carampane',
     reason: 'non-descriptive image — replacing with restaurant feature photo',
-    url:    'http://thegastronome.net/wp-content/uploads/2023/10/trattoria-antiche-carampane-feature.jpg',
+    url:    'https://images.squarespace-cdn.com/content/v1/686ec1ffff951e587a007c40/1752089112670-ISE2JKKQHU0MQCPER8JF/venice-hidden-gem-restaurants-antiche-carampane.png',
   },
   {
     id:     17,
@@ -176,6 +195,36 @@ const REPLACEMENTS = [
     name:   'Torcello',
     reason: 'non-descriptive image — replacing with Byzantine cathedral interior',
     url:    'https://static.wixstatic.com/media/37d0c7_52791d3441d3443b999971bd16fc7d8a~mv2.jpg/v1/fill/w_618,h_477,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/37d0c7_52791d3441d3443b999971bd16fc7d8a~mv2.jpg',
+  },
+  {
+    id:     1,
+    name:   'Ca\' Sagredo Hotel',
+    reason: 'exterior/canal shot — replacing with grand staircase interior',
+    url:    'https://www.casagredohotel.com/wp-content/uploads/sites/184/2020/08/hotel_casagredo_moment_awards_back_past_museum_arts_scalone_giganti_gallery_01.jpg',
+  },
+  {
+    id:     6,
+    name:   'Anice Stellato',
+    reason: 'non-descriptive image — replacing with canal-side Cannaregio atmosphere shot',
+    url:    'https://imagesofvenice.com/wp-content/uploads/2018/12/G13-1_venice_quiet-cannaregio.jpg',
+  },
+  {
+    id:     21,
+    name:   'San Sebastiano',
+    reason: 'generic interior — replacing with official Chorus association photo showing Veronese ceiling',
+    url:    'https://chorusvenezia.org/wp-content/uploads/2022/03/Chiesa-di-San-Sebastiano-43.jpg',
+  },
+  {
+    id:     23,
+    name:   'Campo Santa Margherita',
+    reason: 'non-descriptive image — replacing with Scuola dei Carmini feature shot',
+    url:    'https://imagesofvenice.com/wp-content/uploads/2020/10/ven_scuola-carmini-1-feature_blog.jpg',
+  },
+  {
+    id:     32,
+    name:   'Burano',
+    reason: 'dull composition — replacing with vibrant coloured-houses canal photo',
+    url:    'https://veneziaautentica.com/wp-content/uploads/2020/03/burano-houses.color-venice.jpg',
   },
 ];
 
@@ -257,13 +306,13 @@ async function run() {
   }
 
   const failedMissing      = await processGroup('MISSING (15 — original 8 + 7 expansion IDs 34–40)', MISSING);
-  const failedReplacements = await processGroup('REPLACEMENTS (12 bad existing images)', REPLACEMENTS);
+  const failedReplacements = await processGroup('REPLACEMENTS (17 bad existing images)', REPLACEMENTS);
 
   const allFailed = [...failedMissing, ...failedReplacements];
 
   console.log('\n─────────────────────────────');
   if (allFailed.length === 0) {
-    console.log('All 27 images downloaded successfully.');
+    console.log('All 35 images downloaded successfully.');
   } else {
     console.log(`\nFailed (${allFailed.length}) — download these manually:`);
     for (const { id, name, url } of allFailed) {
