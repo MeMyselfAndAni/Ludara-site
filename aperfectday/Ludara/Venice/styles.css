@@ -385,6 +385,8 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   box-shadow: 0 3px 12px rgba(184,150,10,0.45);
   transform: scale(1.08);
 }
+/* "All" bubble inner — brighter so 🗺 stands out */
+#nbhd-all .nbhd-ring-inner { background: var(--gold); }
 .nbhd-bubble.nbhd-active .nbhd-label {
   color: var(--accent);
   font-weight: 700;
@@ -776,7 +778,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   width: 100%; height: 100%;
   border-radius: 50%;
   border: 2.5px solid white;
-  background: var(--gold);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
