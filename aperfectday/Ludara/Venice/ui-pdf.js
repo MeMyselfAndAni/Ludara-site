@@ -89,7 +89,7 @@ async function generatePDF(){
   const cards = places.map((p, i) => {
     const photoUrl = photoCache[p.id]?.url || '';
     const gradient = {
-      landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
+      landmark:'linear-gradient(135deg,#0f0d0a,#3a2a14)',
       food:    'linear-gradient(135deg,#7a3020,#c06040)',
       cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
       church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
@@ -97,7 +97,7 @@ async function generatePDF(){
       soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
       pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
       nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
-    }[p.cat] || 'linear-gradient(135deg,#1a3a5c,#2a5298)';
+    }[p.cat] || 'linear-gradient(135deg,#0f0d0a,#3a2a14)';
 
     const catColors = {
       landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
@@ -108,8 +108,10 @@ async function generatePDF(){
     const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(mapsUrl)}`;
 
     const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
+    const legMode  = _routeStats.legModes ? _routeStats.legModes[i] : (_routeStats.travelMode || 'walk');
+    const modeLabel = legMode === 'driving' ? '🚗 drive' : legMode === 'boat' ? '⛵ vaporetto' : '🚶 walk';
     const walkNext = i < places.length-1
-      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min ${_routeStats.travelMode === 'driving' ? '🚗 drive' : '🚶 walk'} to next stop</div>`
+      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min ${modeLabel} to next stop</div>`
       : '';
 
     return `
@@ -159,7 +161,7 @@ async function generatePDF(){
   .pdf-cover {
     width: 100%; height: 100vh;
     min-height: 100vh;
-    background: #1a3a5c;
+    background: #0f0d0a;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,8 +176,8 @@ async function generatePDF(){
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 30% 60%, rgba(184,150,10,0.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 30%, rgba(42,114,152,0.3) 0%, transparent 50%);
+    background: radial-gradient(ellipse at 30% 60%, rgba(212,168,75,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(212,168,75,0.12) 0%, transparent 50%);
   }
   .pdf-cover-logo {
     font-family: 'Playfair Display', serif;
@@ -199,7 +201,7 @@ async function generatePDF(){
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 1.6rem;
-    color: #b8960a;
+    color: #d4a84b;
     margin-bottom: 48px;
     position: relative;
   }
@@ -281,7 +283,7 @@ async function generatePDF(){
     width: 28px; height: 28px;
     border-radius: 50%;
     background: white;
-    color: #1a3a5c;
+    color: #0f0d0a;
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -328,14 +330,14 @@ async function generatePDF(){
     line-height: 1.55;
     color: #333;
     font-style: italic;
-    border-left: 2px solid #b8960a;
+    border-left: 2px solid #d4a84b;
     padding-left: 10px;
     margin: 4px 0;
     flex: 1;
   }
   .pdf-note-by {
     font-size: 0.62rem;
-    color: #b8960a;
+    color: #d4a84b;
     font-weight: 600;
     font-style: normal;
   }
@@ -350,7 +352,7 @@ async function generatePDF(){
   }
   .pdf-tip-label {
     font-weight: 700;
-    color: #b8960a;
+    color: #d4a84b;
     margin-right: 4px;
   }
   .pdf-card-qr-row {
@@ -369,7 +371,7 @@ async function generatePDF(){
   .pdf-website {
     margin-left: auto;
     font-size: 0.62rem;
-    color: #1a3a5c;
+    color: #0f0d0a;
     text-decoration: none;
   }
 
@@ -405,12 +407,12 @@ async function generatePDF(){
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 0.85rem;
-    color: #1a3a5c;
+    color: #0f0d0a;
     font-weight: 400;
   }
   .pdf-brand-footer-url {
     font-size: 0.6rem;
-    color: #b8960a;
+    color: #d4a84b;
     letter-spacing: 0.06em;
   }
 
@@ -438,8 +440,8 @@ async function generatePDF(){
       <div class="pdf-stat-label">Places</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
-      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : 'Walking'}</div>
+      <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : _routeStats.travelMode === 'boat' ? '⛵' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
+      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : _routeStats.travelMode === 'boat' ? 'Travel Time' : 'Walking'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
