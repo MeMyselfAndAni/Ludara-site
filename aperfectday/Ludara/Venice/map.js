@@ -13,7 +13,7 @@ const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [12.3215, 45.4408];   // [longitude, latitude] — centre of Venice main island
 const MAP_ZOOM          = 13.5;
 const OFFLINE_CENTER    = { lat: 45.4408, lng: 12.3215 };
-const GUIDE_CITY        = 'Venetia';
+const GUIDE_CITY        = 'Venice';
 const BLOGGER_NAME      = 'A Perfect Day';
 const GUIDE_TIMEZONE    = 'Europe/Rome';
 
