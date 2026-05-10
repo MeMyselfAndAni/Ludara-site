@@ -106,13 +106,13 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   border: 2px solid var(--border);
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   font-weight: 400;
-  font-style: italic;
+  letter-spacing: 0.08em;
   cursor: pointer;
   white-space: nowrap;
   color: var(--text2);
-  font-family: 'IM Fell English', serif;
+  font-family: 'Cinzel Decorative', serif;
   transition: all 0.18s;
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
