@@ -9,9 +9,9 @@
   --text: #0f1a2e;
   --text2: #4a5568;
   --text3: #8a96a8;
-  --accent: #1a3a5c;
-  --accent2: #2a5298;
-  --gold: #b8960a;
+  --accent: #0f0d0a;
+  --accent2: #5a4a2e;
+  --gold: #d4a84b;
   --sheet-radius: 20px;
 }
 
@@ -41,7 +41,7 @@ header {
   justify-content: space-between;
   pointer-events: none;
   border-bottom: none;
-  box-shadow: 0 2px 16px rgba(26,58,92,0.3);
+  box-shadow: 0 2px 16px rgba(15,13,10,0.5);
 }
 .header-title { pointer-events: all; display: flex; flex-direction: row; align-items: center; gap: 14px; }
 .header-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
@@ -339,7 +339,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   transition: background 0.15s;
   display: block;
 }
-.btn-primary:hover { background: #152e4a; }
+.btn-primary:hover { background: #1a1a10; }
 .btn-secondary {
   padding: 13px 16px;
   background: var(--surface);
@@ -643,7 +643,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .user-dot-inner {
   width: 13px; height: 13px;
   border-radius: 50%;
-  background: #1a3a5c;
+  background: #0f0d0a;
   border: 2.5px solid white;
   box-shadow: 0 1px 6px rgba(0,0,0,0.4);
 }
@@ -701,7 +701,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   transition: background 0.2s;
   box-shadow: 0 4px 20px rgba(26,58,92,0.3);
 }
-.splash-btn:hover { background: #152e4a; }
+.splash-btn:hover { background: #1a1a10; }
 .splash-footer a {
   font-size: 0.72rem;
   color: #8a7050;
@@ -764,7 +764,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .nbhd-ring {
   width: 58px; height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a3a5c 0%, #2a7298 50%, #b8960a 100%);
+  background: linear-gradient(135deg, #0f0d0a 0%, #3a2a14 50%, #d4a84b 100%);
   padding: 2.5px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
   transition: transform 0.15s;
@@ -786,7 +786,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .nbhd-label {
   font-size: 0.62rem;
   font-weight: 600;
-  color: #1a3a5c;
+  color: #0f0d0a;
   text-align: center;
   max-width: 64px;
   line-height: 1.2;
@@ -993,7 +993,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   cursor: pointer;
   font-family: 'Inter', sans-serif;
 }
-.trip-maps-btn:hover { background: #152e4a; }
+.trip-maps-btn:hover { background: #1a1a10; }
 
 /* ── DETAIL — title + heart inline ─────────────────────────── */
 .detail-title-row {
@@ -1281,7 +1281,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   height: 200px;
   flex-shrink: 0;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a3a5c 0%, #2a7298 100%);
+  background: linear-gradient(135deg, #0f0d0a 0%, #2a7298 100%);
   display: flex; align-items: center; justify-content: center;
 }
 .pc-photo-placeholder {
@@ -1355,7 +1355,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .pc-btn-nav {
   top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.88);
-  color: #1a3a5c;
+  color: #0f0d0a;
   width: 36px; height: 36px;
   border-radius: 50%;
   font-size: 1.3rem; font-weight: 700;
@@ -1468,14 +1468,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   border-radius: 20px;
   font-size: 0.72rem; font-weight: 600;
   text-decoration: none;
-  border: 1.5px solid #1a3a5c;
-  color: #1a3a5c;
+  border: 1.5px solid #0f0d0a;
+  color: #0f0d0a;
   background: white;
   transition: all 0.15s;
   font-family: 'Inter', sans-serif;
   white-space: nowrap;
 }
-.pc-contact-pill:hover { background: #1a3a5c; color: white; }
+.pc-contact-pill:hover { background: #0f0d0a; color: white; }
 
 /* Counter (nbhd mode) */
 .pc-counter {
@@ -1563,4 +1563,4 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   align-items: center;
 }
 #nbhd-show-btn.visible { display: flex; }
-#nbhd-show-btn:hover { background: #152e4a; }
+#nbhd-show-btn:hover { background: #1a1a10; }

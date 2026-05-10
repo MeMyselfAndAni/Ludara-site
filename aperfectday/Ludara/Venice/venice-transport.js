@@ -121,7 +121,7 @@
       }
       var d = crow(places[i], p);
       return {
-        mins: Math.max(1, Math.round(d * 1.35 / 58)),
+        mins: Math.max(5, Math.round(d * 1.35 / 50)),
         distM: d,
         mode: 'walk',
       };
