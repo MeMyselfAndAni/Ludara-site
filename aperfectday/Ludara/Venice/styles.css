@@ -103,15 +103,16 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   gap: 5px;
   padding: 7px 13px;
   border-radius: 24px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
-  font-size: 0.72rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-style: italic;
   cursor: pointer;
   white-space: nowrap;
   color: var(--text2);
-  font-family: 'Inter', sans-serif;
+  font-family: 'IM Fell English', serif;
   transition: all 0.18s;
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
@@ -381,12 +382,11 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 
 /* ── Neighbourhood bubble selected state ── */
 .nbhd-bubble.nbhd-active .nbhd-ring {
-  background: linear-gradient(135deg, var(--gold) 0%, #e8a800 60%, #b8960a 100%);
-  box-shadow: 0 3px 12px rgba(184,150,10,0.45);
+  background: #d4a84b;
+  box-shadow: 0 3px 12px rgba(212,168,75,0.55);
   transform: scale(1.08);
 }
-/* "All" bubble inner — brighter so 🗺 stands out */
-#nbhd-all .nbhd-ring-inner { background: var(--gold); }
+
 .nbhd-bubble.nbhd-active .nbhd-label {
   color: var(--accent);
   font-weight: 700;
@@ -766,7 +766,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 .nbhd-ring {
   width: 58px; height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f0d0a 0%, #3a2a14 50%, #d4a84b 100%);
+  background: #d4a84b;
   padding: 2.5px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
   transition: transform 0.15s;
