@@ -1,0 +1,401 @@
+# Places needing individual hours research
+# Format: id | cat | name | note preview
+
+1	architecture	גב רחף	
+2	architecture	pilpel	Swimsuit store that Ira recommended and I once bought a lot 
+3	architecture	גוטקס - חנות הדגל	Ira recommended 
+4	eat	גרפיטי ים המלח	Kalia from the word Kalium - Potassium.  Grew around Potash 
+5	architecture	נחל פרצים	
+6	christianity	JAR Old Jaffa Artists Residency	Artist residence.
+8	eat	איתא - בית קפה וחנות. כשר	
+11	eat	Nuna - Mufleta	
+12	eat	המאפייה הבוכרית	Tradition baking techniques. Recommended by Ynet. In Shuk ha
+14	architecture	מסעדת זייתונה אבו גוש Zaytuna مطعم زيتونة ابو غوش	
+15	architecture	Ofer's Raspberry	
+16	eat	San Mai Gyoza Bar	Great gyoza bar in Carmel market
+17	architecture	הכרמל 40 hacarmel	Famous fisherman sandwich 
+18	eat	Abu Hassan	
+19	eat	הבורקס של אמא לוינסקי	
+20	eat	HaKosem	
+22	eat	Sabich Tchernikhovski	
+23	eat	במרפסת בית -קפה	Recommended.
+24	eat	Bar 22	
+25	architecture	גינת ההסתדרות	
+26	eat	SCHMEARZ BAGEL SHOP	Good bagel shop
+27	architecture	גב חלון	Beautiful view of the Dead Sea.  1-2 hour climb 
+28	eat	Kumkum Tea House	British style tea house with a great selection of sweets and
+29	eat	Shulman chocolate - Chocolate Museum Shulman	Small chocolate factory 
+30	eat	Tel Aviv-Yafo City Museum	First city hall built as a hotel but immediately became the 
+31	jesus	Razzouk Tattoo - Since 1300	Oldest family owned tattoo shop. 27 generations. From 1300, 
+33	architecture	Ein Uja	Nice stop with running spring but some say people leave garb
+34	architecture	חורשת גדעון	Nice shaded area to stop for a picnic and small pool and hik
+35	eat	גוגה קפה	עגלת קפה נחמדה
+36	eat	Ben Yehuda St 151	House of Rachel Levy, a fortune teller who was the source fo
+37	architecture	סקיי גלמפינג בוטיק	
+40	eat	Treysar	Excellent restaurant. Local fresh produce only. We sat at th
+42	architecture	Bitronot Ruhama Reserve	Amazing landscapes 
+43	architecture	בתרונות רוחמה	Amazing landscapes 
+44	eat	En Hazevah	Biblical Tamar. Dryed spring Ein Hazeva nearby. Very old Juj
+46	old_testament	Ohalo II	Prehistoric site 23,000 years ago, underwater now. Huts, fis
+48	eat	אנדרטת שיירת יחיעם	Monument to Yehiam convoy that tried delivering food and amm
+49	eat	Salty restaurant - מסעדת סולט	
+50	eat	מעיין קונדיטוריה בוטיק ביתית	
+52	architecture	עידן הפרי	Pre-schedule a visit if in the area. Dried fruit. Met at IMT
+53	eat	HaTsuk Restaurant	Saw at IMTM abd tasted apple and lemon tarts 
+54	architecture	באר מרווה	Red bloom in February
+55	architecture	Sorek Desalination Plant	
+58	christianity	Nukeib Lookout	Some Protestants believe that miracle of seines happened her
+59	jesus	Courtyard Shmueli	Recommended. Beautiful story of Sobotnik clan Christian's wh
+60	eat	מצפה אופיר	Great Kineret view
+61	king_david	Tel Erani / תל ערני	This is where nearby Ziklag was, a town where King David est
+62	christianity	Tsidonim Cave	Phoenician-Greek-Edomite burial cave. Nothing says class bet
+67	old_testament	Dolmenim	Believed to be burial constructions from the  Neolitic 8,500
+68	eat	אלקע בר - ELKA BAR	Recomended by Yalla bikes
+70	eat	Aharon Chelouche St 35	Shlomo and Rivka Abulafia house. He knew 12 languages and he
+72	christianity	Gutman Museum	He grew up right next to Migdal Shalom, his father is a writ
+73	ottoman	Shim'on Rokah St 12	One of the first Neve Tzedek houses built for low income fam
+76	eat	קפה בפטל - עגלת קפה וגלידה במרכז	
+77	eat	עגלה של קפה בית הראשונים	
+78	architecture	קטיף עצמי בית הראשונים	
+79	eat	`En Yorqe`am	Great shaded place. No springs of water here but high level 
+80	eat	J. L. Gordon St 31	Arik Ainshtein was born here. This was a house of theater ac
+81	eat	Ma'ale Ha'aqrabim	Mentioned in Tanakh in judges battle with Amorites. Also Jos
+82	eat	Har Avnon	Good viewpoint on Mahtesh haGadol. Size is 15km by 8km. Maal
+83	architecture	Tree Trunk Fossils	Originally believed to be fossilized trees, then came archeo
+84	crusaders	Giv'at HaTitora	Archeological place with remains of a structures, olive pres
+85	jesus	Cenáculo	Room of the Last Supper. Cenaculo - Upper room in Greek. Jes
+86	israeli	Kiryat Anavim Cemetery	Kyryat Anavim was the only Jewish place surrounding the road
+87	eat	Craft Pizza Bistro	Recommended kosher pizza 
+88	israeli	מגדל תצפית אש	Good place to tell Burma road story. Harel lookout.
+89	architecture	גן הדייגים	
+90	old_testament	אנדרטת השלום (ירושלים)	מיזם של המונומנט היה Aby Natan who had a ship in Mediterrane
+92	egyptian	Ammunition Hill Heritage Site	Place of a big battle with Jordanians in 1967. Paratroopers 
+94	israeli	The Knesset	120 members. Governing over 10 million people. Three branche
+95	old_testament	Menora Memorial	4.3 meters tall bronze menorah. Summarizing our 3000 years. 
+96	israeli	Yad Lalohemet Haivriya Monument	Monument to Jewish women fighters who fell in 1948 Nitzanim 
+97	christianity	Hasimta	Art shop held by the artists themselves 
+98	architecture	הגשר הקנטרה	Recommended on Facebook
+99	architecture	Arches House	
+100	eat	Herb Farm Restaurant	
+101	king_david	Tel Beit Shemesh	Probable location for the Ark if the covenant after it was p
+102	jesus	Canaan Fattal Hotel	Recommended. This place used to be a base for Palmah. Jewish
+104	king_david	British Police Station	One of Teggart fortresses from 1930th. When Brits left they 
+106	roman	Roman bath	Beginning of Roman aqueduct to Caesaria. Byzantine time Spa 
+108	eat	St Etienne	According to some tradition Stephen the first martyr was per
+110	architecture	עץ הזית והאלון	A very old olive tree
+112	eat	Maharaja	We maybe ate here
+113	eat	מאמה אינדיה	We are here or at another Indian restaurant 
+114	eat	Bialik Square	Me'ir Dizengoff lured celebrities to come live in Tel Aviv. 
+115	eat	Herzl 16	Cafe 16 in a building where first TLV elevator was built. In
+117	eat	Murano Restaurant Mi'ilya	
+118	king_david	Davidson Gardans	Nice small gardens to walk 
+123	architecture	Церковь Святого Иоанна	
+124	architecture	Храм Илии Пророка в Хайфе	
+125	christianity	Lookout and Observation Stock Mishmar Hasharon and reservoirs Emek Hefer	
+126	christianity	Mishmar HaYarden	One of the first agricultural settlements 1884 established b
+129	eat	Touma	Recommended coffee house
+131	eat	Ликёры из	Great liquor from paciflora, and various berries 
+133	architecture	גן אירועים אחוזת דוברובין	
+134	eat	Caviar Galilee	
+135	eat	Coffee Orchid Greenhouse	Recommended coffee and sandwich place 
+136	eat	Sindiana	Great restaurant we ate walking from Daliat ElKarmel to Muhr
+138	eat	Piccolino	Highly recommended Italian restaurant by a few people 
+139	eat	Bardak Pizza Bar	
+140	architecture	גבעת האשחרים	Flower Bloom place
+141	architecture	חורבת המלח	Recommended for a beautiful bloom 
+142	eat	Hummus Al Sham	Recommended by Sharon
+143	eat	Kibbutz Hatserim	Kibutz where drip irrigation was invented. Now they grow Joj
+144	eat	שחרזאד קייטרינג והפקות	Saw their great dishes on Instagram 
+145	eat	Saxum Visitor Center	Great for Cristians about Holy Labd at the time of Jesus 
+146	architecture	Kfar Hanokdim	Popular Beduin experience 
+147	architecture	Abu Shukri	Near here there is Mr Kunafa shop selling knaffe on the coal
+149	eat	Jerusalem Pottery Hagop Karakashian	Karakashian family was invited to paint abd repair Dome of t
+150	egyptian	Allenby Square	Memorial square for general Allenbi and British soldiers tha
+153	eat	Tomb shimon hatzadik	Priest who met Alexander the Great at Afek and Alexander dis
+156	crusaders	Khirbet Manot	Crusaders time sugar cane production facility
+158	eat	Tony and Esther	Have a good crack pie
+161	eat	Hadayagim	A chilling secret: after Adolf Eichman was executed by hangi
+162	architecture	Ras Irdeiha	Middle of Mahtesh Ramón heart. 
+163	old_testament	Tell es-safi	Currently believed to be the Biblical Gat, one of five Phili
+164	israeli	Givat Kobi	Sderot lookout
+165	israeli	Sdot Negev Regional Council	Shuvu volunteering tent 
+166	old_testament	Old Be'eri Nakhbir	
+170	ottoman	Saraya Building	Goverment house. Lechi operatives blew this building. On the
+171	eat	Khalil Restaurant	Recommended hummus. Try משולש
+172	eat	Eco-Kef Ecological Park, Kibbutz Lotan	Ecological community. Established by Reform Jewish youth mov
+173	eat	Deir Al-Mukhraqa Carmelite Monastery	Here prophet Elijah confronted the prophets of Baal during t
+175	king_david	Tel Mikne / Ekron עקרון	Philistine Ekron town together with Ashdod, Asklhkelon, Gaza
+176	architecture	אנדרטת הבקעה	
+179	christianity	Mount Ebal	The cursing mountain while mt Grezim is the mountain for pra
+180	jesus	Ramla	Ramla Lod in 1947 partition plan were in Arab territory. Ara
+181	crusaders	Pool of the Arches	Built by Abbasid kalif Harun Al Rashid … from the 1001 night
+183	crusaders	המסגד הגדול	Omar, second Caliph of Islam established it in mid 7th centu
+184	israeli	Haifa Port	Here the last British commissioner Sir Alan Cunningham left 
+186	architecture	Red Canyon	
+187	architecture	Amram Columns	
+189	israeli	National Institutions	Three institutions established in 1930th while British are s
+190	israeli	Mikveh Israel	Agricultural school established by Charles Netter in 1870. A
+192	jesus	Yigal Allon Centre	Ancient boat from the time of Jesus is presented here.  Jesu
+193	jesus	Bethany beyond the Jordan	Here Jesus raised Lazarus from the dead.
+196	christianity	Mosaic Centre Jericho مركز الفسيفساء أريحا	
+197	christianity	Russian Museum	Small museum describing Russian presence in the HolyLand
+199	architecture	Romantique	
+202	mary	Mary's Spring	
+203	eat	Couronne Patisserie	
+204	eat	Mercato Restaurant	
+205	eat	Talpiyot Market Historical Building	Great hip neighborhood to walk and dine
+206	eat	Horvat Midras	Great free hike along the Bar Kohva caves. 2km
+208	eat	Monument to the Fallen	Tower and stockade settlement from 1939. 10 soldiers died in
+209	roman	Promenade Rosh Hanikra	
+211	roman	Acre Ottoman Aqueduct	Salian Pasha of Ottomans built it
+212	architecture	Rabbi Aryeh Levin House	Prison Rabby. Was visiting Lehi and Ezel prisoners abd remem
+214	israeli	Mount Zion Trench	A secret passage. Used during 1948-67 when it was dangerous 
+215	ottoman	Yosef Rivlin St 6	Yosef Navon lived here at the end of the 19th century. He wa
+217	architecture	Keshet Cave	
+219	architecture	Heftziba	In the fields near kibutz a limestone tablet from year 200 B
+220	eat	Coptic Orthodox Patriarchate Jerusalem	Church of St Helen is built about a quarry which was turned 
+221	architecture	`En Yehuda	
+222	eat	Bar Bahar	Nice cafe from where 750 meters wheelchair accessible path c
+224	eat	Mandelbaum Square	Here used to be the gate connecting Mt Scopus island to west
+225	israeli	Palmach Harel Division Garden	
+226	architecture	Gan Sipur Café	
+228	old_testament	Nitzana	Nabatean trade post. Seven Byzantine churches! Was on the pi
+230	architecture	Center Ramat Negev Desert Agriculture	
+231	israeli	Monument to the Negev Brigade	Dany Karavan
+232	eat	סכר אלומות	New beautiful set of round shaped dams. Recommended coffee c
+233	eat	Shwartzman Dairy	Recommend by Anton for cheese and wine
+238	architecture	יערת הדבש מרכז מבקרים	
+239	eat	בקבוקים אלוני אבא	Coffe and wine shop
+241	eat	חוות רום | Rom Farm	Cheeses from this place branded under the name Gvinage won a
+242	architecture	Suspended Orange Tree	By Ran Morin (also in Ramat Rachel)
+243	architecture	השער המצרי	
+244	roman	Смотровая площадка	Andromeda rock 
+245	architecture	Bikta - Dan	
+247	eat	Kibbutz Misgav Am	Great view over Lebanon and coffee cart
+250	eat	מצפה	Great lookout to metuka abd other areas
+251	eat	BIG Shopping Mall	Good shopping and food mall
+253	architecture	מצפור הפילבוקס	
+255	eat	Nimrod Lookout	Great lookout to Nimrud castle 
+256	eat	Nalchik	Looks really good abd authentic 
+258	eat	Lahuhe original - Yemenite food bar	Nice authentic shop of Yemenite Lahuhe
+259	egyptian	Navi Sabalan's Tomb	New beautiful shrine but not very friendly. Did not allow en
+260	eat	Safed Candles Ltd.	Famous candles store
+261	architecture	Zion Hillel Hazaken and Students	
+262	eat	Eshkol Filtration Plant visitor center	Should be a great visitors center
+264	israeli	Sarona-HaKirya Visitors' Center	
+265	old_testament	Carmel Market	1919-23 polish Russian Jewish immigrant families arrive afte
+267	ottoman	Lilienblum St 1	First TLV cinema. Open roof. First silent movies accompanied
+268	eat	לב קפה	Inside Liebnitz house. Nice exhibitions. Good rooftop view.
+270	architecture	The Bauhaus Foundation	
+271	eat	Johanniter-Hospiz	Station 7 and 8 of the way of suffering: 7 - jesus falls for
+278	architecture	שמורת נחל צלמון	River that is now flowing thanks to the water reversal proje
+283	architecture	Dropped pin	Movie about Sderot on October 7th
+285	architecture		Place where all October 7th burned vehicles gathered 
+288	israeli	Be'eri	Kibutz that lost 102 out of 1200 members on October 7.
+294	eat	The Clock Tower	Click build by Moris Steinberg for the 25th anniversary of r
+299	christianity	Nahal Mishmar	Here in one of the caves Chalcolitic treasures were found. 4
+300	eat	Cave of Letters	Letters and documents from Bar Kohva revolt 132-36 CE archiv
+301	israeli	Beit Keshet	Settlement associated with Yits'hak Ben Zvi. His son Eli was
+306	old_testament	Mount Gerizim	Shomronim believe this is the place where all events of the 
+307	eat	Jacob's Well Greek Orthodox Church	Jacob's Well, near ancient Shechem (modern Nablus) at the fo
+308	old_testament	Ma'ale Levona	Here was a battle of Judah the Maccabee with Greeks that he 
+309	eat	Bible Hill	Hill from where one could observe all Bible event locations:
+315	eat	The Lod Mosaic Archaeological Center	Very peculiar new mosaics found in Byzantine villa in 1996. 
+318	jesus	British Military Cemetery	Largest of 6 British military cemeteries. 6000 soldiers Brit
+320	eat	Ramla Museum	Great small museum telling the story of Ramla from 700 till 
+322	israeli	Ayalon Prison	High profile security prisoners. Eichman spent time here aft
+323	israeli	Sde Dov Airport	Opened in 1938 by British for light aircrafts. Later in 1948
+324	eat	Tel Shikmona	Recently archeologist found a purple and royal blue producti
+325	architecture	Netanya	
+326	eat	מכון וינגייט - המכון הלאומי למצוינות בספורט	Named after Charles Orde Wingate, British major who grew up 
+330	eat	Dropped pin	The world's most patient mountain where people of 3 religion
+334	architecture	Ramban St 14	First house in Rehavia built in 1924 built by Eliezer Yellin
+335	jesus	Talbiya	Affluent Christian Arabs used to live here in early 20th cen
+336	architecture	Hansen House	
+338	architecture	Yad Ben Zvi	
+339	eat	Rehavia Windmill-טחנה הרוח-רחביה	Rehavia mill built by Greek Orthodox for use as a mill. Flou
+342	king_david	31°45'46.4"N 35°12'41.8"E	From here David Saltiel commanded the city defense in 1948, 
+344	eat	House of Simon the Tanner	Lighthouse built in sixties where Simon tanners house was an
+346	eat	School age	Station 1 of the jesus way of suffering. Antonia fortress st
+348	jesus	Jericho	One if the oldest towns on earth. 10,000 BCE Jesus puts to s
+349	jesus	Pool of Siloam	Jesus healed a blind person here.
+351	architecture	Bethesda	
+353	jesus	Nein	Jesus raised a widow's son from the dead here. See Luke 7:11
+359	old_testament	Hisham's Palace	Magnificent Ummyad palace reconstructed with support of Japa
+370	eat	Sammy Ofer Stadium	Great sketch caffee
+381	jesus	Katamon	1.	🏘️ Arab-Christian upscale neighborhood 	2.	🕍 Between Re
+385	eat	HaAgas 1	Hummus place where Yehud Babai family used to live. He wrote
+386	ottoman	Mahaneh Yehudah Market	Started by Arabs from Lifta in Ottoman times. Jewish sellers
+389	eat	Sergei's Courtyard	Russian compound 1860 Used to have a full wall all around: c
+390	eat	Motor House	House built for the piping motor. In the eucalyptus grove th
+393	christianity	Dropped pin	Somewhere around this point is a building with. Hospital mar
+396	ottoman	גילדה גלריה לקרמיקה	Third neighborhood outside the walls. Nahalat shiva neighbor
+397	jesus	Mamilla Cemetery	Mamila: water of God in Arabic. During Byzantine times there
+398	eat	Waldorf Astoria Jerusalem	1928-29Palace hotel  hotel   Built by Hajamin Al Hussein In 
+399	eat	Centre Mondial du Judaïsme Nord-Africain - Jerusalem	Mahane israel - second neighborhood outside the wall 1866 Bu
+401	king_david	King David Hotel	King David hotel bombing in July 22 1946 Etzel under the com
+402	eat	Yemin Moshe	Yamin Moshe neighborhood. Built in 1890th outside the city w
+403	christianity	Lions Fountain	Lions fountain  Teddy Kolik Goes to a German council and ask
+409	eat	Christian Information Center	Good museum and rooftop lookout. Holy Sepulcher model. Exper
+410	king_david	Dropped pin	Inner Citadel. Place where Allenby gave a speech in 1917. Th
+414	jesus	荆冕堂	Arch that Hadrian built around 120 CE on a place where Ponti
+416	ottoman	Sabil Abu Nabut	Built around 1815 by Abu Nabut that was brought by Ottomans 
+420	eat	Dropped pin	Famous silk shop of Bilal Abu Khalaf importing silk from Afr
+424	eat	Israel Antiquities Authority (Schottenstein National Campus for the  Archaeology of  Israel) 	Great new museum. Impressive touching exhibition about how a
+427	roman	Dropped pin	Arnona neighborhood. Jerusalem aqueducts model. 
+428	eat	Dropped pin	My Scopus lookout. Was a demili tarized Israeli island among
+429	eat	Friends of Zion Museum	Good immersive exhibit about help of Christians to Jews thro
+432	old_testament	Jerusalem Bird Observatory	Ringing station
+433	israeli	Givat Ram cemetery	They buried people here 1948-51 in wooden caskets temporaril
+435	architecture	National Library of Israel	Recently ina ugurated beautiful building with many interesti
+436	eat	מצפה רביבים ע"ש יוסף וייץ	1943 Jewish agricultural settlement in the area of Nabatean 
+440	eat	Ashalim Power Station	Actually there are three power stations. Overall they produc
+455	jesus	Nazareth Village	Village reconstructing life at time of Jesus. About 50 shek 
+460	architecture	ה"נוקטה "The "taken"	
+469	eat	Metzudat Koach	Great view 360. Nice benches on the back.  Place of a big ba
+475	eat	The Baron's Garden	Great picnic place. Baron Rothschild brought a French garden
+478	architecture	Rehaniya	Circassian village
+480	israeli	Dropped pin	Lulav Israeli post
+481	christianity	32°38'49.4"N 34°55'58.7"E	Kostya takes tourists there on the weekends 
+487	christianity	Kever Rashbi (Tomb of Rabbi…	
+490	king_david	Ben-Gurion House	On the street in front of the house is a colorful sculpture 
+493	architecture	Kerem HaTeimanim	Cool neighborhood. Established even before Ahuzat bait. Muni
+496	eat	Shalom Meir Tower	Here once stood Gymnasia Hertzelya that was the first school
+501	eat	Stefan Austrian bakery	
+503	architecture	Lions' Gate	Main Muslim gate. Not for Jewish tourists. This gate Israel 
+504	architecture	מיכלי׳ז - מותג השש בש המקורי	Design your own shesh besh backgammon 
+505	eat	דודה ברטה חנות הבית	Great store and coffee sandwiches shop of German BetEl commu
+506	architecture	Kinneret cemetery	
+508	architecture	Eucalyptus Grove of Naomi Shemer	
+509	eat	Kinneret Courtyard	Han with ppt Rachel exhibition Havat Alamot room Cafe with a
+510	architecture	Um Juni	Where Dgania started 
+511	architecture	מסעדת 1910	Excellent 
+512	eat	Rutenberg restaurant	Recommended. Upscale 
+513	israeli	נהריים בגשר	Site of the old pinchas Ruttenberg hydro power plant capture
+514	eat	Neve Schechter	Gallery and kosher coffee house open till 3pm
+515	eat	Yad Mordechai	Named after Mordehai Anielewicz commander of the uprisings i
+516	architecture	Ghetto Fighters' House Lohamei HaGeta'ot	Founded in 1949. Emphasizes Jewish resistance bravery and sp
+518	architecture	Rosh Pinna	Started as a Jewish farm 1878 Gay Oni, later Eliezer Rokah t
+519	architecture	Yesud HaMa'ala	Started as a first farm in 1872 called May Marom, later beca
+522	eat	Homa and Migdal	Great exhibition about Homa and Migdal settlements
+523	architecture	כנאפה חסוס	
+524	architecture	מחלבת אלברוס	
+526	old_testament	Ein Dor	EinDor is mentioned in the Bible. Here lived the witch that 
+528	architecture	Nahalal Cemetery	Moshe Dayan Ilan abd Asaf Ramon Meir Shalev Sara Maisler
+531	architecture	Ein Hod Artist Village	
+532	eat	Hecht Museum	Great archeology museum
+534	ottoman	Augusta Victoria Hospital	Built by the order of German Kaiser Wilhelm 2nd and named af
+535	jesus	Польская пещера	Columbarius for pigeon growing fur sacrifices and fertilizer
+537	eat	Thali Indian Restaurant	Recommended Indian restaurant, by travel group.
+538	architecture	קניון עדה	Beautiful hiking place. Military practice zone, so only on t
+541	eat	Rosh	Rosh Rehavia neighborhood. Jerusalem model of Baihaus  Therm
+542	jesus	Villa Lea	Abicarous Bay, Egyptian lawyer, Christian Arab falls in love
+544	eat	Azura	Recommended in Mahane Yehuda. Banai wrote a song about them.
+545	israeli	Hebrew Union College	Center for Reform Judaism, beautiful building designed by Mo
+546	eat	דיר חג'לה	Monastery of St Geracimus. Beautiful abd welcoming. Lion, th
+547	jesus	Beit Oliphant	Used to be a house of Olymphant  He Ein Kshatot  Came in lat
+548	christianity	Holy Shrine of the Prophet Abu Ibrahim	Cave where he dwelled.
+550	eat	הבית השרוף - The Burnt House	Museum preserving rich Jewish priestly family house at the t
+551	ottoman	Al-Qattanin St	Somewhere around there is a Cotton Market area. Built by Mam
+552	eat	Suq Al Attarin	Bustling Mamluk era market whose name means: spice sellers s
+553	eat	Church of the Holy Sepulchre	Stations 10-14 of the way of the suffering: 10 jesus is stri
+554	roman	Mazor Mausoleum	Roman 3rd century masoleum, well preserved. During Ottoman t
+555	roman	Tabor House	Residence of Conrad Schick, German Protestant missionary, ar
+557	ottoman	Rabbi Yokhanan Ben Zakai Tomb	
+558	christianity	Tomb of Rabbi Akiva	
+559	christianity	The Tomb Site of the Rambam	
+563	architecture	The Scots Hotel	Nice hotel with impressive history. Also do wine tastings.
+568	architecture	מרכז המבקרים עיריית ירושלים	Should be good view from the roof and city model in the base
+569	israeli	Bezalel Academy of Art and Design	 Bezalell art academy  Started in 1906 by the world Zionist 
+570	architecture	המעיין - אזור תעשייה מתחדש מעיין צבי. תרבות, אמנות, קיימות וקהילה	Arts passage with second hand shops, cafe abd exhibitions.
+571	eat	hof maayan zvi	Great bird watching place near the fish pools. Beach access,
+574	old_testament	Museum of Philistine Culture	Can pre reserve kids cooking activity. Locally guided tour 
+576	eat	Tmol Shilshom	Great cafe for lunch
+577	eat	HAMIFFAL‭	Great artsy place with coffee and bar
+579	ottoman	מוזיאון הסובלנות ירושלים Museum of Tolerance Jerusalem	New museum. Exhibition from dark to lightness about October 
+580	architecture	Camels' Cave	
+581	architecture	עין אמי	Beautiful water spot
+582	architecture	Bustan Khayat	A few green water pools that are good for cooling on a hot d
+583	architecture	30°27'00.0"N 34°45'00.0"E	Petroglyphs  (carved rock drawings) of ibex, sandals, humans
+584	eat	30°17'19.0"N 34°44'34.1"E	Army permit is required to access. Platoe with over 40,000 e
+585	architecture	Dropped pin	Rooftop walk entrance
+586	eat	Ancient Synagouge Rabi Akiva	Not ancient. Modern. Name for Rabbi Akiva who was martyred i
+588	roman	האובליסק בהיפודרום המזרחי, קיסריה	Hippodrome of Caesaria
+589	eat	Underground Prisoners Museum	British prison from where Etzel Lechi and Hagaba escaped in 
+590	crusaders	Municipal Museum Turkish bath	Nice Hamam museum. Included in the ticket to Knights Halls. 
+592	eat	Knights' Halls, Old Akko	Crusader place. Very  impressive. Underground, great for a h
+593	crusaders	City Wall Watchtowers	Napoleons cannons. Ottoman walls. Grass to sit on.   Island 
+594	eat	Restaurant Doniana	Recommended  Great view and food 
+595	eat	חומוס פאדי	Great place for lunch 
+596	architecture	Ein Shokek	Beautiful clear spring
+599	israeli	Bonei Yerushalayim Garden	Former armistice line, imagine trenches here, soldiers patro
+600	roman	Dropped pin	Bullet holes in the wall from the 1948-49 combat, mortar she
+601	eat	Hutzot Hayotzer Artists Colony מושבת האמנים אינה קשורה ליריד - נא לא לפנות  לחברת אריאל בנושאים הקשורים ליריד	Khinich Valley. Artists colony: studios, galleries, artisan 
+602	eat	St. Paul came down	Paulus-Haus Church with a great rooftop view and a small mus
+604	eat	St. James Cathedral Church	Inside Armenian quarter. Armenians are here for 1500 years. 
+605	christianity	Armenian Patriarchate	
+609	eat	Church of the Annunciation	Largest church in the Middle East. Different representations
+612	eat	Cana Wedding Wine	Store owned by Ghassan and Samis parents
+615	old_testament	Nabi Shu'ayb	The holiest place for Druze in israel, where Jethro - father
+617	architecture	Ein Eyov Waterfall	
+618	eat	Jasmine Cafe	Excellent international restaurant in a Druze village. Btw m
+619	eat	Neapolitan Pizza Fresca	Good Neapolitan style pizza and delicious lemon tiramisu 
+621	egyptian	Megiddo Aviation	Small airport. Yearly anemone fields. This is where Syrian p
+622	architecture	Ein Almin Ha-Ktsinim Pool	Nice pool
+623	architecture	Rujum Al-Hiri	5000 year old historical site. Three concentric circles of s
+631	architecture	Jordan River Rafting Attractions	Popular caylking site 
+632	architecture	Hermon Field School	Nice place we stayed with your group
+634	king_david	אתר הנצחה לחללי גדוד עוז 77	Memorial place. A few tanks that kids or boys could climb on
+635	eat	Al Sultan	Great hummus salads shipudim restaurant we went with a group
+636	eat	Shipudey Hakikar	The only Good place to eat in Beit Shean
+637	old_testament	Dropped pin	Izbet Sarta- Even Ezer place of a big Philistine battle wher
+638	eat	Tomb Of The Prophets	Great place to cool down during warm months. Perfect additio
+639	eat	Dominus Flevit Church	Designed by Antonio Barluzzi who was an architect of the Hol
+640	architecture	Mt of Olives	
+644	jesus	The Garden Tomb Jerusalem	Place that Protestants believe Jesus was crucified , buried 
+645	eat	Lookout porch	We are standing in front of the unique geological creation e
+646	eat	Ramon Geological Park Reserve	Acacia. - Shita in Hebrew. A queen of survival in arid natur
+648	eat	Mitzpe Ramon	While Mahtesh Ramon was formed hundreds of millions of years
+649	eat	Ammonite Wall	These creatures lived 100 million years ago. Fortunately or 
+650	eat	HaMinsara	Beautiful hexagonal rocks, black pencils. White inside.   Th
+651	roman	Dropped pin	Chain gate. Originally 7th century, rebuilt by crusaders. Ma
+652	architecture	Dropped pin	Sabil (drinking fountain) built by Kait Bay. Cairo has one o
+653	architecture	Little Western Wall	Discovered in 1970. Niche was a local toilet. We are on a hi
+655	architecture	Armon ha-Natsiv U.N Observers Headquarters	
+658	jesus	Jesus Holyland	Station 6 of the way of suffering. Veronica wipes Jesus face
+661	jesus	Saladin Boutique Hotel	Station 3 of the Jesus way of the suffering. He falls for th
+662	eat	Church of the Flagellation	Station 2 of the “ way if the suffering”. Jesus was made fun
+663	eat	מסעדת אבו כאמל Abu Kamel (Ramzi) Restaurant	Good falafel and hummus restaurant
+667	eat	Mt. Ayit Lookout	Great place to be at sunset. Top of the mountains in front i
+668	eat	Kasuy Dunes	Great place to sand sledding. Clean soft sands.
+669	christianity	Leopard Temple	Dates 6,000 BCE one of the mist ancient cultic sites in Isra
+670	architecture	Vidor Center	Small visitors center and nursery showcasing fruit and veggi
+671	architecture	Nahal Mearot Nature Preserve	Unesco world heritage site. Remains of Neanderthal men from 
+674	eat	Shlomo Columns	Many of you probably heard about a book or a movie called Ki
+675	eat	Magdalena restaurant	
+677	eat	Tibi's Restaurant	Omer Tobol recommended. Good meat place
+678	eat	Timna Park	Welcome to Timna, one of the world's geological wonders! Let
+679	king_david	David and Paula Ben Gurion gravesite	Considered day of his alyah to be his second birthday. Walke
+681	architecture	Borut sand	
+682	christianity	שמורת עברונה	Chain wells. Umayyads 7-9th century. Tech learned in Persia.
+685	king_david	Um Rush Rush	We owe Eilat to colonel Rushdi. 1906. British in Egypt and O
+687	eat	Danul cafe & bakery	Recommended coffee shop in a Circassian village. Circassian 
+688	old_testament	Ancient Tsunam	https://www.instagram.com/reel/DJHediUMqwr/?igsh=MWN6dWFnNzZ
+691	mary	Tomb of the Virgin	Orthodox, Armenian, Coptic believe Mary died and then Jesus 
+692	jesus	Gethsemane	
+695	eat	Laura of Gerasimus	Laura type of monastery where monks meet once a week to eat 
+696	eat	Prophet moses	According to Muslim tradition Moses/Musa is buried here. He 
+698	eat	Euthymius Monastery - מנזר אותימיוס	Strange location. Pre-arranged entrance via Good Samaritans.
+701	christianity	Scroll of Fire	Holocaust memorial by Nathan Rapoport. In the Forrest of Mar
+703	christianity	The Mizgaga Museum	Interesting early Zionism history of Unsuccessful bottle fac
+704	israeli	Atlit Detention Camp	British mandate time camp for holding jews arriving to the l
+707	king_david	Silwan	From City of David we can see Silwan necropolis. First templ
+708	architecture	Lachish	
+709	king_david	Tel Azekah	From here we can see the Ellah valley where the David and Go
+710	architecture	Valley of Elah	
+711	architecture	Marinado	
+712	architecture	באיי גאלי - כפר נופש מונגולי	
+713	architecture	Yardenit	Place where John the baptist baptized people.
+714	eat	David's Harp Restaurant Galilee	Shira Harpaz recommended 
+715	eat	Domus Galilaeae	Beautiful church and study center. Great library with stars 
+716	eat	Tabgha Pilgerhaus	Cafe recommended by Shira Harpaz

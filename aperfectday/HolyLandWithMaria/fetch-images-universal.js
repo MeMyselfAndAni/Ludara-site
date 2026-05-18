@@ -92,7 +92,7 @@ function translate(text, targetLang) {
 function searchWikimedia(query, limit) {
   return new Promise((resolve) => {
     const timer = setTimeout(() => resolve([]), 8000);
-    const q = encodeURIComponent('filetype:bitmap ' + query);
+    const q = encodeURIComponent(query);
     const url = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search'
       + '&gsrsearch=' + q + '&gsrnamespace=6&gsrlimit=' + limit
       + '&prop=imageinfo&iiprop=url&iiurlwidth=1200&format=json';
@@ -243,21 +243,31 @@ async function fetchPlace(place) {
     console.log('not found');
   }
 
-  // Stage 2: Wikimedia — exact name in English + Hebrew (if Hebrew name or translated)
+  // Stage 2: Wikimedia — try English, English+Israel, Hebrew translation, Hebrew+ישראל
   const queries = [];
-  queries.push(place.name);                          // exact name as-is
-  if (!isHebrew(place.name)) {
-    // English name: also try with country for disambiguation
-    queries.push(place.name + ' Israel');
-  } else {
-    // Hebrew name: also try translated to English for better Wikimedia coverage
+  if (isHebrew(place.name)) {
+    // Hebrew name: search Hebrew first, then translate to English
+    queries.push(place.name);
+    queries.push(place.name + ' ישראל');
     const english = await translate(place.name, 'en');
-    if (english && english !== place.name) queries.push(english + ' Israel');
+    if (english && english !== place.name) {
+      queries.push(english);
+      queries.push(english + ' Israel');
+    }
+  } else {
+    // English name: search English first, then translate to Hebrew
+    queries.push(place.name);
+    queries.push(place.name + ' Israel');
+    const hebrew = await translate(place.name, 'he');
+    if (hebrew && hebrew !== place.name) {
+      queries.push(hebrew);
+      queries.push(hebrew + ' ישראל');
+    }
   }
 
   for (const query of queries) {
     process.stdout.write('  → Wikimedia "' + query.slice(0, 45) + '"... ');
-    const urls = await searchWikimedia(query, 3);   // top 3 only
+    const urls = await searchWikimedia(query, 5);   // top 5 results
     if (!urls.length) { console.log('0 results'); continue; }
 
     let found = false;
@@ -336,7 +346,7 @@ async function run() {
   console.log('══════════════════════════════════════════════════');
   console.log('  Places:   ' + PLACES.length);
   console.log('  Verify:   ' + (API_KEY ? '✅ Claude vision active' : '⚠️  no API key — first result accepted'));
-  console.log('  Strategy: exact name → Wikimedia (top 3) → skip');
+  console.log('  Strategy: English → English+Israel → Hebrew → Hebrew+ישראל → Wikimedia (top 5)');
   console.log('  Manual:   drop your photo as images/place-N.jpg');
   if (SKIP_IDS.length) console.log('  Skipping: ' + SKIP_IDS.join(', '));
   console.log('──────────────────────────────────────────────────');
