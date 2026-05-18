@@ -22,7 +22,6 @@ const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
-  'mary':          '#7b5ea7',   // sacred purple — Virgin Mary sites
   'jesus':         '#c04a2a',   // deep red — Jesus sites
   'king_david':    '#d4a043',   // royal gold — King David sites
   'herod':         '#8b5c2a',   // stone brown — Herodian period
@@ -44,7 +43,6 @@ const CC = {
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'mary':          'Mary',
   'jesus':         'Jesus',
   'king_david':    'King David',
   'herod':         'Herod',
