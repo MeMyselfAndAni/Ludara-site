@@ -1,6 +1,6 @@
 // A Perfect Day — Holy Land with Maria
 // map.js — guide-specific config
-// v1 — May 2026: Maria Lando's personal 715-place Holy Land collection
+// v2 — May 2026: Maria Lando's personal Holy Land collection (place count from data.js)
 //
 // 14 categories: Mary · Jesus · King David · Herod · Egyptian · Roman ·
 //                Christianity · Old Testament · Ottoman · Crusaders ·
@@ -35,7 +35,11 @@ const CC = {
   'israeli':       '#3a8060',   // modern teal — modern Israeli sites
   'architecture':  '#5a5a80',   // stone blue-grey — notable architecture
   'eat':           '#8b5080',   // deep plum — restaurants and food
+  'cafe':          '#8b6914',   // coffee brown — cafes and coffee houses
+  'street_food':   '#c05a20',   // warm orange — street food
   'wineries':      '#6a2a50',   // wine burgundy — wineries
+  'nature':        '#2e8b57',   // forest green — nature and outdoors
+  'unesco':        '#1a7fa0',   // UNESCO teal
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
@@ -53,7 +57,11 @@ const CL = {
   'israeli':       'Israeli',
   'architecture':  'Architecture',
   'eat':           'Eat',
+  'cafe':          'Cafe',
+  'street_food':   'Street Food',
   'wineries':      'Wineries',
+  'nature':        'Nature',
+  'unesco':        'UNESCO',
 };
 
 // ─── Region colours ───────────────────────────────────────────────────────────
@@ -114,6 +122,58 @@ function assignRegion(lat, lng) {
   if (lat < 31.30) return 'negev';
   // Default fallback
   return 'jerusalem';
+}
+
+// ─── Neighbourhood circles — country-scale override ──────────────────────────
+// map-core.js caps places at 5 km from the approximate centre (fine for a city-
+// island like Venice, fatal for Israeli regions that span 50–300 km).
+// This override is loaded after map-core.js and replaces its buildNbhdCircles.
+
+// Per-region radius bounds (metres) — reflect actual geographic extent of each region.
+// Min ensures small datasets still show a meaningful circle; max prevents outlier places
+// from inflating a circle beyond the region's real boundaries.
+const NBHD_MIN_RADIUS = {
+  'jerusalem':    35000,   // Jerusalem metro area
+  'galilee':      55000,   // Lower + Upper Galilee
+  'golan':        25000,   // Golan Heights
+  'coastal':      80000,   // Tel Aviv–Haifa coastal strip
+  'dead_sea':     45000,   // Dead Sea corridor
+  'negev':        80000,   // Negev Desert
+  'judean_hills': 35000,   // Judean foothills + West Bank ridge
+  'jordan_valley':50000,   // Jordan Valley
+};
+const NBHD_MAX_RADIUS = {
+  'jerusalem':    55000,
+  'galilee':      70000,
+  'golan':        40000,
+  'coastal':     100000,
+  'dead_sea':     60000,
+  'negev':       100000,
+  'judean_hills': 45000,
+  'jordan_valley':60000,
+};
+
+function buildNbhdCircles() {
+  const circles = [];
+  for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
+    const approxCenter = NBHD_APPROX_CENTERS[nbhd];
+    const ps = PLACES.filter(p => p.nbhd === nbhd);
+
+    if (ps.length === 0) {
+      circles.push({ id: nbhd, lat: approxCenter.lat, lng: approxCenter.lng,
+                     radius: NBHD_MIN_RADIUS[nbhd] || 20000, color });
+    } else {
+      const clat = ps.reduce((s, p) => s + p.lat, 0) / ps.length;
+      const clng = ps.reduce((s, p) => s + p.lng, 0) / ps.length;
+      const maxDist = Math.max(...ps.map(p => _haversineM({ lat: clat, lng: clng }, p)));
+      const raw    = maxDist * 1.25;
+      const minR   = NBHD_MIN_RADIUS[nbhd] || 20000;
+      const maxR   = NBHD_MAX_RADIUS[nbhd] || 100000;
+      const radius = Math.min(Math.max(raw, minR), maxR);
+      circles.push({ id: nbhd, lat: clat, lng: clng, radius, color });
+    }
+  }
+  return circles;
 }
 
 // ─── Map initialisation ───────────────────────────────────────────────────────

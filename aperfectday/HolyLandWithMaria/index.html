@@ -230,9 +230,13 @@
   <button class="pill" onclick="fc(this,'ottoman')"><span class="dot" style="background:#c04a60"></span>Ottoman</button>
   <button class="pill" onclick="fc(this,'crusaders')"><span class="dot" style="background:#607060"></span>Crusaders</button>
   <button class="pill" onclick="fc(this,'israeli')"><span class="dot" style="background:#3a8060"></span>Israeli</button>
+  <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#2e8b57"></span>Nature</button>
   <button class="pill" onclick="fc(this,'architecture')"><span class="dot" style="background:#5a5a80"></span>Architecture</button>
   <button class="pill" onclick="fc(this,'eat')"><span class="dot" style="background:#8b5080"></span>Eat</button>
+  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6914"></span>Cafe</button>
+  <button class="pill" onclick="fc(this,'street_food')"><span class="dot" style="background:#c05a20"></span>Street Food</button>
   <button class="pill" onclick="fc(this,'wineries')"><span class="dot" style="background:#6a2a50"></span>Wineries</button>
+  <button class="pill" onclick="fc(this,'unesco')"><span class="dot" style="background:#1a7fa0"></span>UNESCO</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
@@ -411,6 +415,21 @@
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
+<script>
+// Update all place-count displays from PLACES.length — never hard-code again
+(function() {
+  var n = PLACES.length;
+  var splash = document.querySelector('.splash-subtitle');
+  if (splash) splash.textContent = n + ' Places · A Personal Map';
+  var hdr = document.querySelector('.header-sub');
+  if (hdr) hdr.innerHTML = n + ' personal picks<span class="header-sub-by"> · by Ludara</span>';
+  ['list-badge','list-badge-desktop','desktop-list-count'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.textContent = n;
+  });
+  var st = document.getElementById('sheet-title');
+  if (st) st.textContent = n + ' Places';
+})();
+</script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script><!-- MUST be before map.js -->
 <script src="map.js"></script>
