@@ -88,7 +88,32 @@ function translate(text, targetLang) {
   });
 }
 
-// ── WIKIMEDIA SEARCH — top N results ─────────────────────────────
+// ── WIKIPEDIA PAGE THUMBNAIL (primary — most reliable) ───────────
+function fetchWikipediaThumb(title, lang) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), 8000);
+    const t = encodeURIComponent(title);
+    const host = (lang || 'en') + '.wikipedia.org';
+    const path = '/w/api.php?action=query&titles=' + t
+      + '&prop=pageimages&pithumbsize=1200&pilicense=any&format=json&redirects=1';
+    https.get({ hostname: host, path, headers: { 'User-Agent': 'APerfectDayGuide/1.0 (ludara.ai)' } }, (res) => {
+      let d = '';
+      res.on('data', c => d += c);
+      res.on('end', () => {
+        clearTimeout(timer);
+        try {
+          const pages = JSON.parse(d)?.query?.pages;
+          if (!pages) return resolve(null);
+          const page = Object.values(pages)[0];
+          const url = page?.thumbnail?.source || null;
+          resolve(url && !url.match(/\.(svg|gif)/i) ? url : null);
+        } catch(e) { resolve(null); }
+      });
+    }).on('error', () => { clearTimeout(timer); resolve(null); });
+  });
+}
+
+// ── WIKIMEDIA COMMONS SEARCH — fallback ──────────────────────────
 function searchWikimedia(query, limit) {
   return new Promise((resolve) => {
     const timer = setTimeout(() => resolve([]), 8000);
@@ -243,31 +268,68 @@ async function fetchPlace(place) {
     console.log('not found');
   }
 
-  // Stage 2: Wikimedia — try English, English+Israel, Hebrew translation, Hebrew+ישראל
-  const queries = [];
+  // Resolve English name once (used for Wikipedia lookups + verify)
+  let englishName = place.name;
+  let hebrewName  = null;
   if (isHebrew(place.name)) {
-    // Hebrew name: search Hebrew first, then translate to English
-    queries.push(place.name);
-    queries.push(place.name + ' ישראל');
-    const english = await translate(place.name, 'en');
-    if (english && english !== place.name) {
-      queries.push(english);
-      queries.push(english + ' Israel');
-    }
+    const en = await translate(place.name, 'en');
+    if (en && en !== place.name) englishName = en;
   } else {
-    // English name: search English first, then translate to Hebrew
-    queries.push(place.name);
-    queries.push(place.name + ' Israel');
-    const hebrew = await translate(place.name, 'he');
-    if (hebrew && hebrew !== place.name) {
-      queries.push(hebrew);
-      queries.push(hebrew + ' ישראל');
+    const he = await translate(place.name, 'he');
+    if (he && he !== place.name) hebrewName = he;
+  }
+  const verifyName = englishName;
+
+  // Stage 2a: Wikipedia page thumbnail — en, then he
+  const wikiTitles = [englishName, place.name + ' Israel'];
+  if (hebrewName) wikiTitles.push(hebrewName);
+  for (const title of wikiTitles) {
+    process.stdout.write('  → Wikipedia "' + title.slice(0, 45) + '"... ');
+    const imgUrl = await fetchWikipediaThumb(title, 'en');
+    if (!imgUrl) { console.log('not found'); continue; }
+    const ok = await download(imgUrl, tmp, 3);
+    if (!ok) { console.log('download failed'); continue; }
+    process.stdout.write('verifying... ');
+    const match = await verifyImage(tmp, verifyName);
+    if (match) {
+      try { fs.renameSync(tmp, dest); }
+      catch(e) { fs.copyFileSync(tmp, dest); fs.unlink(tmp, () => {}); }
+      const kb = Math.round(fs.statSync(dest).size / 1024);
+      console.log('✅ ' + kb + 'KB\n');
+      return true;
     }
+    fs.unlink(tmp, () => {});
+    console.log('mismatch');
+  }
+  // Also try Hebrew Wikipedia
+  if (isHebrew(place.name)) {
+    process.stdout.write('  → Wikipedia HE "' + place.name.slice(0, 45) + '"... ');
+    const imgUrl = await fetchWikipediaThumb(place.name, 'he');
+    if (imgUrl) {
+      const ok = await download(imgUrl, tmp, 3);
+      if (ok) {
+        const match = await verifyImage(tmp, verifyName);
+        if (match) {
+          try { fs.renameSync(tmp, dest); }
+          catch(e) { fs.copyFileSync(tmp, dest); fs.unlink(tmp, () => {}); }
+          const kb = Math.round(fs.statSync(dest).size / 1024);
+          console.log('✅ ' + kb + 'KB\n');
+          return true;
+        }
+        fs.unlink(tmp, () => {});
+        console.log('mismatch');
+      } else { console.log('download failed'); }
+    } else { console.log('not found'); }
   }
 
+  // Stage 2b: Wikimedia Commons search — fallback
+  const queries = [englishName, englishName + ' Israel'];
+  if (isHebrew(place.name)) { queries.push(place.name); queries.push(place.name + ' ישראל'); }
+  if (hebrewName)            { queries.push(hebrewName); }
+
   for (const query of queries) {
-    process.stdout.write('  → Wikimedia "' + query.slice(0, 45) + '"... ');
-    const urls = await searchWikimedia(query, 5);   // top 5 results
+    process.stdout.write('  → Commons "' + query.slice(0, 45) + '"... ');
+    const urls = await searchWikimedia(query, 5);
     if (!urls.length) { console.log('0 results'); continue; }
 
     let found = false;
@@ -275,7 +337,7 @@ async function fetchPlace(place) {
       const ok = await download(urls[i], tmp, 3);
       if (!ok) continue;
       process.stdout.write('checking #' + (i+1) + '... ');
-      const match = await verifyImage(tmp, place.name);
+      const match = await verifyImage(tmp, verifyName);
       if (match) {
         try { fs.renameSync(tmp, dest); }
         catch(e) { fs.copyFileSync(tmp, dest); fs.unlink(tmp, () => {}); }
