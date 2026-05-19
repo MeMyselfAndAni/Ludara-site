@@ -25,7 +25,6 @@ const CC = {
   'jesus':         '#c04a2a',   // deep red — Jesus sites
   'king_david':    '#d4a043',   // royal gold — King David sites
   'herod':         '#8b5c2a',   // stone brown — Herodian period
-  'egyptian':      '#b08020',   // Egyptian gold — ancient Egypt influence
   'roman':         '#708090',   // Roman stone — Roman period
   'christianity':  '#4a7ab0',   // Byzantine blue — Christian sites (general)
   'old_testament': '#6b8e4e',   // ancient olive — Old Testament sites
@@ -46,7 +45,6 @@ const CL = {
   'jesus':         'Jesus',
   'king_david':    'King David',
   'herod':         'Herod',
-  'egyptian':      'Egyptian',
   'roman':         'Roman',
   'christianity':  'Christianity',
   'old_testament': 'Old Testament',
