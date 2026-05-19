@@ -171,6 +171,24 @@
   }
   .splash-footer a { color: #d4a84b; text-decoration: none; font-weight: 700; }
   .splash-footer a:hover { color: #d4a84b; }
+
+  /* ── Two-row filter bar ── */
+  .filter-bar-two-rows {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 5px 8px 3px !important;
+    row-gap: 4px !important;
+    align-content: flex-start !important;
+  }
+  .filter-bar-break {
+    width: 100% !important;
+    height: 0 !important;
+    flex-basis: 100% !important;
+    flex-shrink: 0 !important;
+  }
 </style>
 </head>
 <body>
@@ -215,27 +233,33 @@
   <a class="header-btn" href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai ↗</a>
 </header>
 
-<!-- Filter bar -->
-<div class="filter-bar">
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
-  <button class="pill" onclick="fc(this,'jesus')"><span class="dot" style="background:#c04a2a"></span>Jesus</button>
-  <button class="pill" onclick="fc(this,'king_david')"><span class="dot" style="background:#d4a043"></span>King David</button>
-  <button class="pill" onclick="fc(this,'herod')"><span class="dot" style="background:#8b5c2a"></span>Herod</button>
-  <button class="pill" onclick="fc(this,'roman')"><span class="dot" style="background:#708090"></span>Roman</button>
-  <button class="pill" onclick="fc(this,'christianity')"><span class="dot" style="background:#4a7ab0"></span>Christianity</button>
-  <button class="pill" onclick="fc(this,'old_testament')"><span class="dot" style="background:#6b8e4e"></span>Old Testament</button>
-  <button class="pill" onclick="fc(this,'ottoman')"><span class="dot" style="background:#c04a60"></span>Ottoman</button>
-  <button class="pill" onclick="fc(this,'crusaders')"><span class="dot" style="background:#607060"></span>Crusaders</button>
-  <button class="pill" onclick="fc(this,'israeli')"><span class="dot" style="background:#3a8060"></span>Israeli</button>
-  <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#2e8b57"></span>Nature</button>
-  <button class="pill" onclick="fc(this,'architecture')"><span class="dot" style="background:#5a5a80"></span>Architecture</button>
-  <button class="pill" onclick="fc(this,'eat')"><span class="dot" style="background:#8b5080"></span>Eat</button>
-  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6914"></span>Cafe</button>
-  <button class="pill" onclick="fc(this,'street_food')"><span class="dot" style="background:#c05a20"></span>Street Food</button>
-  <button class="pill" onclick="fc(this,'wineries')"><span class="dot" style="background:#6a2a50"></span>Wineries</button>
-  <button class="pill" onclick="fc(this,'unesco')"><span class="dot" style="background:#1a7fa0"></span>UNESCO</button>
-  <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
+<!-- Filter bar — two rows -->
+<div class="filter-bar" id="filter-bar" style="display:flex!important;flex-direction:column!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:4px 0 2px!important;gap:0!important;">
+  <!-- Row 1: Saved + History & Religion -->
+  <div style="display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 8px 3px;gap:6px;align-items:center;">
+    <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+    <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
+    <button class="pill" onclick="fc(this,'jesus')"><span class="dot" style="background:#c04a2a"></span>Jesus</button>
+    <button class="pill" onclick="fc(this,'king_david')"><span class="dot" style="background:#d4a043"></span>King David</button>
+    <button class="pill" onclick="fc(this,'herod')"><span class="dot" style="background:#8b5c2a"></span>Herod</button>
+    <button class="pill" onclick="fc(this,'roman')"><span class="dot" style="background:#708090"></span>Roman</button>
+    <button class="pill" onclick="fc(this,'christianity')"><span class="dot" style="background:#4a7ab0"></span>Christianity</button>
+    <button class="pill" onclick="fc(this,'old_testament')"><span class="dot" style="background:#6b8e4e"></span>Old Testament</button>
+    <button class="pill" onclick="fc(this,'ottoman')"><span class="dot" style="background:#c04a60"></span>Ottoman</button>
+    <button class="pill" onclick="fc(this,'crusaders')"><span class="dot" style="background:#607060"></span>Crusaders</button>
+  </div>
+  <!-- Row 2: Modern & Practical -->
+  <div style="display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 8px 2px;gap:6px;align-items:center;">
+    <button class="pill" onclick="fc(this,'israeli')"><span class="dot" style="background:#3a8060"></span>Israeli</button>
+    <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#2e8b57"></span>Nature</button>
+    <button class="pill" onclick="fc(this,'architecture')"><span class="dot" style="background:#5a5a80"></span>Architecture</button>
+    <button class="pill" onclick="fc(this,'eat')"><span class="dot" style="background:#8b5080"></span>Good Eats</button>
+    <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6914"></span>Cafe</button>
+    <button class="pill" onclick="fc(this,'street_food')"><span class="dot" style="background:#c05a20"></span>Street Food</button>
+    <button class="pill" onclick="fc(this,'wineries')"><span class="dot" style="background:#6a2a50"></span>Wineries</button>
+    <button class="pill" onclick="fc(this,'unesco')"><span class="dot" style="background:#1a7fa0"></span>UNESCO</button>
+    <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
+  </div>
 </div>
 
 <!-- Map -->

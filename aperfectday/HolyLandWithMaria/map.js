@@ -52,7 +52,7 @@ const CL = {
   'crusaders':     'Crusaders',
   'israeli':       'Israeli',
   'architecture':  'Architecture',
-  'eat':           'Eat',
+  'eat':           'Good Eats',
   'cafe':          'Cafe',
   'street_food':   'Street Food',
   'wineries':      'Wineries',
