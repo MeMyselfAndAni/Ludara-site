@@ -661,6 +661,107 @@ function clearAllSaved() {
     if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
     var btn=document.getElementById('sheet-clear-btn');
     if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
+    setTimeout(function(){
+      if(typeof favourites!=='undefined'&&favourites.length>0){
+        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
+        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
+      }
+    },200);
+  };
+})();
+</script>
+
+<!-- Brand color for map route line and numbered markers -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#c04a2a';
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) {
+      map.setPaintProperty('trip-route-line', 'line-color', brand);
+    }
+  };
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = [
+        'width:26px','height:26px','border-radius:50%',
+        'background:' + brand,
+        'border:2.5px solid white',
+        'color:white','font-size:0.68rem','font-weight:700',
+        'display:flex','align-items:center','justify-content:center',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.35)',
+        'font-family:sans-serif',
+        'z-index:' + (9000 + i)
+      ].join(';');
+      el.textContent = i + 1;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function() {
+        if (typeof openDetail === 'function') openDetail(p.id);
+      });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([p.lng, p.lat]).addTo(map);
+      tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- Mobile UX: full-card swipe to navigate + sheet pull-down to close (mobile only) -->
+<script>
+(function(){
+  // Swipe left/right anywhere on the card to go to prev/next place
+  var card = document.getElementById('place-card');
+  if (card) {
+    var swipeX = 0, swipeY = 0;
+    card.addEventListener('touchstart', function(e) {
+      swipeX = e.touches[0].clientX;
+      swipeY = e.touches[0].clientY;
+    }, { passive: true });
+    card.addEventListener('touchend', function(e) {
+      if (window.innerWidth >= 768) return;
+      var dx = e.changedTouches[0].clientX - swipeX;
+      var dy = e.changedTouches[0].clientY - swipeY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx < 0 && typeof cardNext === 'function') cardNext();
+        else if (dx > 0 && typeof cardPrev === 'function') cardPrev();
+      }
+    }, { passive: true });
+  }
+  // Swipe the sheet handle down to close the list
+  var handle = document.querySelector('.sheet-handle-area');
+  if (handle) {
+    var hY = 0, hX = 0;
+    handle.addEventListener('touchstart', function(e) {
+      hY = e.touches[0].clientY;
+      hX = e.touches[0].clientX;
+    }, { passive: true });
+    handle.addEventListener('touchend', function(e) {
+      if (window.innerWidth >= 768) return;
+      var dy = e.changedTouches[0].clientY - hY;
+      var dx = e.changedTouches[0].clientX - hX;
+      if (dy > 60 && Math.abs(dy) > Math.abs(dx)) {
+        if (typeof closeSheet === 'function') closeSheet();
+      }
+    }, { passive: true });
+  }
+})();
+</script>
+
+</body>
+</html>
+    var pill=document.getElementById('pill-saved');
+    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
+    var btn=document.getElementById('sheet-clear-btn');
+    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
   };
 })();
 </script>
