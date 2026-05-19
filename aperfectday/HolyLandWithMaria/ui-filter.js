@@ -565,4 +565,19 @@ if(typeof document !== 'undefined'){
     // Wait for sheet to be ready
     var tries = 0;
     var interval = setInterval(function(){
-      if(document.getEle
+      if(document.getElementById('sheet-title') || tries++ > 20){
+        clearInterval(interval);
+        _initSearch();
+      }
+    }, 200);
+
+    // Re-apply distance badges whenever the list re-renders
+    var _listEl = document.getElementById('places-list');
+    if (_listEl) {
+      var _distObserver = new MutationObserver(function() {
+        if (window._userLat) updateListDistances();
+      });
+      _distObserver.observe(_listEl, { childList: true });
+    }
+  });
+}
