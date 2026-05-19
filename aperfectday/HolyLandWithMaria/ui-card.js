@@ -360,20 +360,40 @@ document.addEventListener('keydown', e => {
 })();
 
 
-// ── Swipe left/right on photo to navigate cards (mobile) ────
+// ── Swipe left/right anywhere on card to navigate (mobile only) ────
 (function(){
-  var wrap = document.getElementById('pc-photo-wrap');
-  if (!wrap) return;
+  var card = document.getElementById('place-card');
+  if (!card) return;
   var touchStartX = 0, touchStartY = 0;
-  wrap.addEventListener('touchstart', function(e) {
+  card.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
-  wrap.addEventListener('touchend', function(e) {
+  card.addEventListener('touchend', function(e) {
+    if (window.innerWidth >= 768) return; // desktop: photo drag handles navigation
     var dx = e.changedTouches[0].clientX - touchStartX;
     var dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       if (dx < 0) { cardNext(); } else { cardPrev(); }
+    }
+  }, { passive: true });
+})();
+
+// ── Swipe sheet handle down to close list (mobile only) ───────
+(function(){
+  var handle = document.querySelector('.sheet-handle-area');
+  if (!handle) return;
+  var startY = 0, startX = 0;
+  handle.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+  handle.addEventListener('touchend', function(e) {
+    if (window.innerWidth >= 768) return;
+    var dy = e.changedTouches[0].clientY - startY;
+    var dx = e.changedTouches[0].clientX - startX;
+    if (dy > 60 && Math.abs(dy) > Math.abs(dx)) {
+      if (typeof closeSheet === 'function') closeSheet();
     }
   }, { passive: true });
 })();
@@ -402,29 +422,4 @@ document.addEventListener('keydown', e => {
     dragging = true;
     card.style.cursor = 'grabbing';
     document.body.style.userSelect = 'none';
-    e.preventDefault();
-  }
-  function doDrag(e){
-    if(!dragging) return;
-    const dx = e.clientX - startMouseX;
-    const dy = e.clientY - startMouseY;
-    let nx = startCardX + dx;
-    let ny = startCardY + dy;
-    nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  nx));
-    ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, ny));
-    card.style.left = nx + 'px';
-    card.style.top  = ny + 'px';
-  }
-  function endDrag(){
-    if(!dragging) return;
-    dragging = false;
-    card.style.cursor = '';
-    document.body.style.userSelect = '';
-  }
-
-  handle.addEventListener('mousedown', startDrag);
-  document.addEventListener('mousemove', doDrag);
-  document.addEventListener('mouseup',   endDrag);
-})();
-
-// (card position reset happens in closePlaceCard)
+  
