@@ -86,7 +86,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── HH FULL LOCKUP LOGO ── */
 .hh-logo-full {
-  height: 150px;
+  height: 100px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 152px; left: 0; right: 0;
+  top: 102px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -424,7 +424,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     scrollbar-width: none;
     z-index: 410;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
-    align-items: center;
+    align-items: flex-start;
   }
   #nbhd-bar::-webkit-scrollbar { display: none; }
 
