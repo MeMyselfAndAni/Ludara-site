@@ -39,7 +39,7 @@ header {
   position: absolute;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 4px 16px 4px;
+  padding: 0 16px;
   background: linear-gradient(-45deg, #1c130c, #31261d, #3d2f22, #251b12, #2c2016, #150e08);
   background-size: 400% 400%;
   animation: headerFlow 10s ease infinite;
@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 160px; left: 0; right: 0;
+  top: 152px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -460,7 +460,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   /* ── Browse all places: horizontal pill, top-right under filter bar ── */
   .list-toggle {
-    top: 132px !important;
+    top: 120px !important;
     right: 8px !important;
     bottom: auto !important;
     left: auto !important;
@@ -1158,7 +1158,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 @media (max-width: 767px) {
   /* ── Mobile header: compact ── */
   header {
-    padding: 4px 12px 4px;
+    padding: 0 12px;
     flex-wrap: wrap;
     gap: 2px;
     align-items: center;
@@ -1227,7 +1227,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
 
   /* Filter bar just below the header */
-  .filter-bar { top: 86px; }   /* flush under compact mobile header */
+  .filter-bar { top: 76px; }   /* flush under compact mobile header */
 
   /* Hide Ludara footer inside list panel — reclaim vertical space on mobile */
   .list-footer-brand { display: none; }
