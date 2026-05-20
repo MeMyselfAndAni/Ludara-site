@@ -86,7 +86,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── HH FULL LOCKUP LOGO ── */
 .hh-logo-full {
-  height: 64px;
+  height: 80px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 96px; left: 0; right: 0;
+  top: 110px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -430,7 +430,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   /* Override ALL base bubble/ring sizing for mobile */
   #nbhd-bar .nbhd-ring {
-    width: 36px; height: 36px;
+    width: 48px; height: 48px;
     padding: 2px;
   }
   #nbhd-bar .nbhd-ring-inner { font-size: 1.1rem; border-width: 2px; }
@@ -743,8 +743,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .splash.hidden { display: none; }
 
 /* ── OPEN NOW PILL ── */
-.pill-opennow { border-color: #2e7d32; color: #2e7d32; }
-.pill-opennow.active { background: #2e7d32; border-color: #2e7d32; color: white; }
+.pill-opennow { border-color: #802f2d; color: white; }
+.pill-opennow.active { background: #802f2d; border-color: #802f2d; color: white; }
 
 /* ── SELECTED PIN PULSE ── */
 #pin-pulse {
@@ -1155,13 +1155,16 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* Hide on very small screens */
 @media (max-width: 767px) {
-  /* ── Mobile header: compact 2-row layout ── */
+  /* ── Mobile header: compact ── */
   header {
     padding: 6px 12px 7px;
     flex-wrap: wrap;
     gap: 2px;
     align-items: center;
   }
+  .hh-logo-full { height: 52px; }   /* smaller logo on mobile */
+  .splash-hotel-desc { display: none; }   /* hide hotel blurb on mobile splash */
+  .splash-divider { display: none; }
   /* Row 1: blogger logo (left) + Blog button (right) */
   .header-title {
     gap: 8px;
@@ -1223,7 +1226,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   }
 
   /* Filter bar just below the header */
-  .filter-bar { top: 54px; }   /* flush under compact mobile header */
+  .filter-bar { top: 68px; }   /* flush under compact mobile header */
+
+  /* Hide Ludara footer inside list panel — reclaim vertical space on mobile */
+  .list-footer-brand { display: none; }
 }
 
 /* List panel — sticky footer */
