@@ -86,7 +86,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── HH FULL LOCKUP LOGO ── */
 .hh-logo-full {
-  height: 48px;
+  height: 64px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 82px; left: 0; right: 0;
+  top: 96px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -119,20 +119,20 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   gap: 5px;
   padding: 7px 13px;
   border-radius: 24px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(136,136,141,0.35);
+  background: rgba(136,136,141,0.80);
   backdrop-filter: blur(12px);
   font-size: 0.72rem;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  color: var(--text2);
+  color: white;
   font-family: 'Inter', sans-serif;
   transition: all 0.18s;
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-.pill:hover { border-color: var(--text3); color: var(--text); }
+.pill:hover { background: rgba(136,136,141,0.97); border-color: rgba(136,136,141,0.6); color: white; }
 .pill.active {
   background: var(--accent);
   border-color: var(--accent);
@@ -387,7 +387,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.55);
+  color: rgba(49,38,29,0.80);
   pointer-events: none;
   z-index: 412;
   bottom: 80px;
@@ -430,7 +430,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   /* Override ALL base bubble/ring sizing for mobile */
   #nbhd-bar .nbhd-ring {
-    width: 48px; height: 48px;
+    width: 36px; height: 36px;
     padding: 2px;
   }
   #nbhd-bar .nbhd-ring-inner { font-size: 1.1rem; border-width: 2px; }
@@ -576,8 +576,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
-  .nbhd-ring { width: 52px; height: 52px; }
-  .nbhd-ring-inner { font-size: 1.25rem; }
+  .nbhd-ring { width: 40px; height: 40px; }
+  .nbhd-ring-inner { font-size: 1.0rem; }
   .nbhd-label { font-size: 0.60rem; }
   .nbhd-bubble { gap: 3px; }
 
@@ -692,8 +692,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .splash-logo-row { margin-bottom: 8px; }
 .splash-hh-logo {
-  height: 90px;
+  height: 130px;
   width: auto;
+  max-width: 380px;
   display: block;
 }
 .splash-hotel-desc {
@@ -772,7 +773,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   align-items: center;
   flex-wrap: nowrap;
   gap: 0;
-  padding: 4px 10px 6px;
+  padding: 2px 8px 4px;
   overflow: visible;
   background: #31261d;
 }
@@ -793,7 +794,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   user-select: none;
 }
 .nbhd-ring {
-  width: 58px; height: 58px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, #c1c6c8 0%, #88888d 100%);
   border: 2px solid rgba(255,255,255,0.30);
