@@ -673,56 +673,71 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: linear-gradient(160deg, #fdf6e3 0%, #f5e6b8 50%, #f0d890 100%);
+  background: linear-gradient(-45deg, #1c130c, #31261d, #3d2f22, #251b12, #2c2016, #150e08);
+  background-size: 400% 400%;
+  animation: headerFlow 12s ease infinite;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
 }
 .splash-inner {
-  max-width: 460px;
+  max-width: 480px;
   width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
-.splash-logo-row { margin-bottom: 4px; }
-.splash-title {
+.splash-logo-row { margin-bottom: 8px; }
+.splash-hh-logo {
+  height: 90px;
+  width: auto;
+  display: block;
+}
+.splash-hotel-desc {
   font-family: 'Playfair Display', serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #0f1a2e;
-  line-height: 1.1;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.90);
+  line-height: 1.70;
+  max-width: 400px;
 }
-.splash-title em { font-style: italic; color: var(--accent); }
-.splash-sub {
-  font-size: 0.88rem;
-  color: #4a3f2a;
+.splash-divider {
+  width: 48px;
+  height: 1px;
+  background: rgba(193,198,200,0.45);
+  margin: 2px 0;
+}
+.splash-city-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(193,198,200,0.80);
   line-height: 1.65;
-  max-width: 380px;
+  max-width: 400px;
 }
 .splash-btn {
-  background: var(--accent);
+  background: #802f2d;
   color: white;
   border: none;
   padding: 14px 36px;
   border-radius: 30px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
-  margin-top: 8px;
+  margin-top: 6px;
   transition: background 0.2s;
-  box-shadow: 0 4px 20px rgba(49,38,29,0.3);
+  box-shadow: 0 4px 20px rgba(128,47,45,0.45);
+  letter-spacing: 0.04em;
 }
-.splash-btn:hover { background: #152e4a; }
+.splash-btn:hover { background: #6b2220; }
 .splash-footer a {
-  font-size: 0.72rem;
-  color: #8a7050;
+  font-size: 0.68rem;
+  color: rgba(193,198,200,0.50);
   text-decoration: none;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 .splash.hidden { display: none; }
 
@@ -846,11 +861,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   white-space: nowrap;
   display: block;
 }
-/* In the splash (light bg), make it dark */
-.splash .wl-logo {
-  color: var(--accent);
-  font-size: 2rem;
-}
+/* splash uses dark bg — wl-logo not used */
 
 /* ── NEIGHBOURHOOD BAR DRAG HANDLE ──────────────────────────── */
 .nbhd-bar-handle {
