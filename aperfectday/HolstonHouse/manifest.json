@@ -1,0 +1,18 @@
+{
+  "name": "Holston House Nashville — A Perfect Day",
+  "short_name": "Holston House",
+  "description": "Your interactive city guide for Nashville, curated by Holston House.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#31261d",
+  "theme_color": "#31261d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Branding/HH_Logo_White (2).png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
