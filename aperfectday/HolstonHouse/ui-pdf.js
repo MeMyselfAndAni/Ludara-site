@@ -437,7 +437,7 @@ async function generatePDF(){
 <div class="pdf-cover">
   <img class="pdf-cover-hh-logo" src="Branding/HH_Logo_White%20%282%29.png" alt="Holston House Nashville">
   <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
-  <div class="pdf-cover-subtitle">Your Personal Day Guide</div>
+  <div class="pdf-cover-subtitle">Your Perfect Day</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
