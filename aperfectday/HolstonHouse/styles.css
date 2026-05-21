@@ -1198,6 +1198,25 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .header-ludara-link:hover { color: rgba(193,198,200,0.95); }
 
+/* Mobile title block — hidden on desktop */
+.header-apd-mobile { display: none; }
+.header-apd-m1 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.90);
+  line-height: 1.2;
+}
+.header-apd-m2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: rgba(255,255,255,0.50);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
 /* Hide on very small screens */
 @media (max-width: 767px) {
   /* ── Mobile header: compact ── */
@@ -1270,15 +1289,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     padding: 5px 10px;
   }
 
-  /* Mobile: show left text compact, hide subtitle */
-  .header-apd { display: flex; flex: 1; }
-  .header-apd-sub { display: none; }
-  .header-apd-title { font-size: 0.62rem; }
+  /* Mobile header left block */
+  .header-apd { display: flex; flex: 1; order: 1; }
+  .header-apd-desktop { display: none; }
+  .header-apd-mobile { display: flex; flex-direction: column; }
   .header-title { order: 2; flex: 0; }
-  .header-apd { order: 1; }
   .header-ludara-link {
     order: 3;
-    font-size: 0.40rem;
+    font-size: 0.42rem;
     flex: 0;
     white-space: nowrap;
     text-align: right;
