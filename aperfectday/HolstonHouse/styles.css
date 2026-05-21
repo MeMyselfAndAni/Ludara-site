@@ -86,7 +86,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── HH FULL LOCKUP LOGO ── */
 .hh-logo-full {
-  height: 100px;
+  height: 75px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 102px; left: 0; right: 0;
+  top: 78px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -692,9 +692,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .splash-logo-row { margin-bottom: 8px; }
 .splash-hh-logo {
-  height: 130px;
+  height: 200px;
   width: auto;
-  max-width: 380px;
+  max-width: 480px;
   display: block;
 }
 .splash-hotel-desc {
