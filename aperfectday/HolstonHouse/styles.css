@@ -1272,10 +1272,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
   /* Hide left text on mobile — logo + Ludara credit only */
   .header-apd { display: none; }
+  .header-title { order: 1; }
   .header-ludara-link {
+    order: 2;
     font-size: 0.46rem;
     flex: 0;
     white-space: nowrap;
+    text-align: right;
   }
 
   /* Filter bar just below the header */
