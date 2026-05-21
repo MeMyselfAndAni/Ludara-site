@@ -1308,7 +1308,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .header-apd-m2 { font-size: clamp(0.38rem, 2.2vw, 0.52rem); }
 
   /* Filter bar just below the header */
-  .filter-bar { top: calc(clamp(48px, 12vw, 75px) + 11px); }   /* 3mm below header on any phone */
+  .filter-bar { top: calc(clamp(48px, 12vw, 75px) + 8px); }   /* 2mm below header on any phone */
 
   /* Hide Ludara footer inside list panel — reclaim vertical space on mobile */
   .list-footer-brand { display: none; }
