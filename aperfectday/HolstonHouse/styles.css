@@ -103,7 +103,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── FILTER BAR ── */
 .filter-bar {
   position: absolute;
-  top: 78px; left: 0; right: 0;
+  top: 86px; left: 0; right: 0;
   z-index: 100;
   padding: 0 12px;
   display: flex;
@@ -413,7 +413,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     position: fixed;
     left: 0; right: 0;
     bottom: 0;
-    padding: 10px 6px 6px;      /* top breathing room + safe-area bottom on notched phones */
+    padding: 14px 6px 6px;      /* top breathing room + safe-area bottom on notched phones */
     background: #31261d;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -773,7 +773,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   align-items: center;
   flex-wrap: nowrap;
   gap: 0;
-  padding: 2px 8px 4px;
+  padding: 8px 8px 4px;
   overflow: visible;
   background: #31261d;
 }
@@ -1308,7 +1308,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .header-apd-m2 { font-size: clamp(0.38rem, 2.2vw, 0.52rem); }
 
   /* Filter bar just below the header */
-  .filter-bar { top: 76px; }   /* flush under compact mobile header */
+  .filter-bar { top: calc(clamp(48px, 12vw, 75px) + 11px); }   /* 3mm below header on any phone */
 
   /* Hide Ludara footer inside list panel — reclaim vertical space on mobile */
   .list-footer-brand { display: none; }
