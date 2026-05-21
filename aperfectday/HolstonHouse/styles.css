@@ -1219,14 +1219,15 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* Hide on very small screens */
 @media (max-width: 767px) {
-  /* ── Mobile header: compact ── */
+  /* ── Mobile header: 3-column grid ── */
   header {
-    padding: 0 12px;
-    flex-wrap: wrap;
-    gap: 2px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    padding: 0 10px;
+    gap: 0;
   }
-  .hh-logo-full { height: 75px; }   /* smaller logo on mobile */
+  .hh-logo-full { height: clamp(48px, 12vw, 75px); }   /* scales on small screens */
   .splash-hotel-desc { display: none; }   /* hide hotel blurb on mobile splash */
   .splash-divider { display: none; }
   /* Row 1: blogger logo (left) + Blog button (right) */
@@ -1258,8 +1259,6 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     order: 3;
     padding-right: 0;
   }
-  .header-btn { order: 2; }
-  .header-title { order: 1; }
   .header-ludara-text { display: none; }
   .header-ludara-brand {
     display: flex;
@@ -1289,18 +1288,24 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     padding: 5px 10px;
   }
 
-  /* Mobile header left block */
-  .header-apd { display: flex; flex: 1; order: 1; }
+  /* Mobile header: grid columns */
+  .header-apd { display: flex; flex-direction: column; grid-column: 1; justify-self: start; }
+  .header-title { grid-column: 2; justify-self: center; flex: unset; min-width: 0; }
+  .header-ludara-link {
+    grid-column: 3;
+    justify-self: end;
+    text-align: right;
+    font-size: clamp(0.34rem, 2.2vw, 0.42rem);
+    flex: unset;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 80px;
+  }
+  /* Show mobile text, hide desktop text */
   .header-apd-desktop { display: none; }
   .header-apd-mobile { display: flex; flex-direction: column; }
-  .header-title { order: 2; flex: 0; }
-  .header-ludara-link {
-    order: 3;
-    font-size: 0.42rem;
-    flex: 0;
-    white-space: nowrap;
-    text-align: right;
-  }
+  .header-apd-m1 { font-size: clamp(0.52rem, 3.2vw, 0.72rem); }
+  .header-apd-m2 { font-size: clamp(0.38rem, 2.2vw, 0.52rem); }
 
   /* Filter bar just below the header */
   .filter-bar { top: 76px; }   /* flush under compact mobile header */
