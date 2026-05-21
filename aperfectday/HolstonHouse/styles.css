@@ -1154,6 +1154,50 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .header-ludara-brand:hover { color: var(--gold, #b8960a); }
 
+/* ── Three-column header: left text · center logo · right credit ── */
+.header-apd {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  pointer-events: none;
+}
+.header-apd-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.90);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.header-apd-title em {
+  font-style: italic;
+  color: rgba(193,198,200,0.85);
+}
+.header-apd-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+}
+.header-ludara-link {
+  flex: 1;
+  text-align: right;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.60rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  pointer-events: all;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.header-ludara-link:hover { color: rgba(193,198,200,0.95); }
+
 /* Hide on very small screens */
 @media (max-width: 767px) {
   /* ── Mobile header: compact ── */
@@ -1224,6 +1268,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .header-btn {
     font-size: 0.6rem;
     padding: 5px 10px;
+  }
+
+  /* Hide left text on mobile — logo + Ludara credit only */
+  .header-apd { display: none; }
+  .header-ludara-link {
+    font-size: 0.46rem;
+    flex: 0;
+    white-space: nowrap;
   }
 
   /* Filter bar just below the header */
