@@ -1270,12 +1270,15 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     padding: 5px 10px;
   }
 
-  /* Hide left text on mobile — logo + Ludara credit only */
-  .header-apd { display: none; }
-  .header-title { order: 1; }
+  /* Mobile: show left text compact, hide subtitle */
+  .header-apd { display: flex; flex: 1; }
+  .header-apd-sub { display: none; }
+  .header-apd-title { font-size: 0.62rem; }
+  .header-title { order: 2; flex: 0; }
+  .header-apd { order: 1; }
   .header-ludara-link {
-    order: 2;
-    font-size: 0.46rem;
+    order: 3;
+    font-size: 0.40rem;
     flex: 0;
     white-space: nowrap;
     text-align: right;
