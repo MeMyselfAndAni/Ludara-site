@@ -1671,17 +1671,74 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   flex-shrink: 0;
   margin-left: auto;         /* push to right end of bar */
   margin-right: 2px;
-  transition: background 0.15s;
+ound 0.15s;
 }
-.nbhd-close-btn:hover { background: rgba(0,0,0,0.22); color: #111; }
-
-/* Hidden state */
-#nbhd-bar.hidden {
-  display: none !important;
+.nbhd-close-btn:hover { background: rgba(0,0,0,0.20); }
+@media (max-width: 767px) {
+  .nbhd-close-btn { display: flex; }
 }
 
-/* Show nbhd bar button (appears when bar is hidden) */
-#nbhd-show-btn {
+/* ── DAY TRIP LAUNCHER — fixed left edge, 40% down ── */
+.trip-launcher {
   position: fixed;
-  bottom: 24px;
- 
+  left: 12px;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 350;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.trip-launcher-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(49,38,29,0.70);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-bottom: 4px;
+  pointer-events: none;
+}
+.trip-btn-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  box-shadow: 0 3px 14px rgba(49,38,29,0.22);
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.trip-btn-circle:hover {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 18px rgba(49,38,29,0.40);
+}
+.trip-btn-circle.active {
+  background: #31261d;
+  border-color: #31261d;
+  color: white;
+  box-shadow: 0 4px 18px rgba(49,38,29,0.50);
+}
+.trip-btn-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.trip-btn-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.46rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
