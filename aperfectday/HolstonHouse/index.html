@@ -535,7 +535,25 @@ function clearAllSaved() {
 
 </script>
 
-
+<script>
+/* ── Header-height tracker ─────────────────────────────────────────────────
+   Sets --header-h on <html> so .filter-bar can always sit exactly 2mm below
+   the header, regardless of logo size or device. Runs on load + resize.     */
+(function () {
+  function syncHeaderHeight() {
+    var h = document.querySelector('header');
+    if (h) {
+      document.documentElement.style.setProperty('--header-h', h.getBoundingClientRect().height + 'px');
+    }
+  }
+  /* Run once images are loaded (logo affects header height) */
+  window.addEventListener('load', syncHeaderHeight);
+  /* Re-run on resize (orientation change, window resize) */
+  window.addEventListener('resize', syncHeaderHeight);
+  /* Also run immediately in case header has no images */
+  syncHeaderHeight();
+})();
+</script>
 
 </body>
 </html>
