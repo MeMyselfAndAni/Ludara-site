@@ -50,7 +50,8 @@ header {
   border-bottom: none;
   box-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
-.header-title { pointer-events: all; display: flex; flex-direction: row; align-items: center; gap: 14px; }
+.header-title { pointer-events: all; display: flex; flex-direction: row; align-items: center; gap: 16px; }
+.header-ub-logo { height: 22px; width: auto; max-width: 180px; display: block; object-fit: contain; opacity: 0.82; mix-blend-mode: screen; }
 .header-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
 .header-text { display: flex; flex-direction: column; gap: 2px; }
 h1 {
@@ -690,12 +691,21 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   align-items: center;
   gap: 18px;
 }
-.splash-logo-row { margin-bottom: 8px; }
+.splash-logo-row { margin-bottom: 8px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .splash-hh-logo {
   height: 200px;
   width: auto;
   max-width: 480px;
   display: block;
+}
+.splash-ub-logo {
+  height: 65px;
+  width: auto;
+  max-width: 380px;
+  display: block;
+  object-fit: contain;
+  opacity: 0.88;
+  mix-blend-mode: screen;
 }
 .splash-hotel-desc {
   font-family: 'Playfair Display', serif;
@@ -1230,6 +1240,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   .hh-logo-full { height: clamp(48px, 12vw, 75px); }   /* scales on small screens */
   .splash-hotel-desc { display: none; }   /* hide hotel blurb on mobile splash */
   .splash-divider { display: none; }
+  .splash-ub-logo { display: none; }      /* Unbound Collection logo — desktop only */
+  .header-ub-logo { display: none; }      /* Unbound Collection logo — desktop only */
   /* Row 1: blogger logo (left) + Blog button (right) */
   .header-title {
     gap: 8px;
