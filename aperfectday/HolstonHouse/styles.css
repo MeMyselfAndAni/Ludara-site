@@ -756,9 +756,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .pill-opennow.active { background: #802f2d; border-color: #802f2d; color: white; }
 
 /* ── Day Trip preset pills ── */
-.pill-trip { border-color: #b8860b; color: #f0d080; }
-.pill-trip.active { background: #b8860b; border-color: #b8860b; color: white; }
-.pill-trip:hover { background: rgba(184,134,11,0.85) !important; border-color: #b8860b !important; color: white !important; }
+.pill-trip { }
+.pill-trip.active { background: #31261d; border-color: #31261d; color: white; }
+.pill-trip:hover { background: rgba(49,38,29,0.97) !important; border-color: #31261d !important; color: white !important; }
 
 /* ── SELECTED PIN PULSE ── */
 #pin-pulse {

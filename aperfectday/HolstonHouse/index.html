@@ -559,81 +559,51 @@ function clearAllSaved() {
 
 
 <script>
-/* ── DAY TRIPS — two preset itineraries ───────────────────────────────────
-   One tap replaces the Saved list with the trip stops and activates the
-   Saved filter. Previous saves are stashed for a 6-second undo toast.      */
+/* ── DAY TRIPS ──────────────────────────────────────────────────────────────────────
+   favourites is declared with `let` in ui-favourites.js so it is not
+   reachable here. Fix: write to localStorage directly then call
+   refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
   music: { name: 'Music Insider Day', ids: [40, 4, 2, 39, 1, 3, 35] },
   bar:   { name: 'Broadway Bar Hop',  ids: [7, 5, 6, 41, 42, 45] }
 };
-
+function _favsKey() {
+  return 'favs_' + window.location.pathname.replace(/\//g, '_');
+}
 function loadTrip(key) {
-  var trip = _TRIPS[key];
-  if (!trip) return;
-
-  /* Stash current saves for undo */
-  var prev = (typeof favourites !== 'undefined') ? favourites.slice() : [];
-
-  /* Load trip into favourites */
-  if (typeof favourites !== 'undefined') {
-    favourites = trip.ids.slice();
-    if (typeof saveFavs === 'function') saveFavs();
-  }
-
-  /* Activate Saved filter if not already on */
-  var savedPill = document.getElementById('pill-saved');
-  if (savedPill && typeof savedFilterActive !== 'undefined' && !savedFilterActive) {
-    if (typeof toggleSavedFilter === 'function') toggleSavedFilter(savedPill);
-  } else if (typeof applyFilters === 'function') {
-    applyFilters();
-  }
-
-  /* Highlight active trip pill */
-  document.querySelectorAll('.pill-trip').forEach(function(p) { p.classList.remove('active'); });
-  var activePill = document.getElementById('pill-trip-' + key);
-  if (activePill) activePill.classList.add('active');
-
-  /* Undo toast */
-  _tripToast(trip.name + ' loaded — ' + trip.ids.length + ' stops', prev, key);
+  var trip = _TRIPS[key]; if (!trip) return;
+  var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
+  localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var sp = document.getElementById("pill-saved");
+  if (sp && !sp.classList.contains("active")) {
+    if (typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
+  document.querySelectorAll(".pill-trip").forEach(function(p){ p.classList.remove("active"); });
+  var ap = document.getElementById("pill-trip-" + key);
+  if (ap) ap.classList.add("active");
+  _tripToast(trip.name + " loaded — " + trip.ids.length + " stops", prev, key);
 }
-
 function _tripToast(msg, prev, key) {
-  var existing = document.getElementById('_trip-toast');
-  if (existing) existing.remove();
-  var el = document.createElement('div');
-  el.id = '_trip-toast';
-  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
-  el.style.cssText = 'position:fixed;top:110px;left:50%;transform:translateX(-50%);' +
-    'background:white;color:#31261d;padding:10px 18px;border-radius:24px;' +
-    'border:2px solid ' + brand + ';' +
-    'font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;' +
-    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.18);display:flex;align-items:center;gap:12px;' +
-    'animation:_apd-fadein 0.2s ease;';
-  el.innerHTML = '<span>📍 ' + msg + '</span>' +
-    '<button onclick="_undoTrip(' + JSON.stringify(prev) + ','' + key + '')" ' +
-    'style="background:none;border:1px solid ' + brand + ';color:' + brand + ';' +
-    'border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;' +
-    'font-family:Inter,sans-serif;white-space:nowrap;">Undo</button>';
+  var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
+  var el = document.createElement("div"); el.id = "_trip-toast";
+  var brand = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim() || "#ff2a00";
+  el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:white;color:#31261d;padding:10px 18px;border-radius:24px;border:2px solid "+brand+";font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.18);display:flex;align-items:center;gap:12px;";
+  el.innerHTML = "<span>📍 " + msg + "</span>"
+    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',' + JSON.stringify(key) + ')" '
+    + 'style="background:none;border:1px solid ' + brand + ';color:' + brand + ';border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
   document.body.appendChild(el);
-  var t = setTimeout(function() { if (el.parentNode) el.remove(); }, 6000);
-  el._timer = t;
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
 }
-
 function _undoTrip(prev, key) {
-  var el = document.getElementById('_trip-toast');
-  if (el) el.remove();
-  if (typeof favourites !== 'undefined') {
-    favourites = prev.slice();
-    if (typeof saveFavs === 'function') saveFavs();
-  }
-  var activePill = document.getElementById('pill-trip-' + key);
-  if (activePill) activePill.classList.remove('active');
-  if (!prev.length && typeof savedFilterActive !== 'undefined' && savedFilterActive) {
-    var savedPill = document.getElementById('pill-saved');
-    if (savedPill && typeof toggleSavedFilter === 'function') toggleSavedFilter(savedPill);
-  } else if (typeof applyFilters === 'function') {
-    applyFilters();
-  }
+  var el = document.getElementById("_trip-toast"); if (el) el.remove();
+  localStorage.setItem(_favsKey(), JSON.stringify(prev));
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var ap = document.getElementById("pill-trip-" + key); if (ap) ap.classList.remove("active");
+  if (!prev.length) {
+    var sp = document.getElementById("pill-saved");
+    if (sp && sp.classList.contains("active") && typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
 }
 </script>
 </body>
