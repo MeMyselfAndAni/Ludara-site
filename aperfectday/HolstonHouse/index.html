@@ -611,12 +611,18 @@ function _undoTrip(prev, key) {
 <div class="trip-launcher" id="trip-launcher">
   <span class="trip-launcher-label">Our Picks</span>
   <button class="trip-btn-circle" id="trip-btn-music" onclick="loadTrip('music')" title="Music Insider Day">
-    <span class="trip-btn-emoji">🎵</span>
-    <span class="trip-btn-text">Music Day</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-music" d="M 5,26 A 21,21 0 0,1 47,26"/></defs>
+      <text x="26" y="23" text-anchor="middle" class="trip-emoji-txt">🎵</text>
+      <text class="trip-arc-label"><textPath href="#arc-music" startOffset="50%" text-anchor="middle">Music Day</textPath></text>
+    </svg>
   </button>
   <button class="trip-btn-circle" id="trip-btn-bar" onclick="loadTrip('bar')" title="Broadway Bar Hop">
-    <span class="trip-btn-emoji">🤠</span>
-    <span class="trip-btn-text">Bar Hop</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-bar" d="M 5,26 A 21,21 0 0,1 47,26"/></defs>
+      <text x="26" y="23" text-anchor="middle" class="trip-emoji-txt">🤠</text>
+      <text class="trip-arc-label"><textPath href="#arc-bar" startOffset="50%" text-anchor="middle">Bar Hop</textPath></text>
+    </svg>
   </button>
 </div>
 </body>

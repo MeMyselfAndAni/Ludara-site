@@ -1697,48 +1697,52 @@ ound 0.15s;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: rgba(49,38,29,0.70);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   pointer-events: none;
+  white-space: nowrap;
 }
 .trip-btn-circle {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: var(--surface);
+  background: var(--bg);
   border: 2px solid var(--accent);
-  color: var(--accent);
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  padding: 0;
   box-shadow: 0 3px 14px rgba(49,38,29,0.22);
   transition: all 0.18s;
   -webkit-tap-highlight-color: transparent;
 }
 .trip-btn-circle:hover {
-  background: var(--accent);
-  color: white;
-  box-shadow: 0 4px 18px rgba(49,38,29,0.40);
+  background: rgba(49,38,29,0.12);
+  box-shadow: 0 4px 18px rgba(49,38,29,0.32);
 }
 .trip-btn-circle.active {
   background: #31261d;
   border-color: #31261d;
-  color: white;
   box-shadow: 0 4px 18px rgba(49,38,29,0.50);
 }
-.trip-btn-emoji {
-  font-size: 1.1rem;
-  line-height: 1;
+.trip-btn-svg {
+  width: 52px;
+  height: 52px;
+  overflow: visible;
+  pointer-events: none;
 }
-.trip-btn-text {
+.trip-emoji-txt {
+  font-size: 18px;
+}
+.trip-arc-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.46rem;
+  font-size: 6.2px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: 1;
+  letter-spacing: 0.6px;
+  fill: var(--accent);
+}
+.trip-btn-circle.active .trip-arc-label,
+.trip-btn-circle:hover .trip-arc-label {
+  fill: white;
 }
