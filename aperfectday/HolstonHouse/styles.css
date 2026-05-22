@@ -117,13 +117,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .pill {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 13px;
+  gap: 4px;
+  padding: 5px 11px;
   border-radius: 24px;
   border: 2px solid rgba(49,38,29,0.90);
   background: rgba(136,136,141,0.80);
   backdrop-filter: blur(12px);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -754,6 +754,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* ── OPEN NOW PILL ── */
 .pill-opennow { border-color: #802f2d; color: white; }
 .pill-opennow.active { background: #802f2d; border-color: #802f2d; color: white; }
+
+/* ── Day Trip preset pills ── */
+.pill-trip { border-color: #b8860b; color: #f0d080; }
+.pill-trip.active { background: #b8860b; border-color: #b8860b; color: white; }
+.pill-trip:hover { background: rgba(184,134,11,0.85) !important; border-color: #b8860b !important; color: white !important; }
 
 /* ── SELECTED PIN PULSE ── */
 #pin-pulse {
