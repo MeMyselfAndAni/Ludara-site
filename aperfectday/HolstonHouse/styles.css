@@ -1697,7 +1697,7 @@ ound 0.15s;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(49,38,29,0.80);
-  margin-bottom: 1mm;
+  margin-bottom: -7px;
   pointer-events: none;
   white-space: nowrap;
 }
@@ -1724,8 +1724,10 @@ ound 0.15s;
   box-shadow: 0 4px 18px rgba(49,38,29,0.32);
 }
 .trip-btn-circle.active {
-  background: #31261d;
-  border-color: #31261d;
+  background: var(--accent);
+  border-color: var(--accent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   box-shadow: 0 4px 18px rgba(49,38,29,0.50);
 }
 .trip-btn-svg {
