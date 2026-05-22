@@ -51,7 +51,7 @@ header {
   box-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
 .header-title { pointer-events: all; display: flex; flex-direction: row; align-items: center; gap: 16px; }
-.header-ub-logo { height: 30px; width: auto; max-width: 220px; display: block; object-fit: contain; opacity: 0.82; }
+.header-ub-logo { height: 90px; width: auto; max-width: 500px; display: block; object-fit: contain; opacity: 0.82; }
 .header-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.25); flex-shrink: 0; }
 .header-text { display: flex; flex-direction: column; gap: 2px; }
 h1 {
