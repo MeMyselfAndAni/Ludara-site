@@ -1692,12 +1692,12 @@ ound 0.15s;
 }
 .trip-launcher-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.52rem;
-  font-weight: 700;
+  font-size: 0.54rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(49,38,29,0.70);
-  margin-bottom: 2px;
+  letter-spacing: 0.12em;
+  color: rgba(49,38,29,0.80);
+  margin-bottom: 5px;
   pointer-events: none;
   white-space: nowrap;
 }
@@ -1732,7 +1732,7 @@ ound 0.15s;
   pointer-events: none;
 }
 .trip-emoji-txt {
-  font-size: 18px;
+  font-size: 22px;
 }
 .trip-arc-label {
   font-family: 'Inter', sans-serif;
