@@ -358,11 +358,11 @@
   function showSavedDemo() {
     /* Close demo card if open */
     closeDemoCard();
-    /* Suppress route drawing for the duration of the demo —
-       monkey-patch drawSavedRoute to a no-op so neither the straight-line
-       placeholder nor the async OSRM result ever gets drawn */
+    /* Suppress route drawing AND map re-fitting for the duration of the demo */
     window._tutDrawSavedOrig = window.drawSavedRoute;
     window.drawSavedRoute = function() {};
+    window._tutFitBoundsOrig = window._fitRouteBounds;
+    window._fitRouteBounds = function() {};
     /* Inject 5 demo saved places */
     _demoSavedBkp = localStorage.getItem(_favsKey());
     _demoSavedOn  = true;
@@ -396,10 +396,14 @@
     _demoSavedOn  = false;
     _demoSavedBkp = null;
     if (typeof clearTripRoute === 'function') clearTripRoute();
-    /* Restore drawSavedRoute */
+    /* Restore drawSavedRoute and _fitRouteBounds */
     if (window._tutDrawSavedOrig) {
       window.drawSavedRoute = window._tutDrawSavedOrig;
       window._tutDrawSavedOrig = null;
+    }
+    if (window._tutFitBoundsOrig !== undefined) {
+      window._fitRouteBounds = window._tutFitBoundsOrig;
+      window._tutFitBoundsOrig = undefined;
     }
   }
 
@@ -563,8 +567,11 @@
 
     var step = STEPS[n];
 
-    /* Close demo card if this step requests it */
-    if (step.closeCard) { closeDemoCard(); }
+    /* Close any open place card if this step requests it — unconditional */
+    if (step.closeCard) {
+      if (typeof closePlaceCard === 'function') { closePlaceCard(false); }
+      _demoCardOpen = false;
+    }
 
     STEPS.forEach(function (_, i) {
       var d = card.querySelector('#tut-dot-' + i);
