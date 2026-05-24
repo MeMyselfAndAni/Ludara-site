@@ -436,7 +436,10 @@ function locateMe(){
 
 // ── SPLASH ────────────────────────────────────────────────────
 function closeSplash(){
-  document.getElementById('splash').classList.add('hidden');
+  var el = document.getElementById('splash');
+  el.style.opacity = '0';
+  el.style.pointerEvents = 'none';
+  setTimeout(function(){ el.classList.add('hidden'); }, 520);
 }
 
 // ── OPEN NOW ─────────────────────────────────────────────────

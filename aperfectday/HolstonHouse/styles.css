@@ -678,11 +678,16 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   z-index: 2000;
   background: linear-gradient(-45deg, #1c130c, #31261d, #3d2f22, #251b12, #2c2016, #150e08);
   background-size: 400% 400%;
-  animation: headerFlow 12s ease infinite;
+  animation: headerFlow 12s ease infinite, splashFadeIn 0.5s ease both;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  transition: opacity 0.5s ease;
+}
+@keyframes splashFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .splash-inner {
   max-width: 480px;
@@ -751,7 +756,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   text-decoration: none;
   letter-spacing: 0.06em;
 }
-.splash.hidden { display: none; }
+.splash.hidden { opacity: 0; pointer-events: none; display: none; }
 
 /* ── OPEN NOW PILL ── */
 .pill-opennow { border-color: #802f2d; color: white; }
