@@ -189,10 +189,10 @@ async function _fetchOSRMRoute(places){
   for(let i = 0; i < places.length - 1; i += CHUNK - 1){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
-    // foot.router.project-osrm.org is the dedicated walking profile server
-    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    // Reliable OSRM foot profile — walking routes for Venice
+    const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
       const data = await res.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
         const segCoords = data.routes[0].geometry.coordinates;
@@ -221,8 +221,7 @@ function drawSavedRoute(){
   // Draw numbered markers immediately
   _addNumberedMarkers(places);
 
-  // Draw straight line first as placeholder
-  _drawStraightRoute(places);
+  // Fit map to show all saved places; real route drawn once OSRM responds
   _fitRouteBounds(places);
 
   // If online, fetch real walking route from OSRM and replace

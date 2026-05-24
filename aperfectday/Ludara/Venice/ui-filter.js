@@ -313,7 +313,7 @@ function renderList(){
 
   filtered = PLACES.filter(p => {
     const catOk    = AF === 'all' || p.cat === AF;
-    const nbhdOk   = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+    const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
     const openOk   = !openNowActive || isOpenNow(p);
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
     return catOk && nbhdOk && openOk && searchOk;
@@ -436,7 +436,10 @@ function locateMe(){
 
 // ── SPLASH ────────────────────────────────────────────────────
 function closeSplash(){
-  document.getElementById('splash').classList.add('hidden');
+  var el = document.getElementById('splash');
+  el.style.opacity = '0';
+  el.style.pointerEvents = 'none';
+  setTimeout(function(){ el.classList.add('hidden'); }, 520);
 }
 
 // ── OPEN NOW ─────────────────────────────────────────────────
@@ -517,7 +520,7 @@ function applyFilters(){
       const inCat   = AF !== 'all' && p.cat === AF;
       visible = inSaved || inCat;
     } else {
-      const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+      const nbhdOk = true; /* neighbourhood selection only pans map — all markers stay visible */
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
       visible = catOk && openOk && nbhdOk;
