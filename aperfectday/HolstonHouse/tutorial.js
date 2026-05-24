@@ -86,7 +86,7 @@
     },
     {
       title: 'Share your map',
-      body: 'Share your personalized map in one tap — by message or email.',
+      body: 'Share this personalized interactive map in one tap — by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
@@ -329,6 +329,8 @@
     }
     /* On mobile toggleSavedFilter skips openSheet — call it explicitly */
     if (typeof openSheet === 'function') { setTimeout(openSheet, 80); }
+    /* Suppress route lines — clear after drawSavedRoute has fired */
+    setTimeout(function() { if (typeof clearTripRoute === 'function') clearTripRoute(); }, 300);
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
@@ -346,6 +348,7 @@
     if (typeof refreshFavourites === 'function') { refreshFavourites(); }
     _demoSavedOn  = false;
     _demoSavedBkp = null;
+    if (typeof clearTripRoute === 'function') clearTripRoute();
   }
 
   /* ── General helpers ────────────────────────────────────────── */
