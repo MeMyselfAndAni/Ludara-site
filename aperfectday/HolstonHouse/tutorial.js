@@ -219,9 +219,24 @@
   function _blinkHeart() {
     var hb = document.querySelector('#pc-btn-fav');
     if (!hb) return;
-    /* Turn heart red (simulate save), then restore after 2 s */
-    hb.classList.add('faved');
-    setTimeout(function () { hb.classList.remove('faved'); }, 2000);
+    /* Snap to bright red filled heart */
+    hb.style.transition = 'color 0.25s ease, transform 0.25s ease';
+    hb.textContent = '♥'; /* ♥ filled */
+    hb.style.fontFamily = 'Arial, sans-serif';
+    hb.style.color = '#e00040';
+    hb.style.transform = 'scale(1.25)';
+    /* After 2 s, fade back to white outline heart */
+    setTimeout(function () {
+      hb.style.color = 'white';
+      hb.style.transform = 'scale(1)';
+      setTimeout(function () {
+        hb.textContent = '♡'; /* ♡ outline */
+        hb.style.fontFamily = '';
+        hb.style.color = '';
+        hb.style.transform = '';
+        hb.style.transition = '';
+      }, 260);
+    }, 2000);
   }
 
   function openDemoCard() {
@@ -442,12 +457,12 @@
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard();
-    /* For saved-panel action buttons, re-query after panel animates in */
+    /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
-      setSpot(null);
       setTimeout(function () {
         var el = document.querySelector(step.target);
         if (el && el.getBoundingClientRect().width > 0) { setSpot(el); }
+        else { setSpot(null); }
       }, 120);
     } else {
       setSpot(targetEl);
