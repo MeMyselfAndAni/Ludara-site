@@ -32,6 +32,7 @@
       body: 'Slide the top bar left or right to browse all categories. Tap one — only places of that type stay on the map.',
       target: '.filter-bar',
       cardPos: 'center',
+      closeCard: true,
       demo: 'scroll-filter',
       btn: 'Next'
     },
@@ -417,6 +418,9 @@
     clearLauncherAnim();
 
     var step = STEPS[n];
+
+    /* Close demo card if this step requests it */
+    if (step.closeCard) { closeDemoCard(); }
 
     STEPS.forEach(function (_, i) {
       var d = card.querySelector('#tut-dot-' + i);
