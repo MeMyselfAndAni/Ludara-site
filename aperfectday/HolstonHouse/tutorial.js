@@ -12,15 +12,7 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Let\'s plan Your Perfect Day!',
-      body: '',
-      target: null,
-      cardPos: 'center',
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Your Perfect Day in ' + CITY + ',',
+      title: 'Your Perfect Day in ' + CITY,
       body: 'Every icon on the map is a hand-picked place we recommend. Icon colors show the type — tap any icon to open its card with hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
@@ -56,7 +48,7 @@
       body: 'Read our curated place description and exclusive tips. Scroll down for the phone number and website link.',
       target: null,
       cardPos: 'center',
-      demo: null,
+      demo: 'scroll-card',
       btn: 'Next'
     },
     {
@@ -70,7 +62,7 @@
     {
       title: 'Navigate',
       body: 'You can navigate on mobile using our maps or tap to open your trip in Google Maps.',
-      target: '#sheet .saved-action-btn:nth-child(1)',
+      target: '.saved-action-route',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -78,7 +70,7 @@
     {
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
-      target: '#sheet .saved-action-btn:nth-child(2)',
+      target: '.saved-action-pdf',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -86,7 +78,7 @@
     {
       title: 'Share your map',
       body: 'Share your personalized map via message or email.',
-      target: '#sheet .saved-action-btn:nth-child(3)',
+      target: '.saved-action-map',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -242,16 +234,13 @@
       }
     });
 
-    /* Show tap ripple, then open the card */
-    _showTapRipple(tapX, tapY);
-    setTimeout(function () {
-      if (typeof openDetail === 'function') {
-        openDetail(DEMO_PLACE);
-        _demoCardOpen = true;
-        /* Blink the heart button after card animates in */
-        setTimeout(_blinkHeart, 2250);
-      }
-    }, 1260);
+    /* Open the place card directly — no ripple */
+    if (typeof openDetail === 'function') {
+      openDetail(DEMO_PLACE);
+      _demoCardOpen = true;
+      /* Blink the heart button after card animates in */
+      setTimeout(_blinkHeart, 2250);
+    }
   }
 
   function closeDemoCard() {
@@ -259,6 +248,32 @@
       closePlaceCard(false);
       _demoCardOpen = false;
     }
+  }
+
+  function scrollCardDemo() {
+    /* Wait 5 s, then slowly ease-scroll #pc-body down to reveal contacts */
+    setTimeout(function () {
+      var body = document.getElementById('pc-body');
+      if (!body) return;
+      var contacts = document.getElementById('pc-contacts');
+      var targetScroll = contacts ? contacts.offsetTop : body.scrollHeight;
+      var startScroll  = body.scrollTop;
+      var distance     = targetScroll - startScroll;
+      if (distance <= 4) return;
+      var duration = 1400; /* ms — leisurely scroll */
+      var startTime = null;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / duration, 1);
+        /* ease-in-out cubic */
+        var ease = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        body.scrollTop = startScroll + distance * ease;
+        if (progress < 1) { requestAnimationFrame(step); }
+      }
+      requestAnimationFrame(step);
+    }, 5000);
   }
 
   function showSavedDemo() {
@@ -413,8 +428,8 @@
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard();
-    /* For action buttons inside the sheet, re-query after paint to get real coords */
-    if (step.target && step.target.indexOf('#sheet') !== -1) {
+    /* For saved-panel action buttons, re-query after panel animates in */
+    if (step.target && step.target.indexOf('saved-action') !== -1) {
       setSpot(null);
       setTimeout(function () {
         var el = document.querySelector(step.target);
@@ -427,6 +442,7 @@
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
+    if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
     if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
