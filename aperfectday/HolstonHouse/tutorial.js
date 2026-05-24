@@ -1,16 +1,22 @@
 (function () {
   'use strict';
 
-  var DONE_KEY = 'holston_tour_v1';
+  /* ── City config (set window.TutorialConfig in each hotel's index.html) ── */
+  var CFG             = window.TutorialConfig || {};
+  var DONE_KEY        = CFG.doneKey       || 'city_tour_v1';
+  var CITY            = CFG.cityName      || 'the city';
+  var DEMO_PLACE      = CFG.demoPlaceId   || 1;
+  var TRIP_NAMES      = CFG.tripNames     || 'a curated day trip';
+  var DEMO_SAVED_IDS  = CFG.demoSavedIds  || null; /* array of 3-4 real place IDs */
 
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Your Nashville guide',
+      title: 'Your ' + CITY + ' guide',
       body: 'Every icon on the map is a hand-picked place. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
       target: null,
       cardPos: 'bottom-center',
-      demo: 'blink',
+      demo: null,
       btn: 'Next'
     },
     {
@@ -23,7 +29,7 @@
     },
     {
       title: 'Explore by neighbourhood',
-      body: 'The icons along the bottom are Nashville neighbourhoods. Tap one to zoom the map to that area. Tap it again to reset.',
+      body: 'The icons along the bottom are ' + CITY + ' neighbourhoods. Tap one to zoom the map to that area. Tap it again to reset.',
       target: '#nbhd-bar',
       cardPos: 'above',
       demo: null,
@@ -33,51 +39,59 @@
       title: 'Save your favourites',
       body: 'Tap any icon on the map to open its place card. Then tap the heart to save it — it stays saved between visits.',
       target: null,
-      cardPos: 'bottom-center',
+      cardPos: 'top-center',
       demo: 'open-card',
       btn: 'Next'
     },
     {
-      title: 'Find your saved places',
-      body: 'Tap Saved in the filter bar to open your personal list.',
+      title: 'Your saved places',
+      body: 'Tap Saved to open your personal list. Drag any item up or down to rearrange the order.',
       target: '#pill-saved',
       cardPos: 'below',
-      demo: 'close-card',
+      demo: 'show-saved',
       btn: 'Next'
     },
     {
-      title: 'Your saved list',
-      body: 'Your picks appear here. Drag any item up or down to rearrange the order.',
-      target: '#saved-panel',
-      cardPos: 'above',
-      demo: 'open-saved-demo',
-      btn: 'Next'
-    },
-    {
-      title: 'Plan a full itinerary',
-      body: 'Tap Full Itinerary to build a walking route through all your picks, with travel time between each stop.',
+      title: 'Open in Google Maps',
+      body: 'Tap Full Itinerary to build a walking route through all your picks and open it directly in Google Maps.',
       target: '.saved-action-route',
       cardPos: 'above',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Take it offline',
-      body: 'Tap PDF Guide to download a branded guide with all your picks — perfect to keep on your phone or share with a friend.',
+      title: 'Download a PDF guide',
+      body: 'Tap PDF Guide to download a beautifully designed guide with all your picks — perfect to keep on your phone.',
       target: '.saved-action-pdf',
       cardPos: 'above',
       demo: null,
       btn: 'Next'
     },
     {
+      title: 'Share your map',
+      body: 'Save a snapshot of your personalised map — then share it with guests before they arrive.',
+      target: '.saved-action-map',
+      cardPos: 'above',
+      demo: null,
+      btn: 'Next'
+    },
+    {
       title: 'Our Day Trip Picks',
-      body: 'See the two buttons on the left edge? One tap loads a full curated itinerary — a Music Insider Day or an evening Broadway Bar Hop.',
+      body: 'See the two buttons on the left edge? One tap loads a full curated itinerary — ' + TRIP_NAMES + '.',
       target: '#trip-launcher',
       cardPos: 'right',
       demo: 'close-saved-pulse',
       btn: 'Done'
     }
   ];
+
+  /* ── Filter steps that need optional UI elements ───────────── */
+  /* Day Trips step requires #trip-launcher — skip silently if absent */
+  if (!document.querySelector('#trip-launcher')) {
+    STEPS = STEPS.filter(function (s) { return s.demo !== 'close-saved-pulse'; });
+  }
+  /* Always mark the final step as Done */
+  if (STEPS.length > 0) { STEPS[STEPS.length - 1].btn = 'Done ✓'; }
 
   /* ── Inject CSS ─────────────────────────────────────────────── */
   var style = document.createElement('style');
@@ -162,15 +176,10 @@
 
   function openDemoCard() {
     if (typeof openDetail === 'function') {
-      openDetail(45);
+      openDetail(DEMO_PLACE); /* place ID from TutorialConfig.demoPlaceId */
       _demoCardOpen = true;
-      setTimeout(function () {
-        var hb = document.querySelector('#pc-btn-fav');
-        if (hb && hb.getBoundingClientRect().width > 0) {
-          setSpot(hb);
-          setCard(hb, 'above');
-        }
-      }, 650);
+      /* No spotlight update — target stays null so the full card
+         stays visible without the dark vignette covering it */
     }
   }
 
@@ -181,16 +190,30 @@
     }
   }
 
-  function openSavedDemo() {
+  function showSavedDemo() {
+    /* Close 3rd & Lindsley card if open */
     closeDemoCard();
+    /* Inject 5 demo saved places */
     _demoSavedBkp = localStorage.getItem(_favsKey());
     _demoSavedOn  = true;
-    localStorage.setItem(_favsKey(), JSON.stringify([45, 1, 28, 5, 10]));
+    var demoIds = DEMO_SAVED_IDS
+      ? DEMO_SAVED_IDS.slice(0, 5)
+      : [DEMO_PLACE, 1, 5, 10, 15].filter(function(v,i,a){return a.indexOf(v)===i;}).slice(0,5);
+    localStorage.setItem(_favsKey(), JSON.stringify(demoIds));
     if (typeof refreshFavourites === 'function') { refreshFavourites(); }
+    /* Open saved panel if not already active */
     var pill = document.getElementById('pill-saved');
     if (pill && !pill.classList.contains('active')) {
       if (typeof toggleSavedFilter === 'function') { toggleSavedFilter(pill); }
     }
+    /* After panel animates in, shift spotlight to the panel so the list is visible */
+    setTimeout(function () {
+      var panel = document.getElementById('saved-panel');
+      if (panel && panel.getBoundingClientRect().height > 0) {
+        setSpot(panel);
+        setCard(panel, 'above');
+      }
+    }, 600);
   }
 
   function closeSavedDemo() {
@@ -305,6 +328,13 @@
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;';
 
+    if (position === 'top-center') {
+      /* Place card near top — keeps bottom free for place card sheet */
+      card.style.top  = '100px';
+      card.style.left = Math.max(16, (vw - cardW) / 2) + 'px';
+      return;
+    }
+
     if (position === 'bottom-center') {
       if (vw >= 500) {
         card.style.top  = Math.max(80, (vh - 260) / 2) + 'px';
@@ -368,7 +398,7 @@
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
-    if (step.demo === 'open-saved-demo')   { setTimeout(openSavedDemo,    350); }
+    if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
     if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
     if (step.demo === 'close-saved-pulse') {
       setTimeout(function () {
@@ -435,3 +465,4 @@
   }
 
 })();
+                                                                           
