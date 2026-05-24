@@ -107,7 +107,7 @@
       targets: ['#locate-btn', '#offline-save-btn'],
       cardPos: 'center',
       demo: 'close-sheet',
-      cardOffset: -75,  /* move card ~2cm up so it doesn't cover the buttons */
+      mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
       btn: 'Next'
     },
     {
@@ -115,6 +115,7 @@
       body: 'Nashville is waiting. Go find your perfect day.',
       target: null,
       cardPos: 'center',
+      mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */
       demo: null,
       btn: 'Done'
     }
@@ -312,8 +313,13 @@
   }
 
   function showSavedDemo() {
-    /* Close 3rd & Lindsley card if open */
+    /* Close demo card if open */
     closeDemoCard();
+    /* Suppress route drawing for the duration of the demo —
+       monkey-patch drawSavedRoute to a no-op so neither the straight-line
+       placeholder nor the async OSRM result ever gets drawn */
+    window._tutDrawSavedOrig = window.drawSavedRoute;
+    window.drawSavedRoute = function() {};
     /* Inject 5 demo saved places */
     _demoSavedBkp = localStorage.getItem(_favsKey());
     _demoSavedOn  = true;
@@ -329,8 +335,6 @@
     }
     /* On mobile toggleSavedFilter skips openSheet — call it explicitly */
     if (typeof openSheet === 'function') { setTimeout(openSheet, 80); }
-    /* Suppress route lines — clear after drawSavedRoute has fired */
-    setTimeout(function() { if (typeof clearTripRoute === 'function') clearTripRoute(); }, 300);
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
@@ -349,6 +353,11 @@
     _demoSavedOn  = false;
     _demoSavedBkp = null;
     if (typeof clearTripRoute === 'function') clearTripRoute();
+    /* Restore drawSavedRoute */
+    if (window._tutDrawSavedOrig) {
+      window.drawSavedRoute = window._tutDrawSavedOrig;
+      window._tutDrawSavedOrig = null;
+    }
   }
 
   /* ── General helpers ────────────────────────────────────────── */
@@ -492,7 +501,7 @@
     nextBtn.textContent = step.btn;
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setCard(step.cardOffset || 0);
+    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.targets) {
       setSpotMulti(step.targets);
