@@ -108,6 +108,7 @@
       body: 'Tap the circle to pinpoint where you are and navigate from there. Save the map to your phone and it works without Wifi too.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
+      targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
       cardPos: 'center',
       demo: 'close-sheet',
       mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
@@ -138,7 +139,7 @@
     '#tut-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;transition:opacity 0.4s;}',
     '#tut-spot{position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);border-radius:12px;',
     '  transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),',
-    '  width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);pointer-events:none;}',
+    '  width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;pointer-events:none;}',
     '#tut-card{position:fixed;background:#f5edd8;border-radius:16px;padding:20px 22px 16px;',
     '  max-width:290px;width:calc(100vw - 52px);box-shadow:0 8px 40px rgba(0,0,0,0.30);',
     '  pointer-events:all;transition:left 0.35s ease,top 0.35s ease,bottom 0.35s ease;z-index:9001;cursor:grab;}',
@@ -482,14 +483,17 @@
     var PAD = 8;
     clearDualOverlay();
     if (!el) {
-      spot.style.cssText = 'display:none;position:fixed;pointer-events:none;';
+      /* Fade out smoothly rather than snapping to hidden */
+      spot.style.transition = 'opacity 0.3s ease';
+      spot.style.opacity = '0';
+      spot.style.pointerEvents = 'none';
       return;
     }
     var r = el.getBoundingClientRect();
     spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
-      'border-radius:12px;pointer-events:none;' +
+      'border-radius:12px;pointer-events:none;opacity:1;' +
       'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
-      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
+      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;' +
       'left:' + (r.left - PAD) + 'px;top:' + (r.top - PAD) + 'px;' +
       'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
   }
@@ -509,9 +513,9 @@
     });
     if (left === Infinity) { setSpot(null); return; }
     spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
-      'border-radius:12px;pointer-events:none;' +
+      'border-radius:12px;pointer-events:none;opacity:1;' +
       'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
-      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
+      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;' +
       'left:' + (left - PAD) + 'px;top:' + (top - PAD) + 'px;' +
       'width:' + (right - left + PAD * 2) + 'px;height:' + (bottom - top + PAD * 2) + 'px;';
   }
