@@ -24,7 +24,7 @@
       body: 'Every icon on the map is a hand-picked place we recommend. Tap any icon to open its card with place description, work hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
-      demo: 'open-card-delayed',
+      demo: 'open-card-delayed-no-heart',
       btn: 'Next'
     },
     {
@@ -106,7 +106,7 @@
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       cardPos: 'center',
-      demo: null,
+      demo: 'close-sheet',
       btn: 'Next'
     },
     {
@@ -505,11 +505,20 @@
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
     if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    3000); }
+    if (step.demo === 'open-card-delayed-no-heart') { setTimeout(function() {
+      if (!_demoCardOpen && typeof openDetail === 'function') {
+        openDetail(DEMO_PLACE);
+        _demoCardOpen = true;
+      }
+    }, 3000); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
     if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
     if (step.demo === 'close-saved')       { setTimeout(closeSavedDemo, 100); }
+    if (step.demo === 'close-sheet')        { setTimeout(function() {
+      if (typeof closeSheet === 'function') { closeSheet(); }
+    }, 100); }
     if (step.demo === 'close-saved-pulse') {
       setTimeout(function () {
         closeSavedDemo();
