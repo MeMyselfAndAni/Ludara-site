@@ -21,7 +21,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Slide the bar left or right to browse all categories. Tap one — only places of that type stay on the map.',
+      body: 'Slide the top bar left or right to browse all categories. Tap one — only places of that type stay on the map.',
       target: '.filter-bar',
       cardPos: 'center',
       demo: 'scroll-filter',
@@ -84,6 +84,14 @@
       btn: 'Next'
     },
     {
+      title: "You're all set!",
+      body: "Let's start planning Your Perfect Day!",
+      target: null,
+      cardPos: 'center',
+      demo: 'close-saved',
+      btn: 'Next'
+    },
+    {
       title: 'Our Day Trip Picks',
       body: 'See the buttons on the left edge? One tap loads a full curated itinerary — ' + TRIP_NAMES + '.',
       target: '#trip-launcher',
@@ -143,12 +151,11 @@
     '  30%{color:#802f2d;transform:scale(1.45);}',
     '  60%{color:rgba(128,47,45,0.35);transform:scale(1.1);}}',
     '.tut-heart-blink{animation:tut-heart-blink 0.75s ease-in-out 3 !important;}',
-    '@keyframes tut-ring-pulse{',
-    '  0%,100%{box-shadow:0 0 0 3px rgba(128,47,45,0.25);}',
-    '  50%{box-shadow:0 0 0 9px rgba(128,47,45,0.06);}}',
-    '#tut-ring{position:fixed;display:none;pointer-events:none;z-index:10000;',
-    '  border:2px solid #802f2d;border-radius:10px;',
-    '  animation:tut-ring-pulse 1.2s ease-in-out infinite;}'
+    '@keyframes tut-highlight-pulse{',
+    '  0%,100%{box-shadow:0 0 0 0 rgba(128,47,45,0.7);}',
+    '  50%{box-shadow:0 0 0 8px rgba(128,47,45,0.0);}}',
+    '.tut-highlight{box-shadow:0 0 0 3px #802f2d,0 0 0 7px rgba(128,47,45,0.25) !important;',
+    '  animation:tut-highlight-pulse 1.1s ease-in-out infinite !important;}'
   ].join('');
   document.head.appendChild(style);
 
@@ -196,9 +203,10 @@
   var currentStep   = 0;
   var beacons       = [];
   var launcherAnim  = null;
-  var _demoCardOpen = false;
-  var _demoSavedOn  = false;
-  var _demoSavedBkp = null;
+  var _demoCardOpen  = false;
+  var _demoSavedOn   = false;
+  var _demoSavedBkp  = null;
+  var _highlightedEl = null;
 
   /* ── Demo helpers ───────────────────────────────────────────── */
   function _favsKey() {
@@ -360,16 +368,10 @@
     launcherAnim = true;
   }
 
-  /* ── Ring highlight (above saved panel z-index) ──────────────── */
-  function setRing(el) {
-    if (!el) { ring.style.display = 'none'; return; }
-    var PAD = 6;
-    var r = el.getBoundingClientRect();
-    ring.style.cssText = 'position:fixed;display:block;pointer-events:none;z-index:10000;' +
-      'border:2px solid #802f2d;border-radius:10px;' +
-      'animation:tut-ring-pulse 1.2s ease-in-out infinite;' +
-      'left:' + (r.left - PAD) + 'px;top:' + (r.top - PAD) + 'px;' +
-      'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
+  /* ── Button highlight (class on element, renders in its own stacking context) ── */
+  function setHighlight(el) {
+    if (_highlightedEl) { _highlightedEl.classList.remove('tut-highlight'); _highlightedEl = null; }
+    if (el) { el.classList.add('tut-highlight'); _highlightedEl = el; }
   }
 
   /* ── Spotlight + card positioning ───────────────────────────── */
@@ -417,7 +419,7 @@
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setSpot(targetEl);
-    setRing(targetEl);
+    setHighlight(targetEl);
     setCard();
 
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
@@ -426,6 +428,7 @@
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
     if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
+    if (step.demo === 'close-saved')       { setTimeout(closeSavedDemo, 100); }
     if (step.demo === 'close-saved-pulse') {
       setTimeout(function () {
         closeSavedDemo();
@@ -438,7 +441,7 @@
   function endTutorial() {
     clearBeacons();
     clearLauncherAnim();
-    setRing(null);
+    setHighlight(null);
     closeDemoCard();
     closeSavedDemo();
     localStorage.setItem(DONE_KEY, '1');
