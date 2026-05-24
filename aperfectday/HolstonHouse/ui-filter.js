@@ -313,7 +313,7 @@ function renderList(){
 
   filtered = PLACES.filter(p => {
     const catOk    = AF === 'all' || p.cat === AF;
-    const nbhdOk   = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+    const nbhdOk   = true; /* neighborhood selection only pans map — all markers stay visible */
     const openOk   = !openNowActive || isOpenNow(p);
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
     return catOk && nbhdOk && openOk && searchOk;
