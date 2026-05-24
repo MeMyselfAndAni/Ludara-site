@@ -12,6 +12,14 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
+      title: 'Let\'s plan Your Perfect Day!',
+      body: '',
+      target: null,
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
       title: 'Your ' + CITY + ' guide',
       body: 'Every icon on the map is a hand-picked place we recommend. Colours show the type — tap any icon to open its card with hours, an insider tip, and a link to the website.',
       target: null,
@@ -62,7 +70,7 @@
     {
       title: 'Open in Google Maps',
       body: 'Tap to open your trip directly in Google Maps.',
-      target: '.saved-action-route',
+      target: 'button[onclick="openTripInMaps()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -70,7 +78,7 @@
     {
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
-      target: '.saved-action-pdf',
+      target: 'button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -78,17 +86,9 @@
     {
       title: 'Share your map',
       body: 'Share your personalized map via message or email.',
-      target: '.saved-action-map',
+      target: 'button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
-      btn: 'Next'
-    },
-    {
-      title: "You're all set!",
-      body: "Let's start planning Your Perfect Day!",
-      target: null,
-      cardPos: 'center',
-      demo: 'close-saved',
       btn: 'Next'
     },
     {
@@ -97,6 +97,14 @@
       target: '#trip-launcher',
       cardPos: 'center',
       demo: 'close-saved-pulse',
+      btn: 'Next'
+    },
+    {
+      title: "You're all set!",
+      body: "Let's start planning Your Perfect Day!",
+      target: null,
+      cardPos: 'center',
+      demo: null,
       btn: 'Done'
     }
   ];
@@ -418,9 +426,17 @@
     nextBtn.textContent = step.btn;
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setSpot(targetEl);
-    setHighlight(targetEl);
     setCard();
+    /* For action buttons inside the sheet, re-query after paint to get real coords */
+    if (step.target && step.target.indexOf('onclick') !== -1) {
+      setSpot(null);
+      setTimeout(function () {
+        var el = document.querySelector(step.target);
+        if (el && el.getBoundingClientRect().width > 0) { setSpot(el); }
+      }, 120);
+    } else {
+      setSpot(targetEl);
+    }
 
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
