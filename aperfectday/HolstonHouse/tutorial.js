@@ -16,7 +16,15 @@
       body: 'Every icon on the map is a hand-picked place we recommend. Tap any icon to open its card with place description, work hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
-      demo: null,
+      demo: 'open-card-delayed',
+      btn: 'Next'
+    },
+    {
+      title: 'Inside the place card',
+      body: 'Read our curated place description and exclusive tips. Scroll down for the phone number and website link.',
+      target: null,
+      cardPos: 'center',
+      demo: 'scroll-card',
       btn: 'Next'
     },
     {
@@ -41,14 +49,6 @@
       target: null,
       cardPos: 'center',
       demo: 'open-card',
-      btn: 'Next'
-    },
-    {
-      title: 'Inside the place card',
-      body: 'Read our curated place description and exclusive tips. Scroll down for the phone number and website link.',
-      target: null,
-      cardPos: 'center',
-      demo: 'scroll-card',
       btn: 'Next'
     },
     {
@@ -247,6 +247,11 @@
   }
 
   function scrollCardDemo() {
+    /* Ensure the place card is open (in case user tapped Next before the 5s timer fired) */
+    if (!_demoCardOpen && typeof openDetail === 'function') {
+      openDetail(DEMO_PLACE);
+      _demoCardOpen = true;
+    }
     /* Wait 5 s, then slowly ease-scroll #pc-body down to reveal contacts */
     setTimeout(function () {
       var body = document.getElementById('pc-body');
@@ -438,6 +443,7 @@
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
+    if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    5000); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
