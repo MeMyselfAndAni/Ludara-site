@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Your Perfect Day in ' + CITY,
-      body: 'Every icon on the map is a hand-picked place we recommend. Icon colors show the type — tap any icon to open its card with hours, an insider tip, and a link to the website.',
+      body: 'Every icon on the map is a hand-picked place we recommend. Tap any icon to open its card with place description, work hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -62,7 +62,7 @@
     {
       title: 'Navigate',
       body: 'You can navigate on mobile using our maps or tap to open your trip in Google Maps.',
-      target: '.saved-action-route',
+      target: '#sheet button[onclick="openTripInMaps()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -70,7 +70,7 @@
     {
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
-      target: '.saved-action-pdf',
+      target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -78,7 +78,7 @@
     {
       title: 'Share your map',
       body: 'Share your personalized map via message or email.',
-      target: '.saved-action-map',
+      target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -146,11 +146,6 @@
     '@keyframes tut-tap{',
     '  0%{transform:translate(-50%,-50%) scale(0.3);opacity:1;}',
     '  100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;}}',
-    '@keyframes tut-heart-blink{',
-    '  0%,100%{color:inherit;transform:scale(1);}',
-    '  30%{color:#802f2d;transform:scale(1.45);}',
-    '  60%{color:rgba(128,47,45,0.35);transform:scale(1.1);}}',
-    '.tut-heart-blink{animation:tut-heart-blink 2.25s ease-in-out 3 !important;}',
   ].join('');
   document.head.appendChild(style);
 
@@ -215,8 +210,9 @@
   function _blinkHeart() {
     var hb = document.querySelector('#pc-btn-fav');
     if (!hb) return;
-    hb.classList.add('tut-heart-blink');
-    setTimeout(function () { hb.classList.remove('tut-heart-blink'); }, 7500);
+    /* Turn heart red (simulate save), then restore after 2 s */
+    hb.classList.add('faved');
+    setTimeout(function () { hb.classList.remove('faved'); }, 2000);
   }
 
   function openDemoCard() {
@@ -429,7 +425,7 @@
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard();
     /* For saved-panel action buttons, re-query after panel animates in */
-    if (step.target && step.target.indexOf('saved-action') !== -1) {
+    if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
       setSpot(null);
       setTimeout(function () {
         var el = document.querySelector(step.target);
