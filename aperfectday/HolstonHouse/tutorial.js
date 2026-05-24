@@ -366,23 +366,39 @@
   });
   skipBtn.addEventListener('click', endTutorial);
 
-  /* ── Start: wait for map to be ready ───────────────────────── */
+  /* ── Start: wait for splash to close, then map to be ready ─── */
   function tryStart() {
     var loading = document.getElementById('loading');
     var mapEl   = document.getElementById('map');
-    /* Start once loading spinner gone or map has leaflet tiles */
     if ((loading && loading.style.display !== 'none') &&
         !(mapEl && mapEl.querySelector('.leaflet-tile'))) {
       setTimeout(tryStart, 300);
       return;
     }
-    setTimeout(function () { showStep(0); }, 800);
+    setTimeout(function () { showStep(0); }, 600);
+  }
+
+  function waitForSplashClose() {
+    var splash = document.getElementById('splash');
+    /* Splash not present or already hidden — go straight to map check */
+    if (!splash || splash.style.display === 'none' || splash.classList.contains('hidden')) {
+      setTimeout(tryStart, 1200);
+      return;
+    }
+    /* Splash is visible — watch for it to be dismissed */
+    var obs = new MutationObserver(function () {
+      if (splash.style.display === 'none' || splash.classList.contains('hidden')) {
+        obs.disconnect();
+        setTimeout(tryStart, 600);
+      }
+    });
+    obs.observe(splash, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 
   if (document.readyState === 'complete') {
-    setTimeout(tryStart, 1200);
+    waitForSplashClose();
   } else {
-    window.addEventListener('load', function () { setTimeout(tryStart, 1200); });
+    window.addEventListener('load', waitForSplashClose);
   }
 
 })();
