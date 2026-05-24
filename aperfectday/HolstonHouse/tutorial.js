@@ -138,7 +138,9 @@
     '  width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);pointer-events:none;}',
     '#tut-card{position:fixed;background:#f5edd8;border-radius:16px;padding:20px 22px 16px;',
     '  max-width:290px;width:calc(100vw - 52px);box-shadow:0 8px 40px rgba(0,0,0,0.30);',
-    '  pointer-events:all;transition:left 0.35s ease,top 0.35s ease,bottom 0.35s ease;z-index:9001;}',
+    '  pointer-events:all;transition:left 0.35s ease,top 0.35s ease,bottom 0.35s ease;z-index:9001;cursor:grab;}',
+    '#tut-card.tut-dragging{cursor:grabbing;transition:none;}',
+    '#tut-next,#tut-skip{cursor:pointer;}',
     '#tut-dots{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}',
     '.tut-dot{height:5px;border-radius:3px;background:rgba(49,38,29,0.22);transition:all 0.3s;}',
     '.tut-dot.on{background:#31261d;width:18px;}',
@@ -192,6 +194,36 @@
   overlay.appendChild(spot);
   overlay.appendChild(card);
 
+  /* ── Drag-to-move card ──────────────────────────────────────── */
+  card.addEventListener('pointerdown', function (e) {
+    if (e.target.tagName === 'BUTTON') return;   /* don't steal button clicks */
+    var r = card.getBoundingClientRect();
+    _drag.active = true;
+    _drag.startX = e.clientX;
+    _drag.startY = e.clientY;
+    _drag.cardX  = r.left;
+    _drag.cardY  = r.top;
+    card.classList.add('tut-dragging');
+    card.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  card.addEventListener('pointermove', function (e) {
+    if (!_drag.active) return;
+    var nx = _drag.cardX + (e.clientX - _drag.startX);
+    var ny = _drag.cardY + (e.clientY - _drag.startY);
+    /* keep card within viewport */
+    var vw = window.innerWidth, vh = window.innerHeight;
+    nx = Math.max(0, Math.min(nx, vw - card.offsetWidth));
+    ny = Math.max(0, Math.min(ny, vh - card.offsetHeight));
+    card.style.left = nx + 'px';
+    card.style.top  = ny + 'px';
+  });
+  card.addEventListener('pointerup', function () {
+    _drag.active = false;
+    card.classList.remove('tut-dragging');
+  });
+
+
   var titleEl = card.querySelector('#tut-title');
   var bodyEl  = card.querySelector('#tut-body');
   var nextBtn = card.querySelector('#tut-next');
@@ -212,6 +244,9 @@
   var _demoCardOpen  = false;
   var _demoSavedOn   = false;
   var _demoSavedBkp  = null;
+
+  /* ── Drag state ─────────────────────────────────────────────── */
+  var _drag = { active: false, startX: 0, startY: 0, cardX: 0, cardY: 0 };
 
   /* ── Demo helpers ───────────────────────────────────────────── */
   function _favsKey() {
