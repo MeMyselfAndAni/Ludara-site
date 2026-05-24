@@ -12,7 +12,15 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Your Perfect Day in ' + CITY,
+      title: 'Welcome to Your Perfect Day in ' + CITY,
+      body: 'This short tour will show you everything the guide can do. Tap Next to begin.',
+      target: null,
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
+      title: 'Our Curated ' + CITY + ' Guide',
       body: 'Every icon on the map is a hand-picked place we recommend. Tap any icon to open its card with place description, work hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
@@ -457,6 +465,8 @@
     if (step.demo === 'close-saved-pulse') {
       setTimeout(function () {
         closeSavedDemo();
+        /* On mobile, close the places list so trip-launcher icons are visible */
+        if (window.innerWidth < 768 && typeof closeSheet === 'function') { closeSheet(); }
         setTimeout(pulseLauncher, 400);
       }, 100);
     }
