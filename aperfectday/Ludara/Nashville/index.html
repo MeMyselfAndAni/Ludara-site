@@ -75,8 +75,7 @@
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span>
     </div>
-    <h2 class="splash-title">Nashville Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">50</span> hand-picked places — from Michelin-starred dining and legendary honky-tonks to songwriter listening rooms and wilderness trails.</p>
+    <p class="splash-hotel-desc">Get curated dining, nightlife, music, and local recommendations tailored to your stay.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
@@ -297,6 +296,16 @@
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
+<script>
+window.TutorialConfig = {
+  doneKey:      'nashville_tour_v1',
+  cityName:     'Nashville',
+  demoPlaceId:  42,                            /* Skull's Rainbow Room */
+  demoSavedIds: [42, 1, 5, 3, 4],             /* Skull's Rainbow Room, Ryman, Tootsie's, NMAAM, Hatch Show Print — all Broadway/walkable */
+  /* tripNames not set — no trip launcher in this guide */
+};
+</script>
+<script src="tutorial.js"></script>
 
 <!-- Navigate in Google Maps using place search names -->
 <script>

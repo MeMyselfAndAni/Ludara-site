@@ -170,7 +170,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .sheet {
   position: fixed;          /* fixed — never causes page reflow or jump */
   bottom: 0; left: 0; right: 0;
-  z-index: 300;
+  z-index: 360; /* above .trip-launcher (350) so saved list covers buttons on mobile */
   background: var(--surface);
   border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   transform: translateY(105%);
@@ -653,6 +653,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 
 /* ── WELCOME SPLASH ── */
+@keyframes splashFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 .splash {
   position: fixed;
   inset: 0;
@@ -662,6 +666,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   align-items: center;
   justify-content: center;
   padding: 24px;
+  animation: splashFadeIn 0.5s ease both;
+  transition: opacity 0.5s ease;
 }
 .splash-inner {
   max-width: 460px;
@@ -708,7 +714,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   text-decoration: none;
   letter-spacing: 0.05em;
 }
-.splash.hidden { display: none; }
+@keyframes splashFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.splash.hidden { opacity: 0; pointer-events: none; display: none; }
 
 /* ── OPEN NOW PILL ── */
 .pill-opennow { border-color: #2e7d32; color: #2e7d32; }

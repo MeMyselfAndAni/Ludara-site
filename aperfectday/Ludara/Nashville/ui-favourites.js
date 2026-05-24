@@ -189,10 +189,9 @@ async function _fetchOSRMRoute(places){
   for(let i = 0; i < places.length - 1; i += CHUNK - 1){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
-    // foot.router.project-osrm.org is the dedicated walking profile server
-    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    const url = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`;
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
       const data = await res.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
         const segCoords = data.routes[0].geometry.coordinates;
@@ -221,11 +220,10 @@ function drawSavedRoute(){
   // Draw numbered markers immediately
   _addNumberedMarkers(places);
 
-  // Draw straight line first as placeholder
-  _drawStraightRoute(places);
+  // Fit map bounds immediately; real route drawn once OSRM responds
   _fitRouteBounds(places);
 
-  // If online, fetch real walking route from OSRM and replace
+  // Fetch actual driving route from OSRM — no straight-line placeholder
   if(navigator.onLine){
     _fetchOSRMRoute(places).then(coords => {
       if(coords && coords.length > 1){
@@ -590,7 +588,7 @@ function _fetchRouteStats(places) {
     if (!navigator.onLine) return fallback();
 
     const coords = places.map(p => p.lng + ',' + p.lat).join(';');
-    const url = 'https://routing.openstreetmap.de/routed-foot/route/v1/walking/' + coords + '?overview=false';
+    const url = 'https://router.project-osrm.org/route/v1/driving/' + coords + '?overview=false';
     const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
 
