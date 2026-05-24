@@ -46,8 +46,8 @@
     {
       title: 'Your saved places',
       body: 'Tap Saved to open your personal list. Drag any item up or down to rearrange the order.',
-      target: '#pill-saved',
-      cardPos: 'below',
+      target: null,
+      cardPos: 'bottom-center',
       demo: 'show-saved',
       btn: 'Next'
     },
@@ -122,7 +122,19 @@
     '  animation:tut-pulse 1.3s ease-in-out infinite;pointer-events:none;z-index:9002;transform:translate(-50%,-50%);}',
     '@keyframes tut-launcher-glow{',
     '  0%,100%{box-shadow:0 0 0 0 rgba(49,38,29,0.5);}',
-    '  50%{box-shadow:0 0 0 10px rgba(49,38,29,0);}}'
+    '  50%{box-shadow:0 0 0 10px rgba(49,38,29,0);}}',
+    '.tut-tap-ripple{position:fixed;width:48px;height:48px;border-radius:50%;',
+    '  border:3px solid rgba(128,47,45,0.85);background:rgba(128,47,45,0.22);',
+    '  pointer-events:none;z-index:9005;',
+    '  animation:tut-tap 0.65s ease-out forwards;}',
+    '@keyframes tut-tap{',
+    '  0%{transform:translate(-50%,-50%) scale(0.3);opacity:1;}',
+    '  100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;}}',
+    '@keyframes tut-heart-blink{',
+    '  0%,100%{color:inherit;transform:scale(1);}',
+    '  30%{color:#802f2d;transform:scale(1.45);}',
+    '  60%{color:rgba(128,47,45,0.35);transform:scale(1.1);}}',
+    '.tut-heart-blink{animation:tut-heart-blink 0.75s ease-in-out 3 !important;}'
   ].join('');
   document.head.appendChild(style);
 
@@ -174,13 +186,47 @@
     return 'favs_' + window.location.pathname.replace(/\//g, '_');
   }
 
+  function _showTapRipple(x, y) {
+    var r = document.createElement('div');
+    r.className = 'tut-tap-ripple';
+    r.style.left = x + 'px';
+    r.style.top  = y + 'px';
+    document.body.appendChild(r);
+    setTimeout(function () { r.parentNode && r.parentNode.removeChild(r); }, 750);
+  }
+
+  function _blinkHeart() {
+    var hb = document.querySelector('#pc-btn-fav');
+    if (!hb) return;
+    hb.classList.add('tut-heart-blink');
+    setTimeout(function () { hb.classList.remove('tut-heart-blink'); }, 2500);
+  }
+
   function openDemoCard() {
-    if (typeof openDetail === 'function') {
-      openDetail(DEMO_PLACE); /* place ID from TutorialConfig.demoPlaceId */
-      _demoCardOpen = true;
-      /* No spotlight update — target stays null so the full card
-         stays visible without the dark vignette covering it */
-    }
+    /* Find a visible map marker to tap — prefer one near screen centre */
+    var tapX = window.innerWidth * 0.55;
+    var tapY = window.innerHeight * 0.42;
+    var markers = document.querySelectorAll('.leaflet-marker-icon');
+    markers.forEach(function (m) {
+      var r = m.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if (cy > 80 && cy < window.innerHeight * 0.65 &&
+          cx > 60 && cx < window.innerWidth - 60) {
+        tapX = cx; tapY = cy;
+      }
+    });
+
+    /* Show tap ripple, then open the card */
+    _showTapRipple(tapX, tapY);
+    setTimeout(function () {
+      if (typeof openDetail === 'function') {
+        openDetail(DEMO_PLACE);
+        _demoCardOpen = true;
+        /* Blink the heart button after card animates in */
+        setTimeout(_blinkHeart, 750);
+      }
+    }, 420);
   }
 
   function closeDemoCard() {
@@ -206,14 +252,7 @@
     if (pill && !pill.classList.contains('active')) {
       if (typeof toggleSavedFilter === 'function') { toggleSavedFilter(pill); }
     }
-    /* After panel animates in, shift spotlight to the panel so the list is visible */
-    setTimeout(function () {
-      var panel = document.getElementById('saved-panel');
-      if (panel && panel.getBoundingClientRect().height > 0) {
-        setSpot(panel);
-        setCard(panel, 'above');
-      }
-    }, 600);
+    /* No spotlight shift — keep everything bright, card stays centered */
   }
 
   function closeSavedDemo() {
@@ -329,8 +368,8 @@
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;';
 
     if (position === 'top-center') {
-      /* Place card near top — keeps bottom free for place card sheet */
-      card.style.top  = '100px';
+      /* Sit just below the hotel header so the place card image shows below */
+      card.style.top  = '8px';
       card.style.left = Math.max(16, (vw - cardW) / 2) + 'px';
       return;
     }
