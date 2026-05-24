@@ -64,6 +64,8 @@
       title: 'Your saved places',
       body: 'Tap Saved in the top left to see your list. Tap any row to revisit the place card. Drag to put them in the order you\'ll actually go.',
       target: null,
+      targets: ['#pill-saved', '#sheet'],
+      targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
       cardPos: 'center',
       demo: 'show-saved',
       btn: 'Next'
@@ -539,7 +541,12 @@
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.targets) {
-      setSpotMulti(step.targets);
+      if (step.targetsDelay) {
+        setSpot(null);
+        setTimeout(function() { setSpotMulti(step.targets); }, step.targetsDelay);
+      } else {
+        setSpotMulti(step.targets);
+      }
     } else if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
       setTimeout(function () {
         var el = document.querySelector(step.target);
