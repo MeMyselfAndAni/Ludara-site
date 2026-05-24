@@ -49,6 +49,7 @@
       body: 'Each button at the bottom is a ' + CITY + ' neighborhood. Tap to zoom straight in. Tap again to zoom back out.',
       target: '#nbhd-bar',
       cardPos: 'center',
+      closeCard: true,
       demo: null,
       btn: 'Next'
     },
