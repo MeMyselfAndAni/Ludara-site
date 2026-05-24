@@ -165,7 +165,7 @@
 
   overlay.appendChild(spot);
   overlay.appendChild(card);
-  document.body.appendChild(overlay);
+  /* Overlay appended to DOM only when tutorial actually starts — never on splash */
 
   var titleEl = document.getElementById('tut-title');
   var bodyEl  = document.getElementById('tut-body');
@@ -366,8 +366,9 @@
   });
   skipBtn.addEventListener('click', endTutorial);
 
-  /* ── Start: wait for splash to close, then map to be ready ─── */
+  /* ── Start: only after splash is fully dismissed ───────────── */
   function tryStart() {
+    if (!overlay.parentNode) { document.body.appendChild(overlay); }
     var loading = document.getElementById('loading');
     var mapEl   = document.getElementById('map');
     if ((loading && loading.style.display !== 'none') &&
@@ -379,20 +380,15 @@
   }
 
   function waitForSplashClose() {
-    var splash = document.getElementById('splash');
-    /* Splash not present or already hidden — go straight to map check */
-    if (!splash || splash.style.display === 'none' || splash.classList.contains('hidden')) {
+    var btn = document.querySelector('.splash-btn');
+    if (!btn) {
+      /* No splash button visible — map is already showing */
       setTimeout(tryStart, 1200);
       return;
     }
-    /* Splash is visible — watch for it to be dismissed */
-    var obs = new MutationObserver(function () {
-      if (splash.style.display === 'none' || splash.classList.contains('hidden')) {
-        obs.disconnect();
-        setTimeout(tryStart, 600);
-      }
-    });
-    obs.observe(splash, { attributes: true, attributeFilter: ['style', 'class'] });
+    btn.addEventListener('click', function () {
+      setTimeout(tryStart, 700);
+    }, { once: true });
   }
 
   if (document.readyState === 'complete') {
@@ -400,5 +396,14 @@
   } else {
     window.addEventListener('load', waitForSplashClose);
   }
+
+  /* ── Public restart function (for the "Show Tutorial" button) ── */
+  window.restartTutorial = function () {
+    localStorage.removeItem(DONE_KEY);
+    currentStep = 0;
+    if (!overlay.parentNode) { document.body.appendChild(overlay); }
+    overlay.style.opacity = '1';
+    showStep(0);
+  };
 
 })();
