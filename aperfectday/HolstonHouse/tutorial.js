@@ -166,11 +166,11 @@
   overlay.appendChild(card);
   /* Overlay appended to DOM only when tutorial actually starts — never on splash */
 
-  var titleEl = document.getElementById('tut-title');
-  var bodyEl  = document.getElementById('tut-body');
-  var nextBtn = document.getElementById('tut-next');
-  var skipBtn = document.getElementById('tut-skip');
-  var dotsEl  = document.getElementById('tut-dots');
+  var titleEl = card.querySelector('#tut-title');
+  var bodyEl  = card.querySelector('#tut-body');
+  var nextBtn = card.querySelector('#tut-next');
+  var skipBtn = card.querySelector('#tut-skip');
+  var dotsEl  = card.querySelector('#tut-dots');
 
   /* Build dots */
   STEPS.forEach(function (_, i) {
@@ -327,7 +327,7 @@
 
     /* Dots */
     STEPS.forEach(function (_, i) {
-      var d = document.getElementById('tut-dot-' + i);
+      var d = card.querySelector('#tut-dot-' + i);
       if (d) d.className = 'tut-dot ' + (i === n ? 'on' : 'off');
     });
 
@@ -368,6 +368,7 @@
   /* ── Launch ─────────────────────────────────────────────────── */
   function launch() {
     currentStep = 0;
+    if (!style.parentNode)   { document.head.appendChild(style); }
     if (!overlay.parentNode) { document.body.appendChild(overlay); }
     overlay.style.opacity = '1';
     showStep(0);
@@ -381,7 +382,7 @@
 
   /* ── Auto-start on first visit only ─────────────────────────── */
   if (!localStorage.getItem(DONE_KEY)) {
-    function waitForSplashClose() {
+    var waitForSplashClose = function () {
       var btn = document.querySelector('.splash-btn');
       if (!btn) {
         /* No splash — map already showing */
