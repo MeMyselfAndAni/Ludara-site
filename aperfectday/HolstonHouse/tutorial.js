@@ -20,8 +20,8 @@
       btn: 'Next'
     },
     {
-      title: 'Your ' + CITY + ' guide',
-      body: 'Every icon on the map is a hand-picked place we recommend. Colours show the type — tap any icon to open its card with hours, an insider tip, and a link to the website.',
+      title: 'Your Perfect Day in ' + CITY + ',',
+      body: 'Every icon on the map is a hand-picked place we recommend. Icon colors show the type — tap any icon to open its card with hours, an insider tip, and a link to the website.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -44,7 +44,7 @@
       btn: 'Next'
     },
     {
-      title: 'Save your favourites',
+      title: 'Save your favorites',
       body: 'Tap any icon on the map to open its place card. Then tap the heart to save it — it stays saved between visits.',
       target: null,
       cardPos: 'center',
@@ -61,16 +61,16 @@
     },
     {
       title: 'Your saved places',
-      body: 'Tap Saved to open your personal list. Click on rows to open each place card. Drag any item up or down to rearrange the order.',
+      body: 'Tap top left Saved to open your personal list. Click on rows to open each place card. Drag any item up or down to rearrange the order.',
       target: null,
       cardPos: 'center',
       demo: 'show-saved',
       btn: 'Next'
     },
     {
-      title: 'Open in Google Maps',
-      body: 'Tap to open your trip directly in Google Maps.',
-      target: 'button[onclick="openTripInMaps()"]',
+      title: 'Navigate',
+      body: 'You can navigate on mobile using our maps or tap to open your trip in Google Maps.',
+      target: '#sheet .saved-action-btn:nth-child(1)',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -78,7 +78,7 @@
     {
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
-      target: 'button[onclick="generatePDF()"]',
+      target: '#sheet .saved-action-btn:nth-child(2)',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -86,7 +86,7 @@
     {
       title: 'Share your map',
       body: 'Share your personalized map via message or email.',
-      target: 'button[onclick="shareItinerary()"]',
+      target: '#sheet .saved-action-btn:nth-child(3)',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
@@ -150,7 +150,7 @@
     '.tut-tap-ripple{position:fixed;width:48px;height:48px;border-radius:50%;',
     '  border:3px solid rgba(128,47,45,0.85);background:rgba(128,47,45,0.22);',
     '  pointer-events:none;z-index:9005;',
-    '  animation:tut-tap 0.65s ease-out forwards;}',
+    '  animation:tut-tap 1.95s ease-out forwards;}',
     '@keyframes tut-tap{',
     '  0%{transform:translate(-50%,-50%) scale(0.3);opacity:1;}',
     '  100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;}}',
@@ -158,19 +158,10 @@
     '  0%,100%{color:inherit;transform:scale(1);}',
     '  30%{color:#802f2d;transform:scale(1.45);}',
     '  60%{color:rgba(128,47,45,0.35);transform:scale(1.1);}}',
-    '.tut-heart-blink{animation:tut-heart-blink 0.75s ease-in-out 3 !important;}',
-    '@keyframes tut-highlight-pulse{',
-    '  0%,100%{box-shadow:0 0 0 0 rgba(128,47,45,0.7);}',
-    '  50%{box-shadow:0 0 0 8px rgba(128,47,45,0.0);}}',
-    '.tut-highlight{box-shadow:0 0 0 3px #802f2d,0 0 0 7px rgba(128,47,45,0.25) !important;',
-    '  animation:tut-highlight-pulse 1.1s ease-in-out infinite !important;}'
+    '.tut-heart-blink{animation:tut-heart-blink 2.25s ease-in-out 3 !important;}',
   ].join('');
   document.head.appendChild(style);
 
-  /* ── Ring highlight (above saved panel z-index) ──────────────── */
-  var ring = document.createElement('div');
-  ring.id = 'tut-ring';
-  document.body.appendChild(ring);
 
   /* ── Build overlay DOM ──────────────────────────────────────── */
   var overlay = document.createElement('div');
@@ -214,7 +205,6 @@
   var _demoCardOpen  = false;
   var _demoSavedOn   = false;
   var _demoSavedBkp  = null;
-  var _highlightedEl = null;
 
   /* ── Demo helpers ───────────────────────────────────────────── */
   function _favsKey() {
@@ -227,14 +217,14 @@
     r.style.left = x + 'px';
     r.style.top  = y + 'px';
     document.body.appendChild(r);
-    setTimeout(function () { r.parentNode && r.parentNode.removeChild(r); }, 750);
+    setTimeout(function () { r.parentNode && r.parentNode.removeChild(r); }, 2250);
   }
 
   function _blinkHeart() {
     var hb = document.querySelector('#pc-btn-fav');
     if (!hb) return;
     hb.classList.add('tut-heart-blink');
-    setTimeout(function () { hb.classList.remove('tut-heart-blink'); }, 2500);
+    setTimeout(function () { hb.classList.remove('tut-heart-blink'); }, 7500);
   }
 
   function openDemoCard() {
@@ -259,9 +249,9 @@
         openDetail(DEMO_PLACE);
         _demoCardOpen = true;
         /* Blink the heart button after card animates in */
-        setTimeout(_blinkHeart, 750);
+        setTimeout(_blinkHeart, 2250);
       }
-    }, 420);
+    }, 1260);
   }
 
   function closeDemoCard() {
@@ -287,6 +277,8 @@
     if (pill && !pill.classList.contains('active')) {
       if (typeof toggleSavedFilter === 'function') { toggleSavedFilter(pill); }
     }
+    /* On mobile toggleSavedFilter skips openSheet — call it explicitly */
+    if (typeof openSheet === 'function') { setTimeout(openSheet, 80); }
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
@@ -376,12 +368,6 @@
     launcherAnim = true;
   }
 
-  /* ── Button highlight (class on element, renders in its own stacking context) ── */
-  function setHighlight(el) {
-    if (_highlightedEl) { _highlightedEl.classList.remove('tut-highlight'); _highlightedEl = null; }
-    if (el) { el.classList.add('tut-highlight'); _highlightedEl = el; }
-  }
-
   /* ── Spotlight + card positioning ───────────────────────────── */
   function setSpot(el) {
     var PAD = 8;
@@ -428,7 +414,7 @@
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard();
     /* For action buttons inside the sheet, re-query after paint to get real coords */
-    if (step.target && step.target.indexOf('onclick') !== -1) {
+    if (step.target && step.target.indexOf('#sheet') !== -1) {
       setSpot(null);
       setTimeout(function () {
         var el = document.querySelector(step.target);
@@ -457,7 +443,6 @@
   function endTutorial() {
     clearBeacons();
     clearLauncherAnim();
-    setHighlight(null);
     closeDemoCard();
     closeSavedDemo();
     localStorage.setItem(DONE_KEY, '1');
