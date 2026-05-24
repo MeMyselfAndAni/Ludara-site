@@ -684,11 +684,23 @@
 
   /* ── Auto-start on first visit only ─────────────────────────── */
   if (!localStorage.getItem(DONE_KEY)) {
+    var _splashGone = function() {
+      var s = document.getElementById('splash');
+      return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
+    };
+    var _launchWhenClear = function() {
+      if (_splashGone()) { launch(); } else { setTimeout(_launchWhenClear, 80); }
+    };
     var waitForSplashClose = function () {
       var btn = document.querySelector('.splash-btn');
-      if (!btn) { setTimeout(launch, 1200); return; }
+      if (!btn) {
+        /* No splash on this page — only launch if there is genuinely no splash showing */
+        if (_splashGone()) { setTimeout(launch, 400); }
+        return;
+      }
       btn.addEventListener('click', function () {
-        setTimeout(launch, 700);
+        /* Poll until splash is fully hidden (display:none) before launching */
+        setTimeout(_launchWhenClear, 300);
       }, { once: true });
     };
     if (document.readyState === 'complete') {
