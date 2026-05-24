@@ -2,7 +2,6 @@
   'use strict';
 
   var DONE_KEY = 'holston_tour_v1';
-  if (localStorage.getItem(DONE_KEY)) return;
 
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
@@ -366,44 +365,38 @@
   });
   skipBtn.addEventListener('click', endTutorial);
 
-  /* ── Start: only after splash is fully dismissed ───────────── */
-  function tryStart() {
-    if (!overlay.parentNode) { document.body.appendChild(overlay); }
-    var loading = document.getElementById('loading');
-    var mapEl   = document.getElementById('map');
-    if ((loading && loading.style.display !== 'none') &&
-        !(mapEl && mapEl.querySelector('.leaflet-tile'))) {
-      setTimeout(tryStart, 300);
-      return;
-    }
-    setTimeout(function () { showStep(0); }, 600);
-  }
-
-  function waitForSplashClose() {
-    var btn = document.querySelector('.splash-btn');
-    if (!btn) {
-      /* No splash button visible — map is already showing */
-      setTimeout(tryStart, 1200);
-      return;
-    }
-    btn.addEventListener('click', function () {
-      setTimeout(tryStart, 700);
-    }, { once: true });
-  }
-
-  if (document.readyState === 'complete') {
-    waitForSplashClose();
-  } else {
-    window.addEventListener('load', waitForSplashClose);
-  }
-
-  /* ── Public restart function (for the "Show Tutorial" button) ── */
-  window.restartTutorial = function () {
-    localStorage.removeItem(DONE_KEY);
+  /* ── Launch ─────────────────────────────────────────────────── */
+  function launch() {
     currentStep = 0;
     if (!overlay.parentNode) { document.body.appendChild(overlay); }
     overlay.style.opacity = '1';
     showStep(0);
+  }
+
+  /* ── Public restart — always available, even after completion ── */
+  window.restartTutorial = function () {
+    localStorage.removeItem(DONE_KEY);
+    launch();
   };
+
+  /* ── Auto-start on first visit only ─────────────────────────── */
+  if (!localStorage.getItem(DONE_KEY)) {
+    function waitForSplashClose() {
+      var btn = document.querySelector('.splash-btn');
+      if (!btn) {
+        /* No splash — map already showing */
+        setTimeout(launch, 1200);
+        return;
+      }
+      btn.addEventListener('click', function () {
+        setTimeout(launch, 700);
+      }, { once: true });
+    }
+    if (document.readyState === 'complete') {
+      waitForSplashClose();
+    } else {
+      window.addEventListener('load', waitForSplashClose);
+    }
+  }
 
 })();
