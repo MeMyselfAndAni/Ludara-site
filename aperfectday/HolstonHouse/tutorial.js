@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Your ' + CITY + ' guide',
-      body: 'Every icon on the map is a hand-picked place. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
+      body: 'Every icon on the map is a hand-picked place we recommend to visit. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
       target: null,
       cardPos: 'bottom-center',
       demo: null,
