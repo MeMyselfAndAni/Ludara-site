@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice — a bacaro that Venetians actually use, a church with a Tintoretto and no queue, a glassblower on Murano who still works by eye. Tap any icon to see why it made the list.',
+      body: 'Every pin is a choice: a wine bar that Venetians actually use, a church with a Tintoretto and no queue, a glassblower on Murano who still works by eye. Tap any icon to see why it made the list.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -29,7 +29,7 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Straight talk from a local insider — what makes it worth your time, when to go, and what to ask for. Scroll down for the phone number and website.',
+      body: 'Straight talk from a local insider: what makes it worth your time, when to go, and what to ask for. Scroll down for the phone number and website.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Looking for a bacaro with real cichetti? A Renaissance church with no queue? Slide the bar to show only the category you want — the map follows.',
+      body: 'Looking for a wine bar with real local bites? A Renaissance church with no queue? Slide the bar to show only the category you want, the map follows.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -46,7 +46,7 @@
     },
     {
       title: 'Explore by Sestiere',
-      body: 'Each button is a Venetian district or island. Tap to zoom straight in. Venice rewards those who drift — let the sestieri guide you.',
+      body: 'Each button is a Venetian district or island. Tap to zoom straight in. Venice rewards those who drift, let the districts guide you.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -55,7 +55,7 @@
     },
     {
       title: 'Save your favorites',
-      body: 'Find something that makes you stop? Tap the heart. It stays in your list for the whole trip — even when you close the map.',
+      body: 'Find something that makes you stop? Tap the heart. It stays in your list for the whole trip, even when you close the map.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',
@@ -63,7 +63,7 @@
     },
     {
       title: 'Your saved places',
-      body: 'Tap Saved to see your list. Tap any row to reopen the card. Drag to arrange them in the order you plan to walk — Venice rewards planning.',
+      body: 'Tap Saved to see your list. Tap any row to reopen the card. Drag to arrange them in the order you plan to walk.',
       target: null,
       dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
@@ -81,7 +81,7 @@
     },
     {
       title: 'Download a PDF guide',
-      body: 'Tap PDF Guide to get a beautifully designed guide with all your picks — ready to share or print before you leave.',
+      body: 'Tap PDF Guide to get a beautifully designed guide with all your picks, ready to share or print before you leave.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
@@ -105,7 +105,7 @@
     },
     {
       title: 'Navigate with and without Wifi',
-      body: 'Venice\'s calli can swallow a signal. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too — essential in the narrow lanes.',
+      body: 'Venice\'s narrow streets can swallow a signal. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too, essential in the tight lanes.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'La Serenissima awaits. Go find your perfect day.',
+      body: 'Venice is yours to discover. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */
