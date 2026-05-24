@@ -517,7 +517,7 @@ function applyFilters(){
       const inCat   = AF !== 'all' && p.cat === AF;
       visible = inSaved || inCat;
     } else {
-      const nbhdOk = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
+      const nbhdOk = true; /* neighborhood selection only pans map — all markers stay visible */
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
       visible = catOk && openOk && nbhdOk;
