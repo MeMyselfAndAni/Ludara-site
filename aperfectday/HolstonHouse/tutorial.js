@@ -64,7 +64,7 @@
       title: 'Your saved places',
       body: 'Tap Saved in the top left to see your list. Tap any row to revisit the place card. Drag to put them in the order you\'ll actually go.',
       target: null,
-      targets: ['#pill-saved', '#sheet'],
+      dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
       cardPos: 'center',
       demo: 'show-saved',
@@ -181,6 +181,10 @@
   var spot = document.createElement('div');
   spot.id = 'tut-spot';
 
+  var dualOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  dualOverlay.id = 'tut-dual-overlay';
+  dualOverlay.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;display:none;z-index:9000;';
+
   var card = document.createElement('div');
   card.id = 'tut-card';
   card.innerHTML = [
@@ -194,6 +198,7 @@
   ].join('');
 
   overlay.appendChild(spot);
+  overlay.appendChild(dualOverlay);
   overlay.appendChild(card);
 
   /* ── Drag-to-move card ──────────────────────────────────────── */
@@ -470,6 +475,7 @@
   /* ── Spotlight + card positioning ───────────────────────────── */
   function setSpot(el) {
     var PAD = 8;
+    clearDualOverlay();
     if (!el) {
       spot.style.cssText = 'display:none;position:fixed;pointer-events:none;';
       return;
@@ -505,6 +511,36 @@
       'width:' + (right - left + PAD * 2) + 'px;height:' + (bottom - top + PAD * 2) + 'px;';
   }
 
+  function clearDualOverlay() {
+    dualOverlay.style.display = 'none';
+  }
+
+  function setSpotDual(selectors) {
+    /* Two separate highlighted cutouts via SVG mask — desktop only */
+    var PAD = 8;
+    var els = selectors.map(function(s) { return document.querySelector(s); }).filter(Boolean);
+    spot.style.cssText = 'display:none;position:fixed;pointer-events:none;';
+    if (!els.length) { dualOverlay.style.display = 'none'; return; }
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var maskRects = '';
+    els.forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width) return;
+      maskRects += '<rect x="' + (r.left - PAD) + '" y="' + (r.top - PAD) + '"' +
+        ' width="' + (r.width + PAD * 2) + '" height="' + (r.height + PAD * 2) + '"' +
+        ' rx="12" fill="black"/>';
+    });
+    if (!maskRects) { dualOverlay.style.display = 'none'; return; }
+    dualOverlay.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
+    dualOverlay.innerHTML =
+      '<defs><mask id="tut-holes-mask">' +
+      '<rect width="' + vw + '" height="' + vh + '" fill="white"/>' +
+      maskRects +
+      '</mask></defs>' +
+      '<rect width="' + vw + '" height="' + vh + '" fill="rgba(15,10,5,0.70)" mask="url(#tut-holes-mask)"/>';
+    dualOverlay.style.display = 'block';
+  }
+
   function setCard(extraOffset) {
     var vw      = window.innerWidth;
     var vh      = window.innerHeight;
@@ -522,6 +558,7 @@
   function showStep(n) {
     clearBeacons();
     clearLauncherAnim();
+    clearDualOverlay();
 
     var step = STEPS[n];
 
@@ -540,7 +577,19 @@
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
-    if (step.targets) {
+    if (step.dualTargets) {
+      clearDualOverlay();
+      if (window.innerWidth >= 768) {
+        if (step.targetsDelay) {
+          setSpot(null);
+          setTimeout(function() { setSpotDual(step.dualTargets); }, step.targetsDelay);
+        } else {
+          setSpotDual(step.dualTargets);
+        }
+      } else {
+        setSpot(null); /* no shading on mobile for this step */
+      }
+    } else if (step.targets) {
       if (step.targetsDelay) {
         setSpot(null);
         setTimeout(function() { setSpotMulti(step.targets); }, step.targetsDelay);
