@@ -15,7 +15,7 @@
       title: 'Your ' + CITY + ' guide',
       body: 'Every icon on the map is a hand-picked place we recommend. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
       target: null,
-      cardPos: 'bottom-center',
+      cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
@@ -23,7 +23,7 @@
       title: 'Filter by place type',
       body: 'Slide the bar left or right to browse all categories. Tap one — only places of that type stay on the map.',
       target: '.filter-bar',
-      cardPos: 'below',
+      cardPos: 'center',
       demo: 'scroll-filter',
       btn: 'Next'
     },
@@ -31,7 +31,7 @@
       title: 'Explore by neighbourhood',
       body: 'The icons along the bottom are ' + CITY + ' neighbourhoods. Tap one to zoom the map to that area. Tap it again to reset.',
       target: '#nbhd-bar',
-      cardPos: 'above',
+      cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
@@ -39,47 +39,55 @@
       title: 'Save your favourites',
       body: 'Tap any icon on the map to open its place card. Then tap the heart to save it — it stays saved between visits.',
       target: null,
-      cardPos: 'top-center',
+      cardPos: 'center',
       demo: 'open-card',
       btn: 'Next'
     },
     {
-      title: 'Your saved places',
-      body: 'Tap Saved to open your personal list. Drag any item up or down to rearrange the order.',
+      title: 'Inside the place card',
+      body: 'Read our curated place description and exclusive tips. Scroll down for the phone number and website link.',
       target: null,
-      cardPos: 'bottom-center',
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
+      title: 'Your saved places',
+      body: 'Tap Saved to open your personal list. Click on rows to open each place card. Drag any item up or down to rearrange the order.',
+      target: null,
+      cardPos: 'center',
       demo: 'show-saved',
       btn: 'Next'
     },
     {
       title: 'Open in Google Maps',
-      body: 'Tap Full Itinerary to build a walking route through all your picks and open it directly in Google Maps.',
+      body: 'Tap to open your trip directly in Google Maps.',
       target: '.saved-action-route',
-      cardPos: 'bottom-center',
+      cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
       title: 'Download a PDF guide',
-      body: 'Tap PDF Guide to download a beautifully designed guide with all your picks — perfect to keep on your phone.',
+      body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
       target: '.saved-action-pdf',
-      cardPos: 'bottom-center',
+      cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
       title: 'Share your map',
-      body: 'Save a snapshot of your personalised map — then share it with guests before they arrive.',
+      body: 'Share your personalized map via message or email.',
       target: '.saved-action-map',
-      cardPos: 'bottom-center',
+      cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
       title: 'Our Day Trip Picks',
-      body: 'See the two buttons on the left edge? One tap loads a full curated itinerary — ' + TRIP_NAMES + '.',
+      body: 'See the buttons on the left edge? One tap loads a full curated itinerary — ' + TRIP_NAMES + '.',
       target: '#trip-launcher',
-      cardPos: 'right',
+      cardPos: 'center',
       demo: 'close-saved-pulse',
       btn: 'Done'
     }
@@ -134,9 +142,20 @@
     '  0%,100%{color:inherit;transform:scale(1);}',
     '  30%{color:#802f2d;transform:scale(1.45);}',
     '  60%{color:rgba(128,47,45,0.35);transform:scale(1.1);}}',
-    '.tut-heart-blink{animation:tut-heart-blink 0.75s ease-in-out 3 !important;}'
+    '.tut-heart-blink{animation:tut-heart-blink 0.75s ease-in-out 3 !important;}',
+    '@keyframes tut-ring-pulse{',
+    '  0%,100%{box-shadow:0 0 0 3px rgba(128,47,45,0.25);}',
+    '  50%{box-shadow:0 0 0 9px rgba(128,47,45,0.06);}}',
+    '#tut-ring{position:fixed;display:none;pointer-events:none;z-index:10000;',
+    '  border:2px solid #802f2d;border-radius:10px;',
+    '  animation:tut-ring-pulse 1.2s ease-in-out infinite;}'
   ].join('');
   document.head.appendChild(style);
+
+  /* ── Ring highlight (above saved panel z-index) ──────────────── */
+  var ring = document.createElement('div');
+  ring.id = 'tut-ring';
+  document.body.appendChild(ring);
 
   /* ── Build overlay DOM ──────────────────────────────────────── */
   var overlay = document.createElement('div');
@@ -252,23 +271,7 @@
     if (pill && !pill.classList.contains('active')) {
       if (typeof toggleSavedFilter === 'function') { toggleSavedFilter(pill); }
     }
-    /* After panel animates in, reposition card to the left of the saved panel */
-    setTimeout(function () {
-      var panel = document.getElementById('saved-panel');
-      if (!panel) return;
-      var r = panel.getBoundingClientRect();
-      if (r.width === 0) return;
-      var vw   = window.innerWidth;
-      var vh   = window.innerHeight;
-      var cardW = Math.min(290, vw - 52);
-      if (vw >= 600) {
-        /* Desktop: card sits to the left of the panel, vertically centred on it */
-        card.style.left   = Math.max(16, r.left - cardW - 16) + 'px';
-        card.style.top    = Math.max(80, Math.min(vh - 280, r.top + 80)) + 'px';
-        card.style.bottom = '';
-      }
-      /* Mobile: leave the bottom-center position set by setCard */
-    }, 650);
+    /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
   function closeSavedDemo() {
@@ -357,6 +360,18 @@
     launcherAnim = true;
   }
 
+  /* ── Ring highlight (above saved panel z-index) ──────────────── */
+  function setRing(el) {
+    if (!el) { ring.style.display = 'none'; return; }
+    var PAD = 6;
+    var r = el.getBoundingClientRect();
+    ring.style.cssText = 'position:fixed;display:block;pointer-events:none;z-index:10000;' +
+      'border:2px solid #802f2d;border-radius:10px;' +
+      'animation:tut-ring-pulse 1.2s ease-in-out infinite;' +
+      'left:' + (r.left - PAD) + 'px;top:' + (r.top - PAD) + 'px;' +
+      'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
+  }
+
   /* ── Spotlight + card positioning ───────────────────────────── */
   function setSpot(el) {
     var PAD = 8;
@@ -373,59 +388,15 @@
       'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
   }
 
-  function setCard(el, position) {
+  function setCard() {
     var vw    = window.innerWidth;
     var vh    = window.innerHeight;
     var cardW = Math.min(290, vw - 52);
-
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
-      'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;';
-
-    if (position === 'top-center') {
-      /* Sit just below the hotel header so the place card image shows below */
-      card.style.top  = '8px';
-      card.style.left = Math.max(16, (vw - cardW) / 2) + 'px';
-      return;
-    }
-
-    if (position === 'bottom-center') {
-      if (vw >= 500) {
-        card.style.top  = Math.max(80, (vh - 260) / 2) + 'px';
-        card.style.left = Math.max(16, (vw - cardW) / 2) + 'px';
-      } else {
-        card.style.bottom = '28px';
-        card.style.left   = Math.max(16, (vw - cardW) / 2) + 'px';
-      }
-      return;
-    }
-
-    if (!el) {
-      card.style.bottom = '28px';
-      card.style.left   = Math.max(16, (vw - cardW) / 2) + 'px';
-      return;
-    }
-
-    var r  = el.getBoundingClientRect();
-    var cx = Math.max(16, Math.min(vw - cardW - 16, r.left + r.width / 2 - cardW / 2));
-
-    if (position === 'below') {
-      card.style.top  = (r.bottom + 14) + 'px';
-      card.style.left = cx + 'px';
-    } else if (position === 'above') {
-      card.style.bottom = (vh - r.top + 14) + 'px';
-      card.style.left   = cx + 'px';
-    } else if (position === 'right') {
-      var topPos     = Math.max(80, Math.min(vh - 220, r.top + r.height / 2 - 90));
-      var rightSpace = vw - r.right - 14;
-      card.style.top = topPos + 'px';
-      if (rightSpace >= cardW + 8) {
-        card.style.left = (r.right + 14) + 'px';
-      } else {
-        card.style.top  = (r.bottom + 14) + 'px';
-        card.style.left = cx + 'px';
-      }
-    }
+      'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
+      'left:' + Math.max(16, (vw - cardW) / 2) + 'px;' +
+      'top:'  + Math.max(80, (vh - 280) / 2)   + 'px;';
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
@@ -446,7 +417,8 @@
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setSpot(targetEl);
-    setCard(targetEl, step.cardPos);
+    setRing(targetEl);
+    setCard();
 
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
@@ -466,6 +438,7 @@
   function endTutorial() {
     clearBeacons();
     clearLauncherAnim();
+    setRing(null);
     closeDemoCard();
     closeSavedDemo();
     localStorage.setItem(DONE_KEY, '1');
