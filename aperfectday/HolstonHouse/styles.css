@@ -187,7 +187,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .sheet {
   position: fixed;          /* fixed — never causes page reflow or jump */
   bottom: 0; left: 0; right: 0;
-  z-index: 300;
+  z-index: 360; /* above .trip-launcher (350) so saved list covers buttons on mobile */
   background: var(--surface);
   border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   transform: translateY(105%);

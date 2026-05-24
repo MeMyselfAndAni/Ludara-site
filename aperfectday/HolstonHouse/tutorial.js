@@ -275,7 +275,7 @@
         if (progress < 1) { requestAnimationFrame(step); }
       }
       requestAnimationFrame(step);
-    }, 5000);
+    }, 3000);
   }
 
   function showSavedDemo() {
@@ -405,7 +405,7 @@
     var vw      = window.innerWidth;
     var vh      = window.innerHeight;
     var cardW   = Math.min(290, vw - 52);
-    var mobileOffset = vw < 768 ? 75 : 0; /* ~2 cm below centre on mobile */
+    var mobileOffset = vw < 768 ? 113 : 0; /* ~3 cm below centre on mobile */
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
@@ -448,7 +448,7 @@
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
-    if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    5000); }
+    if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    3000); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
