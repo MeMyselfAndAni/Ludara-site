@@ -252,7 +252,23 @@
     if (pill && !pill.classList.contains('active')) {
       if (typeof toggleSavedFilter === 'function') { toggleSavedFilter(pill); }
     }
-    /* No spotlight shift — keep everything bright, card stays centered */
+    /* After panel animates in, reposition card to the left of the saved panel */
+    setTimeout(function () {
+      var panel = document.getElementById('saved-panel');
+      if (!panel) return;
+      var r = panel.getBoundingClientRect();
+      if (r.width === 0) return;
+      var vw   = window.innerWidth;
+      var vh   = window.innerHeight;
+      var cardW = Math.min(290, vw - 52);
+      if (vw >= 600) {
+        /* Desktop: card sits to the left of the panel, vertically centred on it */
+        card.style.left   = Math.max(16, r.left - cardW - 16) + 'px';
+        card.style.top    = Math.max(80, Math.min(vh - 280, r.top + 80)) + 'px';
+        card.style.bottom = '';
+      }
+      /* Mobile: leave the bottom-center position set by setCard */
+    }, 650);
   }
 
   function closeSavedDemo() {
