@@ -108,6 +108,7 @@
       body: 'Tap the circle to pinpoint where you are and navigate from there. Save the map to your phone and it works without Wifi too.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
+      targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
       cardPos: 'center',
       demo: 'close-sheet',
       mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
@@ -138,7 +139,7 @@
     '#tut-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;transition:opacity 0.4s;}',
     '#tut-spot{position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);border-radius:12px;',
     '  transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),',
-    '  width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);pointer-events:none;}',
+    '  width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;pointer-events:none;}',
     '#tut-card{position:fixed;background:#f5edd8;border-radius:16px;padding:20px 22px 16px;',
     '  max-width:290px;width:calc(100vw - 52px);box-shadow:0 8px 40px rgba(0,0,0,0.30);',
     '  pointer-events:all;transition:left 0.35s ease,top 0.35s ease,bottom 0.35s ease;z-index:9001;cursor:grab;}',
@@ -358,11 +359,11 @@
   function showSavedDemo() {
     /* Close demo card if open */
     closeDemoCard();
-    /* Suppress route drawing for the duration of the demo —
-       monkey-patch drawSavedRoute to a no-op so neither the straight-line
-       placeholder nor the async OSRM result ever gets drawn */
+    /* Suppress route drawing AND map re-fitting for the duration of the demo */
     window._tutDrawSavedOrig = window.drawSavedRoute;
     window.drawSavedRoute = function() {};
+    window._tutFitBoundsOrig = window._fitRouteBounds;
+    window._fitRouteBounds = function() {};
     /* Inject 5 demo saved places */
     _demoSavedBkp = localStorage.getItem(_favsKey());
     _demoSavedOn  = true;
@@ -396,10 +397,14 @@
     _demoSavedOn  = false;
     _demoSavedBkp = null;
     if (typeof clearTripRoute === 'function') clearTripRoute();
-    /* Restore drawSavedRoute */
+    /* Restore drawSavedRoute and _fitRouteBounds */
     if (window._tutDrawSavedOrig) {
       window.drawSavedRoute = window._tutDrawSavedOrig;
       window._tutDrawSavedOrig = null;
+    }
+    if (window._tutFitBoundsOrig !== undefined) {
+      window._fitRouteBounds = window._tutFitBoundsOrig;
+      window._tutFitBoundsOrig = undefined;
     }
   }
 
@@ -478,14 +483,17 @@
     var PAD = 8;
     clearDualOverlay();
     if (!el) {
-      spot.style.cssText = 'display:none;position:fixed;pointer-events:none;';
+      /* Fade out smoothly rather than snapping to hidden */
+      spot.style.transition = 'opacity 0.3s ease';
+      spot.style.opacity = '0';
+      spot.style.pointerEvents = 'none';
       return;
     }
     var r = el.getBoundingClientRect();
     spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
-      'border-radius:12px;pointer-events:none;' +
+      'border-radius:12px;pointer-events:none;opacity:1;' +
       'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
-      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
+      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;' +
       'left:' + (r.left - PAD) + 'px;top:' + (r.top - PAD) + 'px;' +
       'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
   }
@@ -505,9 +513,9 @@
     });
     if (left === Infinity) { setSpot(null); return; }
     spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
-      'border-radius:12px;pointer-events:none;' +
+      'border-radius:12px;pointer-events:none;opacity:1;' +
       'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
-      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
+      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s ease;' +
       'left:' + (left - PAD) + 'px;top:' + (top - PAD) + 'px;' +
       'width:' + (right - left + PAD * 2) + 'px;height:' + (bottom - top + PAD * 2) + 'px;';
   }
@@ -563,8 +571,11 @@
 
     var step = STEPS[n];
 
-    /* Close demo card if this step requests it */
-    if (step.closeCard) { closeDemoCard(); }
+    /* Close any open place card if this step requests it — unconditional */
+    if (step.closeCard) {
+      if (typeof closePlaceCard === 'function') { closePlaceCard(false); }
+      _demoCardOpen = false;
+    }
 
     STEPS.forEach(function (_, i) {
       var d = card.querySelector('#tut-dot-' + i);
@@ -677,11 +688,23 @@
 
   /* ── Auto-start on first visit only ─────────────────────────── */
   if (!localStorage.getItem(DONE_KEY)) {
+    var _splashGone = function() {
+      var s = document.getElementById('splash');
+      return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
+    };
+    var _launchWhenClear = function() {
+      if (_splashGone()) { launch(); } else { setTimeout(_launchWhenClear, 80); }
+    };
     var waitForSplashClose = function () {
       var btn = document.querySelector('.splash-btn');
-      if (!btn) { setTimeout(launch, 1200); return; }
+      if (!btn) {
+        /* No splash on this page — only launch if there is genuinely no splash showing */
+        if (_splashGone()) { setTimeout(launch, 400); }
+        return;
+      }
       btn.addEventListener('click', function () {
-        setTimeout(launch, 700);
+        /* Poll until splash is fully hidden (display:none) before launching */
+        setTimeout(_launchWhenClear, 300);
       }, { once: true });
     };
     if (document.readyState === 'complete') {
