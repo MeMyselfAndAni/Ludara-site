@@ -192,7 +192,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   transform: translateY(105%);
   transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-  max-height: 72dvh;
+  max-height: 85dvh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
@@ -243,9 +243,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 
 .places-list {
-  overflow-y: auto;
+  overflow-y: scroll;
   flex: 1;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   scrollbar-width: none;
 }
 .places-list::-webkit-scrollbar { display: none; }

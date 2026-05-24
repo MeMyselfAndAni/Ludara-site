@@ -132,8 +132,6 @@
   <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#b07040"></span>Markets</button>
   <button class="pill" onclick="fc(this,'nature')"><span class="dot" style="background:#3d8a5e"></span>Parks</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🔴 Open Now</button>
-  <button class="pill pill-trip" id="pill-trip-music" onclick="loadTrip('music')">🎵 Music Day</button>
-  <button class="pill pill-trip" id="pill-trip-bar" onclick="loadTrip('bar')">🤠 Bar Hop</button>
 </div>
 
 <!-- Map -->
@@ -502,9 +500,9 @@ function clearAllSaved() {
           if(typeof _setSavedOrder==='function')_setSavedOrder(ids);
           setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);
         });
-        var ts=null;
-        row.addEventListener('touchstart',function(){ts=this;},{passive:true});
-        row.addEventListener('touchmove',function(e){if(!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
+        var ts=null,_tx=0,_ty=0,_dragging=false;
+        row.addEventListener('touchstart',function(e){ts=this;_tx=e.touches[0].clientX;_ty=e.touches[0].clientY;_dragging=false;},{passive:true});
+        row.addEventListener('touchmove',function(e){if(!ts)return;var dx=Math.abs(e.touches[0].clientX-_tx),dy=Math.abs(e.touches[0].clientY-_ty);if(!_dragging&&dy>dx)return;_dragging=true;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
         row.addEventListener('touchend',function(e){if(!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
       });
     }
