@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Your ' + CITY + ' guide',
-      body: 'Every icon on the map is a hand-picked place we recommend to visit. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
+      body: 'Every icon on the map is a hand-picked place we recommend. Colours show the type — tap any icon to open its card with hours, a concierge tip, and a link to the website.',
       target: null,
       cardPos: 'bottom-center',
       demo: null,
@@ -55,7 +55,7 @@
       title: 'Open in Google Maps',
       body: 'Tap Full Itinerary to build a walking route through all your picks and open it directly in Google Maps.',
       target: '.saved-action-route',
-      cardPos: 'above',
+      cardPos: 'bottom-center',
       demo: null,
       btn: 'Next'
     },
@@ -63,7 +63,7 @@
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to download a beautifully designed guide with all your picks — perfect to keep on your phone.',
       target: '.saved-action-pdf',
-      cardPos: 'above',
+      cardPos: 'bottom-center',
       demo: null,
       btn: 'Next'
     },
@@ -71,7 +71,7 @@
       title: 'Share your map',
       body: 'Save a snapshot of your personalised map — then share it with guests before they arrive.',
       target: '.saved-action-map',
-      cardPos: 'above',
+      cardPos: 'bottom-center',
       demo: null,
       btn: 'Next'
     },
@@ -361,12 +361,11 @@
   function setSpot(el) {
     var PAD = 8;
     if (!el) {
-      spot.style.cssText = 'position:fixed;left:50%;top:50%;width:0;height:0;' +
-        'box-shadow:0 0 0 9999px rgba(15,10,5,0);border-radius:12px;pointer-events:none;transition:none;';
+      spot.style.cssText = 'display:none;position:fixed;pointer-events:none;';
       return;
     }
     var r = el.getBoundingClientRect();
-    spot.style.cssText = 'position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
+    spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
       'border-radius:12px;pointer-events:none;' +
       'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
       'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
