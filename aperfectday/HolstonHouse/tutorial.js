@@ -101,6 +101,15 @@
       btn: 'Next'
     },
     {
+      title: 'Navigate with and without Wifi',
+      body: 'Click on the Circle to show your current location and navigate. You can also save our map for offline navigation without Wifi.',
+      target: null,
+      targets: ['#locate-btn', '#offline-save-btn'],
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
       title: "You're all set!",
       body: "Let's start planning Your Perfect Day!",
       target: null,
@@ -424,6 +433,28 @@
       'width:' + (r.width + PAD * 2) + 'px;height:' + (r.height + PAD * 2) + 'px;';
   }
 
+  function setSpotMulti(selectors) {
+    var PAD = 8;
+    var els = selectors.map(function(s) { return document.querySelector(s); }).filter(Boolean);
+    if (!els.length) { setSpot(null); return; }
+    var left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+    els.forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      if (r.width === 0) return;
+      left   = Math.min(left,   r.left);
+      top    = Math.min(top,    r.top);
+      right  = Math.max(right,  r.right);
+      bottom = Math.max(bottom, r.bottom);
+    });
+    if (left === Infinity) { setSpot(null); return; }
+    spot.style.cssText = 'display:block;position:fixed;box-shadow:0 0 0 9999px rgba(15,10,5,0.70);' +
+      'border-radius:12px;pointer-events:none;' +
+      'transition:left 0.4s cubic-bezier(.4,0,.2,1),top 0.4s cubic-bezier(.4,0,.2,1),' +
+      'width 0.4s cubic-bezier(.4,0,.2,1),height 0.4s cubic-bezier(.4,0,.2,1);' +
+      'left:' + (left - PAD) + 'px;top:' + (top - PAD) + 'px;' +
+      'width:' + (right - left + PAD * 2) + 'px;height:' + (bottom - top + PAD * 2) + 'px;';
+  }
+
   function setCard() {
     var vw      = window.innerWidth;
     var vh      = window.innerHeight;
@@ -458,7 +489,9 @@
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard();
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
-    if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
+    if (step.targets) {
+      setSpotMulti(step.targets);
+    } else if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
       setTimeout(function () {
         var el = document.querySelector(step.target);
         if (el && el.getBoundingClientRect().width > 0) { setSpot(el); }
