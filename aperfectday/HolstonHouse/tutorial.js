@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'This short tour will show you everything the guide can do. Tap Next to begin.',
+      body: '30 seconds. That\'s all it takes to explore Nashville like an insider. Tap Next to start.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every icon on the map is a hand-picked place we recommend. Tap any icon to open its card with place description, work hours, an insider tip, and a link to the website.',
+      body: 'Every pin on this map earned its spot. Tap any icon to see our pick — a local insider tip, working hours, and a direct link to the place.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -29,7 +29,7 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Read our curated place description and exclusive tips. Scroll down for the phone number and website link.',
+      body: 'The good stuff is in here. Read our take on the place, then scroll down for the phone number and website.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Slide the top bar left or right to browse all categories. Tap one — only places of that type stay on the map.',
+      body: 'In the mood for live music? Great coffee? Slide the bar to find your category — the map keeps only those spots visible.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -45,8 +45,8 @@
       btn: 'Next'
     },
     {
-      title: 'Explore by neighbourhood',
-      body: 'The icons along the bottom are ' + CITY + ' neighbourhoods. Tap one to zoom the map to that area. Tap it again to reset.',
+      title: 'Explore by neighborhood',
+      body: 'Each button at the bottom is a ' + CITY + ' neighborhood. Tap to zoom straight in. Tap again to zoom back out.',
       target: '#nbhd-bar',
       cardPos: 'center',
       demo: null,
@@ -54,7 +54,7 @@
     },
     {
       title: 'Save your favorites',
-      body: 'Tap any icon on the map to open its place card. Then tap the heart to save it — it stays saved between visits.',
+      body: 'Spot something you love? Tap the heart and it\'s yours — saved and waiting every time you come back.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',
@@ -62,7 +62,7 @@
     },
     {
       title: 'Your saved places',
-      body: 'Tap top left Saved to open your personal list. Click on rows to open each place card. Drag any item up or down to rearrange the order.',
+      body: 'Tap Saved in the top left to see your list. Tap any row to revisit the place card. Drag to put them in the order you\'ll actually go.',
       target: null,
       cardPos: 'center',
       demo: 'show-saved',
@@ -70,7 +70,7 @@
     },
     {
       title: 'Navigate',
-      body: 'You can navigate on mobile using our maps or tap to open your trip in Google Maps.',
+      body: 'Ready to go? Navigate on our maps or tap to open your full trip in Google Maps.',
       target: '#sheet button[onclick="openTripInMaps()"]',
       cardPos: 'center',
       demo: null,
@@ -78,7 +78,7 @@
     },
     {
       title: 'Download a PDF guide',
-      body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks.',
+      body: 'Tap PDF Guide to download a beautifully designed branded guide with all your picks. Share it or print it.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
@@ -86,7 +86,7 @@
     },
     {
       title: 'Share your map',
-      body: 'Share your personalized map via message or email.',
+      body: 'Share your personalized map in one tap — by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
@@ -94,7 +94,7 @@
     },
     {
       title: 'Our Day Trip Picks',
-      body: 'See the buttons on the left edge? One tap loads a full curated itinerary — ' + TRIP_NAMES + '.',
+      body: 'Looking for inspiration? We have suggestions for you. One tap on the left loads a full ready-to-go day — ' + TRIP_NAMES + '.',
       target: '#trip-launcher',
       cardPos: 'center',
       demo: 'close-saved-pulse',
@@ -102,16 +102,17 @@
     },
     {
       title: 'Navigate with and without Wifi',
-      body: 'Click on the Circle to show your current location and navigate. You can also save our map for offline navigation without Wifi.',
+      body: 'Tap the circle to pinpoint where you are and navigate from there. Save the map to your phone and it works without Wifi too.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       cardPos: 'center',
       demo: 'close-sheet',
+      cardOffset: -75,  /* move card ~2cm up so it doesn't cover the buttons */
       btn: 'Next'
     },
     {
       title: "You're all set!",
-      body: "Let's start planning Your Perfect Day!",
+      body: 'Nashville is waiting. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -455,16 +456,17 @@
       'width:' + (right - left + PAD * 2) + 'px;height:' + (bottom - top + PAD * 2) + 'px;';
   }
 
-  function setCard() {
+  function setCard(extraOffset) {
     var vw      = window.innerWidth;
     var vh      = window.innerHeight;
     var cardW   = Math.min(290, vw - 52);
     var mobileOffset = vw < 768 ? 113 : 0; /* ~3 cm below centre on mobile */
+    var extra   = extraOffset || 0;
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
       'left:' + Math.max(16, (vw - cardW) / 2) + 'px;' +
-      'top:'  + Math.max(80, (vh - 280) / 2 + mobileOffset) + 'px;';
+      'top:'  + Math.max(80, (vh - 280) / 2 + mobileOffset + extra) + 'px;';
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
@@ -487,7 +489,7 @@
     nextBtn.textContent = step.btn;
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setCard();
+    setCard(step.cardOffset || 0);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.targets) {
       setSpotMulti(step.targets);
