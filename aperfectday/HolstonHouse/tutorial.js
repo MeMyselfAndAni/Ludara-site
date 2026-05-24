@@ -236,7 +236,7 @@
       openDetail(DEMO_PLACE);
       _demoCardOpen = true;
       /* Blink the heart button after card animates in */
-      setTimeout(_blinkHeart, 2250);
+      setTimeout(_blinkHeart, 600);
     }
   }
 
@@ -402,14 +402,15 @@
   }
 
   function setCard() {
-    var vw    = window.innerWidth;
-    var vh    = window.innerHeight;
-    var cardW = Math.min(290, vw - 52);
+    var vw      = window.innerWidth;
+    var vh      = window.innerHeight;
+    var cardW   = Math.min(290, vw - 52);
+    var mobileOffset = vw < 768 ? 75 : 0; /* ~2 cm below centre on mobile */
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
       'left:' + Math.max(16, (vw - cardW) / 2) + 'px;' +
-      'top:'  + Math.max(80, (vh - 280) / 2)   + 'px;';
+      'top:'  + Math.max(80, (vh - 280) / 2 + mobileOffset) + 'px;';
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
