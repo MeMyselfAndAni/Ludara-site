@@ -86,8 +86,8 @@
   ];
 
   /* ── Filter steps that need optional UI elements ───────────── */
-  /* Day Trips step requires #trip-launcher — skip silently if absent */
-  if (!document.querySelector('#trip-launcher')) {
+  /* Day Trips step — skip if launcher absent or tripNames not configured */
+  if (!document.querySelector('#trip-launcher') || !CFG.tripNames) {
     STEPS = STEPS.filter(function (s) { return s.demo !== 'close-saved-pulse'; });
   }
   /* Always mark the final step as Done */
@@ -465,4 +465,3 @@
   }
 
 })();
-                                                                           
