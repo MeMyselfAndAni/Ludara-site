@@ -176,8 +176,17 @@
     color: #3a2e1e;
     letter-spacing: 0.12em;
   }
-  .splash-footer a { color: var(--brand); text-decoration: none; font-weight: 700; }
+  .splash-footer a { color: var(--brand); text-decoration: none; font-weight: 700; font-size: 1rem; }
   .splash-footer a:hover { color: var(--brand); }
+
+  @media (max-width: 600px) {
+    .splash-inner      { padding: 36px 20px 28px !important; }
+    .splash-sub        { font-size: 1rem !important; line-height: 1.5 !important; max-width: 100% !important; }
+    .splash-sub br     { display: none; }
+    .splash-sample     { font-size: 1rem !important; }
+    .splash-tagline    { font-size: 0.72rem !important; }
+    .splash-footer a   { font-size: 1rem !important; color: var(--brand) !important; }
+  }
   .splash-tagline {
     font-family: 'Cinzel Decorative', serif;
     font-size: 0.9rem;
@@ -208,7 +217,6 @@
   <div class="splash-inner">
     <div class="splash-eyebrow">A Perfect Day</div>
     <h1 class="splash-title">Venice</h1>
-    <div class="splash-subtitle">Serenissima</div>
     <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
     <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
     <span class="splash-ornament">— ✦ —</span>
