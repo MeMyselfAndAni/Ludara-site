@@ -227,7 +227,7 @@ function drawSavedRoute(){
 
   // If online, fetch real walking route from OSRM and replace
   if(navigator.onLine){
-    window._fetchOSRMRoute(places).then(coords => {
+    _fetchOSRMRoute(places).then(coords => {
       if(coords && coords.length > 1){
         _setRouteGeoJSON({
           type: 'Feature',
