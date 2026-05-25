@@ -65,6 +65,16 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
+
+  /* ── Splash — GM demo additions ── */
+  .splash-tagline    { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+                       color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
+  .splash-divider    { width: 40px; height: 3px; background: var(--brand); border: none;
+                       border-radius: 2px; margin: 10px auto 18px; }
+  .splash-hotel-desc { font-style: italic; font-size: 0.97rem; line-height: 1.72;
+                       color: #555; margin-top: 0; margin-bottom: 24px; }
+  .splash-sample     { font-size: 0.875rem; color: #555; margin: 14px 0 0; font-style: italic; }
+  .splash-footer a   { color: var(--brand) !important; }
 </style>
 </head>
 <body>
@@ -76,7 +86,10 @@
       <span class="wl-logo">A Perfect Day</span>
     </div>
     <h2 class="splash-title">Nashville Guide</h2>
-    <p class="splash-hotel-desc">Get curated dining, nightlife, music, and local recommendations tailored to your stay.</p>
+    <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
+    <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
+    <hr class="splash-divider">
+    <p class="splash-hotel-desc">The listening room where Garth Brooks and Taylor Swift were discovered, three Michelin-starred restaurants, a James Beard Award winner, and one of the New York Times' 50 Best Restaurants in America — 50 essential Nashville places chosen because no other city has them.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
