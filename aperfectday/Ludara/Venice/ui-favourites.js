@@ -181,60 +181,37 @@ function _drawStraightRoute(places){
   });
 }
 
-// Islands that require a vaporetto to reach — matches venice-transport.js classification
-const _VENICE_BOAT_ISLANDS = ['murano', 'burano', 'torcello'];
-function _veniceNeedsBoat(a, b){
-  const ga = _VENICE_BOAT_ISLANDS.indexOf(a.nbhd) >= 0 ? a.nbhd : 'main';
-  const gb = _VENICE_BOAT_ISLANDS.indexOf(b.nbhd) >= 0 ? b.nbhd : 'main';
-  return ga !== gb;
-}
-
-// Haversine straight-line distance in metres between two {lat,lng} points
-function _haversineM(a, b){
-  const R = 6371000, toR = Math.PI / 180;
-  const dLat = (b.lat - a.lat) * toR, dLng = (b.lng - a.lng) * toR;
-  const s = Math.sin(dLat/2), t = Math.sin(dLng/2);
-  return 2 * R * Math.asin(Math.sqrt(s*s + Math.cos(a.lat*toR)*Math.cos(b.lat*toR)*t*t));
-}
-
 async function _fetchOSRMRoute(places){
-  // Uses island classification (same logic as venice-transport.js) to decide
-  // walk vs boat per segment. murano/burano/torcello require a vaporetto —
-  // all other neighbourhoods are walkable within the main Venice island.
+  // Generic chunk-based OSRM foot routing. Venice-specific boat/walk splitting
+  // is handled by the override in venice-transport.js.
   const allCoords = [];
+  const CHUNK = 10;
 
-  for(let i = 0; i < places.length - 1; i++){
-    const a = places[i], b = places[i+1];
-    let segCoords = null;
-
-    if(_veniceNeedsBoat(a, b)){
-      // Boat segment — draw as direct line across the water
-      const straightM = _haversineM(a, b);
-      segCoords = [[a.lng, a.lat], [b.lng, b.lat]];
-      _routeDurations[`${i}-${i+1}`] = (straightM / 1000 / 5) * 3600; // ~5 km/h overall
-    } else {
-      // Walking segment — fetch actual street route from OSRM
-      const coords = `${a.lng},${a.lat};${b.lng},${b.lat}`;
-      const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
-      try {
-        const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-        const data = await res.json();
-        if(data.code === 'Ok' && data.routes && data.routes[0]){
-          segCoords = data.routes[0].geometry.coordinates;
-          _routeDurations[`${i}-${i+1}`] = data.routes[0].legs[0].duration;
-        }
-      } catch(e) {}
-      if(!segCoords){
-        // OSRM unavailable — fall back to straight line
-        segCoords = [[a.lng, a.lat], [b.lng, b.lat]];
+  for(let i = 0; i < places.length - 1; i += CHUNK - 1){
+    const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
+    const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
+    const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      const data = await res.json();
+      if(data.code === 'Ok' && data.routes && data.routes[0]){
+        const segCoords = data.routes[0].geometry.coordinates;
+        if(allCoords.length > 0) segCoords.shift();
+        allCoords.push(...segCoords);
+        data.routes[0].legs.forEach((leg, legIdx) => {
+          _routeDurations[`${i+legIdx}-${i+legIdx+1}`] = leg.duration;
+        });
+      } else {
+        chunk.forEach(p => allCoords.push([p.lng, p.lat]));
       }
+    } catch(e) {
+      chunk.forEach(p => allCoords.push([p.lng, p.lat]));
     }
-
-    if(allCoords.length > 0) segCoords = segCoords.slice(1);
-    allCoords.push(...segCoords);
   }
   return allCoords;
 }
+// Expose on window so venice-transport.js (and future city overrides) can replace it
+window._fetchOSRMRoute = _fetchOSRMRoute;
 
 function drawSavedRoute(){
   if(!savedFilterActive || favourites.length < 2){ clearTripRoute(); return; }
@@ -250,7 +227,7 @@ function drawSavedRoute(){
 
   // If online, fetch real walking route from OSRM and replace
   if(navigator.onLine){
-    _fetchOSRMRoute(places).then(coords => {
+    window._fetchOSRMRoute(places).then(coords => {
       if(coords && coords.length > 1){
         _setRouteGeoJSON({
           type: 'Feature',
@@ -689,6 +666,9 @@ function _fetchRouteStats(places) {
   });
 }
 
+// Expose on window so venice-transport.js (and future city overrides) can replace it
+window._fetchRouteStats = _fetchRouteStats;
+
 document.addEventListener('DOMContentLoaded', updateFavUI);
 
 
@@ -721,8 +701,6 @@ function _showOfflineRouteMsg() {
 // ── Service Worker registration ───────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js', { scope: './' })
-      .then(function(reg) { console.log('SW registered:', reg.scope); })
-      .catch(function(err) { console.log('SW registration failed:', err); });
-  });
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+});
 }
