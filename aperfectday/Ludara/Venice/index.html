@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A Perfect Day — Venetia Guide</title>
+<title>A Perfect Day — Venice Guide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
@@ -186,10 +186,10 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-eyebrow">A Perfect Day</div>
-    <h1 class="splash-title">Venetia</h1>
+    <h1 class="splash-title">Venice</h1>
     <div class="splash-subtitle">Serenissima</div>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">Hand-picked Venetia gems:<br>Byzantine mosaics, bacari unchanged since the Republic, furnaces blowing glass since 1291, and a lagoon that still hides the world.</p>
+    <p class="splash-sub">Hand-picked Venice gems:<br>Byzantine mosaics, bacari unchanged since the Republic, furnaces blowing glass since 1291, and a lagoon that still hides the world.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the City</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
@@ -211,7 +211,7 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Venetia</em> Guide</h1>
+      <h1><em>Venice</em> Guide</h1>
       <div class="header-sub">hand-picked gems<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
@@ -348,9 +348,18 @@
   <span class="count-badge" id="list-badge">40</span>
 </button>
 
+<button onclick="restartTutorial()" title="Show tutorial" style="
+  position:fixed; bottom:224px; right:12px; z-index:1100;
+  background:#0f0d0a; color:#d4a84b; border:1px solid #5a3e18; border-radius:0;
+  padding:8px 14px; font-size:0.72rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4); font-family:'Cinzel Decorative',serif;
+  letter-spacing:0.1em; -webkit-tap-highlight-color:transparent;">
+  Guide
+</button>
+
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
   position:fixed; bottom:180px; right:12px; z-index:1000;
-  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  background:#0f0d0a; color:white; border:none; border-radius:24px;
   padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;">
   📥 Save offline
@@ -421,7 +430,18 @@
 <script src="ui-filter.js"></script>
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
+<script src="venice-transport.js"></script>
 <script src="ui-pdf.js"></script>
+<script>
+window.TutorialConfig = {
+  doneKey:     'venice_tour_v1',
+  cityName:    'Venice',
+  demoPlaceId: 10,           /* Cantina Do Mori — oldest bacaro in Venice */
+  demoSavedIds: [10, 11, 12, 29, 30]  /* Rialto cluster: Do Mori, All'Arco, Rialto Market, Damocle, Il Pavone */
+  /* no tripNames — no Day Trip Picks step */
+};
+</script>
+<script src="tutorial.js"></script>
 
 <!-- Address display — populates pc-address when a card opens -->
 <script>
@@ -679,9 +699,6 @@ window.addEventListener('load', function() {
   };
 });
 </script>
-
-
-<script src="venice-transport.js"></script>
 
 </body>
 </html>

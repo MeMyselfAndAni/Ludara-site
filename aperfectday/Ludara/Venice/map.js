@@ -13,7 +13,7 @@ const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [12.3215, 45.4408];   // [longitude, latitude] — centre of Venice main island
 const MAP_ZOOM          = 13.5;
 const OFFLINE_CENTER    = { lat: 45.4408, lng: 12.3215 };
-const GUIDE_CITY        = 'Venetia';
+const GUIDE_CITY        = 'Venice';
 const BLOGGER_NAME      = 'A Perfect Day';
 const GUIDE_TIMEZONE    = 'Europe/Rome';
 
@@ -89,19 +89,9 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-  map.on('error', function(e) {
-    var msg = e.error ? e.error.message : JSON.stringify(e);
-    if (msg && (msg.includes('Failed to fetch') || msg.includes('fetch') ||
-                msg.includes('NetworkError') || msg.includes('Load failed'))) {
-      console.warn('Map tile fetch failed (transient):', msg);
-      return;
-    }
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;cursor:pointer;';
-    d.textContent = 'Map error: ' + msg + ' (tap to dismiss)';
-    d.onclick = function() { d.remove(); };
-    document.body.appendChild(d);
-    setTimeout(function() { if (d.parentNode) d.remove(); }, 8000);
+  map.on('error', function() {
+    // Silent reload — client sees nothing, transient errors self-heal
+    setTimeout(function() { location.reload(); }, 2000);
   });
 
   map.on('load', () => {

@@ -1,18 +1,13 @@
 /**
  * venice-transport.js
- * ALL Venice-specific navigation logic for A Perfect Day.
+ * Venice-specific route STATS for A Perfect Day.
  *
- * 1. Route LINE drawing (_fetchOSRMRoute override)
- *    - Splits saved places into walk groups and boat crossings.
- *    - Walk groups: routed via Valhalla (use_ferry:0) so ferry links in OSM
- *      are excluded from pedestrian routing. Falls back to OSRM if Valhalla
- *      is unreachable, then to straight lines.
- *    - Boat crossings (to murano / burano / torcello): straight lines.
+ * Overrides _fetchRouteStats to replace walking times with accurate ACTV
+ * vaporetto times for any leg that crosses between island groups.
+ * Legs entirely within the main island use the original OSRM walking stats.
  *
- * 2. Route STATS (_fetchRouteStats override)
- *    - Replaces walking times with accurate ACTV vaporetto times for any
- *      leg that crosses between island groups.
- *    - Legs entirely within the main island use the original OSRM stats.
+ * Route LINE drawing (the red path on the map) is handled by the generic
+ * OSRM chunk-based function in ui-favourites.js — no override here.
  *
  * Island groups:
  *   murano   — Murano island (lines 4.1, 4.2)
@@ -138,7 +133,10 @@
     return allCoords.length > 1 ? allCoords : null;
   }
 
-  // ── 1. Route LINE drawing override ───────────────────────────────────────
+  // ── Route LINE drawing override ───────────────────────────────────────────
+  // Splits places into main-island walk groups and boat crossings.
+  // Walk groups: routed via Valhalla (use_ferry:0), falls back to OSRM.
+  // Boat crossings (to murano / burano / torcello): straight lines.
 
   var _origFetchOSRM = window._fetchOSRMRoute;
 
@@ -186,7 +184,7 @@
     return result;
   };
 
-  // ── 2. Route STATS override ───────────────────────────────────────────────
+  // ── Route STATS override ──────────────────────────────────────────────────
   // Replaces walking times with accurate ACTV vaporetto times for any leg
   // that crosses between island groups.
   // Legs entirely within the main island are handed off to the original

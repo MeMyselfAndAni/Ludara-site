@@ -171,7 +171,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 .sheet {
   position: fixed;          /* fixed — never causes page reflow or jump */
   bottom: 0; left: 0; right: 0;
-  z-index: 300;
+  z-index: 360;
   background: var(--surface);
   border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
   transform: translateY(105%);
@@ -388,7 +388,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 
 .nbhd-bubble.nbhd-active .nbhd-label {
-  color: var(--accent);
+  color: #f5d878;
   font-weight: 700;
 }
 
@@ -655,6 +655,10 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 
 /* ── WELCOME SPLASH ── */
+@keyframes splashFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 .splash {
   position: fixed;
   inset: 0;
@@ -664,6 +668,8 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   align-items: center;
   justify-content: center;
   padding: 24px;
+  animation: splashFadeIn 0.5s ease both;
+  transition: opacity 0.5s ease;
 }
 .splash-inner {
   max-width: 460px;
@@ -710,7 +716,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   text-decoration: none;
   letter-spacing: 0.05em;
 }
-.splash.hidden { display: none; }
+.splash.hidden { opacity: 0; pointer-events: none; display: none; }
 
 /* ── OPEN NOW PILL ── */
 .pill-opennow { border-color: #2e7d32; color: #2e7d32; }
@@ -745,7 +751,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   gap: 0;
   padding: 4px 10px 6px;
   overflow: visible;
-  background: rgba(255,255,255,0.97);
+  background: rgba(15,13,10,0.97);
 }
 
 .nbhd-bubble {
@@ -778,7 +784,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   width: 100%; height: 100%;
   border-radius: 50%;
   border: 2.5px solid white;
-  background: var(--accent);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -790,7 +796,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   font-weight: 700;
   font-family: 'Cinzel Decorative', serif;
   letter-spacing: 0.04em;
-  color: #0f0d0a;
+  color: #d4a84b;
   text-align: center;
   max-width: 64px;
   line-height: 1.2;
@@ -852,7 +858,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   -webkit-user-select: none;
   flex: 0 0 auto;          /* fixed width, never grows */
   width: 28px;
-  border-right: 1px solid rgba(0,0,0,0.08);
+  border-right: 1px solid rgba(212,168,75,0.25);
   margin-right: 6px;
   touch-action: none;      /* needed so touchmove fires */
 }
@@ -860,7 +866,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 
 .nbhd-handle-grip {
   font-size: 0.75rem;
-  color: var(--text3);
+  color: rgba(212,168,75,0.55);
   line-height: 1;
   letter-spacing: -1px;
 }
