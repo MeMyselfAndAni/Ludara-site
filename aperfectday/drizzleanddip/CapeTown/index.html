@@ -65,6 +65,19 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
+
+  /* ── Splash — GM demo additions ── */
+  .splash-inner      { max-width: 680px !important; width: 90vw !important; padding: 40px 40px 32px !important; }
+  .splash-title      { font-size: 3rem !important; white-space: nowrap !important; }
+  .splash            .wl-logo { font-size: 1.15rem !important; }
+  .splash-tagline    { font-size: 0.92rem !important; letter-spacing: 0.08em; text-transform: uppercase;
+                       color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
+  .splash-divider    { width: 40px; height: 3px; background: var(--brand); border: none;
+                       border-radius: 2px; margin: 10px auto 18px; }
+  .splash-hotel-desc { font-style: italic; font-size: 1.15rem !important; line-height: 1.72;
+                       color: #555; margin-top: 0; margin-bottom: 24px; }
+  .splash-sample     { font-size: 1rem !important; color: #555; margin: 14px 0 0; font-style: italic; }
+  .splash-footer a   { color: var(--brand) !important; font-size: 0.92rem !important; }
 </style>
 </head>
 <body>
@@ -75,8 +88,11 @@
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span>
     </div>
-    <h2 class="splash-title">Drizzle &amp; Dip<br>Cape Town &amp; Winelands Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">70</span> hand-picked places by Sam Linsell — trained chef, award-winning food stylist, recipe developer, photographer and three-time cookbook author based in Cape Town.</p>
+    <h2 class="splash-title">Cape Town &amp; Winelands Guide</h2>
+    <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
+    <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
+    <hr class="splash-divider">
+    <p class="splash-hotel-desc">A three-Michelin-starred chef's first international restaurant, South Africa's Restaurant of the Year, award-winning winelands, and <span class="place-count-all">70</span> places curated by Sam Linsell — cookbook author and Cape Town's most trusted culinary voice.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
