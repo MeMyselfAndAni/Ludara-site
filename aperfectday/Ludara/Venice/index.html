@@ -101,8 +101,9 @@
   /* ── Splash card — Venice, medieval-renaissance ── */
   .splash { background: #0f0d0a !important; }
   .splash-inner {
-    padding: 56px 36px 44px;
-    max-width: 400px;
+    padding: 56px 36px 44px !important;
+    max-width: 1200px !important;
+    width: 95vw !important;
     text-align: center;
   }
   .splash-eyebrow {
@@ -142,10 +143,13 @@
   .splash-sub {
     font-family: 'IM Fell English', serif;
     font-style: italic;
-    font-size: 1.22rem;
+    font-size: 1.4rem;
     font-weight: 400;
-    line-height: 1.82;
-    color: #d4a84b;
+    line-height: 1.7;
+    hyphens: none;
+    max-width: 900px !important;
+    width: 100% !important;
+    color: var(--brand);
     margin: 0 0 34px;
   }
   .splash-btn {
@@ -174,6 +178,23 @@
   }
   .splash-footer a { color: #d4a84b; text-decoration: none; font-weight: 700; }
   .splash-footer a:hover { color: #d4a84b; }
+  .splash-tagline {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--brand);
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .splash-sample {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #a08c5e;
+    margin: 10px 0 0;
+    line-height: 1.6;
+  }
 </style>
 
 <script>
@@ -188,8 +209,10 @@
     <div class="splash-eyebrow">A Perfect Day</div>
     <h1 class="splash-title">Venice</h1>
     <div class="splash-subtitle">Serenissima</div>
+    <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
+    <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">Hand-picked Venice gems:<br>Byzantine mosaics, bacari unchanged since the Republic, furnaces blowing glass since 1291, and a lagoon that still hides the world.</p>
+    <p class="splash-sub">Glass furnaces since 1291, Verdi's La Traviata premiere,<br>and Michelin-listed trattorias no tourist map shows —<br>43 essential Venice places.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the City</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
