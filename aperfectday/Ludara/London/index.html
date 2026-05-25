@@ -302,11 +302,11 @@
 
 <button onclick="restartTutorial()" title="Show tutorial" style="
   position:fixed; bottom:224px; right:12px; z-index:1100;
-  background:#0f0d0a; color:#ff2a00; border:1px solid #8a1500; border-radius:0;
-  padding:8px 14px; font-size:0.72rem; font-weight:600; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,0.4); font-family:'Playfair Display',serif;
-  letter-spacing:0.1em; -webkit-tap-highlight-color:transparent;">
-  Guide
+  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;">
+  🧭 Guide
 </button>
 
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
@@ -606,8 +606,8 @@ function clearAllSaved() {
 window.TutorialConfig = {
   doneKey:      'london_tour_v1',
   cityName:     'London',
-  demoPlaceId:  59,
-  demoSavedIds: [59, 73, 83, 3, 78]
+  demoPlaceId:  1,
+  demoSavedIds: [1, 73, 83, 3, 78]
   /* no tripNames -- no Day Trip Picks step */
 };
 </script>

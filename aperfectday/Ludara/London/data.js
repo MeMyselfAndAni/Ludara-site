@@ -32,6 +32,7 @@ const PLACES = [
     hours: 'Mon–Fri 10:00–18:00; Sat 10:00–17:00; closed Sun',
     tip: 'Ask for a recommendation at your price point — the response will be specific and correct. Cellar tours and tastings bookable on the website.',
     type: 'Britain\'s oldest wine merchant (est. 1698) — St James\'s',
+    phone: '+44 20 7022 8973',
     website: 'https://www.bbr.com',
   },
   {
