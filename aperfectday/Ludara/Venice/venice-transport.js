@@ -4,8 +4,8 @@
  *
  * 1. Route LINE drawing (_fetchOSRMRoute override)
  *    - Splits saved places into walk groups and boat crossings.
- *    - Walk groups: routed via OSRM with exclude=ferry so vaporetto links
- *      in OSM are never used as pedestrian paths.
+ *    - Walk groups: routed via routing.openstreetmap.de/routed-foot which
+ *      uses a proper pedestrian profile without Venice ferry links.
  *    - Boat crossings (to murano / burano / torcello): straight lines.
  *
  * 2. Route STATS (_fetchRouteStats override)
