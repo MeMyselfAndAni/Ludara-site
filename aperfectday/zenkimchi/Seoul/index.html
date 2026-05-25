@@ -65,6 +65,24 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
+
+  /* ── Splash — GM demo additions ── */
+  .splash-inner      { max-width: 680px !important; width: 90vw !important; padding: 40px 40px 32px !important; }
+  .splash            .wl-logo { font-size: 1rem !important; }
+  .splash-tagline    { font-size: 0.84rem !important; letter-spacing: 0.08em; text-transform: uppercase;
+                       color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
+  .splash-divider    { width: 40px; height: 3px; background: var(--brand); border: none;
+                       border-radius: 2px; margin: 10px auto 18px; }
+  .splash-hotel-desc { font-style: italic; font-size: 1.05rem !important; line-height: 1.72;
+                       color: #555; margin-top: 0; margin-bottom: 24px; }
+  .splash-sample     { font-size: 0.92rem !important; color: #555; margin: 14px 0 0; font-style: italic; }
+  .splash-footer a   { color: var(--brand) !important; font-size: 0.88rem !important; }
+
+  @media (max-width: 600px) {
+    .splash-inner      { padding: 32px 20px 24px !important; }
+    .splash-hotel-desc { font-size: 0.88rem !important; }
+    .splash-sample     { font-size: 0.82rem !important; }
+  }
 </style>
 </head>
 <body>
@@ -76,10 +94,13 @@
       <span class="wl-logo">ZenKimchi</span>
     </div>
     <h2 class="splash-title">Seoul Food Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">65</span> hand-picked places by <strong>Joe McPherson</strong> — Korea's #1 food writer, president of ZenKimchi Experiences, and consultant to Anthony Bourdain, Andrew Zimmern and Lonely Planet.</p>
+    <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
+    <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
+    <hr class="splash-divider">
+    <p class="splash-hotel-desc">The BBQ restaurant Anthony Bourdain called essential, UNESCO royal palaces, late-night street food alleys, and <span class="place-count-all">65</span> places hand-picked by Korea's #1 food writer — chosen because no other city has them.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai/aperfectday</a>
+      <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
     </div>
   </div>
 </div>
@@ -224,6 +245,15 @@
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
   <span class="count-badge" id="list-badge">65</span>
+</button>
+
+<button onclick="restartTutorial()" title="Show tutorial" style="
+  position:fixed; bottom:224px; right:12px; z-index:1100;
+  background:#1a3a5c; color:white; border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;">
+  🧭 Guide
 </button>
 
 <button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
@@ -524,6 +554,17 @@ function clearAllSaved() {
 </script>
 
 
+
+<script>
+window.TutorialConfig = {
+  doneKey:      'seoul_tour_v1',
+  cityName:     'Seoul',
+  demoPlaceId:  1,
+  demoSavedIds: [1, 16, 50, 22, 39]
+  /* no tripNames -- no Day Trip Picks step */
+};
+</script>
+<script src="tutorial.js"></script>
 
 </body>
 </html>
