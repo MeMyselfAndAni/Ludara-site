@@ -4,7 +4,9 @@
  *
  * 1. Route LINE drawing (_fetchOSRMRoute override)
  *    - Splits saved places into consecutive walk groups and boat crossings.
- *    - Walk groups: routed via OSRM foot (real Venice street paths).
+ *    - Walk groups: routed via Valhalla pedestrian (use_ferry:0) so Venice's
+ *      vaporetto lines in OSM do not corrupt the route path.
+ *      Falls back to OSRM if Valhalla is unreachable, then to straight lines.
  *    - Boat crossings: drawn as straight lines across the lagoon.
  *
  * 2. Route STATS (_fetchRouteStats override)
@@ -88,31 +90,72 @@
     return Math.round((BASE_MINS[key] || 30) * BOAT_BUFFER);
   }
 
+  // ── 1. Route LINE drawing override ───────────────────────────────────────
+  // Splits places into walk groups (consecutive main-island stops) and boat
+  // crossings (to/from murano, burano, torcello).
+  //   - Walk groups: routed via Valhalla with use_ferry:0, so Venice's
+  //     vaporetto OSM lines are never used as walking shortcuts.
+  //     Falls back to OSRM (with 4× crow-fly rejection) if Valhalla fails,
+  //     then to straight lines.
+  //   - Boat crossings: drawn as a straight line across the lagoon.
+
+  var _origFetchOSRM = window._fetchOSRMRoute;
+
   /**
-   * Sum of haversine distances along a coordinate array [[lng,lat], ...].
-   * Used to detect ferry-inflated OSRM routes.
+   * Decode a Valhalla polyline6-encoded shape string into [[lng, lat], ...].
+   * Valhalla encodes lat/lng pairs with precision 1e-6.
    */
+  function _decodePolyline6(encoded) {
+    var scale = 1e6;
+    var result = [], index = 0, lat = 0, lng = 0;
+    while (index < encoded.length) {
+      var b, shift = 0, r = 0;
+      do { b = encoded.charCodeAt(index++) - 63; r |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+      lat += (r & 1) ? ~(r >> 1) : (r >> 1);
+      shift = 0; r = 0;
+      do { b = encoded.charCodeAt(index++) - 63; r |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+      lng += (r & 1) ? ~(r >> 1) : (r >> 1);
+      result.push([lng / scale, lat / scale]); // [lng, lat] for MapLibre
+    }
+    return result;
+  }
+
+  /** Sum of haversine distances along [[lng,lat], ...] — used to reject ferry-bloated routes. */
   function _routeLength(coords) {
     var total = 0;
     for (var i = 1; i < coords.length; i++) {
-      total += crow(
-        { lat: coords[i - 1][1], lng: coords[i - 1][0] },
-        { lat: coords[i][1],     lng: coords[i][0]     }
-      );
+      total += crow({ lat: coords[i-1][1], lng: coords[i-1][0] },
+                    { lat: coords[i][1],   lng: coords[i][0]   });
     }
     return total;
   }
 
-  // ── 1. Route LINE drawing override ───────────────────────────────────────
-  // Splits places into walk groups (consecutive main-island stops) and boat
-  // crossings (to/from murano, burano, torcello).
-  //   - Walk groups: sent to OSRM for real Venice street paths.
-  //     If OSRM returns a route more than 4× the direct crow-fly distance
-  //     (a sign it used Venice's ferry links instead of the actual calli),
-  //     the result is rejected and a straight line is drawn instead.
-  //   - Boat crossings: drawn as a straight line across the lagoon.
-
-  var _origFetchOSRM = window._fetchOSRMRoute;
+  /**
+   * Route a walk group via Valhalla (pedestrian, no ferries).
+   * Returns [[lng,lat], ...] or null on failure.
+   */
+  async function _valhallaWalk(group) {
+    var body = {
+      locations: group.map(function (p) { return { lon: p.lng, lat: p.lat }; }),
+      costing: 'pedestrian',
+      costing_options: { pedestrian: { use_ferry: 0 } }
+    };
+    var res = await fetch('https://valhalla.openstreetmap.de/route', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(9000)
+    });
+    var data = await res.json();
+    if (!data.trip || !data.trip.legs) return null;
+    var coords = [];
+    data.trip.legs.forEach(function (leg, li) {
+      var decoded = _decodePolyline6(leg.shape);
+      if (li > 0 && decoded.length > 0) decoded = decoded.slice(1);
+      coords.push.apply(coords, decoded);
+    });
+    return coords.length > 1 ? coords : null;
+  }
 
   window._fetchOSRMRoute = async function (places) {
     if (!places || places.length < 2) return [];
@@ -128,28 +171,27 @@
       }
 
       var coords = null;
-      if (_origFetchOSRM) {
+
+      // 1st choice: Valhalla pedestrian, ferries excluded
+      try {
+        var vraw = await _valhallaWalk(group);
+        if (vraw && vraw.length > 1) coords = vraw;
+      } catch (e) {}
+
+      // 2nd choice: OSRM (reject if it used ferry links — route > 4× crow-fly)
+      if (!coords && _origFetchOSRM) {
         try {
-          var raw = await _origFetchOSRM(group);
-          if (raw && raw.length > 1) {
-            // Reject ferry-inflated routes: OSRM foot profile includes Venice
-            // vaporetto lines as valid foot paths, producing wild detours.
-            // Real Venice walking routes through the calli are ≤ ~3× crow-fly;
-            // ferry-routed paths are typically 5–10×.
+          var oraw = await _origFetchOSRM(group);
+          if (oraw && oraw.length > 1) {
             var directM = 0;
-            for (var g = 1; g < group.length; g++) {
-              directM += crow(group[g - 1], group[g]);
-            }
-            if (directM === 0 || _routeLength(raw) <= directM * 4.0) {
-              coords = raw;
-            }
+            for (var g = 1; g < group.length; g++) directM += crow(group[g-1], group[g]);
+            if (directM === 0 || _routeLength(oraw) <= directM * 4.0) coords = oraw;
           }
         } catch (e) {}
       }
-      // Fallback: straight lines between the places
-      if (!coords) {
-        coords = group.map(function (p) { return [p.lng, p.lat]; });
-      }
+
+      // Final fallback: straight lines
+      if (!coords) coords = group.map(function (p) { return [p.lng, p.lat]; });
 
       if (result.length > 0 && coords.length > 0) coords = coords.slice(1);
       result.push.apply(result, coords);
@@ -157,14 +199,12 @@
 
     for (var i = 0; i < places.length - 1; i++) {
       if (legKey(places[i], places[i + 1]) !== null) {
-        // End of a walk group — route it, then add the boat destination as a straight-line point
         await routeWalkGroup(places.slice(groupStart, i + 1));
         result.push([places[i + 1].lng, places[i + 1].lat]);
         groupStart = i + 1;
       }
     }
 
-    // Route the final (or only) walk group
     await routeWalkGroup(places.slice(groupStart));
     return result;
   };
