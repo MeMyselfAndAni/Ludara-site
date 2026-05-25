@@ -104,13 +104,15 @@
   .splash-logo-row     { margin-bottom: 4px; }
   .splash-title        { margin-bottom: 0; letter-spacing: -0.02em; }
   .splash-divider      { width: 40px; height: 3px; background: var(--brand); border: none;
-                         border-radius: 2px; margin: 18px auto 18px; }
+                         border-radius: 2px; margin: 10px auto 18px; }
   .splash-sub          { font-style: italic; font-size: 0.97rem; line-height: 1.72;
                          color: #555; margin-top: 0; margin-bottom: 24px; }
-  .splash-footer       { margin-top: 22px; font-size: 0.75rem; color: #bbb;
+  .splash-footer       { margin-top: 22px; font-size: 0.75rem; color: #888;
                          letter-spacing: 0.01em; }
-  .splash-footer a     { color: #999; text-decoration: none; font-weight: 500; }
+  .splash-footer a     { color: var(--brand); text-decoration: none; font-weight: 500; }
   .splash-footer a:hover { color: var(--brand); }
+  .splash-tagline      { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+                         color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
 </style>
 
 <script>
@@ -126,6 +128,7 @@
       <span class="wl-logo">A Perfect Day</span><!-- [2] -->
     </div>
     <h2 class="splash-title">London Guide</h2><!-- [3] -->
+    <p class="splash-tagline">A curated city guide, built for luxury hotels</p><!-- [3b] -->
     <hr class="splash-divider">
     <p class="splash-sub">Royal palaces, jazz basements, Hitchcock film sets, three-Michelin-star kitchens, and the Soho bar where the Free French drank during the Blitz — <span class="place-count-all">69</span> essential London places chosen because no other city has them.</p><!-- [4] -->
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
