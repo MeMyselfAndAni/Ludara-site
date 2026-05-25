@@ -1,13 +1,17 @@
 /**
  * venice-transport.js
- * Venice-specific route STATS for A Perfect Day.
+ * Venice-specific navigation logic for A Perfect Day.
  *
- * Overrides _fetchRouteStats to replace walking times with accurate ACTV
- * vaporetto times for any leg that crosses between island groups.
- * Legs entirely within the main island use the original OSRM walking stats.
+ * 1. Route LINE drawing (_fetchOSRMRoute override)
+ *    - Splits saved places into walk groups and boat crossings.
+ *    - Walk groups: routed via OSRM with exclude=ferry so vaporetto links
+ *      in OSM are never used as pedestrian paths.
+ *    - Boat crossings (to murano / burano / torcello): straight lines.
  *
- * Route LINE drawing (the red path on the map) is handled by the generic
- * OSRM chunk-based function in ui-favourites.js — no override here.
+ * 2. Route STATS (_fetchRouteStats override)
+ *    - Replaces walking times with accurate ACTV vaporetto times for any
+ *      leg that crosses between island groups.
+ *    - Legs entirely within the main island use the original OSRM stats.
  *
  * Island groups:
  *   murano   — Murano island (lines 4.1, 4.2)
@@ -85,60 +89,35 @@
     return Math.round((BASE_MINS[key] || 30) * BOAT_BUFFER);
   }
 
-  // ── Valhalla polyline6 decoder ────────────────────────────────────────────
-  // Valhalla returns route shapes as polyline6-encoded strings (precision 1e6).
-  // Output: array of [lng, lat] pairs for MapLibre GeoJSON.
+  // ── OSRM routing with ferry exclusion ────────────────────────────────────
+  // Calls OSRM foot profile with exclude=ferry so vaporetto lines mapped in
+  // OSM as route=ferry are never used as pedestrian paths.
 
-  function _decodePolyline6(str) {
-    var coords = [], index = 0, lat = 0, lng = 0;
-    while (index < str.length) {
-      var b, shift = 0, result = 0;
-      do { b = str.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
-      var dlat = (result & 1) ? ~(result >> 1) : (result >> 1);
-      lat += dlat;
-      shift = 0; result = 0;
-      do { b = str.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
-      var dlng = (result & 1) ? ~(result >> 1) : (result >> 1);
-      lng += dlng;
-      coords.push([lng / 1e6, lat / 1e6]); // [lng, lat] for GeoJSON
+  async function _fetchOSRMNoFerry(places) {
+    var CHUNK = 10, allCoords = [];
+    for (var i = 0; i < places.length - 1; i += CHUNK - 1) {
+      var chunk = places.slice(i, Math.min(i + CHUNK, places.length));
+      var coords = chunk.map(function (p) { return p.lng + ',' + p.lat; }).join(';');
+      var url = 'https://router.project-osrm.org/route/v1/foot/' + coords +
+                '?overview=full&geometries=geojson&exclude=ferry';
+      try {
+        var res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+        var data = await res.json();
+        if (data.code === 'Ok' && data.routes && data.routes[0]) {
+          var segCoords = data.routes[0].geometry.coordinates;
+          if (allCoords.length > 0) segCoords.shift();
+          allCoords.push.apply(allCoords, segCoords);
+        } else {
+          chunk.forEach(function (p) { allCoords.push([p.lng, p.lat]); });
+        }
+      } catch (e) {
+        chunk.forEach(function (p) { allCoords.push([p.lng, p.lat]); });
+      }
     }
-    return coords;
+    return allCoords;
   }
 
-  // ── Valhalla pedestrian routing (no ferries) ──────────────────────────────
-
-  async function _fetchValhallaWalk(places) {
-    var locs = places.map(function (p) { return { lon: p.lng, lat: p.lat }; });
-    var body = JSON.stringify({
-      locations: locs,
-      costing: 'pedestrian',
-      costing_options: { pedestrian: { use_ferry: 0 } },
-      directions_type: 'none'
-    });
-    var res = await fetch('https://valhalla.openstreetmap.de/route', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body,
-      signal: AbortSignal.timeout(10000)
-    });
-    if (!res.ok) return null;
-    var data = await res.json();
-    if (!data.trip || !data.trip.legs || !data.trip.legs.length) return null;
-    var allCoords = [];
-    data.trip.legs.forEach(function (leg, i) {
-      var coords = _decodePolyline6(leg.shape);
-      if (i > 0 && allCoords.length > 0) coords = coords.slice(1);
-      allCoords.push.apply(allCoords, coords);
-    });
-    return allCoords.length > 1 ? allCoords : null;
-  }
-
-  // ── Route LINE drawing override ───────────────────────────────────────────
-  // Splits places into main-island walk groups and boat crossings.
-  // Walk groups: routed via Valhalla (use_ferry:0), falls back to OSRM.
-  // Boat crossings (to murano / burano / torcello): straight lines.
-
-  var _origFetchOSRM = window._fetchOSRMRoute;
+  // ── 1. Route LINE drawing override ───────────────────────────────────────
 
   window._fetchOSRMRoute = async function (places) {
     if (!places || places.length < 2) return [];
@@ -153,21 +132,10 @@
         return;
       }
       var coords = null;
-
-      // 1st choice: Valhalla with use_ferry:0 — guaranteed ferry-free routing
       try {
-        coords = await _fetchValhallaWalk(group);
+        var raw = await _fetchOSRMNoFerry(group);
+        if (raw && raw.length > 1) coords = raw;
       } catch (e) {}
-
-      // 2nd choice: OSRM — may include ferry links but better than nothing
-      if (!coords && _origFetchOSRM) {
-        try {
-          var raw = await _origFetchOSRM(group);
-          if (raw && raw.length > 1) coords = raw;
-        } catch (e) {}
-      }
-
-      // Last resort: straight lines
       if (!coords) coords = group.map(function (p) { return [p.lng, p.lat]; });
       if (result.length > 0 && coords.length > 0) coords = coords.slice(1);
       result.push.apply(result, coords);
@@ -184,7 +152,7 @@
     return result;
   };
 
-  // ── Route STATS override ──────────────────────────────────────────────────
+  // ── 2. Route STATS override ───────────────────────────────────────────────
   // Replaces walking times with accurate ACTV vaporetto times for any leg
   // that crosses between island groups.
   // Legs entirely within the main island are handed off to the original
