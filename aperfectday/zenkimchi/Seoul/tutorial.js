@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 70 places most guests never find. All earned their spot. Tap Next to begin.',
+      body: 'One map. 65 places most guests never find. All earned their spot. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a wine bar at the tip of Africa, a clifftop restaurant above Hout Bay, a market that Capetonians actually use. Tap any icon to see why it made the list.',
+      body: 'Every pin is a choice: a BBQ alley Anthony Bourdain called essential, a palace that has stood for 600 years, a late-night food market locals actually use. Tap any icon to see why it made the list.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Looking for a winelands estate or a hidden city cocktail bar? A beach-side fish shack? Slide the bar to show only the category you want — the map follows.',
+      body: 'In the mood for Korean BBQ, a late-night makgeolli bar, or a 600-year-old palace? Slide the bar to show only the category you want — the map follows.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -46,7 +46,7 @@
     },
     {
       title: 'Explore by Area',
-      body: 'Each button is a Cape Town area — city centre, Peninsula, Stellenbosch, Franschhoek, West Coast. Tap to zoom straight in.',
+      body: 'Each button is a Seoul neighbourhood: Mapo, Hongdae, Jongno, Euljiro, Itaewon, Gangnam, Han River. Tap to zoom straight in.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -105,7 +105,7 @@
     },
     {
       title: 'Navigate with and without Wifi',
-      body: "Mountain passes and coastal roads can both drop your signal. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too.",
+      body: "Signal can drop in subway stations and underground markets. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too.",
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       targetsDelay: 200,
@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'Cape Town is yours to discover. Go find your perfect day.',
+      body: 'Seoul is yours to discover. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,
