@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apd-shell-v6';
+var SHELL_CACHE = 'apd-shell-v8';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
@@ -17,6 +17,7 @@ var SHELL_FILES = [
   './ui-card.js',
   './ui-filter.js',
   './ui-favourites.js',
+  './venice-transport.js',
   './ui-pdf.js',
   './ui-stories.js',
   './favicon.svg',
