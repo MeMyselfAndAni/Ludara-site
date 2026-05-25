@@ -98,7 +98,7 @@
     for (var i = 0; i < places.length - 1; i += CHUNK - 1) {
       var chunk = places.slice(i, Math.min(i + CHUNK, places.length));
       var coords = chunk.map(function (p) { return p.lng + ',' + p.lat; }).join(';');
-      var url = 'https://router.project-osrm.org/route/v1/foot/' + coords +
+      var url = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/' + coords +
                 '?overview=full&geometries=geojson';
       try {
         var res = await fetch(url, { signal: AbortSignal.timeout(8000) });
