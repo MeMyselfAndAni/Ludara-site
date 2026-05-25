@@ -181,33 +181,49 @@ function _drawStraightRoute(places){
   });
 }
 
-async function _fetchOSRMRoute(places){
-  // OSRM foot routing — uses dedicated walking server
-  const allCoords = [];
-  const CHUNK = 10;
+// Haversine straight-line distance in metres between two {lat,lng} points
+function _haversineM(a, b){
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * toR, dLng = (b.lng - a.lng) * toR;
+  const s = Math.sin(dLat/2), t = Math.sin(dLng/2);
+  return 2 * R * Math.asin(Math.sqrt(s*s + Math.cos(a.lat*toR)*Math.cos(b.lat*toR)*t*t));
+}
 
-  for(let i = 0; i < places.length - 1; i += CHUNK - 1){
-    const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
-    const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
-    // Reliable OSRM foot profile — walking routes for Venice
+async function _fetchOSRMRoute(places){
+  // Route segment by segment so we can detect water-crossings.
+  // If OSRM routes more than 2.5× the straight-line distance it has gone
+  // around the lagoon via roads — replace that segment with a direct boat line.
+  const allCoords = [];
+
+  for(let i = 0; i < places.length - 1; i++){
+    const a = places[i], b = places[i+1];
+    const straightM = _haversineM(a, b);
+    const coords = `${a.lng},${a.lat};${b.lng},${b.lat}`;
     const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+
+    let segCoords = null;
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
       const data = await res.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
-        const segCoords = data.routes[0].geometry.coordinates;
-        if(allCoords.length > 0) segCoords.shift();
-        allCoords.push(...segCoords);
-        // Store actual walking durations
-        data.routes[0].legs.forEach((leg, legIdx) => {
-          _routeDurations[`${i+legIdx}-${i+legIdx+1}`] = leg.duration;
-        });
-      } else {
-        chunk.forEach(p => allCoords.push([p.lng, p.lat]));
+        const routeM = data.routes[0].distance;
+        // Accept OSRM result only when it stays close to the straight-line path.
+        // A ratio > 2.5 means OSRM is routing around a body of water.
+        if(routeM <= straightM * 2.5){
+          segCoords = data.routes[0].geometry.coordinates;
+          _routeDurations[`${i}-${i+1}`] = data.routes[0].legs[0].duration;
+        }
       }
-    } catch(e) {
-      chunk.forEach(p => allCoords.push([p.lng, p.lat]));
+    } catch(e) {}
+
+    if(!segCoords){
+      // Boat / vaporetto segment — draw as direct line, estimate ~5 km/h overall
+      segCoords = [[a.lng, a.lat], [b.lng, b.lat]];
+      _routeDurations[`${i}-${i+1}`] = (straightM / 1000 / 5) * 3600;
     }
+
+    if(allCoords.length > 0) segCoords = segCoords.slice(1);
+    allCoords.push(...segCoords);
   }
   return allCoords;
 }
