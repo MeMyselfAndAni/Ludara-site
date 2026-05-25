@@ -1,13 +1,19 @@
 /**
  * venice-transport.js
- * Venice-specific route STATS for A Perfect Day.
+ * ALL Venice-specific navigation logic for A Perfect Day.
  *
- * Overrides _fetchRouteStats to replace walking times with accurate ACTV
- * vaporetto times for any leg that crosses between island groups.
- * Legs entirely within the main island use the original OSRM walking stats.
+ * 1. Route LINE drawing (_fetchOSRMRoute override)
+ *    - Splits saved places into walk groups and boat crossings.
+ *    - Walk groups: routed via OSRM. If OSRM returns a route that leaves the
+ *      Venice main island bounding box (i.e. it used a ferry link to Lido or
+ *      the mainland bridge), the result is rejected and straight lines are
+ *      drawn instead. Real Venice walking routes always stay within the bbox.
+ *    - Boat crossings (to murano / burano / torcello): straight lines.
  *
- * Route LINE drawing (the red path on the map) is handled by the generic
- * OSRM chunk-based function in ui-favourites.js — no override here.
+ * 2. Route STATS (_fetchRouteStats override)
+ *    - Replaces walking times with accurate ACTV vaporetto times for any
+ *      leg that crosses between island groups.
+ *    - Legs entirely within the main island use the original OSRM stats.
  *
  * Island groups:
  *   murano   — Murano island (lines 4.1, 4.2)
@@ -85,7 +91,61 @@
     return Math.round((BASE_MINS[key] || 30) * BOAT_BUFFER);
   }
 
-  // ── Route STATS override ──────────────────────────────────────────────────
+  // ── 1. Route LINE drawing override ───────────────────────────────────────
+  //
+  // Venice main island bounding box (includes Giudecca, excludes Lido and mainland).
+  // Any OSRM route that leaves this box used a ferry link and must be rejected.
+  //
+  var VENICE_BBOX = { lngMin: 12.280, lngMax: 12.382, latMin: 45.412, latMax: 45.456 };
+
+  function _staysInVenice(coords) {
+    return coords.every(function (c) {
+      return c[0] >= VENICE_BBOX.lngMin && c[0] <= VENICE_BBOX.lngMax &&
+             c[1] >= VENICE_BBOX.latMin && c[1] <= VENICE_BBOX.latMax;
+    });
+  }
+
+  var _origFetchOSRM = window._fetchOSRMRoute;
+
+  window._fetchOSRMRoute = async function (places) {
+    if (!places || places.length < 2) return [];
+
+    var result     = [];
+    var groupStart = 0;
+
+    async function routeWalkGroup(group) {
+      if (group.length === 0) return;
+      if (group.length === 1) {
+        if (result.length === 0) result.push([group[0].lng, group[0].lat]);
+        return;
+      }
+      var coords = null;
+      if (_origFetchOSRM) {
+        try {
+          var raw = await _origFetchOSRM(group);
+          // Accept only if route stays within Venice main island + Giudecca.
+          // If OSRM routed via Lido ferry (lng > 12.382) or mainland bridge
+          // (lng < 12.280), the route is rejected and straight lines are drawn.
+          if (raw && raw.length > 1 && _staysInVenice(raw)) coords = raw;
+        } catch (e) {}
+      }
+      if (!coords) coords = group.map(function (p) { return [p.lng, p.lat]; });
+      if (result.length > 0 && coords.length > 0) coords = coords.slice(1);
+      result.push.apply(result, coords);
+    }
+
+    for (var i = 0; i < places.length - 1; i++) {
+      if (legKey(places[i], places[i + 1]) !== null) {
+        await routeWalkGroup(places.slice(groupStart, i + 1));
+        result.push([places[i + 1].lng, places[i + 1].lat]);
+        groupStart = i + 1;
+      }
+    }
+    await routeWalkGroup(places.slice(groupStart));
+    return result;
+  };
+
+  // ── 2. Route STATS override ───────────────────────────────────────────────
   // Replaces walking times with accurate ACTV vaporetto times for any leg
   // that crosses between island groups.
   // Legs entirely within the main island are handed off to the original
