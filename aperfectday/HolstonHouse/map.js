@@ -78,11 +78,9 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-  map.on('error', function(e) {
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;';
-    d.textContent = 'Map error: ' + (e.error ? e.error.message : JSON.stringify(e));
-    document.body.appendChild(d);
+  map.on('error', function() {
+    // Silent reload — client sees nothing, transient errors self-heal
+    setTimeout(function() { location.reload(); }, 2000);
   });
 
   map.on('load', () => {
