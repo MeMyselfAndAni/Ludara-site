@@ -99,7 +99,7 @@
       var chunk = places.slice(i, Math.min(i + CHUNK, places.length));
       var coords = chunk.map(function (p) { return p.lng + ',' + p.lat; }).join(';');
       var url = 'https://router.project-osrm.org/route/v1/foot/' + coords +
-                '?overview=full&geometries=geojson&exclude=ferry';
+                '?overview=full&geometries=geojson';
       try {
         var res = await fetch(url, { signal: AbortSignal.timeout(8000) });
         var data = await res.json();
