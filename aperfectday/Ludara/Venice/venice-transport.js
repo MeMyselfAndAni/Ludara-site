@@ -89,46 +89,53 @@
   }
 
   // ── 1. Route LINE drawing override ───────────────────────────────────────
-  // Splits places into walk groups and boat crossings, then:
-  //   - Routes each walk group through OSRM (real Venice street paths)
-  //   - Draws a straight line for each island crossing
+  // Splits places into walk groups (consecutive main-island stops) and boat
+  // crossings (to/from murano, burano, torcello).
+  //   - Walk groups: sent to OSRM for real Venice street paths
+  //   - Boat crossings: drawn as a straight line across the lagoon
 
   var _origFetchOSRM = window._fetchOSRMRoute;
 
   window._fetchOSRMRoute = async function (places) {
     if (!places || places.length < 2) return [];
 
-    var result      = [];
-    var groupStart  = 0;
+    var result     = [];
+    var groupStart = 0;
 
     async function routeWalkGroup(group) {
       if (group.length === 0) return;
       if (group.length === 1) {
-        // Single place — only add if result is empty (first point in whole route)
         if (result.length === 0) result.push([group[0].lng, group[0].lat]);
         return;
       }
-      var coords = _origFetchOSRM
-        ? await _origFetchOSRM(group)
-        : group.map(function (p) { return [p.lng, p.lat]; });
-      // Skip the first coord if it's already the last point in result
+
+      var coords = null;
+      if (_origFetchOSRM) {
+        try {
+          var raw = await _origFetchOSRM(group);
+          if (raw && raw.length > 1) coords = raw;
+        } catch (e) {}
+      }
+      // Fallback: straight lines between the places
+      if (!coords) {
+        coords = group.map(function (p) { return [p.lng, p.lat]; });
+      }
+
       if (result.length > 0 && coords.length > 0) coords = coords.slice(1);
       result.push.apply(result, coords);
     }
 
     for (var i = 0; i < places.length - 1; i++) {
       if (legKey(places[i], places[i + 1]) !== null) {
-        // Boat crossing ahead — route the current walk group first
+        // End of a walk group — route it, then add the boat destination as a straight-line point
         await routeWalkGroup(places.slice(groupStart, i + 1));
-        // Straight line to the destination island
         result.push([places[i + 1].lng, places[i + 1].lat]);
         groupStart = i + 1;
       }
     }
 
-    // Route the final walk group (or remaining places after last boat crossing)
+    // Route the final (or only) walk group
     await routeWalkGroup(places.slice(groupStart));
-
     return result;
   };
 
