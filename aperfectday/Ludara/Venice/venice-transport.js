@@ -88,11 +88,29 @@
     return Math.round((BASE_MINS[key] || 30) * BOAT_BUFFER);
   }
 
+  /**
+   * Sum of haversine distances along a coordinate array [[lng,lat], ...].
+   * Used to detect ferry-inflated OSRM routes.
+   */
+  function _routeLength(coords) {
+    var total = 0;
+    for (var i = 1; i < coords.length; i++) {
+      total += crow(
+        { lat: coords[i - 1][1], lng: coords[i - 1][0] },
+        { lat: coords[i][1],     lng: coords[i][0]     }
+      );
+    }
+    return total;
+  }
+
   // ── 1. Route LINE drawing override ───────────────────────────────────────
   // Splits places into walk groups (consecutive main-island stops) and boat
   // crossings (to/from murano, burano, torcello).
-  //   - Walk groups: sent to OSRM for real Venice street paths
-  //   - Boat crossings: drawn as a straight line across the lagoon
+  //   - Walk groups: sent to OSRM for real Venice street paths.
+  //     If OSRM returns a route more than 4× the direct crow-fly distance
+  //     (a sign it used Venice's ferry links instead of the actual calli),
+  //     the result is rejected and a straight line is drawn instead.
+  //   - Boat crossings: drawn as a straight line across the lagoon.
 
   var _origFetchOSRM = window._fetchOSRMRoute;
 
@@ -113,7 +131,19 @@
       if (_origFetchOSRM) {
         try {
           var raw = await _origFetchOSRM(group);
-          if (raw && raw.length > 1) coords = raw;
+          if (raw && raw.length > 1) {
+            // Reject ferry-inflated routes: OSRM foot profile includes Venice
+            // vaporetto lines as valid foot paths, producing wild detours.
+            // Real Venice walking routes through the calli are ≤ ~3× crow-fly;
+            // ferry-routed paths are typically 5–10×.
+            var directM = 0;
+            for (var g = 1; g < group.length; g++) {
+              directM += crow(group[g - 1], group[g]);
+            }
+            if (directM === 0 || _routeLength(raw) <= directM * 4.0) {
+              coords = raw;
+            }
+          }
         } catch (e) {}
       }
       // Fallback: straight lines between the places
