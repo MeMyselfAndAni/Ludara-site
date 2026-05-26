@@ -90,9 +90,10 @@ function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
     const approxCenter = NBHD_APPROX_CENTERS[nbhd];
-    // Get places in this neighbourhood, filter outliers > 3km from approx center
+    // Get places in this neighbourhood; filter distance is guide-specific (Cyprus regions span 30km+)
+    const _nbhdFilterM = (typeof NBHD_FILTER_M !== 'undefined') ? NBHD_FILTER_M : 5000;
     const ps = PLACES.filter(p => p.nbhd === nbhd &&
-      _haversineM(approxCenter, p) < 5000);  // 5km to include outliers like Chronicles of Georgia
+      _haversineM(approxCenter, p) < _nbhdFilterM);
 
     if (ps.length === 0) {
       // No valid places — tiny 40m dot to show neighbourhood exists but is empty

@@ -16,6 +16,7 @@ const OFFLINE_CENTER    = { lat: 34.88, lng: 32.75 };
 const GUIDE_CITY        = 'Cyprus';
 const BLOGGER_NAME      = 'A Perfect Day';
 const GUIDE_TIMEZONE    = 'Asia/Nicosia';
+const NBHD_FILTER_M     = 30000;  // 30km — Cyprus regions span the whole island
 
 // ─── Category colours ─────────────────────────────────────────────────────────
 const CC = {
