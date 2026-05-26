@@ -91,11 +91,25 @@ function toggleSavedFilter(el){
     }
     applyFilters();
     if(window.innerWidth >= 768) openSheet();
+    // Hide nbhd-bar on mobile so it doesn't overlap saved-place-list items
+    if(window.innerWidth < 768){
+      const bar = document.getElementById('nbhd-bar');
+      if(bar) bar.style.display = 'none';
+      const ttl = document.getElementById('nbhd-title');
+      if(ttl) ttl.style.display = 'none';
+    }
     drawSavedRoute();
   } else {
     clearTripRoute();
     const banner = document.getElementById('saved-mode-banner');
     if(banner) banner.remove();
+    // Restore nbhd-bar on mobile when exiting saved mode
+    if(window.innerWidth < 768){
+      const bar = document.getElementById('nbhd-bar');
+      if(bar) bar.style.display = '';
+      const ttl = document.getElementById('nbhd-title');
+      if(ttl) ttl.style.display = '';
+    }
     applyFilters();
     // Refit map to all visible places so it isn't stranded on the saved-route zoom
     try {
@@ -118,7 +132,8 @@ function toggleSavedFilter(el){
 
 // ── ROUTE DRAWING (Leaflet polylines — works fully offline) ──
 let tripPolyline  = null;
-let tripMarkers   = [];
+// var so city _addNumberedMarkers overrides can access as window.tripMarkers
+var tripMarkers   = [];
 let tripRenderers = [];
 let _routeDurations = {};
 
@@ -182,22 +197,23 @@ function _drawStraightRoute(places){
 }
 
 async function _fetchOSRMRoute(places){
-  // Generic chunk-based OSRM foot routing. Venice-specific boat/walk splitting
-  // is handled by the override in venice-transport.js.
+  // OSRM foot routing — uses dedicated walking server
   const allCoords = [];
   const CHUNK = 10;
 
   for(let i = 0; i < places.length - 1; i += CHUNK - 1){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
+    // foot.router.project-osrm.org is the dedicated walking profile server
     const url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`;
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
       const data = await res.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
         const segCoords = data.routes[0].geometry.coordinates;
         if(allCoords.length > 0) segCoords.shift();
         allCoords.push(...segCoords);
+        // Store actual walking durations
         data.routes[0].legs.forEach((leg, legIdx) => {
           _routeDurations[`${i+legIdx}-${i+legIdx+1}`] = leg.duration;
         });
@@ -210,8 +226,6 @@ async function _fetchOSRMRoute(places){
   }
   return allCoords;
 }
-// Expose on window so venice-transport.js (and future city overrides) can replace it
-window._fetchOSRMRoute = _fetchOSRMRoute;
 
 function drawSavedRoute(){
   if(!savedFilterActive || favourites.length < 2){ clearTripRoute(); return; }
@@ -222,7 +236,8 @@ function drawSavedRoute(){
   // Draw numbered markers immediately
   _addNumberedMarkers(places);
 
-  // Fit map to show all saved places; real route drawn once OSRM responds
+  // Draw straight line first as placeholder
+  _drawStraightRoute(places);
   _fitRouteBounds(places);
 
   // If online, fetch real walking route from OSRM and replace
@@ -666,9 +681,6 @@ function _fetchRouteStats(places) {
   });
 }
 
-// Expose on window so venice-transport.js (and future city overrides) can replace it
-window._fetchRouteStats = _fetchRouteStats;
-
 document.addEventListener('DOMContentLoaded', updateFavUI);
 
 
@@ -701,4 +713,8 @@ function _showOfflineRouteMsg() {
 // ── Service Worker registration ───────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-  navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.register('sw.js', { scope: './' })
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
+}

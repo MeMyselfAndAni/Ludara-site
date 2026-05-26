@@ -312,8 +312,8 @@ function renderList(){
   if(_searchIconBtn) _searchIconBtn.style.display = '';
 
   filtered = PLACES.filter(p => {
-    const catOk    = AF === 'all' || p.cat === AF;
-    const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
+    const catOk    = AF === 'all' || _inCats(p, AF);  // multi-cat aware
+    const nbhdOk   = (typeof ANF === 'undefined' || ANF === 'all' || p.nbhd === ANF);
     const openOk   = !openNowActive || isOpenNow(p);
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
     return catOk && nbhdOk && openOk && searchOk;
@@ -381,7 +381,7 @@ function fc(el,cat){
   applyFilters();
 
   // Fit MapLibre map to visible places
-  const vis = PLACES.filter(p=>(AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p)));
+  const vis = PLACES.filter(p=>(AF==='all'||_inCats(p,AF))&&(!openNowActive||isOpenNow(p)));
   if(vis.length && map){
     const lngs = vis.map(p => p.lng), lats = vis.map(p => p.lat);
     map.fitBounds(
@@ -436,10 +436,7 @@ function locateMe(){
 
 // ── SPLASH ────────────────────────────────────────────────────
 function closeSplash(){
-  var el = document.getElementById('splash');
-  el.style.opacity = '0';
-  el.style.pointerEvents = 'none';
-  setTimeout(function(){ el.classList.add('hidden'); }, 520);
+  document.getElementById('splash').classList.add('hidden');
 }
 
 // ── OPEN NOW ─────────────────────────────────────────────────
@@ -507,6 +504,17 @@ function isOpenNow(place){
   return !anyRecognised; // unrecognised format → assume open; recognised but no match → closed
 }
 
+// ── Multi-category helper ─────────────────────────────────────
+// Returns true if place p belongs to category cat.
+// Checks primary cat and optional cats field (comma-separated).
+function _inCats(p, cat) {
+  if (p.cat === cat) return true;
+  if (p.cats) {
+    return p.cats.split(',').map(c => c.trim()).includes(cat);
+  }
+  return false;
+}
+
 function applyFilters(){
   const isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
   const savedIds = isSaved
@@ -517,11 +525,11 @@ function applyFilters(){
     let visible;
     if(isSaved){
       const inSaved = savedIds.includes(p.id);
-      const inCat   = AF !== 'all' && p.cat === AF;
+      const inCat   = AF !== 'all' && _inCats(p, AF);
       visible = inSaved || inCat;
     } else {
-      const nbhdOk = true; /* neighbourhood selection only pans map — all markers stay visible */
-      const catOk  = AF === 'all' || p.cat === AF;
+      const nbhdOk = true; /* neighborhood selection only pans map — all markers stay visible */
+      const catOk  = AF === 'all' || _inCats(p, AF);
       const openOk = !openNowActive || isOpenNow(p);
       visible = catOk && openOk && nbhdOk;
     }
@@ -567,4 +575,9 @@ if(typeof document !== 'undefined'){
     var _listEl = document.getElementById('places-list');
     if (_listEl) {
       var _distObserver = new MutationObserver(function() {
-        if (
+        if (window._userLat) updateListDistances();
+      });
+      _distObserver.observe(_listEl, { childList: true });
+    }
+  });
+}
