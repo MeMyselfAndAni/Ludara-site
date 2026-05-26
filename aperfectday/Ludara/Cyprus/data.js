@@ -362,23 +362,6 @@ const PLACES = [
     type: 'Boutique winery — indigenous Cypriot varieties',
   },
 
-  {
-    id: 21,
-    nbhd: 'akamas',
-    name: 'Koullas Sandwiches',
-    cat: 'dining',
-    emoji: '🥙',
-    address: 'Pomos Village, Paphos District (45 minutes north)',
-    lat: 35.0536, lng: 32.5833,
-    phone: '',
-    website: '',
-    search: 'Koullas Sandwiches Pomos village Cyprus legendary halloumi lunch',
-    note: 'A village sandwich shop in Pomos that has acquired a cult following among Cypriots who make the drive north specifically for it — the equivalent of a pilgrimage for a souvlaki. The menu is minimal: grilled halloumi, local sausage (loukanika), fresh tomato and the village bread made that morning. No tables; eat standing or in the car. The 45-minute drive from Paphos through the Chrysochou valley and along the wild north coast is half the point — the Pomos coastline is completely undeveloped and the drive is one of the most beautiful on the island.',
-    hours: 'Morning to early afternoon — closes when the bread runs out',
-    tip: 'Call ahead if possible — the shop is genuinely small and sometimes closed for family reasons. This is a local institution, not a tourist restaurant: treat it accordingly.',
-    type: 'Village sandwich shop — legendary local institution',
-  },
-
   // ── TROODOS — Mountain Heart ──────────────────────────────────────────────
 
   {
