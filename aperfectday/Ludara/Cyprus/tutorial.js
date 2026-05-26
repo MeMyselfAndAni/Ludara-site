@@ -68,6 +68,7 @@
       dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
       cardPos: 'center',
+      mobileCardOffset: -300,  /* sheet is open — push card to top on mobile */
       demo: 'show-saved',
       btn: 'Next'
     },
@@ -76,6 +77,7 @@
       body: 'Ready to walk? Open your full route in Google Maps, or tap any saved place to navigate there directly.',
       target: '#sheet button[onclick="openTripInMaps()"]',
       cardPos: 'center',
+      mobileCardOffset: -300,  /* sheet is open — push card to top on mobile */
       demo: null,
       btn: 'Next'
     },
@@ -84,6 +86,7 @@
       body: 'Tap PDF Guide to get a beautifully designed guide with all your picks, ready to share or print before you leave.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
+      mobileCardOffset: -300,  /* sheet is open — push card to top on mobile */
       demo: null,
       btn: 'Next'
     },
@@ -92,6 +95,7 @@
       body: 'Send this map to a travel companion or keep it for the next visit. One tap to share by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
+      mobileCardOffset: -300,  /* sheet is open — push card to top on mobile */
       demo: null,
       btn: 'Next'
     },
