@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 43 places most guests never find. Some have been here since the Republic. All earned their spot. Tap Next to begin.',
+      body: 'One map. 35 places most guests never find. Byzantine frescoes from 1105, sea-turtle nesting beaches, and a Roman mosaic the size of this room. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a wine bar that Venetians actually use, a church with a Tintoretto and no queue, a glassblower on Murano who still works by eye. Tap any icon to see why it made the list.',
+      body: 'Every pin is a choice: a fish taverna that closes if the boat didn\'t go out, a Venetian bridge lost in pine forest, a monastery holding an icon unseen since 980 AD. Tap any icon to see why it made the list.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Looking for a wine bar with real local bites? A Renaissance church with no queue? Slide the bar to show only the category you want, the map follows.',
+      body: 'Looking for a fish taverna? A UNESCO Byzantine church? A nature trail? Slide the bar to show only the category you want — the map follows.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -45,8 +45,8 @@
       btn: 'Next'
     },
     {
-      title: 'Explore by Sestiere',
-      body: 'Each button is a Venetian district or island. Tap to zoom straight in. Venice rewards those who drift, let the districts guide you.',
+      title: 'Explore by Region',
+      body: 'Each button is a region of Cyprus — Paphos coast, the Akamas wilderness, the Troodos mountains, or the Lefkara villages. Tap to zoom straight in.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -105,7 +105,7 @@
     },
     {
       title: 'Navigate with and without Wifi',
-      body: 'Venice\'s narrow streets can swallow a signal. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too, essential in the tight lanes.',
+      body: 'Mountain roads and forest trails can lose a signal. Tap the circle to find yourself on the map. Save it offline and it works in the Troodos without Wifi too.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'Venice is yours to discover. Go find your perfect day.',
+      body: 'Cyprus is yours to discover. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */

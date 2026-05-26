@@ -455,6 +455,11 @@ window.TutorialConfig = {
 </script>
 <script src="tutorial.js"></script>
 
+<!-- fires initMap() after ALL scripts have loaded — do not move or remove -->
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
 <!-- Address display — populates pc-address when a card opens -->
 <script>
 window.addEventListener('load', function() {
