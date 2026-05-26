@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 35 places chosen for one reason: they stop you cold. Byzantine frescoes from 1105, a sea-turtle nesting beach, and a Roman mosaic floor covering 556 square metres. Tap Next to begin.',
+      body: 'One map. ' + (typeof PLACES !== 'undefined' ? PLACES.length : '') + ' places chosen for one reason: they stop you cold. Byzantine frescoes from 1105, a sea-turtle nesting beach, and a Roman mosaic floor covering 556 square metres. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,

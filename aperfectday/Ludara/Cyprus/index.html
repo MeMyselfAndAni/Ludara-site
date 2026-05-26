@@ -218,7 +218,7 @@
     <p class="splash-tagline">A curated island guide, built for luxury hotels</p>
     <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">UNESCO frescoes painted in 1105, the world's oldest named wine,<br>and Venetian bridges lost in pine forest —<br>35 essential Cyprus places.</p>
+    <p class="splash-sub">UNESCO frescoes painted in 1105, the world's oldest named wine,<br>and Venetian bridges lost in pine forest —<br><span id="place-count-splash">35</span> essential Cyprus places.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Island</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
@@ -389,7 +389,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">35 Places</span>
+    <span class="sheet-title" id="sheet-title"><span id="place-count-sheet">35</span> Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
@@ -411,6 +411,15 @@
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
+<script>
+  (function(){
+    var n = (typeof PLACES !== 'undefined') ? PLACES.length : '';
+    var s = document.getElementById('place-count-splash');
+    var t = document.getElementById('place-count-sheet');
+    if (s) s.textContent = n;
+    if (t) t.textContent = n;
+  })();
+</script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script><!-- MUST be before map.js -->
 <script src="map.js"></script>
