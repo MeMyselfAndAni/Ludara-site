@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 35 places most guests never find. Byzantine frescoes from 1105, sea-turtle nesting beaches, and a Roman mosaic the size of this room. Tap Next to begin.',
+      body: 'One map. 35 places chosen for one reason: they stop you cold. Byzantine frescoes from 1105, a sea-turtle nesting beach, and a Roman mosaic floor covering 556 square metres. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a fish taverna that closes if the boat didn\'t go out, a Venetian bridge lost in pine forest, a monastery holding an icon unseen since 980 AD. Tap any icon to see why it made the list.',
+      body: 'Every pin is a choice: a fish taverna that closes when the morning catch is too small to serve, a Venetian bridge lost in pine forest, a monastery holding an icon unseen since 980 AD. Tap any pin to see what earned its place.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -55,7 +55,7 @@
     },
     {
       title: 'Save your favorites',
-      body: 'Find something that makes you stop? Tap the heart. It stays in your list for the whole trip, even when you close the map.',
+      body: 'Find something that lights you up? Tap the heart. It stays saved for your whole trip, even when you close the map.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',

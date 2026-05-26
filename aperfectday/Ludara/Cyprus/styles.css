@@ -272,6 +272,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   text-overflow: ellipsis;
 }
 .place-type {
+  font-family: 'Philosopher', serif;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -794,7 +795,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 .nbhd-label {
   font-size: 0.48rem;
   font-weight: 700;
-  font-family: 'Cinzel Decorative', serif;
+  font-family: 'Philosopher', serif;
   letter-spacing: 0.04em;
   color: #c8922a;
   text-align: center;
@@ -827,9 +828,9 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 
 
 /* ── WANDER-LUSH TEXT LOGO ── */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap');
 .wl-logo {
-  font-family: 'Cormorant Garamond', 'Cormorant', Georgia, serif;
+  font-family: 'Philosopher', Georgia, serif;
   font-style: italic;
   font-weight: 500;
   font-size: 1.5rem;
@@ -1392,6 +1393,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 .pc-body::-webkit-scrollbar { display: none; }
 
 .pc-cat {
+  font-family: 'Philosopher', serif;
   font-size: 0.58rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1410,6 +1412,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   margin-bottom: 2px;
 }
 .pc-type {
+  font-family: 'Philosopher', serif;
   font-size: 0.67rem;
   color: #888;
   font-style: italic;
