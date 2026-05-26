@@ -106,13 +106,13 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   border: 2px solid var(--border);
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   cursor: pointer;
   white-space: nowrap;
   color: #0d1b3e;
-  font-family: 'Cinzel Decorative', serif;
+  font-family: 'Philosopher', serif;
   transition: all 0.18s;
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
@@ -421,7 +421,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
     padding: 2px;
   }
   #nbhd-bar .nbhd-ring-inner { font-size: 1.1rem; border-width: 2px; }
-  #nbhd-bar .nbhd-label { font-size: 0.48rem; line-height: 1; margin-top: 1px; }
+  #nbhd-bar .nbhd-label { font-size: 0.58rem; line-height: 1; margin-top: 1px; }
   #nbhd-bar .nbhd-bubble { gap: 2px; padding: 0 4px; }
   #nbhd-bar .nbhd-bubbles-row { gap: 2px; padding: 0; align-items: center; }
 
@@ -565,7 +565,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 
   .nbhd-ring { width: 52px; height: 52px; }
   .nbhd-ring-inner { font-size: 1.25rem; }
-  .nbhd-label { font-size: 0.60rem; }
+  .nbhd-label { font-size: 0.68rem; }
   .nbhd-bubble { gap: 3px; }
 
   /* ── Place card — centre of screen ── */
@@ -793,7 +793,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   overflow: hidden;
 }
 .nbhd-label {
-  font-size: 0.48rem;
+  font-size: 0.65rem;
   font-weight: 700;
   font-family: 'Philosopher', serif;
   letter-spacing: 0.04em;
