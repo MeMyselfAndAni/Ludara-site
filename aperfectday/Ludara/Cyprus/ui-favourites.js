@@ -91,25 +91,11 @@ function toggleSavedFilter(el){
     }
     applyFilters();
     if(window.innerWidth >= 768) openSheet();
-    // Hide nbhd-bar on mobile so it doesn't overlap saved-place-list items
-    if(window.innerWidth < 768){
-      const bar = document.getElementById('nbhd-bar');
-      if(bar) bar.style.display = 'none';
-      const ttl = document.getElementById('nbhd-title');
-      if(ttl) ttl.style.display = 'none';
-    }
     drawSavedRoute();
   } else {
     clearTripRoute();
     const banner = document.getElementById('saved-mode-banner');
     if(banner) banner.remove();
-    // Restore nbhd-bar on mobile when exiting saved mode
-    if(window.innerWidth < 768){
-      const bar = document.getElementById('nbhd-bar');
-      if(bar) bar.style.display = '';
-      const ttl = document.getElementById('nbhd-title');
-      if(ttl) ttl.style.display = '';
-    }
     applyFilters();
     // Refit map to all visible places so it isn't stranded on the saved-route zoom
     try {
