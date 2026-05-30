@@ -631,6 +631,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   transition: all 0.2s;
 }
 .locate-btn:hover, .locate-btn.active { background: var(--accent); color: white; }
+.locate-btn.tracking { background: #c0392b !important; border-color: #c0392b !important; color: white !important; }
 .locate-btn.locating { animation: pulse-btn 0.9s infinite; }
 @keyframes pulse-btn {
   0%,100% { box-shadow: 0 2px 12px rgba(26,58,92,0.3); }
