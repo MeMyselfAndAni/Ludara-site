@@ -336,7 +336,7 @@ function closePlaceCard(reopenList){
 }
 
 function cardBack(){
-  closePlaceCard(true); // user action — reopen list on mobile
+  closePlaceCard(); // do not auto-open list on mobile
 }
 
 // ── Keyboard nav ──────────────────────────────────────────────

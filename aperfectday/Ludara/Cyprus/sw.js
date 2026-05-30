@@ -112,4 +112,10 @@ self.addEventListener('message', function(event) {
           return fetch(url, { cache: 'reload' }).then(function(res) {
             if (res.ok) return cache.put(url, res);
           }).catch(function() {});
-        
+        })
+      ).then(function() {
+        if (event.source) event.source.postMessage({ action: 'SAVE_OFFLINE_DONE' });
+      });
+    });
+  }
+});

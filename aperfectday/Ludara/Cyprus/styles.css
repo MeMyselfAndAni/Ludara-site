@@ -376,7 +376,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   color: rgba(26,58,92,0.90);
   pointer-events: none;
   z-index: 412;
-  bottom: 80px;
+  bottom: 88px;
 }
 #nbhd-title.hidden { display: none; }
 
@@ -447,7 +447,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 
   /* ── Browse all places: horizontal pill, top-right under filter bar ── */
   .list-toggle {
-    top: 92px !important;
+    top: 103px !important;
     right: 8px !important;
     bottom: auto !important;
     left: auto !important;
@@ -525,7 +525,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
 
   /* ── Neighbourhood bar — bottom left, full width with scrolling ── */
   
-  #nbhd-title { bottom: 108px; font-size: 0.78rem; letter-spacing: 0.20em; }
+  #nbhd-title { bottom: 116px; font-size: 0.78rem; letter-spacing: 0.20em; }
   #nbhd-bar {
     position: fixed;
     bottom: 8px;
