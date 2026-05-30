@@ -404,9 +404,13 @@ function locateMe(){
   const btn = document.getElementById('locate-btn');
   if(!navigator.geolocation){ alert('Geolocation not supported.'); return; }
 
-  // Already watching — just re-center on current position
+  // Already watching — toggle off: stop tracking, remove marker, reset button
   if(locationWatchId !== null){
-    if(window._userLat) map.panTo([window._userLng, window._userLat]);
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = null;
+    if(userMarker){ userMarker.remove(); userMarker = null; }
+    window._userLat = null; window._userLng = null;
+    btn.classList.remove('active', 'tracking');
     return;
   }
 
@@ -416,7 +420,7 @@ function locateMe(){
   locationWatchId = navigator.geolocation.watchPosition(
     pos => {
       btn.classList.remove('locating');
-      btn.classList.add('active');
+      btn.classList.add('active', 'tracking');
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
       window._userLat = lat;
