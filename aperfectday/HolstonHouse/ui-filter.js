@@ -399,48 +399,117 @@ function fc(el,cat){
 
 // ── MY LOCATION ───────────────────────────────────────────────
 let userMarker = null;
+let locationWatchId = null;
 function locateMe(){
   const btn = document.getElementById('locate-btn');
   if(!navigator.geolocation){ alert('Geolocation not supported.'); return; }
+
+  // Already watching — just re-center on current position
+  if(locationWatchId !== null){
+    if(window._userLat) map.panTo([window._userLng, window._userLat]);
+    return;
+  }
+
   btn.classList.add('locating');
-  navigator.geolocation.getCurrentPosition(
+  let firstFix = true;
+
+  locationWatchId = navigator.geolocation.watchPosition(
     pos => {
       btn.classList.remove('locating');
       btn.classList.add('active');
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
-
-      if(userMarker) userMarker.remove();
-
-      const dotEl = document.createElement('div');
-      dotEl.innerHTML = '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>';
-      userMarker = new maplibregl.Marker({ element: dotEl, anchor: 'center' })
-        .setLngLat([lng, lat])
-        .addTo(map);
-      userMarker.setMap = function(m) { if(m === null) this.remove(); };
-
-      map.panTo([lng, lat]);  // MapLibre: [lng, lat]
-      if(map.getZoom() < 14) map.setZoom(15);
       window._userLat = lat;
       window._userLng = lng;
-      updateListDistances();
+
+      if(!userMarker){
+        const dotEl = document.createElement('div');
+        dotEl.innerHTML = '<div class="user-dot-outer"><div class="user-dot-inner"></div></div>';
+        userMarker = new maplibregl.Marker({ element: dotEl, anchor: 'center' })
+          .setLngLat([lng, lat])
+          .addTo(map);
+        userMarker.setMap = function(m) { if(m === null) this.remove(); };
+      } else {
+        userMarker.setLngLat([lng, lat]);
+      }
+
+      if(firstFix){
+        map.panTo([lng, lat]);
+        if(map.getZoom() < 14) map.setZoom(15);
+        firstFix = false;
+      }
+
+      if(typeof updateListDistances === 'function') updateListDistances();
+      if(typeof updateNavigateButton === 'function') updateNavigateButton();
     },
     err => {
       btn.classList.remove('locating');
+      if(locationWatchId !== null){ navigator.geolocation.clearWatch(locationWatchId); locationWatchId = null; }
       const msgs = {1:'Location access denied.', 2:'Location unavailable.', 3:'Request timed out.'};
       alert(msgs[err.code] || 'Could not get location.');
     },
-    { enableHighAccuracy: true, timeout: 10000 }
+    { enableHighAccuracy: true, timeout: 30000, maximumAge: 5000 }
   );
+}
+
+// ── OFFLINE SAVE ──────────────────────────────────────────────
+function saveForOffline() {
+  const btn = document.getElementById('offline-save-btn');
+  if (btn) { btn.textContent = '⏳ Saving…'; btn.disabled = true; }
+
+  // Pre-cache the MapTiler style JSON — needed for offline map initialisation
+  if (typeof MAPTILER_KEY !== 'undefined' && 'caches' in window) {
+    const styleUrl = 'https://api.maptiler.com/maps/streets-v2/style.json?key=' + MAPTILER_KEY;
+    caches.open('apd-tiles-v1').then(function(cache) {
+      fetch(styleUrl).then(function(res) {
+        if (res.ok) cache.put(styleUrl, res.clone());
+      }).catch(function() {});
+    });
+  }
+
+  function finish() {
+    if (!btn) return;
+    setTimeout(function() {
+      btn.textContent = '✓ Saved offline';
+      btn.style.background = '#2a5a3a';
+      btn.disabled = false;
+    }, 1200);
+  }
+
+  if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ action: 'SAVE_OFFLINE' });
+    navigator.serviceWorker.addEventListener('message', function handler(e) {
+      if (e.data && e.data.action === 'SAVE_OFFLINE_DONE') {
+        navigator.serviceWorker.removeEventListener('message', handler);
+        finish();
+      }
+    });
+    setTimeout(finish, 4000); // fallback if no message received
+  } else if (navigator.serviceWorker) {
+    navigator.serviceWorker.ready.then(function(reg) {
+      if (reg.active) reg.active.postMessage({ action: 'SAVE_OFFLINE' });
+      finish();
+    });
+  } else {
+    if (btn) { btn.textContent = '✗ Not supported'; btn.disabled = false; }
+  }
 }
 
 // ── SPLASH ────────────────────────────────────────────────────
 function closeSplash(){
+  sessionStorage.setItem('splashDismissed', '1');
   var el = document.getElementById('splash');
   el.style.opacity = '0';
   el.style.pointerEvents = 'none';
   setTimeout(function(){ el.classList.add('hidden'); }, 520);
 }
+// Auto-skip splash if page was refreshed while already in session
+document.addEventListener('DOMContentLoaded', function(){
+  if(sessionStorage.getItem('splashDismissed')){
+    var el = document.getElementById('splash');
+    if(el) el.classList.add('hidden');
+  }
+});
 
 // ── OPEN NOW ─────────────────────────────────────────────────
 let openNowActive = false;

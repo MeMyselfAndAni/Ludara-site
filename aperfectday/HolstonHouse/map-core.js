@@ -380,12 +380,7 @@ function refreshMapTiles() {
       map.setStyle(currentStyle);
     }
   } catch (error) {
-    console.warn('Map refresh failed:', error);
-    // Fallback: reload page if map refresh fails
-    setTimeout(() => {
-      console.log('🔄 Map refresh failed, reloading page...');
-      location.reload();
-    }, 2000);
+    console.warn('Map refresh failed — will recover on next interaction:', error);
   }
 }
 
@@ -434,13 +429,7 @@ function handleMapError(error) {
     console.log('🔄 Attempting to refresh map due to error...');
     refreshMapTiles();
     
-    // If refresh doesn't work, reload page after additional delay
-    setTimeout(() => {
-      if (map && map.loaded && !map.loaded()) {
-        console.log('🔄 Map still not working, reloading page...');
-        location.reload();
-      }
-    }, 5000);
+    // Map will recover on its own when connectivity returns
   }, 1000);
 }
 

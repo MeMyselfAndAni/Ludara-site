@@ -78,9 +78,9 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-  map.on('error', function() {
-    // Silent reload — client sees nothing, transient errors self-heal
-    setTimeout(function() { location.reload(); }, 2000);
+  map.on('error', function(e) {
+    // Don't reload — tile errors are normal offline; map recovers when connectivity returns
+    console.warn('Map tile error (offline?):', e && e.error ? e.error.message : '');
   });
 
   map.on('load', () => {
@@ -121,3 +121,12 @@ function initMap() {
   });
 }
 // ⚠️ DO NOT call initMap() here — index.html fires it via window.addEventListener('load', initMap)
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').catch(function(err) {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}

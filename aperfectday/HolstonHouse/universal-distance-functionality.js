@@ -48,27 +48,9 @@ window.addEventListener('load', function() {
   var _origLocate = window.locateMe;
   if (typeof _origLocate !== 'function') return;
   
+  // locateMe now uses watchPosition internally — no secondary location call needed
   window.locateMe = function() {
     _origLocate();
-    var attempts = 0;
-    var poll = setInterval(function() {
-      if (document.querySelector('.user-dot-inner') || attempts > 20) {
-        clearInterval(poll);
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            window._userLat = pos.coords.latitude;
-            window._userLng = pos.coords.longitude;
-            var units = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') ? 'imperial' : 'metric';
-            console.log('🗺️ User location stored:', window._userLat, window._userLng, '(using', units, 'distances)');
-            updateListDistances();
-            updateNavigateButton();
-          }, function(err) {
-            console.log('❌ Failed to get user location:', err);
-          }, { enableHighAccuracy: true, timeout: 10000 });
-        }
-      }
-      attempts++;
-    }, 300);
   };
 });
 
