@@ -12,16 +12,16 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. ' + (typeof PLACES !== 'undefined' ? PLACES.length : '') + ' places chosen for one reason: they stop you cold. Byzantine frescoes from 1105, a sea-turtle nesting beach, and a Roman mosaic floor covering 556 square metres. Tap Next to begin.',
+      title: 'Your Perfect Day in ' + CITY,
+      body: 'A concierge guide built for guests who want the real Cyprus — not the tourist circuit. Every place was chosen by hand, every note written to tell you exactly what makes it worth the trip.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a fish taverna that closes when the morning catch is too small to serve, a Venetian bridge lost in pine forest, a monastery holding an icon unseen since 980 AD. Tap any pin to see what earned its place.',
+      title: 'Each pin has a story',
+      body: 'Tap any pin to read the concierge note — what to order, when to arrive, and what most visitors walk straight past. No sponsored listings, no algorithms.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',

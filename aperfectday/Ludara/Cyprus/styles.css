@@ -563,9 +563,9 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
-  .nbhd-ring { width: 52px; height: 52px; }
-  .nbhd-ring-inner { font-size: 1.25rem; }
-  .nbhd-label { font-size: 0.68rem; }
+  .nbhd-ring { width: 42px; height: 42px; }
+  .nbhd-ring-inner { font-size: 1.0rem; }
+  .nbhd-label { font-size: 0.54rem; }
   .nbhd-bubble { gap: 3px; }
 
   /* ── Place card — centre of screen ── */
