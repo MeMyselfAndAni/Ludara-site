@@ -534,7 +534,7 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
     width: auto;
     flex-direction: row;
     align-items: center;
-    padding: 6px 12px;
+    padding: 4px 12px;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -563,10 +563,10 @@ h1 em { font-style: italic; color: #c8922a; font-weight: 400; font-family: 'Corm
   /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
-  .nbhd-ring { width: 42px; height: 42px; }
-  .nbhd-ring-inner { font-size: 1.0rem; }
-  .nbhd-label { font-size: 0.54rem; }
-  .nbhd-bubble { gap: 3px; }
+  #nbhd-bar .nbhd-ring { width: 42px; height: 42px; }
+  #nbhd-bar .nbhd-ring-inner { font-size: 1.0rem; }
+  #nbhd-bar .nbhd-label { font-size: 0.54rem; }
+  #nbhd-bar .nbhd-bubble { gap: 3px; padding: 2px; }
 
   /* ── Place card — centre of screen ── */
   #place-card {
