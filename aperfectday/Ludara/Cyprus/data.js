@@ -248,7 +248,7 @@ const PLACES = [
     cat: 'hike',
     emoji: '🏖️',
     address: 'Coral Bay (Corallia Beach), 8099 Paphos',
-    lat: 34.8333, lng: 32.3667,
+    lat: 34.857702, lng: 32.3609,
     phone: '',
     website: 'https://www.visitpaphos.eu/beaches/coral-bay/',
     search: 'Coral Bay Corallia Beach Paphos Cyprus sandy cove turquoise',
