@@ -241,9 +241,19 @@ function _populateCard(p){
 
   document.getElementById('pc-note').textContent = p.note || '';
 
+  // Staff recommender byline — extract name, strip attribution from tip
+  const staffMatch = p.tip && p.tip.match(/A Holston House staff pick\s*[—–-]\s*([A-Za-z]+)[.]?\s*([\s\S]*)/i);
+  const staffName   = staffMatch ? staffMatch[1] : null;
+  const cleanedTip  = staffMatch ? staffMatch[2].trim() : (p.tip || '').trim();
+
+  const byEl = document.querySelector('.pc-emily-by');
+  if (byEl) {
+    byEl.textContent = staffName ? '— Recommended by ' + staffName : '';
+  }
+
   const tipEl = document.getElementById('pc-tip');
-  if(p.tip){
-    document.getElementById('pc-tip-text').textContent = p.tip;
+  if (cleanedTip) {
+    document.getElementById('pc-tip-text').textContent = cleanedTip;
     tipEl.style.display = '';
   } else {
     tipEl.style.display = 'none';

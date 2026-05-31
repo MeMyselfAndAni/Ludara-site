@@ -1708,7 +1708,9 @@ ound 0.15s;
   color: rgba(49,38,29,0.80);
   margin-bottom: -7px;
   pointer-events: none;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
 }
 .trip-btn-circle {
   width: 56px;
