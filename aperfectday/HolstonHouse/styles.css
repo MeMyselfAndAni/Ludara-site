@@ -87,11 +87,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── HH FULL LOCKUP LOGO ── */
 .hh-logo-full {
-  height: 75px;
+  height: 90px;
   width: auto;
   display: block;
   object-fit: contain;
   flex-shrink: 0;
+  filter: brightness(1.12);
 }
 
 /* ── MAP ── */
@@ -1254,7 +1255,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     padding: 0 10px;
     gap: 0;
   }
-  .hh-logo-full { height: clamp(48px, 12vw, 75px); }   /* scales on small screens */
+  .hh-logo-full { height: clamp(55px, 13vw, 90px); }   /* scales on small screens */
   .splash-hotel-desc { display: block; }   /* show hotel blurb on mobile splash */
   .splash-divider { display: none; }
   .splash-ub-logo { display: none; }      /* Unbound Collection logo — desktop only */
