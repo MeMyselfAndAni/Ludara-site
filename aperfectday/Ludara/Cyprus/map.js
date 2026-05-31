@@ -24,6 +24,7 @@ const CC = {
   'church':   '#b8902a',   // Byzantine gold — churches and monasteries
   'heritage': '#2a5a8a',   // Aegean blue — archaeological and UNESCO sites
   'hike':     '#4a7a50',   // Mediterranean sage — nature, trails, gorges
+  'winery':   '#8a2a55',   // Commandaria burgundy — wineries
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
@@ -32,6 +33,7 @@ const CL = {
   'church':   'Churches & Monasteries',
   'heritage': 'Heritage & Villages',
   'hike':     'Nature & Trails',
+  'winery':   'Wineries',
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
