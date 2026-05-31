@@ -108,12 +108,18 @@ function loadPlaces() {
     console.error('ERROR: data.js not found in ' + __dirname);
     process.exit(1);
   }
+  const vm = require('vm');
   try {
     const code = fs.readFileSync(dataPath, 'utf8');
-    eval(code.replace(/^const PLACES/m, 'var PLACES'));
-    if (typeof PLACES !== 'undefined' && Array.isArray(PLACES)) return PLACES;
+    const sandbox = { PLACES: undefined };
+    vm.createContext(sandbox);
+    vm.runInContext(code.replace(/^const PLACES/m, 'var PLACES'), sandbox);
+    if (Array.isArray(sandbox.PLACES)) return sandbox.PLACES;
   } catch(e) {
-    console.error('ERROR: Could not parse PLACES from data.js — ' + e.message);
+    // Try to surface line number if available
+    const loc = e.message.match(/\((\d+:\d+)\)/);
+    const hint = loc ? ' at line ' + loc[1] : '';
+    console.error('ERROR: Could not parse PLACES from data.js — ' + e.message + hint);
     process.exit(1);
   }
   console.error('ERROR: PLACES array not found in data.js');
@@ -213,31 +219,56 @@ function searchWikimediaAll(query) {
 }
 
 // ── DOWNLOAD IMAGE ────────────────────────────────────────────────
-function download(imgUrl, dest, hops) {
+function download(imgUrl, dest, hops, referer) {
   return new Promise((resolve) => {
     if (hops <= 0) return resolve(false);
+    // Reject relative or non-http URLs before attempting
+    if (!imgUrl || (!imgUrl.startsWith('http://') && !imgUrl.startsWith('https://'))) {
+      return resolve(false);
+    }
+    // Derive a Referer from the image URL origin if none provided (helps with hotlink protection)
+    if (!referer) {
+      try { referer = new URL(imgUrl).origin + '/'; } catch(e) {}
+    }
     const timer = setTimeout(() => resolve(false), 20000);
     const proto = imgUrl.startsWith('https') ? https : http;
     const file = fs.createWriteStream(dest);
-    const req = proto.get(imgUrl, {
-      headers: { 'User-Agent': 'APerfectDayGuide/1.0 (ludara.ai; contact@ludara.ai)' }
-    }, (res) => {
-      if ([301, 302, 303].includes(res.statusCode) && res.headers.location) {
-        clearTimeout(timer); file.close(); fs.unlink(dest, () => {});
-        return resolve(download(res.headers.location, dest, hops - 1));
-      }
-      if (res.statusCode !== 200) {
-        clearTimeout(timer); file.close(); fs.unlink(dest, () => {});
-        return resolve(false);
-      }
-      res.pipe(file);
-      file.on('finish', () => {
-        clearTimeout(timer); file.close();
-        const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
-        if (size < 10000) { fs.unlink(dest, () => {}); return resolve(false); }
-        resolve(true);
+    let req;
+    try {
+      req = proto.get(imgUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
+          'Referer': referer || '',
+          'Accept': 'image/webp,image/avif,image/jpeg,image/*,*/*;q=0.8',
+        }
+      }, (res) => {
+        if ([301, 302, 303].includes(res.statusCode) && res.headers.location) {
+          clearTimeout(timer); file.close(); fs.unlink(dest, () => {});
+          let loc = res.headers.location;
+          // Resolve relative redirect URLs against the original URL
+          if (loc.startsWith('/')) {
+            try { loc = new URL(imgUrl).origin + loc; } catch(e) { return resolve(false); }
+          }
+          return resolve(download(loc, dest, hops - 1, referer));
+        }
+        if (res.statusCode !== 200) {
+          clearTimeout(timer); file.close(); fs.unlink(dest, () => {});
+          return resolve(false);
+        }
+        res.pipe(file);
+        file.on('finish', () => {
+          clearTimeout(timer); file.close();
+          const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
+          if (size < 10000) { fs.unlink(dest, () => {}); return resolve(false); }
+          resolve(true);
+        });
       });
-    });
+    } catch(e) {
+      clearTimeout(timer);
+      try { file.close(); } catch(_) {}
+      fs.unlink(dest, () => {});
+      return resolve(false);
+    }
     req.on('error', () => { clearTimeout(timer); file.close(); fs.unlink(dest, () => {}); resolve(false); });
   });
 }
@@ -339,6 +370,8 @@ async function resizeImages() {
     'sharp',
     path.join(__dirname, '..', '..', 'general', '_scripts', 'node_modules', 'sharp'),
     path.join(__dirname, '..', '..', '..', 'general', '_scripts', 'node_modules', 'sharp'),
+    // Ludara project (when guide folder is outside aperfectday tree)
+    path.join(__dirname, '..', '..', '..', '..', 'Ludara', 'Ludara-site', 'aperfectday', 'general', '_scripts', 'node_modules', 'sharp'),
   ];
   for (const p of sharpPaths) {
     try { sharp = require(p); break; } catch(e) {}
@@ -347,6 +380,24 @@ async function resizeImages() {
     console.log('  ⚠️  sharp not found — skipping resize.');
     console.log('  Fix: cd general\\_scripts && npm install sharp');
     return;
+  }
+
+  // Resume any leftover .tmp files from a previous interrupted resize
+  const tmpFiles = fs.readdirSync(OUTPUT_DIR).filter(f => f.endsWith('.jpg.tmp'));
+  if (tmpFiles.length) {
+    console.log('  Resuming ' + tmpFiles.length + ' leftover .tmp file(s)...');
+    for (const tmp of tmpFiles) {
+      const tmpPath = path.join(OUTPUT_DIR, tmp);
+      const finalPath = path.join(OUTPUT_DIR, tmp.replace('.jpg.tmp', '.jpg'));
+      try {
+        if (fs.existsSync(finalPath)) fs.unlinkSync(finalPath);
+        fs.renameSync(tmpPath, finalPath);
+        console.log('  ✓ resumed ' + tmp.replace('.jpg.tmp', '.jpg'));
+      } catch(e) {
+        fs.unlink(tmpPath, () => {});
+        console.log('  ✗ could not resume ' + tmp + ' — will re-resize');
+      }
+    }
   }
 
   const MAX_SIZE = 600;

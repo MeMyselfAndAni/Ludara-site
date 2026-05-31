@@ -12,24 +12,32 @@ const TIME_FORMAT       = '12h';               // Display hours in AM/PM for US 
 const DISTANCE_UNITS    = 'imperial';         // Use feet/miles for US guides
 
 // ─── Category colours ─────────────────────────────────────────────────────────
-// Nashville palette: Tennessee brick, Southern gold, Music Row purple, forest green
+// Nashville palette — updated May 2026 to match staff category system
 const CC = {
-  'landmark': '#ff2a00',   // Tennessee brick
-  'food':     '#d4902a',   // Southern gold
-  'cafe':     '#5a8f68',   // Cumberland green
-  'pub':      '#6b5b9a',   // Music Row purple
-  'market':   '#b07040',   // Worn leather brown
-  'nature':   '#3d8a5e',   // Deep forest
+  'breakfast':  '#E87C3E',   // Warm orange-gold — morning warmth
+  'lunch':      '#5A9E74',   // Fresh green — midday energy
+  'dinner':     '#8B1A2F',   // Deep burgundy — evening dining
+  'bbq':        '#C4520A',   // Burnt sienna — smoke and fire
+  'bar':        '#6B3FA0',   // Deep purple — Music Row nights
+  'music':      '#1A5FAB',   // Nashville blue — stage lights
+  'attraction': '#CC2F2F',   // Tennessee brick — landmarks
+  'shopping':   '#2E8B8B',   // Warm teal — boutique and curated
+  'boots':      '#8B5E3C',   // Saddle brown — western leather
+  'parks':      '#3D7A50',   // Forest green — nature and greater Nashville
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'landmark': 'Landmarks',
-  'food':     'Restaurants',
-  'cafe':     'Coffee & Brunch',
-  'pub':      'Bars & Music',
-  'market':   'Markets',
-  'nature':   'Parks & Nature',
+  'breakfast':  'Breakfast & Brunch',
+  'lunch':      'Lunch',
+  'dinner':     'Dinner',
+  'bbq':        'BBQ',
+  'bar':        'Bars & Honky Tonks',
+  'music':      'Music Venues',
+  'attraction': 'Attractions',
+  'shopping':   'Shopping',
+  'boots':      'Boot Shops',
+  'parks':      'Parks',
 };
 
 // ─── Neighbourhood colours ────────────────────────────────────────────────────
