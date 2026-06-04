@@ -1,11 +1,10 @@
 // A Perfect Day — Cyprus
-// data.js — 35 curated places
+// data.js — 26 curated places
 //
 // v1 — May 2026
 // Voice: boutique hotel concierge — direct, specific, opinionated
 // Four categories: Dining · Churches & Monasteries · Heritage & Villages · Nature & Trails
 //
-// Curated for the Elysium Hotel, Paphos demo
 // Research sources: Cyprus Tourism Organisation, UNESCO World Heritage listings,
 //   Cyprus Department of Antiquities, Elysium Hotel official website,
 //   local press (Cyprus Mail, In-Cyprus), verified May 2026.
@@ -18,160 +17,6 @@ const PLACES = [
 
   {
     id: 1,
-    nbhd: 'paphos',
-    name: 'Elysium Hotel',
-    cat: 'dining',
-    emoji: '🏛️',
-    address: 'Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772922, lng: 32.405640,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com',
-    search: 'Elysium Hotel Paphos Cyprus seafront luxury pool terrace',
-    note: 'A Byzantine-inspired five-star set directly on the Paphos seafront, designed by the architect Giorgos Vasiliou around a sequence of pools, arched colonnades and mosaic-tiled courtyards. Eight restaurants and bars occupy the complex — from the rooftop Astria to the Japanese O\'Shin and the Italian Ristorante Bacco. The hotel is 200 metres from the Kato Pafos archaeological park. Every room faces either the sea or the gardens.',
-    hours: 'Open year-round',
-    tip: 'Ask for a room on the upper floors of the main building — uninterrupted sea view at the same rate as the garden-side rooms. Breakfast on the terrace overlooking the Mediterranean is worth waking early for.',
-    type: 'Five-star resort hotel — Byzantine architecture, seafront',
-    awards: 'TUI Global Hotel Awards 2026: Top 100 · TripAdvisor Travellers\' Choice Best of the Best 2025: 10th Best Hotel in the World, 7th Best Hotel in Europe · TUI Global Hotel Awards 2025: Top 100 · Condé Nast Readers\' Choice Awards 2025 · World Travel Awards 2025: Cyprus\'s Leading Boutique Hotel · British Airways Holidays Customer Excellence 2025 · Leading Hotels of the World',
-  },
-
-  {
-    id: 2,
-    nbhd: 'paphos',
-    name: 'Lemonia Piazza',
-    cat: 'dining',
-    emoji: '🍋',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.773461, lng: 32.405640,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/lemonia-piazza/',
-    search: 'Lemonia Piazza restaurant Elysium Hotel Paphos terrace dining',
-    note: 'The Elysium\'s main all-day restaurant, set around a lemon-shaded piazza at the heart of the hotel complex. The menu moves between Cypriot and Mediterranean — meze with local halloumi, grilled fish caught the same morning from the Paphos harbour, and mezze platters that work equally well for a light lunch or a long evening table. The terrace is the most reliably comfortable outdoor dining spot in the Paphos hotel district.',
-    hours: 'Daily — breakfast, lunch, and dinner',
-    tip: 'The Cypriot meze here is one of the better hotel versions on the island — order the full spread rather than à la carte for a first evening.',
-    type: 'All-day Mediterranean and Cypriot restaurant',
-  },
-
-  {
-    id: 3,
-    nbhd: 'paphos',
-    name: 'Epicurean Restaurant',
-    cat: 'dining',
-    emoji: '🍽️',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.773302, lng: 32.406106,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/epicurean-restaurant/',
-    search: 'Epicurean restaurant Elysium Hotel fine dining Paphos Cyprus',
-    note: 'The Elysium\'s fine-dining flagship, focusing on contemporary Mediterranean cuisine with produce sourced from Cypriot farms and the Paphos fishing fleet. The kitchen takes seasonal seriously — the menu changes with what arrives, not the other way around. The room is quieter and more formal than the hotel\'s other venues; right for an occasion meal or a long conversation over wine.',
-    hours: 'Dinner only — Tuesday to Sunday (hours subject to season)',
-    tip: 'Book the corner table by the window — it faces the sea. The Commandaria dessert wine pairing at the end of the tasting menu is the local note worth keeping.',
-    type: 'Fine-dining Mediterranean restaurant',
-  },
-
-  {
-    id: 4,
-    nbhd: 'paphos',
-    name: 'Ristorante Bacco',
-    cat: 'dining',
-    emoji: '🍷',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772920, lng: 32.406299,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/ristorante-bacco/',
-    search: 'Ristorante Bacco Italian restaurant Elysium Hotel Paphos',
-    note: 'The Italian restaurant in the Elysium complex, serving classic Roman and Neapolitan dishes with Cypriot olive oil and local herbs substituted where it improves rather than compromises. The wine list reaches well beyond the usual hotel Italian selection — the sommelier here knows their Sicilian and Campanian bottles. Good for a relaxed evening that does not want to engage with the meze ritual.',
-    hours: 'Dinner only — check current schedule at reception',
-    tip: 'The truffle pasta changes with the season. Worth asking what arrived that week rather than ordering from the printed menu alone.',
-    type: 'Italian restaurant',
-  },
-
-  {
-    id: 5,
-    nbhd: 'paphos',
-    name: 'O\'Shin Japanese Restaurant',
-    cat: 'dining',
-    emoji: '🍣',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772538, lng: 32.406106,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/oshin-restaurant/',
-    search: 'O\'Shin Japanese restaurant sushi Elysium Paphos Cyprus',
-    note: 'The only dedicated Japanese restaurant in Paphos that consistently draws guests who are not staying at the hotel. The sushi and sashimi are made with fish from local waters where quality allows, with imported key ingredients. The robata grill is the section worth focusing on — the grilled Black Angus and the whole sea bass over charcoal are better than anything on the standard sushi menu.',
-    hours: 'Dinner only — check current schedule at reception',
-    tip: 'Arrive before sunset and ask for a courtyard seat. The Japanese aesthetic sits unexpectedly well next to the Byzantine stonework.',
-    type: 'Japanese restaurant — sushi and robata grill',
-  },
-
-  {
-    id: 6,
-    nbhd: 'paphos',
-    name: 'Mediterraneo Pool Bar',
-    cat: 'dining',
-    emoji: '🌊',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772379, lng: 32.405640,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/mediterraneo-restaurant/',
-    search: 'Mediterraneo pool bar Elysium Hotel Paphos seafront',
-    note: 'Light lunches, fresh salads and cold drinks served poolside and on the seafront terrace. The kitchen keeps things simple here by design — the point is the setting: the Elysium\'s main infinity pool with the Mediterranean directly beyond. The halloumi wrap and the fish souvlaki are what most locals order when they come in from the beach.',
-    hours: 'Daily during pool hours — seasonal',
-    tip: 'The best hour is around 17:00 when the sun angle drops and the terrace cools. Order a Cypriot brandy sour — the local summer drink most visitors miss.',
-    type: 'Pool bar and seafront terrace',
-  },
-
-  {
-    id: 7,
-    nbhd: 'paphos',
-    name: 'Astria Rooftop Bar',
-    cat: 'dining',
-    emoji: '🌅',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772538, lng: 32.405174,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/astria-bar/',
-    search: 'Astria Bar rooftop Elysium Hotel Paphos sunset cocktails',
-    note: 'The Elysium\'s cocktail bar, themed around the night sky and its constellations — the name is Greek for star. Seating inside and on a pergola-covered terrace overlooking the Lethe Spring, which the hotel illuminates after dark. The bar covers cocktails, premium whiskies and cognac, with cigars available on request. Live music on most nights of the week makes it the liveliest spot in the hotel after dinner — more intimate and unhurried than the main restaurant terraces.',
-    hours: '19:00–00:30 — open nightly',
-    tip: 'The best hour is after dinner when the live music is playing and the Lethe Spring terrace is lit. Ask the bartender for a Commandaria-based cocktail — the island\'s dessert wine works well as a digestif base and is something most guests miss entirely.',
-    type: 'Cocktail bar — lobby level, live music nightly',
-  },
-
-  {
-    id: 8,
-    nbhd: 'paphos',
-    name: 'Café Occidental',
-    cat: 'dining',
-    emoji: '☕',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.772920, lng: 32.404981,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/cafe-occidental/',
-    search: 'Cafe Occidental Elysium Hotel Paphos coffee pastries lounge',
-    note: 'The hotel\'s all-day café and lounge — the right stop for a Cypriot coffee or a late-afternoon Commandaria after a morning at the archaeological park. Pastries are made in-house; the loukoumades (Cypriot honey doughnuts) come out warm in the afternoon. Good for work between sightseeing if you need a quiet table and reliable wifi.',
-    hours: 'Daily — morning to late evening',
-    tip: 'Order the Cypriot coffee the traditional way — sketo (without sugar) or metrio (medium) and ask for it with a small glass of cold water. The carob cake is a local speciality worth trying once.',
-    type: 'All-day café and lounge',
-  },
-
-  {
-    id: 9,
-    nbhd: 'paphos',
-    name: 'Mare Nostrum Pool Bar',
-    cat: 'dining',
-    emoji: '🏖️',
-    address: 'Elysium Hotel, Queen Verenikis Street, 8045 Paphos',
-    lat: 34.773302, lng: 32.405174,
-    phone: '+357 2684 4444',
-    website: 'https://www.elysium-hotel.com/dining/mare-nostrum-pool-bar/',
-    search: 'Mare Nostrum pool bar Elysium Hotel Paphos Cyprus',
-    note: 'The second pool bar in the Elysium complex, positioned between the lower pools and the private beach area. Light snacks, fresh juices and cold drinks only — the emphasis is on the location rather than the food. The smaller of the two pool terraces and usually quieter than the Mediterraneo. Most guests use it as a midday retreat from the beach rather than a food destination.',
-    hours: 'Seasonal — pool and beach hours',
-    tip: 'If the Mediterraneo terrace is busy, walk through to Mare Nostrum — same drinks, same kitchen, but without the crowd.',
-    type: 'Beach-side pool bar',
-  },
-
-  {
-    id: 10,
     nbhd: 'paphos',
     name: 'Kato Pafos Archaeological Park',
     cat: 'heritage',
@@ -189,7 +34,7 @@ const PLACES = [
   },
 
   {
-    id: 11,
+    id: 2,
     nbhd: 'paphos',
     name: 'Sanctuary of Aphrodite, Palaepaphos',
     cat: 'heritage',
@@ -207,7 +52,7 @@ const PLACES = [
   },
 
   {
-    id: 12,
+    id: 3,
     nbhd: 'paphos',
     name: 'Yeroskipou Folk Art Museum',
     cat: 'heritage',
@@ -224,7 +69,7 @@ const PLACES = [
   },
 
   {
-    id: 13,
+    id: 4,
     nbhd: 'paphos',
     name: 'Filiotis by the Sea',
     cat: 'dining',
@@ -242,7 +87,7 @@ const PLACES = [
   },
 
   {
-    id: 14,
+    id: 5,
     nbhd: 'paphos',
     name: 'Coral Bay Beach',
     cat: 'hike',
@@ -261,7 +106,7 @@ const PLACES = [
   // ── AKAMAS — Wild Northwest Peninsula ────────────────────────────────────
 
   {
-    id: 15,
+    id: 6,
     nbhd: 'akamas',
     name: 'Avakas Gorge',
     cat: 'hike',
@@ -278,7 +123,7 @@ const PLACES = [
   },
 
   {
-    id: 16,
+    id: 7,
     nbhd: 'akamas',
     name: 'Baths of Aphrodite',
     cat: 'heritage',
@@ -295,7 +140,7 @@ const PLACES = [
   },
 
   {
-    id: 17,
+    id: 8,
     nbhd: 'akamas',
     name: 'Akamas National Forest Park',
     cat: 'hike',
@@ -312,7 +157,7 @@ const PLACES = [
   },
 
   {
-    id: 18,
+    id: 9,
     nbhd: 'akamas',
     name: 'Tzelefos Medieval Bridge',
     cat: 'hike',
@@ -329,7 +174,7 @@ const PLACES = [
   },
 
   {
-    id: 19,
+    id: 10,
     nbhd: 'akamas',
     name: 'Elias Medieval Bridge',
     cat: 'hike',
@@ -346,7 +191,7 @@ const PLACES = [
   },
 
   {
-    id: 20,
+    id: 11,
     nbhd: 'troodos',
     name: 'Revecca Winery',
     cat: 'winery',
@@ -365,7 +210,7 @@ const PLACES = [
   // ── TROODOS — Mountain Heart ──────────────────────────────────────────────
 
   {
-    id: 22,
+    id: 13,
     nbhd: 'troodos',
     name: 'Asinou Church (Panagia Forviotissa)',
     cat: 'church',
@@ -383,7 +228,7 @@ const PLACES = [
   },
 
   {
-    id: 23,
+    id: 14,
     nbhd: 'troodos',
     name: 'St Nicholas of the Roof (Agios Nikolaos tis Stegis)',
     cat: 'church',
@@ -401,7 +246,7 @@ const PLACES = [
   },
 
   {
-    id: 24,
+    id: 15,
     nbhd: 'troodos',
     name: 'St John Lampadistis Monastery',
     cat: 'church',
@@ -419,7 +264,7 @@ const PLACES = [
   },
 
   {
-    id: 25,
+    id: 16,
     nbhd: 'troodos',
     name: 'Kykkos Monastery',
     cat: 'church',
@@ -437,7 +282,7 @@ const PLACES = [
   },
 
   {
-    id: 26,
+    id: 17,
     nbhd: 'troodos',
     name: 'Millomeris Waterfall',
     cat: 'hike',
@@ -454,7 +299,7 @@ const PLACES = [
   },
 
   {
-    id: 27,
+    id: 18,
     nbhd: 'troodos',
     name: 'Kalidonia Falls',
     cat: 'hike',
@@ -471,7 +316,7 @@ const PLACES = [
   },
 
   {
-    id: 28,
+    id: 19,
     nbhd: 'troodos',
     name: 'Cedar Valley & Stavros tis Psokas',
     cat: 'hike',
@@ -488,7 +333,7 @@ const PLACES = [
   },
 
   {
-    id: 29,
+    id: 20,
     nbhd: 'troodos',
     name: 'Agros Village',
     cat: 'heritage',
@@ -505,7 +350,7 @@ const PLACES = [
   },
 
   {
-    id: 30,
+    id: 21,
     nbhd: 'troodos',
     name: 'Vlassides Winery',
     cat: 'winery',
@@ -525,7 +370,7 @@ const PLACES = [
   // ── LEFKARA & VILLAGES — Heritage and Inland ─────────────────────────────
 
   {
-    id: 31,
+    id: 22,
     nbhd: 'lefkara',
     name: 'Pano Lefkara',
     cat: 'heritage',
@@ -543,7 +388,7 @@ const PLACES = [
   },
 
   {
-    id: 32,
+    id: 23,
     nbhd: 'lefkara',
     name: 'Omodos Village',
     cat: 'heritage',
@@ -560,7 +405,7 @@ const PLACES = [
   },
 
   {
-    id: 33,
+    id: 24,
     nbhd: 'lefkara',
     name: 'Timios Stavros Monastery, Omodos',
     cat: 'church',
@@ -577,7 +422,7 @@ const PLACES = [
   },
 
   {
-    id: 34,
+    id: 25,
     nbhd: 'lefkara',
     name: 'Karseras Winery',
     cat: 'winery',
@@ -594,7 +439,7 @@ const PLACES = [
   },
 
   {
-    id: 35,
+    id: 26,
     nbhd: 'akamas',
     name: 'Aphrodite Trail',
     cat: 'hike',
@@ -613,7 +458,7 @@ const PLACES = [
   // ── SOUTH COAST & NEW ENTRIES ─────────────────────────────────────────────
 
   {
-    id: 36,
+    id: 27,
     nbhd: 'paphos',
     name: 'Petra tou Romiou (Aphrodite\'s Rock)',
     cat: 'heritage',
@@ -631,7 +476,7 @@ const PLACES = [
   },
 
   {
-    id: 37,
+    id: 28,
     nbhd: 'troodos',
     name: 'Chantara Waterfall',
     cat: 'hike',
@@ -648,7 +493,7 @@ const PLACES = [
   },
 
   {
-    id: 38,
+    id: 29,
     nbhd: 'akamas',
     name: 'Koullas Sandwiches',
     cat: 'dining',
@@ -665,7 +510,7 @@ const PLACES = [
   },
 
   {
-    id: 39,
+    id: 30,
     nbhd: 'troodos',
     name: 'Mount Olympus (Chionistra)',
     cat: 'hike',
@@ -682,7 +527,7 @@ const PLACES = [
   },
 
   {
-    id: 40,
+    id: 31,
     nbhd: 'lefkara',
     name: 'Choirokoitia Neolithic Settlement',
     cat: 'heritage',
@@ -703,7 +548,7 @@ const PLACES = [
   // ── NEW ENTRIES — May 2026 ────────────────────────────────────────────────
 
   {
-    id: 49,
+    id: 40,
     nbhd: 'troodos',
     name: 'Antoniades Winery',
     cat: 'winery',
@@ -721,7 +566,7 @@ const PLACES = [
 
 
   {
-    id: 41,
+    id: 32,
     nbhd: 'akamas',
     name: 'Vasilikon Winery',
     cat: 'winery',
@@ -739,7 +584,7 @@ const PLACES = [
   },
 
   {
-    id: 42,
+    id: 33,
     nbhd: 'paphos',
     name: 'Agios Neofytos Monastery',
     cat: 'church',
@@ -757,7 +602,7 @@ const PLACES = [
   },
 
   {
-    id: 43,
+    id: 34,
     nbhd: 'akamas',
     name: 'Paphos Zoo',
     cat: 'hike',
@@ -774,7 +619,7 @@ const PLACES = [
   },
 
   {
-    id: 44,
+    id: 35,
     nbhd: 'akamas',
     name: 'Edro III Shipwreck',
     cat: 'heritage',
@@ -791,7 +636,7 @@ const PLACES = [
   },
 
   {
-    id: 45,
+    id: 36,
     nbhd: 'akamas',
     name: 'St George Chapel & Geronissos Island',
     cat: 'church',
@@ -808,7 +653,7 @@ const PLACES = [
   },
 
   {
-    id: 46,
+    id: 37,
     nbhd: 'akamas',
     name: 'Skarfos Medieval Bridge',
     cat: 'hike',
@@ -825,7 +670,7 @@ const PLACES = [
   },
 
   {
-    id: 47,
+    id: 38,
     nbhd: 'akamas',
     name: 'Latsi Marina & Boat Hire',
     cat: 'hike',
@@ -842,7 +687,7 @@ const PLACES = [
   },
 
   {
-    id: 48,
+    id: 39,
     nbhd: 'paphos',
     name: 'Tombs of the Kings',
     cat: 'heritage',
