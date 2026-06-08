@@ -494,7 +494,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(212,168,75,0.90);
+  color: #0f0d0a;
   margin-bottom: -7px;
   pointer-events: none;
   white-space: normal;
@@ -504,7 +504,7 @@
 .trip-btn-circle {
   width: 56px; height: 56px;
   border-radius: 50%;
-  background: #1a3a5c;
+  background: #0f0d0a;
   border: 2px solid rgba(212,168,75,0.80);
   cursor: pointer;
   position: relative;
@@ -516,7 +516,7 @@
   transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
   -webkit-tap-highlight-color: transparent;
 }
-.trip-btn-circle:hover { background: #1e4570; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
+.trip-btn-circle:hover { background: #26221c; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
 .trip-btn-circle.active { background: #d4a84b; border-color: #d4a84b; }
 .trip-btn-svg { width: 52px; height: 52px; overflow: visible; pointer-events: none; }
 .trip-btn-emoji-html {
@@ -537,7 +537,7 @@
 <script>
 /* ── DAY TRIPS ── */
 var _TRIPS = {
-  morning: { name: "Makers’ Morning", ids: [12, 11, 25, 30], note: ‘Rialto market: Tue–Sat until 12:00 only’ },
+  morning: { name: "Makers’ Morning", ids: [12, 11, 25, 30], note: 'Rialto market: Tue-Sat until 12:00 only' },
   evening: { name: 'Venetian Evening',   ids: [24, 23, 9, 7],   note: 'Antica Adelaide kitchen until 01:00' }
 };
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
