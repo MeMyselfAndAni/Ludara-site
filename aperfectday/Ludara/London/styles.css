@@ -560,10 +560,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* Bubbles start after label */
   #nbhd-bar .nbhd-bubbles-row { padding-left: 0; }
 
-  .nbhd-ring { width: 52px; height: 52px; }
-  .nbhd-ring-inner { font-size: 1.25rem; }
+  .nbhd-ring { width: 40px; height: 40px; }
+  .nbhd-ring-inner { font-size: 1.0rem; }
   .nbhd-label { font-size: 0.60rem; }
   .nbhd-bubble { gap: 3px; }
+  #nbhd-bar { padding: calc(8px - 1mm) 8px calc(4px - 1mm); }
 
   /* ── Place card — centre of screen ── */
   #place-card {
