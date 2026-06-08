@@ -1489,6 +1489,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* ── DESKTOP place-card — centred on full screen ─────────────── */
 @media (min-width: 768px) {
+  /* Push locate button above the whole neighbourhood bar + title assembly */
+  .locate-btn { bottom: 160px; }
+
   #place-card {
     bottom: auto;
     left: 50%;
