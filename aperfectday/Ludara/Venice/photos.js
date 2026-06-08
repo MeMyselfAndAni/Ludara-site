@@ -5,7 +5,8 @@ function fetchPhoto(p, callback){
   if(photoCache[p.id] !== undefined){ callback(photoCache[p.id]); return; }
   const basePath = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   const url = basePath + 'place-' + p.id + '.jpg';
-  photoCache[p.id] = { url: url, attr: '' };
+  const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
+  photoCache[p.id] = { url: url, attr: attr };
   callback(photoCache[p.id]);
 }
 
@@ -18,7 +19,8 @@ function preloadAllPhotos(){
       if(photoCache[p.id]) return; // already cached
       const img = new Image();
       const url = basePath + 'place-' + p.id + '.jpg';
-      img.onload = () => { photoCache[p.id] = { url: url, attr: '' }; };
+      const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
+      img.onload = () => { photoCache[p.id] = { url: url, attr: attr }; };
       img.src = url;
     }, i * 80); // 80ms between each — all 63 preloaded in ~5 seconds
   });
