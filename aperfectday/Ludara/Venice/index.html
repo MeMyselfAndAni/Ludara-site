@@ -504,9 +504,7 @@
 .trip-btn-circle {
   width: 56px; height: 56px;
   border-radius: 50%;
-  background: rgba(212,168,75,0.22);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #1a3a5c;
   border: 2px solid rgba(212,168,75,0.80);
   cursor: pointer;
   position: relative;
@@ -514,12 +512,12 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  box-shadow: 0 3px 14px rgba(0,0,0,0.30);
+  box-shadow: 0 3px 14px rgba(0,0,0,0.35);
   transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
   -webkit-tap-highlight-color: transparent;
 }
-.trip-btn-circle:hover { background: rgba(212,168,75,0.40); box-shadow: 0 4px 18px rgba(0,0,0,0.40); }
-.trip-btn-circle.active { background: #d4a84b; border-color: #d4a84b; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.trip-btn-circle:hover { background: #1e4570; box-shadow: 0 4px 18px rgba(0,0,0,0.45); }
+.trip-btn-circle.active { background: #d4a84b; border-color: #d4a84b; }
 .trip-btn-svg { width: 52px; height: 52px; overflow: visible; pointer-events: none; }
 .trip-btn-emoji-html {
   position: absolute; top: 38%; left: 50%;
@@ -545,36 +543,37 @@ var _TRIPS = {
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
 function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
-  var prev = JSON.parse(localStorage.getItem(_favsKey()) || '[]');
+  var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
-  if (typeof refreshFavourites === 'function') refreshFavourites();
-  var sp = document.getElementById('pill-saved');
-  if (sp && !sp.classList.contains('active')) {
-    if (typeof toggleSavedFilter === 'function') toggleSavedFilter(sp);
-  } else if (typeof applyFilters === 'function') { applyFilters(); }
-  document.querySelectorAll('.trip-btn-circle').forEach(function(p){ p.classList.remove('active'); });
-  var ap = document.getElementById('trip-btn-' + key);
-  if (ap) ap.classList.add('active');
-  _tripToast(trip.name + ' loaded — ' + trip.ids.length + ' stops', trip.note, prev, key);
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var sp = document.getElementById("pill-saved");
+  if (sp && !sp.classList.contains("active")) {
+    if (typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
+  document.querySelectorAll(".trip-btn-circle").forEach(function(p){ p.classList.remove("active"); });
+  var ap = document.getElementById("trip-btn-" + key);
+  if (ap) ap.classList.add("active");
+  _tripToast(trip.name + " loaded — " + trip.ids.length + " stops", trip.note, prev, key);
 }
 function _tripToast(msg, note, prev, key) {
-  var ex = document.getElementById('_trip-toast'); if (ex) ex.remove();
-  var el = document.createElement('div'); el.id = '_trip-toast';
-  el.style.cssText = 'position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#1a1409;color:#d4a84b;padding:10px 18px;border-radius:24px;border:2px solid #d4a84b;font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;';
-  el.innerHTML = '<span>📍 ' + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.65">' + note + '</span>' : '') + '</span>'
-    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" style="background:none;border:1px solid #d4a84b;color:#d4a84b;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
+  var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
+  var el = document.createElement("div"); el.id = "_trip-toast";
+  el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#0f0d0a;color:#d4a84b;padding:10px 18px;border-radius:24px;border:2px solid #d4a84b;font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;";
+  el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.65">' + note + '</span>' : '') + "</span>"
+    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
+    + 'style="background:none;border:1px solid #d4a84b;color:#d4a84b;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
   document.body.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
 }
 function _undoTrip(prev, key) {
-  var el = document.getElementById('_trip-toast'); if (el) el.remove();
+  var el = document.getElementById("_trip-toast"); if (el) el.remove();
   localStorage.setItem(_favsKey(), JSON.stringify(prev));
-  if (typeof refreshFavourites === 'function') refreshFavourites();
-  var ap = document.getElementById('trip-btn-' + key); if (ap) ap.classList.remove('active');
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var ap = document.getElementById("trip-btn-" + key); if (ap) ap.classList.remove("active");
   if (!prev.length) {
-    var sp = document.getElementById('pill-saved');
-    if (sp && sp.classList.contains('active') && typeof toggleSavedFilter === 'function') toggleSavedFilter(sp);
-  } else if (typeof applyFilters === 'function') { applyFilters(); }
+    var sp = document.getElementById("pill-saved");
+    if (sp && sp.classList.contains("active") && typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
 }
 </script>
 
