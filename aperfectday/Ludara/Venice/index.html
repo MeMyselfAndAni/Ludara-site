@@ -545,6 +545,7 @@ function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
+  if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);
   if (typeof refreshFavourites === "function") refreshFavourites();
   var sp = document.getElementById("pill-saved");
   if (sp && !sp.classList.contains("active")) {
@@ -568,6 +569,7 @@ function _tripToast(msg, note, prev, key) {
 function _undoTrip(prev, key) {
   var el = document.getElementById("_trip-toast"); if (el) el.remove();
   localStorage.setItem(_favsKey(), JSON.stringify(prev));
+  if (typeof _clearSavedOrder === "function") _clearSavedOrder();
   if (typeof refreshFavourites === "function") refreshFavourites();
   var ap = document.getElementById("trip-btn-" + key); if (ap) ap.classList.remove("active");
   if (!prev.length) {
