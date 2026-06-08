@@ -476,13 +476,134 @@
 <script src="ui-favourites.js"></script>
 <script src="venice-transport.js"></script>
 <script src="ui-pdf.js"></script>
+<style>
+.trip-launcher {
+  position: fixed;
+  left: 12px;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 350;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.trip-launcher-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.54rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(212,168,75,0.90);
+  margin-bottom: -7px;
+  pointer-events: none;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+}
+.trip-btn-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(212,168,75,0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(212,168,75,0.80);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.30);
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.trip-btn-circle:hover { background: rgba(212,168,75,0.40); box-shadow: 0 4px 18px rgba(0,0,0,0.40); }
+.trip-btn-circle.active { background: #d4a84b; border-color: #d4a84b; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.trip-btn-svg { width: 52px; height: 52px; overflow: visible; pointer-events: none; }
+.trip-btn-emoji-html {
+  position: absolute; top: 38%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.35rem; line-height: 1;
+  pointer-events: none; z-index: 1;
+}
+.trip-arc-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 6.2px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.8px;
+  fill: #d4a84b;
+}
+.trip-btn-circle.active .trip-arc-label { fill: white; }
+</style>
+
+<script>
+/* ── DAY TRIPS ── */
+var _TRIPS = {
+  morning: { name: "Makers’ Morning", ids: [12, 11, 25, 30], note: ‘Rialto market: Tue–Sat until 12:00 only’ },
+  evening: { name: 'Venetian Evening',   ids: [24, 23, 9, 7],   note: 'Antica Adelaide kitchen until 01:00' }
+};
+function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
+function loadTrip(key) {
+  var trip = _TRIPS[key]; if (!trip) return;
+  var prev = JSON.parse(localStorage.getItem(_favsKey()) || '[]');
+  localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
+  if (typeof refreshFavourites === 'function') refreshFavourites();
+  var sp = document.getElementById('pill-saved');
+  if (sp && !sp.classList.contains('active')) {
+    if (typeof toggleSavedFilter === 'function') toggleSavedFilter(sp);
+  } else if (typeof applyFilters === 'function') { applyFilters(); }
+  document.querySelectorAll('.trip-btn-circle').forEach(function(p){ p.classList.remove('active'); });
+  var ap = document.getElementById('trip-btn-' + key);
+  if (ap) ap.classList.add('active');
+  _tripToast(trip.name + ' loaded — ' + trip.ids.length + ' stops', trip.note, prev, key);
+}
+function _tripToast(msg, note, prev, key) {
+  var ex = document.getElementById('_trip-toast'); if (ex) ex.remove();
+  var el = document.createElement('div'); el.id = '_trip-toast';
+  el.style.cssText = 'position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#1a1409;color:#d4a84b;padding:10px 18px;border-radius:24px;border:2px solid #d4a84b;font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;';
+  el.innerHTML = '<span>📍 ' + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.65">' + note + '</span>' : '') + '</span>'
+    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" style="background:none;border:1px solid #d4a84b;color:#d4a84b;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
+  document.body.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
+}
+function _undoTrip(prev, key) {
+  var el = document.getElementById('_trip-toast'); if (el) el.remove();
+  localStorage.setItem(_favsKey(), JSON.stringify(prev));
+  if (typeof refreshFavourites === 'function') refreshFavourites();
+  var ap = document.getElementById('trip-btn-' + key); if (ap) ap.classList.remove('active');
+  if (!prev.length) {
+    var sp = document.getElementById('pill-saved');
+    if (sp && sp.classList.contains('active') && typeof toggleSavedFilter === 'function') toggleSavedFilter(sp);
+  } else if (typeof applyFilters === 'function') { applyFilters(); }
+}
+</script>
+
+<!-- Day Trip launcher -->
+<div class="trip-launcher" id="trip-launcher">
+  <span class="trip-launcher-label">Our<br>Picks</span>
+  <button class="trip-btn-circle" id="trip-btn-morning" onclick="loadTrip('morning')" title="Makers' Morning">
+    <span class="trip-btn-emoji-html">🎨</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-morning" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-morning" startOffset="50%" text-anchor="middle">Morning</textPath></text>
+    </svg>
+  </button>
+  <button class="trip-btn-circle" id="trip-btn-evening" onclick="loadTrip('evening')" title="Venetian Evening">
+    <span class="trip-btn-emoji-html">🌅</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-evening" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-evening" startOffset="50%" text-anchor="middle">Evening</textPath></text>
+    </svg>
+  </button>
+</div>
+
 <script>
 window.TutorialConfig = {
   doneKey:     'venice_tour_v1',
   cityName:    'Venice',
-  demoPlaceId: 10,           /* Cantina Do Mori — oldest bacaro in Venice */
-  demoSavedIds: [10, 11, 12, 29, 30]  /* Rialto cluster: Do Mori, All'Arco, Rialto Market, Damocle, Il Pavone */
-  /* no tripNames — no Day Trip Picks step */
+  demoPlaceId: 10,
+  demoSavedIds: [10, 11, 12, 29, 30],
+  tripNames:   "a Makers’ Morning or a Venetian Evening"
 };
 </script>
 <script src="tutorial.js"></script>
