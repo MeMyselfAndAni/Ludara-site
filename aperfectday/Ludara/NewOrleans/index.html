@@ -76,7 +76,10 @@
       <span class="wl-logo">A Perfect Day</span>
     </div>
     <h2 class="splash-title">New Orleans Guide</h2>
-    <p class="splash-sub"><span class="place-count-all">50</span> hand-picked places — from jazz halls and above-ground cemeteries to the best po-boy in America.</p>
+    <p class="splash-tagline">A curated city guide for boutique hotels</p>
+    <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
+    <hr class="splash-divider">
+    <p class="splash-hotel-desc">50 hand-picked places — from jazz halls and above-ground cemeteries to the best po-boy in America.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai" target="_blank">ludara.ai</a>
@@ -289,6 +292,7 @@
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
+<script src="credits.js"></script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script>
 <script src="map.js"></script>
@@ -297,6 +301,15 @@
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
+<script>
+window.TutorialConfig = {
+  doneKey:      'neworleans_tour_v1',
+  cityName:     'New Orleans',
+  demoPlaceId:  5,                            /* Preservation Hall */
+  demoSavedIds: [5, 1, 2, 9, 8]              /* Preservation Hall, Jackson Square, Café du Monde, Royal Street, Carousel Bar — French Quarter walkable */
+};
+</script>
+<script src="tutorial.js"></script>
 
 <!-- Navigate in Google Maps using place search names -->
 <script>

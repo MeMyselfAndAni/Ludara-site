@@ -218,11 +218,7 @@ function _populateCard(p){
       }
     };
     img.src = url;
-    if(attr){
-      const tmp = document.createElement('div');
-      tmp.innerHTML = attr;
-      document.getElementById('pc-credit').textContent = '© ' + (tmp.querySelector('a')?.textContent || 'Google');
-    }
+    document.getElementById('pc-credit').innerHTML = attr || '';
   };
 
   if(photoCache[p.id]?.url){
@@ -428,3 +424,4 @@ document.addEventListener('keydown', e => {
 })();
 
 // (card position reset happens in closePlaceCard)
+                                                                                                                                                    
