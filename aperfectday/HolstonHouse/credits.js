@@ -48,6 +48,7 @@ const PHOTO_CREDITS = {
   58: { author: "Assembly Food Hall", license: "", url: "https://assemblyfoodhall.com", venue:true },
   59: { author: "Pinewood Social", license: "", url: "https://pinewoodsocial.com", venue:true },
   60: { author: "Bourbon Steak", license: "", url: "https://bourbonsteak.com/location/nashville", venue:true },
+  61: { author: "Amerigo", license: "", url: "https://amerigo.net/nashville", venue:true },
   62: { author: "Maiz de la Vida", license: "", url: "https://maizdelavida.com", venue:true },
   63: { author: "Eddie V's Prime Seafood", license: "", url: "https://eddiev.com", venue:true },
   64: { author: "Peg Leg Porker", license: "", url: "https://peglegporker.com", venue:true },
@@ -65,6 +66,7 @@ const PHOTO_CREDITS = {
   76: { author: "Boot Barn", license: "", url: "https://www.bootbarn.com", venue:true },
   77: { author: "Warren LeMay", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Big_Time_Boots_Sign,_Broadway,_Nashville,_TN_(54384488694).jpg", venue:false },
   78: { author: "Betty Boots", license: "", url: "https://www.trailwestnashville.com/betty-boots", venue:true },
+  79: { author: "Nashville Boot Co", license: "", url: "https://www.nashvilleboots.com", venue:true },
 };
 
 // Build the credit anchor HTML for a place id (returns '' if none).
