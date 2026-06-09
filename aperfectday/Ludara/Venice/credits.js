@@ -25,7 +25,7 @@ const PHOTO_CREDITS = {
   22: { author: 'Wolfgang Moroder',  license: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Santa_Maria_della_Salute_from_Hotel_Monaco_nightview.jpg' },
   23: { author: 'Didier Descouens',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Campo_Santa_Margherita_(Venice).jpg' },
   24: { author: 'Wolfgang Moroder',  license: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:The_squero_San_Trovaso_and_church_in_Venice.JPG' },
-  25: { author: 'Karlheinz Nast', license: 'CC0', url: 'https://www.flickr.com/photos/157371708@N03/52781355448/' },
+  25: { author: 'Karlheinz Nast', license: 'CC0', url: 'https://www.flickr.com/photos/157371708@N03/52781134399/' },
   28: { author: 'Didier Descouens',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Palazzo_Fortuny,_gi%C3%A0_Pesaro_Orfei.jpg' },
   31: { author: 'Miguel Mendez',     license: 'CC BY 2.0',    url: 'https://commons.wikimedia.org/wiki/File:Glass_blowing_in_the_Murano_island_(14023312236).jpg' },
   32: { author: 'Jorge Franganillo', license: 'CC BY 2.0',    url: 'https://commons.wikimedia.org/wiki/File:Canal_and_colourful_houses_in_Burano_(50416720362).jpg' },
