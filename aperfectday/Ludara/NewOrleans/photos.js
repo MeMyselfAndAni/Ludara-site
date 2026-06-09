@@ -19,4 +19,9 @@ function preloadAllPhotos(){
       if(photoCache[p.id]) return; // already cached
       const img = new Image();
       const url = basePath + 'place-' + p.id + '.jpg';
-      const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : ''
+      const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
+      img.onload = () => { photoCache[p.id] = { url: url, attr: attr }; };
+      img.src = url;
+    }, i * 80); // 80ms between each — all preloaded in a few seconds
+  });
+}
