@@ -1,68 +1,62 @@
-// A Perfect Day — Ludara / Nashville
-// map.js — guide-specific config
+// A Perfect Day — Ludara / New Orleans
+// map.js — guide-specific config (rebuilt from data.js)
 
 const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
-const MAP_CENTER        = [-86.7879, 36.1500];  // ⚠️ [longitude, latitude] — between Downtown and Gulch
-const MAP_ZOOM          = 13;
-const OFFLINE_CENTER    = { lat: 36.1500, lng: -86.7879 };
-const GUIDE_CITY        = 'Nashville';
+const MAP_CENTER        = [-90.077, 29.9503];  // [longitude, latitude] — New Orleans centroid
+const MAP_ZOOM          = 12;
+const OFFLINE_CENTER    = { lat: 29.9503, lng: -90.077 };
+const GUIDE_CITY        = 'New Orleans';
 const BLOGGER_NAME      = 'Ludara';
-const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
-const TIME_FORMAT       = '12h';               // Display hours in AM/PM for US guides
-const DISTANCE_UNITS    = 'imperial';         // Use feet/miles for US guides
+const GUIDE_TIMEZONE    = 'America/Chicago';
+const TIME_FORMAT       = '12h';
+const DISTANCE_UNITS    = 'imperial';
 
-// ─── Category colours ─────────────────────────────────────────────────────────
-// Nashville palette: Tennessee brick, Southern gold, Music Row purple, forest green
 const CC = {
-  'landmark': '#ff2a00',   // Tennessee brick
-  'food':     '#d4902a',   // Southern gold
-  'cafe':     '#5a8f68',   // Cumberland green
-  'pub':      '#6b5b9a',   // Music Row purple
-  'market':   '#b07040',   // Worn leather brown
-  'nature':   '#3d8a5e',   // Deep forest
+  "landmark": "#ff2a00",
+  "food": "#d4902a",
+  "cafe": "#5a8f68",
+  "pub": "#6b5b9a",
+  "market": "#b07040",
+  "nature": "#3d8a5e"
 };
 
-// ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'landmark': 'Landmarks',
-  'food':     'Restaurants',
-  'cafe':     'Coffee & Brunch',
-  'pub':      'Bars & Music',
-  'market':   'Markets',
-  'nature':   'Parks & Nature',
+  "landmark": "Landmarks",
+  "food": "Restaurants",
+  "cafe": "Coffee & Brunch",
+  "pub": "Bars & Music",
+  "market": "Markets",
+  "nature": "Parks & Nature"
 };
 
-// ─── Neighbourhood colours ────────────────────────────────────────────────────
 const NBHD_COLORS = {
-  'downtown':   '#ff2a00',   // Brick orange — honky-tonk warmth
-  'germantown': '#5a8a6e',   // Victorian green — historic streets
-  'gulch':      '#6b5b9a',   // Deep purple — polished and creative
-  'east':       '#d4883a',   // Amber — independent East Nashville energy
-  '12south':    '#4a90b8',   // Cool blue — boutique and curated
-  'midtown':    '#7a9e5e',   // Sage — campus greenery and parks
-  'parks':      '#3d7a50',   // Forest green — nature and greater Nashville
+  "french-quarter": "#ff2a00",
+  "marigny-bywater": "#d4902a",
+  "treme": "#6b5b9a",
+  "garden-district": "#5a8f68",
+  "warehouse": "#4a90b8",
+  "mid-city": "#b07040",
+  "uptown": "#3d8a5e"
 };
 
-// ─── Neighbourhood display labels ─────────────────────────────────────────────
 const NBHD_LABELS = {
-  'downtown':   'Downtown',
-  'germantown': 'Germantown',
-  'gulch':      'The Gulch',
-  'east':       'East Nashville',
-  '12south':    '12 South',
-  'midtown':    'Midtown',
-  'parks':      'Parks & Day Trips',
+  "french-quarter": "French Quarter",
+  "marigny-bywater": "Marigny & Bywater",
+  "treme": "Tremé",
+  "garden-district": "Garden District",
+  "warehouse": "Warehouse District",
+  "mid-city": "Mid-City",
+  "uptown": "Uptown"
 };
 
-// ─── Neighbourhood approximate centers ───────────────────────────────────────
 const NBHD_APPROX_CENTERS = {
-  'downtown':   { lat: 36.1600, lng: -86.7779 },
-  'germantown': { lat: 36.1715, lng: -86.7836 },
-  'gulch':      { lat: 36.1525, lng: -86.7872 },
-  'east':       { lat: 36.1820, lng: -86.7570 },
-  '12south':    { lat: 36.1250, lng: -86.7875 },
-  'midtown':    { lat: 36.1350, lng: -86.8060 },
-  'parks':      { lat: 36.0900, lng: -86.8600 },
+  "french-quarter": { lat: 29.9582, lng: -90.0656 },
+  "marigny-bywater": { lat: 29.9617, lng: -90.0489 },
+  "treme": { lat: 29.9659, lng: -90.0725 },
+  "garden-district": { lat: 29.9347, lng: -90.0863 },
+  "warehouse": { lat: 29.9437, lng: -90.0704 },
+  "mid-city": { lat: 29.9817, lng: -90.0852 },
+  "uptown": { lat: 29.9204, lng: -90.1092 }
 };
 
 // ─── Map initialisation ───────────────────────────────────────────────────────
