@@ -33,7 +33,7 @@ const PHOTO_CREDITS = {
   37: { author: "EVula", license: "CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:WTN_EVula_135.jpg", venue:false },
   39: { author: "Prayitno (prayitnophotography)", license: "CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:Recording_Session_at_RCA_Studio_B_(2015-04-09_11.01.48_by_prayitnophotography).jpg", venue:false },
   40: { author: "Pancake Pantry", license: "", url: "https://www.thepancakepantry.com", venue:true },
-  41: { author: "The Listening Room Cafe", license: "", url: "https://thelisteningroomcafe.com", venue:true },
+  41: { author: "The Listening Room Cafe", license: "", url: "https://www.instagram.com/listeningroomcafe", venue:true },
   42: { author: "Skull's Rainbow Room", license: "", url: "https://skullsrainbowroom.com", venue:true },
   43: { author: "Rudy's Jazz Room", license: "", url: "https://rudysjazzroom.com", venue:true },
   45: { author: "3rd & Lindsley", license: "", url: "https://3rdandlindsley.com", venue:true },
@@ -58,12 +58,12 @@ const PHOTO_CREDITS = {
   69: { author: "The Basement East", license: "", url: "https://thebasementnashville.com", venue:true },
   70: { author: "Nashville Old Town Trolley Tours", license: "", url: "https://www.trolleytours.com/nashville", venue:true },
   71: { author: "Michael Rivera", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Johnny_Cash_Museum,_Nashville.JPG", venue:false },
-  72: { author: "12 South", license: "", url: "https://www.visitmusiccity.com/nashville-neighborhoods/12south", venue:true },
+  72: { author: "White's Mercantile", license: "", url: "https://whitesmercantile.com", venue:true },
   73: { author: "Fifth + Broadway", license: "", url: "https://fifthandb.com", venue:true },
   74: { author: "Boot Country", license: "", url: "https://www.twofreeboots.com", venue:true },
   75: { author: "Tecovas", license: "", url: "https://www.tecovas.com/stores/nashville-tn-broadway", venue:true },
   76: { author: "Boot Barn", license: "", url: "https://www.bootbarn.com", venue:true },
-  77: { author: "Big Time Boots", license: "", url: "https://www.trailwestnashville.com/big-time-boots", venue:true },
+  77: { author: "Warren LeMay", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Big_Time_Boots_Sign,_Broadway,_Nashville,_TN_(54384488694).jpg", venue:false },
   78: { author: "Betty Boots", license: "", url: "https://www.trailwestnashville.com/betty-boots", venue:true },
 };
 
