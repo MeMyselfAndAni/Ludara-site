@@ -67,12 +67,14 @@ const sharp = loadSharp();
     const filepath = path.join(IMG_DIR, file);
     try {
       const meta = await sharp(filepath).metadata();
-      if (meta.width <= MAX_SIZE && meta.height <= MAX_SIZE) {
+      const needsRotate = meta.orientation && meta.orientation > 1;  // EXIF rotation flag set
+      if (meta.width <= MAX_SIZE && meta.height <= MAX_SIZE && !needsRotate) {
         console.log('  ✓ ' + file + ' (' + meta.width + 'x' + meta.height + ') — already small');
         skipped++; continue;
       }
       const tmpPath = filepath + '.tmp';
       await sharp(filepath)
+        .rotate()  // bake EXIF orientation into the pixels, then strip the flag (fixes sideways/inverted photos)
         .resize(MAX_SIZE, MAX_SIZE, { fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 85, progressive: true })
         .toFile(tmpPath);
