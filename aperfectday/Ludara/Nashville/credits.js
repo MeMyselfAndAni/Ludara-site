@@ -49,7 +49,7 @@ const PHOTO_CREDITS = {
   44: { author: "Holyhootenany", license: "CC0", url: "https://commons.wikimedia.org/wiki/File:Justin_Amaral_at_The_5_Spot,_Nashville,_TN.jpg", venue:false },
   45: { author: "3rd & Lindsley", license: "", url: "https://3rdandlindsley.com", venue:true },
   46: { author: "Andysedgley", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Downtown_from_Siegenthaler.jpg", venue:false },
-  47: { author: "Bobak Ha'Eri", license: "CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:101207-Nashville-GrandOleOpry-001.JPG", venue:false },
+  47: { author: "Grand Ole Opry", license: "", url: "https://www.opry.com", venue:true },
   48: { author: "MICHAEL BROWN", license: "CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:Percy_Warner_Park_(3230557452).jpg", venue:false },
   49: { author: "Spheroidite", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Radnor_Lake_panorama.jpg", venue:false },
   50: { author: "RL0919", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Walking_path_in_the_gardens_of_Cheekwood.png", venue:false }
