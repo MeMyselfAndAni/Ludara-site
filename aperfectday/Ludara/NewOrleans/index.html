@@ -66,15 +66,43 @@
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
 
-  /* ── Splash — GM demo additions ── */
-  .splash-tagline    { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
-                       color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
-  .splash-divider    { width: 40px; height: 3px; background: var(--brand); border: none;
-                       border-radius: 2px; margin: 10px auto 18px; }
-  .splash-hotel-desc { font-style: italic; font-size: 0.97rem; line-height: 1.72;
-                       color: #555; margin-top: 0; margin-bottom: 24px; }
-  .splash-sample     { font-size: 0.875rem; color: #555; margin: 14px 0 0; font-style: italic; }
-  .splash-footer a   { color: var(--brand) !important; }
+  /* ── Splash — New Orleans dusk hero ── */
+  #splash {
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 130% 80% at 50% 122%, rgba(245,170,95,0.92) 0%, rgba(212,104,58,0) 46%),
+      radial-gradient(ellipse 90% 60% at 80% 6%, rgba(255,216,150,0.16) 0%, rgba(255,216,150,0) 55%),
+      linear-gradient(168deg, #120f2b 0%, #221a44 26%, #45224f 48%, #7a2f50 66%, #b9492f 86%, #e07a35 100%) !important;
+  }
+  /* soft dusk-sun glow in the lower third */
+  #splash::before {
+    content:''; position:absolute; left:50%; bottom:-110px; transform:translateX(-50%);
+    width:360px; height:360px; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,209,143,0.5) 0%, rgba(255,180,102,0.16) 42%, rgba(255,180,102,0) 70%);
+    pointer-events:none; z-index:0;
+  }
+  #splash .splash-inner {
+    position:relative; z-index:1;
+    background: rgba(16,12,34,0.34);
+    backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 22px;
+    padding: 40px 34px 34px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+  }
+  #splash .wl-logo      { color:#f3e7cf; letter-spacing:0.06em; }
+  #splash .splash-title { color:#f6ecd6; text-shadow: 0 2px 24px rgba(0,0,0,0.40); }
+  #splash .splash-tagline { font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase;
+                            color:#ebbd76; margin:8px 0 0; font-style:normal; font-weight:700; }
+  #splash .splash-divider { width:54px; height:2px; border:none; border-radius:2px; margin:14px auto 18px;
+                            background:linear-gradient(90deg, rgba(235,189,118,0), #ebbd76 50%, rgba(235,189,118,0)); }
+  #splash .splash-hotel-desc { font-style:italic; font-size:0.99rem; line-height:1.74;
+                               color:#ece3d4; margin:0 0 26px; }
+  #splash .splash-sample { font-size:0.84rem; color:#c9bda6; margin:14px 0 0; font-style:italic; }
+  #splash .splash-btn { background:linear-gradient(135deg, #f0b15a, #d98336); color:#2a1606;
+                        font-weight:800; box-shadow:0 10px 30px rgba(217,131,54,0.45); }
+  #splash .splash-btn:hover { background:linear-gradient(135deg, #f4bd6e, #e08c3c); }
+  #splash .splash-footer a { color:#d9b483 !important; }
 </style>
 </head>
 <body>
