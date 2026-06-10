@@ -15,6 +15,7 @@ const PHOTO_CREDITS = {
   10: { author: 'Tim Sackton',       license: 'CC BY-SA 2.0', url: 'https://commons.wikimedia.org/wiki/File:%22_05_-_ITALY_-_un_bacaro_a_Venezia_Osteria_appetizers_restaurant_in_Venice_wine_enoteca.jpg' },
   11: { author: 'Monika Ďuríčková',  license: 'CC BY 2.0',    url: 'https://commons.wikimedia.org/wiki/File:Venice_Prosecco_and_Cicchetti.jpg' },
   12: { author: 'Jorge Franganillo', license: 'CC BY 2.0',    url: 'https://commons.wikimedia.org/wiki/File:Venezia-_Rialto_market_-_50336366728.jpg' },
+  13: { author: 'Antiche Carampane',  license: 'used with permission', url: 'https://www.antichecarampane.com' },
   14: { author: 'Didier Descouens',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Chiesa_di_San_Polo_(Venice)_-abside.jpg' },
   15: { author: 'Osteria alle Testiere', license: 'used with permission', url: 'http://www.osterialletestiere.it' },
   17: { author: 'Cristina Gottardi', license: 'CC0',          url: 'https://commons.wikimedia.org/wiki/File:Heaps_of_books_(Unsplash).jpg' },
