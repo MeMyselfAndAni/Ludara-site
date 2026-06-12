@@ -18,6 +18,7 @@ const PHOTO_CREDITS = {
   13: { author: 'Antiche Carampane',  license: 'used with permission', url: 'https://www.antichecarampane.com' },
   14: { author: 'Didier Descouens',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Chiesa_di_San_Polo_(Venice)_-abside.jpg' },
   15: { author: 'Osteria alle Testiere', license: 'used with permission', url: 'http://www.osterialletestiere.it' },
+  16: { author: 'Ristorante Al Covo',   license: 'used with permission', url: 'https://www.ristorantealcovo.com' },
   17: { author: 'Cristina Gottardi', license: 'CC0',          url: 'https://commons.wikimedia.org/wiki/File:Heaps_of_books_(Unsplash).jpg' },
   18: { author: 'Daniel Ventura',    license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Venezia_panorama_2004_12.jpg' },
   19: { author: 'Didier Descouens',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Accademia_(Venice).jpg' },
