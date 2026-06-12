@@ -686,8 +686,12 @@
     launch();
   };
 
-  /* ── Auto-start on first visit only ─────────────────────────── */
-  if (!localStorage.getItem(DONE_KEY)) {
+  /* ── Auto-start on first visit DISABLED 2026-06-12 (per Maria) ──
+     Visitors now explore the map first and open the tutorial themselves
+     via the "Show Tutorial" button (restartTutorial()).
+     To re-enable first-visit auto-start, restore the original condition:
+     if (!localStorage.getItem(DONE_KEY)) {                            */
+  if (false) {
     var _splashGone = function() {
       var s = document.getElementById('splash');
       return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
