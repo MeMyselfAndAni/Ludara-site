@@ -127,6 +127,28 @@
   .splash-tagline      { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
                          color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
   .splash-sample       { font-size: 0.875rem; color: #555; margin: 14px 0 0; font-style: italic; }
+
+  /* ── Splash skyline + diagonal bookmark ribbons — Jun 2026 ── */
+  .skyline             { width: 100%; max-width: 470px; margin: 0 auto 4px; display: block; }
+  .skyline .far        { fill: var(--accent); opacity: .30; }
+  .skyline .near       { fill: var(--accent); opacity: .92; }
+  .skyline .pop        { fill: var(--brand); }
+  .ribbons             { display: flex; justify-content: center; align-items: flex-start;
+                         gap: 12px; flex-wrap: wrap; margin: 24px auto 10px; max-width: 520px; }
+  .ribbon              { position: relative; color: #fff; font-size: 0.68rem; font-weight: 700;
+                         letter-spacing: 0.03em; text-transform: uppercase; padding: 10px 14px 20px;
+                         border-radius: 4px 4px 0 0;
+                         clip-path: polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);
+                         box-shadow: 0 6px 14px rgba(26,58,92,0.18); }
+  .ribbon.navy         { background: var(--accent); }
+  .ribbon.red          { background: var(--brand); }
+  .ribbon:nth-child(1) { transform: rotate(-7deg); }
+  .ribbon:nth-child(2) { transform: rotate(5deg); }
+  .ribbon:nth-child(3) { transform: rotate(-4deg); }
+  .ribbon:nth-child(4) { transform: rotate(6deg); }
+  .ribbon:nth-child(5) { transform: rotate(-6deg); }
+  .splash              { overflow-y: auto; }
+  @media (max-height: 780px) { .splash { align-items: flex-start; } }
 </style>
 
 <script>
@@ -138,14 +160,59 @@
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
   <div class="splash-inner">
+    <svg class="skyline" viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" aria-label="London skyline">
+      <g class="far">
+        <rect x="96" y="92" width="14" height="32"/><rect x="200" y="96" width="12" height="28"/><rect x="266" y="90" width="12" height="34"/><rect x="356" y="94" width="14" height="30"/>
+      </g>
+      <g class="near">
+        <line x1="50" y1="124" x2="58" y2="62" stroke="#1a3a5c" stroke-width="2.4"/>
+        <line x1="66" y1="124" x2="58" y2="62" stroke="#1a3a5c" stroke-width="2.4"/>
+        <circle cx="58" cy="60" r="30" fill="none" stroke="#1a3a5c" stroke-width="2.6"/>
+        <g stroke="#1a3a5c" stroke-width="1">
+          <line x1="58" y1="60" x2="58" y2="30"/><line x1="58" y1="60" x2="58" y2="90"/><line x1="58" y1="60" x2="28" y2="60"/><line x1="58" y1="60" x2="88" y2="60"/>
+          <line x1="58" y1="60" x2="37" y2="39"/><line x1="58" y1="60" x2="79" y2="81"/><line x1="58" y1="60" x2="79" y2="39"/><line x1="58" y1="60" x2="37" y2="81"/>
+        </g>
+        <circle cx="58" cy="30" r="2.4" class="pop"/><circle cx="58" cy="60" r="3.5"/>
+        <polygon points="110,42 119.5,22 129,42"/>
+        <rect x="111" y="42" width="17" height="80"/>
+        <rect x="113" y="52" width="13" height="13" fill="#f5e6b8"/>
+        <circle cx="119.5" cy="58.5" r="4.6" fill="none" stroke="#1a3a5c" stroke-width="1.4"/>
+        <rect x="136" y="66" width="22" height="56"/>
+        <g><polygon points="137,66 140,60 143,66"/><polygon points="145,66 148,60 151,66"/><polygon points="153,66 156,60 159,66"/></g>
+        <rect x="158" y="90" width="34" height="32"/>
+        <rect x="214" y="84" width="8" height="38"/><rect x="252" y="84" width="8" height="38"/>
+        <rect x="220" y="74" width="34" height="48"/>
+        <path d="M220 74 A17 17 0 0 1 254 74 Z"/>
+        <rect x="233" y="58" width="8" height="12"/>
+        <path d="M233 58 A4 4 0 0 1 241 58 Z"/>
+        <rect x="236" y="48" width="2" height="10"/><rect x="232.5" y="51" width="9" height="2" class="pop"/>
+        <path d="M286 122 Q284 92 293 80 Q302 92 300 122 Z"/>
+        <polygon points="324,122 338,26 352,122"/>
+        <line x1="338" y1="26" x2="338" y2="16" stroke="#1a3a5c" stroke-width="1.4"/>
+        <path d="M372 122 Q386 100 391 86" fill="none" stroke="#1a3a5c" stroke-width="1.6"/>
+        <path d="M448 122 Q434 100 429 86" fill="none" stroke="#1a3a5c" stroke-width="1.6"/>
+        <rect x="384" y="84" width="12" height="38"/><rect x="424" y="84" width="12" height="38"/>
+        <polygon points="384,84 390,74 396,84"/><polygon points="424,84 430,74 436,84"/>
+        <rect x="384" y="86" width="52" height="6"/>
+        <rect x="396" y="112" width="28" height="4"/>
+      </g>
+      <rect x="0" y="123" width="460" height="2" class="near"/>
+    </svg>
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span><!-- [2] -->
     </div>
     <h2 class="splash-title">London</h2><!-- [3] -->
     <p class="splash-tagline">A curated city guide</p><!-- [3b] -->
     <p class="splash-sample">This is a sample guide — yours will be branded for you and curated for your city.</p>
+    <div class="ribbons">
+      <div class="ribbon navy">Movie Locations</div>
+      <div class="ribbon red">Book Scenes</div>
+      <div class="ribbon navy">Music Spots</div>
+      <div class="ribbon red">Unique Shops</div>
+      <div class="ribbon navy">Award-winning Kitchens</div>
+    </div>
     <hr class="splash-divider">
-    <p class="splash-sub">Where Hitchcock scouted his sets, jazz clubs refused to close during the Blitz, and a secondhand bookshop became the setting for a love story. A Michelin kitchen hidden in a railway arch, and 68 more places that make London impossible to leave.</p><!-- [4] -->
+    <p class="splash-sub">Skip the tourist trail. Walk into real film scenes, late-night jazz, the bookshop behind a love story, and a Michelin kitchen hidden in a railway arch. 69 hand-picked places, one perfect day.</p><!-- [4] -->
     <button class="splash-btn" onclick="closeSplash()">Enter the City</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai</a><!-- [5] -->
