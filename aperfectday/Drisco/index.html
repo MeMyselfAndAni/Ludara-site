@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A Perfect Day in Tel Aviv — The Drisco Hotel</title>
+<title>A Perfect Day in Tel Aviv-Jaffa — The Drisco Hotel</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Open Graph / WhatsApp rich preview -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ludara.ai/aperfectday/ludara/telaviv/">
 <meta property="og:site_name" content="The Drisco Hotel · A Perfect Day">
-<meta property="og:title" content="A Perfect Day in Tel Aviv — by The Drisco">
+<meta property="og:title" content="A Perfect Day in Tel Aviv-Jaffa — by The Drisco">
 <meta property="og:description" content="The Drisco concierge's Tel Aviv and Jaffa: Old Jaffa galleries, the flea market, Neve Tzedek and the sea — hand-picked places within a short walk of the hotel.">
 <meta property="og:image" content="https://ludara.ai/aperfectday/ludara/venice/og-preview.jpg">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="A Perfect Day in Tel Aviv — by The Drisco">
+<meta name="twitter:title" content="A Perfect Day in Tel Aviv-Jaffa — by The Drisco">
 <meta name="twitter:description" content="The Drisco concierge's Tel Aviv and Jaffa: hand-picked places within a short walk of the hotel.">
 <meta name="twitter:image" content="https://ludara.ai/aperfectday/ludara/venice/og-preview.jpg">
 <link rel="stylesheet" href="styles.css">
@@ -247,6 +247,7 @@
   .header-sub { color: rgba(245,244,242,0.80) !important; }
   .header-ludara-text, .ludara-line1, .ludara-line2, .header-ludara-brand { color: rgba(245,244,242,0.85) !important; }
   .header-btn { color: #f5f4f2 !important; background: rgba(245,244,242,0.12) !important; border-color: rgba(245,244,242,0.55) !important; }
+  .filter-bar .pill { font-size: 0.74rem !important; }
   .filter-bar .pill.active { background: #004f48 !important; border-color: #004f48 !important; color: #fff !important; }
   .filter-bar .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: #fff !important; }
   .filter-bar .pill-saved.active .heart-icon, .filter-bar .pill-saved.active .pill-saved-count { color: #fff !important; }
@@ -273,7 +274,7 @@
   <div class="splash-inner">
     <img class="drisco-logo-splash" src="Branding/drisco-logo-white.png" onerror="this.onerror=null;this.src='https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png'" alt="The Drisco">
     <div class="splash-eyebrow">A Perfect Day · Concept</div>
-    <h1 class="splash-title">Tel Aviv</h1>
+    <h1 class="splash-title">Tel Aviv-Jaffa</h1>
     <p class="splash-sample">A concept sketch for The Drisco: a starting point, branded and curated with you.</p>
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub">From the hotel's own door into Old Jaffa, the flea market, Neve Tzedek and the sea: the places The Drisco concierge would send you to, all within a short walk.</p>
@@ -287,7 +288,7 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading Tel Aviv…</div>
+  <div class="loading-text">Loading Tel Aviv-Jaffa…</div>
 </div>
 
 <!-- Header -->
@@ -299,7 +300,7 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Tel Aviv</em> Guide</h1>
+      <h1><em>Tel Aviv-Jaffa</em> Guide</h1>
       <div class="header-sub">By the Drisco team</div>
     </div>
   </div>
@@ -321,6 +322,7 @@
   <button class="pill" onclick="fc(this,'culture')"><span class="dot" style="background:#4a7ab0"></span>Art &amp; Culture</button>
   <button class="pill" onclick="fc(this,'shop')"><span class="dot" style="background:#5a8060"></span>Design &amp; Shops</button>
   <button class="pill" onclick="fc(this,'wellness')"><span class="dot" style="background:#2f8f7f"></span>Wellness</button>
+  <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
 <!-- Map -->
@@ -570,8 +572,8 @@
 <script>
 /* ── DAY TRIPS ── */
 var _TRIPS = {
-  morning: { name: "Jaffa Morning", ids: [8, 5, 11, 7], note: 'Galleries often open from late morning' },
-  evening: { name: 'Jaffa Evening', ids: [2, 23, 27, 25], note: 'Reserve George & John ahead' }
+  morning: { name: "Jaffa Morning", ids: [5, 13, 19, 7], note: 'Flea market stalls are best before midday' },
+  evening: { name: 'Jaffa Evening', ids: [2, 26, 27], note: 'Reserve George & John ahead' }
 };
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
 function loadTrip(key) {
@@ -634,7 +636,7 @@ function _undoTrip(prev, key) {
 <script>
 window.TutorialConfig = {
   doneKey:     'drisco_tour_v1',
-  cityName:    'Tel Aviv',
+  cityName:    'Tel Aviv-Jaffa',
   demoPlaceId: 1,
   demoSavedIds: [2, 8, 11, 7, 26],
   tripNames:   "a Jaffa Morning or a Jaffa Evening"

@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'Tel Aviv is yours to discover. Go find your perfect day.',
+      body: 'Tel Aviv-Jaffa is yours to discover. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */

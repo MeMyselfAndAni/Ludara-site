@@ -12,7 +12,7 @@ const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
 const MAP_CENTER        = [34.7625, 32.0560];   // [longitude, latitude] — Jaffa / American-German Colony
 const MAP_ZOOM          = 14.2;
 const OFFLINE_CENTER    = { lat: 32.0560, lng: 34.7625 };
-const GUIDE_CITY        = 'Tel Aviv';
+const GUIDE_CITY        = 'Tel Aviv-Jaffa';
 const BLOGGER_NAME      = 'A Perfect Day';
 const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
 
