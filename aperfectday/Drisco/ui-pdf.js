@@ -437,8 +437,8 @@ async function generatePDF(){
 <!-- COVER -->
 <div class="pdf-cover">
   <img class="pdf-cover-drisco-logo" src="https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png" alt="The Drisco">
-  <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
-  <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
+  <div class="pdf-cover-logo">A Perfect Day in</div>
+  <div class="pdf-cover-title">Tel Aviv-Jaffa</div>
   <div class="pdf-cover-subtitle">Your personal day guide</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">

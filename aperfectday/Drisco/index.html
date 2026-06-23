@@ -237,7 +237,8 @@
   .splash-footer a:hover { color: #f7f3ec !important; }
   #offline-save-btn, .desktop-list-btn, #desktop-list-btn, #list-toggle-desktop, .list-toggle { background: #004f48 !important; }
   button[onclick="restartTutorial()"] { background: #004f48 !important; color: #f5f1ea !important; border-color: rgba(245,241,234,0.5) !important; }
-  header { background: #004f48 !important; }
+  header { background: #004f48 !important; position: relative !important; }
+  .header-drisco-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); height: 34px; width: auto; z-index: 6; pointer-events: none; }
   .wl-logo { color: #f5f4f2 !important; }
   .header-divider { background: rgba(245,244,242,0.35) !important; }
   .header-text h1, .header-text h1 em { color: #f5f4f2 !important; font-family: 'Cormorant Garamond', Georgia, serif !important; }
@@ -245,9 +246,11 @@
   .header-ludara-text, .ludara-line1, .ludara-line2, .header-ludara-brand { color: rgba(245,244,242,0.85) !important; }
   .header-btn { color: #f5f4f2 !important; background: rgba(245,244,242,0.12) !important; border-color: rgba(245,244,242,0.55) !important; }
   .filter-bar .pill.active { background: #004f48 !important; border-color: #004f48 !important; color: #fff !important; }
+  .filter-bar .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: #fff !important; }
+  .filter-bar .pill-saved.active .heart-icon, .filter-bar .pill-saved.active .pill-saved-count { color: #fff !important; }
   #nbhd-bar { background: #004f48 !important; }
   #nbhd-title { color: #f5f1ea !important; }
-  .nbhd-label { color: #f5f1ea !important; }
+  .nbhd-label { color: #f5f1ea !important; font-size: 0.8rem !important; font-weight: 600 !important; max-width: 80px !important; letter-spacing: 0.01em !important; line-height: 1.25 !important; }
   .nbhd-active .nbhd-ring { background: #e9cab8 !important; color: #231f20 !important; }
   .trip-btn-circle { background: #004f48 !important; border-color: rgba(245,241,234,0.70) !important; }
   .trip-btn-circle.active { background: #e9cab8 !important; }
@@ -283,6 +286,7 @@
 
 <!-- Header -->
 <header>
+  <img class="header-drisco-center" src="Branding/drisco-logo-white.png" onerror="this.onerror=null;this.src='https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png'" alt="The Drisco">
   <div class="header-title">
     <a href="https://ludara.ai/aperfectday/" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
       <span class="wl-logo">A Perfect Day</span>
@@ -292,7 +296,6 @@
       <h1><em>Tel Aviv</em> Guide</h1>
       <div class="header-sub">by The Drisco concierge<span class="header-sub-by"> · powered by Ludara</span></div>
     </div>
-    <img class="header-drisco-logo" src="Branding/drisco-logo-white.png" onerror="this.onerror=null;this.src='https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png'" alt="The Drisco" style="height:30px;width:auto;margin-left:18px;flex-shrink:0;align-self:center;opacity:0.96;">
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
