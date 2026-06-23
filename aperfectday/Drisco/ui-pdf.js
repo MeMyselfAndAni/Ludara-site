@@ -188,6 +188,13 @@ async function generatePDF(){
     margin-bottom: 40px;
     position: relative;
   }
+  .pdf-cover-drisco-logo {
+    height: 58px;
+    width: auto;
+    margin-bottom: 26px;
+    position: relative;
+    filter: drop-shadow(0 1px 6px rgba(0,0,0,0.45));
+  }
   .pdf-cover-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 4.5rem;
@@ -429,6 +436,7 @@ async function generatePDF(){
 
 <!-- COVER -->
 <div class="pdf-cover">
+  <img class="pdf-cover-drisco-logo" src="https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png" alt="The Drisco">
   <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
   <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
   <div class="pdf-cover-subtitle">Your personal day guide</div>
