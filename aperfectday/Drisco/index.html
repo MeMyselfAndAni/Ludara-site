@@ -221,17 +221,22 @@
   /* ── Drisco brand fonts ── */
   body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   .pc-title, #pc-title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; letter-spacing: 0.01em; }
-  /* ── Drisco brand: light splash + green chrome (overrides Venice gold) ── */
-  .splash { background: #f5f1ea !important; }
-  .splash-eyebrow { color: #5c6053 !important; }
-  .splash-title { color: #231f20 !important; }
-  .splash-sample { color: #6b6f63 !important; }
-  .splash-ornament { color: #004f48 !important; }
-  .splash-sub { color: #3a3a36 !important; }
-  .splash-btn { background: #004f48 !important; border-color: #004f48 !important; color: #f5f1ea !important; }
-  .splash-btn:hover { background: transparent !important; border-color: #004f48 !important; color: #004f48 !important; }
-  .splash-footer a { color: #004f48 !important; }
-  .splash-footer a:hover { color: #231f20 !important; }
+  /* ── Drisco brand: cinematic hero splash (their building + logo) ── */
+  .splash { background: linear-gradient(rgba(16,13,9,0.30), rgba(16,13,9,0.44)), url('https://thedrisco.com/wp-content/uploads/2024/03/video-fallback.webp') center 24% / cover no-repeat !important; }
+  .splash-inner { border: 1px solid rgba(247,243,236,0.60) !important; outline: 1px solid rgba(247,243,236,0.22) !important; outline-offset: 7px !important; background: rgba(13,10,7,0.48) !important; padding: 52px 54px 42px !important; max-width: 660px !important; width: 90vw !important; animation: driscoIn 1s ease-out both !important; }
+  @keyframes driscoIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .drisco-logo-splash { display: block; margin: 0 auto 20px; height: 52px; width: auto; filter: drop-shadow(0 1px 7px rgba(0,0,0,0.5)); }
+  .splash-eyebrow { color: #e9cab8 !important; letter-spacing: 0.44em !important; font-size: 0.8rem !important; }
+  .splash-title { color: #f7f3ec !important; font-weight: 600 !important; font-size: clamp(2.9rem, 8vw, 4.6rem) !important; letter-spacing: 0.045em !important; text-shadow: 0 2px 22px rgba(0,0,0,0.55) !important; margin: 6px 0 6px !important; }
+  .splash-sample { color: #e9cab8 !important; font-size: 1.16rem !important; }
+  .splash-ornament { color: #e9cab8 !important; }
+  .splash-sub { color: rgba(247,243,236,0.96) !important; text-shadow: 0 1px 12px rgba(0,0,0,0.6) !important; }
+  .splash-btn { background: #f5f1ea !important; border-color: #f5f1ea !important; color: #231f20 !important; letter-spacing: 0.26em !important; padding: 14px 42px !important; }
+  .splash-btn:hover { background: transparent !important; border-color: #f5f1ea !important; color: #f5f1ea !important; }
+  .splash-footer a { color: #e9cab8 !important; }
+  .splash-footer a:hover { color: #f7f3ec !important; }
+  #offline-save-btn, .desktop-list-btn, #desktop-list-btn, #list-toggle-desktop, .list-toggle { background: #004f48 !important; }
+  button[onclick="restartTutorial()"] { background: #004f48 !important; color: #f5f1ea !important; border-color: rgba(245,241,234,0.5) !important; }
   header { background: #004f48 !important; }
   .wl-logo { color: #f5f4f2 !important; }
   .header-divider { background: rgba(245,244,242,0.35) !important; }
@@ -257,6 +262,7 @@
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
   <div class="splash-inner">
+    <img class="drisco-logo-splash" src="https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png" alt="The Drisco">
     <div class="splash-eyebrow">A Perfect Day · Concept</div>
     <h1 class="splash-title">Tel Aviv</h1>
     <p class="splash-sample">A concept sketch for The Drisco: a starting point, branded and curated with you.</p>
