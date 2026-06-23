@@ -89,19 +89,18 @@ async function generatePDF(){
   const cards = places.map((p, i) => {
     const photoUrl = photoCache[p.id]?.url || '';
     const gradient = {
-      landmark:'linear-gradient(135deg,#0f0d0a,#3a2a14)',
-      food:    'linear-gradient(135deg,#7a3020,#c06040)',
-      cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
-      church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
-      market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
-      soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
-      pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
-      nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
-    }[p.cat] || 'linear-gradient(135deg,#0f0d0a,#3a2a14)';
+      stay:    'linear-gradient(135deg,#12283f,#1a3a5c)',
+      dining:  'linear-gradient(135deg,#7a2c18,#c0492a)',
+      cafe:    'linear-gradient(135deg,#7a5418,#c98a2b)',
+      bar:     'linear-gradient(135deg,#3a1a3a,#8b5080)',
+      culture: 'linear-gradient(135deg,#1a3a5c,#4a7ab0)',
+      shop:    'linear-gradient(135deg,#2a3a2a,#5a8060)',
+      wellness:'linear-gradient(135deg,#143a34,#2f8f7f)',
+    }[p.cat] || 'linear-gradient(135deg,#00342f,#004f48)';
 
     const catColors = {
-      landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
-      church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
+      stay:'#1a3a5c', dining:'#c0492a', cafe:'#c98a2b',
+      bar:'#8b5080', culture:'#4a7ab0', shop:'#5a8060', wellness:'#2f8f7f'
     };
 
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
@@ -146,12 +145,12 @@ async function generatePDF(){
 <head>
 <meta charset="UTF-8">
 <title>A Perfect Day · ${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: 'Inter', sans-serif;
-    color: #0f1a2e;
+    font-family: 'Poppins', sans-serif;
+    color: #1c1c1c;
     background: white;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -161,7 +160,7 @@ async function generatePDF(){
   .pdf-cover {
     width: 100%; height: 100vh;
     min-height: 100vh;
-    background: #0f0d0a;
+    background: #231f20;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -176,11 +175,11 @@ async function generatePDF(){
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 30% 60%, rgba(212,168,75,0.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 30%, rgba(212,168,75,0.12) 0%, transparent 50%);
+    background: radial-gradient(ellipse at 30% 60%, rgba(0,79,72,0.40) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(233,202,184,0.14) 0%, transparent 50%);
   }
   .pdf-cover-logo {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.1rem;
     color: rgba(255,255,255,0.55);
@@ -190,7 +189,7 @@ async function generatePDF(){
     position: relative;
   }
   .pdf-cover-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 4.5rem;
     color: white;
     line-height: 1;
@@ -198,10 +197,10 @@ async function generatePDF(){
     position: relative;
   }
   .pdf-cover-subtitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.6rem;
-    color: #d4a84b;
+    color: #e9cab8;
     margin-bottom: 48px;
     position: relative;
   }
@@ -220,7 +219,7 @@ async function generatePDF(){
     text-align: center;
   }
   .pdf-stat-num {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 2.2rem;
     color: white;
     line-height: 1;
@@ -245,7 +244,7 @@ async function generatePDF(){
   .pdf-cover-by {
     position: absolute;
     bottom: 60px;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 0.95rem;
     color: rgba(255,255,255,0.6);
@@ -283,7 +282,7 @@ async function generatePDF(){
     width: 28px; height: 28px;
     border-radius: 50%;
     background: white;
-    color: #0f0d0a;
+    color: #231f20;
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -307,7 +306,7 @@ async function generatePDF(){
     text-transform: uppercase;
   }
   .pdf-card-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-size: 1.35rem;
     color: #0f1a2e;
     line-height: 1.2;
@@ -330,21 +329,21 @@ async function generatePDF(){
     line-height: 1.55;
     color: #333;
     font-style: italic;
-    border-left: 2px solid #d4a84b;
+    border-left: 2px solid #004f48;
     padding-left: 10px;
     margin: 4px 0;
     flex: 1;
   }
   .pdf-note-by {
     font-size: 0.62rem;
-    color: #d4a84b;
+    color: #004f48;
     font-weight: 600;
     font-style: normal;
   }
   .pdf-card-tip {
     font-size: 0.67rem;
-    background: #fffbf0;
-    border: 1px solid #f0e0a0;
+    background: #f4f7f5;
+    border: 1px solid #d8e6e0;
     border-radius: 6px;
     padding: 7px 10px;
     color: #555;
@@ -352,7 +351,7 @@ async function generatePDF(){
   }
   .pdf-tip-label {
     font-weight: 700;
-    color: #d4a84b;
+    color: #004f48;
     margin-right: 4px;
   }
   .pdf-card-qr-row {
@@ -371,7 +370,7 @@ async function generatePDF(){
   .pdf-website {
     margin-left: auto;
     font-size: 0.62rem;
-    color: #0f0d0a;
+    color: #231f20;
     text-decoration: none;
   }
 
@@ -379,12 +378,12 @@ async function generatePDF(){
   .pdf-walk {
     padding: 7px 20px 7px 248px;
     font-size: 0.65rem;
-    color: #e00040;
+    color: #004f48;
     font-weight: 600;
     letter-spacing: 0.04em;
     border-left: none;
-    background: #fff8f9;
-    border-bottom: 1px solid #f5e0e4;
+    background: #f3f6f4;
+    border-bottom: 1px solid #dfeae6;
     page-break-inside: avoid;
   }
 
@@ -404,15 +403,15 @@ async function generatePDF(){
     margin-bottom: 3px;
   }
   .pdf-brand-footer-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 0.85rem;
-    color: #0f0d0a;
+    color: #231f20;
     font-weight: 400;
   }
   .pdf-brand-footer-url {
     font-size: 0.6rem;
-    color: #d4a84b;
+    color: #004f48;
     letter-spacing: 0.06em;
   }
 
