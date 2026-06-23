@@ -145,7 +145,7 @@ async function generatePDF(){
 <head>
 <meta charset="UTF-8">
 <title>A Perfect Day · ${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -179,7 +179,7 @@ async function generatePDF(){
                 radial-gradient(ellipse at 70% 30%, rgba(233,202,184,0.14) 0%, transparent 50%);
   }
   .pdf-cover-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-style: italic;
     font-size: 1.1rem;
     color: rgba(255,255,255,0.55);
@@ -196,7 +196,7 @@ async function generatePDF(){
     filter: drop-shadow(0 1px 6px rgba(0,0,0,0.45));
   }
   .pdf-cover-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-size: 4.5rem;
     color: white;
     line-height: 1;
@@ -204,7 +204,7 @@ async function generatePDF(){
     position: relative;
   }
   .pdf-cover-subtitle {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-style: italic;
     font-size: 1.6rem;
     color: #e9cab8;
@@ -226,7 +226,7 @@ async function generatePDF(){
     text-align: center;
   }
   .pdf-stat-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-size: 2.2rem;
     color: white;
     line-height: 1;
@@ -251,7 +251,7 @@ async function generatePDF(){
   .pdf-cover-by {
     position: absolute;
     bottom: 60px;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-style: italic;
     font-size: 0.95rem;
     color: rgba(255,255,255,0.6);
@@ -313,7 +313,7 @@ async function generatePDF(){
     text-transform: uppercase;
   }
   .pdf-card-name {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-size: 1.35rem;
     color: #0f1a2e;
     line-height: 1.2;
@@ -410,7 +410,7 @@ async function generatePDF(){
     margin-bottom: 3px;
   }
   .pdf-brand-footer-name {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Source Serif 4', serif;
     font-style: italic;
     font-size: 0.85rem;
     color: #231f20;
@@ -436,7 +436,7 @@ async function generatePDF(){
 
 <!-- COVER -->
 <div class="pdf-cover">
-  <img class="pdf-cover-drisco-logo" src="https://thedrisco.com/wp-content/uploads/2022/12/drisco-logo-white-1.png" alt="The Drisco">
+  <img class="pdf-cover-drisco-logo" src="${new URL('Branding/drisco-logo-white.png', location.href).href}" alt="The Drisco">
   <div class="pdf-cover-logo">A Perfect Day in</div>
   <div class="pdf-cover-title">Tel Aviv-Jaffa</div>
   <div class="pdf-cover-subtitle">Your personal day guide</div>
