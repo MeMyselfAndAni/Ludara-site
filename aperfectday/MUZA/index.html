@@ -109,11 +109,21 @@
   .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.85) !important; text-decoration:none !important; cursor:pointer; pointer-events:auto; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; transition:color 0.15s, background 0.15s; }
   .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; background:rgba(245,239,230,0.14); }
   @media (max-width:768px){
-    .header-text { display:flex !important; }
-    .header-credit-link { font-size:0.58rem; white-space:normal; text-align:right; max-width:104px; line-height:1.25; }
+    header { display:flex !important; flex-direction:row !important; align-items:center !important; justify-content:space-between !important; gap:8px !important; min-height:48px !important; height:auto !important; padding:6px 10px !important; position:relative !important; }
+    .header-title { display:flex !important; flex-direction:column !important; align-items:flex-start !important; gap:1px !important; flex:1 1 auto !important; min-width:0 !important; position:static !important; transform:none !important; padding:0 !important; }
+    .header-title > a { display:none !important; }      /* hide the "A Perfect Day" wordmark on mobile */
+    .header-divider { display:none !important; }
+    .header-text { display:flex !important; flex-direction:column !important; align-items:flex-start !important; }
+    .header-text h1 { font-size:0.96rem !important; line-height:1.05 !important; margin:0 !important; white-space:nowrap !important; }
+    .header-sub { font-size:0.6rem !important; line-height:1.15 !important; white-space:nowrap !important; }
+    .header-credit-link { position:static !important; flex:0 0 auto !important; margin:0 0 0 8px !important; font-size:0.56rem !important; max-width:92px !important; white-space:normal !important; text-align:right !important; line-height:1.2 !important; padding:4px 6px !important; }
   }
   /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
   #pc-note { white-space: pre-line; }
+  /* Title row — English name on the left, Hebrew name on the right, same size */
+  #pc-title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+  #pc-title-row #pc-title, #pc-title-he { font-size:1.2rem !important; line-height:1.2 !important; flex:1 1 0; min-width:0; }
+  #pc-title-he { direction:rtl; text-align:right; font-family:'Suez One', Georgia, serif; font-weight:700; letter-spacing:0.01em; color:#1f1b18; }
 
   /* ── Filter pills ── */
   .filter-bar { padding-top:0 !important; padding-bottom:4px !important; margin-top:-5px !important; }
@@ -455,6 +465,37 @@ window.addEventListener('load', function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
     addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+</script>
+
+<!-- Bilingual card: Hebrew name opposite the English name; Hebrew description above English -->
+<script>
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  var heEl = document.getElementById('pc-title-he');
+  if (!heEl) {
+    var row = document.createElement('div'); row.id = 'pc-title-row';
+    titleEl.parentNode.insertBefore(row, titleEl);
+    row.appendChild(titleEl);
+    heEl = document.createElement('div'); heEl.id = 'pc-title-he'; heEl.setAttribute('dir', 'rtl');
+    row.appendChild(heEl);
+  }
+  new MutationObserver(function() {
+    var name = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) { heEl.textContent = ''; return; }
+    var parts = (place.type || '').split('·');
+    heEl.textContent = (parts[0] || '').trim();
+    var role = parts.slice(1).join('·').trim();
+    var typeEl = document.getElementById('pc-type');
+    if (typeEl) typeEl.textContent = role;
+    var noteEl = document.getElementById('pc-note');
+    if (noteEl && place.note) {
+      var segs = place.note.split('\n\n');
+      if (segs.length >= 2) noteEl.textContent = [segs[1], segs[0]].concat(segs.slice(2)).join('\n\n');
+    }
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>
