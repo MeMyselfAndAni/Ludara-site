@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'muza-shell-v9';
+var SHELL_CACHE = 'muza-shell-v13';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
@@ -19,6 +19,8 @@ var SHELL_FILES = [
   './ui-favourites.js',
   './ui-pdf.js',
   './ui-stories.js',
+  './tutorial.js',
+  './credits.js',
   './favicon.svg',
 ];
 

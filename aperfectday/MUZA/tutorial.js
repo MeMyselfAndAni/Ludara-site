@@ -21,7 +21,7 @@
     },
     {
       title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a wine bar that Venetians actually use, a church with a Tintoretto and no queue, a glassblower on Murano who still works by eye. Tap any icon to see why it made the list.',
+      body: 'Every pin is a place worth your time: a pavilion of ancient glass, a 3,000-year-old tell, the exhibition showing inside each building. Tap any icon to see what is there.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Looking for a wine bar with real local bites? A Renaissance church with no queue? Slide the bar to show only the category you want, the map follows.',
+      body: 'Looking only for the pavilions, or just the gardens and heritage sites? Tap a category at the top to show only what you want, the map follows.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -45,8 +45,8 @@
       btn: 'Next'
     },
     {
-      title: 'Explore by Sestiere',
-      body: 'Each button is a Venetian district or island. Tap to zoom straight in. Venice rewards those who drift, let the districts guide you.',
+      title: 'Explore by Zone',
+      body: 'Each bubble is a part of the grounds: the eastern pavilions, the central core, or the western park. Tap one to zoom straight to it.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -105,7 +105,7 @@
     },
     {
       title: 'Navigate with and without Wifi',
-      body: 'Venice\'s narrow streets can swallow a signal. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too, essential in the tight lanes.',
+      body: 'The museum grounds are large and the signs are sparse. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too, essential across the large grounds.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'Venice is yours to discover. Go find your perfect day.',
+      body: 'The museum is yours to explore. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */

@@ -401,6 +401,16 @@ function fc(el,cat){
 let userMarker = null;
 function locateMe(){
   const btn = document.getElementById('locate-btn');
+  // Toggle OFF if the location is already shown
+  if(userMarker){
+    userMarker.remove();
+    userMarker = null;
+    btn.classList.remove('active','locating');
+    window._userLat = null;
+    window._userLng = null;
+    document.querySelectorAll('.dist-badge').forEach(function(b){ b.remove(); });
+    return;
+  }
   if(!navigator.geolocation){ alert('Geolocation not supported.'); return; }
   btn.classList.add('locating');
   navigator.geolocation.getCurrentPosition(

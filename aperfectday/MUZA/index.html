@@ -106,8 +106,8 @@
   /* Hide the old multi-part right side + the redundant centre block */
   .header-btn, .header-ludara, .header-apd-mobile { display:none !important; }
   /* Single credit link on the right — hover reveals it is a link to aperfectday */
-  .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.82) !important; text-decoration:none !important; cursor:pointer; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding-right:8px; transition:color 0.15s; }
-  .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; }
+  .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.85) !important; text-decoration:none !important; cursor:pointer; pointer-events:auto; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; transition:color 0.15s, background 0.15s; }
+  .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; background:rgba(245,239,230,0.14); }
   @media (max-width:768px){
     .header-text { display:flex !important; }
     .header-credit-link { font-size:0.58rem; white-space:normal; text-align:right; max-width:104px; line-height:1.25; }
@@ -116,10 +116,10 @@
   #pc-note { white-space: pre-line; }
 
   /* ── Filter pills ── */
-  .filter-bar { padding-top:2px !important; padding-bottom:4px !important; margin-top:0 !important; }
-  .filter-bar .pill { font-family:'Rubik',sans-serif !important; font-size:0.98rem !important; font-weight:600 !important; padding:9px 17px !important; letter-spacing:0.005em; }
-  .filter-bar .pill .dot { width:10px !important; height:10px !important; }
-  @media (max-width:768px){ .filter-bar .pill { font-size:0.9rem !important; padding:8px 14px !important; } }
+  .filter-bar { padding-top:0 !important; padding-bottom:4px !important; margin-top:-5px !important; }
+  .filter-bar .pill { font-family:'Rubik',sans-serif !important; font-size:0.84rem !important; font-weight:600 !important; padding:7px 14px !important; letter-spacing:0.005em; }
+  .filter-bar .pill .dot { width:9px !important; height:9px !important; }
+  @media (max-width:768px){ .filter-bar .pill { font-size:0.78rem !important; padding:6px 12px !important; } }
   .filter-bar .pill.active { background:#3a201c !important; border-color:#3a201c !important; color:#fff !important; }
   .filter-bar .pill-saved.active { background:var(--brand) !important; border-color:var(--brand) !important; color:#fff !important; }
   .filter-bar .pill-saved.active .heart-icon, .filter-bar .pill-saved.active .pill-saved-count { color:#fff !important; }
@@ -174,7 +174,7 @@
       <div class="header-sub">Pavilions &amp; current exhibitions · מוז״א</div>
     </div>
   </div>
-  <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" title="A Perfect Day by Ludara.AI — opens ludara.ai/aperfectday">Interactive map by Ludara.AI</a>
+  <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" rel="noopener" aria-label="Open A Perfect Day by Ludara.AI" title="Link — opens A Perfect Day at ludara.ai/aperfectday">Interactive map by Ludara.AI ↗</a>
 </header>
 
 <!-- Filter bar -->
