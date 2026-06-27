@@ -97,7 +97,9 @@
   .place-type { font-size:0.74rem !important; }
 
   /* ── Header — MUZA ── */
-  header { background:#3a201c !important; }
+  header { background:#3a201c !important; position:relative !important; }
+  /* Centered MUZA (Hebrew) logo — museum logo is dark, so render it white on the dark header */
+  .header-muza-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:30px; width:auto; max-width:42vw; object-fit:contain; filter:brightness(0) invert(1); opacity:0.95; z-index:3; pointer-events:none; }
   .wl-logo { color:#f5efe6 !important; }
   .header-divider { background:rgba(245,239,230,0.35) !important; }
   .header-text h1, .header-text h1 em { color:#f5efe6 !important; font-family:'Suez One', Georgia, serif !important; font-style:normal !important; }
@@ -109,14 +111,15 @@
   .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.85) !important; text-decoration:none !important; cursor:pointer; pointer-events:auto; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; transition:color 0.15s, background 0.15s; }
   .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; background:rgba(245,239,230,0.14); }
   @media (max-width:768px){
-    header { display:flex !important; flex-direction:row !important; align-items:center !important; justify-content:space-between !important; gap:8px !important; min-height:48px !important; height:auto !important; padding:6px 10px !important; position:relative !important; }
-    .header-title { display:flex !important; flex-direction:column !important; align-items:flex-start !important; gap:1px !important; flex:1 1 auto !important; min-width:0 !important; position:static !important; transform:none !important; padding:0 !important; }
-    .header-title > a { display:none !important; }      /* hide the "A Perfect Day" wordmark on mobile */
-    .header-divider { display:none !important; }
-    .header-text { display:flex !important; flex-direction:column !important; align-items:flex-start !important; }
-    .header-text h1 { font-size:0.96rem !important; line-height:1.05 !important; margin:0 !important; white-space:nowrap !important; }
-    .header-sub { font-size:0.6rem !important; line-height:1.15 !important; white-space:nowrap !important; }
-    .header-credit-link { position:static !important; flex:0 0 auto !important; margin:0 0 0 8px !important; font-size:0.56rem !important; max-width:92px !important; white-space:normal !important; text-align:right !important; line-height:1.2 !important; padding:4px 6px !important; }
+    header { display:flex !important; flex-direction:row !important; align-items:flex-start !important; justify-content:space-between !important; gap:8px !important; min-height:46px !important; height:auto !important; padding:7px 6px 7px 12px !important; position:relative !important; }
+    .header-title { order:1 !important; display:flex !important; flex-direction:column !important; align-items:flex-start !important; gap:1px !important; flex:1 1 auto !important; min-width:0 !important; position:static !important; transform:none !important; padding:0 !important; }
+    .header-title > a, .header-divider, .header-text { display:none !important; }   /* hide desktop title parts on mobile */
+    .header-apd-mobile { display:flex !important; flex-direction:column !important; align-items:flex-start !important; }
+    .header-apd-m1 { font-family:'Suez One', Georgia, serif !important; font-size:0.8rem !important; line-height:1.1 !important; color:#f5efe6 !important; }
+    .header-apd-m2 { font-family:'Rubik', sans-serif !important; font-size:0.55rem !important; letter-spacing:0.03em !important; color:rgba(245,239,230,0.72) !important; margin-top:2px !important; }
+    .header-credit-link { order:2 !important; position:static !important; flex:0 0 auto !important; align-self:flex-start !important; margin:0 !important; font-size:0.54rem !important; max-width:84px !important; white-space:normal !important; text-align:right !important; line-height:1.2 !important; padding:2px 2px 2px 4px !important; }
+    .header-title { max-width:44% !important; }
+    .header-muza-center { height:20px !important; max-width:34vw !important; }
   }
   /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
   #pc-note { white-space: pre-line; }
@@ -187,8 +190,13 @@
       <h1><em>Eretz Israel Museum</em> Guide</h1>
       <div class="header-sub">Pavilions &amp; current exhibitions · מוז״א</div>
     </div>
+    <div class="header-apd-mobile">
+      <div class="header-apd-m1">A Perfect Day in Eretz Israel Museum</div>
+      <div class="header-apd-m2">Pavilions &amp; current exhibitions · מוז״א</div>
+    </div>
   </div>
   <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" rel="noopener" aria-label="Open A Perfect Day by Ludara.AI" title="Link — opens A Perfect Day at ludara.ai/aperfectday">Interactive map by Ludara.AI ↗</a>
+  <img class="header-muza-center" src="muza-logo.png" onerror="this.onerror=null;this.src='https://www.eretzmuseum.org.il/wp-content/themes/eretzmuseum/media/muza_logo.png'" alt="מוז״א — Eretz Israel Museum">
 </header>
 
 <!-- Filter bar -->
