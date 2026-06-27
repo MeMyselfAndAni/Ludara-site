@@ -550,17 +550,25 @@
     dualOverlay.style.display = 'block';
   }
 
-  function setCard(extraOffset) {
+  function setCard(extraOffset, targetEl) {
     var vw      = window.innerWidth;
     var vh      = window.innerHeight;
     var cardW   = Math.min(290, vw - 52);
-    var mobileOffset = vw < 768 ? 113 : 0; /* ~3 cm below centre on mobile */
-    var extra   = extraOffset || 0;
+    var left    = Math.max(16, (vw - cardW) / 2);
+    var cardH   = card.offsetHeight || 240;
+    var top;
+    var r = (targetEl && targetEl.getBoundingClientRect) ? targetEl.getBoundingClientRect() : null;
+    if (r && r.width > 0) {
+      top = (r.top > vh * 0.48) ? (r.top - cardH - 18) : (r.bottom + 18);
+      top = Math.max(72, Math.min(top, vh - cardH - 14));
+    } else {
+      var mobileOffset = vw < 768 ? 40 : 0;
+      top = Math.max(80, (vh - 280) / 2 + mobileOffset + (extraOffset || 0));
+    }
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
-      'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
-      'left:' + Math.max(16, (vw - cardW) / 2) + 'px;' +
-      'top:'  + Math.max(80, (vh - 280) / 2 + mobileOffset + extra) + 'px;';
+      'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;touch-action:none;' +
+      'left:' + left + 'px;top:' + top + 'px;';
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
@@ -587,7 +595,7 @@
     nextBtn.textContent = step.btn;
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);
+    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, targetEl);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.dualTargets) {
       clearDualOverlay();
@@ -611,7 +619,7 @@
     } else if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
       setTimeout(function () {
         var el = document.querySelector(step.target);
-        if (el && el.getBoundingClientRect().width > 0) { setSpot(el); }
+        if (el && el.getBoundingClientRect().width > 0) { setSpot(el); setCard(0, el); }
         else { setSpot(null); }
       }, 120);
     } else {

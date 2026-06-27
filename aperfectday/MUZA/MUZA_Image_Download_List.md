@@ -7,7 +7,14 @@ All photos are the museum's own, from **eretzmuseum.org.il**. Save each URL into
 Tip: in Chrome, right-click the image → "Save image as…" → set the filename to `place-<id>.jpg`.
 A few URLs have Hebrew characters — they still open and download fine; just rename on save.
 
-## Images found (20)
+## Centered header logo
+
+Save this as **`muza-logo.png`** in the MUZA folder **root** (next to index.html, NOT in images/):
+`https://www.eretzmuseum.org.il/wp-content/themes/eretzmuseum/media/muza_logo.png`
+
+It's optional — until you save it, the header loads the same logo straight from the museum site as a fallback. It's rendered white over the dark header.
+
+## Images found (21)
 
 | Save as | Place | Source image URL |
 |---|---|---|
@@ -27,6 +34,7 @@ A few URLs have Hebrew characters — they still open and download fine; just re
 | place-18.jpg | MUZA Park (Bustan) | https://www.eretzmuseum.org.il/wp-content/uploads/2023/09/DJI_0664_1800-1024x683.jpg |
 | place-21.jpg | Laski Planetarium | https://www.eretzmuseum.org.il/wp-content/uploads/2023/06/MUZA-Planetarium_photo-leonid-Pedrol_310-1024x822.jpg |
 | place-22.jpg | Main Entrance & grounds (aerial) | https://www.eretzmuseum.org.il/wp-content/uploads/2023/08/DJI_0006-1024x576.jpg |
+| place-24.jpg | Artsi Café (PNG — minimize-images.js converts it to JPEG) | https://www.eretzmuseum.org.il/wp-content/uploads/2023/05/museum_restaurant.png |
 | place-25.jpg | Nofim Hall (Photo: Tal Izsak) | https://www.eretzmuseum.org.il/wp-content/uploads/2024/10/אולם-נופים-מוזא_צילום-טל-איזק_2-1024x577.jpg |
 | place-26.jpg | Yael Garden — The Bird Mosaic (Photo: Nof Harari) | https://www.eretzmuseum.org.il/wp-content/uploads/2024/04/PXL_20240403_095947870.MP_-1024x576.jpg |
 
@@ -39,10 +47,14 @@ A few URLs have Hebrew characters — they still open and download fine; just re
 
 (These two already carry the correct CC credit in `credits.js`.)
 
-## Still need a photo (6) — these stay as the coloured icon until you add one
+## Still need a photo (5) — these stay as the coloured icon until you add one
 
 place-9 Migdal Gallery · place-16 Sundial Square · place-19 Jotam's Parable Garden ·
-place-20 Open-Air Theater · place-23 Museum Shop · place-24 Anina Café
+place-20 Open-Air Theater · place-23 Museum Shop
+
+Notes:
+- place-23 Museum Shop: no shop photo exists in the museum media or on Commons (only a link to muzashop.biz). Send me one if you have it.
+- place-22 Entrance: currently the drone aerial. If you'd rather show the actual gate, there's a ground-level entrance photo on Commons — `https://commons.wikimedia.org/wiki/Special:FilePath/Eretz_Yisrael_Mus._Ent_004.jpg` (Ori~, CC BY-SA 3.0) — but it's a 2009 point-and-shoot, lower quality than the aerial. Say the word and I'll switch it.
 
 No genuine image exists for these on the museum site or Wikimedia Commons, so I've left them as icons rather than attach a wrong photo. Drop your own in as `place-<id>.jpg` and tell me the credit to use.
 
