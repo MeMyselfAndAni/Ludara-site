@@ -4,14 +4,14 @@
 // 25 places: 7 collection pavilions · 3 exhibition halls · 7 heritage sites ·
 //            3 gardens/outdoor · 5 services
 // Bilingual EN / HE. Coordinates from OpenStreetMap building centroids.
-// Current exhibitions verified from eretzmuseum.org.il, current as of 26 Jun 2026.
+// Descriptions sourced from eretzmuseum.org.il. Exhibitions current as of 26 Jun 2026.
 //
 // Three campus zones (nbhd): east (eastern pavilions) · core (central core) · park (western park)
 // Field convention for this guide:
 //   name    = English name (card title + list)
-//   type    = Hebrew name + role  (shown under the title — gives a bilingual heading)
-//   address = campus zone, bilingual (used for orientation in the list)
-//   note    = English description, then Hebrew description, then current exhibitions
+//   type    = Hebrew name + role  (shown under the title — a bilingual heading)
+//   address = campus zone, bilingual (orientation in the list)
+//   note    = English description, then Hebrew, then current exhibitions
 //   tip     = bilingual wayfinding / visitor tip
 
 const PLACES = [
@@ -26,7 +26,7 @@ const PLACES = [
     address: 'Eastern pavilions · מתחם הביתנים המזרחי',
     lat: 32.1028378, lng: 34.7978806,
     type: 'ביתן הקרמיקה · Permanent collection',
-    note: 'Pottery of the Land of Israel through the ages — including ritual vessels found in the temples of Tell Qasile, just across the grounds.\n\nכלי חרס מארץ ישראל לאורך הדורות, כולל כלי פולחן שנמצאו במקדשי תל קסילה שבלב המוזיאון.',
+    note: 'Opened in 1966, the pavilion traces ceramics across seven sections — from the first fired-clay vessels of the Neolithic and Chalcolithic periods through manufacturing, decoration, the role of pottery in early writing, and ritual art. Highlights: painted Neolithic potsherds, clay ossuaries, Greek black- and red-figure vessels, Islamic blue-glazed pottery, finds from the temples of Tell Qasile, and a full-scale reconstruction of a 3,000-year-old Israelite “Four-Room House”. The renewed courtyard adds contemporary works by Lidia Zavadsky and Uriel Caspi.\n\nביתן הקרמיקה מציג עבודות קרמיקה עתיקות בשבעה חלקים — מראשית השימוש בחומר שרוף ועד אמנות ופולחן — כולל ממצאים ממקדשי תל קסילה ושחזור “בית ארבעת המרחבים” הישראלי. בחצר המחודשת מוצגות עבודות עכשוויות של לידיה זבצקי ואוריאל כספי.',
     tip: 'In the eastern cluster, beside the Glass and Nehushtan pavilions. · במתחם המזרחי, ליד ביתני הזכוכית ונחושתן.',
     website: 'https://www.eretzmuseum.org.il/en/the-ceramics-pavilion/',
   },
@@ -39,8 +39,8 @@ const PLACES = [
     address: 'Eastern pavilions · מתחם הביתנים המזרחי',
     lat: 32.1024233, lng: 34.7972721,
     type: 'ביתן הזכוכית · Permanent collection',
-    note: 'The history of glass and glass-making — one of the most important collections of ancient glass in the world, tracing the craft from its beginnings to the Islamic period.\n\nתולדות הזכוכית ומלאכת הזכוכית — אחד האוספים החשובים בעולם לזכוכית קדומה.',
-    tip: 'Small and dimly lit to protect the glass — give your eyes a moment. · התצוגה מוארת בעמעום כדי להגן על הזכוכית.',
+    note: 'Built in 1959 around founder Dr. Walter Moses’s collection, this is one of the world’s finest collections of ancient glass — a permanent display spanning 3,000 years, from the ancient Near East to the decline of Islamic glass around 1400 CE. It runs from pre-blown glass through Roman and Byzantine blown glass to the Islamic period, ending at a Crusader-era glass furnace. Star pieces: Ennion’s signed Blue Jug, a rare Roman drinking horn, a gold-glass mosaic panel from Caesarea, and a 14th-century Mamluk mosque lamp.\n\nביתן הזכוכית, שנבנה ב-1959, מציג את אחד מאוספי הזכוכית העתיקה המשובחים בעולם — 3,000 שנות יצירה מהמזרח הקדום ועד שלהי התקופה האסלאמית. בין פריטי המופת: הפך הכחול של אניון, קרן שתייה רומית נדירה, ולוח הזכוכית מקיסריה.',
+    tip: 'Lit low to protect the glass — give your eyes a moment. · התצוגה מוארת בעמעום כדי להגן על הזכוכית.',
     website: 'https://www.eretzmuseum.org.il/en/the-glass-pavilion/',
   },
   {
@@ -52,7 +52,7 @@ const PLACES = [
     address: 'Eastern pavilions · מתחם הביתנים המזרחי',
     lat: 32.1031281, lng: 34.7970486,
     type: 'ביתן קדמן למטבעות · Permanent collection',
-    note: 'The story of money and coinage in the Land of Israel, from the first coins to the modern era — one of the finest numismatic collections in the country.\n\nתולדות הכסף והמטבע בארץ ישראל, מהמטבעות הראשונים ועד ימינו.',
+    note: 'Inaugurated in 1962 around the collection of Leo Kadman, this is the largest numismatic collection in Israel and one of the largest in the world — tens of thousands of coins, banknotes, weights and medals. The display follows means of payment from pre-coinage barter (salt, shells, hacksilver) through the first Greek coins, the coins minted in the Land of Israel (Yehud, Hasmonean, Herodian, the Jewish War and Bar Kokhba Revolt), and the region under foreign rule, up to modern Israeli coins that echo ancient Jewish designs.\n\nביתן קדמן למטבעות, שנוסד ב-1962 מאוסף ליאו קדמן, הוא אוסף המטבעות הגדול בישראל ומן הגדולים בעולם. התצוגה מספרת את סיפור אמצעי התשלום מראשיתם ועד מטבעות מדינת ישראל.',
     tip: 'At the north-eastern edge, near the Alexander Pavilion. · בקצה הצפוני-מזרחי, ליד ביתן אלכסנדר.',
     website: 'https://www.eretzmuseum.org.il/en/kadman-numismatic-pavilion/',
   },
@@ -65,7 +65,7 @@ const PLACES = [
     address: 'Eastern pavilions · מתחם הביתנים המזרחי',
     lat: 32.1025605, lng: 34.7976444,
     type: 'ביתן נחושתן · Copper & metallurgy',
-    note: 'Copper and ancient metallurgy, centred on the Timna copper mines in the Arava — how metal was mined and worked in antiquity.\n\nנחושת ומטלורגיה קדומה, סביב מכרות הנחושת בתמנע.\n\n● Now showing / מציג עכשיו:\n— Judgment Day, 2018–2022 — Neta Harari-Navon (until 30 Apr 2027) / יום דין 2018–2022 — נטע הררי־נבון',
+    note: 'The pavilion tells the story of ancient copper, based on excavations at Timna and Sinai — a reconstructed copper mine at the entrance, smelting furnaces from the Chalcolithic through the Iron Age, and rare organic finds (wood, textiles) preserved by the desert. It also shows “Midianite” Qurayyah painted pottery and finds from the Timna shrine of the Egyptian goddess Hathor, patroness of the miners.\n\nביתן נחושתן מספר את סיפור הפקת הנחושת הקדומה, ובו שחזורים של מכרה נחושת וכבשני היתוך מתימנע ומסיני, וכן ממצאים ממקדש האלה חתחור.\n\n● Now showing / מציג עכשיו:\n— Judgment Day, 2018–2022 — Neta Harari-Navon (until 30 Apr 2027) / יום דין 2018–2022 — נטע הררי־נבון',
     tip: 'Currently also hosting a contemporary installation alongside the permanent display. · מתארח כעת גם מיצב עכשווי לצד תצוגת הקבע.',
     website: 'https://www.eretzmuseum.org.il/en/nehushtan-pavilion/',
   },
@@ -78,7 +78,7 @@ const PLACES = [
     address: 'Eastern pavilions · מתחם הביתנים המזרחי',
     lat: 32.1033136, lng: 34.7975800,
     type: 'ביתן אלכסנדר לתולדות הדואר והבולאות · Postal history',
-    note: 'Postal history and stamps of the Land of Israel and beyond. The largest pavilion in the eastern cluster, it also hosts several of the museum’s temporary exhibitions.\n\nתולדות הדואר והבולאות בארץ ישראל ובעולם. הביתן הגדול במתחם המזרחי, ומארח גם תערוכות מתחלפות.\n\n● Now showing / מציג עכשיו:\n— Layers of Light: Analog Cameras, 1860–2000 (until 21 Nov 2026) / תל אור: מצלמות אנלוגיות\n— Postcards without Borders, 1870–1930 (until 3 Oct 2026) / גלויות ללא גבולות\n— Werner Braun: Between Water and Sky — closing 30 Jun 2026 / ורנר בראון: בין מים לשמיים\n— Worth the Wait, a family exhibition (until 31 Jul 2026) / שווה לחכות',
+    note: 'Founded in 1998 for Israel’s 50th anniversary, the pavilion presents the history of the post in the Land of Israel — from the Ottoman period through the British Mandate to statehood and the first Doar Ivri stamps — with envelopes, letters, postcards and seals. Centerpieces: a 1949 red Ford F1 mail truck with Israel Post’s running-gazelle logo, 1930s–60s telephones, and the Planeta press that printed the state’s first stamp series. (The lower-level philately display, incl. the Zvi Alexander Collection, is temporarily closed.) The pavilion also hosts several of the museum’s temporary exhibitions.\n\nביתן אלכסנדר לתולדות הדואר והבולאות, שנוסד ב-1998, מציג את תולדות הדואר בארץ ישראל מהתקופה העות’מאנית ועד הקמת המדינה. בין המוצגים: משאית דואר אדומה משנת 1949 ומכבש הדפוס “פלנטה”. (תצוגת הבולאות בקומה התחתונה סגורה זמנית.)\n\n● Now showing / מציג עכשיו:\n— Layers of Light: Analog Cameras, 1860–2000 (until 21 Nov 2026) / תל אור: מצלמות אנלוגיות\n— Postcards without Borders, 1870–1930 (until 3 Oct 2026) / גלויות ללא גבולות\n— Werner Braun: Between Water and Sky — closing 30 Jun 2026 / ורנר בראון: בין מים לשמיים\n— Worth the Wait, a family exhibition (until 31 Jul 2026) / שווה לחכות',
     tip: 'If you only have time for one temporary show, this building has four. · אם יש זמן לתערוכה אחת בלבד — כאן מרוכזות ארבע.',
     website: 'https://www.eretzmuseum.org.il/en/alexander-pavilion-of-postal-history-and-philately/',
   },
@@ -93,8 +93,8 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1026292, lng: 34.7960750,
     type: 'מרכז אדם ועמלו · Crafts & ancient technology',
-    note: 'Traditional crafts, tools and ancient technology — how people of the region worked the land, built, wove and made the objects of everyday life.\n\nמלאכות, כלים וטכנולוגיה קדומה — כיצד עבדו את הארץ, בנו, ארגו ויצרו את חפצי היום-יום.',
-    tip: 'Look for the working demonstrations of ancient crafts in the surrounding courtyard. · חפשו את מתקני המלאכה הפעילים בחצר שמסביב.',
+    note: 'Established in 1982 and named after Prof. Shmuel Avitzur, this ethnographic center preserves a vanishing world of traditional crafts across three areas. The Pavilion shows tools and installations of daily life up to early industrialization (food, building, spinning and weaving); the Crafts Arcade reconstructs eleven domed workshops — blacksmith, cobbler, potter, weaver, tinker, baker and more; and the outdoor Bread Courtyard centers on a reconstructed threshing floor with ploughs and threshing boards.\n\nמרכז “אדם ועמלו”, שנוסד ב-1982 על שם פרופ’ שמואל אביצור, משמר עולם נעלם של מלאכות יד מסורתיות בשלושה אזורים: הביתן, שדרת בעלי המלאכה (11 כיפות מלאכה) וחצר הלחם.',
+    tip: 'Look for the eleven reconstructed craft workshops in the domed arcade. · חפשו את 11 כיפות בעלי המלאכה בשדרה.',
     website: 'https://www.eretzmuseum.org.il/en/the-man-and-his-work-center/',
   },
   {
@@ -106,8 +106,8 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1022894, lng: 34.7958946,
     type: 'מרכז רוטשילד ואולם התערוכות המרכזי · Main hall',
-    note: 'The museum’s main hall for large temporary exhibitions, with an auditorium. It is the central hub of the 2026 Tel Aviv Biennale.\n\nאולם התערוכות המרכזי של המוזיאון, ובו אודיטוריום. לב הביאנלה של תל אביב 2026.\n\n● Now showing / מציג עכשיו:\n— Tel Aviv Biennale of Crafts & Design 2026: Works and Days (until 30 Nov 2026), spread across several pavilions / הביאנלה לאומנויות ולעיצוב תל אביב 2026: מעשים וימים',
-    tip: 'Start here to orient yourself — it sits at the centre of the campus. · התחילו כאן כדי להתמצא — האולם נמצא במרכז המתחם.',
+    note: 'The museum’s main hall for large temporary exhibitions, with an auditorium. It is the central hub of the 2026 Tel Aviv Biennale of Crafts & Design, whose works are spread across several pavilions.\n\nאולם התערוכות המרכזי של המוזיאון, ובו אודיטוריום. לב הביאנלה של תל אביב לאומנויות ולעיצוב 2026, הפרושה על פני כמה ביתנים.\n\n● Now showing / מציג עכשיו:\n— Tel Aviv Biennale of Crafts & Design 2026: Works and Days (until 30 Nov 2026) / הביאנלה לאומנויות ולעיצוב תל אביב 2026: מעשים וימים',
+    tip: 'Start here to orient yourself — it sits at the centre of the campus. · התחילו כאן כדי להתמצא — האולם במרכז המתחם.',
     website: 'https://www.eretzmuseum.org.il/en/the-tel-aviv-biennale-of-crafts-and-design-2026/',
   },
   {
@@ -119,7 +119,7 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1027887, lng: 34.7955134,
     type: 'מרכז ואודיטוריום קלצ’קין · Exhibition & auditorium',
-    note: 'An exhibition space and auditorium just north of Tell Qasile.\n\nחלל תצוגה ואודיטוריום, מצפון לתל קסילה.\n\n● Now showing / מציג עכשיו:\n— Postcards from Yesterday — Vera Vladimirsky (until 31 Dec 2026) / גלויות מאתמול — ורה ולדימירסקי',
+    note: 'An exhibition space and auditorium just north of Tell Qasile, used for changing displays and for talks and screenings.\n\nחלל תצוגה ואודיטוריום מצפון לתל קסילה, לתערוכות מתחלפות ולהרצאות והקרנות.\n\n● Now showing / מציג עכשיו:\n— Postcards from Yesterday — Vera Vladimirsky (until 31 Dec 2026) / גלויות מאתמול — ורה ולדימירסקי',
     tip: 'Check the auditorium programme for talks and screenings. · בדקו את לוח האירועים של האודיטוריום.',
     website: 'https://www.eretzmuseum.org.il/en/exhibitions/postcards-from-yesterday/',
   },
@@ -132,8 +132,8 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1019525, lng: 34.7952746,
     type: 'תל קסילה · Archaeological tell',
-    note: 'A 3,000-year-old archaeological tell at the heart of the museum, with twelve layers of settlement and an ancient sacred complex. It was the site of the State of Israel’s first excavation permit, in 1948.\n\nתל ארכאולוגי בן 3,000 שנה בלב המוזיאון — שתים-עשרה שכבות יישוב ומתחם מקדשים קדום. כאן ניתן היתר החפירה הראשון של מדינת ישראל ב-1948.',
-    tip: 'Climb to the top for the best overview of the whole campus. · עלו לראש התל לתצפית הטובה ביותר על כל המתחם.',
+    note: 'A 3,000-year-old archaeological tell at the heart of the museum, with twelve layers of settlement and an ancient sacred complex of three temples built one atop another. Excavated from 1948 (the first dig permit issued by the State of Israel) by B. Mazar and later A. Mazar, it yielded rare ritual vessels — many now displayed in the Ceramics Pavilion — and is debated as a possible Philistine centre.\n\nתל ארכאולוגי בן 3,000 שנה בלב המוזיאון — שתים-עשרה שכבות יישוב ומתחם מקדשים קדום. כאן ניתן היתר החפירה הראשון של מדינת ישראל ב-1948. רבים מהממצאים מוצגים בביתן הקרמיקה.',
+    tip: 'Climb to the top for the best overview of the whole campus. · עלו לראש התל לתצפית הטובה ביותר על המתחם.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
   {
@@ -145,8 +145,8 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1019974, lng: 34.7956553,
     type: 'המקדשים · Reconstructed sacred complex',
-    note: 'The reconstructed sacred complex at the top of the tell — three temples built one atop another. Many of the ritual vessels found here are displayed in the Ceramics Pavilion.\n\nמתחם המקדשים המשוחזר בראש התל — שלושה מקדשים שנבנו זה על גבי זה. רבים מכלי הפולחן שנמצאו כאן מוצגים בביתן הקרמיקה.',
-    tip: 'Pair a visit here with the Ceramics Pavilion to see the finds in context. · שלבו ביקור כאן עם ביתן הקרמיקה לראות את הממצאים בהקשרם.',
+    note: 'The reconstructed sacred complex at the top of the tell — three temples built one above the other, of sun-dried brick with plastered benches. Offering and ritual vessels found here (some rare and unique) are on display in the Ceramics Pavilion; an altar surrounded by ash and animal bones points to sacrifice and communal feasting.\n\nמתחם המקדשים המשוחזר בראש התל — שלושה מקדשים שנבנו זה על גבי זה. כלי הפולחן שנמצאו כאן מוצגים בביתן הקרמיקה.',
+    tip: 'Pair this with the Ceramics Pavilion to see the finds in context. · שלבו עם ביתן הקרמיקה לראות את הממצאים בהקשרם.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
   {
@@ -158,7 +158,7 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1030522, lng: 34.7957828,
     type: 'כיכר הפסיפסים · Ancient mosaics',
-    note: 'Ancient mosaic floors gathered from sites across Israel — Samaritan, Jewish, Christian and Muslim — laid out together in the open air.\n\nרצפות פסיפס עתיקות מאתרים ברחבי הארץ — שומרוני, יהודי, נוצרי ומוסלמי — תחת כיפת השמיים.',
+    note: 'Ancient mosaic floors gathered from sites across Israel and laid out together in the open air — among them a 6th-century Samaritan prayer-house floor (in situ), a hunting-scene floor from Beit Guvrin, a Tiberias synagogue floor with lulavim and etrogim, and a Muslim prayer-house floor from Ramla. Together they testify to the many cultures — Samaritan, Jewish, Christian and Muslim — that lived here.\n\nרצפות פסיפס עתיקות מאתרים ברחבי הארץ תחת כיפת השמיים — בית תפילה שומרוני, רצפת ציד מבית גוברין, בית כנסת מטבריה ובית תפילה מוסלמי מרמלה.',
     tip: 'Best seen in raking morning or late-afternoon light. · נראות במיטבן באור נמוך של בוקר או אחר הצהריים.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
@@ -171,8 +171,8 @@ const PLACES = [
     address: 'Central core · מתחם המרכז',
     lat: 32.1027345, lng: 34.7964179,
     type: 'גת · Ancient rock-cut wine press',
-    note: 'An ancient rock-cut wine press, one of several agricultural installations preserved across the grounds.\n\nגת עתיקה חצובה בסלע, אחת מכמה מתקני חקלאות שנשתמרו במתחם.',
-    tip: 'Near the Man and His Work Center and the crafts arcade. · ליד מרכז אדם ועמלו וכיפות היוצרים.',
+    note: 'An ancient rock-cut wine press, one of several agricultural installations preserved across the grounds beside the crafts arcade.\n\nגת עתיקה חצובה בסלע, אחת מכמה מתקני חקלאות שנשתמרו במתחם, סמוך לשדרת בעלי המלאכה.',
+    tip: 'Near the Man and His Work Center and the Bread Courtyard. · ליד מרכז אדם ועמלו וחצר הלחם.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
   {
@@ -252,7 +252,7 @@ const PLACES = [
     lat: 32.1023628, lng: 34.7975515,
     type: 'גלריית מגדל · Exhibition gallery',
     note: 'An exhibition gallery beside the Nehushtan and Ceramics pavilions, used for changing displays.\n\nגלריית תצוגה לצד ביתני נחושתן והקרמיקה, לתערוכות מתחלפות.',
-    tip: 'Easy to miss between the larger pavilions — look for it just west of Nehushtan. · קל לפספס בין הביתנים הגדולים — מצויה ממש ממערב לנחושתן.',
+    tip: 'Easy to miss between the larger pavilions — look just west of Nehushtan. · קל לפספס בין הביתנים — ממש ממערב לנחושתן.',
     website: 'https://www.eretzmuseum.org.il/en/exhibitions/',
   },
 
@@ -266,8 +266,8 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1009395, lng: 34.7946903,
     type: 'הביתן לתרבות יהודית ולפולקלור · Judaica & folklore',
-    note: 'One of Israel’s largest collections of Judaica, ethnography and folklore. Reopened in June 2024 after a full renovation, in a historic building in the heart of MUZA Park.\n\nאחד האוספים הגדולים בארץ ליודאיקה, אתנוגרפיה ופולקלור. נפתח מחדש ביוני 2024 לאחר שיפוץ מלא, בבניין היסטורי בלב בוסתן מוז“א.\n\nNote: the ketubot (marriage contracts) display is temporarily closed for the Biennale. / תצוגת הכתובות סגורה זמנית בשל הביאנלה.',
-    tip: 'It sits inside the free public park — reachable even without a museum ticket. · נמצא בתוך הפארק הציבורי החופשי — נגיש גם בלי כרטיס למוזיאון.',
+    note: 'Judaica, ethnography and folklore from the museum’s collection, shown alongside contemporary art. One display traces local Judaica made here from the late 19th century to the 1960s; another gathers festival and life-cycle objects from communities worldwide — tefillin cases, tallitot, wedding costumes, jewelry, amulets and decorated ketubot. A special room holds an 18th-century Baroque-Rococo Torah Ark brought from Trino Vercellese in Piedmont, Italy — the only one of its kind in Israel. Reopened June 2024 after a full renovation.\n\nהביתן לתרבות יהודית ולפולקלור מציג יודאיקה, אתנוגרפיה ופולקלור מאוסף המוזיאון לצד עבודות עכשוויות. במרכזו ארון קודש מן המאה ה-18 שהובא מטרינו ורצ’לזה שבאיטליה, היחיד מסוגו בישראל. נפתח מחדש ביוני 2024.\n\nNote: the ketubot display is temporarily closed for the Biennale. / תצוגת הכתובות סגורה זמנית בשל הביאנלה.',
+    tip: 'It sits inside the free public park — reachable even without a museum ticket. · בתוך הפארק הציבורי החופשי — נגיש גם בלי כרטיס.',
     website: 'https://www.eretzmuseum.org.il/en/jewish-culture-and-folklore-pavilion/',
   },
   {
@@ -279,7 +279,7 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1014195, lng: 34.7942218,
     type: 'בית הבד · Reconstructed olive-oil plant',
-    note: 'Reconstructed olive-oil installations spanning the Iron Age to the modern era, showing how oil was pressed across thousands of years.\n\nמתקני בית בד משוחזרים מתקופת הברזל ועד העת החדשה.',
+    note: 'Reconstructed olive-oil installations spanning the Iron Age to the modern era — an Iron-Age beam-and-weights press from Tell Batash, a traditional Arab press with one of the largest known press beams (from Iksal in the Galilee), and 19th-century iron equipment, with extraction stones, weights and storage jars around the courtyard.\n\nמתקני בית בד משוחזרים מתקופת הברזל ועד העת החדשה — בית בד מתל בטש, בית בד ערבי מסורתי עם אחת מקורות הבד הגדולות בארץ, וציוד ברזל מהמאה ה-19.',
     tip: 'In the western park, on the way to the Flour Mill and the pond. · בפארק המערבי, בדרך לטחנת הקמח ולבריכה.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
@@ -292,7 +292,7 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1008115, lng: 34.7953150,
     type: 'טחנת קמח · Reconstructed watermill',
-    note: 'A reconstructed water-powered flour mill at the foot of Tell Qasile, modelled on the mills that worked in northern Israel for centuries.\n\nטחנת קמח משוחזרת המונעת בכוח המים, למרגלות תל קסילה.',
+    note: 'A reconstructed water-powered flour mill at the foot of Tell Qasile, modelled on the mills that worked in northern Israel for centuries — water diverted through a conduit turns a wheel that drives the upper millstone. Such mills produced 30–50 kg of flour an hour and were vital social and economic centres.\n\nטחנת קמח משוחזרת המונעת בכוח המים, למרגלות תל קסילה, על פי הטחנות שפעלו בצפון הארץ במשך מאות שנים.',
     tip: 'The southern, lower part of the park — near the pond. · בחלק הדרומי-נמוך של הפארק, ליד הבריכה.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
@@ -305,7 +305,7 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1023741, lng: 34.7934427,
     type: 'כיכר שעוני השמש · Square of sundials',
-    note: 'A plaza of sundials beside the western gate, demonstrating how time was measured by the sun.\n\nכיכר ובה שעוני שמש, ליד השער המערבי.',
+    note: 'A plaza of sundials beside the western gate, showing how time was once measured by the sun.\n\nכיכר ובה שעוני שמש, ליד השער המערבי, הממחישה כיצד נמדד הזמן לפי השמש.',
     tip: 'Come on a sunny day to read the dials. · בואו ביום שמש כדי לקרוא את השעונים.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
@@ -318,7 +318,7 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1015512, lng: 34.7947573,
     type: 'בוסתן מוז“א · Public park',
-    note: 'The Jack, Joseph & Morton Mandel public park in the western grounds — free to enter, with a pond, an orchard and shaded paths. A quiet green space inside the city.\n\nהפארק הציבורי ע“ש משפחת מנדל בשטח המערבי — כניסה חופשית, בריכה, בוסתן ושבילים מוצלים.',
+    note: 'The Jack, Joseph & Morton Mandel public park in the western grounds — free to enter, with a pond, an orchard and shaded “sheep-track” paths lined with seating, fountains, grapevine trellises and native Mediterranean planting. Within it: the Park Pond, the Olive Press and Flour Mill, the Planetarium, Sundial Square and the Folklore Pavilion.\n\nהפארק הציבורי ע“ש משפחת מנדל בשטח המערבי — כניסה חופשית, בריכה, בוסתן ושבילים מוצלים, ובהם בית הבד, טחנת הקמח, הפלנטריום, כיכר שעוני השמש והביתן לפולקלור.',
     tip: 'Open 08:00–20:00, free of charge, through five gates around the grounds. · פתוח 08:00–20:00, ללא תשלום, דרך חמישה שערים.',
     website: 'https://www.eretzmuseum.org.il/en/muza-park/',
   },
@@ -331,7 +331,7 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1018744, lng: 34.7941490,
     type: 'גינת משל יותם · Themed garden',
-    note: 'A small themed garden within the grounds, planted around the biblical parable of Jotam.\n\nגינה נושאית קטנה במתחם, סביב משל יותם המקראי.',
+    note: 'A small themed garden within the grounds, planted around the biblical parable of Jotam (the trees that sought a king).\n\nגינה נושאית קטנה במתחם, סביב משל יותם המקראי (העצים שביקשו להם מלך).',
     tip: 'A shaded detour between Sundial Square and the Folklore Pavilion. · עצירה מוצלת בין כיכר שעוני השמש לביתן הפולקלור.',
     website: 'https://www.eretzmuseum.org.il/en/open-spaces/',
   },
@@ -344,8 +344,8 @@ const PLACES = [
     address: 'Western park · מתחם הבוסתן המערבי',
     lat: 32.1023938, lng: 34.7939174,
     type: 'פלנטריום ע“ש לסקי · Planetarium',
-    note: 'The museum’s planetarium, on the western side of the grounds, with shows about the night sky and space.\n\nהפלנטריום של המוזיאון, בצד המערבי, עם הקרנות על שמי הלילה והחלל.',
-    tip: 'Shows run to a schedule and may require a separate ticket — check times at the entrance. · ההקרנות לפי לוח זמנים ועשויות לדרוש כרטיס נפרד.',
+    note: 'Dedicated in 1968 and donated by Harry and Sadie Lasky, the planetarium projects an artificial sky onto a 12-metre dome — Israel’s largest domed screen — using a state-of-the-art Digistar 7 laser system, with seating for 110. It runs short shows for ages 5 and up, including “Stars” (a voyage across galaxies and the life and death of stars) and “Astronaut” (how astronauts train for spaceflight).\n\nהפלנטריום ע“ש לסקי, שנחנך ב-1968, מקרין שמיים מלאכותיים על כיפה בקוטר 12 מטר במערכת Digistar 7 מתקדמת. מוצגות בו תוכניות קצרות לכל המשפחה, ובהן “כוכבים” ו“אסטרונאוט”.',
+    tip: 'Shows run to a schedule and may need a separate ticket — check times at the entrance. · ההקרנות לפי לוח זמנים ועשויות לדרוש כרטיס נפרד.',
     website: 'https://www.eretzmuseum.org.il/en/planetarium/',
   },
 
