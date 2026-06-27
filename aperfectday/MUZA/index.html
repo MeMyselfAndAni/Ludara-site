@@ -75,8 +75,8 @@
   .splash { background: linear-gradient(150deg, #2b2420 0%, #4a2a26 55%, #6e2a22 100%) !important; }
   .splash-inner { border: 1px solid rgba(233,225,210,0.5) !important; outline: 1px solid rgba(233,225,210,0.2) !important; outline-offset: 7px !important; background: rgba(20,16,14,0.30) !important; padding: 52px 46px 40px !important; max-width: 640px !important; width: 92vw !important; text-align:center; }
   .splash-eyebrow { font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:600; letter-spacing:0.34em; color:#e9c9b0; text-transform:uppercase; margin-bottom:14px; }
-  .splash-title { font-family:'Suez One',serif; font-weight:700; color:#f7f1e8; font-size:clamp(2.3rem,7vw,3.6rem); line-height:1.05; letter-spacing:0.02em; margin:2px 0 6px; text-shadow:0 2px 18px rgba(0,0,0,0.5); }
-  .splash-he { font-family:'Suez One',serif; direction:rtl; font-size:1.25rem; font-weight:500; color:#e9c9b0; letter-spacing:0.04em; margin:0 0 18px; }
+  .splash-title { font-family:'Suez One',serif; font-weight:700; color:#f7f1e8; font-size:clamp(1.6rem,4.2vw,2.3rem); line-height:1.1; letter-spacing:0.02em; margin:2px 0 8px; text-shadow:0 2px 18px rgba(0,0,0,0.5); }
+  .splash-he { font-family:'Suez One',serif; direction:rtl; font-size:clamp(2.0rem,6vw,3.0rem); font-weight:400; color:#f7f1e8; letter-spacing:0.03em; line-height:1.1; margin:0 0 18px; text-shadow:0 2px 18px rgba(0,0,0,0.5); }
   .splash-ornament { display:block; color:#e9c9b0; font-size:1rem; letter-spacing:0.6em; margin:0 auto 14px; }
   .splash-sub { font-family:'Rubik',sans-serif; font-size:1.04rem; font-weight:300; line-height:1.7; color:rgba(247,241,232,0.95); max-width:520px; margin:0 auto 26px; }
   .splash-btn { font-family:'Suez One',serif !important; font-size:0.82rem !important; letter-spacing:0.2em !important; text-transform:uppercase; background:#e9c9b0 !important; border:1px solid #e9c9b0 !important; color:#3a201c !important; padding:13px 38px !important; border-radius:0 !important; cursor:pointer; transition:background 0.2s,color 0.2s; }
@@ -100,14 +100,14 @@
   header { background:#3a201c !important; }
   .wl-logo { color:#f5efe6 !important; }
   .header-divider { background:rgba(245,239,230,0.35) !important; }
-  .header-text h1, .header-text h1 em { color:#f5efe6 !important; font-family:'Suez One', Georgia, serif !important; }
+  .header-text h1, .header-text h1 em { color:#f5efe6 !important; font-family:'Suez One', Georgia, serif !important; font-style:normal !important; }
   .header-sub { color:rgba(245,239,230,0.8) !important; }
   .header-ludara-text, .ludara-line1, .ludara-line2, .header-ludara-brand { color:rgba(245,239,230,0.85) !important; }
   /* Hide the old multi-part right side + the redundant centre block */
   .header-btn, .header-ludara, .header-apd-mobile { display:none !important; }
   /* Single credit link on the right — hover reveals it is a link to aperfectday */
-  .header-credit-link { margin-left:auto; align-self:center; color:rgba(245,239,230,0.82); text-decoration:none; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding-right:8px; transition:color 0.15s; }
-  .header-credit-link:hover { color:#f5efe6; text-decoration:underline; }
+  .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.82) !important; text-decoration:none !important; cursor:pointer; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding-right:8px; transition:color 0.15s; }
+  .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; }
   @media (max-width:768px){
     .header-text { display:flex !important; }
     .header-credit-link { font-size:0.58rem; white-space:normal; text-align:right; max-width:104px; line-height:1.25; }
@@ -116,7 +116,8 @@
   #pc-note { white-space: pre-line; }
 
   /* ── Filter pills ── */
-  .filter-bar .pill { font-size:0.98rem !important; font-weight:600 !important; padding:9px 17px !important; letter-spacing:0.005em; }
+  .filter-bar { padding-top:2px !important; padding-bottom:4px !important; margin-top:0 !important; }
+  .filter-bar .pill { font-family:'Rubik',sans-serif !important; font-size:0.98rem !important; font-weight:600 !important; padding:9px 17px !important; letter-spacing:0.005em; }
   .filter-bar .pill .dot { width:10px !important; height:10px !important; }
   @media (max-width:768px){ .filter-bar .pill { font-size:0.9rem !important; padding:8px 14px !important; } }
   .filter-bar .pill.active { background:#3a201c !important; border-color:#3a201c !important; color:#fff !important; }
@@ -128,12 +129,12 @@
   #nbhd-title { color:#3a201c !important; bottom:86px !important; font-weight:700 !important; font-size:0.8rem !important; letter-spacing:0.14em !important; }
   .nbhd-ring { width:48px !important; height:48px !important; padding:2px !important; }
   .nbhd-ring-inner { font-size:18px !important; }
-  .nbhd-label { color:#f5efe6 !important; font-size:0.72rem !important; font-weight:600 !important; max-width:82px !important; line-height:1.2 !important; }
+  .nbhd-label { font-family:'Rubik',sans-serif !important; color:#f5efe6 !important; font-size:0.72rem !important; font-weight:600 !important; max-width:82px !important; line-height:1.2 !important; }
   .nbhd-active .nbhd-ring { background:#e9c9b0 !important; color:#3a201c !important; }
 
   #offline-save-btn, #list-toggle-desktop, .desktop-list-btn, .list-toggle { background:#3a201c !important; }
   .trip-btn-circle { background:#3a201c !important; border-color:rgba(233,201,176,0.7) !important; }
-  .trip-btn-circle.active { background:#e9c9b0 !important; }
+  .trip-btn-circle.active { background:#e9c9b0 !important; border-color:#3a201c !important; border-width:3px !important; }
   button[onclick="restartTutorial()"] { background:#3a201c !important; color:#e9c9b0 !important; border-color:rgba(233,201,176,0.5) !important; }
 </style>
 </head>
