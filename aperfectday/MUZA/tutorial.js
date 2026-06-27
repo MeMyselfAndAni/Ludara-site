@@ -29,7 +29,7 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Straight talk from a local insider: what makes it worth your time, when to go, and what to ask for. Scroll down for the phone number and website.',
+      body: 'Each card has the place in Hebrew and English, what is on display now and the current exhibition, plus a visitor tip. Scroll for the website and a walking route to it.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
