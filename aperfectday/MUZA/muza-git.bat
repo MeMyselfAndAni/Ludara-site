@@ -27,17 +27,17 @@ if not exist "%DEPLOY%\images" mkdir "%DEPLOY%\images"
 
 echo.
 echo Copying guide files into the live site...
-for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg universal-distance-functionality.js) do (
+for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg universal-distance-functionality.js minimize-images.js) do (
   if exist "%WORKING%\%%F" (
     copy /Y "%WORKING%\%%F" "%DEPLOY%\%%F" >nul && echo   copied %%F
   ) else (
     echo   [skip] %%F not found
   )
 )
-rem --- Copy any place images (silent if none yet) ---
-if exist "%WORKING%\images\*" (
-  xcopy /Y /Q "%WORKING%\images\*" "%DEPLOY%\images\" >nul && echo   copied images\
-)
+rem --- IMAGES ARE MANAGED DIRECTLY IN THE DEPLOY FOLDER. ---
+rem --- This script does NOT copy or overwrite them, so your edits in
+rem ---   %DEPLOY%\images  are preserved. ---
+echo   (images in the deploy folder are left untouched)
 
 echo.
 echo Navigating to deploy folder...

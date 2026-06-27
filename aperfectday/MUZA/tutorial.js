@@ -13,7 +13,7 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 25 places across the museum grounds: every pavilion, the exhibition showing inside it, and the gardens and 3,000-year-old tell between them. Tap Next to begin.',
+      body: 'One map. 26 places across the museum grounds: every pavilion, the exhibition showing inside it, and the gardens and 3,000-year-old tell between them. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,

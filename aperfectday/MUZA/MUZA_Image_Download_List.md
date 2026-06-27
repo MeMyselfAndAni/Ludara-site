@@ -7,7 +7,7 @@ All photos are the museum's own, from **eretzmuseum.org.il**. Save each URL into
 Tip: in Chrome, right-click the image → "Save image as…" → set the filename to `place-<id>.jpg`.
 A few URLs have Hebrew characters — they still open and download fine; just rename on save.
 
-## Images found (19)
+## Images found (20)
 
 | Save as | Place | Source image URL |
 |---|---|---|
@@ -28,6 +28,7 @@ A few URLs have Hebrew characters — they still open and download fine; just re
 | place-21.jpg | Laski Planetarium | https://www.eretzmuseum.org.il/wp-content/uploads/2023/06/MUZA-Planetarium_photo-leonid-Pedrol_310-1024x822.jpg |
 | place-22.jpg | Main Entrance & grounds (aerial) | https://www.eretzmuseum.org.il/wp-content/uploads/2023/08/DJI_0006-1024x576.jpg |
 | place-25.jpg | Nofim Hall (Photo: Tal Izsak) | https://www.eretzmuseum.org.il/wp-content/uploads/2024/10/אולם-נופים-מוזא_צילום-טל-איזק_2-1024x577.jpg |
+| place-26.jpg | Yael Garden — The Bird Mosaic (Photo: Nof Harari) | https://www.eretzmuseum.org.il/wp-content/uploads/2024/04/PXL_20240403_095947870.MP_-1024x576.jpg |
 
 ### From Wikimedia Commons (free-licensed — credited to the photographer)
 
