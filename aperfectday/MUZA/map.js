@@ -64,9 +64,9 @@ function initMap() {
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
     center: MAP_CENTER,
     zoom: MAP_ZOOM,
-    minZoom: 15.5,
+    minZoom: 12,
     maxZoom: 19,
-    maxBounds: [[34.7905, 32.0995], [34.7995, 32.1048]],  // lock to the museum grounds
+    // No maxBounds — the map pans freely in every direction so you can recentre on any pavilion.
     attributionControl: false,
   });
 
