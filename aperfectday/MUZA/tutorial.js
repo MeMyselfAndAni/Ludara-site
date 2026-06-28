@@ -72,7 +72,7 @@
       btn: 'Next'
     },
     {
-      title: 'Navigate',
+      title: 'Navigate with Google Maps',
       body: 'Ready to walk? Open your full route in Google Maps, or tap any saved place to navigate there directly.',
       target: '#sheet button[onclick="openTripInMaps()"]',
       cardPos: 'center',
