@@ -104,10 +104,10 @@
       btn: 'Next'
     },
     {
-      title: 'Navigate with and without Wifi',
-      body: 'The museum grounds are large and the signs are sparse. Tap the circle to find yourself on the map. Save it offline and it works without Wifi too, essential across the large grounds.',
+      title: 'Navigate',
+      body: 'The museum grounds are large and the signs are sparse. Tap the circle to find yourself on the map.',
       target: null,
-      targets: ['#locate-btn', '#offline-save-btn'],
+      targets: ['#locate-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
       cardPos: 'center',
       demo: 'close-sheet',
