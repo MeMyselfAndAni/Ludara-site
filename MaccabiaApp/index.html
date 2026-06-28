@@ -102,10 +102,12 @@
     unicode-range:U+0590-05FF,U+FB1D-FB4F;}
 
   @media(max-width:640px){
-    html,body{height:100%}
-    body{padding:6px}
-    .app{height:calc(100vh - 12px);height:calc(100dvh - 12px);max-height:calc(100dvh - 12px);padding:12px 10px 12px}
+    body{padding:6px;align-items:flex-start}
+    .app{height:auto;max-height:none;padding:12px 10px 14px}
     .app:before{inset:4px}
+    .screen.active{justify-content:flex-start}
+    .hero{flex:0 0 auto}
+    .hero img{max-height:38vh}
     #cardCanvas{max-height:none;width:100%}
     .screen h2{font-size:20px}
     .title-main{font-size:24px}
@@ -141,13 +143,13 @@
   <section id="select" class="screen">
     <h2>Select Your Sport</h2>
     <div class="prompt he">בחר את הענף שלך · choose one of the 16 sports</div>
-    <div id="loadMsg" class="center loadnote">Loading the 1932 sports poster…</div>
-    <div id="grid" class="grid"></div>
-    <div id="selInfo" class="selinfo empty">No sport selected yet · בחר ענף</div>
     <div class="btnrow">
       <button class="btn ghost" onclick="go('welcome')">Back</button>
       <button class="btn" id="toName" onclick="go('name')" disabled style="opacity:.5">Next · המשך</button>
     </div>
+    <div id="selInfo" class="selinfo empty">No sport selected yet · בחר ענף</div>
+    <div id="loadMsg" class="center loadnote">Loading the 1932 sports poster…</div>
+    <div id="grid" class="grid"></div>
   </section>
 
   <section id="name" class="screen">
@@ -376,14 +378,14 @@ function shareCard(){
   const nm=($('nameInput').value.trim()||'participant').replace(/[^\w֐-׿-]+/g,'_');
   const url='https://ludara.ai/maccabiaapp';
   const title='First Maccabiah 1932 — Participant Card';
-  const text='Make your own First Maccabiah 1932 participant card: '+url+'\nAsk me about the Maccabiah Tour: https://www.instagram.com/holyland_with_maria/';
+  const text='Make your own First Maccabiah 1932 participant card: '+url;
   cv.toBlob(async (blob)=>{
     const file=new File([blob],'Maccabiah1932_'+nm+'.png',{type:'image/png'});
     try{
       if(navigator.canShare && navigator.canShare({files:[file]})){
-        await navigator.share({files:[file], title, text, url});
+        await navigator.share({files:[file], title, text});
       } else if(navigator.share){
-        await navigator.share({title, text, url});
+        await navigator.share({title, text});
       } else if(navigator.clipboard){
         await navigator.clipboard.writeText(text);
         alert('Sharing is not supported here - copied this to your clipboard:\n'+text);
@@ -394,11 +396,25 @@ function shareCard(){
   }, 'image/png');
 }
 
+function dataURLToFile(durl,name){
+  const parts=durl.split(','); const mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/png';
+  const bin=atob(parts[1]); const u8=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+  return new File([u8],name,{type:mime});
+}
 function downloadCard(){
-  const cv=$('cardCanvas'), a=document.createElement('a');
+  const cv=$('cardCanvas');
   const nm=($('nameInput').value.trim()||'participant').replace(/[^\w֐-׿-]+/g,'_');
-  a.download='Maccabiah1932_'+nm+'.png';
-  a.href=cv.toDataURL('image/png'); a.click();
+  const durl=cv.toDataURL('image/png');
+  const file=dataURLToFile(durl,'Maccabiah1932_'+nm+'.png');
+  const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isMobile && navigator.canShare && navigator.canShare({files:[file]})){
+    // iOS/Android: opens the share sheet -> choose "Save Image" to add to Photos
+    navigator.share({files:[file], title:'First Maccabiah 1932 — Participant Card'}).catch(()=>{});
+    return;
+  }
+  const a=document.createElement('a');
+  a.download=file.name; a.href=durl; a.click();
 }
 
 const ticketImg=new Image(); let ticketReady=false; ticketImg.onload=()=>{ticketReady=true;}; ticketImg.src=TICKET_DATA;
