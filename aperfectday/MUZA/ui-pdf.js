@@ -53,6 +53,13 @@ async function generatePDF(){
     return;
   }
 
+  // Open the print window NOW — synchronously within the tap — so mobile browsers
+  // don't block it as a pop-up. It is filled in once the data is ready.
+  const win = window.open('', '_blank');
+  if (win) {
+    win.document.write('<!doctype html><meta charset="utf-8"><title>A Perfect Day</title><body style="margin:0;font-family:-apple-system,Segoe UI,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#7a3b2e;background:#f7f1e8;font-size:18px">Preparing your guide…</body>');
+  }
+
   // Show loading message
   if (typeof _toast === 'function') {
     _toast('📸 Loading images for PDF...', 8000);
@@ -484,9 +491,12 @@ window.addEventListener('load', function(){
 </body>
 </html>`;
 
-  // Open in new window; the page prints itself once its images have loaded (inline script above)
-  const win = window.open('', '_blank');
-  if (!win) { alert('Please allow pop-ups so the PDF guide can open.'); return; }
-  win.document.write(html);
-  win.document.close();
+  // Fill the already-open window with the guide; it prints itself once its images load (inline script above).
+  if (win) {
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  } else if (typeof _toast === 'function') {
+    _toast('Could not open the PDF tab — please tap PDF again.', 4000);
+  }
 }

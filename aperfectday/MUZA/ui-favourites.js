@@ -17,7 +17,7 @@ function _toast(msg, durationMs){
     'border:2px solid ' + brand + ';' +
     'font-size:0.82rem;font-weight:600;font-family:Inter,sans-serif;' +
     'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:80vw;text-align:center;' +
-    'animation:_apd-fadein 0.2s ease;pointer-events:none;white-space:nowrap;';
+    'animation:_apd-fadein 0.2s ease;pointer-events:none;white-space:normal;line-height:1.35;word-break:break-word;';
   el.textContent = msg;
   if(!document.getElementById('_apd-toast-style')){
     const s = document.createElement('style');
