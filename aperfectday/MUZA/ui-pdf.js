@@ -116,8 +116,8 @@ async function generatePDF(){
 
     return `
     <div class="pdf-card">
-      <div class="pdf-card-photo" style="${photoUrl ? `background-image:url('${photoUrl}')` : gradient}">
-        ${!photoUrl ? `<span class="pdf-card-emoji">${p.emoji}</span>` : ''}
+      <div class="pdf-card-photo"${photoUrl ? '' : ` style="background:${gradient}"`}>
+        ${photoUrl ? `<img class="pdf-card-img" src="${photoUrl}" alt="">` : `<span class="pdf-card-emoji">${p.emoji}</span>`}
         <div class="pdf-card-num">${i+1}</div>
       </div>
       <div class="pdf-card-body">
@@ -265,13 +265,21 @@ async function generatePDF(){
   .pdf-card-photo {
     width: 220px;
     flex-shrink: 0;
-    background-size: cover;
-    background-position: center;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
     padding: 12px;
     position: relative;
+    overflow: hidden;
+  }
+  .pdf-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
   .pdf-card-emoji {
     font-size: 3.5rem;
@@ -464,19 +472,21 @@ async function generatePDF(){
   <div class="pdf-brand-footer-url">ludara.ai</div>
 </div>
 
+<script>
+window.addEventListener('load', function(){
+  var imgs = Array.prototype.slice.call(document.images);
+  Promise.all(imgs.map(function(im){
+    return (im.complete && im.naturalWidth) ? Promise.resolve()
+      : new Promise(function(res){ im.addEventListener('load', res); im.addEventListener('error', res); setTimeout(res, 4000); });
+  })).then(function(){ setTimeout(function(){ window.focus(); window.print(); }, 400); });
+});
+</script>
 </body>
 </html>`;
 
-  // Open in new window → user hits Cmd/Ctrl+P or Save as PDF
+  // Open in new window; the page prints itself once its images have loaded (inline script above)
   const win = window.open('', '_blank');
+  if (!win) { alert('Please allow pop-ups so the PDF guide can open.'); return; }
   win.document.write(html);
   win.document.close();
-
-  // Trigger print dialog after images load
-  win.onload = () => {
-    setTimeout(() => {
-      win.focus();
-      win.print();
-    }, 1200);
-  };
 }
