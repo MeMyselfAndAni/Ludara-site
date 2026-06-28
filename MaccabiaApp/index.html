@@ -76,8 +76,8 @@
   .selinfo.empty{color:#9a8c66;font-weight:400}
   .selinfo .he{color:var(--ink2)}
   .cell canvas{width:100%;height:auto;max-height:17vh;object-fit:contain;display:block;background:var(--paper)}
-  .cell .lab{font-size:12px;font-weight:700;margin-top:4px;color:var(--ink);line-height:1.15;min-height:30px;display:flex;align-items:center;justify-content:center;text-align:center}
-  .cell .lab .h{display:block;direction:rtl;color:var(--ink2);font-size:11px}
+  .cell .lab{margin-top:4px;line-height:1.15;min-height:26px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .cell .lab .h{display:block;direction:rtl;color:var(--ink2);font-size:16px;font-weight:700}
   #name .card-frame{width:100%;max-width:520px;margin:0 auto;text-align:center}
   label.fld{display:block;text-align:left;margin:16px 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#5a4e2e}
   input[type=text]{width:100%;padding:12px 14px;font-size:20px;font-family:Georgia,serif;border:2px solid var(--ink);background:var(--paper2);color:var(--ink)}
@@ -102,7 +102,7 @@
     unicode-range:U+0590-05FF,U+FB1D-FB4F;}
 
   @media(max-width:640px){
-    body{padding:6px;align-items:flex-start}
+    body{padding:6px}
     .app{height:auto;max-height:none;padding:12px 10px 14px}
     .app:before{inset:4px}
     .screen.active{justify-content:flex-start}
@@ -278,7 +278,7 @@ function renderGrid(){
     cv.getContext('2d').drawImage(slices[i],0,0);
     cell.appendChild(cv);
     const lab=document.createElement('div'); lab.className='lab';
-    lab.innerHTML='<span>'+s.en+'<span class="h">'+s.he+'</span></span>';
+    lab.innerHTML='<span class="h">'+s.he+'</span>';
     cell.appendChild(lab);
     cell.onclick=()=>selectSport(i);
     g.appendChild(cell);
@@ -334,9 +334,9 @@ function drawEmblem(ctx,x,y,s,color){
 }
 
 function drawCard(name){
-  const cv=$('cardCanvas'); cv.width=1683; cv.height=1120;
+  const cv=$('cardCanvas'); cv.width=1080; cv.height=1366;
   const ctx=cv.getContext('2d'); const CW=cv.width, CH=cv.height;
-  const INK='#1f3a6e',INK2='#2b4a8b',ACC='#c0492b',GOLD='#9a8c66';
+  const INK='#1f3a6e',INK2='#2b4a8b',GOLD='#9a8c66';
   const g=ctx.createLinearGradient(0,0,0,CH); g.addColorStop(0,'#f4ecd6'); g.addColorStop(1,'#e7dcc0');
   ctx.fillStyle=g; ctx.fillRect(0,0,CW,CH);
   ctx.strokeStyle=INK; ctx.lineWidth=4; ctx.strokeRect(14,14,CW-28,CH-28);
@@ -344,33 +344,32 @@ function drawCard(name){
   ctx.textBaseline='middle';
   ctx.fillStyle=INK; ctx.textAlign='center'; ctx.direction='ltr';
   ctx.font='700 34px Georgia, serif';
-  ctx.fillText('FIRST MACCABIAH · TEL-AVIV 1932', CW/2, 58);
-  const ph=950, pw=posterReady?Math.round(posterImg.naturalWidth*ph/posterImg.naturalHeight):663;
-  const px=46, py=110;
-  if(posterReady) ctx.drawImage(posterImg,px,py,pw,ph);
-  ctx.strokeStyle=INK; ctx.lineWidth=3; ctx.strokeRect(px-3,py-3,pw+6,ph+6);
-  const rx=px+pw+44, rw=CW-rx-44;
-  const tw=rw, th=ticketReady?Math.round(ticketImg.naturalHeight*tw/ticketImg.naturalWidth):Math.round(tw/1.571);
-  const tx=rx, ty=110;
+  ctx.fillText('FIRST MACCABIAH · TEL-AVIV 1932', CW/2, 56);
+  // participant card (top, full width)
+  const tx=44, ty=96, tw=CW-88;
+  const th=ticketReady?Math.round(ticketImg.naturalHeight*tw/ticketImg.naturalWidth):Math.round(tw/1.564);
   if(ticketReady) ctx.drawImage(ticketImg,tx,ty,tw,th);
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.strokeRect(tx-2,ty-2,tw+4,th+4);
-  const k=tw/ticketImg.naturalWidth;
-  const TK=(xL,yL)=>[tx+xL*k, ty+yL*k];
-  let p;
+  // handwritten name on the card
+  const k=tw/(ticketReady?ticketImg.naturalWidth:1569);
   const isHe=/[֐-׿]/.test(name);
   ctx.fillStyle=INK2; ctx.direction=isHe?'rtl':'ltr'; ctx.textAlign='center';
   ctx.font=Math.round(64*k)+'px "HandName", "Segoe Script", cursive';
-  p=TK(1000,600); ctx.fillText(name,p[0],p[1]);
+  ctx.fillText(name, tx+1000*k, ty+600*k);
+  // below: First Maccabiah poster + selected sport square
+  const y0=ty+th+34, rh=520;
+  const pw=posterReady?Math.round(posterImg.naturalWidth*rh/posterImg.naturalHeight):363;
   const src=slices[selected];
-  const sw=270, sh=Math.round(sw*src.height/src.width);
-  const sx=rx+(rw-sw)/2, sy=ty+th+30;
-  ctx.fillStyle='#fff'; ctx.fillRect(sx-6,sy-6,sw+12,sh+12);
-  ctx.strokeStyle=INK; ctx.lineWidth=3; ctx.strokeRect(sx-6,sy-6,sw+12,sh+12);
-  ctx.drawImage(src,sx,sy,sw,sh);
-  ctx.fillStyle=INK; ctx.direction='ltr'; ctx.textAlign='center'; ctx.font='700 24px Georgia, serif';
-  ctx.fillText((selected+1)+'. '+SPORTS[selected].en, sx+sw/2, sy+sh+24);
-  ctx.direction='rtl'; ctx.fillStyle=INK2; ctx.font='600 22px Georgia, serif';
-  ctx.fillText(SPORTS[selected].he, sx+sw/2, sy+sh+50);
+  const sw=Math.round(src.width*rh/src.height);
+  const gap=50, total=pw+gap+sw, startx=Math.round((CW-total)/2);
+  const px=startx, sx=startx+pw+gap;
+  if(posterReady) ctx.drawImage(posterImg,px,y0,pw,rh);
+  ctx.strokeStyle=INK; ctx.lineWidth=3; ctx.strokeRect(px-3,y0-3,pw+6,rh+6);
+  ctx.fillStyle='#fff'; ctx.fillRect(sx-5,y0-5,sw+10,rh+10);
+  ctx.strokeStyle=INK; ctx.lineWidth=3; ctx.strokeRect(sx-5,y0-5,sw+10,rh+10);
+  ctx.drawImage(src,sx,y0,sw,rh);
+  ctx.fillStyle=INK2; ctx.direction='rtl'; ctx.textAlign='center'; ctx.font='700 36px Georgia, serif';
+  ctx.fillText(SPORTS[selected].he, sx+sw/2, y0+rh+38);
 }
 
 function shareCard(){
