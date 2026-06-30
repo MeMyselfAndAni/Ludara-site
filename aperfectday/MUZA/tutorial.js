@@ -13,15 +13,15 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 26 places across the museum grounds: every pavilion, the exhibition showing inside it, and the gardens and 3,000-year-old tell between them. Tap Next to begin.',
+      body: 'One interactive map with 26 attractions to explore: temporary and permanent exhibitions, beautiful gardens and a 3,000-year-old tell.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a place worth your time: a pavilion of ancient glass, a 3,000-year-old tell, the exhibition showing inside each building. Tap any icon to see what is there.',
+      title: 'The Eretz Israel Museum Guide',
+      body: 'Every pin is worth your time: a groundbreaking crafts & design biennale, a pavilion of ancient glass, an ancient olive press, fine mosaics, and relaxing gardens. Tap any icon to see what is there.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -137,9 +137,9 @@
   var TUT_BTN_HE = { 'Next':'הבא', 'Done':'סיום', 'Done ✓':'סיום ✓' };
   var TUT_HE = {
     ['Welcome to Your Perfect Day in ' + CITY]: { title:'ברוכים הבאים ליום מושלם במוזיאון ארץ ישראל',
-      body:'מפה אחת. 26 מקומות ברחבי המוזיאון: כל ביתן, התערוכה שבתוכו, והגנים והתל בן 3,000 השנה שביניהם. הקישו «הבא» כדי להתחיל.' },
-    ['Our Curated ' + CITY + ' Guide']: { title:'המדריך שלנו למוזיאון ארץ ישראל',
-      body:'כל סיכה היא מקום ששווה את זמנכם: ביתן של זכוכית עתיקה, תל בן 3,000 שנה, והתערוכה שבכל מבנה. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
+      body:'מפה אינטראקטיבית אחת עם 26 אטרקציות לגלות: תערוכות מתחלפות וקבועות, גנים יפים ותל בן 3,000 שנה.' },
+    'The Eretz Israel Museum Guide': { title:'המדריך למוזיאון ארץ ישראל',
+      body:'כל סיכה שווה את זמנכם: ביאנלה פורצת דרך לאומנות ולעיצוב, ביתן של זכוכית עתיקה, בית בד עתיק, פסיפסים, וגנים מרגיעים. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
     'Inside the place card': { title:'בתוך כרטיס המקום',
       body:'בכל כרטיס תמצאו את המקום בעברית ובאנגלית, מה מוצג עכשיו והתערוכה הנוכחית, וטיפ למבקר. גללו לאתר וגם למסלול הליכה אליו.' },
     'Filter by place type': { title:'סינון לפי סוג',
