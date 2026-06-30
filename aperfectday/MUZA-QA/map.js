@@ -57,6 +57,23 @@ const NBHD_APPROX_CENTERS = {
   'park': { lat: 32.10140, lng: 34.79440 },
 };
 
+// ─── Basemap label language ──────────────────────────────────────────────────
+// Hebrew mode → prefer Hebrew street/place names; English mode → Latin/English.
+function setBasemapLang(lang) {
+  if (typeof map === 'undefined' || !map || !map.getStyle) return;
+  var expr = (lang === 'he')
+    ? ['coalesce', ['get', 'name:he'], ['get', 'name'], ['get', 'name:en']]
+    : ['coalesce', ['get', 'name:en'], ['get', 'name']];
+  try {
+    var layers = map.getStyle().layers || [];
+    layers.forEach(function (layer) {
+      if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+        try { map.setLayoutProperty(layer.id, 'text-field', expr); } catch (e) {}
+      }
+    });
+  } catch (e) {}
+}
+
 // ─── Map initialisation ───────────────────────────────────────────────────────
 function initMap() {
   map = new maplibregl.Map({
@@ -83,15 +100,7 @@ function initMap() {
       const loadingEl = document.getElementById('loading');
       if (loadingEl) loadingEl.style.display = 'none';
 
-      map.getStyle().layers.forEach(layer => {
-        if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-          try {
-            map.setLayoutProperty(layer.id, 'text-field', [
-              'coalesce', ['get', 'name:en'], ['get', 'name'],
-            ]);
-          } catch(e) {}
-        }
-      });
+      if (typeof setBasemapLang === 'function') setBasemapLang(typeof getLang === 'function' ? getLang() : 'he');
 
       if (typeof applyLang === 'function' && typeof getLang === 'function') applyLang(getLang());
       NBHD_CIRCLES = buildNbhdCircles();

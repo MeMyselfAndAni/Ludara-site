@@ -109,6 +109,7 @@ function applyLang(lang){
   updateLangToggle();
 
   // 5) re-render dynamic UI
+  if(typeof setBasemapLang === 'function') setBasemapLang(lang);
   if(typeof renderList === 'function') renderList();
   if(typeof CARD_PLACE !== 'undefined' && CARD_PLACE && typeof _populateCard === 'function') _populateCard(CARD_PLACE);
   if(typeof refreshSavedPill === 'function') refreshSavedPill();
@@ -116,6 +117,12 @@ function applyLang(lang){
 }
 
 function toggleLang(){ applyLang(LANG === 'he' ? 'en' : 'he'); }
+
+// Splash language chooser: set the language, then enter the map
+function enterIn(lang){
+  applyLang(lang);
+  if(typeof closeSplash === 'function') closeSplash();
+}
 
 // Localise the chrome as early as possible (before the map finishes loading)
 document.addEventListener('DOMContentLoaded', function(){ applyLang(getLang()); });

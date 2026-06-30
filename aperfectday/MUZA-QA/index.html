@@ -169,7 +169,11 @@
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub he">ברוכים הבאים למוז״א, מוזיאון ארץ ישראל — ביתני קרמיקה, זכוכית, מטבעות, נחושת ופולקלור סביב תל בן 3,000 שנה וגנים ירוקים. המדריך יעזור לכם למצוא כל ביתן ולראות מה מוצג בו עכשיו.</p>
     <p class="splash-sub">Welcome to MUZA, the Eretz Israel Museum — pavilions of ceramics, glass, coins, copper and folklore around a 3,000-year-old tell and green gardens. This guide helps you find each one and see what's on show inside it now.</p>
-    <button class="splash-btn" onclick="closeSplash()">כניסה · Enter the Museum</button>
+    <div class="splash-lang-label">בחרו שפה · Choose your language</div>
+    <div class="splash-lang-row">
+      <button class="splash-btn" onclick="enterIn('he')">כניסה בעברית</button>
+      <button class="splash-btn splash-btn-en" onclick="enterIn('en')">Enter in English</button>
+    </div>
     <div class="splash-note">מידע על התערוכות עדכני ליוני 2026 · Exhibition information current as of June 2026.</div>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
@@ -184,10 +188,14 @@
 </div>
 
 <style>
-  /* ── Language toggle pill ───────────────────────────────── */
-  .pill-lang{ background:#9e2b25 !important; color:#fff !important; border-color:#9e2b25 !important; font-weight:600; }
-  .pill-lang b{ font-weight:800; }
-  .pill-lang #lang-label{ display:inline-flex; align-items:center; gap:3px; }
+  /* ── Language toggle pill — pinned to the right of the filter bar ── */
+  .filter-bar{ padding-right:6px; }
+  .pill-lang{ position:sticky; right:4px; z-index:6;
+    background:#9e2b25 !important; color:#fff !important; border:1.5px solid #fff !important;
+    font-weight:700; flex-shrink:0;
+    box-shadow:0 0 0 2px rgba(158,43,37,0.30), -12px 0 14px -6px rgba(0,0,0,0.45); }
+  .pill-lang b{ font-weight:900; }
+  .pill-lang #lang-label{ display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
 
   /* ── Hebrew mode: right-align text areas (map chrome stays LTR) ── */
   body.lang-he .pc-title,
@@ -201,9 +209,11 @@
   body.lang-he .sheet-title{ direction:rtl; text-align:right; }
   body.lang-he .pc-tip{ text-align:right; }
 
-  /* Splash: show only the active language's intro paragraph */
-  body.lang-he  .splash-sub:not(.he){ display:none; }
-  body:not(.lang-he) .splash-sub.he{ display:none; }
+  /* Splash language chooser — both intros show; visitor picks a language */
+  .splash-lang-label{ font-family:'Rubik',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#e9c9b0; margin:0 0 14px; }
+  .splash-lang-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .splash-btn-en{ background:transparent !important; color:#e9c9b0 !important; }
+  .splash-btn-en:hover{ background:#e9c9b0 !important; color:#3a201c !important; }
 </style>
 
 <!-- Header -->
@@ -229,7 +239,6 @@
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill pill-lang" id="pill-lang" onclick="toggleLang()" title="Language · שפה"><span id="lang-label">🌐 <b>EN</b> · עב</span></button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> <span data-i18n="f_saved">Saved</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span><span data-i18n="f_all">All</span></button>
   <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#9e2b25"></span><span data-i18n="f_pavilion">Pavilions</span></button>
@@ -237,6 +246,7 @@
   <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_heritage">Heritage</span></button>
   <button class="pill" onclick="fc(this,'outdoor')"><span class="dot" style="background:#3f7d4e"></span><span data-i18n="f_outdoor">Gardens &amp; Outdoor</span></button>
   <button class="pill" onclick="fc(this,'service')"><span class="dot" style="background:#3a6ea5"></span><span data-i18n="f_service">Services</span></button>
+  <button class="pill pill-lang" id="pill-lang" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label">🌐 <b>EN</b> · עב</span></button>
 </div>
 
 <!-- Map -->
