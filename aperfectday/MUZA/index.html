@@ -93,7 +93,7 @@
 
   /* ── Brand fonts ── */
   body { font-family:'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .pc-title, #pc-title { font-family:'Suez One', Georgia, serif; font-weight:700; letter-spacing:0.01em; }
+  .pc-title, #pc-title { font-family:'Rubik', -apple-system, 'Segoe UI', sans-serif; font-weight:700; letter-spacing:-0.005em; line-height:1.2; }
   .place-name { font-family:'Rubik', sans-serif !important; font-size:1.05rem !important; font-weight:600 !important; line-height:1.25 !important; }
   .place-type { font-size:0.74rem !important; }
 
@@ -122,7 +122,9 @@
     .header-credit-link { order:2 !important; position:static !important; flex:0 0 auto !important; align-self:center !important; margin:0 !important; font-size:0.72rem !important; max-width:112px !important; white-space:normal !important; text-align:right !important; line-height:1.25 !important; padding:1px 2px 1px 4px !important; }
     .header-muza-center { height:17px !important; max-width:30vw !important; }
     .filter-bar { top:66px !important; margin-top:0 !important; }
-    .list-toggle { top:111px !important; }   /* "Places" button, ~4mm lower */
+    #lang-fixed { top:108px !important; right:10px !important; }   /* language toggle */
+    #lang-menu { top:146px !important; right:10px !important; }     /* menu opens below the toggle */
+    #list-toggle { top:150px !important; }                          /* "Places" button sits right below the language toggle */
   }
   /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
   #pc-note { white-space: pre-line; }
@@ -167,10 +169,22 @@
     <h1 class="splash-title">Eretz Israel Museum</h1>
     <div class="splash-he">מוזיאון ארץ ישראל · מוז״א</div>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub he">ברוכים הבאים למוז״א, מוזיאון ארץ ישראל — ביתני קרמיקה, זכוכית, מטבעות, נחושת ופולקלור סביב תל בן 3,000 שנה וגנים ירוקים. המדריך יעזור לכם למצוא כל ביתן ולראות מה מוצג בו עכשיו.</p>
-    <p class="splash-sub">Welcome to MUZA, the Eretz Israel Museum — pavilions of ceramics, glass, coins, copper and folklore around a 3,000-year-old tell and green gardens. This guide helps you find each one and see what's on show inside it now.</p>
-    <button class="splash-btn" onclick="closeSplash()">כניסה · Enter the Museum</button>
-    <div class="splash-note">מידע על התערוכות עדכני ליוני 2026 · Exhibition information current as of June 2026.</div>
+    <!-- Step 1: choose language (compact — just under the museum name) -->
+    <div id="splash-choose">
+      <div class="splash-lang-label">בחרו שפה · Choose your language</div>
+      <div class="splash-lang-row" id="splash-lang-row"><!-- buttons generated from LANGS by buildSplashLangButtons() --></div>
+    </div>
+
+    <!-- Step 2: selected-language intro, hours and Enter button -->
+    <div id="splash-info" style="display:none">
+      <p class="splash-sub" id="splash-sub-text"></p>
+      <div style="margin:0 auto 22px;padding:10px 18px;border:1px solid rgba(233,201,176,0.45);border-radius:7px;display:inline-block;font-family:'Rubik',sans-serif;line-height:1.5">
+        <div id="splash-hours-text" style="font-size:0.9rem;color:#f7f1e8"></div>
+      </div>
+      <div><button class="splash-btn" id="splash-enter-btn" onclick="closeSplash()" style="min-width:240px">Enter the Museum Map</button></div>
+      <div style="margin-top:14px"><a href="#" onclick="splashReset();return false" style="color:#e9c9b0;font-size:0.78rem;text-decoration:none">↩ בחרו שפה אחרת · change language</a></div>
+      <div class="splash-note" id="splash-note-text" style="margin-top:16px"></div>
+    </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
     </div>
@@ -183,6 +197,47 @@
   <div class="loading-text">Loading the museum grounds…</div>
 </div>
 
+<style>
+  /* ── Language toggle — fixed, upper-right, above the Places button ── */
+  #lang-fixed{ position:fixed; z-index:430; top:128px; right:16px;
+    background:#9e2b25; color:#fff; border:1.5px solid #fff; border-radius:50px;
+    padding:6px 12px; font-family:'Rubik',sans-serif; font-weight:700; font-size:0.72rem;
+    line-height:1; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.42); white-space:nowrap; }
+  #lang-fixed b{ font-weight:800; }
+  #lang-fixed #lang-label{ display:inline-flex; align-items:center; gap:5px; }
+  #lang-fixed svg{ display:inline-block; vertical-align:-2px; border-radius:2px; }
+  /* Language menu (opens below the toggle; scales to any number of languages) */
+  #lang-menu{ display:none; position:fixed; z-index:431; top:166px; right:16px; background:#3a201c; border:1.5px solid #e9c9b0; border-radius:12px; padding:5px; box-shadow:0 6px 20px rgba(0,0,0,0.5); }
+  #lang-menu .lang-opt{ display:flex; align-items:center; gap:8px; width:100%; min-width:132px; background:none; border:none; color:#f5efe6; font-family:'Rubik',sans-serif; font-size:0.86rem; font-weight:600; padding:9px 14px; border-radius:8px; cursor:pointer; white-space:nowrap; text-align:start; }
+  #lang-menu .lang-opt:hover{ background:rgba(233,201,176,0.16); }
+  #lang-menu .lang-opt.active{ background:#9e2b25; }
+  #lang-menu .lang-opt svg{ border-radius:2px; flex:0 0 auto; }
+  /* Desktop: keep the Places button clearly below the language toggle (overrides styles.css top:140) */
+  @media (min-width:769px){
+    #lang-fixed { top:124px; right:18px; }
+    #lang-menu  { top:162px; right:18px; }
+    #list-toggle { top:184px !important; right:18px !important; }
+  }
+
+  /* ── Hebrew mode: right-align text areas (map chrome stays LTR) ── */
+  body.rtl .pc-title,
+  body.rtl .pc-type,
+  body.rtl .pc-address,
+  body.rtl .pc-note,
+  body.rtl .pc-tip,
+  body.rtl #pc-tip-text,
+  body.rtl .pc-cat,
+  body.rtl .place-info,
+  body.rtl .sheet-title{ direction:rtl; text-align:right; }
+  body.rtl .pc-tip{ text-align:right; }
+
+  /* Splash language chooser — both intros show; visitor picks a language */
+  .splash-lang-label{ font-family:'Rubik',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#e9c9b0; margin:0 0 14px; }
+  .splash-lang-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .splash-btn-en{ background:transparent !important; color:#e9c9b0 !important; }
+  .splash-btn-en:hover{ background:#e9c9b0 !important; color:#3a201c !important; }
+</style>
+
 <!-- Header -->
 <header>
   <div class="header-title">
@@ -191,35 +246,39 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Eretz Israel Museum</em> Guide</h1>
-      <div class="header-sub">Pavilions &amp; current exhibitions · מוז״א</div>
+      <h1 data-i18n-html="hdr_guide_h1"><em>Eretz Israel Museum</em> Guide</h1>
+      <div class="header-sub" data-i18n="hdr_sub">Pavilions &amp; current exhibitions · מוז״א</div>
     </div>
     <div class="header-apd-mobile">
-      <div class="header-apd-m1">A Perfect Day in</div>
-      <div class="header-apd-m1b">Eretz Israel Museum</div>
-      <div class="header-apd-m2">Pavilions &amp; current exhibitions · מוז״א</div>
+      <div class="header-apd-m1" data-i18n="hdr_apd_in">A Perfect Day in</div>
+      <div class="header-apd-m1b" data-i18n="hdr_museum">Eretz Israel Museum</div>
+      <div class="header-apd-m2" data-i18n="hdr_sub">Pavilions &amp; current exhibitions · מוז״א</div>
     </div>
   </div>
-  <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" rel="noopener" aria-label="Open A Perfect Day by Ludara.AI" title="Link — opens A Perfect Day at ludara.ai/aperfectday">Interactive map by Ludara.AI ↗</a>
+  <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" rel="noopener" aria-label="Open A Perfect Day by Ludara.AI" title="Link — opens A Perfect Day at ludara.ai/aperfectday" data-i18n="credit">Interactive map by Ludara.AI ↗</a>
   <img class="header-muza-center" src="muza-logo.png" onerror="this.onerror=null;this.src='https://www.eretzmuseum.org.il/wp-content/themes/eretzmuseum/media/muza_logo.png'" alt="מוז״א — Eretz Israel Museum">
 </header>
 
 <!-- Filter bar -->
 <div class="filter-bar">
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
-  <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#9e2b25"></span>Pavilions</button>
-  <button class="pill" onclick="fc(this,'hall')"><span class="dot" style="background:#c8761b"></span>Exhibition Halls</button>
-  <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span>Heritage</button>
-  <button class="pill" onclick="fc(this,'outdoor')"><span class="dot" style="background:#3f7d4e"></span>Gardens &amp; Outdoor</button>
-  <button class="pill" onclick="fc(this,'service')"><span class="dot" style="background:#3a6ea5"></span>Services</button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> <span data-i18n="f_saved">Saved</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span><span data-i18n="f_all">All</span></button>
+  <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#9e2b25"></span><span data-i18n="f_pavilion">Pavilions</span></button>
+  <button class="pill" onclick="fc(this,'hall')"><span class="dot" style="background:#c8761b"></span><span data-i18n="f_hall">Exhibition Halls</span></button>
+  <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_heritage">Heritage</span></button>
+  <button class="pill" onclick="fc(this,'outdoor')"><span class="dot" style="background:#3f7d4e"></span><span data-i18n="f_outdoor">Gardens &amp; Outdoor</span></button>
+  <button class="pill" onclick="fc(this,'service')"><span class="dot" style="background:#3a6ea5"></span><span data-i18n="f_service">Services</span></button>
 </div>
+
+<!-- Language toggle — fixed, upper-right, above the Places button -->
+<button id="lang-fixed" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label">EN ▾</span></button>
+<div id="lang-menu"><!-- options generated from LANGS by updateLangToggle() --></div>
 
 <!-- Map -->
 <div id="map"></div>
 
 <!-- Zone bubble bar -->
-<div id="nbhd-title">Campus zones</div>
+<div id="nbhd-title" data-i18n="zones_title">Campus zones</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
     <div class="nbhd-handle-grip">⠿</div>
@@ -227,19 +286,19 @@
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
     <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
-      <span class="nbhd-label">All</span>
+      <span class="nbhd-label" data-i18n="z_all">All</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-east" role="button" tabindex="0" onclick="selectNbhd('east', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏺</div></div>
-      <span class="nbhd-label">Eastern Pavilions</span>
+      <span class="nbhd-label" data-i18n="z_east">Eastern Pavilions</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-core" role="button" tabindex="0" onclick="selectNbhd('core', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">⛰️</div></div>
-      <span class="nbhd-label">Central Core</span>
+      <span class="nbhd-label" data-i18n="z_core">Central Core</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-park" role="button" tabindex="0" onclick="selectNbhd('park', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌳</div></div>
-      <span class="nbhd-label">Western Park</span>
+      <span class="nbhd-label" data-i18n="z_park">Western Park</span>
     </div>
   </div>
 </div>
@@ -268,7 +327,7 @@
       <div class="pc-note" id="pc-note"></div>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Tip</span>
+      <span class="pc-tip-label" data-i18n="tip_label">💡 Tip</span>
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -283,14 +342,14 @@
 <div id="trip-overlay">
   <div class="trip-panel">
     <div class="trip-header">
-      <div class="trip-title">🗺 Your Saved Places Route</div>
+      <div class="trip-title" data-i18n="trip_title">🗺 Your Saved Places Route</div>
       <button class="trip-close" onclick="closeTripPlan()">✕</button>
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
-      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
-      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
-      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share</button>
+      <button class="trip-maps-btn" onclick="openTripInMaps()" data-i18n="trip_maps">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()" data-i18n="trip_pdf">⬇ Download PDF Guide</button>
+      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()" data-i18n="trip_share">🔗 Share</button>
     </div>
   </div>
 </div>
@@ -298,7 +357,7 @@
 <!-- List toggle (mobile) -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
-  <span class="list-toggle-label">Places</span>
+  <span class="list-toggle-label" data-i18n="places">Places</span>
   <span class="count-badge" id="list-badge">25</span>
 </button>
 
@@ -307,7 +366,7 @@
   border:none; border-radius:24px; padding:8px 14px; font-size:0.72rem;
   font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.4);
   font-family:'Suez One',serif; letter-spacing:0.08em; -webkit-tap-highlight-color:transparent;">
-  Guide
+  <span data-i18n="guide">Guide</span>
 </button>
 
 
@@ -317,7 +376,7 @@
 
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
-  <span>Places</span>
+  <span data-i18n="places">Places</span>
   <span id="list-badge-desktop">25</span>
 </button>
 
@@ -329,12 +388,12 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">25 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" data-i18n="clear_btn">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
   <div class="list-footer-brand">
-    <span>Interactive map by</span>
+    <span data-i18n="footer_by">Interactive map by</span>
     <a href="https://ludara.ai/aperfectday/" target="_blank">A Perfect Day · Ludara.AI</a>
   </div>
 </div>
@@ -342,26 +401,26 @@
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> Your Saved Places</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> <span data-i18n="saved_panel">Your Saved Places</span></div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Route</button>
-    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
-    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()" data-i18n="full_route">🗺 Full Route</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" data-i18n="pdf_guide">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()" data-i18n="save_map">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">♡</div>
-      <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap ♡ on any pavilion to save it here — then plan your route, download a PDF, or save the map for offline use.</div>
+      <div class="saved-empty-title" data-i18n="no_saved_title">No saved places yet</div>
+      <div class="saved-empty-body" data-i18n="no_saved_body">Tap ♡ on any pavilion to save it here — then plan your route, download a PDF, or save the map for offline use.</div>
     </div>
   </div>
 </div>
 
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
-  <span>Places</span>
+  <span data-i18n="places">Places</span>
   <span class="desktop-list-count" id="desktop-list-count">25</span>
 </button>
 
@@ -378,6 +437,7 @@
 <script src="ui-stories.js"></script>
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
+<script src="i18n.js"></script>
 
 <style>
 .trip-launcher { position: fixed; left: 12px; top: 40%; transform: translateY(-50%); z-index: 350; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -410,7 +470,11 @@ function loadTrip(key) {
   document.querySelectorAll(".trip-btn-circle").forEach(function(p){ p.classList.remove("active"); });
   var ap = document.getElementById("trip-btn-" + key);
   if (ap) ap.classList.add("active");
-  _tripToast(trip.name + " loaded — " + trip.ids.length + " stops", trip.note, prev, key);
+  var _tn = (typeof t==='function') ? t('trip_'+key+'_name') : trip.name;
+  var _nt = (typeof t==='function') ? t('trip_'+key+'_note') : trip.note;
+  var _ld = (typeof t==='function') ? t('trip_loaded') : 'loaded';
+  var _sw = (typeof t==='function') ? t('stops_word') : 'stops';
+  _tripToast(_tn + " " + _ld + " — " + trip.ids.length + " " + _sw, _nt, prev, key);
 }
 function _tripToast(msg, note, prev, key) {
   var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
@@ -418,7 +482,7 @@ function _tripToast(msg, note, prev, key) {
   el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#3a201c;color:#e9c9b0;padding:10px 18px;border-radius:24px;border:2px solid #e9c9b0;font-size:0.78rem;font-weight:600;font-family:Rubik,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;";
   el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.7">' + note + '</span>' : '') + "</span>"
     + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
-    + 'style="background:none;border:1px solid #e9c9b0;color:#e9c9b0;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Rubik,sans-serif;">Undo</button>';
+    + 'style="background:none;border:1px solid #e9c9b0;color:#e9c9b0;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Rubik,sans-serif;">' + ((typeof t==='function')?t('undo'):'Undo') + '</button>';
   document.body.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
 }
@@ -437,19 +501,19 @@ function _undoTrip(prev, key) {
 
 <!-- Preset route launcher -->
 <div class="trip-launcher" id="trip-launcher">
-  <span class="trip-launcher-label">Our<br>Picks</span>
+  <span class="trip-launcher-label" data-i18n-html="our_picks_html">Our<br>Picks</span>
   <button class="trip-btn-circle" id="trip-btn-highlights" onclick="loadTrip('highlights')" title="Museum Highlights">
     <span class="trip-btn-emoji-html">🏛️</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-highlights" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-highlights" startOffset="50%" text-anchor="middle">Highlights</textPath></text>
+      <text class="trip-arc-label"><textPath href="#arc-highlights" startOffset="50%" text-anchor="middle" data-i18n="arc_highlights">Highlights</textPath></text>
     </svg>
   </button>
   <button class="trip-btn-circle" id="trip-btn-park" onclick="loadTrip('park')" title="Park &amp; Heritage">
     <span class="trip-btn-emoji-html">🌳</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-park" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-park" startOffset="50%" text-anchor="middle">Park</textPath></text>
+      <text class="trip-arc-label"><textPath href="#arc-park" startOffset="50%" text-anchor="middle" data-i18n="arc_park">Park</textPath></text>
     </svg>
   </button>
 </div>
@@ -479,31 +543,9 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Bilingual card: Hebrew name opposite the English name; Hebrew description above English -->
-<script>
-window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  var heEl = document.getElementById('pc-title-he');
-  if (!heEl) {
-    var row = document.createElement('div'); row.id = 'pc-title-row';
-    titleEl.parentNode.insertBefore(row, titleEl);
-    row.appendChild(titleEl);
-    heEl = document.createElement('div'); heEl.id = 'pc-title-he'; heEl.setAttribute('dir', 'rtl');
-    row.appendChild(heEl);
-  }
-  new MutationObserver(function() {
-    var name = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) { heEl.textContent = ''; return; }
-    var parts = (place.type || '').split('·');
-    heEl.textContent = (parts[0] || '').trim();
-    var role = parts.slice(1).join('·').trim();
-    var typeEl = document.getElementById('pc-type');
-    if (typeEl) typeEl.textContent = role;
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
-</script>
+<!-- Bilingual title split removed — the language toggle now shows one language, so the
+     place name uses the full card width on its own line. -->
+
 
 <!-- Navigate button — injected into card when a place opens, shows distance if location known -->
 <script>
@@ -522,7 +564,7 @@ window.addEventListener('load', function() {
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
-    btn.innerHTML = '🚶 Walk here (Google Maps)' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.innerHTML = (typeof t==='function'?t('walk_here'):'🚶 Walk here (Google Maps)') + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() {
       var dest = place.lat+','+place.lng;
       var url = window._userLat && window._userLng
@@ -563,7 +605,7 @@ function clearAllSaved() {
   favourites = []; saveFavs(); clearTripRoute();
   var pill = document.getElementById('pill-saved');
   if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
-  if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
+  if (typeof _toast === 'function') _toast((typeof t==='function')?t('saved_cleared'):'Saved places cleared.', 2500);
 }
 if (typeof window.toggleDesktopList !== 'function') {
   window.toggleDesktopList = function () { if (typeof toggleSheet === 'function') toggleSheet(); };
@@ -584,7 +626,7 @@ if (typeof window.toggleDesktopList !== 'function') {
     }
     var places = typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces() : [];
     var titleEl = document.getElementById('sheet-title');
-    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Saved' : 'Saved Places') + '</span>';
+    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' ' + ((typeof t==='function')?t('saved_word'):'Saved') : ((typeof t==='function')?t('saved_panel'):'Saved Places')) + '</span>';
     var badge = document.getElementById('list-badge');
     if (badge) badge.textContent = places.length;
     var scb = document.getElementById('sheet-clear-btn');
@@ -613,27 +655,26 @@ if (typeof window.toggleDesktopList !== 'function') {
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
-            if (c) c.textContent = rs.travelMode === 'driving' ? '↓ ~' + m + ' min drive' : '↓ ~' + m + ' min walk';
+            if (c) c.textContent = '↓ ~' + m + ' ' + (rs.travelMode === 'driving' ? (typeof t==='function'?t('min_drive'):'min drive') : (typeof t==='function'?t('min_walk'):'min walk'));
           });
         }).catch(function(){});
       }
     }
     function showTrip(pl, distM, walkMins) {
-      var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode)
-        ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
-      var icon = mode==='driving' ? '🚗' : '🚶';
+      var mode = 'walking';   // MUZA is walking-only
+      var icon = '🚶';
       var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
+        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+' '+(pl.length===1?(typeof t==='function'?t('stop_one'):'stop'):(typeof t==='function'?t('stops_word'):'stops'))+'</span>'+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
         '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
-        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
+        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">'+(typeof t==='function'?t('trip_share'):'🔗 Share')+'</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
-      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠇ to reorder'+
-        (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a>':'')+'</div>';
+      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">'+(typeof t==='function'?t('drag_reorder'):'Drag to reorder')+
+        (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">'+(typeof t==='function'?t('autosort'):'↺ Auto-sort')+'</a>':'')+'</div>';
       pl.forEach(function(p,i) {
         html += '<div class="place-row '+(p.id===AID?'active':'')+'" draggable="true" data-id="'+p.id+'" id="row-'+p.id+'">'+
           '<span class="saved-grip" style="font-size:1.3rem;color:#bbb;padding:0 10px 0 4px;cursor:grab;flex-shrink:0;touch-action:none">⠇</span>'+
@@ -653,7 +694,7 @@ if (typeof window.toggleDesktopList !== 'function') {
         _fetchRouteStats(pl).then(function(s) {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
-          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent='↓ ~'+m+' '+(s.travelMode==='driving'?(typeof t==='function'?t('min_drive'):'min drive'):(typeof t==='function'?t('min_walk'):'min walk'));});
         }).catch(function(){});
       }
     }

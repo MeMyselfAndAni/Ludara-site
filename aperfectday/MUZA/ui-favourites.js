@@ -604,8 +604,8 @@ function _fetchRouteStats(places) {
         const legMins = (route.legs || []).map(l => Math.round(l.duration / 60));
         const walkMins = Math.round(route.duration / 60);
         
-        // 🚗 3-HOUR LOGIC: If walking >3h, fetch driving route
-        if (walkMins > 180) {
+        // MUZA is a walking-only museum campus — driving mode disabled.
+        if (false) {
           const driveUrl = 'https://routing.openstreetmap.de/routed-car/route/v1/driving/' + coords + '?overview=false';
           const driveCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
           const driveTimer = driveCtrl ? setTimeout(() => driveCtrl.abort(), 8000) : null;

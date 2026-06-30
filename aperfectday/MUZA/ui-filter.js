@@ -122,7 +122,7 @@ function _initSearch(){
   const input = document.createElement('input');
   input.id = 'search-input';
   input.type = 'text';
-  input.placeholder = 'Search places...';
+  input.placeholder = (typeof t === 'function') ? t('search_ph') : 'Search places…';
   input.style.cssText = [
     'display:none','width:100%','padding:7px 12px',
     'border:1.5px solid var(--brand)','border-radius:20px',
@@ -242,8 +242,9 @@ function renderList(){
       }
     }
     filtered = sorted;
-    const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
-    document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
+    const _tf = (k,d)=> (typeof t==='function'?t(k):d);
+    const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} ${_tf('on_map','on map')}` : '';
+    document.getElementById('sheet-title').textContent = `♥ ${sorted.length} ${_tf('saved_word','Saved')}${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
     // Banner with auto-sort reset button
@@ -254,9 +255,10 @@ function renderList(){
       banner.id = 'saved-mode-banner';
       banner.className = 'saved-mode-banner';
       const hasManual = !!_getSavedOrder();
-      banner.innerHTML = `<span>Drag ⠿ to reorder stops</span>
-        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Itinerary</button>
-        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">↺ Auto</button>' : ''}`;
+      const _tb = (k,d)=> (typeof t==='function'?t(k):d);
+      banner.innerHTML = `<span>${_tb('drag_reorder','Drag ⠿ to reorder stops')}</span>
+        <button class="saved-plan-btn" onclick="planFavTrip()">${_tb('itinerary','🗺 Itinerary')}</button>
+        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">'+_tb('auto','↺ Auto')+'</button>' : ''}`;
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
     } else {
@@ -267,7 +269,7 @@ function renderList(){
         const btn = document.createElement('button');
         btn.className = 'saved-plan-btn saved-auto-reset';
         btn.style.marginLeft = '4px';
-        btn.textContent = '↺ Auto';
+        btn.textContent = (typeof t==='function')?t('auto'):'↺ Auto';
         btn.onclick = function(){ _clearSavedOrder(); renderList(); if(typeof drawSavedRoute==='function') drawSavedRoute(); };
         banner.appendChild(btn);
       } else if(!hasManual && autoBtn){
@@ -276,7 +278,7 @@ function renderList(){
     }
 
     el.innerHTML = allSaved.length === 0
-      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
+      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">'+((typeof t==='function')?t('empty_saved'):'Tap ♡ on any place<br>to save it here')+'</div>'
       : sorted.map((p,i) => `
         <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
           <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
@@ -322,9 +324,10 @@ function renderList(){
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
+  const _tt = (k,d)=> (typeof t==='function'?t(k):d);
   const _titleText = _searchQuery
-    ? (count + ' match' + (count !== 1 ? 'es' : ''))
-    : (nbhdName + count + ' Places');
+    ? (count + ' ' + (count === 1 ? _tt('match_one','match') : _tt('match_many','matches')))
+    : (nbhdName + count + ' ' + _tt('places_word','Places'));
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 

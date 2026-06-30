@@ -230,7 +230,9 @@ function _populateCard(p){
     `<span class="pc-cat-dot" style="background:${col}"></span><span style="color:${col}">${CAT_LABELS[p.cat] || p.cat}</span>`;
 
   document.getElementById('pc-title').textContent = p.name;
-  document.getElementById('pc-type').textContent  = p.type || '';
+  // Role subtitle hidden — the title + the category badge already say what it is.
+  var _ptypeEl = document.getElementById('pc-type');
+  if(_ptypeEl){ _ptypeEl.textContent = ''; _ptypeEl.style.display = 'none'; }
   document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${typeof formatHours === 'function' ? formatHours(p.hours) : p.hours}` : '';
 
   document.getElementById('pc-note').textContent = p.note || '';
@@ -245,7 +247,7 @@ function _populateCard(p){
 
   let contacts = '';
   if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
-  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
+  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">${(typeof t==='function')?t('website'):'🌐 Website'}</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
   var awardsEl = document.getElementById('pc-awards');

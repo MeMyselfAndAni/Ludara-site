@@ -133,6 +133,39 @@
   /* Always mark the final step as Done */
   if (STEPS.length > 0) { STEPS[STEPS.length - 1].btn = 'Done ✓'; }
 
+  /* ── Hebrew tutorial strings (keyed by English title) ── */
+  var TUT_BTN_HE = { 'Next':'הבא', 'Done':'סיום', 'Done ✓':'סיום ✓' };
+  var TUT_HE = {
+    ['Welcome to Your Perfect Day in ' + CITY]: { title:'ברוכים הבאים ליום מושלם במוזיאון ארץ ישראל',
+      body:'מפה אחת. 26 מקומות ברחבי המוזיאון: כל ביתן, התערוכה שבתוכו, והגנים והתל בן 3,000 השנה שביניהם. הקישו «הבא» כדי להתחיל.' },
+    ['Our Curated ' + CITY + ' Guide']: { title:'המדריך שלנו למוזיאון ארץ ישראל',
+      body:'כל סיכה היא מקום ששווה את זמנכם: ביתן של זכוכית עתיקה, תל בן 3,000 שנה, והתערוכה שבכל מבנה. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
+    'Inside the place card': { title:'בתוך כרטיס המקום',
+      body:'בכל כרטיס תמצאו את המקום בעברית ובאנגלית, מה מוצג עכשיו והתערוכה הנוכחית, וטיפ למבקר. גללו לאתר וגם למסלול הליכה אליו.' },
+    'Filter by place type': { title:'סינון לפי סוג',
+      body:'מחפשים רק את הביתנים, או רק את הגנים ואתרי המורשת? הקישו על קטגוריה למעלה כדי להציג רק את מה שתרצו — והמפה תתעדכן.' },
+    'Explore by Zone': { title:'חקרו לפי אזור',
+      body:'כל בועה היא חלק מהמתחם: הביתנים המזרחיים, מתחם המרכז, או הפארק המערבי. הקישו על אחת כדי לזום ישר אליה.' },
+    'Save your favorites': { title:'שמרו את המועדפים',
+      body:'מצאתם משהו שעוצר אתכם? הקישו על הלב. הוא יישאר ברשימה שלכם לאורך כל הביקור, גם כשתסגרו את המפה.' },
+    'Your saved places': { title:'המקומות השמורים שלכם',
+      body:'הקישו «שמורים» כדי לראות את הרשימה. הקישו על שורה כדי לפתוח שוב את הכרטיס. גררו כדי לסדר אותם לפי סדר ההליכה.' },
+    'Navigate with Google Maps': { title:'ניווט עם Google Maps',
+      body:'מוכנים לצאת לדרך? פתחו את המסלול המלא ב‑Google Maps, או הקישו על מקום שמור כדי לנווט ישר אליו.' },
+    'Download a PDF guide': { title:'הורדת מדריך PDF',
+      body:'הקישו «מדריך PDF» כדי לקבל מדריך מעוצב עם כל הבחירות שלכם, מוכן לשיתוף או להדפסה לפני היציאה.' },
+    'Share your map': { title:'שתפו את המפה',
+      body:'שלחו את המפה לבן לוויה, או שמרו אותה לביקור הבא. הקשה אחת לשיתוף בהודעה או במייל.' },
+    'Our Day Trip Picks': { title:'המסלולים המומלצים שלנו',
+      body:'מחפשים השראה? יש לנו הצעות בשבילכם. הקשה אחת בצד טוענת יום שלם מוכן מראש.' },
+    'Navigate': { title:'מצאו את עצמכם',
+      body:'שטח המוזיאון גדול והשילוט מועט. הקישו על העיגול כדי למצוא את מיקומכם על המפה.' },
+    "You're all set!": { title:'הכול מוכן!',
+      body:'המוזיאון כולו פתוח לפניכם. צאו למצוא את היום המושלם שלכם.' }
+  };
+  function _tutHE(){ return (typeof LANG !== 'undefined' && LANG === 'he'); }
+
+
   /* ── Inject CSS ─────────────────────────────────────────────── */
   var style = document.createElement('style');
   style.textContent = [
@@ -194,7 +227,7 @@
     '<h3 id="tut-title"></h3>',
     '<p id="tut-body"></p>',
     '<div id="tut-actions">',
-    '  <button id="tut-skip">Skip tour</button>',
+    '  <button id="tut-skip">Skip to the end</button>',
     '  <button id="tut-next">Next</button>',
     '</div>'
   ].join('');
@@ -590,9 +623,11 @@
       if (d) d.className = 'tut-dot ' + (i === n ? 'on' : 'off');
     });
 
-    titleEl.textContent = step.title;
-    bodyEl.textContent  = step.body;
-    nextBtn.textContent = step.btn;
+    var _h = _tutHE() ? TUT_HE[step.title] : null;
+    titleEl.textContent = _h ? _h.title : step.title;
+    bodyEl.textContent  = _h ? _h.body  : step.body;
+    nextBtn.textContent = _tutHE() ? (TUT_BTN_HE[step.btn] || step.btn) : step.btn;
+    var _skip = document.getElementById('tut-skip'); if(_skip) _skip.textContent = _tutHE() ? 'דלג לסוף' : 'Skip to the end';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, targetEl);
