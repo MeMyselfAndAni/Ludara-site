@@ -3,7 +3,7 @@
 // photographer the museum names (or to the museum). A couple of images come from
 // Wikimedia Commons under Creative Commons and carry the photographer + licence.
 // Only ids with an image return a credit.
-var MUZA_PHOTO_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 21, 22, 24, 25, 26];
+var MUZA_PHOTO_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26];
 
 // Museum photos — photographer where the museum names them.
 var MUZA_CREDIT = {
@@ -13,6 +13,8 @@ var MUZA_CREDIT = {
   11: 'Aviad Bar-Nes',
   12: 'Aviad Bar-Nes',
   13: 'Aviad Bar-Nes',
+  16: 'Studio Urbanof',
+  19: 'Nof Harari',
   21: 'Leonid Pedrol',
   25: 'Tal Izsak',
   26: 'Nof Harari'

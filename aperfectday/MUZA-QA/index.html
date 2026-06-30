@@ -212,6 +212,12 @@
   #lang-menu .lang-opt:hover{ background:rgba(233,201,176,0.16); }
   #lang-menu .lang-opt.active{ background:#9e2b25; }
   #lang-menu .lang-opt svg{ border-radius:2px; flex:0 0 auto; }
+  /* Desktop: keep the Places button clearly below the language toggle (overrides styles.css top:140) */
+  @media (min-width:769px){
+    #lang-fixed { top:124px; right:18px; }
+    #lang-menu  { top:162px; right:18px; }
+    #list-toggle { top:184px !important; right:18px !important; }
+  }
 
   /* ── Hebrew mode: right-align text areas (map chrome stays LTR) ── */
   body.rtl .pc-title,
