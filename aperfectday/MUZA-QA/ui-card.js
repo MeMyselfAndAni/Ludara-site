@@ -230,7 +230,9 @@ function _populateCard(p){
     `<span class="pc-cat-dot" style="background:${col}"></span><span style="color:${col}">${CAT_LABELS[p.cat] || p.cat}</span>`;
 
   document.getElementById('pc-title').textContent = p.name;
-  document.getElementById('pc-type').textContent  = p.type || '';
+  // Role subtitle hidden — the title + the category badge already say what it is.
+  var _ptypeEl = document.getElementById('pc-type');
+  if(_ptypeEl){ _ptypeEl.textContent = ''; _ptypeEl.style.display = 'none'; }
   document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${typeof formatHours === 'function' ? formatHours(p.hours) : p.hours}` : '';
 
   document.getElementById('pc-note').textContent = p.note || '';

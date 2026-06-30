@@ -31,8 +31,8 @@ const STRINGS = {
     }
   },
   he: {
-    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים' },
-    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות' },
+    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים למבקרים' },
+    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות למבקרים' },
     zones:     { east:'הביתנים המזרחיים', core:'מתחם המרכז', park:'הפארק המערבי' },
     ui: {
       hdr_apd_in:'A Perfect Day —', hdr_museum:'מוזיאון ארץ ישראל',
@@ -40,7 +40,7 @@ const STRINGS = {
       hdr_guide_h1:'מדריך <em>מוזיאון ארץ ישראל</em>',
       credit:'מפה אינטראקטיבית מאת Ludara.AI ↗',
       f_saved:'שמורים', f_all:'הכול', f_pavilion:'ביתנים', f_hall:'אולמות תערוכה',
-      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים',
+      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים',
       zones_title:'אזורי המתחם', z_all:'הכול', z_east:'הביתנים המזרחיים', z_core:'מתחם המרכז', z_park:'הפארק המערבי',
       places:'מקומות', places_word:'מקומות', guide:'מדריך',
       trip_title:'🗺 מסלול המקומות השמורים', trip_maps:'🗺 פתחו ב‑Google Maps',
@@ -76,8 +76,8 @@ function updateLangToggle(){
   const lbl = document.getElementById('lang-label');
   if(lbl){
     lbl.innerHTML = (LANG==='he')
-      ? '🌐 EN · <b>עב</b>'
-      : '🌐 <b>EN</b> · עב';
+      ? '🇬🇧 EN · <b>🇮🇱 עב</b>'
+      : '<b>🇬🇧 EN</b> · 🇮🇱 עב';
   }
 }
 

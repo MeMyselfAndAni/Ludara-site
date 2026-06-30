@@ -93,7 +93,7 @@
 
   /* ── Brand fonts ── */
   body { font-family:'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .pc-title, #pc-title { font-family:'Suez One', Georgia, serif; font-weight:700; letter-spacing:0.01em; }
+  .pc-title, #pc-title { font-family:'Rubik', -apple-system, 'Segoe UI', sans-serif; font-weight:700; letter-spacing:-0.005em; line-height:1.2; }
   .place-name { font-family:'Rubik', sans-serif !important; font-size:1.05rem !important; font-weight:600 !important; line-height:1.25 !important; }
   .place-type { font-size:0.74rem !important; }
 
@@ -171,8 +171,8 @@
     <p class="splash-sub">Welcome to MUZA, the Eretz Israel Museum — pavilions of ceramics, glass, coins, copper and folklore around a 3,000-year-old tell and green gardens. This guide helps you find each one and see what's on show inside it now.</p>
     <div class="splash-lang-label">בחרו שפה · Choose your language</div>
     <div class="splash-lang-row">
-      <button class="splash-btn" onclick="enterIn('he')">כניסה בעברית</button>
-      <button class="splash-btn splash-btn-en" onclick="enterIn('en')">Enter in English</button>
+      <button class="splash-btn" onclick="enterIn('he')">🇮🇱 כניסה בעברית</button>
+      <button class="splash-btn splash-btn-en" onclick="enterIn('en')">🇬🇧 Enter in English</button>
     </div>
     <div class="splash-note">מידע על התערוכות עדכני ליוני 2026 · Exhibition information current as of June 2026.</div>
     <div class="splash-footer">
@@ -246,7 +246,7 @@
   <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_heritage">Heritage</span></button>
   <button class="pill" onclick="fc(this,'outdoor')"><span class="dot" style="background:#3f7d4e"></span><span data-i18n="f_outdoor">Gardens &amp; Outdoor</span></button>
   <button class="pill" onclick="fc(this,'service')"><span class="dot" style="background:#3a6ea5"></span><span data-i18n="f_service">Services</span></button>
-  <button class="pill pill-lang" id="pill-lang" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label">🌐 <b>EN</b> · עב</span></button>
+  <button class="pill pill-lang" id="pill-lang" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label"><b>🇬🇧 EN</b> · 🇮🇱 עב</span></button>
 </div>
 
 <!-- Map -->
@@ -514,31 +514,9 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Bilingual card: Hebrew name opposite the English name; Hebrew description above English -->
-<script>
-window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  var heEl = document.getElementById('pc-title-he');
-  if (!heEl) {
-    var row = document.createElement('div'); row.id = 'pc-title-row';
-    titleEl.parentNode.insertBefore(row, titleEl);
-    row.appendChild(titleEl);
-    heEl = document.createElement('div'); heEl.id = 'pc-title-he'; heEl.setAttribute('dir', 'rtl');
-    row.appendChild(heEl);
-  }
-  new MutationObserver(function() {
-    var name = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) { heEl.textContent = ''; return; }
-    var parts = (place.type || '').split('·');
-    heEl.textContent = (parts[0] || '').trim();
-    var role = parts.slice(1).join('·').trim();
-    var typeEl = document.getElementById('pc-type');
-    if (typeEl) typeEl.textContent = role;
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
-</script>
+<!-- Bilingual title split removed — the language toggle now shows one language, so the
+     place name uses the full card width on its own line. -->
+
 
 <!-- Navigate button — injected into card when a place opens, shows distance if location known -->
 <script>
