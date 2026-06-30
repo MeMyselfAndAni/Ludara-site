@@ -40,6 +40,12 @@ const STRINGS = {
       trip_park_name:'Park & Heritage', trip_park_note:'A quieter loop through the western park',
       trip_loaded:'loaded', stops_word:'stops', undo:'Undo',
       our_picks_html:'Our<br>Picks', arc_highlights:'Highlights', arc_park:'Park',
+      stop_one:'stop', min_walk:'min walk', min_drive:'min drive', min_here:'min here',
+      mins_total:'total', walking_word:'walking', autosort:'↺ Auto-sort',
+      walk_here:'🚶 Walk here (Google Maps)', clear_btn:'🗑 Clear',
+      pdf_cover_sub:'Your personal day guide', pdf_curated_by:'Curated by', pdf_scan:'Scan for Google Maps',
+      pdf_created_with:'Interactive map guide created with', pdf_preparing:'Preparing your guide…',
+      pdf_walking:'Walking', pdf_driving:'Driving', pdf_travel_time:'Travel Time',
     }
   },
   he: {
@@ -75,6 +81,12 @@ const STRINGS = {
       trip_park_name:'פארק ומורשת', trip_park_note:'מסלול שקט יותר בפארק המערבי',
       trip_loaded:'נטען', stops_word:'עצירות', undo:'ביטול',
       our_picks_html:'הבחירות<br>שלנו', arc_highlights:'מומלצים', arc_park:'פארק',
+      stop_one:'עצירה', min_walk:'דק׳ הליכה', min_drive:'דק׳ נסיעה', min_here:'דק׳ במקום',
+      mins_total:'סה״כ', walking_word:'הליכה', autosort:'↺ מיון אוטומטי',
+      walk_here:'🚶 נווטו לכאן (Google Maps)', clear_btn:'🗑 ניקוי',
+      pdf_cover_sub:'מדריך אישי ליום שלם', pdf_curated_by:'נערך על ידי', pdf_scan:'סרקו ל‑Google Maps',
+      pdf_created_with:'מדריך מפה אינטראקטיבית נוצר עם', pdf_preparing:'מכינים את המדריך…',
+      pdf_walking:'הליכה', pdf_driving:'נסיעה', pdf_travel_time:'זמן נסיעה',
     }
   }
 };

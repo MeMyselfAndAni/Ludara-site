@@ -57,7 +57,7 @@ async function generatePDF(){
   // don't block it as a pop-up. It is filled in once the data is ready.
   const win = window.open('', '_blank');
   if (win) {
-    win.document.write('<!doctype html><meta charset="utf-8"><title>A Perfect Day</title><body style="margin:0;font-family:-apple-system,Segoe UI,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#7a3b2e;background:#f7f1e8;font-size:18px">Preparing your guide…</body>');
+    win.document.write('<!doctype html><meta charset="utf-8"><title>A Perfect Day</title><body style="margin:0;font-family:-apple-system,Segoe UI,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#7a3b2e;background:#f7f1e8;font-size:18px">' + (typeof t==='function'?t('pdf_preparing'):'Preparing your guide…') + '</body>');
   }
 
   // Show loading message
@@ -140,7 +140,7 @@ async function generatePDF(){
         ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
-          <span class="pdf-qr-label">Scan for Google Maps</span>
+          <span class="pdf-qr-label">${typeof t==='function'?t('pdf_scan'):'Scan for Google Maps'}</span>
           ${p.website ? `<a class="pdf-website" href="${p.website}">${p.website.replace('https://','')}</a>` : ''}
         </div>
       </div>
@@ -447,23 +447,23 @@ async function generatePDF(){
 <div class="pdf-cover">
   <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
   <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
-  <div class="pdf-cover-subtitle">Your personal day guide</div>
+  <div class="pdf-cover-subtitle">${typeof t==='function'?t('pdf_cover_sub'):'Your personal day guide'}</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
       <div class="pdf-stat-num">${places.length}</div>
-      <div class="pdf-stat-label">Places</div>
+      <div class="pdf-stat-label">${typeof t==='function'?t('places_word'):'Places'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : _routeStats.travelMode === 'boat' ? '⛵' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
-      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : _routeStats.travelMode === 'boat' ? 'Travel Time' : 'Walking'}</div>
+      <div class="pdf-stat-label">${typeof t==='function' ? (_routeStats.travelMode === 'driving' ? t('pdf_driving') : _routeStats.travelMode === 'boat' ? t('pdf_travel_time') : t('pdf_walking')) : 'Walking'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
       <div class="pdf-stat-label">${formatDistanceUnit()}</div>
     </div>
   </div>
-  <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
+  <div class="pdf-cover-by">${typeof t==='function'?t('pdf_curated_by'):'Curated by'} ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
   <div class="pdf-cover-date">${date}</div>
 </div>
 
@@ -474,7 +474,7 @@ async function generatePDF(){
 
 <!-- BRANDING FOOTER -->
 <div class="pdf-brand-footer">
-  <div class="pdf-brand-footer-label">Interactive map guide created with</div>
+  <div class="pdf-brand-footer-label">${typeof t==='function'?t('pdf_created_with'):'Interactive map guide created with'}</div>
   <div class="pdf-brand-footer-name">A Perfect Day</div>
   <div class="pdf-brand-footer-url">ludara.ai</div>
 </div>

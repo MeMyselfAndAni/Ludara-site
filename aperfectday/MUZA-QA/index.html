@@ -382,7 +382,7 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">25 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" data-i18n="clear_btn">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -558,7 +558,7 @@ window.addEventListener('load', function() {
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
-    btn.innerHTML = '🚶 Walk here (Google Maps)' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.innerHTML = (typeof t==='function'?t('walk_here'):'🚶 Walk here (Google Maps)') + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() {
       var dest = place.lat+','+place.lng;
       var url = window._userLat && window._userLng
@@ -649,27 +649,26 @@ if (typeof window.toggleDesktopList !== 'function') {
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
-            if (c) c.textContent = rs.travelMode === 'driving' ? '↓ ~' + m + ' min drive' : '↓ ~' + m + ' min walk';
+            if (c) c.textContent = '↓ ~' + m + ' ' + (rs.travelMode === 'driving' ? (typeof t==='function'?t('min_drive'):'min drive') : (typeof t==='function'?t('min_walk'):'min walk'));
           });
         }).catch(function(){});
       }
     }
     function showTrip(pl, distM, walkMins) {
-      var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode)
-        ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
-      var icon = mode==='driving' ? '🚗' : '🚶';
+      var mode = 'walking';   // MUZA is walking-only
+      var icon = '🚶';
       var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
+        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+' '+(pl.length===1?(typeof t==='function'?t('stop_one'):'stop'):(typeof t==='function'?t('stops_word'):'stops'))+'</span>'+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
         '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
-        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
+        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">'+(typeof t==='function'?t('trip_share'):'🔗 Share')+'</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
-      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠇ to reorder'+
-        (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a>':'')+'</div>';
+      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">'+(typeof t==='function'?t('drag_reorder'):'Drag to reorder')+
+        (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">'+(typeof t==='function'?t('autosort'):'↺ Auto-sort')+'</a>':'')+'</div>';
       pl.forEach(function(p,i) {
         html += '<div class="place-row '+(p.id===AID?'active':'')+'" draggable="true" data-id="'+p.id+'" id="row-'+p.id+'">'+
           '<span class="saved-grip" style="font-size:1.3rem;color:#bbb;padding:0 10px 0 4px;cursor:grab;flex-shrink:0;touch-action:none">⠇</span>'+
@@ -689,7 +688,7 @@ if (typeof window.toggleDesktopList !== 'function') {
         _fetchRouteStats(pl).then(function(s) {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
-          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent='↓ ~'+m+' '+(s.travelMode==='driving'?(typeof t==='function'?t('min_drive'):'min drive'):(typeof t==='function'?t('min_walk'):'min walk'));});
         }).catch(function(){});
       }
     }
