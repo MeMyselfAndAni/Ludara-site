@@ -28,6 +28,9 @@ const STRINGS = {
       drag_reorder:'Drag ⠿ to reorder stops', itinerary:'🗺 Itinerary', auto:'↺ Auto',
       empty_saved:'Tap ♡ on any place<br>to save it here',
       saved_cleared:'Saved places cleared.', on_map:'on map',
+      splash_welcome:"Welcome to MUZA, the Eretz Israel Museum — pavilions of ceramics, glass, coins, copper and folklore around a 3,000-year-old tell and green gardens. This guide helps you find each one and see what's on show inside it now.",
+      splash_hours:'🕐 Opening hours · Sun–Wed 10:00–16:00 · Thu 10:00–20:00 · Fri & Sat 10:00–14:00',
+      splash_enter:'Enter the Museum Map',
     }
   },
   he: {
@@ -51,6 +54,9 @@ const STRINGS = {
       drag_reorder:'גררו לשינוי סדר', itinerary:'🗺 מסלול', auto:'↺ אוטומטי',
       empty_saved:'הקישו ♡ על כל מקום<br>כדי לשמור אותו כאן',
       saved_cleared:'המקומות השמורים נמחקו.', on_map:'במפה',
+      splash_welcome:'ברוכים הבאים למוז״א, מוזיאון ארץ ישראל — ביתני קרמיקה, זכוכית, מטבעות, נחושת ופולקלור סביב תל בן 3,000 שנה וגנים ירוקים. המדריך יעזור לכם למצוא כל ביתן ולראות מה מוצג בו עכשיו.',
+      splash_hours:'🕐 שעות פתיחה · א׳–ד׳ 10:00–16:00 · ה׳ 10:00–20:00 · ו׳–שבת 10:00–14:00',
+      splash_enter:'כניסה למפת המוזיאון',
     }
   }
 };
@@ -121,11 +127,29 @@ function applyLang(lang){
 
 function toggleLang(){ applyLang(LANG === 'he' ? 'en' : 'he'); }
 
-// Splash language chooser: set the language, then enter the map
-function enterIn(lang){
+// Splash step 1 → 2: pick a language, then show that language's intro, hours and Enter button
+function splashPick(lang){
   applyLang(lang);
-  if(typeof closeSplash === 'function') closeSplash();
+  var st = document.getElementById('splash-sub-text');
+  var ht = document.getElementById('splash-hours-text');
+  var eb = document.getElementById('splash-enter-btn');
+  if(st) st.textContent = t('splash_welcome');
+  if(ht) ht.textContent = t('splash_hours');
+  if(eb) eb.textContent = t('splash_enter');
+  var info = document.getElementById('splash-info');
+  if(info) info.setAttribute('dir', lang==='he' ? 'rtl' : 'ltr');
+  var choose = document.getElementById('splash-choose');
+  if(choose) choose.style.display = 'none';
+  if(info) info.style.display = '';
 }
+function splashReset(){
+  var info = document.getElementById('splash-info');
+  var choose = document.getElementById('splash-choose');
+  if(info) info.style.display = 'none';
+  if(choose) choose.style.display = '';
+}
+// kept for safety if referenced elsewhere
+function enterIn(lang){ splashPick(lang); }
 
 // Localise the chrome as early as possible (before the map finishes loading)
 document.addEventListener('DOMContentLoaded', function(){ applyLang(getLang()); });
