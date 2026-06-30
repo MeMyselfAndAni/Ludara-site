@@ -46,9 +46,9 @@ const STRINGS = {
       trip_title:'🗺 מסלול המקומות השמורים', trip_maps:'🗺 פתחו ב‑Google Maps',
       trip_pdf:'⬇ הורדת מדריך PDF', trip_share:'🔗 שיתוף',
       saved_panel:'המקומות השמורים שלי', footer_by:'מפה אינטראקטיבית מאת',
-      tip_label:'💡 טיפ', website:'🌐 אתר',
+      tip_label:'💡 המלצה', website:'🌐 אתר',
       search_ph:'חיפוש מקומות…', match_one:'תוצאה', match_many:'תוצאות', saved_word:'שמורים',
-      drag_reorder:'גררו ⠿ לשינוי סדר העצירות', itinerary:'🗺 מסלול', auto:'↺ אוטומטי',
+      drag_reorder:'גררו לשינוי סדר', itinerary:'🗺 מסלול', auto:'↺ אוטומטי',
       empty_saved:'הקישו ♡ על כל מקום<br>כדי לשמור אותו כאן',
       saved_cleared:'המקומות השמורים נמחקו.', on_map:'במפה',
     }
@@ -72,13 +72,16 @@ function applyStaticI18n(){
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-ph')); });
 }
 
+// Drawn SVG flags (render everywhere, unlike emoji flags which show as "GB"/"IL" on Windows)
+const FLAG_GB = '<svg viewBox="0 0 30 20" width="20" height="13"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" stroke-width="2"/><rect x="12.5" width="5" height="20" fill="#fff"/><rect y="7.5" width="30" height="5" fill="#fff"/><rect x="13.5" width="3" height="20" fill="#C8102E"/><rect y="8.5" width="30" height="3" fill="#C8102E"/></svg>';
+const FLAG_IL = '<svg viewBox="0 0 30 20" width="20" height="13"><rect width="30" height="20" fill="#fff"/><rect width="30" height="2.6" y="3" fill="#0038b8"/><rect width="30" height="2.6" y="14.4" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="1.1"><path d="M15 7.1l2.7 4.7h-5.4z"/><path d="M15 12.9l2.7-4.7h-5.4z"/></g></svg>';
+
 function updateLangToggle(){
   const lbl = document.getElementById('lang-label');
-  if(lbl){
-    lbl.innerHTML = (LANG==='he')
-      ? '🇬🇧 EN · <b>🇮🇱 עב</b>'
-      : '<b>🇬🇧 EN</b> · 🇮🇱 עב';
-  }
+  if(!lbl) return;
+  lbl.innerHTML = (LANG==='he')
+    ? FLAG_GB + ' EN&nbsp;·&nbsp;<b>' + FLAG_IL + ' עב</b>'
+    : '<b>' + FLAG_GB + ' EN</b>&nbsp;·&nbsp;' + FLAG_IL + ' עב';
 }
 
 function applyLang(lang){
