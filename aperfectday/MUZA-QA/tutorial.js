@@ -227,7 +227,7 @@
     '<h3 id="tut-title"></h3>',
     '<p id="tut-body"></p>',
     '<div id="tut-actions">',
-    '  <button id="tut-skip">Skip tour</button>',
+    '  <button id="tut-skip">Skip to the end</button>',
     '  <button id="tut-next">Next</button>',
     '</div>'
   ].join('');
@@ -627,6 +627,7 @@
     titleEl.textContent = _h ? _h.title : step.title;
     bodyEl.textContent  = _h ? _h.body  : step.body;
     nextBtn.textContent = _tutHE() ? (TUT_BTN_HE[step.btn] || step.btn) : step.btn;
+    var _skip = document.getElementById('tut-skip'); if(_skip) _skip.textContent = _tutHE() ? 'דלג לסוף' : 'Skip to the end';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, targetEl);

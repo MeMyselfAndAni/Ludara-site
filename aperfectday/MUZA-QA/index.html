@@ -122,8 +122,8 @@
     .header-credit-link { order:2 !important; position:static !important; flex:0 0 auto !important; align-self:center !important; margin:0 !important; font-size:0.72rem !important; max-width:112px !important; white-space:normal !important; text-align:right !important; line-height:1.25 !important; padding:1px 2px 1px 4px !important; }
     .header-muza-center { height:17px !important; max-width:30vw !important; }
     .filter-bar { top:66px !important; margin-top:0 !important; }
-    #lang-fixed { top:110px; right:10px; }            /* language toggle, upper-right */
-    .list-toggle { top:172px !important; }            /* "Places" button, clear gap below the language toggle */
+    #lang-fixed { top:108px !important; right:10px !important; }   /* language toggle, upper-right */
+    #list-toggle { top:170px !important; }                          /* "Places" button, clear gap below the language toggle */
   }
   /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
   #pc-note { white-space: pre-line; }
@@ -185,7 +185,7 @@
       </div>
       <div><button class="splash-btn" id="splash-enter-btn" onclick="closeSplash()" style="min-width:240px">Enter the Museum Map</button></div>
       <div style="margin-top:14px"><a href="#" onclick="splashReset();return false" style="color:#e9c9b0;font-size:0.78rem;text-decoration:none">↩ בחרו שפה אחרת · change language</a></div>
-      <div class="splash-note" style="margin-top:16px">מידע על התערוכות עדכני ליוני 2026 · Exhibition information current as of June 2026.</div>
+      <div class="splash-note" id="splash-note-text" style="margin-top:16px"></div>
     </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
