@@ -122,8 +122,9 @@
     .header-credit-link { order:2 !important; position:static !important; flex:0 0 auto !important; align-self:center !important; margin:0 !important; font-size:0.72rem !important; max-width:112px !important; white-space:normal !important; text-align:right !important; line-height:1.25 !important; padding:1px 2px 1px 4px !important; }
     .header-muza-center { height:17px !important; max-width:30vw !important; }
     .filter-bar { top:66px !important; margin-top:0 !important; }
-    #lang-fixed { top:108px !important; right:10px !important; }   /* language toggle, upper-right */
-    #list-toggle { top:170px !important; }                          /* "Places" button, clear gap below the language toggle */
+    #lang-fixed { top:108px !important; right:10px !important; }   /* language toggle */
+    #lang-menu { top:146px !important; right:10px !important; }     /* menu opens below the toggle */
+    #list-toggle { top:150px !important; }                          /* "Places" button sits right below the language toggle */
   }
   /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
   #pc-note { white-space: pre-line; }
@@ -171,10 +172,7 @@
     <!-- Step 1: choose language (compact — just under the museum name) -->
     <div id="splash-choose">
       <div class="splash-lang-label">בחרו שפה · Choose your language</div>
-      <div class="splash-lang-row">
-        <button class="splash-btn" onclick="splashPick('he')"><svg viewBox="0 0 30 20" width="22" height="15" style="vertical-align:-2px;margin-inline-end:7px;border-radius:2px"><rect width="30" height="20" fill="#fff"/><rect width="30" height="2.6" y="3" fill="#0038b8"/><rect width="30" height="2.6" y="14.4" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="1.1"><path d="M15 7.1l2.7 4.7h-5.4z"/><path d="M15 12.9l2.7-4.7h-5.4z"/></g></svg>עברית</button>
-        <button class="splash-btn splash-btn-en" onclick="splashPick('en')"><svg viewBox="0 0 30 20" width="22" height="15" style="vertical-align:-2px;margin-inline-end:7px;border-radius:2px"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" stroke-width="2"/><rect x="12.5" width="5" height="20" fill="#fff"/><rect y="7.5" width="30" height="5" fill="#fff"/><rect x="13.5" width="3" height="20" fill="#C8102E"/><rect y="8.5" width="30" height="3" fill="#C8102E"/></svg>English</button>
-      </div>
+      <div class="splash-lang-row" id="splash-lang-row"><!-- buttons generated from LANGS by buildSplashLangButtons() --></div>
     </div>
 
     <!-- Step 2: selected-language intro, hours and Enter button -->
@@ -208,18 +206,24 @@
   #lang-fixed b{ font-weight:800; }
   #lang-fixed #lang-label{ display:inline-flex; align-items:center; gap:5px; }
   #lang-fixed svg{ display:inline-block; vertical-align:-2px; border-radius:2px; }
+  /* Language menu (opens below the toggle; scales to any number of languages) */
+  #lang-menu{ display:none; position:fixed; z-index:431; top:166px; right:16px; background:#3a201c; border:1.5px solid #e9c9b0; border-radius:12px; padding:5px; box-shadow:0 6px 20px rgba(0,0,0,0.5); }
+  #lang-menu .lang-opt{ display:flex; align-items:center; gap:8px; width:100%; min-width:132px; background:none; border:none; color:#f5efe6; font-family:'Rubik',sans-serif; font-size:0.86rem; font-weight:600; padding:9px 14px; border-radius:8px; cursor:pointer; white-space:nowrap; text-align:start; }
+  #lang-menu .lang-opt:hover{ background:rgba(233,201,176,0.16); }
+  #lang-menu .lang-opt.active{ background:#9e2b25; }
+  #lang-menu .lang-opt svg{ border-radius:2px; flex:0 0 auto; }
 
   /* ── Hebrew mode: right-align text areas (map chrome stays LTR) ── */
-  body.lang-he .pc-title,
-  body.lang-he .pc-type,
-  body.lang-he .pc-address,
-  body.lang-he .pc-note,
-  body.lang-he .pc-tip,
-  body.lang-he #pc-tip-text,
-  body.lang-he .pc-cat,
-  body.lang-he .place-info,
-  body.lang-he .sheet-title{ direction:rtl; text-align:right; }
-  body.lang-he .pc-tip{ text-align:right; }
+  body.rtl .pc-title,
+  body.rtl .pc-type,
+  body.rtl .pc-address,
+  body.rtl .pc-note,
+  body.rtl .pc-tip,
+  body.rtl #pc-tip-text,
+  body.rtl .pc-cat,
+  body.rtl .place-info,
+  body.rtl .sheet-title{ direction:rtl; text-align:right; }
+  body.rtl .pc-tip{ text-align:right; }
 
   /* Splash language chooser — both intros show; visitor picks a language */
   .splash-lang-label{ font-family:'Rubik',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#e9c9b0; margin:0 0 14px; }
@@ -261,7 +265,8 @@
 </div>
 
 <!-- Language toggle — fixed, upper-right, above the Places button -->
-<button id="lang-fixed" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label">EN · עב</span></button>
+<button id="lang-fixed" onclick="toggleLang()" title="Language · שפה" aria-label="Switch language"><span id="lang-label">EN ▾</span></button>
+<div id="lang-menu"><!-- options generated from LANGS by updateLangToggle() --></div>
 
 <!-- Map -->
 <div id="map"></div>
@@ -394,22 +399,22 @@
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Route</button>
-    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
-    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()" data-i18n="full_route">🗺 Full Route</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" data-i18n="pdf_guide">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()" data-i18n="save_map">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">♡</div>
-      <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap ♡ on any pavilion to save it here — then plan your route, download a PDF, or save the map for offline use.</div>
+      <div class="saved-empty-title" data-i18n="no_saved_title">No saved places yet</div>
+      <div class="saved-empty-body" data-i18n="no_saved_body">Tap ♡ on any pavilion to save it here — then plan your route, download a PDF, or save the map for offline use.</div>
     </div>
   </div>
 </div>
 
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
-  <span>Places</span>
+  <span data-i18n="places">Places</span>
   <span class="desktop-list-count" id="desktop-list-count">25</span>
 </button>
 
@@ -459,7 +464,11 @@ function loadTrip(key) {
   document.querySelectorAll(".trip-btn-circle").forEach(function(p){ p.classList.remove("active"); });
   var ap = document.getElementById("trip-btn-" + key);
   if (ap) ap.classList.add("active");
-  _tripToast(trip.name + " loaded — " + trip.ids.length + " stops", trip.note, prev, key);
+  var _tn = (typeof t==='function') ? t('trip_'+key+'_name') : trip.name;
+  var _nt = (typeof t==='function') ? t('trip_'+key+'_note') : trip.note;
+  var _ld = (typeof t==='function') ? t('trip_loaded') : 'loaded';
+  var _sw = (typeof t==='function') ? t('stops_word') : 'stops';
+  _tripToast(_tn + " " + _ld + " — " + trip.ids.length + " " + _sw, _nt, prev, key);
 }
 function _tripToast(msg, note, prev, key) {
   var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
@@ -467,7 +476,7 @@ function _tripToast(msg, note, prev, key) {
   el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#3a201c;color:#e9c9b0;padding:10px 18px;border-radius:24px;border:2px solid #e9c9b0;font-size:0.78rem;font-weight:600;font-family:Rubik,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;";
   el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.7">' + note + '</span>' : '') + "</span>"
     + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
-    + 'style="background:none;border:1px solid #e9c9b0;color:#e9c9b0;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Rubik,sans-serif;">Undo</button>';
+    + 'style="background:none;border:1px solid #e9c9b0;color:#e9c9b0;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Rubik,sans-serif;">' + ((typeof t==='function')?t('undo'):'Undo') + '</button>';
   document.body.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
 }
@@ -486,19 +495,19 @@ function _undoTrip(prev, key) {
 
 <!-- Preset route launcher -->
 <div class="trip-launcher" id="trip-launcher">
-  <span class="trip-launcher-label">Our<br>Picks</span>
+  <span class="trip-launcher-label" data-i18n-html="our_picks_html">Our<br>Picks</span>
   <button class="trip-btn-circle" id="trip-btn-highlights" onclick="loadTrip('highlights')" title="Museum Highlights">
     <span class="trip-btn-emoji-html">🏛️</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-highlights" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-highlights" startOffset="50%" text-anchor="middle">Highlights</textPath></text>
+      <text class="trip-arc-label"><textPath href="#arc-highlights" startOffset="50%" text-anchor="middle" data-i18n="arc_highlights">Highlights</textPath></text>
     </svg>
   </button>
   <button class="trip-btn-circle" id="trip-btn-park" onclick="loadTrip('park')" title="Park &amp; Heritage">
     <span class="trip-btn-emoji-html">🌳</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-park" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-park" startOffset="50%" text-anchor="middle">Park</textPath></text>
+      <text class="trip-arc-label"><textPath href="#arc-park" startOffset="50%" text-anchor="middle" data-i18n="arc_park">Park</textPath></text>
     </svg>
   </button>
 </div>
