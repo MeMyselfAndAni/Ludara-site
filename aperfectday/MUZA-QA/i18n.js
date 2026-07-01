@@ -287,10 +287,10 @@ const FLAG_RU = '<svg viewBox="0 0 30 20" width="20" height="13"><rect width="30
 // country flag); `rtl:true` makes that language right-to-left.
 // ─────────────────────────────────────────────────────────────────────────────
 const LANGS = [
-  { code:'he', name:'עברית',   short:'עב', flag:FLAG_IL, rtl:true  },
-  { code:'en', name:'English', short:'EN', flag:FLAG_US, rtl:false },
-  { code:'ru', name:'Русский', short:'RU', flag:FLAG_RU, rtl:false },
-  { code:'ar', name:'العربية', short:'ع',  flag:null,    rtl:true  },
+  { code:'he', name:'עברית',   short:'עב', flag:null, rtl:true  },
+  { code:'en', name:'English', short:'EN', flag:null, rtl:false },
+  { code:'ru', name:'Русский', short:'RU', flag:null, rtl:false },
+  { code:'ar', name:'العربية', short:'ع',  flag:null, rtl:true  },
 ];
 const DEFAULT_LANG = 'he';
 function langDef(code){ return LANGS.find(l => l.code === code) || LANGS.find(l => l.code === DEFAULT_LANG) || LANGS[0]; }
@@ -356,47 +356,46 @@ function applyLang(lang){
 
 function toggleLang(){ var m = document.getElementById('lang-menu'); if(!m) return; m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
 
-// Build the splash language buttons from the LANGS registry
-function buildSplashLangButtons(){
-  var row = document.getElementById('splash-lang-row');
-  if(!row) return;
-  row.innerHTML = LANGS.map(function(l){
-    var cls = 'splash-btn' + (l.rtl ? '' : ' splash-btn-en');
-    return '<button type="button" class="' + cls + '" onclick="splashPick(\'' + l.code + '\')">' +
-      (l.flag ? l.flag + ' ' : '') + l.name + '</button>';
-  }).join('');
-}
-
-// Splash step 1 → 2: pick a language, then show that language's intro, hours and Enter button
-function splashPick(lang){
-  applyLang(lang);
+// Splash (single screen): show the auto-detected language's intro, hours and
+// Enter button, plus the OTHER languages as one-tap "switch + enter" buttons.
+var SPLASH_OTHER = { he:'שפה אחרת', en:'Other language', ru:'Другой язык', ar:'لغة أخرى' };
+function renderSplashInfo(lang){
   var st = document.getElementById('splash-sub-text');
   var ht = document.getElementById('splash-hours-text');
   var eb = document.getElementById('splash-enter-btn');
+  var nt = document.getElementById('splash-note-text');
   if(st) st.textContent = t('splash_welcome');
   if(ht) ht.textContent = t('splash_hours');
   if(eb) eb.textContent = t('splash_enter');
-  var nt = document.getElementById('splash-note-text');
   if(nt) nt.textContent = t('splash_note');
   var info = document.getElementById('splash-info');
   if(info) info.setAttribute('dir', langDef(lang).rtl ? 'rtl' : 'ltr');
-  var choose = document.getElementById('splash-choose');
-  if(choose) choose.style.display = 'none';
-  if(info) info.style.display = '';
+  var lbl = document.getElementById('splash-otherlang');
+  if(lbl) lbl.textContent = SPLASH_OTHER[lang] || SPLASH_OTHER.en;
+  var row = document.getElementById('splash-lang-row');
+  if(row){
+    row.innerHTML = LANGS.filter(function(l){ return l.code !== lang; }).map(function(l){
+      var cls = 'splash-btn splash-btn-alt' + (l.rtl ? '' : ' splash-btn-en');
+      return '<button type="button" class="' + cls + '" onclick="splashEnter(\'' + l.code + '\')">' + l.name + '</button>';
+    }).join('');
+  }
 }
-function splashReset(){
-  var info = document.getElementById('splash-info');
-  var choose = document.getElementById('splash-choose');
-  if(info) info.style.display = 'none';
-  if(choose) choose.style.display = '';
+// Switch language and go straight into the map — one tap.
+function splashEnter(code){
+  applyLang(code);
+  if(typeof renderSplashInfo === 'function') renderSplashInfo(code);
+  if(typeof closeSplash === 'function') closeSplash();
 }
 // kept for safety if referenced elsewhere
-function enterIn(lang){ splashPick(lang); }
+function splashPick(lang){ applyLang(lang); renderSplashInfo(lang); }
+function splashReset(){}
+function enterIn(lang){ splashEnter(lang); }
 
 // Localise the chrome as early as possible (before the map finishes loading)
 document.addEventListener('DOMContentLoaded', function(){
-  buildSplashLangButtons();
-  applyLang(getLang());
+  var L = getLang();
+  applyLang(L);
+  renderSplashInfo(L);
 });
 // Close the language menu when clicking outside it
 document.addEventListener('click', function(e){
