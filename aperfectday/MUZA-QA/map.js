@@ -61,9 +61,11 @@ const NBHD_APPROX_CENTERS = {
 // Hebrew mode → prefer Hebrew street/place names; English mode → Latin/English.
 function setBasemapLang(lang) {
   if (typeof map === 'undefined' || !map || !map.getStyle) return;
-  var expr = (lang === 'he')
-    ? ['coalesce', ['get', 'name:he'], ['get', 'name'], ['get', 'name:en']]
-    : ['coalesce', ['get', 'name:en'], ['get', 'name']];
+  var expr;
+  if (lang === 'he')      expr = ['coalesce', ['get', 'name:he'], ['get', 'name'], ['get', 'name:en']];
+  else if (lang === 'ru') expr = ['coalesce', ['get', 'name:ru'], ['get', 'name:en'], ['get', 'name']];
+  else if (lang === 'ar') expr = ['coalesce', ['get', 'name:ar'], ['get', 'name:en'], ['get', 'name']];
+  else                    expr = ['coalesce', ['get', 'name:en'], ['get', 'name']];
   try {
     var layers = map.getStyle().layers || [];
     layers.forEach(function (layer) {

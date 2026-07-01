@@ -13,15 +13,15 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 26 places across the museum grounds: every pavilion, the exhibition showing inside it, and the gardens and 3,000-year-old tell between them. Tap Next to begin.',
+      body: 'One interactive map with 26 attractions to explore: temporary and permanent exhibitions, beautiful gardens and a 3,000-year-old tell.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a place worth your time: a pavilion of ancient glass, a 3,000-year-old tell, the exhibition showing inside each building. Tap any icon to see what is there.',
+      title: 'The Eretz Israel Museum Guide',
+      body: 'Every pin is worth your time: a groundbreaking crafts & design biennale, a pavilion of ancient glass, an ancient olive press, fine mosaics, and relaxing gardens. Tap any icon to see what is there.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -137,9 +137,9 @@
   var TUT_BTN_HE = { 'Next':'הבא', 'Done':'סיום', 'Done ✓':'סיום ✓' };
   var TUT_HE = {
     ['Welcome to Your Perfect Day in ' + CITY]: { title:'ברוכים הבאים ליום מושלם במוזיאון ארץ ישראל',
-      body:'מפה אחת. 26 מקומות ברחבי המוזיאון: כל ביתן, התערוכה שבתוכו, והגנים והתל בן 3,000 השנה שביניהם. הקישו «הבא» כדי להתחיל.' },
-    ['Our Curated ' + CITY + ' Guide']: { title:'המדריך שלנו למוזיאון ארץ ישראל',
-      body:'כל סיכה היא מקום ששווה את זמנכם: ביתן של זכוכית עתיקה, תל בן 3,000 שנה, והתערוכה שבכל מבנה. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
+      body:'מפה אינטראקטיבית אחת עם 26 אטרקציות לגלות: תערוכות מתחלפות וקבועות, גנים יפים ותל בן 3,000 שנה.' },
+    'The Eretz Israel Museum Guide': { title:'המדריך למוזיאון ארץ ישראל',
+      body:'כל סיכה שווה את זמנכם: ביאנלה פורצת דרך לאומנות ולעיצוב, ביתן של זכוכית עתיקה, בית בד עתיק, פסיפסים, וגנים מרגיעים. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
     'Inside the place card': { title:'בתוך כרטיס המקום',
       body:'בכל כרטיס תמצאו את המקום בעברית ובאנגלית, מה מוצג עכשיו והתערוכה הנוכחית, וטיפ למבקר. גללו לאתר וגם למסלול הליכה אליו.' },
     'Filter by place type': { title:'סינון לפי סוג',
@@ -163,6 +163,67 @@
     "You're all set!": { title:'הכול מוכן!',
       body:'המוזיאון כולו פתוח לפניכם. צאו למצוא את היום המושלם שלכם.' }
   };
+  var TUT_BTN_RU = { 'Next':'Далее', 'Done':'Готово', 'Done ✓':'Готово ✓' };
+  var TUT_RU = {
+    ['Welcome to Your Perfect Day in ' + CITY]: { title:'Добро пожаловать в ваш идеальный день в Музее Эрец-Исраэль',
+      body:'Одна интерактивная карта с 26 объектами: временные и постоянные выставки, прекрасные сады и телль возрастом 3000 лет.' },
+    'The Eretz Israel Museum Guide': { title:'Путеводитель по Музею Эрец-Исраэль',
+      body:'Каждая метка стоит вашего времени: новаторская биеннале ремёсел и дизайна, павильон древнего стекла, старинная маслодавильня, изящные мозаики и тенистые сады. Нажмите любой значок, чтобы узнать, что там.' },
+    'Inside the place card': { title:'Внутри карточки места',
+      body:'В каждой карточке — место на иврите и английском, что выставлено сейчас и текущая выставка, а также совет для посетителя. Прокрутите вниз до сайта и пешего маршрута.' },
+    'Filter by place type': { title:'Фильтр по типу',
+      body:'Ищете только павильоны или только сады и места наследия? Нажмите категорию вверху, чтобы показать лишь нужное, — карта обновится.' },
+    'Explore by Zone': { title:'По зонам',
+      body:'Каждый кружок — часть территории: восточные павильоны, центральная часть или западный парк. Нажмите один, чтобы сразу приблизиться.' },
+    'Save your favorites': { title:'Сохраняйте избранное',
+      body:'Что-то зацепило? Нажмите сердечко. Оно останется в вашем списке на всю поездку, даже если закрыть карту.' },
+    'Your saved places': { title:'Ваши сохранённые места',
+      body:'Нажмите «Сохранённые», чтобы увидеть список. Нажмите строку, чтобы снова открыть карточку. Перетаскивайте, чтобы расставить в порядке прогулки.' },
+    'Navigate with Google Maps': { title:'Навигация в Google Maps',
+      body:'Готовы идти? Откройте весь маршрут в Google Maps или нажмите сохранённое место, чтобы пройти прямо к нему.' },
+    'Download a PDF guide': { title:'Скачать PDF-гид',
+      body:'Нажмите «PDF-гид», чтобы получить красиво оформленный гид со всеми вашими выборами — готовый поделиться или распечатать перед выходом.' },
+    'Share your map': { title:'Поделитесь картой',
+      body:'Отправьте карту спутнику или сохраните для следующего визита. Одно касание — поделиться сообщением или письмом.' },
+    'Our Day Trip Picks': { title:'Наши маршруты на день',
+      body:'Ищете вдохновение? У нас есть предложения. Одно касание слева загружает готовый день.' },
+    'Navigate': { title:'Найдите себя',
+      body:'Территория музея большая, а указателей мало. Нажмите кружок, чтобы найти себя на карте.' },
+    "You're all set!": { title:'Всё готово!',
+      body:'Музей в вашем распоряжении. Найдите свой идеальный день.' }
+  };
+  var TUT_BTN_AR = { 'Next':'التالي', 'Done':'تم', 'Done ✓':'تم ✓' };
+  var TUT_AR = {
+    ['Welcome to Your Perfect Day in ' + CITY]: { title:'أهلاً بكم في يومكم المثالي في متحف أرض إسرائيل',
+      body:'خريطة تفاعلية واحدة بها 26 معلماً لاكتشافها: معارض مؤقتة ودائمة، وحدائق جميلة، وتل عمره 3000 عام.' },
+    'The Eretz Israel Museum Guide': { title:'دليل متحف أرض إسرائيل',
+      body:'كل علامة تستحق وقتك: بيناليه رائد للحِرف والتصميم، وجناح زجاج قديم، ومعصرة زيتون عتيقة، وفسيفساء أنيقة، وحدائق وارفة الظلال. اضغط أي أيقونة لترى ما فيها.' },
+    'Inside the place card': { title:'داخل بطاقة المكان',
+      body:'تضمّ كل بطاقة اسم المكان بالعبرية والإنجليزية، وما يُعرض الآن والمعرض الحالي، ونصيحة للزائر. مرِّر للأسفل للوصول إلى الموقع ومسار المشي إليه.' },
+    'Filter by place type': { title:'التصفية حسب النوع',
+      body:'تبحث عن الأجنحة فقط، أو عن الحدائق ومواقع التراث فقط؟ اضغط فئة في الأعلى لعرض ما تريد فقط — وستتبعك الخريطة.' },
+    'Explore by Zone': { title:'استكشف حسب المنطقة',
+      body:'كل فقاعة جزء من المتحف: الأجنحة الشرقية، أو المنطقة المركزية، أو الحديقة الغربية. اضغط واحدة للتقريب إليها مباشرةً.' },
+    'Save your favorites': { title:'احفظ مفضّلاتك',
+      body:'وجدت ما يستوقفك؟ اضغط القلب. سيبقى في قائمتك طوال الزيارة، حتى لو أغلقت الخريطة.' },
+    'Your saved places': { title:'أماكنك المحفوظة',
+      body:'اضغط «المحفوظة» لرؤية قائمتك. اضغط أي صف لإعادة فتح البطاقة. اسحب لترتيبها حسب مسار مشيك.' },
+    'Navigate with Google Maps': { title:'التنقّل عبر Google Maps',
+      body:'جاهز للمشي؟ افتح مسارك الكامل في Google Maps، أو اضغط أي مكان محفوظ للتوجّه إليه مباشرةً.' },
+    'Download a PDF guide': { title:'تنزيل دليل PDF',
+      body:'اضغط «دليل PDF» للحصول على دليل أنيق التصميم بكل اختياراتك، جاهز للمشاركة أو الطباعة قبل خروجك.' },
+    'Share your map': { title:'شارك خريطتك',
+      body:'أرسل الخريطة إلى رفيق رحلتك أو احتفظ بها للزيارة القادمة. ضغطة واحدة للمشاركة برسالة أو بريد إلكتروني.' },
+    'Our Day Trip Picks': { title:'مساراتنا المقترحة لليوم',
+      body:'تبحث عن إلهام؟ لدينا اقتراحات لك. ضغطة واحدة على الجانب تحمّل يوماً كاملاً جاهزاً.' },
+    'Navigate': { title:'حدّد موقعك',
+      body:'مساحة المتحف واسعة واللافتات قليلة. اضغط الدائرة لتحديد موقعك على الخريطة.' },
+    "You're all set!": { title:'كل شيء جاهز!',
+      body:'المتحف بين يديك. اذهب واعثر على يومك المثالي.' }
+  };
+  var TUT_BY_LANG = { he: TUT_HE, ru: TUT_RU, ar: TUT_AR };
+  var TUT_BTN_BY_LANG = { he: TUT_BTN_HE, ru: TUT_BTN_RU, ar: TUT_BTN_AR };
+  var TUT_SKIP_BY_LANG = { he:'דלג לסוף', ru:'Перейти к концу', ar:'تخطٍّ إلى النهاية' };
   function _tutHE(){ return (typeof LANG !== 'undefined' && LANG === 'he'); }
 
 
@@ -623,11 +684,14 @@
       if (d) d.className = 'tut-dot ' + (i === n ? 'on' : 'off');
     });
 
-    var _h = _tutHE() ? TUT_HE[step.title] : null;
+    var _tl   = (typeof LANG !== 'undefined') ? LANG : 'en';
+    var _dict = TUT_BY_LANG[_tl] || null;
+    var _h    = _dict ? _dict[step.title] : null;
     titleEl.textContent = _h ? _h.title : step.title;
     bodyEl.textContent  = _h ? _h.body  : step.body;
-    nextBtn.textContent = _tutHE() ? (TUT_BTN_HE[step.btn] || step.btn) : step.btn;
-    var _skip = document.getElementById('tut-skip'); if(_skip) _skip.textContent = _tutHE() ? 'דלג לסוף' : 'Skip to the end';
+    var _btnmap = TUT_BTN_BY_LANG[_tl];
+    nextBtn.textContent = (_btnmap && _btnmap[step.btn]) || step.btn;
+    var _skip = document.getElementById('tut-skip'); if(_skip) _skip.textContent = TUT_SKIP_BY_LANG[_tl] || 'Skip to the end';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, targetEl);
