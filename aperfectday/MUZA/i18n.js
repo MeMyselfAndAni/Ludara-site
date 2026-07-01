@@ -88,6 +88,170 @@ const STRINGS = {
       pdf_created_with:'מדריך מפה אינטראקטיבית נוצר עם', pdf_preparing:'מכינים את המדריך…',
       pdf_walking:'הליכה', pdf_driving:'נסיעה', pdf_travel_time:'זמן נסיעה',
     }
+  },
+  ru: {
+    cl:        { pavilion:"Павильоны", hall:"Выставочные залы", heritage:"Наследие", outdoor:"Сады и территория", service:"Услуги" },
+    catLabels: { pavilion:"Павильон", hall:"Выставочный зал", heritage:"Объект наследия", outdoor:"Сад и территория", service:"Услуга" },
+    zones:     { east:"Восточные павильоны", core:"Центральная часть", park:"Западный парк" },
+    ui: {
+      hdr_apd_in:"A Perfect Day —",
+      hdr_museum:"Музей Эрец-Исраэль",
+      hdr_sub:"Павильоны и текущие выставки · מוז״א",
+      hdr_guide_h1:"Путеводитель по <em>Музею Эрец-Исраэль</em>",
+      credit:"Интерактивная карта от Ludara.AI ↗",
+      f_saved:"Выбранное",
+      f_all:"Все",
+      f_pavilion:"Павильоны",
+      f_hall:"Выставочные залы",
+      f_heritage:"Наследие",
+      f_outdoor:"Сады и территория",
+      f_service:"Услуги",
+      zones_title:"Зоны кампуса",
+      z_all:"Все",
+      z_east:"Восточные павильоны",
+      z_core:"Центральная часть",
+      z_park:"Западный парк",
+      places:"Места",
+      places_word:"Места",
+      guide:"Гид",
+      trip_title:"🗺 Маршрут по выбранным местам",
+      trip_maps:"🗺 Открыть в Google Maps",
+      trip_pdf:"⬇ Скачать PDF-гид",
+      trip_share:"🔗 Поделиться",
+      saved_panel:"Ваши выбранные места",
+      footer_by:"Интерактивная карта от",
+      tip_label:"💡 Совет",
+      website:"🌐 Сайт",
+      search_ph:"Поиск мест…",
+      match_one:"результат",
+      match_many:"результатов",
+      saved_word:"Выбранное",
+      drag_reorder:"Перетащите ⠿, чтобы изменить порядок",
+      itinerary:"🗺 Маршрут",
+      auto:"↺ Авто",
+      empty_saved:"Нажмите ♡ на любом месте,<br>чтобы выбрать его здесь",
+      saved_cleared:"Выбранные места очищены.",
+      on_map:"на карте",
+      splash_welcome:"Добро пожаловать в МУЗА, Музей Эрец-Исраэль, — павильоны керамики, стекла, монет, меди и фольклора вокруг 3000-летнего телля и зелёных садов. Этот гид поможет найти каждый из них и увидеть, что выставлено внутри сейчас.",
+      splash_hours:"🕐 Часы работы · Вс–Ср 10:00–16:00 · Чт 10:00–20:00 · Пт и Сб 10:00–14:00",
+      splash_enter:"Открыть карту музея",
+      splash_note:"Информация о выставках актуальна на июнь 2026 года.",
+      full_route:"🗺 Весь маршрут",
+      pdf_guide:"📄 PDF-гид",
+      save_map:"🖼 Сохранить карту",
+      places_word_btn:"Места",
+      no_saved_title:"Пока нет выбранных мест",
+      no_saved_body:"Нажмите ♡ на любом павильоне, чтобы выбрать его здесь, — затем спланируйте маршрут, скачайте PDF или сохраните карту для офлайн-доступа.",
+      trip_highlights_name:"Главное в музее",
+      trip_highlights_note:"Начните у входа, поднимитесь на телль, затем павильоны",
+      trip_park_name:"Парк и наследие",
+      trip_park_note:"Спокойный маршрут по западному парку",
+      trip_loaded:"загружено",
+      stops_word:"остановок",
+      undo:"Отменить",
+      our_picks_html:"Наш<br>выбор",
+      arc_highlights:"Главное",
+      arc_park:"Парк",
+      stop_one:"остановка",
+      min_walk:"мин ходьбы",
+      min_drive:"мин езды",
+      min_here:"мин здесь",
+      mins_total:"всего",
+      walking_word:"пешком",
+      autosort:"↺ Автосортировка",
+      walk_here:"🚶 Маршрут пешком (Google Maps)",
+      clear_btn:"🗑 Очистить",
+      pdf_cover_sub:"Ваш личный гид на день",
+      pdf_curated_by:"Подготовлено",
+      pdf_scan:"Сканируйте для Google Maps",
+      pdf_created_with:"Интерактивный гид-карта создан с помощью",
+      pdf_preparing:"Готовим ваш гид…",
+      pdf_walking:"Пешком",
+      pdf_driving:"На машине",
+      pdf_travel_time:"Время в пути",
+    }
+  },
+  ar: {
+    cl:        { pavilion:"الأجنحة", hall:"قاعات العرض", heritage:"التراث", outdoor:"الحدائق والساحات", service:"الخدمات" },
+    catLabels: { pavilion:"جناح", hall:"قاعة عرض", heritage:"موقع تراثي", outdoor:"حديقة وساحة", service:"خدمة" },
+    zones:     { east:"الأجنحة الشرقية", core:"المنطقة المركزية", park:"الحديقة الغربية" },
+    ui: {
+      hdr_apd_in:"A Perfect Day —",
+      hdr_museum:"متحف أرض إسرائيل",
+      hdr_sub:"الأجنحة والمعارض الحالية · מוז״א",
+      hdr_guide_h1:"دليل <em>متحف أرض إسرائيل</em>",
+      credit:"خريطة تفاعلية من Ludara.AI ↗",
+      f_saved:"المحفوظة",
+      f_all:"الكل",
+      f_pavilion:"الأجنحة",
+      f_hall:"قاعات العرض",
+      f_heritage:"التراث",
+      f_outdoor:"الحدائق والساحات",
+      f_service:"الخدمات",
+      zones_title:"مناطق الحرم",
+      z_all:"الكل",
+      z_east:"الأجنحة الشرقية",
+      z_core:"المنطقة المركزية",
+      z_park:"الحديقة الغربية",
+      places:"الأماكن",
+      places_word:"الأماكن",
+      guide:"الدليل",
+      trip_title:"🗺 مسار أماكنك المحفوظة",
+      trip_maps:"🗺 افتح في Google Maps",
+      trip_pdf:"⬇ تنزيل دليل PDF",
+      trip_share:"🔗 مشاركة",
+      saved_panel:"أماكنك المحفوظة",
+      footer_by:"خريطة تفاعلية من",
+      tip_label:"💡 نصيحة",
+      website:"🌐 الموقع",
+      search_ph:"ابحث عن الأماكن…",
+      match_one:"نتيجة",
+      match_many:"نتائج",
+      saved_word:"المحفوظة",
+      drag_reorder:"اسحب ⠿ لإعادة الترتيب",
+      itinerary:"🗺 خط السير",
+      auto:"↺ تلقائي",
+      empty_saved:"اضغط ♡ على أي مكان<br>لحفظه هنا",
+      saved_cleared:"تم مسح الأماكن المحفوظة.",
+      on_map:"على الخريطة",
+      splash_welcome:"أهلاً بكم في موزا، متحف أرض إسرائيل — أجنحة الخزف والزجاج والعملات والنحاس والفولكلور حول تل عمره 3000 عام وحدائق خضراء. يساعدكم هذا الدليل في العثور على كل جناح ومعرفة ما يُعرض داخله الآن.",
+      splash_hours:"🕐 ساعات العمل · الأحد–الأربعاء 10:00–16:00 · الخميس 10:00–20:00 · الجمعة والسبت 10:00–14:00",
+      splash_enter:"ادخل إلى خريطة المتحف",
+      splash_note:"معلومات المعارض محدَّثة حتى يونيو 2026.",
+      full_route:"🗺 المسار الكامل",
+      pdf_guide:"📄 دليل PDF",
+      save_map:"🖼 حفظ الخريطة",
+      places_word_btn:"الأماكن",
+      no_saved_title:"لا توجد أماكن محفوظة بعد",
+      no_saved_body:"اضغط ♡ على أي جناح لحفظه هنا — ثم خطّط مسارك، أو نزّل ملف PDF، أو احفظ الخريطة للاستخدام دون اتصال.",
+      trip_highlights_name:"أبرز معالم المتحف",
+      trip_highlights_note:"ابدأ من المدخل، اصعد التل، ثم الأجنحة",
+      trip_park_name:"الحديقة والتراث",
+      trip_park_note:"جولة هادئة عبر الحديقة الغربية",
+      trip_loaded:"تم التحميل",
+      stops_word:"محطات",
+      undo:"تراجع",
+      our_picks_html:"اختياراتنا",
+      arc_highlights:"أبرز المعالم",
+      arc_park:"الحديقة",
+      stop_one:"محطة",
+      min_walk:"دقيقة سيراً",
+      min_drive:"دقيقة بالسيارة",
+      min_here:"دقيقة هنا",
+      mins_total:"الإجمالي",
+      walking_word:"سيراً",
+      autosort:"↺ ترتيب تلقائي",
+      walk_here:"🚶 المشي إلى هنا (Google Maps)",
+      clear_btn:"🗑 مسح",
+      pdf_cover_sub:"دليلك الشخصي ليوم كامل",
+      pdf_curated_by:"إعداد",
+      pdf_scan:"امسح للوصول إلى Google Maps",
+      pdf_created_with:"دليل الخريطة التفاعلي أُنشئ بواسطة",
+      pdf_preparing:"جارٍ تحضير دليلك…",
+      pdf_walking:"سيراً",
+      pdf_driving:"بالسيارة",
+      pdf_travel_time:"زمن التنقل",
+    }
   }
 };
 
@@ -123,10 +287,10 @@ const FLAG_RU = '<svg viewBox="0 0 30 20" width="20" height="13"><rect width="30
 // country flag); `rtl:true` makes that language right-to-left.
 // ─────────────────────────────────────────────────────────────────────────────
 const LANGS = [
-  { code:'he', name:'עברית',   short:'עב', flag:FLAG_IL, rtl:true  },
-  { code:'en', name:'English', short:'EN', flag:FLAG_US, rtl:false },
-  // { code:'ru', name:'Русский', short:'RU', flag:FLAG_RU, rtl:false },   // + STRINGS.ru + p.ru
-  // { code:'ar', name:'العربية', short:'ع',  flag:null,    rtl:true  },    // + STRINGS.ar + p.ar
+  { code:'he', name:'עברית',   short:'עב', flag:null, rtl:true  },
+  { code:'en', name:'English', short:'EN', flag:null, rtl:false },
+  { code:'ru', name:'Русский', short:'RU', flag:null, rtl:false },
+  { code:'ar', name:'العربية', short:'ع',  flag:null, rtl:true  },
 ];
 const DEFAULT_LANG = 'he';
 function langDef(code){ return LANGS.find(l => l.code === code) || LANGS.find(l => l.code === DEFAULT_LANG) || LANGS[0]; }
@@ -192,47 +356,46 @@ function applyLang(lang){
 
 function toggleLang(){ var m = document.getElementById('lang-menu'); if(!m) return; m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
 
-// Build the splash language buttons from the LANGS registry
-function buildSplashLangButtons(){
-  var row = document.getElementById('splash-lang-row');
-  if(!row) return;
-  row.innerHTML = LANGS.map(function(l){
-    var cls = 'splash-btn' + (l.rtl ? '' : ' splash-btn-en');
-    return '<button type="button" class="' + cls + '" onclick="splashPick(\'' + l.code + '\')">' +
-      (l.flag ? l.flag + ' ' : '') + l.name + '</button>';
-  }).join('');
-}
-
-// Splash step 1 → 2: pick a language, then show that language's intro, hours and Enter button
-function splashPick(lang){
-  applyLang(lang);
+// Splash (single screen): show the auto-detected language's intro, hours and
+// Enter button, plus the OTHER languages as one-tap "switch + enter" buttons.
+var SPLASH_OTHER = { he:'שפות אחרות', en:'Other languages', ru:'Другие языки', ar:'لغات أخرى' };
+function renderSplashInfo(lang){
   var st = document.getElementById('splash-sub-text');
   var ht = document.getElementById('splash-hours-text');
   var eb = document.getElementById('splash-enter-btn');
+  var nt = document.getElementById('splash-note-text');
   if(st) st.textContent = t('splash_welcome');
   if(ht) ht.textContent = t('splash_hours');
   if(eb) eb.textContent = t('splash_enter');
-  var nt = document.getElementById('splash-note-text');
   if(nt) nt.textContent = t('splash_note');
   var info = document.getElementById('splash-info');
   if(info) info.setAttribute('dir', langDef(lang).rtl ? 'rtl' : 'ltr');
-  var choose = document.getElementById('splash-choose');
-  if(choose) choose.style.display = 'none';
-  if(info) info.style.display = '';
+  var lbl = document.getElementById('splash-otherlang');
+  if(lbl) lbl.textContent = SPLASH_OTHER[lang] || SPLASH_OTHER.en;
+  var row = document.getElementById('splash-lang-row');
+  if(row){
+    row.innerHTML = LANGS.filter(function(l){ return l.code !== lang; }).map(function(l){
+      var cls = 'splash-btn splash-btn-alt' + (l.rtl ? '' : ' splash-btn-en');
+      return '<button type="button" class="' + cls + '" onclick="splashEnter(\'' + l.code + '\')">' + l.name + '</button>';
+    }).join('');
+  }
 }
-function splashReset(){
-  var info = document.getElementById('splash-info');
-  var choose = document.getElementById('splash-choose');
-  if(info) info.style.display = 'none';
-  if(choose) choose.style.display = '';
+// Switch language and go straight into the map — one tap.
+function splashEnter(code){
+  applyLang(code);
+  if(typeof renderSplashInfo === 'function') renderSplashInfo(code);
+  if(typeof closeSplash === 'function') closeSplash();
 }
 // kept for safety if referenced elsewhere
-function enterIn(lang){ splashPick(lang); }
+function splashPick(lang){ applyLang(lang); renderSplashInfo(lang); }
+function splashReset(){}
+function enterIn(lang){ splashEnter(lang); }
 
 // Localise the chrome as early as possible (before the map finishes loading)
 document.addEventListener('DOMContentLoaded', function(){
-  buildSplashLangButtons();
-  applyLang(getLang());
+  var L = getLang();
+  applyLang(L);
+  renderSplashInfo(L);
 });
 // Close the language menu when clicking outside it
 document.addEventListener('click', function(e){
