@@ -358,7 +358,7 @@ function toggleLang(){ var m = document.getElementById('lang-menu'); if(!m) retu
 
 // Splash (single screen): show the auto-detected language's intro, hours and
 // Enter button, plus the OTHER languages as one-tap "switch + enter" buttons.
-var SPLASH_OTHER = { he:'שפה אחרת', en:'Other language', ru:'Другой язык', ar:'لغة أخرى' };
+var SPLASH_OTHER = { he:'שפות אחרות', en:'Other languages', ru:'Другие языки', ar:'لغات أخرى' };
 function renderSplashInfo(lang){
   var st = document.getElementById('splash-sub-text');
   var ht = document.getElementById('splash-hours-text');
