@@ -78,6 +78,18 @@ function setBasemapLang(lang) {
 
 // ─── Map initialisation ───────────────────────────────────────────────────────
 function initMap() {
+  // RTL text plugin — MapLibre cannot shape/order Hebrew & Arabic base-map labels
+  // without this; otherwise the tile labels render with letters reversed.
+  try {
+    if (typeof maplibregl.getRTLTextPluginStatus !== 'function' ||
+        maplibregl.getRTLTextPluginStatus() === 'unavailable') {
+      maplibregl.setRTLTextPlugin(
+        'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
+        null,
+        true   // lazy: load when RTL text is first needed
+      );
+    }
+  } catch (e) {}
   map = new maplibregl.Map({
     container: 'map',
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
