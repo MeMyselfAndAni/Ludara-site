@@ -35,23 +35,21 @@
     }
 
     /* NAV */
-    nav {
-      padding: 22px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-    }
-    @media (max-width: 600px) { nav { padding: 18px 24px; } }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.35rem; font-weight: 400; letter-spacing: 0.04em;
-      color: var(--gold-l); text-decoration: none;
-    }
-    .nav-logo span { color: rgba(255,255,255,0.65); font-size: 0.88em; }
-    .nav-link {
-      font-size: 0.92rem; font-weight: 400;
-      color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.2s;
-    }
-    .nav-link:hover { color: var(--gold-l); }
+    nav { max-width:1100px; margin:0 auto; padding:22px 24px 10px; display:flex; align-items:center; justify-content:space-between; }
+    .nav-logo { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; color:var(--white); text-decoration:none; }
+    .nav-links { display:flex; gap:24px; align-items:center; }
+    .nav-links a { font-size:14px; color:rgba(255,255,255,0.75); text-decoration:none; transition:color .15s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .has-dropdown{position:relative;}
+    .has-dropdown>a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease;}
+    .has-dropdown:hover>a .caret,.has-dropdown:focus-within>a .caret{transform:rotate(180deg);}
+    .dropdown-nav{position:absolute;top:calc(100% + 10px);right:0;min-width:212px;background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s;z-index:30;}
+    .has-dropdown:hover .dropdown-nav,.has-dropdown:focus-within .dropdown-nav{opacity:1;visibility:visible;transform:translateY(0);}
+    .dropdown-nav::before{content:'';position:absolute;top:-10px;left:0;right:0;height:14px;}
+    .dropdown-nav a{display:block;padding:8px 12px;border-radius:6px;font-size:14px;white-space:nowrap;color:rgba(255,255,255,0.75);}
+    .dropdown-nav a:hover{background:rgba(184,150,90,.10);color:var(--white);}
+    .nav-link { font-size:14px; color:rgba(255,255,255,0.75); text-decoration:none; transition:color .15s; }
+    .nav-link:hover { color:var(--gold-l); }
 
     /* WRAPPER */
     .wrap {
@@ -342,10 +340,21 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="https://ludara.ai" target="_blank">
-      A Perfect Day <span>by Ludara.AI</span>
-    </a>
-    <a class="nav-link" href="https://ludara.ai/aperfectday/" target="_blank">See the full product &#8594;</a>
+    <a class="nav-logo" href="https://ludara.ai">Ludara.AI</a>
+    <div class="nav-links">
+      <a href="https://ludara.ai">Home</a>
+      <div class="has-dropdown">
+        <a href="https://ludara.ai/aperfectday/">A Perfect Day <span class="caret" aria-hidden="true">&#9662;</span></a>
+        <div class="dropdown-nav" role="menu">
+          <a href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
+          <a href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+          <a href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
+          <a href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
+        </div>
+      </div>
+      <a href="https://ludara.ai/about">About</a>
+      <a href="https://ludara.ai/contact">Contact</a>
+    </div>
   </nav>
 
   <div class="wrap">
