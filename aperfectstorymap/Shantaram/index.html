@@ -268,7 +268,6 @@
   <button class="pill" onclick="fc(this,'bond')"><span class="dot" style="background:#d4a043"></span>Friends &amp; Lovers</button>
   <button class="pill" onclick="fc(this,'dark')"><span class="dot" style="background:#5a6a80"></span>Underworld &amp; Prison</button>
   <button class="pill" onclick="fc(this,'journey')"><span class="dot" style="background:#3a8ab0"></span>The Long Journeys</button>
-  <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
 <!-- Map -->
@@ -506,77 +505,14 @@
 .trip-btn-circle.active .trip-arc-label { fill: white; }
 </style>
 
-<script>
-/* ── DAY TRIPS ── */
-var _TRIPS = {
-  morning: { name: "Makers’ Morning", ids: [12, 11, 25, 30], note: 'Rialto market: Tue-Sat until 12:00 only' },
-  evening: { name: 'Venetian Evening',   ids: [24, 23, 9, 7],   note: 'Antica Adelaide kitchen until 01:00' }
-};
-function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
-function loadTrip(key) {
-  var trip = _TRIPS[key]; if (!trip) return;
-  var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
-  localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
-  if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);
-  if (typeof refreshFavourites === "function") refreshFavourites();
-  var sp = document.getElementById("pill-saved");
-  if (sp && !sp.classList.contains("active")) {
-    if (typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
-  } else if (typeof applyFilters === "function") { applyFilters(); }
-  document.querySelectorAll(".trip-btn-circle").forEach(function(p){ p.classList.remove("active"); });
-  var ap = document.getElementById("trip-btn-" + key);
-  if (ap) ap.classList.add("active");
-  _tripToast(trip.name + " loaded — " + trip.ids.length + " stops", trip.note, prev, key);
-}
-function _tripToast(msg, note, prev, key) {
-  var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
-  var el = document.createElement("div"); el.id = "_trip-toast";
-  el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#0f0d0a;color:#d4a84b;padding:10px 18px;border-radius:24px;border:2px solid #d4a84b;font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;";
-  el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.65">' + note + '</span>' : '') + "</span>"
-    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
-    + 'style="background:none;border:1px solid #d4a84b;color:#d4a84b;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
-  document.body.appendChild(el);
-  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
-}
-function _undoTrip(prev, key) {
-  var el = document.getElementById("_trip-toast"); if (el) el.remove();
-  localStorage.setItem(_favsKey(), JSON.stringify(prev));
-  if (typeof _clearSavedOrder === "function") _clearSavedOrder();
-  if (typeof refreshFavourites === "function") refreshFavourites();
-  var ap = document.getElementById("trip-btn-" + key); if (ap) ap.classList.remove("active");
-  if (!prev.length) {
-    var sp = document.getElementById("pill-saved");
-    if (sp && sp.classList.contains("active") && typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
-  } else if (typeof applyFilters === "function") { applyFilters(); }
-}
-</script>
-
-<!-- Day Trip launcher -->
-<div class="trip-launcher" id="trip-launcher">
-  <span class="trip-launcher-label">Our<br>Picks</span>
-  <button class="trip-btn-circle" id="trip-btn-morning" onclick="loadTrip('morning')" title="Makers' Morning">
-    <span class="trip-btn-emoji-html">🎨</span>
-    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-morning" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-morning" startOffset="50%" text-anchor="middle">Morning</textPath></text>
-    </svg>
-  </button>
-  <button class="trip-btn-circle" id="trip-btn-evening" onclick="loadTrip('evening')" title="Venetian Evening">
-    <span class="trip-btn-emoji-html">🌅</span>
-    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-evening" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-evening" startOffset="50%" text-anchor="middle">Evening</textPath></text>
-    </svg>
-  </button>
-</div>
+<!-- Day Trip launcher ("Our Picks") and its script removed for the Shantaram demo -->
 
 <script>
 window.TutorialConfig = {
   doneKey:     'shantaram_demo_v1',
   cityName:    'Bombay',
   demoPlaceId: 1,
-  demoSavedIds: [1, 2, 5, 7, 10],
-  tripNames:   "Lin's Colaba Morning or the Night Walk"
+  demoSavedIds: [1, 2, 5, 7, 10]
 };
 </script>
 <script src="tutorial.js"></script>

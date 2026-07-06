@@ -58,6 +58,40 @@ const NBHD_APPROX_CENTERS = {
   'afghan': { lat: 31.6200, lng: 65.7100 },
 };
 
+// ─── Region circle override ───────────────────────────────────────────────────
+// map-core's buildNbhdCircles() is tuned for Venice-sized districts: it drops
+// places more than 5km from the region centre, which broke Greater Bombay
+// (only Arthur Road survived the cut, so the circle wrapped one marker).
+// This override (map.js loads after map-core.js, so this declaration wins)
+// uses ALL places in a region and gives symbolic single-marker regions
+// (the village, the war chapters) a readable minimum radius.
+const NBHD_MIN_RADIUS = {
+  'colaba': 700,      // metres — tight historic quarter
+  'city':   2500,     // sprawls CST → Haji Ali → Film City; real extent dominates
+  'maha':   15000,    // symbolic: farming country, not a pin-point
+  'afghan': 40000,    // symbolic: a mountain region, not a place
+};
+
+function buildNbhdCircles() {
+  const circles = [];
+  for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
+    const approxCenter = NBHD_APPROX_CENTERS[nbhd];
+    const ps = PLACES.filter(p => p.nbhd === nbhd);   // no outlier cut — regions are large by design
+    const minR = NBHD_MIN_RADIUS[nbhd] || 80;
+
+    if (ps.length === 0) {
+      circles.push({ id:nbhd, lat:approxCenter.lat, lng:approxCenter.lng, radius:minR, color });
+    } else {
+      const clat = ps.reduce((s,p)=>s+p.lat,0)/ps.length;
+      const clng = ps.reduce((s,p)=>s+p.lng,0)/ps.length;
+      const maxDist = Math.max(...ps.map(p => _haversineM({lat:clat,lng:clng}, p)));
+      const radius = Math.max(maxDist * 1.20, minR);
+      circles.push({ id:nbhd, lat:clat, lng:clng, radius, color });
+    }
+  }
+  return circles;
+}
+
 // ─── Map initialisation ───────────────────────────────────────────────────────
 function initMap() {
   map = new maplibregl.Map({
