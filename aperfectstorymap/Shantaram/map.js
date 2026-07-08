@@ -132,6 +132,16 @@ function initMap() {
       }
 
       PLACES.forEach(p => addMarker(p));
+
+      // Open showing the WHOLE story — Bombay to Afghanistan on one screen.
+      // (The zoom-out that shows the shape of the novel is the demo's first impression.)
+      const storyBounds = new maplibregl.LngLatBounds();
+      PLACES.forEach(p => storyBounds.extend([p.lng, p.lat]));
+      map.fitBounds(storyBounds, {
+        padding: { top: 100, bottom: 80, left: 80, right: 80 },
+        duration: 0,
+      });
+
       if (typeof applyFilters   === 'function') applyFilters();
       if (typeof renderList     === 'function') renderList();
       if (typeof initFavourites === 'function') initFavourites();
