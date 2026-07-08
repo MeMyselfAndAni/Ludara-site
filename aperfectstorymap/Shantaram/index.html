@@ -117,6 +117,10 @@
     border: 1.5px solid #d4a043 !important; font-weight: 700 !important;
   }
   .pill-storypath.active { background: #d4a043 !important; color: #0f0d0a !important; }
+  /* Mobile: keep Story Path, search, and Bookmarks all on screen */
+  @media (max-width: 768px) {
+    #topbar-search { width: 110px !important; }
+  }
   .splash-inner {
     padding: 56px 36px 44px !important;
     max-width: 1200px !important;
@@ -241,7 +245,7 @@
     <p class="splash-sub">From a prison wall in Melbourne to a Colaba cafe table, a village in the rains, and the mountains of a distant war: the novel's whole world on one map, so every reader can see where the story lives.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
     <div class="splash-footer">
-      <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
+      <a href="https://ludara.ai/aperfectstorymap/" target="_blank">by Ludara.AI</a>
     </div>
   </div>
 </div>
@@ -255,7 +259,7 @@
 <!-- Header -->
 <header>
   <div class="header-title">
-    <a href="https://ludara.ai/aperfectday/" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+    <a href="https://ludara.ai/aperfectstorymap/" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
       <span class="wl-logo">A Perfect Story Map</span>
     </a>
     <div class="header-divider"></div>
@@ -266,9 +270,9 @@
   </div>
   <div class="header-ludara">
     <span class="header-ludara-text">Interactive map by</span>
-    <a class="header-ludara-brand" href="https://ludara.ai/aperfectday/" target="_blank"><span class="ludara-line1">A Perfect Story Map</span> <span class="ludara-line2">by Ludara.AI</span></a>
+    <a class="header-ludara-brand" href="https://ludara.ai/aperfectstorymap/" target="_blank"><span class="ludara-line1">A Perfect Story Map</span> <span class="ludara-line2">by Ludara.AI</span></a>
   </div>
-  <a class="header-btn" href="https://ludara.ai/aperfectday/" target="_blank">ludara.ai ↗</a>
+  <a class="header-btn" href="https://ludara.ai/aperfectstorymap/" target="_blank">ludara.ai ↗</a>
 </header>
 
 <!-- Filter bar -->
@@ -418,7 +422,7 @@
   <div class="places-list" id="places-list"></div>
   <div class="list-footer-brand">
     <span>Interactive map by</span>
-    <a href="https://ludara.ai/aperfectday/" target="_blank">A Perfect Day · Ludara.AI</a>
+    <a href="https://ludara.ai/aperfectstorymap/" target="_blank">A Perfect Day · Ludara.AI</a>
   </div>
 </div>
 
