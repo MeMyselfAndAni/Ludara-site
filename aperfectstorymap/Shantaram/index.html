@@ -725,8 +725,7 @@ function clearAllSaved() {
         '<div class="saved-stats-bar" style="display:flex"><span>🔖 '+pl.length+(pl.length===1?' bookmark':' bookmarks')+'</span>'+
         '<span class="saved-stat-dot">·</span><span>your journey through the book</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
-        '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 My PDF</button>'+
-        '<button class="saved-action-btn" onclick="generateStoryPathPDF()" style="flex:1">📖 Story PDF</button>'+
+        '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
       html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠇ to reorder'+

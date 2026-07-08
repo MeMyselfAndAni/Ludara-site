@@ -331,7 +331,14 @@ function renderList(){
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
-  el.innerHTML=filtered.map(p=>`
+  /* Action row: PDF + Share available from the main (Story Path) list too */
+  const _actionRow = `
+    <div style="display:flex;padding:8px 10px 6px;gap:5px;">
+      <button class="saved-action-btn" onclick="if(typeof generateStoryPathPDF==='function')generateStoryPathPDF()" style="flex:1">📄 PDF</button>
+      <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button>
+    </div>`;
+
+  el.innerHTML = _actionRow + filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
