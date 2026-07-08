@@ -46,8 +46,9 @@ async function preloadAllImages(places) {
   return results;
 }
 
-async function generatePDF(){
-  const places = getSortedFavPlaces();
+async function generatePDF(overridePlaces, customSubtitle){
+  window._pdfCoverSubtitle = customSubtitle || null;
+  const places = (overridePlaces && overridePlaces.length) ? overridePlaces : getSortedFavPlaces();
   if(!places || places.length === 0){
     alert('Bookmark some places first using the 🔖 button, then generate your guide.');
     return;
@@ -432,7 +433,7 @@ async function generatePDF(){
 <div class="pdf-cover">
   <div class="pdf-cover-logo">A Perfect Story Map by Ludara</div>
   <div class="pdf-cover-title">Shantaram</div>
-  <div class="pdf-cover-subtitle">Your Book Story Guide: the novel's places, in your order</div>
+  <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || "Your Book Story Guide: the novel's places, in your order"}</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">

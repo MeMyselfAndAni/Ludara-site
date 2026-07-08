@@ -438,6 +438,7 @@
       <div class="saved-empty-icon">🔖</div>
       <div class="saved-empty-title">No saved places yet</div>
       <div class="saved-empty-body">Tap 🔖 on any place to bookmark it: mark your path through the book, share your map, or download it as a PDF guide.</div>
+      <button class="saved-action-btn" onclick="generateStoryPathPDF()" style="margin-top:12px;padding:9px 18px;">📖 Download the full Story Path PDF</button>
     </div>
   </div>
 </div>
@@ -581,6 +582,12 @@ function toggleStoryPath(quiet){
   if(!quiet && typeof _toast === 'function') _toast('Story Path: the novel’s journey in order, from the escape to the war.', 4000);
 }
 
+/* Full Story Path PDF: every place of the novel's journey, in story order */
+function generateStoryPathPDF(){
+  var pl = STORY_PATH_IDS.map(function(id){ return PLACES.find(function(p){ return p.id === id; }); }).filter(Boolean);
+  if(typeof generatePDF === 'function') generatePDF(pl, "Your Book Story Guide: the novel's whole journey, in story order");
+}
+
 /* Any action that clears the route (filters, saved mode) also resets the button */
 window.addEventListener('load', function(){
   var _origClear = window.clearTripRoute;
@@ -718,7 +725,8 @@ function clearAllSaved() {
         '<div class="saved-stats-bar" style="display:flex"><span>🔖 '+pl.length+(pl.length===1?' bookmark':' bookmarks')+'</span>'+
         '<span class="saved-stat-dot">·</span><span>your journey through the book</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
-        '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
+        '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 My PDF</button>'+
+        '<button class="saved-action-btn" onclick="generateStoryPathPDF()" style="flex:1">📖 Story PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
       html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠇ to reorder'+
