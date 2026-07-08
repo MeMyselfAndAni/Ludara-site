@@ -96,8 +96,8 @@
       btn: 'Next'
     },
     {
-      title: 'Our Day Trip Picks',
-      body: 'Looking for inspiration? We have suggestions for you. One tap on the left loads a full ready-to-go day — ' + TRIP_NAMES + '.',
+      title: "The Story's Path",
+      body: 'One tap on the left draws the novel\'s whole journey in order, from the arrival at the Gateway to the mountains of the war. Numbered stops, one line, the shape of the book.',
       target: '#trip-launcher',
       cardPos: 'center',
       demo: 'close-saved-pulse',

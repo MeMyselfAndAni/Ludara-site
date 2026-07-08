@@ -135,10 +135,15 @@ function initMap() {
 
       // Open showing the WHOLE story — Bombay to Afghanistan on one screen.
       // (The zoom-out that shows the shape of the novel is the demo's first impression.)
+      // Padding must clear the overlays: filter pills at the top, region bubble
+      // bar at the bottom — otherwise the outermost markers hide behind them.
       const storyBounds = new maplibregl.LngLatBounds();
       PLACES.forEach(p => storyBounds.extend([p.lng, p.lat]));
+      const _isMobile = window.innerWidth < 768;
       map.fitBounds(storyBounds, {
-        padding: { top: 100, bottom: 80, left: 80, right: 80 },
+        padding: _isMobile
+          ? { top: 140, bottom: 190, left: 40,  right: 40 }
+          : { top: 190, bottom: 230, left: 120, right: 120 },
         duration: 0,
       });
 

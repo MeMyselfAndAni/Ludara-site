@@ -61,7 +61,6 @@ function syncFavBtn(id){
   if(!btn) return;
   const faved = isFav(id);
   btn.textContent = '🔖';
-  btn.style.opacity = faved ? '1' : '0.45';
   btn.classList.toggle('faved', faved);
   btn.title = faved ? 'Remove bookmark' : 'Bookmark this place';
 }

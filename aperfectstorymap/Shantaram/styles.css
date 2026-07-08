@@ -1310,7 +1310,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 .pc-photo-img.loaded { opacity: 1; }
 .pc-photo-credit {
-  position: absolute; bottom: 6px; right: 8px;
+  position: absolute; bottom: 6px; left: 8px;
   font-size: 0.58rem; line-height: 1;
   color: rgba(255,255,255,0.85);
   background: rgba(0,0,0,0.42); padding: 3px 7px; border-radius: 8px;
@@ -1354,17 +1354,18 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   font-size: 1rem;
 }
 .pc-btn-close:hover { background: rgba(0,0,0,0.65); }
-/* ♡ heart — bottom right */
+/* 🔖 bookmark — top right, below the ✕ close button */
 .pc-btn-fav {
-  bottom: 12px; right: 12px;
-  background: rgba(0,0,0,0.38);
+  top: 58px; right: 12px;
+  background: rgba(255,255,255,0.92);
   color: white;
   width: 38px; height: 38px;
   border-radius: 50%;
   font-size: 1.45rem;
   touch-action: manipulation;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.30);
 }
-.pc-btn-fav.faved { color: #e00040; background: rgba(0,0,0,0.52); font-family: Arial, sans-serif; }
+.pc-btn-fav.faved { background: #d4a043; }
 .pc-btn-fav:active { transform: scale(1.2); }
 /* ‹ › prev/next — centred sides, shown in both detail and nbhd mode */
 .pc-btn-nav {

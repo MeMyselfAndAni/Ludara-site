@@ -287,7 +287,6 @@ function _updateFavBtn(){
   const favs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   const saved = favs.includes(CARD_PLACE.id);
   btn.textContent = '🔖';
-  btn.style.opacity = saved ? '1' : '0.45';
   btn.classList.toggle('faved', saved);
 }
 function cardToggleFav(){

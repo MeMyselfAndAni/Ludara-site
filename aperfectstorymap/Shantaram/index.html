@@ -505,14 +505,71 @@
 .trip-btn-circle.active .trip-arc-label { fill: white; }
 </style>
 
-<!-- Day Trip launcher ("Our Picks") and its script removed for the Shantaram demo -->
+<!-- The Story's Path — replaces the city guides' "Our Picks" day-trip launcher.
+     One tap draws the novel's journey in narrative order: numbered stops + route line. -->
+<div class="trip-launcher" id="trip-launcher">
+  <span class="trip-launcher-label">The<br>Story</span>
+  <button class="trip-btn-circle" id="trip-btn-storypath" onclick="toggleStoryPath()" title="The Story's Path — the novel's journey, in order">
+    <span class="trip-btn-emoji-html">📖</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-storypath" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-storypath" startOffset="50%" text-anchor="middle">Path</textPath></text>
+    </svg>
+  </button>
+</div>
+
+<script>
+/* ── THE STORY'S PATH ──
+   Narrative order (part-level, verified against published summaries):
+   arrival → Leopold → VT → the village → the slum → Marine Drive →
+   Film City → Haji Ali (Khaderbhai) → Arthur Road → Afghanistan */
+var STORY_PATH_IDS = [2, 1, 7, 10, 4, 5, 9, 6, 8, 11];
+var _storyPathOn = false;
+
+function toggleStoryPath(){
+  var btn = document.getElementById('trip-btn-storypath');
+  if(_storyPathOn){
+    if(typeof clearTripRoute === 'function') clearTripRoute();
+    return; /* clearTripRoute wrapper below resets state + button */
+  }
+  var pl = STORY_PATH_IDS.map(function(id){ return PLACES.find(function(p){ return p.id === id; }); }).filter(Boolean);
+  if(!pl.length || !map) return;
+  if(typeof _ensureRouteLayer === 'function') _ensureRouteLayer();
+  if(typeof clearTripRoute === 'function') clearTripRoute();
+  tripPolyline = true; /* so clearTripRoute knows to reset the source */
+  map.getSource('trip-route').setData({
+    type: 'Feature',
+    geometry: { type: 'LineString', coordinates: pl.map(function(p){ return [p.lng, p.lat]; }) }
+  });
+  if(typeof window._addNumberedMarkers === 'function') window._addNumberedMarkers(pl);
+  var b = new maplibregl.LngLatBounds();
+  pl.forEach(function(p){ b.extend([p.lng, p.lat]); });
+  var m = window.innerWidth < 768;
+  map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
+  _storyPathOn = true;
+  if(btn) btn.classList.add('active');
+  if(typeof _toast === 'function') _toast('The Story’s Path — the novel’s journey in order, from arrival to the war.', 4000);
+}
+
+/* Any action that clears the route (filters, saved mode) also resets the button */
+window.addEventListener('load', function(){
+  var _origClear = window.clearTripRoute;
+  window.clearTripRoute = function(){
+    if(_origClear) _origClear();
+    _storyPathOn = false;
+    var b = document.getElementById('trip-btn-storypath');
+    if(b) b.classList.remove('active');
+  };
+});
+</script>
 
 <script>
 window.TutorialConfig = {
   doneKey:     'shantaram_demo_v1',
   cityName:    'Bombay',
   demoPlaceId: 1,
-  demoSavedIds: [1, 2, 5, 7, 10]
+  demoSavedIds: [1, 2, 5, 7, 10],
+  tripNames:   "the story's path"   /* enables the Story's Path tutorial step */
 };
 </script>
 <script src="tutorial.js"></script>
