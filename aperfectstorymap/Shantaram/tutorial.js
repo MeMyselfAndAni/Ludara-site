@@ -12,8 +12,8 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One map. 43 places most guests never find. Some have been here since the Republic. All earned their spot. Tap Next to begin.',
+      title: 'The World of Shantaram',
+      body: 'One map, the novel\'s whole world: from a prison wall in Melbourne to the streets of Bombay and the mountains of Afghanistan. This short tour shows you how to travel it. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -29,15 +29,15 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Straight talk from a local insider: what makes it worth your time, when to go, and what to ask for. Scroll down for the phone number and website.',
+      body: 'Each card tells you what happens here in the novel, who you meet — Karla, Prabaker, Khaderbhai — and where it sits in the story. At the bottom, a short "If you visit" line for readers who make the real journey.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
       btn: 'Next'
     },
     {
-      title: 'Filter by place type',
-      body: 'Looking for a wine bar with real local bites? A Renaissance church with no queue? Slide the bar to show only the category you want, the map follows.',
+      title: 'Find any place — or character',
+      body: 'Open the places list and tap the search icon: type a place, or a name like Karla or Prabaker, and the map takes you to their scenes. Pin colors show the story\'s threads: Lin\'s Bombay, Friends & Lovers, Underworld & Prison, The Long Journeys.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -45,8 +45,8 @@
       btn: 'Next'
     },
     {
-      title: 'Explore the Story\'s Places',
-      body: 'Each button is a chapter of the novel\'s geography, from Colaba to the mountains. Tap to zoom straight in and see where the story happens.',
+      title: 'The story\'s regions',
+      body: 'Each bubble is a chapter of the novel\'s geography: Colaba, Greater Bombay, Maharashtra, Afghanistan, Australia. Tap one to zoom straight into that part of the story.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -72,33 +72,25 @@
       btn: 'Next'
     },
     {
-      title: 'Navigate',
-      body: 'Ready to walk? Open your full route in Google Maps, or tap any saved place to navigate there directly.',
-      target: '#sheet button[onclick="openTripInMaps()"]',
-      cardPos: 'center',
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Download a PDF guide',
-      body: 'Tap PDF Guide to get a beautifully designed guide with all your picks, ready to share or print before you leave.',
+      title: 'Download a PDF companion',
+      body: 'Tap PDF Guide to turn your bookmarks into a printable companion — perfect for a book club evening or a reading group handout.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Share your map',
-      body: 'Send this map to a travel companion or keep it for the next visit. One tap to share by message or email.',
+      title: 'Share your map of the book',
+      body: 'Bookmark the scenes that stayed with you and send your map to a friend: this is the Shantaram that got me. One tap to share by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: "The Story's Path",
-      body: 'One tap on the left draws the novel\'s whole journey in order, from the arrival at the Gateway to the mountains of the war. Numbered stops, one line, the shape of the book.',
-      target: '#trip-launcher',
+      title: 'Story Path',
+      body: 'The gold button draws the novel\'s whole journey in order, from the prison wall in Melbourne to the Gateway of India and on to the mountains of the war. It is the map\'s home view: tap it any time to see the shape of the book again.',
+      target: '#pill-storypath',
       cardPos: 'center',
       demo: 'close-saved-pulse',
       btn: 'Next'
@@ -127,7 +119,7 @@
 
   /* ── Filter steps that need optional UI elements ───────────── */
   /* Day Trips step — skip if launcher absent or tripNames not configured */
-  if (!document.querySelector('#trip-launcher') || !CFG.tripNames) {
+  if (!document.querySelector('#pill-storypath') || !CFG.tripNames) {
     STEPS = STEPS.filter(function (s) { return s.demo !== 'close-saved-pulse'; });
   }
   /* Always mark the final step as Done */
@@ -472,7 +464,7 @@
   }
 
   function pulseLauncher() {
-    document.querySelectorAll('.trip-btn-circle').forEach(function (b) {
+    document.querySelectorAll('.trip-btn-circle, #pill-storypath').forEach(function (b) {
       b.style.animation = 'tut-launcher-glow 1.1s ease-in-out infinite';
     });
     launcherAnim = true;

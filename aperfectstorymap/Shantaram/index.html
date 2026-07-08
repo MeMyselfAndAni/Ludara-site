@@ -111,6 +111,12 @@
   .splash { background:
     linear-gradient(rgba(12,10,7,0.85), rgba(12,10,7,0.93)),
     url('images/place-2.jpg') center / cover no-repeat #0f0d0a !important; }
+  /* Story Path — the signature button, bold gold */
+  .pill-storypath {
+    background: #0f0d0a !important; color: #d4a043 !important;
+    border: 1.5px solid #d4a043 !important; font-weight: 700 !important;
+  }
+  .pill-storypath.active { background: #d4a043 !important; color: #0f0d0a !important; }
   .splash-inner {
     padding: 56px 36px 44px !important;
     max-width: 1200px !important;
@@ -267,12 +273,12 @@
 
 <!-- Filter bar -->
 <div class="filter-bar">
+  <!-- Editor-simple top bar: two ideas only. Thread filter pills (Lin's Bombay /
+       Friends & Lovers / Underworld & Prison / The Long Journeys) removed for
+       clarity — threads still show as pin colors and card labels, and search
+       finds places and characters. Pills can return per-title if a publisher wants them. -->
+  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="Draw the novel's journey, in order">📖 Story Path</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
-  <button class="pill" onclick="fc(this,'life')"><span class="dot" style="background:#c04a2a"></span>Lin's Bombay</button>
-  <button class="pill" onclick="fc(this,'bond')"><span class="dot" style="background:#d4a043"></span>Friends &amp; Lovers</button>
-  <button class="pill" onclick="fc(this,'dark')"><span class="dot" style="background:#5a6a80"></span>Underworld &amp; Prison</button>
-  <button class="pill" onclick="fc(this,'journey')"><span class="dot" style="background:#3a8ab0"></span>The Long Journeys</button>
 </div>
 
 <!-- Map -->
@@ -514,19 +520,8 @@
 .trip-btn-circle.active .trip-arc-label { fill: white; }
 </style>
 
-<!-- The Story's Path — replaces the city guides' "Our Picks" day-trip launcher.
+<!-- Story Path — the signature feature, lives as the first pill in the filter bar.
      One tap draws the novel's journey in narrative order: numbered stops + route line. -->
-<div class="trip-launcher" id="trip-launcher">
-  <span class="trip-launcher-label">The<br>Story</span>
-  <button class="trip-btn-circle" id="trip-btn-storypath" onclick="toggleStoryPath()" title="The Story's Path — the novel's journey, in order">
-    <span class="trip-btn-emoji-html">📖</span>
-    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-storypath" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-storypath" startOffset="50%" text-anchor="middle">Path</textPath></text>
-    </svg>
-  </button>
-</div>
-
 <script>
 /* ── THE STORY'S PATH ──
    Narrative order (part-level, verified against published summaries):
@@ -536,11 +531,23 @@
 var STORY_PATH_IDS = [12, 2, 1, 7, 10, 4, 5, 9, 6, 8, 11];
 var _storyPathOn = false;
 
-function toggleStoryPath(){
-  var btn = document.getElementById('trip-btn-storypath');
+function toggleStoryPath(quiet){
+  var btn = document.getElementById('pill-storypath');
   if(_storyPathOn){
     if(typeof clearTripRoute === 'function') clearTripRoute();
     return; /* clearTripRoute wrapper below resets state + button */
+  }
+  /* Story Path is the map's home view: leaving bookmarks mode and
+     clearing any category filter before drawing */
+  if(typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof toggleSavedFilter === 'function'){
+    toggleSavedFilter(document.getElementById('pill-saved'));
+  }
+  if(typeof AF !== 'undefined' && AF !== 'all'){
+    AF = 'all';
+    document.querySelectorAll('.filter-bar .pill').forEach(function(p){
+      if(p.id !== 'pill-storypath' && p.id !== 'pill-saved') p.classList.remove('active');
+    });
+    if(typeof applyFilters === 'function') applyFilters(); /* also clears any stale route */
   }
   var pl = STORY_PATH_IDS.map(function(id){ return PLACES.find(function(p){ return p.id === id; }); }).filter(Boolean);
   if(!pl.length || !map) return;
@@ -555,10 +562,10 @@ function toggleStoryPath(){
   var b = new maplibregl.LngLatBounds();
   pl.forEach(function(p){ b.extend([p.lng, p.lat]); });
   var m = window.innerWidth < 768;
-  map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
+  map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: quiet ? 0 : 800 });
   _storyPathOn = true;
   if(btn) btn.classList.add('active');
-  if(typeof _toast === 'function') _toast('The Story’s Path — the novel’s journey in order, from arrival to the war.', 4000);
+  if(!quiet && typeof _toast === 'function') _toast('Story Path — the novel’s journey in order, from the escape to the war.', 4000);
 }
 
 /* Any action that clears the route (filters, saved mode) also resets the button */
@@ -567,9 +574,21 @@ window.addEventListener('load', function(){
   window.clearTripRoute = function(){
     if(_origClear) _origClear();
     _storyPathOn = false;
-    var b = document.getElementById('trip-btn-storypath');
+    var b = document.getElementById('pill-storypath');
     if(b) b.classList.remove('active');
   };
+});
+
+/* Story Path is the default view: draw it automatically once the map is ready */
+window.addEventListener('load', function(){
+  var tries = 25;
+  (function _autoPath(){
+    if(_storyPathOn) return;
+    var ready = window.map && map.getSource && (function(){ try { return !!map.getSource('trip-route'); } catch(e){ return false; } })()
+                && typeof window._addNumberedMarkers === 'function';
+    if(ready){ toggleStoryPath(true); return; }
+    if(--tries > 0) setTimeout(_autoPath, 400);
+  })();
 });
 </script>
 
