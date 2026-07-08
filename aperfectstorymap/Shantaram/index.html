@@ -16,6 +16,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
+/* ── Splash backdrop: the Gateway of India from the sea (the novel's arrival
+      image), darkened for the gold text. Falls back to plain dark if the
+      image file is absent. ── */
+.splash {
+  background:
+    linear-gradient(rgba(12,10,7,0.85), rgba(12,10,7,0.93)),
+    url('images/place-2.jpg') center / cover no-repeat,
+    #0f0d0a !important;
+}
+
   /* ── BRAND COLOR — platform standard red-orange ── */
   :root { --brand: #ff2a00; --brand-faint: rgba(255,42,0,0.12); --brand-glow: rgba(255,42,0,0.3); }
 
