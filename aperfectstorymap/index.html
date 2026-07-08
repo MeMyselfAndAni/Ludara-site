@@ -105,6 +105,8 @@
     .stat-label { font-size:13px; color:var(--warm-muted); }
 
     /* ── GRIDS ── */
+    .grid-2 { display:grid; gap:16px; grid-template-columns:1fr; }
+    @media(min-width:800px) { .grid-2 { grid-template-columns:repeat(2,1fr); } }
     .grid-3 { display:grid; gap:16px; grid-template-columns:1fr; }
     @media(min-width:900px) { .grid-3 { grid-template-columns:repeat(3,1fr); } }
 
@@ -167,7 +169,7 @@
     <div class="hero-wrap">
       <p class="kicker-dark">A Perfect Story Map &nbsp;·&nbsp; by Ludara.AI</p>
       <h1>Every scene of a novel<br><em>on one living map.</em></h1>
-      <p class="hero-sub">A story map is a companion to reading. It makes the novel vivid: readers see where the story lives, follow its path across the world as the chapters unfold, and return after the last page to relive the whole journey at a glance. In story order, with the characters who live there.</p>
+      <p class="hero-sub">A Perfect Story Map is an interactive companion for novels. Readers follow the story's journey across real and imagined places, discover what happens in each location, search by character or scene, and return after the last page to relive the whole book at a glance. Built for publishers, authors, book clubs, and launch campaigns.</p>
       <!-- SCREENSHOT STRIP -->
       <div class="strip-3">
         <div class="strip-item"><img src="assets/screen-path.jpg" alt="The Story Path: the novel's journey drawn across the world" class="strip-img"/><p class="strip-cap">The Story Path: the whole journey, in order</p></div>
@@ -175,7 +177,7 @@
         <div class="strip-item"><img src="assets/screen-list.jpg" alt="The places list with PDF and Share" class="strip-img"/><p class="strip-cap">Bookmarks, book club PDF, and sharing</p></div>
       </div>
       <div class="hero-btns">
-        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_hero'})">Request the concept demo</a>
+        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_hero'})">Request a publisher demo</a>
         <a href="https://ludara.ai/contact" class="btn-ghost-dark">Contact us →</a>
       </div>
       <p class="demo-note">A full interactive demonstration, built on a beloved modern novel, is available on request.</p>
@@ -191,6 +193,33 @@
       <div class="stat-item"><div class="stat-num">Every language</div><div class="stat-label">the book is published in</div></div>
       <div class="stat-item"><div class="stat-num">QR + link</div><div class="stat-label">on the endpapers and in the marketing kit</div></div>
     </div>
+  </div>
+</section>
+
+<!-- ══ WHERE IT WORKS (warm) ══ -->
+<section class="warm-section" data-animate style="border-bottom:none;">
+  <div class="inner">
+    <p class="kicker-warm">Where It Works</p>
+    <h2 class="warm" style="margin-bottom:24px;">Built for launch campaigns, book clubs,<br>and special editions.</h2>
+    <div class="grid-2">
+      <div class="feat-card">
+        <h3 class="warm">A QR code in the book</h3>
+        <p>Printed on the endpapers or the maps page, the story map becomes part of the reading experience of every copy sold, print or ebook.</p>
+      </div>
+      <div class="feat-card">
+        <h3 class="warm">A launch-campaign link</h3>
+        <p>A shareable, press-ready asset for the publication campaign: social content, newsletter feature, and a reason for readers to talk about the book.</p>
+      </div>
+      <div class="feat-card">
+        <h3 class="warm">A book-club companion</h3>
+        <p>The printable guide turns any reading group evening into a journey through the novel, with the discussion built around its places.</p>
+      </div>
+      <div class="feat-card">
+        <h3 class="warm">A premium edition asset</h3>
+        <p>For anniversary and collector editions, the map is the extra that feels like a gift: the beloved book, made explorable for its most devoted readers.</p>
+      </div>
+    </div>
+    <p style="margin-top:18px;color:var(--warm-muted);font-size:14px;font-weight:300;"><strong style="color:var(--warm-text);">Spoiler-safe:</strong> with the publisher's chapter data, the map can reveal places chapter by chapter, so readers explore only as far as they have read.</p>
   </div>
 </section>
 
@@ -253,7 +282,7 @@
       <h2>Shall we map <em>your novel?</em></h2>
       <p>The map ships as a QR code on the endpapers and a link in your marketing kit. We build and maintain it; your editors hold the source of truth.</p>
       <div class="cta-btns">
-        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_cta'})">Request the concept demo</a>
+        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_cta'})">Request a publisher demo</a>
         <a href="https://ludara.ai/contact" class="btn-ghost-dark">Contact us →</a>
       </div>
     </div>
