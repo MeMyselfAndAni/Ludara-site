@@ -262,6 +262,18 @@ function _populateCard(p){
   if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
+  // Story map: small directions link lives inside the "If you visit" footer.
+  // Hidden for symbolic markers (fictional village, the war chapters).
+  const dirEl = document.getElementById('pc-tip-directions');
+  if (dirEl) {
+    if (p.noDirections) {
+      dirEl.style.display = 'none';
+    } else {
+      dirEl.style.display = 'inline-flex';
+      dirEl.href = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=walking`;
+    }
+  }
+
   var awardsEl = document.getElementById('pc-awards');
   if (awardsEl) {
     if (p.awards) {

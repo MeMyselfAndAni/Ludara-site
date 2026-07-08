@@ -331,6 +331,7 @@
     <div class="pc-tip" id="pc-tip" style="display:none">
       <span class="pc-tip-label">🧭 If you visit</span>
       <span id="pc-tip-text"></span>
+      <a id="pc-tip-directions" class="pc-contact-pill" target="_blank" rel="noopener" style="display:inline-flex;margin-top:8px;font-size:0.78rem;padding:4px 12px;">🚶 Directions</a>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
     <div class="pc-counter" id="pc-counter" style="display:none"></div>
@@ -531,37 +532,7 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<!-- Navigate button — injected into card when a place opens, shows distance if location known -->
-<script>
-window.addEventListener('load', function() {
-  var titleEl = document.getElementById('pc-title');
-  if (!titleEl) return;
-  new MutationObserver(function() {
-    var name  = titleEl.textContent.trim();
-    var place = PLACES.find(function(p) { return p.name === name; });
-    if (!place) return;
-    var existing = document.getElementById('pc-nav-btn');
-    if (existing) existing.remove();
-    var btn = document.createElement('button');
-    btn.id = 'pc-nav-btn';
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
-    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
-    var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
-      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
-    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
-    btn.onclick = function() {
-      var dest = place.lat+','+place.lng;
-      var url = window._userLat && window._userLng
-        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
-        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
-      window.open(url, '_blank');
-    };
-    // Reading-first cards: directions belong in the travel footer, after "If you visit"
-    var tip = document.getElementById('pc-tip');
-    if (tip && tip.parentNode) tip.parentNode.insertBefore(btn, tip.nextSibling);
-  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
-});
-</script>
+<!-- Navigate-on-Google-Maps button removed for the story map (reading-first cards) -->
 
 <!-- Hide neighbourhood bubbles with no places -->
 <script>
