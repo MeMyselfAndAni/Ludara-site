@@ -49,7 +49,7 @@ async function preloadAllImages(places) {
 async function generatePDF(){
   const places = getSortedFavPlaces();
   if(!places || places.length === 0){
-    alert('Save some places first using the ♡ button, then generate your guide.');
+    alert('Bookmark some places first using the 🔖 button, then generate your guide.');
     return;
   }
 

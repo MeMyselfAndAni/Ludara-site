@@ -54,16 +54,16 @@
       btn: 'Next'
     },
     {
-      title: 'Save your favorites',
-      body: 'Find something that makes you stop? Tap the heart. It stays in your list for the whole trip, even when you close the map.',
+      title: 'Bookmark the story',
+      body: 'Reached a place in the book, or found a scene you love? Tap the bookmark. Your marks stay even when you close the map — a record of your journey through the novel.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',
       btn: 'Next'
     },
     {
-      title: 'Your saved places',
-      body: 'Tap Saved to see your list. Tap any row to reopen the card. Drag to arrange them in the order you plan to walk.',
+      title: 'Your bookmarks',
+      body: 'Tap Bookmarks to see your list. Tap any row to reopen the card. Drag to arrange them in reading order, or walking order if you visit.',
       target: null,
       dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
@@ -276,7 +276,7 @@
     if (!hb) return;
     /* Snap to bright red filled heart */
     hb.style.transition = 'color 0.25s ease, transform 0.25s ease';
-    hb.textContent = '♥'; /* ♥ filled */
+    hb.textContent = '🔖';
     hb.style.fontFamily = 'Arial, sans-serif';
     hb.style.color = '#e00040';
     hb.style.transform = 'scale(1.25)';
@@ -285,7 +285,7 @@
       hb.style.color = 'white';
       hb.style.transform = 'scale(1)';
       setTimeout(function () {
-        hb.textContent = '♡'; /* ♡ outline */
+        hb.textContent = '🔖';
         hb.style.fontFamily = '';
         hb.style.color = '';
         hb.style.transform = '';

@@ -243,7 +243,7 @@ function renderList(){
     }
     filtered = sorted;
     const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
-    document.getElementById('sheet-title').textContent = `♥ ${sorted.length} Saved${catNote}`;
+    document.getElementById('sheet-title').textContent = `🔖 ${sorted.length} Bookmarked${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
     // Banner with auto-sort reset button
@@ -276,7 +276,7 @@ function renderList(){
     }
 
     el.innerHTML = allSaved.length === 0
-      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>'
+      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🔖 on any place<br>to bookmark it here</div>'
       : sorted.map((p,i) => `
         <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
           <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
@@ -315,7 +315,10 @@ function renderList(){
     const catOk    = AF === 'all' || p.cat === AF;
     const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
     const openOk   = !openNowActive || isOpenNow(p);
-    const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
+    const searchOk = !_searchQuery
+      || p.name.toLowerCase().includes(_searchQuery)
+      || (p.type && p.type.toLowerCase().includes(_searchQuery))    // characters line
+      || (p.note && p.note.toLowerCase().includes(_searchQuery));   // scene description
     return catOk && nbhdOk && openOk && searchOk;
   });
   const count = filtered.length;
