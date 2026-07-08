@@ -8,15 +8,24 @@ let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 // AID is declared in data.js
 
 const CAT_COLORS = {
+  // Shantaram story categories (match CC in map.js)
+  life:'#c04a2a', bond:'#d4a043', dark:'#5a6a80', journey:'#3a8ab0',
   landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
   church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
 };
 const CAT_LABELS = {
+  // Shantaram story categories (match CL in map.js)
+  life:"Lin's Bombay", bond:'Friends & Lovers', dark:'Underworld & Prison', journey:'The Long Journeys',
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
   church:'Church & Spiritual', market:'Market & Shopping',
   soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature & Views'
 };
 const CAT_GRADIENTS = {
+  // Shantaram story categories
+  life:    'linear-gradient(135deg,#5c2a1a,#c04a2a)',
+  bond:    'linear-gradient(135deg,#5c4a1a,#d4a043)',
+  dark:    'linear-gradient(135deg,#1a2430,#5a6a80)',
+  journey: 'linear-gradient(135deg,#1a3a4c,#3a8ab0)',
   landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
   food:    'linear-gradient(135deg,#7a3020,#c06040)',
   cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
@@ -235,8 +244,8 @@ function _populateCard(p){
 
   document.getElementById('pc-title').textContent = p.name;
   document.getElementById('pc-type').textContent  = p.type || '';
-  // Story maps: the hours slot shows where this place lives in the book
-  document.getElementById('pc-hours').innerHTML   = p.book ? `📖 ${p.book}` : '';
+  // Story maps: book position is woven into the note text; this slot stays empty
+  document.getElementById('pc-hours').innerHTML   = '';
 
   document.getElementById('pc-note').textContent = p.note || '';
 

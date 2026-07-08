@@ -3,8 +3,8 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apd-shell-v13';
-var TILE_CACHE  = 'apd-tiles-v1';
+var SHELL_CACHE = 'apsm-shantaram-shell-v3';   // bump this on every deploy to push updates
+var TILE_CACHE  = 'apsm-shantaram-tiles-v1';
 
 var SHELL_FILES = [
   './',
