@@ -20,6 +20,7 @@ const PHOTO_CREDITS = {
   9:  { author: 'Parminder Sarwara',    license: 'CC0',          url: 'https://commons.wikimedia.org/wiki/File:Film_City,_Mumbai.jpg' },
   10: { author: 'Shagil Kannur',        license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Paddy_field_in_Maharashtra_9.jpg' },
   11: { author: 'Mark Ray',             license: 'Public domain', url: 'https://commons.wikimedia.org/wiki/File:Arghandab_River_Valley_between_Kandahar_and_Lashkar_Gah.jpg' },
+  12: { author: 'Michael J Fromholtz',  license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Pentridge_Prsion_B_Division_Turret_2020.jpg' },
 };
 
 // Build the credit anchor HTML for a place id (returns '' if none).

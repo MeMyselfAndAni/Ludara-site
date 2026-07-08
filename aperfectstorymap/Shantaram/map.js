@@ -36,26 +36,29 @@ const CL = {
 
 // ─── Region colours ────────────────────────────────────────────────────────────
 const NBHD_COLORS = {
-  'colaba': '#c04a2a',
-  'city':   '#d4a043',
-  'maha':   '#5a8060',
-  'afghan': '#5a6a80',
+  'colaba':    '#c04a2a',
+  'city':      '#d4a043',
+  'maha':      '#5a8060',
+  'afghan':    '#5a6a80',
+  'australia': '#7a5090',
 };
 
 // ─── Region display labels ─────────────────────────────────────────────────────
 const NBHD_LABELS = {
-  'colaba': 'Colaba',
-  'city':   'Greater Bombay',
-  'maha':   'Maharashtra',
-  'afghan': 'Afghanistan',
+  'colaba':    'Colaba',
+  'city':      'Greater Bombay',
+  'maha':      'Maharashtra',
+  'afghan':    'Afghanistan',
+  'australia': 'Australia',
 };
 
 // ─── Region approximate centres ───────────────────────────────────────────────
 const NBHD_APPROX_CENTERS = {
-  'colaba': { lat: 18.9190, lng: 72.8280 },
-  'city':   { lat: 18.9900, lng: 72.8300 },
-  'maha':   { lat: 17.9000, lng: 74.5000 },
-  'afghan': { lat: 31.6200, lng: 65.7100 },
+  'colaba':    { lat: 18.9190, lng: 72.8280 },
+  'city':      { lat: 18.9900, lng: 72.8300 },
+  'maha':      { lat: 17.9000, lng: 74.5000 },
+  'afghan':    { lat: 31.6200, lng: 65.7100 },
+  'australia': { lat: -37.7420, lng: 144.9610 },
 };
 
 // ─── Region circle override ───────────────────────────────────────────────────
@@ -66,10 +69,11 @@ const NBHD_APPROX_CENTERS = {
 // uses ALL places in a region and gives symbolic single-marker regions
 // (the village, the war chapters) a readable minimum radius.
 const NBHD_MIN_RADIUS = {
-  'colaba': 700,      // metres — tight historic quarter
-  'city':   2500,     // sprawls CST → Haji Ali → Film City; real extent dominates
-  'maha':   15000,    // symbolic: farming country, not a pin-point
-  'afghan': 40000,    // symbolic: a mountain region, not a place
+  'colaba':    700,      // metres — tight historic quarter
+  'city':      2500,     // sprawls CST → Haji Ali → Film City; real extent dominates
+  'maha':      15000,    // symbolic: farming country, not a pin-point
+  'afghan':    40000,    // symbolic: a mountain region, not a place
+  'australia': 800,      // one real site: Pentridge, Melbourne
 };
 
 function buildNbhdCircles() {

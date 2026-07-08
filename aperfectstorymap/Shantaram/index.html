@@ -227,7 +227,7 @@
     <p class="splash-sample" style="margin-top:2px;font-style:italic;">a novel by Gregory David Roberts</p>
     <p class="splash-sample">Concept demonstration — an interactive companion map for the novel. Not affiliated with the author or publisher.</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">From a Colaba cafe table to a village in the rains to the mountains of a distant war: the novel's whole world on one map, so every reader can see where the story lives.</p>
+    <p class="splash-sub">From a prison wall in Melbourne to a Colaba cafe table, a village in the rains, and the mountains of a distant war: the novel's whole world on one map, so every reader can see where the story lives.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
@@ -300,6 +300,10 @@
     <div class="nbhd-bubble" id="nbhd-afghan" role="button" tabindex="0" onclick="selectNbhd('afghan', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏔️</div></div>
       <span class="nbhd-label">Afghanistan</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-australia" role="button" tabindex="0" onclick="selectNbhd('australia', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🦘</div></div>
+      <span class="nbhd-label">Australia</span>
     </div>
   </div>
 </div>
@@ -521,9 +525,10 @@
 <script>
 /* ── THE STORY'S PATH ──
    Narrative order (part-level, verified against published summaries):
-   arrival → Leopold → VT → the village → the slum → Marine Drive →
-   Film City → Haji Ali (Khaderbhai) → Arthur Road → Afghanistan */
-var STORY_PATH_IDS = [2, 1, 7, 10, 4, 5, 9, 6, 8, 11];
+   the escape in Melbourne → arrival at the Gateway → Leopold → VT →
+   the village → the slum → Marine Drive → Film City → Haji Ali
+   (Khaderbhai) → Arthur Road → Afghanistan */
+var STORY_PATH_IDS = [12, 2, 1, 7, 10, 4, 5, 9, 6, 8, 11];
 var _storyPathOn = false;
 
 function toggleStoryPath(){
@@ -583,7 +588,7 @@ window.addEventListener('load', function() {
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+    addrEl.textContent = ''; /* reading-first card: address line removed (still in PDF + Directions) */
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>

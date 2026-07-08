@@ -17,6 +17,24 @@
 
 const PLACES = [
 
+  // ── AUSTRALIA ─────────────────────────────────────────────────────────────
+
+  {
+    id: 12,
+    nbhd: 'australia',
+    name: 'Pentridge Prison — Melbourne',
+    cat: 'dark',
+    emoji: '🧗',
+    address: 'Champ Street, Coburg, Melbourne, Australia',
+    lat: -37.7420, lng: 144.9610,
+    search: 'Pentridge Prison Melbourne bluestone wall gate',
+    note: 'Where the whole story begins: the novel opens with a daylight escape over an Australian prison wall, and everything on this map follows from that moment. The book never names the prison, but it is drawn from Pentridge in Melbourne, which the author escaped in July 1980, in broad daylight, becoming one of Australia\'s most wanted men. The bluestone prison closed in 1997; today it is a heritage precinct whose guided tours include, fittingly, a Shantaram tour.',
+    book: 'The opening pages — where everything begins',
+    visit: 'The bluestone precinct is open to visitors, with guided tours of the old divisions — including a Shantaram-themed tour.',
+    type: 'Lin, in the moment that makes everything else',
+    website: 'https://pentridgeprisontours.com.au',
+  },
+
   // ── COLABA ────────────────────────────────────────────────────────────────
 
   {

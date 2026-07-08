@@ -1310,7 +1310,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 .pc-photo-img.loaded { opacity: 1; }
 .pc-photo-credit {
-  position: absolute; bottom: 6px; left: 8px;
+  position: absolute; bottom: 6px; right: 8px;
   font-size: 0.58rem; line-height: 1;
   color: rgba(255,255,255,0.85);
   background: rgba(0,0,0,0.42); padding: 3px 7px; border-radius: 8px;
@@ -1354,9 +1354,9 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   font-size: 1rem;
 }
 .pc-btn-close:hover { background: rgba(0,0,0,0.65); }
-/* 🔖 bookmark — top right, below the ✕ close button */
+/* 🔖 bookmark — upper right corner of the photo, beside the ✕ */
 .pc-btn-fav {
-  top: 58px; right: 12px;
+  top: 12px; right: 58px;
   background: rgba(255,255,255,0.92);
   color: white;
   width: 38px; height: 38px;
