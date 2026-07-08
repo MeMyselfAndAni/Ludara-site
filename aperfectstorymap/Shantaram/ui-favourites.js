@@ -300,10 +300,7 @@ function planFavTrip(){
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
-      <span>🗺 ${places.length} stops</span>
-      <span>⏱ ~${formatMins(totalMins)} total</span>
-      <span>🚶 ${formatMins(totalWalkMins)} walking</span>
-      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
+      <span>🔖 ${places.length} bookmark${places.length===1?'':'s'} — your journey through the book</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
@@ -319,28 +316,14 @@ function planFavTrip(){
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
         ${p.book?`<div class="trip-stop-hours">📖 ${p.book}`+`</div>`:''}
-        <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
 
-    </div>
-    ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
+    </div>`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
 
-  // Add the missing trip footer with proper Google Maps button
-  const existingFooter = document.querySelector('.trip-footer');
-  if (!existingFooter) {
-    const tripPanel = document.querySelector('.trip-panel');
-    const footer = document.createElement('div');
-    footer.className = 'trip-footer';
-    footer.innerHTML = `
-      <button class="trip-maps-btn" onclick="openTripInMaps()">
-        🗺 Open in Google Maps
-      </button>
-    `;
-    tripPanel.appendChild(footer);
-  }
+  // Reading-first: no Google Maps footer in the bookmarks overlay.
 
   // Wire drag-to-reorder on trip-stop rows
   let dragSrcId = null;

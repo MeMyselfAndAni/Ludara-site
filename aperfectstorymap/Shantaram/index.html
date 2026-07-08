@@ -236,7 +236,7 @@
     <div class="splash-eyebrow">A Perfect Story Map</div>
     <h1 class="splash-title">Shantaram</h1>
     <p class="splash-sample" style="margin-top:2px;font-style:italic;">a novel by Gregory David Roberts</p>
-    <p class="splash-sample">Concept demonstration — an interactive companion map for the novel. Not affiliated with the author or publisher.</p>
+    <p class="splash-sample">Concept demonstration: an interactive companion map for the novel. Not affiliated with the author or publisher.</p>
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub">From a prison wall in Melbourne to a Colaba cafe table, a village in the rains, and the mountains of a distant war: the novel's whole world on one map, so every reader can see where the story lives.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
@@ -278,6 +278,8 @@
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
   <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="Draw the novel's journey, in order">📖 Story Path</button>
+  <input id="topbar-search" type="search" placeholder="🔎 Place or character…" oninput="_topSearch(this.value)"
+         style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
@@ -364,7 +366,7 @@
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
-      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
+      <!-- Google Maps trip button removed: reading-first bookmarks -->
       <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
       <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
     </div>
@@ -438,7 +440,7 @@
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">🔖</div>
       <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap 🔖 on any place to bookmark it — mark your path through the book, share your map, or download it as a PDF guide.</div>
+      <div class="saved-empty-body">Tap 🔖 on any place to bookmark it: mark your path through the book, share your map, or download it as a PDF guide.</div>
     </div>
   </div>
 </div>
@@ -531,6 +533,14 @@
 var STORY_PATH_IDS = [12, 2, 1, 7, 10, 4, 5, 9, 6, 8, 11];
 var _storyPathOn = false;
 
+/* Top-bar search: filters map pins and the places list by place name,
+   characters, or scene text. Typing clears the Story Path line so the
+   matches stand alone. */
+function _topSearch(v){
+  if(typeof _searchQuery !== 'undefined') _searchQuery = (v || '').trim().toLowerCase();
+  if(typeof applyFilters === 'function') applyFilters();
+}
+
 function toggleStoryPath(quiet){
   var btn = document.getElementById('pill-storypath');
   if(_storyPathOn){
@@ -565,7 +575,7 @@ function toggleStoryPath(quiet){
   map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: quiet ? 0 : 800 });
   _storyPathOn = true;
   if(btn) btn.classList.add('active');
-  if(!quiet && typeof _toast === 'function') _toast('Story Path — the novel’s journey in order, from the escape to the war.', 4000);
+  if(!quiet && typeof _toast === 'function') _toast('Story Path: the novel’s journey in order, from the escape to the war.', 4000);
 }
 
 /* Any action that clears the route (filters, saved mode) also resets the button */
@@ -699,16 +709,12 @@ function clearAllSaved() {
       }
     }
     function showTrip(pl, distM, walkMins) {
-      var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode)
-        ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
-      var icon = mode==='driving' ? '🚗' : '🚶';
-      var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
+      /* Reading-first bookmarks: no route stats, no drive times, no Google Maps.
+         Just the reader's marks in their order, with PDF + Share. */
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
-        '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
-        '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
+        '<div class="saved-stats-bar" style="display:flex"><span>🔖 '+pl.length+(pl.length===1?' bookmark':' bookmarks')+'</span>'+
+        '<span class="saved-stat-dot">·</span><span>your journey through the book</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
-        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
@@ -720,22 +726,14 @@ function clearAllSaved() {
           '<div class="saved-item-num">'+(i+1)+'</div><div class="place-thumb" id="thumb-'+p.id+'">'+(p.emoji||'📍')+'</div>'+
           '<div class="place-info" onclick="openDetail('+p.id+')" style="cursor:pointer;flex:1">'+
           '<div class="place-name">'+p.name+'</div><div class="place-type">'+(CL[p.cat]||p.cat)+'</div>'+
-          '<div class="place-addr">'+(p.address||'')+'</div></div>'+
+          (p.book?'<div class="place-addr">📖 '+p.book+'</div>':'')+'</div>'+
           '<span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">›</span></div>';
-        if (i < pl.length-1) html += '<div class="saved-walk-connector" id="saved-conn-'+i+'">↓</div>';
       });
       listEl.innerHTML = html;
       if (listEl.parentNode) listEl.parentNode.appendChild(listEl);
       var al = document.getElementById('saved-autosort-link');
       if (al) al.addEventListener('click', function(e) { e.preventDefault(); if(typeof _clearSavedOrder==='function')_clearSavedOrder(); if(typeof updateFavUI==='function')updateFavUI(); });
       wireDrag(pl); loadThumbs(pl);
-      if (pl.length>=2 && typeof _fetchRouteStats==='function' && navigator.onLine) {
-        _fetchRouteStats(pl).then(function(s) {
-          var we=document.getElementById('saved-stat-walk-sheet');
-          if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
-          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
-        }).catch(function(){});
-      }
     }
     function wireDrag(pl) {
       var src=null;

@@ -20,6 +20,14 @@
       btn: 'Next'
     },
     {
+      title: 'Story Path',
+      body: 'The gold button draws the novel\'s whole journey in order, from the prison wall in Melbourne to the Gateway of India and on to the mountains of the war. It is the map\'s home view: tap it any time to see the shape of the book again.',
+      target: '#pill-storypath',
+      cardPos: 'center',
+      demo: 'close-saved-pulse',
+      btn: 'Next'
+    },
+    {
       title: 'The Story, Mapped',
       body: 'Every pin is a scene: the cafe where the story begins, the station that carries it away, the mountains where it ends. Tap any icon to see what happens there in the book.',
       target: null,
@@ -29,14 +37,14 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Each card tells you what happens here in the novel, who you meet — Karla, Prabaker, Khaderbhai — and where it sits in the story. At the bottom, a short "If you visit" line for readers who make the real journey.',
+      body: 'Each card tells you what happens here in the novel, who you meet, whether Karla, Prabaker or Khaderbhai, and where it sits in the story. At the bottom, a short "If you visit" note for readers who make the real journey.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
       btn: 'Next'
     },
     {
-      title: 'Find any place — or character',
+      title: 'Find any place, or any character',
       body: 'Open the places list and tap the search icon: type a place, or a name like Karla or Prabaker, and the map takes you to their scenes. Pin colors show the story\'s threads: Lin\'s Bombay, Friends & Lovers, Underworld & Prison, The Long Journeys.',
       target: '.filter-bar',
       cardPos: 'center',
@@ -55,7 +63,7 @@
     },
     {
       title: 'Bookmark the story',
-      body: 'Reached a place in the book, or found a scene you love? Tap the bookmark. Your marks stay even when you close the map — a record of your journey through the novel.',
+      body: 'Reached a place in the book, or found a scene you love? Tap the bookmark. Your marks remain when you close the map: a record of your journey through the novel.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',
@@ -73,7 +81,7 @@
     },
     {
       title: 'Download a PDF companion',
-      body: 'Tap PDF Guide to turn your bookmarks into a printable companion — perfect for a book club evening or a reading group handout.',
+      body: 'Tap PDF Guide to turn your bookmarks into a printable companion, made for a book club evening or a reading group handout.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
@@ -85,25 +93,6 @@
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Story Path',
-      body: 'The gold button draws the novel\'s whole journey in order, from the prison wall in Melbourne to the Gateway of India and on to the mountains of the war. It is the map\'s home view: tap it any time to see the shape of the book again.',
-      target: '#pill-storypath',
-      cardPos: 'center',
-      demo: 'close-saved-pulse',
-      btn: 'Next'
-    },
-    {
-      title: 'Navigate with and without Wifi',
-      body: 'Reading on a plane or walking the real streets? Tap the circle to find yourself on the map. Save it offline and it works without Wifi too.',
-      target: null,
-      targets: ['#locate-btn', '#offline-save-btn'],
-      targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
-      cardPos: 'center',
-      demo: 'close-sheet',
-      mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
       btn: 'Next'
     },
     {

@@ -131,7 +131,7 @@ function _initSearch(){
   ].join(';');
   input.addEventListener('input', function(){
     _searchQuery = this.value.trim().toLowerCase();
-    renderList();
+    applyFilters(); /* filters map pins too, then re-renders the list */
   });
   input.addEventListener('keydown', function(e){
     if(e.key === 'Escape'){ _closeSearch(); }
@@ -526,7 +526,11 @@ function applyFilters(){
       const nbhdOk = true; /* neighbourhood selection only pans map — all markers stay visible */
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
-      visible = catOk && openOk && nbhdOk;
+      const searchOk = (typeof _searchQuery === 'undefined') || !_searchQuery
+        || p.name.toLowerCase().includes(_searchQuery)
+        || (p.type && p.type.toLowerCase().includes(_searchQuery))
+        || (p.note && p.note.toLowerCase().includes(_searchQuery));
+      visible = catOk && openOk && nbhdOk && searchOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);
   });
