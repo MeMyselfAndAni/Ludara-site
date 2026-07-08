@@ -45,8 +45,8 @@
     },
     {
       title: 'Find any place, or any character',
-      body: 'Open the places list and tap the search icon: type a place, or a name like Karla or Prabaker, and the map takes you to their scenes. Pin colors show the story\'s threads: Lin\'s Bombay, Friends & Lovers, Underworld & Prison, The Long Journeys.',
-      target: '.filter-bar',
+      body: 'Type in the search field: a place, or a name like Karla or Prabaker, and the map shows only their scenes. Pin colors mark the story\'s threads: Lin\'s Bombay, Friends & Lovers, Underworld & Prison, The Long Journeys.',
+      target: '#topbar-search',
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',

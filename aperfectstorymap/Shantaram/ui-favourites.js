@@ -681,9 +681,20 @@ function _showOfflineRouteMsg() {
   setTimeout(function() { if (msg.parentNode) msg.remove(); }, 5000);
 }
 
-// ── Service Worker registration ───────────────────────────────
+// ── Service Worker: DISABLED for the story map demo ───────────
+// The cache-first worker kept serving stale files during rapid
+// iteration. The demo has no offline feature, so instead of
+// registering, actively unregister any previously installed worker
+// and clear its caches, so every visitor always gets fresh files.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-  navigator.serviceWorker.register('sw.js').catch(function(){});
-});
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ r.unregister(); });
+    }).catch(function(){});
+    if (window.caches && caches.keys) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ if (k.indexOf('apsm-') === 0 || k.indexOf('apd-') === 0) caches.delete(k); });
+      }).catch(function(){});
+    }
+  });
 }
