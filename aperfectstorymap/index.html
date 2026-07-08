@@ -1,108 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Perfect Story Map — interactive companion maps for novels</title>
-<meta name="description" content="A Perfect Story Map turns a novel's world into one living map: every scene, in story order, with the characters who live there. For publishers and their readers.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="A Perfect Story Map by Ludara.AI">
-<meta property="og:title" content="A Perfect Story Map">
-<meta property="og:description" content="Interactive companion maps for novels: every scene on one living map, in story order.">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
-<style>
-  :root { --gold: #d4a043; --dark: #0f0d0a; --cream: #f5ecd7;
-          --nav-muted: #a9b3c7; --nav-card: #16181d; --nav-border: #23262d; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--dark); color: var(--cream); font-family: 'IM Fell English', serif; text-align: center; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="../favicon.ico">
+  <title>A Perfect Story Map: Interactive Companion Maps for Novels · Ludara.AI</title>
+  <meta name="description" content="A Perfect Story Map turns a novel's world into one living map: every scene, in story order, with the characters who live there. For publishers and their readers."/>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="A Perfect Story Map by Ludara.AI">
+  <meta property="og:title" content="A Perfect Story Map">
+  <meta property="og:description" content="Interactive companion maps for novels: every scene on one living map, in story order, with the characters who live there.">
+  <meta property="og:url" content="https://ludara.ai/aperfectstorymap/">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SEY87L8PFW');
+  </script>
+  <style>
+    :root {
+      --dark:      #0e0f12;
+      --dark-card: #16181d;
+      --dark-text: #e9eef6;
+      --dark-muted:#a9b3c7;
+      --dark-border:#23262d;
+      --warm-bg:   #f7f3ec;
+      --warm-card: #ffffff;
+      --warm-text: #1a2030;
+      --warm-muted:#7a7060;
+      --warm-border:rgba(180,155,100,0.25);
+      --gold:  #b8965a;
+      --gold-l:#d4b07a;
+      --blue:  #6aa3ff;
+      --radius:16px;
+      --wrap:  1100px;
+    }
 
-  /* ── Site nav: same structure as ludara.ai/aperfectday ── */
-  nav {
-    max-width: 1100px; margin: 0 auto; padding: 22px 24px 10px;
-    display: flex; align-items: center; justify-content: space-between;
-    font-family: 'Inter', system-ui, sans-serif; text-align: left;
-  }
-  .nav-logo { font-size: 15px; font-weight: 700; color: var(--cream); text-decoration: none; }
-  .nav-links { display: flex; gap: 24px; align-items: center; }
-  .nav-links a { font-size: 14px; color: var(--nav-muted); text-decoration: none; transition: color .15s; }
-  .nav-links a:hover { color: var(--cream); }
-  .nav-links a.active { color: var(--cream); font-weight: 600; }
-  .has-dropdown { position: relative; }
-  .has-dropdown > a .caret { font-size: 10px; margin-left: 3px; opacity: .7; display: inline-block; transition: transform .15s ease; }
-  .has-dropdown:hover > a .caret, .has-dropdown:focus-within > a .caret { transform: rotate(180deg); }
-  .dropdown-nav { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(-4px);
-    min-width: 200px; background: var(--nav-card); border: 1px solid var(--nav-border); border-radius: 10px; padding: 6px;
-    box-shadow: 0 12px 32px rgba(0,0,0,.5); opacity: 0; visibility: hidden;
-    transition: opacity .15s ease, transform .15s ease, visibility .15s ease; z-index: 30; }
-  .has-dropdown:hover .dropdown-nav, .has-dropdown:focus-within .dropdown-nav { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-  .dropdown-nav::before { content: ''; position: absolute; top: -8px; left: 0; right: 0; height: 14px; }
-  .dropdown-nav a { display: block; padding: 8px 12px; border-radius: 6px; font-size: 14px; white-space: nowrap; color: var(--nav-muted); }
-  .dropdown-nav a:hover { background: rgba(184,150,90,.10); color: var(--cream); }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--dark); color: var(--dark-text); line-height:1.6; }
 
-  /* ── Hero: the arrival image, darkened like the demo splash ── */
-  .hero {
-    min-height: 78vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding: 64px 24px 56px;
-    background:
-      linear-gradient(rgba(12,10,7,0.72), rgba(12,10,7,0.88)),
-      url('Shantaram/images/place-2.jpg') center / cover no-repeat #0f0d0a;
-  }
-  .eyebrow {
-    font-family: 'Cinzel Decorative', serif; color: var(--gold);
-    font-size: 0.85rem; letter-spacing: 0.35em; margin-bottom: 26px;
-  }
-  h1 {
-    font-family: 'Cinzel Decorative', serif; color: var(--gold);
-    font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 700; margin-bottom: 22px;
-  }
-  .tagline {
-    font-style: italic; font-size: clamp(1.05rem, 2.6vw, 1.35rem);
-    line-height: 1.6; max-width: 640px; margin: 0 auto;
-  }
-  .ornament { color: var(--gold); letter-spacing: 0.6em; margin: 28px 0 0; }
+    /* ── NAV ── */
+    nav {
+      max-width: 1100px; margin: 0 auto;
+      padding: 22px 24px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size:15px; font-weight:700; color:var(--dark-text); text-decoration:none; }
+    .nav-links { display:flex; gap:24px; align-items:center; }
+    .nav-links a { font-size:14px; color:var(--dark-muted); text-decoration:none; transition:color .15s; }
+    .nav-links a:hover { color:var(--dark-text); }
+    .nav-links a.active { color:var(--dark-text); font-weight:600; }
+    .has-dropdown{position:relative}
+    .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
+    .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret{transform:rotate(180deg)}
+    .dropdown-nav{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--dark-card);border:1px solid var(--dark-border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
+    .has-dropdown:hover .dropdown-nav,.has-dropdown:focus-within .dropdown-nav{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .dropdown-nav::before{content:'';position:absolute;top:-8px;left:0;right:0;height:14px}
+    .dropdown-nav a{display:block;padding:8px 12px;border-radius:6px;font-size:14px;white-space:nowrap;color:var(--dark-muted)}
+    .dropdown-nav a:hover{background:rgba(184,150,90,.10);color:var(--dark-text)}
 
-  /* ── Three promises, three photographs ── */
-  .features {
-    display: flex; gap: 26px; justify-content: center; flex-wrap: wrap;
-    padding: 64px 24px 20px; max-width: 1040px; margin: 0 auto;
-  }
-  .feature { width: 300px; }
-  .feature img {
-    width: 100%; display: block;
-    border: 1px solid rgba(212,160,67,0.45);
-    border-radius: 18px;
-    box-shadow: 0 10px 34px rgba(0,0,0,0.55);
-  }
-  .feature h2 {
-    font-family: 'Cinzel Decorative', serif; color: var(--gold);
-    font-size: 1rem; letter-spacing: 0.08em; margin: 18px 0 10px;
-  }
-  .feature p { font-size: 0.98rem; line-height: 1.65; opacity: 0.92; }
+    /* ── LAYOUT ── */
+    .dark-section  { background: var(--dark); padding: 32px 24px; }
+    .warm-section  { background: var(--warm-bg); padding: 48px 24px; border-top: 1px solid rgba(184,150,90,0.18); border-bottom: 1px solid rgba(184,150,90,0.18); }
+    .inner { max-width: var(--wrap); margin: 0 auto; }
 
-  .body-copy {
-    font-size: clamp(0.98rem, 2.2vw, 1.12rem); line-height: 1.75;
-    max-width: 640px; margin: 34px auto 0; opacity: 0.92; padding: 0 24px;
-  }
-  .cta {
-    display: inline-block; margin: 40px 0 10px; padding: 14px 34px;
-    background: var(--gold); color: var(--dark); text-decoration: none;
-    font-family: 'Cinzel Decorative', serif; font-size: 0.9rem; letter-spacing: 0.18em;
-  }
-  .cta:hover { filter: brightness(1.08); }
-  .demo-note { margin-top: 12px; font-size: 0.85rem; opacity: 0.6; font-style: italic; }
-  footer {
-    margin-top: 56px; border-top: 1px solid rgba(212,160,67,0.25);
-    padding: 24px; color: var(--nav-muted); text-align: center;
-    font-size: 13px; font-family: 'Inter', system-ui, sans-serif;
-  }
-  footer a { color: var(--nav-muted); text-decoration: none; }
-  footer a:hover { color: var(--gold); }
-  .footer-links { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin-bottom: 10px; }
-  .footer-credit { margin-top: 10px; font-size: 11px; opacity: 0.6; }
-</style>
+    /* ── SHARED TYPOGRAPHY ── */
+    .kicker-dark { font-size:.8rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+    .kicker-warm { font-size:.8rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; font-family:'DM Sans',sans-serif; }
+    h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,5vw,62px); line-height:1.1; font-weight:400; margin-bottom:12px; }
+    h1 strong { font-weight:600; }
+    h1 em { font-style:italic; color:var(--gold-l); }
+    h2.dark  { font-size:clamp(20px,2.5vw,30px); font-weight:700; margin-bottom:8px; color:var(--dark-text); }
+    h2.warm  { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3vw,36px); font-weight:600; margin-bottom:8px; color:var(--warm-text); }
+    h3.warm  { font-size:17px; font-weight:600; margin-bottom:6px; color:var(--warm-text); }
+
+    /* ── HERO ── */
+    .hero-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:48px 40px 40px; position:relative; overflow:hidden; }
+    .hero-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(106,163,255,0.07) 0%,transparent 70%); pointer-events:none; }
+    .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 28px; font-weight:300; max-width:760px; }
+
+    /* ── SCREENSHOT STRIP (3 phone screens) ── */
+    .strip-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:12px 0 32px; max-width:820px; }
+    @media(max-width:700px) { .strip-3 { grid-template-columns:1fr; max-width:320px; margin-left:auto; margin-right:auto; } }
+    .strip-item { display:flex; flex-direction:column; align-items:center; }
+    .strip-img { width:100%; border-radius:14px; box-shadow:0 8px 28px rgba(0,0,0,0.55); display:block; border:1px solid var(--dark-border); }
+    .strip-cap { font-size:12px; color:var(--dark-muted); text-align:center; margin-top:10px; font-weight:500; line-height:1.4; }
+
+    /* ── BUTTONS ── */
+    .btn-gold { display:inline-block; background:var(--gold); color:#fff; padding:11px 28px; border-radius:8px; font-size:14px; font-weight:600; text-decoration:none; transition:background .15s; }
+    .btn-gold:hover { background:var(--gold-l); text-decoration:none; }
+    .btn-ghost-dark { display:inline-block; border:1px solid var(--dark-border); color:var(--dark-muted); padding:10px 24px; border-radius:8px; font-size:14px; text-decoration:none; transition:border-color .15s,color .15s; }
+    .btn-ghost-dark:hover { border-color:var(--blue); color:var(--blue); text-decoration:none; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+    .demo-note { color:var(--dark-muted); font-size:13px; font-style:italic; margin-top:12px; font-weight:300; }
+
+    /* ── STATS ── */
+    .stat-bar { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--warm-border); border:1px solid var(--warm-border); border-radius:var(--radius); overflow:hidden; }
+    .stat-item { background:var(--warm-card); padding:24px 20px; text-align:center; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:600; color:var(--gold); line-height:1; margin-bottom:4px; }
+    .stat-label { font-size:13px; color:var(--warm-muted); }
+
+    /* ── GRIDS ── */
+    .grid-3 { display:grid; gap:16px; grid-template-columns:1fr; }
+    @media(min-width:900px) { .grid-3 { grid-template-columns:repeat(3,1fr); } }
+
+    /* ── FEATURE CARDS (WARM) ── */
+    .feat-card { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:24px; transition:border-color .2s,box-shadow .2s; }
+    .feat-card:hover { border-color:rgba(184,150,90,0.45); box-shadow:0 4px 20px rgba(184,150,90,0.08); }
+    .feat-card p { color:var(--warm-muted); font-size:14px; line-height:1.7; margin:0; font-weight:300; }
+    .icon-title { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .icon { width:32px; height:32px; color:var(--gold); flex-shrink:0; }
+
+    /* ── CTA ── */
+    .cta-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:56px 40px; text-align:center; position:relative; overflow:hidden; }
+    .cta-wrap::before { content:''; position:absolute; bottom:-60px; left:50%; transform:translateX(-50%); width:400px; height:200px; background:radial-gradient(ellipse,rgba(184,150,90,0.08) 0%,transparent 70%); pointer-events:none; }
+    .cta-wrap h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,3.5vw,42px); font-weight:400; margin-bottom:14px; line-height:1.2; }
+    .cta-wrap h2 em { font-style:italic; color:var(--gold-l); }
+    .cta-wrap p { color:var(--dark-muted); max-width:520px; margin:0 auto 32px; font-weight:300; }
+    .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    .footer { border-top:1px solid var(--dark-border); padding:24px 24px; color:var(--dark-muted); text-align:center; font-size:13px; }
+    .footer a { color:var(--dark-muted); text-decoration:none; }
+    .footer a:hover { color:var(--gold-l); }
+    .footer-links { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin-bottom:10px; }
+
+    [data-animate] { opacity:0; transform:translateY(8px); transition:opacity .45s ease,transform .45s ease; }
+    [data-animate].in { opacity:1; transform:none; }
+    @media(prefers-reduced-motion:reduce) { [data-animate]{opacity:1;transform:none} }
+    @media(max-width:640px) {
+      .hero-wrap { padding:32px 20px; }
+      .cta-wrap { padding:36px 20px; }
+      .stat-bar { grid-template-columns:1fr; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- NAV (dark) -->
 <nav>
   <a class="nav-logo" href="https://ludara.ai">Ludara.AI</a>
   <div class="nav-links">
@@ -118,42 +156,112 @@
       </div>
     </div>
     <a class="active" href="https://ludara.ai/aperfectstorymap/">A Perfect Story Map</a>
-    <a href="https://ludara.ai/about.html">About</a>
-    <a href="https://ludara.ai/contact.html">Contact</a>
+    <a href="https://ludara.ai/about">About</a>
+    <a href="https://ludara.ai/contact">Contact</a>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="eyebrow">BY LUDARA.AI</div>
-  <h1>A Perfect Story Map</h1>
-  <p class="tagline">Every scene of a novel on one living map: in story order, with the characters who live there.</p>
-  <div class="ornament">— ✦ —</div>
-</div>
-
-<div class="features">
-  <div class="feature">
-    <img src="assets/screen-path.jpg" alt="The Story Path: a novel's journey drawn across the world map">
-    <h2>Relive the Journey</h2>
-    <p>One tap draws the novel's whole journey in story order. After the last page, one glance brings the whole story back.</p>
+<!-- ══ HERO (dark) ══ -->
+<section class="dark-section" data-animate>
+  <div class="inner">
+    <div class="hero-wrap">
+      <p class="kicker-dark">A Perfect Story Map &nbsp;·&nbsp; by Ludara.AI</p>
+      <h1>Every scene of a novel<br><em>on one living map.</em></h1>
+      <p class="hero-sub">A story map is a companion to reading. It makes the novel vivid: readers see where the story lives, follow its path across the world as the chapters unfold, and return after the last page to relive the whole journey at a glance. In story order, with the characters who live there.</p>
+      <!-- SCREENSHOT STRIP -->
+      <div class="strip-3">
+        <div class="strip-item"><img src="assets/screen-path.jpg" alt="The Story Path: the novel's journey drawn across the world" class="strip-img"/><p class="strip-cap">The Story Path: the whole journey, in order</p></div>
+        <div class="strip-item"><img src="assets/screen-card.jpg" alt="A place card telling what happens there in the novel" class="strip-img"/><p class="strip-cap">Place cards: what happens here, and who you meet</p></div>
+        <div class="strip-item"><img src="assets/screen-list.jpg" alt="The places list with PDF and Share" class="strip-img"/><p class="strip-cap">Bookmarks, book club PDF, and sharing</p></div>
+      </div>
+      <div class="hero-btns">
+        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_hero'})">Request the concept demo</a>
+        <a href="https://ludara.ai/contact" class="btn-ghost-dark">Contact us →</a>
+      </div>
+      <p class="demo-note">A full interactive demonstration, built on a beloved modern novel, is available on request.</p>
+    </div>
   </div>
-  <div class="feature">
-    <img src="assets/screen-card.jpg" alt="A place card telling what happens there in the novel">
-    <h2>A Companion to Reading</h2>
-    <p>Every place tells you what happens there, who you meet, and where it sits in the story. The novel, made vivid.</p>
+</section>
+
+<!-- ══ STATS (warm) ══ -->
+<section class="warm-section" data-animate>
+  <div class="inner">
+    <div class="stat-bar">
+      <div class="stat-item"><div class="stat-num">One tap</div><div class="stat-label">draws the novel's whole journey, in story order</div></div>
+      <div class="stat-item"><div class="stat-num">Every language</div><div class="stat-label">the book is published in</div></div>
+      <div class="stat-item"><div class="stat-num">QR + link</div><div class="stat-label">on the endpapers and in the marketing kit</div></div>
+    </div>
   </div>
-  <div class="feature">
-    <img src="assets/screen-list.jpg" alt="The places list with PDF and Share">
-    <h2>Made for Book Clubs</h2>
-    <p>Readers bookmark the scenes that stay with them, share their map of the book, and print a beautiful book club guide.</p>
+</section>
+
+<!-- ══ WHAT A STORY MAP IS (warm) ══ -->
+<section class="warm-section" data-animate style="border-top:none;">
+  <div class="inner">
+    <p class="kicker-warm">What a Story Map Is</p>
+    <h2 class="warm" style="margin-bottom:24px;">The novel, made explorable.<br>For readers, book clubs and the launch campaign.</h2>
+    <div class="grid-3">
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5-2V4l5 2m0 14V6m0 14l6 2m-6-16l6 2m0 12V8m0 12l5-2V4l-5 2"/></svg>
+          <h3 class="warm">A companion to reading</h3>
+        </div>
+        <p>Every place tells you what happens there in the novel, who you meet, and where it sits in the story. Readers search by place, or by character.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <h3 class="warm">The Story Path</h3>
+        </div>
+        <p>One tap draws the whole journey in narrative order across the world. After the last page, one glance brings the whole story back.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <h3 class="warm">Bookmarks</h3>
+        </div>
+        <p>Readers mark the scenes that stay with them: a record of their journey through the book, kept even after the map is closed.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+          <h3 class="warm">Made for book clubs</h3>
+        </div>
+        <p>One tap turns bookmarks, or the whole Story Path, into a beautiful printable guide for a book club evening or a reading group.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+          <h3 class="warm">Word of mouth, made visible</h3>
+        </div>
+        <p>Readers share their map of the book with friends by message or email. Every shared map is a recommendation for the novel.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <h3 class="warm">Every language, every edition</h3>
+        </div>
+        <p>We produce the map in every language the book is published in. We build and maintain it with the publisher; the book's editors hold the source of truth.</p>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<p class="body-copy">The map ships as a QR code on the endpapers and a link in the marketing kit, produced in every language the book is published in. We build and maintain each map with the publisher; the book's editors hold the source of truth.</p>
+<!-- ══ CTA (dark) ══ -->
+<section class="dark-section" data-animate>
+  <div class="inner">
+    <div class="cta-wrap">
+      <h2>Shall we map <em>your novel?</em></h2>
+      <p>The map ships as a QR code on the endpapers and a link in your marketing kit. We build and maintain it; your editors hold the source of truth.</p>
+      <div class="cta-btns">
+        <a href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo" class="btn-gold" onclick="gtag('event','demo_request',{event_category:'engagement',event_label:'storymap_cta'})">Request the concept demo</a>
+        <a href="https://ludara.ai/contact" class="btn-ghost-dark">Contact us →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-<a class="cta" href="mailto:maria@ludara.ai?subject=A%20Perfect%20Story%20Map%20demo">Request the concept demo</a>
-<p class="demo-note">A full interactive demonstration, built on a beloved modern novel, is available on request.</p>
-
-<footer>
+<!-- FOOTER -->
+<footer class="footer">
   <div class="footer-links">
     <a href="https://ludara.ai">Home</a>
     <a href="https://ludara.ai/product">Products</a>
@@ -161,9 +269,19 @@
     <a href="https://ludara.ai/contact">Contact</a>
   </div>
   <div>© <span id="apsm-y"></span> Ludara LLC · <a href="mailto:maria@ludara.ai">maria@ludara.ai</a></div>
-  <div class="footer-credit">Hero photograph: <a href="https://commons.wikimedia.org/wiki/File:Gateway_of_India_from_sea.jpg">Sauban96, CC BY-SA 4.0</a></div>
 </footer>
 <script>document.getElementById('apsm-y').textContent=new Date().getFullYear()</script>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('[data-animate]');
+    if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.08 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
 
 </body>
 </html>
