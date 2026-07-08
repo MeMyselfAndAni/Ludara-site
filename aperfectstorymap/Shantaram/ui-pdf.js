@@ -129,7 +129,7 @@ async function generatePDF(){
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
-        ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</span></div>` : ''}
+        ${p.note ? `<div class="pdf-card-note">"${p.note}"</div>` : ''}
         ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 If you visit</span> ${p.visit}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
@@ -145,7 +145,7 @@ async function generatePDF(){
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A Perfect Day · ${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</title>
+<title>Shantaram · A Perfect Story Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -428,27 +428,23 @@ async function generatePDF(){
 </head>
 <body>
 
-<!-- COVER -->
+<!-- COVER — Book Story Guide -->
 <div class="pdf-cover">
-  <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
-  <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
-  <div class="pdf-cover-subtitle">Your personal day guide</div>
+  <div class="pdf-cover-logo">A Perfect Story Map by Ludara</div>
+  <div class="pdf-cover-title">Shantaram</div>
+  <div class="pdf-cover-subtitle">Your Book Story Guide: the novel's places, in your order</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
       <div class="pdf-stat-num">${places.length}</div>
-      <div class="pdf-stat-label">Places</div>
+      <div class="pdf-stat-label">Bookmarked places</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">${_routeStats.travelMode === 'driving' ? '🚗' : _routeStats.travelMode === 'boat' ? '⛵' : '🚶'} ~${totalMins < 60 ? totalMins + 'm' : Math.round(totalMins/6)/10 + 'h'}</div>
-      <div class="pdf-stat-label">${_routeStats.travelMode === 'driving' ? 'Driving' : _routeStats.travelMode === 'boat' ? 'Travel Time' : 'Walking'}</div>
-    </div>
-    <div class="pdf-stat">
-      <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
-      <div class="pdf-stat-label">${formatDistanceUnit()}</div>
+      <div class="pdf-stat-num">📖</div>
+      <div class="pdf-stat-label">From the novel by Gregory David Roberts</div>
     </div>
   </div>
-  <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
+  <div class="pdf-cover-by">Curated with A Perfect Story Map</div>
   <div class="pdf-cover-date">${date}</div>
 </div>
 

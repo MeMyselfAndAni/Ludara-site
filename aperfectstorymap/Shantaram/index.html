@@ -278,8 +278,11 @@
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
   <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="Draw the novel's journey, in order">📖 Story Path</button>
-  <input id="topbar-search" type="search" placeholder="🔎 Place or character…" oninput="_topSearch(this.value)"
-         style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
+  <span style="position:relative;display:inline-flex;align-items:center;">
+    <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
+    <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
+           style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px 6px 32px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
+  </span>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
@@ -389,7 +392,7 @@
   Guide
 </button>
 
-<!-- "Save offline" button removed for the story map; offline caching still works silently via the service worker -->
+<!-- "Save offline" button removed for the story map (service worker disabled during iteration) -->
 
 <button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
@@ -542,9 +545,15 @@ function toggleStoryPath(quiet){
     return; /* clearTripRoute wrapper below resets state + button */
   }
   /* Story Path is the map's home view: leaving bookmarks mode and
-     clearing any category filter before drawing */
+     clearing any search or category filter before drawing */
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive && typeof toggleSavedFilter === 'function'){
     toggleSavedFilter(document.getElementById('pill-saved'));
+  }
+  if(typeof _searchQuery !== 'undefined' && _searchQuery){
+    _searchQuery = '';
+    var _ti = document.getElementById('topbar-search'); if(_ti) _ti.value = '';
+    var _si = document.getElementById('search-input');  if(_si) _si.value = '';
+    if(typeof applyFilters === 'function') applyFilters();
   }
   if(typeof AF !== 'undefined' && AF !== 'all'){
     AF = 'all';

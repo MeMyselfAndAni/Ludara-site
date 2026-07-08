@@ -317,8 +317,8 @@ function renderList(){
     const openOk   = !openNowActive || isOpenNow(p);
     const searchOk = !_searchQuery
       || p.name.toLowerCase().includes(_searchQuery)
-      || (p.type && p.type.toLowerCase().includes(_searchQuery))    // characters line
-      || (p.note && p.note.toLowerCase().includes(_searchQuery));   // scene description
+      || (p.type && p.type.toLowerCase().includes(_searchQuery))       // characters line
+      || (p.address && p.address.toLowerCase().includes(_searchQuery)); // city / country
     return catOk && nbhdOk && openOk && searchOk;
   });
   const count = filtered.length;
@@ -528,8 +528,8 @@ function applyFilters(){
       const openOk = !openNowActive || isOpenNow(p);
       const searchOk = (typeof _searchQuery === 'undefined') || !_searchQuery
         || p.name.toLowerCase().includes(_searchQuery)
-        || (p.type && p.type.toLowerCase().includes(_searchQuery))
-        || (p.note && p.note.toLowerCase().includes(_searchQuery));
+        || (p.type && p.type.toLowerCase().includes(_searchQuery))       // characters line
+        || (p.address && p.address.toLowerCase().includes(_searchQuery)); // city / country
       visible = catOk && openOk && nbhdOk && searchOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);
