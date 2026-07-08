@@ -329,7 +329,7 @@
       <span class="pc-emily-by" style="display:none"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span>
+      <span class="pc-tip-label">🧭 If you visit</span>
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -556,8 +556,9 @@ window.addEventListener('load', function() {
         : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
       window.open(url, '_blank');
     };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+    // Reading-first cards: directions belong in the travel footer, after "If you visit"
+    var tip = document.getElementById('pc-tip');
+    if (tip && tip.parentNode) tip.parentNode.insertBefore(btn, tip.nextSibling);
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>

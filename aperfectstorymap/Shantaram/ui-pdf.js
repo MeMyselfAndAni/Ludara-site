@@ -125,12 +125,12 @@ async function generatePDF(){
         <div class="pdf-card-name">${p.name}</div>
         ${p.type ? `<div class="pdf-card-type">${p.type}</div>` : ''}
         <div class="pdf-card-meta">
-          ${p.hours ? `<span>🕐 ${p.hours}</span>` : ''}
+          ${p.book ? `<span>📖 ${p.book}</span>` : ''}
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
         ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</span></div>` : ''}
-        ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
+        ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 If you visit</span> ${p.visit}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
           <span class="pdf-qr-label">Scan for Google Maps</span>

@@ -318,7 +318,7 @@ function planFavTrip(){
       <div class="trip-stop-info">
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
-        ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
+        ${p.book?`<div class="trip-stop-hours">📖 ${p.book}`+`</div>`:''}
         <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
 

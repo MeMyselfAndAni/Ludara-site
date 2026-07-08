@@ -20,8 +20,8 @@
       btn: 'Next'
     },
     {
-      title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin is a choice: a wine bar that Venetians actually use, a church with a Tintoretto and no queue, a glassblower on Murano who still works by eye. Tap any icon to see why it made the list.',
+      title: 'The Story, Mapped',
+      body: 'Every pin is a scene: the cafe where the story begins, the station that carries it away, the mountains where it ends. Tap any icon to see what happens there in the book.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',

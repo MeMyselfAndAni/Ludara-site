@@ -235,13 +235,14 @@ function _populateCard(p){
 
   document.getElementById('pc-title').textContent = p.name;
   document.getElementById('pc-type').textContent  = p.type || '';
-  document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${typeof formatHours === 'function' ? formatHours(p.hours) : p.hours}` : '';
+  // Story maps: the hours slot shows where this place lives in the book
+  document.getElementById('pc-hours').innerHTML   = p.book ? `📖 ${p.book}` : '';
 
   document.getElementById('pc-note').textContent = p.note || '';
 
   const tipEl = document.getElementById('pc-tip');
-  if(p.tip){
-    document.getElementById('pc-tip-text').textContent = p.tip;
+  if(p.visit){
+    document.getElementById('pc-tip-text').textContent = p.visit;
     tipEl.style.display = '';
   } else {
     tipEl.style.display = 'none';
