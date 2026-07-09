@@ -23,6 +23,9 @@
     .has-dropdown{position:relative;}
     .has-dropdown>a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease;}
     .has-dropdown:hover>a .caret,.has-dropdown:focus-within>a .caret{transform:rotate(180deg);}
+    .dropdown-nav a.dd-group{font-weight:700;color:#e9eef6}
+    .dropdown-nav a.dd-sub{padding-left:26px;font-size:13px}
+    .dd-sep{height:1px;background:rgba(255,255,255,0.14);margin:6px 8px}
     .dropdown-nav{position:absolute;top:calc(100% + 10px);right:0;min-width:212px;background:var(--dark-card);border:1px solid var(--dark-border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s;z-index:30;}
     .has-dropdown:hover .dropdown-nav,.has-dropdown:focus-within .dropdown-nav{opacity:1;visibility:visible;transform:translateY(0);}
     .dropdown-nav::before{content:'';position:absolute;top:-10px;left:0;right:0;height:14px;}
@@ -100,13 +103,16 @@
   <div class="nav-links">
     <a href="https://ludara.ai">Home</a>
     <div class="has-dropdown">
-      <a href="https://ludara.ai/aperfectday/" class="active">A Perfect Day <span class="caret" aria-hidden="true">&#9662;</span></a>
+      <a href="https://ludara.ai/product" class="active">Products <span class="caret" aria-hidden="true">&#9662;</span></a>
       <div class="dropdown-nav" role="menu">
-        <a href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
-        <a href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
-        <a href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
-        <a href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
-        <a href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books: A Perfect Story Map</a>
+        <a class="dd-group" href="https://ludara.ai/aperfectday/" role="menuitem">A Perfect Day</a>
+        <a class="dd-sub" href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
+        <a class="dd-sub" href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+        <a class="dd-sub" href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
+        <a class="dd-sub" href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
+        <div class="dd-sep" aria-hidden="true"></div>
+        <a class="dd-group" href="https://ludara.ai/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
+        <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books</a>
       </div>
     </div>
     <a href="https://ludara.ai/about">About</a>

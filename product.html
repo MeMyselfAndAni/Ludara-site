@@ -44,6 +44,9 @@
     .has-dropdown{position:relative}
     .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
     .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
+    .dropdown a.dd-group{font-weight:700;color:#e9eef6}
+    .dropdown a.dd-sub{padding-left:26px;font-size:13px}
+    .dd-sep{height:1px;background:rgba(255,255,255,0.14);margin:6px 8px}
     .dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease,visibility .15s ease;z-index:30}
     .has-dropdown:hover .dropdown,.has-dropdown:focus-within .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
     .dropdown::before{content:'';position:absolute;top:-6px;left:0;right:0;height:12px}
@@ -105,13 +108,16 @@
       <div class="menu">
         <a href="/">Home</a>
         <div class="has-dropdown">
-          <a href="/aperfectday/">A Perfect Day <span class="caret" aria-hidden="true">▾</span></a>
+          <a href="/product.html" class="active">Products <span class="caret" aria-hidden="true">▾</span></a>
           <div class="dropdown" role="menu">
-            <a href="/aperfectday/" role="menuitem">Hotels</a>
-            <a href="/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
-            <a href="/universities.html" role="menuitem">Universities</a>
-            <a href="/realestate.html" role="menuitem">Real Estate</a>
-            <a href="/aperfectstorymap/" role="menuitem">Books: A Perfect Story Map</a>
+            <a class="dd-group" href="/aperfectday/" role="menuitem">A Perfect Day</a>
+            <a class="dd-sub" href="/aperfectday/" role="menuitem">Hotels</a>
+            <a class="dd-sub" href="/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+            <a class="dd-sub" href="/universities.html" role="menuitem">Universities</a>
+            <a class="dd-sub" href="/realestate.html" role="menuitem">Real Estate</a>
+            <div class="dd-sep" aria-hidden="true"></div>
+            <a class="dd-group" href="/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
+            <a class="dd-sub" href="/aperfectstorymap/" role="menuitem">Books</a>
           </div>
         </div>
         <a href="/about.html">About</a>
