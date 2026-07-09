@@ -29,12 +29,9 @@ if not exist "%DEPLOY%\Shantaram\images" mkdir "%DEPLOY%\Shantaram\images"
 echo Copying landing page...
 copy /Y "%WORK%\index.html" "%DEPLOY%\index.html" >nul && echo   copied index.html
 
-echo Copying assets (screenshots)...
-if exist "%WORK%\assets" (
-  copy /Y "%WORK%\assets\*.*" "%DEPLOY%\assets\" >nul && echo   copied assets\*
-) else (
-  echo   [skip] no assets folder in working copy
-)
+rem Assets are managed manually in the deploy folder (Maria, 2026-07-08).
+rem This script does NOT copy or overwrite anything in %DEPLOY%\assets.
+echo   assets folder left untouched, managed manually
 
 echo Copying Shantaram demo files...
 for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js) do (

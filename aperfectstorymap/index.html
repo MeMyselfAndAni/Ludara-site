@@ -68,6 +68,9 @@
     .dropdown-nav::before{content:'';position:absolute;top:-8px;left:0;right:0;height:14px}
     .dropdown-nav a{display:block;padding:8px 12px;border-radius:6px;font-size:14px;white-space:nowrap;color:var(--dark-muted)}
     .dropdown-nav a:hover{background:rgba(184,150,90,.10);color:var(--dark-text)}
+    .dropdown-nav a.dd-group{font-weight:700;color:#e9eef6}
+    .dropdown-nav a.dd-sub{padding-left:26px;font-size:13px}
+    .dd-sep{height:1px;background:rgba(255,255,255,0.14);margin:6px 8px}
 
     /* ── LAYOUT ── */
     .dark-section  { background: var(--dark); padding: 32px 24px; }
@@ -160,13 +163,16 @@
   <div class="nav-links">
     <a href="https://ludara.ai">Home</a>
     <div class="has-dropdown">
-      <a href="https://ludara.ai/aperfectday/">Products <span class="caret" aria-hidden="true">▾</span></a>
+      <a href="https://ludara.ai/product">Products <span class="caret" aria-hidden="true">▾</span></a>
       <div class="dropdown-nav" role="menu">
-        <a href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
-        <a href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
-        <a href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
-        <a href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
-        <a href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books: A Perfect Story Map</a>
+        <a class="dd-group" href="https://ludara.ai/aperfectday/" role="menuitem">A Perfect Day</a>
+        <a class="dd-sub" href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
+        <a class="dd-sub" href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+        <a class="dd-sub" href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
+        <a class="dd-sub" href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
+        <div class="dd-sep" aria-hidden="true"></div>
+        <a class="dd-group" href="https://ludara.ai/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
+        <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books</a>
       </div>
     </div>
     <a class="active" href="https://ludara.ai/aperfectstorymap/">A Perfect Story Map</a>
