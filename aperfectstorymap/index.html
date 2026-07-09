@@ -49,9 +49,15 @@
       padding: 22px 24px 10px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .nav-logo { font-size:15px; font-weight:700; color:var(--dark-text); text-decoration:none; }
-    .nav-links { display:flex; gap:24px; align-items:center; }
-    .nav-links a { font-size:14px; color:var(--dark-muted); text-decoration:none; transition:color .15s; }
+    .nav-logo { font-size:15px; font-weight:700; color:var(--dark-text); text-decoration:none; margin-right:16px; white-space:nowrap; }
+    .nav-links { display:flex; gap:20px; row-gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .nav-links a { font-size:14px; color:var(--dark-muted); text-decoration:none; transition:color .15s; white-space:nowrap; }
+    @media(max-width:640px) {
+      nav { padding:16px 16px 6px; }
+      .nav-links { gap:14px; }
+      /* the page's own name is redundant in its own nav on small screens */
+      .nav-links > a.active { display:none; }
+    }
     .nav-links a:hover { color:var(--dark-text); }
     .nav-links a.active { color:var(--dark-text); font-weight:600; }
     .has-dropdown{position:relative}
