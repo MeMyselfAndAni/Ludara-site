@@ -333,8 +333,12 @@
   /* Save offline + Guide: small oval pills, flush to the right edge */
   #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 5px 12px !important; font-size: 0.64rem !important; right: 10px !important; letter-spacing: 0.05em !important; }
   @media (max-width: 768px){
-    /* Tuck the pill row right under the top band (about a 2mm gap) */
-    .filter-bar { top: 40px !important; flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; align-items: stretch; }
+    /* Taller, more prominent top band on phones */
+    header { padding: 14px 14px 15px !important; }
+    .wl-logo { font-size: 1.08rem !important; }
+    h1, h1 em { font-size: 1.16rem !important; line-height: 1.12 !important; }
+    /* Tuck the pill row just under the taller band */
+    .filter-bar { top: 58px !important; flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; align-items: stretch; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-bar > * { flex: 0 0 auto; }
     /* Trip pills as tidy two-line chips */
