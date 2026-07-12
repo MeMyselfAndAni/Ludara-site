@@ -281,9 +281,9 @@
        Friends & Lovers / Underworld & Prison / The Long Journeys) removed for
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-trip" id="pill-storypath" onclick="drawTripPreset('bath-all', this)" title="Bridgerton filming locations in Bath">👑 Bridgerton in Bath</button>
-  <button class="pill pill-trip" onclick="drawTripPreset('bath-outdoor', this)" title="A free outdoor walk in Bath">🚶 Outdoor walk</button>
-  <button class="pill pill-trip" onclick="drawTripPreset('bristol', this)" title="Rivals filming locations in Bristol">🎬 Rivals in Bristol</button>
+  <button class="pill pill-trip" id="pill-storypath" onclick="loadTrip('bath-all', this)" title="Bridgerton filming locations in Bath">👑 Bridgerton in Bath</button>
+  <button class="pill pill-trip" onclick="loadTrip('bath-outdoor', this)" title="A free outdoor walk in Bath">🚶 Outdoor walk</button>
+  <button class="pill pill-trip" onclick="loadTrip('bristol', this)" title="Rivals filming locations in Bristol">🎬 Rivals in Bristol</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
@@ -391,6 +391,53 @@
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(function(){ if(typeof _toast==='function')_toast('🔗 Link copied — opens this trip on the map.',3500); }).catch(function(){ if(typeof _fallbackCopy==='function')_fallbackCopy(url); });
     } else if(typeof _fallbackCopy==='function'){ _fallbackCopy(url); }
+  }
+
+  // ── Holston-style preset trips: load into Favourites + docked Saved panel ──
+  var _TRIPS = {
+    'bath-all':     { name:'Bridgerton in Bath',          ids:[2,3,8,6,7,5,9,4,10,1] },
+    'bath-outdoor': { name:'A free outdoor walk in Bath', ids:[2,3,7,6,5,4,10] },
+    'bristol':      { name:'Rivals in Bristol',           ids:[11,12,14,13,16,15] }
+  };
+  function loadTrip(key, btn){
+    var trip = _TRIPS[key]; if(!trip) return;
+    var prev = (typeof favourites!=='undefined' && favourites) ? favourites.slice() : [];
+    var prevOrder = (typeof _getSavedOrder==='function') ? _getSavedOrder() : null;
+    if(typeof clearTripRoute==='function') clearTripRoute();
+    favourites = trip.ids.slice();
+    if(typeof _setSavedOrder==='function') _setSavedOrder(trip.ids.slice());
+    if(typeof saveFavs==='function') saveFavs();
+    if(typeof updateFavUI==='function') updateFavUI();
+    var sp = document.getElementById('pill-saved');
+    if(sp && !sp.classList.contains('active') && typeof toggleSavedFilter==='function') toggleSavedFilter(sp);
+    else if(typeof renderList==='function') renderList();
+    if(typeof drawSavedRoute==='function') drawSavedRoute();
+    document.querySelectorAll('.pill-trip').forEach(function(p){ p.classList.remove('active'); });
+    if(btn && btn.classList) btn.classList.add('active');
+    _tripToast(trip.name+' loaded — '+trip.ids.length+' stops', prev, prevOrder, btn);
+  }
+  function _tripToast(msg, prev, prevOrder, btn){
+    var ex=document.getElementById('_trip-toast'); if(ex) ex.remove();
+    var el=document.createElement('div'); el.id='_trip-toast';
+    var brand=getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()||'#ff2a00';
+    el.style.cssText='position:fixed;top:100px;left:50%;transform:translateX(-50%);background:white;color:#31261d;padding:10px 18px;border-radius:24px;border:2px solid '+brand+';font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.18);display:flex;align-items:center;gap:12px;';
+    var span=document.createElement('span'); span.textContent='📍 '+msg; el.appendChild(span);
+    var undo=document.createElement('button'); undo.textContent='Undo';
+    undo.style.cssText='background:none;border:1px solid '+brand+';color:'+brand+';border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;';
+    undo.onclick=function(){
+      el.remove();
+      favourites = prev.slice();
+      if(typeof _setSavedOrder==='function'){ if(prevOrder && prevOrder.length) _setSavedOrder(prevOrder); else if(typeof _clearSavedOrder==='function') _clearSavedOrder(); }
+      if(typeof saveFavs==='function') saveFavs();
+      if(typeof updateFavUI==='function') updateFavUI();
+      var sp=document.getElementById('pill-saved');
+      if(!prev.length){ if(typeof clearTripRoute==='function') clearTripRoute(); if(sp&&sp.classList.contains('active')&&typeof toggleSavedFilter==='function') toggleSavedFilter(sp); }
+      else { if(typeof renderList==='function') renderList(); if(typeof drawSavedRoute==='function') drawSavedRoute(); }
+      document.querySelectorAll('.pill-trip').forEach(function(p){ p.classList.remove('active'); });
+    };
+    el.appendChild(undo);
+    document.body.appendChild(el);
+    setTimeout(function(){ if(el.parentNode) el.remove(); },7000);
   }
 </script>
 
@@ -822,12 +869,16 @@ function clearAllSaved() {
       }
     }
     function showTrip(pl, distM, walkMins) {
-      /* Reading-first bookmarks: no route stats, no drive times, no Google Maps.
-         Just the reader's marks in their order, with PDF + Share. */
+      var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode)
+        ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
+      var icon = mode==='driving' ? '🚗' : '🚶';
+      var dist = (typeof formatDistance==='function') ? formatDistance(distM) : ((distM/1000*0.621371).toFixed(1)+' mi');
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>❤️ '+pl.length+(pl.length===1?' favourite':' favourites')+'</span>'+
-        '<span class="saved-stat-dot">·</span><span>your day out</span></div>'+
+        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
+        '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
+        '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
+        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
@@ -839,14 +890,22 @@ function clearAllSaved() {
           '<div class="saved-item-num">'+(i+1)+'</div><div class="place-thumb" id="thumb-'+p.id+'">'+(p.emoji||'📍')+'</div>'+
           '<div class="place-info" onclick="openDetail('+p.id+')" style="cursor:pointer;flex:1">'+
           '<div class="place-name">'+p.name+'</div><div class="place-type">'+(CL[p.cat]||p.cat)+'</div>'+
-          (p.book?'<div class="place-addr">🎬 '+p.book+'</div>':'')+'</div>'+
+          '<div class="place-addr">'+(p.address||'')+'</div></div>'+
           '<span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">›</span></div>';
+        if (i < pl.length-1) html += '<div class="saved-walk-connector" id="saved-conn-'+i+'">↓</div>';
       });
       listEl.innerHTML = html;
       if (listEl.parentNode) listEl.parentNode.appendChild(listEl);
       var al = document.getElementById('saved-autosort-link');
       if (al) al.addEventListener('click', function(e) { e.preventDefault(); if(typeof _clearSavedOrder==='function')_clearSavedOrder(); if(typeof updateFavUI==='function')updateFavUI(); });
       wireDrag(pl); loadThumbs(pl);
+      if (pl.length>=2 && typeof _fetchRouteStats==='function' && navigator.onLine) {
+        _fetchRouteStats(pl).then(function(s) {
+          var we=document.getElementById('saved-stat-walk-sheet');
+          if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
+        }).catch(function(){});
+      }
     }
     function wireDrag(pl) {
       var src=null;
