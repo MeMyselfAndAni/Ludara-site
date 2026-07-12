@@ -283,6 +283,8 @@ function getSortedFavPlaces(){
 function planFavTrip(){
   if(favourites.length < 2){ _toast('Add at least 2 favourites first ❤️'); return; }
   const places = getSortedFavPlaces();
+  window._activeTrip = { places: places, label: 'your favourites' };
+  { var _tt = document.querySelector('#trip-overlay .trip-title'); if(_tt) _tt.textContent = '🗺 Your favourites'; }
   let totalWalkSecs = 0, totalDwell = 0;
   places.forEach((p, i) => {
     totalDwell += getDwell(p.cat);

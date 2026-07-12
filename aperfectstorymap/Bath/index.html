@@ -281,10 +281,9 @@
        Friends & Lovers / Underworld & Prison / The Long Journeys) removed for
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-trip" id="pill-storypath" onclick="drawTripPreset('bath-all', this)" title="Bath: the full Bridgerton trail">🎬 Bath trail</button>
-  <button class="pill pill-trip" onclick="drawTripPreset('bath-outdoor', this)" title="Bath: free outdoor walk">🚶 Outdoor</button>
-  <button class="pill pill-trip" onclick="drawTripPreset('bath-houses', this)" title="Bath: houses &amp; ballrooms">🏛️ Houses</button>
-  <button class="pill pill-trip" onclick="drawTripPreset('bristol', this)" title="Bristol: the Rivals loop">🎬 Bristol</button>
+  <button class="pill pill-trip" id="pill-storypath" onclick="drawTripPreset('bath-all', this)" title="Bridgerton filming locations in Bath">👑 Bridgerton in Bath</button>
+  <button class="pill pill-trip" onclick="drawTripPreset('bath-outdoor', this)" title="A free outdoor walk in Bath">🚶 Outdoor walk</button>
+  <button class="pill pill-trip" onclick="drawTripPreset('bristol', this)" title="Rivals filming locations in Bristol">🎬 Rivals in Bristol</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
@@ -293,7 +292,7 @@
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">❤️</span> Favourites <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
-<!-- Preset trips: drawn from the pills in the filter bar -->
+<!-- Preset trips: pills draw the route AND open the Trip Plan panel -->
 <style>
   .filter-bar { flex-wrap: wrap !important; row-gap: 6px; }
   .pill-trip { font-size: 0.78rem; }
@@ -301,14 +300,15 @@
 </style>
 <script>
   var TRIP_PRESETS = {
-    'bath-all':     { label:'Bath: the full Bridgerton trail', ids: (typeof STORY_PATH_IDS!=='undefined'?STORY_PATH_IDS:[2,3,8,7,6,5,9,4,10,1]) },
-    'bath-outdoor': { label:'Bath: free outdoor walk',         ids:[2,3,4,5,6,7,10] },
-    'bath-houses':  { label:'Bath: houses & ballrooms',        ids:[1,3,8,9] },
-    'bristol':      { label:'Bristol: the Rivals loop',        ids:[11,12,13,14,16,15] }
+    'bath-all':     { label:'Bridgerton in Bath',          ids:[2,3,8,6,7,5,9,4,10,1] },
+    'bath-outdoor': { label:'A free outdoor walk in Bath', ids:[2,3,7,6,5,4,10] },
+    'bristol':      { label:'Rivals in Bristol',           ids:[11,12,14,13,16,15] }
   };
+  function _presetPlaces(ids){ return ids.map(function(id){ return PLACES.find(function(p){ return p.id===id; }); }).filter(Boolean); }
+
   function drawTripPreset(key, btn){
     var preset = TRIP_PRESETS[key]; if(!preset || !window.map) return;
-    var pl = preset.ids.map(function(id){ return PLACES.find(function(p){ return p.id===id; }); }).filter(Boolean);
+    var pl = _presetPlaces(preset.ids);
     if(!pl.length) return;
     if(typeof _ensureRouteLayer==='function') _ensureRouteLayer();
     if(typeof clearTripRoute==='function') clearTripRoute();
@@ -322,7 +322,61 @@
     document.querySelectorAll('.pill-trip').forEach(function(el){ el.classList.remove('active'); });
     if(btn && btn.classList) btn.classList.add('active');
     else { var sp=document.getElementById('pill-storypath'); if(sp) sp.classList.add('active'); }
-    if(typeof _toast==='function') _toast(preset.label, 3000);
+    planPresetTrip(key, pl);
+  }
+
+  // Open the Trip Plan panel for a preset (like the Favourites itinerary)
+  function planPresetTrip(key, pl){
+    var preset = TRIP_PRESETS[key]; if(!preset) return;
+    pl = pl || _presetPlaces(preset.ids); if(!pl.length) return;
+    window._activeTrip = { places: pl, label: preset.label };
+    var el = document.getElementById('trip-content');
+    if(el){
+      var rows = pl.map(function(p,i){
+        return '<div class="trip-stop" onclick="jumpToTripStop('+p.id+')" style="cursor:pointer">'+
+          '<div class="trip-stop-num">'+(i+1)+'</div>'+
+          '<div class="trip-stop-info">'+
+            '<div class="trip-stop-name">'+p.emoji+' '+p.name+'</div>'+
+            '<div class="trip-stop-meta">'+(((typeof CL!=='undefined')&&CL[p.cat])||p.cat)+(p.address?' · '+p.address:'')+'</div>'+
+            (p.hours?'<div class="trip-stop-hours">🕑 '+p.hours+'</div>':'')+
+          '</div></div>';
+      }).join('');
+      el.innerHTML = '<div class="trip-summary"><span>'+preset.label+' · '+pl.length+' stops</span></div>' + rows;
+    }
+    var t = document.querySelector('#trip-overlay .trip-title'); if(t) t.textContent = '🗺 '+preset.label;
+    var ov = document.getElementById('trip-overlay'); if(ov) ov.classList.add('open');
+  }
+
+  // Footer buttons operate on whatever trip is active (preset or favourites)
+  function _activeTripPlaces(){
+    if(window._activeTrip && window._activeTrip.places && window._activeTrip.places.length) return window._activeTrip.places;
+    return (typeof getSortedFavPlaces==='function') ? getSortedFavPlaces() : [];
+  }
+  function openTripDirections(){
+    var pl = _activeTripPlaces();
+    if(!pl.length){ if(typeof _toast==='function') _toast('No stops to navigate yet'); return; }
+    try{
+      var stops = pl.slice(0,10);
+      var city = (typeof GUIDE_CITY!=='undefined')?GUIDE_CITY:'UK';
+      var enc = function(p){ return encodeURIComponent(p.search || (p.name+', '+(p.address||city))); };
+      var origin=enc(stops[0]), dest=enc(stops[stops.length-1]);
+      var way = stops.slice(1,-1).map(enc).join('|');
+      var url='https://www.google.com/maps/dir/?api=1&origin='+origin+'&destination='+dest+(way?'&waypoints='+way:'')+'&travelmode=walking';
+      window.open(url,'_blank');
+    }catch(e){ if(typeof _toast==='function') _toast('Could not open Google Maps'); }
+  }
+  function tripPDF(){
+    var pl=_activeTripPlaces(); if(!pl.length){ if(typeof _toast==='function')_toast('No stops yet'); return; }
+    var label=(window._activeTrip&&window._activeTrip.label)||'Your day out';
+    if(typeof generatePDF==='function') generatePDF(pl, label);
+  }
+  function tripShare(){
+    var pl=_activeTripPlaces(); if(!pl.length) return;
+    var ids=pl.map(function(p){return p.id;});
+    var url=window.location.origin+window.location.pathname+'?itinerary='+ids.join(',');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ if(typeof _toast==='function')_toast('🔗 Link copied — opens this trip on the map.',3500); }).catch(function(){ if(typeof _fallbackCopy==='function')_fallbackCopy(url); });
+    } else if(typeof _fallbackCopy==='function'){ _fallbackCopy(url); }
   }
 </script>
 
@@ -405,9 +459,9 @@
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
-      <!-- Google Maps trip button removed: reading-first bookmarks -->
-      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
-      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
+      <button class="trip-maps-btn" onclick="openTripDirections()">🧭 Google Directions</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="tripPDF()">⬇ PDF Guide</button>
+      <button class="trip-maps-btn trip-share-btn" onclick="tripShare()">🔗 Share</button>
     </div>
   </div>
 </div>
@@ -564,7 +618,7 @@
    the escape in Melbourne → arrival at the Gateway → Leopold → VT →
    the village → the slum → Marine Drive → Film City → Haji Ali
    (Khaderbhai) → Arthur Road → Afghanistan */
-var STORY_PATH_IDS = [2, 3, 8, 7, 6, 5, 9, 4, 10, 1];
+var STORY_PATH_IDS = [2, 3, 8, 6, 7, 5, 9, 4, 10, 1];
 var _storyPathOn = false;
 
 /* Top-bar search: filters map pins and the places list by place name,
