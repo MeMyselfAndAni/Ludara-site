@@ -1,29 +1,35 @@
-# Bridgerton in Bath — Image Download List (to add later)
+# Bridgerton in Bath — Images
 
-The demo currently ships **image-light**: every place card shows a clean emoji
-placeholder, so the sample carries **zero image-licensing risk** and can be sent
-as-is. To add photos later, download one **Wikimedia Commons (CC-licensed)** image
-per place, save it as `images/place-<id>.jpg`, and add a matching entry to
-`credits.js` (`{ author, license, url }`). Only use Commons / CC or Visit West
-imagery with permission — never a random web image.
+## Fastest way: run the fetch script
+Double-click **`fetch-bath-images.bat`** in this folder. It downloads all 10
+Creative Commons photos from Wikimedia Commons into `images\` as
+`place-1.jpg` … `place-10.jpg` (1280px web size, with a full-resolution
+fallback). Credits are already wired into `credits.js`, so each photo shows
+its author and licence automatically. If any line reports `[FAILED]`, tell
+Claude and we'll swap that one.
 
-Search Wikimedia Commons for each; pick a clean, landscape exterior shot.
+The old Shantaram photos have been moved to `images\_shantaram_old\` (they are
+not used and are not deployed; you can delete that folder).
 
-| id | Place | Suggested Commons search | Save as |
-|----|-------|--------------------------|---------|
-| 2 | The Royal Crescent | "Royal Crescent Bath" | images/place-2.jpg |
-| 3 | No.1 Royal Crescent | "No 1 Royal Crescent Bath" | images/place-3.jpg |
-| 4 | Abbey Green (Abbey Deli) | "Abbey Green Bath" | images/place-4.jpg |
-| 5 | Bath Street | "Bath Street colonnade Bath" | images/place-5.jpg |
-| 6 | Beauford Square | "Beauford Square Bath" | images/place-6.jpg |
-| 7 | Trim Street | "Trim Street Bath" | images/place-7.jpg |
-| 8 | The Assembly Rooms | "Bath Assembly Rooms" | images/place-8.jpg |
-| 9 | The Guildhall | "Guildhall Bath" | images/place-9.jpg |
-| 1 | The Holburne Museum | "Holburne Museum Bath" | images/place-1.jpg |
-| 10 | Edward Street | "Edward Street Bath Bathwick" | images/place-10.jpg |
+## The 10 sources (verified on Wikimedia Commons)
 
-After adding an image + credit, it appears automatically (photos.js loads
-`images/place-<id>.jpg` and shows the credit from `credits.js`).
+| id | Place | Author | Licence | Commons file |
+|----|-------|--------|---------|--------------|
+| 1 | Holburne Museum | Uhooep | CC BY-SA 4.0 | File:Holburne_Museum.jpg |
+| 2 | Royal Crescent | Bärbel Miemietz | CC BY-SA 4.0 | File:2023-09-15_Bath_Royal_Crescent_05.jpg |
+| 3 | No.1 Royal Crescent | Bärbel Miemietz | CC BY-SA 4.0 | File:2023-09-15_Bath_Royal_Crescent_01.jpg |
+| 4 | Abbey Green | Andy Li | CC0 | File:London_plane_at_Abbey_Green,_Bath_2025-07-23.jpg |
+| 5 | Bath Street | Tristan Surtel | CC BY-SA 4.0 | File:Bath_Street_colonnade.jpg |
+| 6 | Beauford Square | Enrique Íñiguez Rodríguez (Qoan) | CC BY-SA 4.0 | File:Bath._Beauford_square.jpg |
+| 7 | Trim Street | Rodw | Public domain | File:Trim_Street,_Bath.JPG |
+| 8 | Assembly Rooms | Lewis Clarke | CC BY-SA 2.0 | File:Bath_,_Assembly_Rooms_-_geograph.org.uk_-_6566729.jpg |
+| 9 | Guildhall | Ytfc23 | CC BY-SA 4.0 | File:Bath_Guildhall,_April_2020.jpg |
+| 10 | Edward Street | Robin Webster | CC BY-SA 2.0 | File:Edward_Street,_Bath_-_geograph.org.uk_-_8220145.jpg |
 
-Note: do NOT use stills or promotional images from the Bridgerton production —
+Licence note: all except Abbey Green (CC0) and Trim Street (public domain)
+require a visible author + licence credit, which `credits.js` provides on each
+card. Do NOT use stills or promotional images from the Bridgerton production:
 only real photographs of the Bath locations, CC-licensed.
+
+Edward Street (10) is the weakest source on Commons (max ~1024px); it is the
+only card where a sharper image would help later if one appears.
