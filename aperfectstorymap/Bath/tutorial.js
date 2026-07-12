@@ -96,6 +96,22 @@
       btn: 'Next'
     },
     {
+      title: 'Find yourself on the map',
+      body: 'Tap the target button to show your location as a dot on the map, so you always know where you are among the filming locations.',
+      target: '#locate-btn',
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
+      title: 'Save it for offline',
+      body: 'Tap Save offline once, while on WiFi, and the map and your trip stay available even with no signal, perfect for walking the streets of Bath.',
+      target: '#offline-save-btn',
+      cardPos: 'center',
+      demo: null,
+      btn: 'Next'
+    },
+    {
       title: "You're all set!",
       body: 'The filming locations of Bath and Bristol are yours to explore. Enjoy the day out.',
       target: null,

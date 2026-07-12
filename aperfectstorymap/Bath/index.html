@@ -106,10 +106,10 @@
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 
   /* ── Splash card — Venice, medieval-renaissance ── */
-  /* Splash backdrop: Gateway of India from the sea (place-2), darkened.
+  /* Splash backdrop: the Royal Crescent (place-2), lightly darkened for text contrast.
      Falls back to plain dark if the image is missing. */
   .splash { background:
-    linear-gradient(rgba(12,10,7,0.70), rgba(12,10,7,0.84)),
+    linear-gradient(rgba(12,10,7,0.40), rgba(12,10,7,0.58)),
     url('images/place-2.jpg') center / cover no-repeat #0f0d0a !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
@@ -297,6 +297,14 @@
   .filter-bar { flex-wrap: wrap !important; row-gap: 6px; }
   .pill-trip { font-size: 0.78rem; }
   .pill-trip.active { background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important; }
+  /* iPhone / small screens: one tidy horizontal-scroll row, no messy wrapping */
+  @media (max-width: 768px){
+    .filter-bar { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-bar > * { flex: 0 0 auto; }
+    .pill-trip { font-size: 0.72rem; padding: 6px 11px; }
+    #topbar-search { width: 128px !important; }
+  }
 </style>
 <script>
   var TRIP_PRESETS = {
@@ -543,7 +551,23 @@
   Guide
 </button>
 
-<!-- "Save offline" button removed for the story map (service worker disabled during iteration) -->
+<button id="offline-save-btn" onclick="saveForOffline()" title="Save map for offline use" style="
+  position:fixed; bottom:266px; right:12px; z-index:1100;
+  background:#0f0d0a; color:#d4a84b; border:1px solid #5a3e18; border-radius:0;
+  padding:8px 12px; font-size:0.72rem; font-weight:600; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4); font-family:'Cinzel Decorative',serif;
+  letter-spacing:0.08em; white-space:nowrap; -webkit-tap-highlight-color:transparent;">
+  📥 Save offline
+</button>
+
+<!-- Register the service worker so Save offline can cache map tiles + images -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function(e){ console.warn('SW register failed', e); });
+  });
+}
+</script>
 
 <button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
@@ -863,7 +887,7 @@ function clearAllSaved() {
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
-            if (c) c.textContent = rs.travelMode === 'driving' ? '↓ ~' + m + ' min drive' : '↓ ~' + m + ' min walk';
+            if (c) c.textContent = (rs.travelMode === 'driving') ? ('↓ ~' + m + ' min drive') : (m > 40 ? ('↓ ~' + Math.max(5, Math.round(m/5)) + ' min drive') : ('↓ ~' + m + ' min walk'));
           });
         }).catch(function(){});
       }
@@ -903,7 +927,7 @@ function clearAllSaved() {
         _fetchRouteStats(pl).then(function(s) {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
-          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving')?('↓ ~'+m+' min drive'):(m>40?('↓ ~'+Math.max(5,Math.round(m/5))+' min drive'):('↓ ~'+m+' min walk'));});
         }).catch(function(){});
       }
     }
