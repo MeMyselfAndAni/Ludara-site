@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>A Perfect Story Map — Bridgerton in Bath</title>
+<!-- Google Analytics (same property as all other maps) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SEY87L8PFW');
+</script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- UNLISTED CONCEPT DEMO — do not index, do not share publicly -->
 <meta name="robots" content="noindex, nofollow">
@@ -301,14 +309,14 @@
   .pill-trip {
     font-size: 0.74rem; font-weight: 800 !important; white-space: nowrap; border-radius: 24px !important;
     border-width: 2px !important;
-    box-shadow: 0 4px 0 rgba(120,90,20,0.30), 0 8px 16px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.75) !important;
+    box-shadow: 0 3px 9px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.7) !important;
     transition: transform .09s ease, box-shadow .09s ease !important; position: relative;
   }
   .pill-trip:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(120,90,20,0.32), 0 11px 22px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.8) !important;
+    box-shadow: 0 7px 16px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.78) !important;
   }
-  .pill-trip:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(120,90,20,0.3), 0 2px 5px rgba(0,0,0,0.25) !important; }
+  .pill-trip:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(0,0,0,0.25) !important; }
   .pill-trip.active {
     background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important;
     transform: translateY(1px);
@@ -326,7 +334,7 @@
   #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 5px 12px !important; font-size: 0.64rem !important; right: 10px !important; letter-spacing: 0.05em !important; }
   @media (max-width: 768px){
     /* Tuck the pill row right under the top band (about a 2mm gap) */
-    .filter-bar { top: 52px !important; flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; align-items: stretch; }
+    .filter-bar { top: 40px !important; flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; align-items: stretch; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-bar > * { flex: 0 0 auto; }
     /* Trip pills as tidy two-line chips */
