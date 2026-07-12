@@ -877,6 +877,33 @@ window.addEventListener('load', function() {
   window.addEventListener('load', initMap);
 </script>
 
+<!-- Pin the trip pills a constant ~2mm below the header on EVERY device.
+     Measures the real header height and re-measures on font load, resize,
+     rotation and any header size change, so the pills never overlap the band. -->
+<script>
+(function(){
+  var GAP = 8; /* ~2mm */
+  function positionPills(){
+    var h = document.querySelector('header');
+    var fb = document.querySelector('.filter-bar');
+    if(!h || !fb) return;
+    fb.style.top = (h.offsetHeight + GAP) + 'px';
+  }
+  function init(){
+    var h = document.querySelector('header');
+    if(!h){ setTimeout(init, 80); return; }
+    positionPills();
+    if(window.ResizeObserver){ try { new ResizeObserver(positionPills).observe(h); } catch(e){} }
+    window.addEventListener('resize', positionPills);
+    window.addEventListener('orientationchange', function(){ setTimeout(positionPills, 150); });
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(positionPills); }
+    setTimeout(positionPills, 300);
+    setTimeout(positionPills, 900);
+  }
+  if(document.readyState !== 'loading') init(); else window.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
 <!-- Make the Trip Plan / places sheet draggable up and down by its handle (tap still toggles) -->
 <script>
 (function(){
