@@ -27,9 +27,17 @@ call :grab 8  "Assembly Rooms"       "Bath_,_Assembly_Rooms_-_geograph.org.uk_-_
 call :grab 9  "Guildhall"            "Bath_Guildhall,_April_2020.jpg"
 call :grab 10 "Edward Street"        "Edward_Street,_Bath_-_geograph.org.uk_-_8220145.jpg"
 
+rem  ── Bristol (Rivals) ──
+call :grab 11 "Corn Street"          "Corn_Street,_Bristol_-_geograph.org.uk_-_2476973.jpg"
+call :grab 12 "Harbour Hotel"        "Harbour_Hotel,_53_and_55_Corn_Street_-_DSC_2220.jpg"
+call :grab 13 "Cosy Club"            "31_Corn_Street,_Bristol_-_geograph.org.uk_-_5447318.jpg"
+call :grab 14 "St Nicholas Market"   "Bristol_-_St_Nicholas_Market_-_geograph.org.uk_-_5265951.jpg"
+call :grab 15 "Aerospace Concorde"   "Ex-British_Airways_Concorde_216_(G-BOAF)_on_display_at_Aerospace_Bristol_8August2019_arp.jpg"
+call :grab 16 "Queen Square"         "King_William_III_statue_Queen_Square,_Bristol.jpg"
+
 echo.
 echo ================================
-echo   Done. Check .\images\ for place-1.jpg ... place-10.jpg
+echo   Done. Check .\images\ for place-1.jpg ... place-16.jpg
 echo   Credits are already set in credits.js (keep them in sync).
 echo ================================
 pause

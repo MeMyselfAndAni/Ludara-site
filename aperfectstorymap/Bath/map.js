@@ -27,9 +27,9 @@ const CC = {
 
 // ─── Category labels ──────────────────────────────────────────────────────────
 const CL = {
-  'ton':    'The Ton & Society',
-  'home':   'Great Houses',
-  'street': 'Regency Streets & Shops',
+  'ton':    'Glamour & Society',
+  'home':   'Grand Houses & Buildings',
+  'street': 'Streets & Squares',
 };
 
 // ─── Region colours ────────────────────────────────────────────────────────────
@@ -37,6 +37,7 @@ const NBHD_COLORS = {
   'crescent': '#d4a043',
   'centre':   '#c04a2a',
   'pulteney': '#3a8ab0',
+  'bristol':  '#6a5acd',
 };
 
 // ─── Region display labels ─────────────────────────────────────────────────────
@@ -44,6 +45,7 @@ const NBHD_LABELS = {
   'crescent': 'Royal Crescent',
   'centre':   'Georgian Centre',
   'pulteney': 'Great Pulteney',
+  'bristol':  'Bristol · Rivals',
 };
 
 // ─── Region approximate centres ───────────────────────────────────────────────
@@ -51,14 +53,16 @@ const NBHD_APPROX_CENTERS = {
   'crescent': { lat: 51.3868, lng: -2.3708 },
   'centre':   { lat: 51.3826, lng: -2.3602 },
   'pulteney': { lat: 51.3855, lng: -2.3534 },
+  'bristol':  { lat: 51.4540, lng: -2.5940 },
 };
 
 // ─── Region minimum circle radius (metres) ────────────────────────────────────
-// Bath's locations sit within a compact walkable core, so these are small.
+// Bath's locations sit within a compact walkable core; Bristol is a separate city.
 const NBHD_MIN_RADIUS = {
   'crescent': 250,
   'centre':   450,
   'pulteney': 350,
+  'bristol':  900,
 };
 
 function buildNbhdCircles() {

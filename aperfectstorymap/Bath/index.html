@@ -238,11 +238,11 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-eyebrow">A Perfect Story Map</div>
-    <h1 class="splash-title">Bridgerton in Bath</h1>
-    <p class="splash-sample" style="margin-top:2px;font-style:italic;">the filming locations, mapped</p>
-    <p class="splash-sample">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland or the production.</p>
+    <h1 class="splash-title">Bath &amp; Bristol on Screen</h1>
+    <p class="splash-sample" style="margin-top:2px;font-style:italic;">Bridgerton in Bath · Rivals in Bristol</p>
+    <p class="splash-sample">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland, Disney+ or the productions.</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">From the sweep of the Royal Crescent to Lady Danbury's door and the modiste's window: every Bridgerton filming location in Bath on one map, sourced and multilingual, so every visitor can walk the season for themselves.</p>
+    <p class="splash-sub">From the Royal Crescent and Lady Danbury's door in Bath to the Rivals awards on Bristol's Corn Street: every filming location across both cities on one map, sourced and multilingual, so every visitor can walk the scenes for themselves.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectstorymap/" target="_blank">by Ludara.AI</a>
@@ -264,7 +264,7 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Bridgerton</em> in Bath</h1>
+      <h1><em>Bath &amp; Bristol</em> on Screen</h1>
       <div class="header-sub">filming locations<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
@@ -281,7 +281,7 @@
        Friends & Lovers / Underworld & Prison / The Long Journeys) removed for
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="Draw the Bridgerton walking trail, in order">🎬 Filming Trail</button>
+  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleTripsMenu(event)" title="Choose a preset route">🎬 Trips ▾</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
@@ -289,6 +289,50 @@
   </span>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
+
+<!-- Preset trips menu (opens from the Trips pill) -->
+<style>
+  #trips-menu { display:none; position:absolute; z-index:1200; top:96px; left:12px; background:#fff; border:1px solid #e2e2e2; border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,0.18); padding:8px; min-width:238px; font-family:'Inter',sans-serif; }
+  #trips-menu .trips-title { font-size:0.66rem; font-weight:800; color:#999; padding:4px 8px 6px; text-transform:uppercase; letter-spacing:0.08em; }
+  #trips-menu .trips-item { display:block; width:100%; text-align:left; background:none; border:none; padding:9px 10px; border-radius:8px; font-size:0.82rem; color:#222; cursor:pointer; font-family:'Inter',sans-serif; }
+  #trips-menu .trips-item:hover { background:var(--brand-faint, rgba(255,42,0,0.08)); }
+</style>
+<div id="trips-menu">
+  <div class="trips-title">Preset routes</div>
+  <button class="trips-item" onclick="drawTripPreset('bath-all')">🎬 Bath — full Bridgerton trail</button>
+  <button class="trips-item" onclick="drawTripPreset('bath-outdoor')">🚶 Bath — free outdoor walk</button>
+  <button class="trips-item" onclick="drawTripPreset('bath-houses')">🏛️ Bath — houses &amp; ballrooms</button>
+  <button class="trips-item" onclick="drawTripPreset('bristol')">🎬 Bristol — Rivals loop</button>
+  <button class="trips-item" style="color:#c0392b" onclick="clearTripRoute();closeTripsMenu();">✕ Clear route</button>
+</div>
+<script>
+  var TRIP_PRESETS = {
+    'bath-all':     { label:'Bath: the full Bridgerton trail', ids: (typeof STORY_PATH_IDS!=='undefined'?STORY_PATH_IDS:[2,3,8,7,6,5,9,4,10,1]) },
+    'bath-outdoor': { label:'Bath: free outdoor walk',         ids:[2,3,4,5,6,7,10] },
+    'bath-houses':  { label:'Bath: houses & ballrooms',        ids:[1,3,8,9] },
+    'bristol':      { label:'Bristol: the Rivals loop',        ids:[11,12,13,14,16,15] }
+  };
+  function toggleTripsMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('trips-menu'); if(m) m.style.display=(m.style.display==='block'?'none':'block'); }
+  function closeTripsMenu(){ var m=document.getElementById('trips-menu'); if(m) m.style.display='none'; }
+  document.addEventListener('click', function(e){ var m=document.getElementById('trips-menu'); var p=document.getElementById('pill-storypath'); if(!m||m.style.display!=='block') return; if(m.contains(e.target)||(p&&p.contains(e.target))) return; m.style.display='none'; });
+  function drawTripPreset(key){
+    var preset = TRIP_PRESETS[key]; if(!preset || !window.map) return;
+    var pl = preset.ids.map(function(id){ return PLACES.find(function(p){ return p.id===id; }); }).filter(Boolean);
+    if(!pl.length) return;
+    if(typeof _ensureRouteLayer==='function') _ensureRouteLayer();
+    if(typeof clearTripRoute==='function') clearTripRoute();
+    try { tripPolyline = true; } catch(e){}
+    map.getSource('trip-route').setData({ type:'Feature', geometry:{ type:'LineString', coordinates: pl.map(function(p){ return [p.lng,p.lat]; }) } });
+    if(typeof window._addNumberedMarkers==='function') window._addNumberedMarkers(pl);
+    var b = new maplibregl.LngLatBounds(); pl.forEach(function(p){ b.extend([p.lng,p.lat]); });
+    var mob = window.innerWidth<768;
+    map.fitBounds(b, { padding: mob?{top:140,bottom:190,left:40,right:40}:{top:190,bottom:230,left:120,right:120}, duration:800 });
+    try { _storyPathOn = true; } catch(e){}
+    var sp=document.getElementById('pill-storypath'); if(sp) sp.classList.add('active');
+    closeTripsMenu();
+    if(typeof _toast==='function') _toast(preset.label, 3000);
+  }
+</script>
 
 <!-- Map -->
 <div id="map"></div>
@@ -316,6 +360,10 @@
     <div class="nbhd-bubble" id="nbhd-pulteney" role="button" tabindex="0" onclick="selectNbhd('pulteney', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌉</div></div>
       <span class="nbhd-label">Great Pulteney</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-bristol" role="button" tabindex="0" onclick="selectNbhd('bristol', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🎬</div></div>
+      <span class="nbhd-label">Bristol · Rivals</span>
     </div>
   </div>
 </div>
@@ -628,7 +676,7 @@ window.addEventListener('load', function() {
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    addrEl.textContent = ''; /* reading-first card: address line removed (still in PDF + Directions) */
+    addrEl.textContent = place ? (place.address || '') : ''; /* hotel-style: show the address */
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>

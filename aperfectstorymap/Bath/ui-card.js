@@ -16,8 +16,8 @@ const CAT_COLORS = {
   church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
 };
 const CAT_LABELS = {
-  // Bridgerton in Bath categories (match CL in map.js)
-  ton:'The Ton & Society', home:'Great Houses', street:'Regency Streets & Shops',
+  // Screen-map categories (match CL in map.js)
+  ton:'Glamour & Society', home:'Grand Houses & Buildings', street:'Streets & Squares',
   // Shantaram story categories (match CL in map.js)
   life:"Lin's Bombay", bond:'Friends & Lovers', dark:'Underworld & Prison', journey:'The Long Journeys',
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
@@ -252,8 +252,8 @@ function _populateCard(p){
 
   document.getElementById('pc-title').textContent = p.name;
   document.getElementById('pc-type').textContent  = p.type || '';
-  // Story maps: book position is woven into the note text; this slot stays empty
-  document.getElementById('pc-hours').innerHTML   = '';
+  // Hotel-style: show opening hours / access status when provided
+  document.getElementById('pc-hours').innerHTML   = p.hours ? ('🕑 ' + p.hours) : '';
 
   document.getElementById('pc-note').textContent = p.note || '';
 
