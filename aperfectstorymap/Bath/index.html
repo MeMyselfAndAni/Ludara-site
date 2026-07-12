@@ -330,6 +330,10 @@
     background: linear-gradient(180deg, #fffef9 0%, #f0e1bd 100%) !important;
     border-color: #cbb06a !important; color: #3f3212 !important;
   }
+  /* Larger "A Perfect Story Map by Ludara.AI" credit, top right */
+  .header-ludara-brand { font-size: 0.92rem !important; }
+  .header-ludara-brand .ludara-line1 { font-size: 0.92rem !important; }
+  .header-ludara-brand .ludara-line2 { font-size: 0.8rem !important; }
   /* Save offline + Guide: small oval pills, flush to the right edge */
   #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 5px 12px !important; font-size: 0.64rem !important; right: 10px !important; letter-spacing: 0.05em !important; }
   @media (max-width: 768px){
@@ -348,7 +352,9 @@
       max-width: 128px;
     }
     #topbar-search { width: 108px !important; }
-    .header-ludara { display: inline-flex !important; font-size: 0.58rem; line-height: 1.05; max-width: 120px; text-align: right; }
+    .header-ludara { display: inline-flex !important; font-size: 0.72rem; line-height: 1.08; max-width: 150px; text-align: right; }
+    .header-ludara-brand .ludara-line1 { font-size: 0.72rem !important; }
+    .header-ludara-brand .ludara-line2 { font-size: 0.62rem !important; }
     #offline-save-btn, button[onclick="restartTutorial()"] { font-size: 0.6rem !important; padding: 4px 11px !important; right: 8px !important; }
   }
 </style>
@@ -887,7 +893,8 @@ window.addEventListener('load', function() {
     var h = document.querySelector('header');
     var fb = document.querySelector('.filter-bar');
     if(!h || !fb) return;
-    fb.style.top = (h.offsetHeight + GAP) + 'px';
+    /* use setProperty with 'important' so it beats the CSS !important top rules */
+    fb.style.setProperty('top', (h.offsetHeight + GAP) + 'px', 'important');
   }
   function init(){
     var h = document.querySelector('header');
