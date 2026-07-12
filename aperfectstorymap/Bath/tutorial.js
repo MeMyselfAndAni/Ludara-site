@@ -21,7 +21,7 @@
     },
     {
       title: 'Preset trips',
-      body: 'The pills along the top are ready-made routes: the full Bridgerton trail, a free outdoor walk, the great houses and ballrooms, and the Rivals loop in Bristol. Tap one and the map draws it in order, numbered stop by stop.',
+      body: 'The pills along the top are ready-made routes: Bridgerton in Bath, a free outdoor walk, and Rivals in Bristol. Tap one and it draws the numbered route on the map and opens the Trip Plan, with the stops, walking times and distance, and buttons for Google Directions, a PDF guide, and Share. Your Favourites open in the very same Trip Plan.',
       target: '#pill-storypath',
       cardPos: 'center',
       demo: 'close-saved-pulse',

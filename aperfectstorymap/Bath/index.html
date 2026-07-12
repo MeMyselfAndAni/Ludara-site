@@ -332,16 +332,30 @@
     window._activeTrip = { places: pl, label: preset.label };
     var el = document.getElementById('trip-content');
     if(el){
+      var totalWalkSecs=0, totalDwell=0;
+      pl.forEach(function(p,i){ totalDwell += (typeof getDwell==='function'?getDwell(p.cat):20); if(i<pl.length-1 && typeof haversineM==='function') totalWalkSecs += Math.round(haversineM(p,pl[i+1])/58*60*1.35); });
+      var totalWalkMins = Math.round(totalWalkSecs/60);
+      var totalMins = totalWalkMins + totalDwell;
+      var totalDistM=0; for(var j=1;j<pl.length && typeof haversineM==='function';j++) totalDistM += haversineM(pl[j-1],pl[j]);
+      var fmt = (typeof formatMins==='function') ? formatMins : function(m){ return m<60?('~'+m+'m'):('~'+Math.floor(m/60)+'h '+(m%60)+'m'); };
       var rows = pl.map(function(p,i){
+        var walkToNext = (i<pl.length-1 && typeof haversineM==='function') ? Math.round(haversineM(p,pl[i+1])/58*1.35) : null;
         return '<div class="trip-stop" onclick="jumpToTripStop('+p.id+')" style="cursor:pointer">'+
           '<div class="trip-stop-num">'+(i+1)+'</div>'+
           '<div class="trip-stop-info">'+
             '<div class="trip-stop-name">'+p.emoji+' '+p.name+'</div>'+
             '<div class="trip-stop-meta">'+(((typeof CL!=='undefined')&&CL[p.cat])||p.cat)+(p.address?' · '+p.address:'')+'</div>'+
-            (p.hours?'<div class="trip-stop-hours">🕑 '+p.hours+'</div>':'')+
-          '</div></div>';
+            (p.hours?'<div class="trip-stop-hours">🕐 '+p.hours+'</div>':'')+
+            '<div class="trip-stop-dwell">⏱ ~'+(typeof getDwell==='function'?getDwell(p.cat):20)+' min here</div>'+
+          '</div></div>'+
+          (walkToNext!==null?'<div class="trip-connector">🚶 ~'+walkToNext+' min walk</div>':'');
       }).join('');
-      el.innerHTML = '<div class="trip-summary"><span>'+preset.label+' · '+pl.length+' stops</span></div>' + rows;
+      el.innerHTML = '<div class="trip-summary">'+
+        '<span>🗺 '+pl.length+' stops</span>'+
+        '<span>⏱ ~'+fmt(totalMins)+' total</span>'+
+        '<span>🚶 '+fmt(totalWalkMins)+' walking</span>'+
+        '<span>📏 '+(totalDistM/1000).toFixed(1)+' km</span>'+
+        '</div>' + rows;
     }
     var t = document.querySelector('#trip-overlay .trip-title'); if(t) t.textContent = '🗺 '+preset.label;
     var ov = document.getElementById('trip-overlay'); if(ov) ov.classList.add('open');

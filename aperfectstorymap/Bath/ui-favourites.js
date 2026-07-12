@@ -302,7 +302,10 @@ function planFavTrip(){
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
-      <span>❤️ ${places.length} favourite${places.length===1?'':'s'} — your day out</span>
+      <span>🗺 ${places.length} stops</span>
+      <span>⏱ ~${formatMins(totalMins)} total</span>
+      <span>🚶 ${formatMins(totalWalkMins)} walking</span>
+      <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
@@ -317,10 +320,11 @@ function planFavTrip(){
       <div class="trip-stop-info">
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
-        ${p.book?`<div class="trip-stop-hours">📖 ${p.book}`+`</div>`:''}
+        ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}</div>`:''}
+        <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
       </div>
-
-    </div>`;
+    </div>
+    ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
