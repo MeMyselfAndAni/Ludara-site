@@ -109,8 +109,11 @@
   /* Splash backdrop: the Royal Crescent (place-2), lightly darkened for text contrast.
      Falls back to plain dark if the image is missing. */
   .splash { background:
-    linear-gradient(rgba(12,10,7,0.40), rgba(12,10,7,0.58)),
+    linear-gradient(rgba(12,10,7,0.48), rgba(12,10,7,0.66)),
     url('images/place-2.jpg') center / cover no-repeat #0f0d0a !important; }
+  /* Text shadow keeps the gold text readable over the bright photo */
+  .splash-inner, .splash-inner * { text-shadow: 0 1px 3px rgba(0,0,0,0.65), 0 2px 16px rgba(0,0,0,0.55); }
+  .splash-btn { text-shadow: none !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
     background: #0f0d0a !important; color: #d4a043 !important;
@@ -268,11 +271,7 @@
       <div class="header-sub">filming locations<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
-  <div class="header-ludara">
-    <span class="header-ludara-text">Interactive map by</span>
-    <a class="header-ludara-brand" href="https://ludara.ai/aperfectstorymap/" target="_blank"><span class="ludara-line1">A Perfect Story Map</span> <span class="ludara-line2">by Ludara.AI</span></a>
-  </div>
-  <a class="header-btn" href="https://ludara.ai/aperfectstorymap/" target="_blank">ludara.ai ↗</a>
+  <a class="header-ludara header-ludara-brand" href="https://ludara.ai/aperfectstorymap/" target="_blank" style="text-decoration:none;"><span class="ludara-line1">A Perfect Story Map</span> <span class="ludara-line2">by Ludara.AI</span></a>
 </header>
 
 <!-- Filter bar -->
@@ -295,15 +294,19 @@
 <!-- Preset trips: pills draw the route AND open the Trip Plan panel -->
 <style>
   .filter-bar { flex-wrap: wrap !important; row-gap: 6px; }
-  .pill-trip { font-size: 0.78rem; }
+  /* Trip pills: narrow, two-line chips so more are visible */
+  .pill-trip { font-size: 0.72rem; white-space: normal; line-height: 1.05; text-align: center; max-width: 104px; padding: 5px 11px; }
   .pill-trip.active { background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important; }
-  /* iPhone / small screens: one tidy horizontal-scroll row, no messy wrapping */
+  /* Save offline + Guide: small oval pills */
+  #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 6px 14px !important; font-size: 0.68rem !important; }
+  /* iPhone / small screens: one tidy horizontal-scroll row of narrow chips */
   @media (max-width: 768px){
     .filter-bar { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-bar > * { flex: 0 0 auto; }
-    .pill-trip { font-size: 0.72rem; padding: 6px 11px; }
-    #topbar-search { width: 128px !important; }
+    .pill-trip { font-size: 0.64rem; max-width: 82px; padding: 4px 9px; }
+    #topbar-search { width: 112px !important; }
+    .header-ludara { display: none !important; }
   }
 </style>
 <script>
