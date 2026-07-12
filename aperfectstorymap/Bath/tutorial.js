@@ -271,12 +271,12 @@
   function _blinkHeart() {
     var hb = document.querySelector('#pc-btn-fav');
     if (!hb) return;
-    /* Snap to bright red filled heart */
+    /* Snap to bright red filled heart (red emoji renders red; a coloured 🤍 would stay white) */
     hb.style.transition = 'color 0.25s ease, transform 0.25s ease';
-    hb.textContent = '🤍';
-    hb.style.fontFamily = 'Arial, sans-serif';
+    hb.textContent = '❤️';
+    hb.style.fontFamily = '';
     hb.style.color = '#e00040';
-    hb.style.transform = 'scale(1.25)';
+    hb.style.transform = 'scale(1.3)';
     /* After 2 s, fade back to white outline heart */
     setTimeout(function () {
       hb.style.color = 'white';
