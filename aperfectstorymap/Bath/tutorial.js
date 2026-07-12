@@ -16,7 +16,7 @@
       body: 'One map, every filming location across two cities: Bridgerton in Bath and Rivals in Bristol. This short tour shows you the map, the place cards, and how to build your own day out. Tap Next to begin.',
       target: null,
       cardPos: 'center',
-      demo: null,
+      demo: 'close-saved',
       btn: 'Next'
     },
     {
@@ -100,7 +100,7 @@
       body: 'Tap the target button to show your location as a dot on the map, so you always know where you are among the filming locations.',
       target: '#locate-btn',
       cardPos: 'center',
-      demo: null,
+      demo: 'close-saved',
       btn: 'Next'
     },
     {
@@ -629,7 +629,7 @@
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
     if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
-    if (step.demo === 'close-saved')       { setTimeout(closeSavedDemo, 100); }
+    if (step.demo === 'close-saved')       { setTimeout(function(){ closeSavedDemo(); if(typeof closeSheet==='function') closeSheet(); }, 100); }
     if (step.demo === 'close-sheet')        { setTimeout(function() {
       if (typeof closeSheet === 'function') { closeSheet(); }
     }, 100); }

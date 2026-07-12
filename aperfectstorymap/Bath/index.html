@@ -112,8 +112,11 @@
     linear-gradient(rgba(12,10,7,0.48), rgba(12,10,7,0.66)),
     url('images/place-2.jpg') center / cover no-repeat #0f0d0a !important; }
   /* Text shadow keeps the gold text readable over the bright photo */
-  .splash-inner, .splash-inner * { text-shadow: 0 1px 3px rgba(0,0,0,0.65), 0 2px 16px rgba(0,0,0,0.55); }
+  .splash-inner, .splash-inner * { text-shadow: 0 1px 3px rgba(0,0,0,0.7), 0 2px 16px rgba(0,0,0,0.6); }
   .splash-btn { text-shadow: none !important; }
+  /* Brighten the small muted lines so they don't vanish against the sunlit stone */
+  .splash-sample, .splash-subtitle { color: #efe6d0 !important; }
+  .splash-sub { color: #f4e6bc !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
     background: #0f0d0a !important; color: #d4a043 !important;
@@ -243,10 +246,10 @@
     <div class="splash-eyebrow">A Perfect Story Map</div>
     <h1 class="splash-title">Bath &amp; Bristol on Screen</h1>
     <p class="splash-sample" style="margin-top:2px;font-style:italic;">Bridgerton in Bath · Rivals in Bristol</p>
-    <p class="splash-sample">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland, Disney+ or the productions.</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub">From the Royal Crescent and Lady Danbury's door in Bath to the Rivals awards on Bristol's Corn Street: every filming location across both cities on one map, sourced and multilingual, so every visitor can walk the scenes for themselves.</p>
+    <p class="splash-sub">Every filming location across both cities on one map: sourced, multilingual, and ready to walk.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
+    <p class="splash-disclaimer" style="margin-top:14px;font-size:0.72rem;line-height:1.4;color:#cbbfa6;opacity:0.85;">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland, Disney+ or the productions.</p>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectstorymap/" target="_blank">by Ludara.AI</a>
     </div>
@@ -281,7 +284,6 @@
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
   <button class="pill pill-trip" id="pill-storypath" onclick="loadTrip('bath-all', this)" title="Bridgerton filming locations in Bath">👑 Bridgerton in Bath</button>
-  <button class="pill pill-trip" onclick="loadTrip('bath-outdoor', this)" title="A free outdoor walk in Bath">🚶 Outdoor walk</button>
   <button class="pill pill-trip" onclick="loadTrip('bristol', this)" title="Rivals filming locations in Bristol">🎬 Rivals in Bristol</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
@@ -294,19 +296,34 @@
 <!-- Preset trips: pills draw the route AND open the Trip Plan panel -->
 <style>
   .filter-bar { flex-wrap: wrap !important; row-gap: 6px; }
-  /* Trip pills: narrow, two-line chips so more are visible */
-  .pill-trip { font-size: 0.72rem; white-space: normal; line-height: 1.05; text-align: center; max-width: 104px; padding: 5px 11px; }
-  .pill-trip.active { background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important; }
-  /* Save offline + Guide: small oval pills */
-  #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 6px 14px !important; font-size: 0.68rem !important; }
-  /* iPhone / small screens: one tidy horizontal-scroll row of narrow chips */
+  /* Trip pills: clean single-line chips (the row scrolls horizontally) */
+  /* Preset trips: raised, tactile 3D chips that read as buttons */
+  .pill-trip {
+    font-size: 0.72rem; white-space: nowrap; border-radius: 22px !important;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.16), 0 5px 11px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+    transition: transform .08s ease, box-shadow .08s ease !important; position: relative;
+  }
+  .pill-trip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.18), 0 7px 15px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.6) !important;
+  }
+  .pill-trip:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.16), 0 2px 5px rgba(0,0,0,0.2) !important; }
+  .pill-trip.active {
+    background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important;
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2), inset 0 2px 6px rgba(0,0,0,0.30) !important;
+  }
+  .pill-storypath.active { box-shadow: 0 1px 0 rgba(0,0,0,0.25), inset 0 2px 6px rgba(0,0,0,0.35) !important; }
+  /* Save offline + Guide: small oval pills, flush to the right edge */
+  #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 5px 12px !important; font-size: 0.64rem !important; right: 10px !important; letter-spacing: 0.05em !important; }
   @media (max-width: 768px){
     .filter-bar { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-bar > * { flex: 0 0 auto; }
-    .pill-trip { font-size: 0.64rem; max-width: 82px; padding: 4px 9px; }
-    #topbar-search { width: 112px !important; }
-    .header-ludara { display: none !important; }
+    .pill-trip { font-size: 0.66rem; padding: 5px 10px; }
+    #topbar-search { width: 108px !important; }
+    .header-ludara { display: inline-flex !important; font-size: 0.58rem; line-height: 1.05; max-width: 120px; text-align: right; }
+    #offline-save-btn, button[onclick="restartTutorial()"] { font-size: 0.6rem !important; padding: 4px 11px !important; right: 8px !important; }
   }
 </style>
 <script>
@@ -407,7 +424,6 @@
   // ── Holston-style preset trips: load into Favourites + docked Saved panel ──
   var _TRIPS = {
     'bath-all':     { name:'Bridgerton in Bath',          ids:[2,3,8,6,7,5,9,4,10,1] },
-    'bath-outdoor': { name:'A free outdoor walk in Bath', ids:[2,3,7,6,5,4,10] },
     'bristol':      { name:'Rivals in Bristol',           ids:[11,12,14,13,16,15] }
   };
   function loadTrip(key, btn){
@@ -584,7 +600,7 @@ if ('serviceWorker' in navigator) {
 
 <!-- Places list sheet -->
 <div class="sheet" id="sheet">
-  <div class="sheet-handle-area" onclick="toggleSheet()">
+  <div class="sheet-handle-area" id="sheet-handle-area" title="Drag to move up or down">
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
@@ -833,6 +849,26 @@ window.addEventListener('load', function() {
 <!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
   window.addEventListener('load', initMap);
+</script>
+
+<!-- Make the Trip Plan / places sheet draggable up and down by its handle (tap still toggles) -->
+<script>
+(function(){
+  function wire(){
+    var sheet = document.getElementById('sheet');
+    var handle = document.getElementById('sheet-handle-area');
+    if(!sheet || !handle) { return; }
+    var dragging=false, moved=false, startY=0, startT=0;
+    function curT(){ var m=/translateY\((-?\d+\.?\d*)px\)/.exec(sheet.style.transform||''); return m?parseFloat(m[1]):0; }
+    function py(e){ return (e.touches&&e.touches[0])?e.touches[0].clientY:e.clientY; }
+    function down(e){ dragging=true; moved=false; startY=py(e); startT=curT(); sheet.style.transition='none'; }
+    function move(e){ if(!dragging) return; var dy=py(e)-startY; if(Math.abs(dy)>5) moved=true; var t=startT+dy; var maxD=Math.round(window.innerHeight*0.55); if(t<-30) t=-30; if(t>maxD) t=maxD; sheet.style.transform='translateY('+t+'px)'; if(moved && e.cancelable) e.preventDefault(); }
+    function up(){ if(!dragging) return; dragging=false; sheet.style.transition=''; if(!moved){ sheet.style.transform=''; if(typeof toggleSheet==='function') toggleSheet(); } }
+    handle.addEventListener('mousedown',down); document.addEventListener('mousemove',move); document.addEventListener('mouseup',up);
+    handle.addEventListener('touchstart',down,{passive:true}); document.addEventListener('touchmove',move,{passive:false}); document.addEventListener('touchend',up);
+  }
+  if(document.readyState!=='loading') wire(); else window.addEventListener('load', wire);
+})();
 </script>
 
 <!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
