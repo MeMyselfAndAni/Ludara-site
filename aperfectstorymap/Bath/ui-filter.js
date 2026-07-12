@@ -243,7 +243,7 @@ function renderList(){
     }
     filtered = sorted;
     const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
-    document.getElementById('sheet-title').textContent = `🔖 ${sorted.length} Bookmarked${catNote}`;
+    document.getElementById('sheet-title').textContent = `❤️ ${sorted.length} Favourites${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
     // Banner with auto-sort reset button
@@ -276,7 +276,7 @@ function renderList(){
     }
 
     el.innerHTML = allSaved.length === 0
-      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🔖 on any place<br>to bookmark it here</div>'
+      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🤍 on any place<br>to add it to Favourites</div>'
       : sorted.map((p,i) => `
         <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
           <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
@@ -331,14 +331,7 @@ function renderList(){
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
-  /* Action row: PDF + Share available from the main (Story Path) list too */
-  const _actionRow = `
-    <div style="display:flex;padding:8px 10px 6px;gap:5px;">
-      <button class="saved-action-btn" onclick="if(typeof generateStoryPathPDF==='function')generateStoryPathPDF()" style="flex:1">📄 PDF</button>
-      <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button>
-    </div>`;
-
-  el.innerHTML = _actionRow + filtered.map(p=>`
+  el.innerHTML = filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>

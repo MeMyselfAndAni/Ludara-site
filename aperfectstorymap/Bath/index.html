@@ -281,30 +281,24 @@
        Friends & Lovers / Underworld & Prison / The Long Journeys) removed for
        clarity — threads still show as pin colors and card labels, and search
        finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleTripsMenu(event)" title="Choose a preset route">🎬 Trips ▾</button>
+  <button class="pill pill-trip" id="pill-storypath" onclick="drawTripPreset('bath-all', this)" title="Bath: the full Bridgerton trail">🎬 Bath trail</button>
+  <button class="pill pill-trip" onclick="drawTripPreset('bath-outdoor', this)" title="Bath: free outdoor walk">🚶 Outdoor</button>
+  <button class="pill pill-trip" onclick="drawTripPreset('bath-houses', this)" title="Bath: houses &amp; ballrooms">🏛️ Houses</button>
+  <button class="pill pill-trip" onclick="drawTripPreset('bristol', this)" title="Bristol: the Rivals loop">🎬 Bristol</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
            style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px 6px 32px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
   </span>
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">❤️</span> Favourites <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
-<!-- Preset trips menu (opens from the Trips pill) -->
+<!-- Preset trips: drawn from the pills in the filter bar -->
 <style>
-  #trips-menu { display:none; position:absolute; z-index:1200; top:96px; left:12px; background:#fff; border:1px solid #e2e2e2; border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,0.18); padding:8px; min-width:238px; font-family:'Inter',sans-serif; }
-  #trips-menu .trips-title { font-size:0.66rem; font-weight:800; color:#999; padding:4px 8px 6px; text-transform:uppercase; letter-spacing:0.08em; }
-  #trips-menu .trips-item { display:block; width:100%; text-align:left; background:none; border:none; padding:9px 10px; border-radius:8px; font-size:0.82rem; color:#222; cursor:pointer; font-family:'Inter',sans-serif; }
-  #trips-menu .trips-item:hover { background:var(--brand-faint, rgba(255,42,0,0.08)); }
+  .filter-bar { flex-wrap: wrap !important; row-gap: 6px; }
+  .pill-trip { font-size: 0.78rem; }
+  .pill-trip.active { background: var(--brand) !important; color:#fff !important; border-color: var(--brand) !important; }
 </style>
-<div id="trips-menu">
-  <div class="trips-title">Preset routes</div>
-  <button class="trips-item" onclick="drawTripPreset('bath-all')">🎬 Bath — full Bridgerton trail</button>
-  <button class="trips-item" onclick="drawTripPreset('bath-outdoor')">🚶 Bath — free outdoor walk</button>
-  <button class="trips-item" onclick="drawTripPreset('bath-houses')">🏛️ Bath — houses &amp; ballrooms</button>
-  <button class="trips-item" onclick="drawTripPreset('bristol')">🎬 Bristol — Rivals loop</button>
-  <button class="trips-item" style="color:#c0392b" onclick="clearTripRoute();closeTripsMenu();">✕ Clear route</button>
-</div>
 <script>
   var TRIP_PRESETS = {
     'bath-all':     { label:'Bath: the full Bridgerton trail', ids: (typeof STORY_PATH_IDS!=='undefined'?STORY_PATH_IDS:[2,3,8,7,6,5,9,4,10,1]) },
@@ -312,10 +306,7 @@
     'bath-houses':  { label:'Bath: houses & ballrooms',        ids:[1,3,8,9] },
     'bristol':      { label:'Bristol: the Rivals loop',        ids:[11,12,13,14,16,15] }
   };
-  function toggleTripsMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('trips-menu'); if(m) m.style.display=(m.style.display==='block'?'none':'block'); }
-  function closeTripsMenu(){ var m=document.getElementById('trips-menu'); if(m) m.style.display='none'; }
-  document.addEventListener('click', function(e){ var m=document.getElementById('trips-menu'); var p=document.getElementById('pill-storypath'); if(!m||m.style.display!=='block') return; if(m.contains(e.target)||(p&&p.contains(e.target))) return; m.style.display='none'; });
-  function drawTripPreset(key){
+  function drawTripPreset(key, btn){
     var preset = TRIP_PRESETS[key]; if(!preset || !window.map) return;
     var pl = preset.ids.map(function(id){ return PLACES.find(function(p){ return p.id===id; }); }).filter(Boolean);
     if(!pl.length) return;
@@ -328,8 +319,9 @@
     var mob = window.innerWidth<768;
     map.fitBounds(b, { padding: mob?{top:140,bottom:190,left:40,right:40}:{top:190,bottom:230,left:120,right:120}, duration:800 });
     try { _storyPathOn = true; } catch(e){}
-    var sp=document.getElementById('pill-storypath'); if(sp) sp.classList.add('active');
-    closeTripsMenu();
+    document.querySelectorAll('.pill-trip').forEach(function(el){ el.classList.remove('active'); });
+    if(btn && btn.classList) btn.classList.add('active');
+    else { var sp=document.getElementById('pill-storypath'); if(sp) sp.classList.add('active'); }
     if(typeof _toast==='function') _toast(preset.label, 3000);
   }
 </script>
@@ -377,7 +369,7 @@
     <span class="pc-photo-credit" id="pc-credit"></span>
     <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
     <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
-    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">🔖</button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">🤍</button>
     <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
     <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
   </div>
@@ -456,7 +448,7 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">43 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all bookmarks" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all favourites" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -469,7 +461,7 @@
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">🔖</span> Your Bookmarks</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">❤️</span> Your Favourites</div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-panel-actions">
@@ -479,9 +471,9 @@
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
-      <div class="saved-empty-icon">🔖</div>
-      <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap 🔖 on any place to bookmark it: build your own walking trail, share your map, or download it as a PDF guide.</div>
+      <div class="saved-empty-icon">❤️</div>
+      <div class="saved-empty-title">No favourites yet</div>
+      <div class="saved-empty-body">Tap 🤍 on any place to add it to Favourites: build your own walking trail, share your map, or download it as a PDF guide.</div>
       <button class="saved-action-btn" onclick="generateStoryPathPDF()" style="margin-top:12px;padding:9px 18px;">🎬 Download the full Filming Trail PDF</button>
     </div>
   </div>
@@ -638,8 +630,7 @@ window.addEventListener('load', function(){
   window.clearTripRoute = function(){
     if(_origClear) _origClear();
     _storyPathOn = false;
-    var b = document.getElementById('pill-storypath');
-    if(b) b.classList.remove('active');
+    document.querySelectorAll('.pill-trip').forEach(function(el){ el.classList.remove('active'); });
   };
 });
 
@@ -706,11 +697,11 @@ window.addEventListener('load', function() {
 <script>
 function clearAllSaved() {
   if (!favourites || favourites.length === 0) return;
-  if (!confirm('Clear all ' + favourites.length + ' bookmarks?')) return;
+  if (!confirm('Clear all ' + favourites.length + ' favourites?')) return;
   favourites = []; saveFavs(); clearTripRoute();
   var pill = document.getElementById('pill-saved');
   if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
-  if (typeof _toast === 'function') _toast('Bookmarks cleared.', 2500);
+  if (typeof _toast === 'function') _toast('Favourites cleared.', 2500);
 }
 
 (function() {
@@ -728,7 +719,7 @@ function clearAllSaved() {
     }
     var places = typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces() : [];
     var titleEl = document.getElementById('sheet-title');
-    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em">🔖</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Bookmarked' : 'Bookmarks') + '</span>';
+    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em">❤️</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Favourites' : 'Favourites') + '</span>';
     var badge = document.getElementById('list-badge');
     if (badge) badge.textContent = places.length;
     var scb = document.getElementById('sheet-clear-btn');
@@ -738,7 +729,7 @@ function clearAllSaved() {
     var listEl = document.getElementById('places-list');
     if (!listEl) return;
     if (places.length === 0) {
-      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🔖 on any place<br>to bookmark it here</div>';
+      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🤍 on any place<br>to add it to Favourites</div>';
       return;
     }
     function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60?(m%60)+'m':''); }
@@ -766,8 +757,8 @@ function clearAllSaved() {
       /* Reading-first bookmarks: no route stats, no drive times, no Google Maps.
          Just the reader's marks in their order, with PDF + Share. */
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>🔖 '+pl.length+(pl.length===1?' bookmark':' bookmarks')+'</span>'+
-        '<span class="saved-stat-dot">·</span><span>your journey through the book</span></div>'+
+        '<div class="saved-stats-bar" style="display:flex"><span>❤️ '+pl.length+(pl.length===1?' favourite':' favourites')+'</span>'+
+        '<span class="saved-stat-dot">·</span><span>your day out</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
@@ -824,7 +815,7 @@ function clearAllSaved() {
   window.updateFavUI = function() {
     try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
     var pill=document.getElementById('pill-saved');
-    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent='🔖';}
+    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent='❤️';}
     var btn=document.getElementById('sheet-clear-btn');
     if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
     setTimeout(function(){

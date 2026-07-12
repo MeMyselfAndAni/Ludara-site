@@ -12,16 +12,16 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
-      title: 'Bridgerton in Bath',
-      body: 'One map, every Bridgerton filming location in Bath: from the sweep of the Royal Crescent to Lady Danbury\'s door and the modiste\'s window. This short tour shows you how to explore it. Tap Next to begin.',
+      title: 'Bath & Bristol on Screen',
+      body: 'One map, every filming location across two cities: Bridgerton in Bath and Rivals in Bristol. This short tour shows you the map, the place cards, and how to build your own day out. Tap Next to begin.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'The Filming Trail',
-      body: 'The gold button draws the Bridgerton trail across Bath in a walkable order, from the Royal Crescent through the Georgian centre to Great Pulteney Street. It is the map\'s home view: tap it any time to see the whole trail again.',
+      title: 'Preset trips',
+      body: 'The pills along the top are ready-made routes: the full Bridgerton trail, a free outdoor walk, the great houses and ballrooms, and the Rivals loop in Bristol. Tap one and the map draws it in order, numbered stop by stop.',
       target: '#pill-storypath',
       cardPos: 'center',
       demo: 'close-saved-pulse',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Inside the place card',
-      body: 'Each card tells you what the place plays in the show, a little about the real Bath landmark, and, at the bottom, a short "If you visit" note with access and the best time to go.',
+      body: 'Tap any pin to open its card: a photo, what the place plays in the show, opening hours and a short "If you visit" note, plus buttons to Navigate in Google Maps, call, or open the website.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
@@ -45,7 +45,7 @@
     },
     {
       title: 'Find any location',
-      body: 'Type in the search field to find a location by name. Pin colors mark the theme: The Ton & Society, Great Houses, and Regency Streets & Shops.',
+      body: 'Type in the search field to find a location by name. Pin colours mark the theme: Glamour & Society, Grand Houses & Buildings, and Streets & Squares.',
       target: '#topbar-search',
       cardPos: 'center',
       closeCard: true,
@@ -53,8 +53,8 @@
       btn: 'Next'
     },
     {
-      title: 'The areas of Bath',
-      body: 'Each bubble is an area of the city: Royal Crescent, the Georgian Centre, and Great Pulteney. Tap one to zoom straight to those locations.',
+      title: 'The areas',
+      body: 'Each bubble is an area: Royal Crescent, the Georgian Centre and Great Pulteney in Bath, and Bristol for the Rivals locations. Tap one to jump straight there.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -62,16 +62,16 @@
       btn: 'Next'
     },
     {
-      title: 'Bookmark a location',
-      body: 'Found a location you want to visit? Tap the bookmark. Your marks remain when you close the map: your own Bridgerton walking trail through Bath.',
+      title: 'Add to Favourites',
+      body: 'Tap the heart on any place to add it to your Favourites. This is how you build your own custom trip: choose the stops you want, in any order.',
       target: null,
       cardPos: 'center',
       demo: 'open-card',
       btn: 'Next'
     },
     {
-      title: 'Your bookmarks',
-      body: 'Tap Bookmarks to see your list. Tap any row to reopen the card. Drag to arrange them in walking order for your day out.',
+      title: 'Your favourites, your trip',
+      body: 'Tap Favourites to see your list. Drag the stops to arrange them in your own walking order, then follow them as your personal day out.',
       target: null,
       dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
@@ -81,15 +81,15 @@
     },
     {
       title: 'Download a PDF companion',
-      body: 'Tap PDF Guide to turn your bookmarks into a printable walking companion, ready for a day out in Bath.',
+      body: 'Tap PDF to turn your favourites into a printable walking companion, ready for the day.',
       target: '#sheet button[onclick="generatePDF()"]',
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'Share your trail',
-      body: 'Bookmark the locations you love and send your map to a friend. One tap to share by message or email.',
+      title: 'Share your day',
+      body: 'Send your map of favourites to a friend or a guest. One tap to share by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
@@ -97,7 +97,7 @@
     },
     {
       title: "You're all set!",
-      body: 'The Bridgerton locations of Bath are yours to explore. Go and walk the season.',
+      body: 'The filming locations of Bath and Bristol are yours to explore. Enjoy the day out.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */
@@ -257,7 +257,7 @@
     if (!hb) return;
     /* Snap to bright red filled heart */
     hb.style.transition = 'color 0.25s ease, transform 0.25s ease';
-    hb.textContent = '🔖';
+    hb.textContent = '🤍';
     hb.style.fontFamily = 'Arial, sans-serif';
     hb.style.color = '#e00040';
     hb.style.transform = 'scale(1.25)';
@@ -266,7 +266,7 @@
       hb.style.color = 'white';
       hb.style.transform = 'scale(1)';
       setTimeout(function () {
-        hb.textContent = '🔖';
+        hb.textContent = '🤍';
         hb.style.fontFamily = '';
         hb.style.color = '';
         hb.style.transform = '';

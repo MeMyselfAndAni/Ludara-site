@@ -50,7 +50,7 @@ async function generatePDF(overridePlaces, customSubtitle){
   window._pdfCoverSubtitle = customSubtitle || null;
   const places = (overridePlaces && overridePlaces.length) ? overridePlaces : getSortedFavPlaces();
   if(!places || places.length === 0){
-    alert('Bookmark some places first using the 🔖 button, then generate your guide.');
+    alert('Add some favourites first using the ❤️ button, then generate your guide.');
     return;
   }
 
@@ -438,7 +438,7 @@ async function generatePDF(overridePlaces, customSubtitle){
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
       <div class="pdf-stat-num">${places.length}</div>
-      <div class="pdf-stat-label">Bookmarked places</div>
+      <div class="pdf-stat-label">Favourite places</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">🎬</div>

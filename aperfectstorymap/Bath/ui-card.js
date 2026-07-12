@@ -269,7 +269,7 @@ function _populateCard(p){
   if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
   if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
   // Story map: small directions pill beside Website; hidden for symbolic markers
-  if(!p.noDirections) contacts += `<a class="pc-contact-pill" href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=walking" target="_blank" rel="noopener">🚶 Directions</a>`;
+  if(!p.noDirections) contacts += `<a class="pc-contact-pill" href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=walking" target="_blank" rel="noopener">🧭 Navigate</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
   var awardsEl = document.getElementById('pc-awards');
@@ -294,7 +294,7 @@ function _updateFavBtn(){
   if(!btn || !CARD_PLACE) return;
   const favs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
   const saved = favs.includes(CARD_PLACE.id);
-  btn.textContent = '🔖';
+  btn.textContent = saved ? '❤️' : '🤍';
   btn.classList.toggle('faved', saved);
 }
 function cardToggleFav(){

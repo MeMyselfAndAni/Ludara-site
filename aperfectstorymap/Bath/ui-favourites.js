@@ -40,7 +40,7 @@ function updateFavUI(){
   const pillCount = document.getElementById('pill-saved-count');
   if(pillCount){ pillCount.textContent = count; pillCount.style.display = count > 0 ? 'inline-flex' : 'none'; }
   const pill = document.getElementById('pill-saved');
-  if(pill){ const icon = pill.childNodes[0]; if(icon && icon.nodeType === 3) icon.textContent = '🔖 Bookmarks '; }
+  if(pill){ const icon = pill.childNodes[0]; if(icon && icon.nodeType === 3) icon.textContent = '❤️ Favourites '; }
   if(savedFilterActive) applyFilters();
 }
 
@@ -60,9 +60,9 @@ function syncFavBtn(id){
   const btn = document.getElementById('pc-btn-fav');
   if(!btn) return;
   const faved = isFav(id);
-  btn.textContent = '🔖';
+  btn.textContent = faved ? '❤️' : '🤍';
   btn.classList.toggle('faved', faved);
-  btn.title = faved ? 'Remove bookmark' : 'Bookmark this place';
+  btn.title = faved ? 'Remove from Favourites' : 'Add to Favourites';
 }
 
 // ── SAVED FILTER ──────────────────────────────────────────────
@@ -86,7 +86,7 @@ function toggleSavedFilter(el){
   if(savedFilterActive){
     if(favourites.length === 0){
       savedFilterActive = false; el.classList.remove('active');
-      _toast('Tap 🔖 on any place to bookmark it here.');
+      _toast('Tap 🤍 on any place to add it to Favourites.');
       return;
     }
     applyFilters();
@@ -281,7 +281,7 @@ function getSortedFavPlaces(){
 }
 
 function planFavTrip(){
-  if(favourites.length < 2){ _toast('Bookmark at least 2 places first 🔖'); return; }
+  if(favourites.length < 2){ _toast('Add at least 2 favourites first ❤️'); return; }
   const places = getSortedFavPlaces();
   let totalWalkSecs = 0, totalDwell = 0;
   places.forEach((p, i) => {
@@ -300,7 +300,7 @@ function planFavTrip(){
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
-      <span>🔖 ${places.length} bookmark${places.length===1?'':'s'} — your journey through the book</span>
+      <span>❤️ ${places.length} favourite${places.length===1?'':'s'} — your day out</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
@@ -425,7 +425,7 @@ function openTripInMaps(){
 
 function shareItinerary() {
   if (!favourites || favourites.length === 0) {
-    _toast('Bookmark some places first 🔖');
+    _toast('Add some favourites first ❤️');
     return;
   }
   var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');

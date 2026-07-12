@@ -49,6 +49,7 @@ const PLACES = [
     hours: 'Ticketed museum — see no1royalcrescent.org.uk',
     type: 'Bridgerton · a house of the ton',
     website: 'https://no1royalcrescent.org.uk',
+    phone: '01225 428126',
   },
 
   // ── THE GEORGIAN CENTRE (BATH) ────────────────────────────────────────────
@@ -127,6 +128,7 @@ const PLACES = [
     hours: 'Guided tours only for now — check National Trust',
     type: 'Bridgerton · the ballroom',
     website: 'https://www.nationaltrust.org.uk/visit/bath-bristol/bath-assembly-rooms',
+    phone: '01225 466414',
   },
   {
     id: 9,
@@ -143,6 +145,7 @@ const PLACES = [
     hours: 'Events venue — not a daily walk-in',
     type: 'Bridgerton · the ballroom',
     website: 'https://bathvenues.co.uk/venues/guildhall',
+    phone: '01225 477786',
   },
 
   // ── GREAT PULTENEY & BATHWICK (BATH) ──────────────────────────────────────
@@ -161,6 +164,7 @@ const PLACES = [
     hours: 'Grounds free daily · galleries ticketed — see holburne.org',
     type: 'Bridgerton · Lady Danbury\'s residence',
     website: 'https://www.holburne.org',
+    phone: '01225 388569',
   },
   {
     id: 10,
@@ -209,6 +213,7 @@ const PLACES = [
     hours: 'Private hotel — exterior visible from Corn Street',
     type: 'Rivals · the awards ceremony',
     website: 'https://www.harbourhotels.co.uk/bristol',
+    phone: '0117 203 4445',
   },
   {
     id: 13,
@@ -225,6 +230,7 @@ const PLACES = [
     hours: 'Open daily for food & drink',
     type: 'Rivals · the author\'s cameo',
     website: 'https://www.cosyclub.co.uk/locations/bristol',
+    phone: '0117 253 0997',
   },
   {
     id: 14,
