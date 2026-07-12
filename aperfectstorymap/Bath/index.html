@@ -249,7 +249,7 @@
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub">Every filming location across both cities on one map: sourced, multilingual, and ready to walk.</p>
     <button class="splash-btn" onclick="closeSplash()">Enter the Story</button>
-    <p class="splash-disclaimer" style="margin-top:14px;font-size:0.72rem;line-height:1.4;color:#cbbfa6;opacity:0.85;">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland, Disney+ or the productions.</p>
+    <p class="splash-disclaimer" style="margin-top:16px;font-size:0.95rem;line-height:1.45;font-weight:700;color:#e4d9c0;">Concept demonstration: an interactive location map for Visit West. Not affiliated with Netflix, Shondaland, Disney+ or the productions.</p>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectstorymap/" target="_blank">by Ludara.AI</a>
     </div>
@@ -314,13 +314,24 @@
     box-shadow: 0 1px 0 rgba(0,0,0,0.2), inset 0 2px 6px rgba(0,0,0,0.30) !important;
   }
   .pill-storypath.active { box-shadow: 0 1px 0 rgba(0,0,0,0.25), inset 0 2px 6px rgba(0,0,0,0.35) !important; }
+  /* Warm gradient on the plain trip pill so it matches the gold one */
+  .pill-trip:not(#pill-storypath):not(.active) {
+    background: linear-gradient(180deg, #ffffff 0%, #f3ead6 100%) !important;
+    border-color: #d8c8a0 !important; color: #4a3c1e !important;
+  }
   /* Save offline + Guide: small oval pills, flush to the right edge */
   #offline-save-btn, button[onclick="restartTutorial()"] { border-radius: 22px !important; padding: 5px 12px !important; font-size: 0.64rem !important; right: 10px !important; letter-spacing: 0.05em !important; }
   @media (max-width: 768px){
-    .filter-bar { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; }
+    /* Tuck the pill row right under the top band (about a 2mm gap) */
+    .filter-bar { top: 64px !important; flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; row-gap: 0 !important; padding-right: 10px; scrollbar-width: none; align-items: stretch; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .filter-bar > * { flex: 0 0 auto; }
-    .pill-trip { font-size: 0.66rem; padding: 5px 10px; }
+    /* Trip pills as tidy two-line chips */
+    .pill-trip {
+      font-size: 0.63rem !important; padding: 6px 13px !important;
+      white-space: normal !important; text-align: center; line-height: 1.14;
+      max-width: 128px;
+    }
     #topbar-search { width: 108px !important; }
     .header-ludara { display: inline-flex !important; font-size: 0.58rem; line-height: 1.05; max-width: 120px; text-align: right; }
     #offline-save-btn, button[onclick="restartTutorial()"] { font-size: 0.6rem !important; padding: 4px 11px !important; right: 8px !important; }
@@ -441,7 +452,7 @@
     if(typeof drawSavedRoute==='function') drawSavedRoute();
     document.querySelectorAll('.pill-trip').forEach(function(p){ p.classList.remove('active'); });
     if(btn && btn.classList) btn.classList.add('active');
-    _tripToast(trip.name+' loaded — '+trip.ids.length+' stops', prev, prevOrder, btn);
+    /* Toast/Undo removed for now: tapping a pill loads the trip silently. */
   }
   function _tripToast(msg, prev, prevOrder, btn){
     var ex=document.getElementById('_trip-toast'); if(ex) ex.remove();

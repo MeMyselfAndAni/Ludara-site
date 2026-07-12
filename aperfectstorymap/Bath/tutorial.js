@@ -21,7 +21,7 @@
     },
     {
       title: 'Preset trips',
-      body: 'The pills along the top are ready-made routes: Bridgerton in Bath, a free outdoor walk, and Rivals in Bristol. Tap one and it draws the numbered route on the map and opens the Trip Plan, with the stops, walking times and distance, and buttons for Google Directions, a PDF guide, and Share. Your Favourites open in the very same Trip Plan.',
+      body: 'The pills along the top are ready-made routes: Bridgerton in Bath and Rivals in Bristol. Tap one to draw the numbered route on the map and open it in the Trip Plan.',
       target: '#pill-storypath',
       cardPos: 'center',
       demo: 'close-saved-pulse',
@@ -70,8 +70,8 @@
       btn: 'Next'
     },
     {
-      title: 'Your favourites, your trip',
-      body: 'Tap Favourites to see your list. Drag the stops to arrange them in your own walking order, then follow them as your personal day out.',
+      title: 'The Trip Plan',
+      body: 'Preset trips and your Favourites all open here. Every stop shows its walking time and distance; drag them to reorder, and use the buttons for Google Directions, a PDF guide, and Share.',
       target: null,
       dualTargets: ['#pill-saved', '#sheet'],
       targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
