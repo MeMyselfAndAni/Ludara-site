@@ -50,6 +50,7 @@ const PLACES = [
     type: 'World\'s #6 cocktail bar 2025 — Mayfair, The Connaught Hotel',
     awards: '#6 The World\'s 50 Best Bars 2025',
     website: 'https://www.the-connaught.co.uk/bars-restaurant/the-connaught-bar/',
+    phone: '+44 20 7499 7070',
   },
   {
     id: 74,
@@ -65,6 +66,7 @@ const PLACES = [
     tip: 'The two-martini rule exists for good reason. The vesper is the Fleming original. Book ahead.',
     type: 'Historic cocktail bar — the birthplace of Bond\'s martini',
     website: 'https://www.dukeshotel.com/dukes-bar',
+    phone: '+44 20 7491 4840',
   },
   {
     id: 59,
@@ -282,6 +284,8 @@ const PLACES = [
     tip: 'Sunday roast: book months ahead, not weeks. Saturday breakfast before 10:00 is quieter and just as good.',
     type: 'Neighbourhood gastropub — Bermondsey\'s anchor since 2003',
     website: 'https://thegarrison.co.uk',
+    resUrl: 'https://www.thegarrison.co.uk/contact',
+    phone: '+44 20 7089 9355',
   },
   {
     id: 60,
@@ -298,6 +302,8 @@ const PLACES = [
     type: 'The original nose-to-tail British restaurant (since 1994)',
     awards: '⭐ One Michelin Star · Condé Nast Traveller Lifetime Achievement (Fergus Henderson, 2024)',
     website: 'https://stjohnrestaurant.com',
+    resUrl: 'https://www.opentable.com/st-john',
+    phone: '+44 20 7251 0848',
   },
   {
     id: 81,
@@ -376,6 +382,8 @@ const PLACES = [
     tip: 'Book a sunrise slot weeks ahead — 06:30 means a quiet room and extraordinary light. The duck and waffle is non-negotiable.',
     type: 'London\'s only 24-hour high-rise restaurant — 40th floor City views',
     website: 'https://duckandwaffle.com',
+    resUrl: 'https://www.sevenrooms.com/reservations/duckandwaffle',
+    phone: '+44 20 3640 7310',
   },
   {
     id: 28,
@@ -424,6 +432,8 @@ const PLACES = [
     tip: 'The Corpse Reviver #2 from the original Craddock recipe. Book ahead for weekends. The piano begins at 19:30.',
     type: 'Historic hotel bar — the birthplace of modern cocktail culture (1893)',
     website: 'https://www.thesavoylondon.com/restaurant/american-bar/',
+    resUrl: 'https://www.sevenrooms.com/reservations/americanbarlondon',
+    phone: '+44 20 7420 2111',
   },
   {
     id: 29,
@@ -470,6 +480,8 @@ const PLACES = [
     type: 'French restaurant — London\'s most romantic dining room',
     awards: '3 AA Rosettes (2026) · Wine Spectator Grand Award (2025) · \'Most Romantic Restaurant in the World\' — Architectural Digest',
     website: 'https://www.closmaggiore.com',
+    resUrl: 'https://www.opentable.com/clos-maggiore',
+    phone: '+44 20 4580 1174',
   },
   {
     id: 32,
@@ -485,6 +497,8 @@ const PLACES = [
     tip: 'Walk-in only. Arrive before opening or accept the wait. Ask the chefs what they recommend today — the answer changes.',
     type: 'The benchmark for Spanish tapas in London — counter seats only, walk-in',
     website: 'https://barrafina.co.uk',
+    resUrl: 'https://www.sevenrooms.com/explore/barrafinaadelaidestreet/reservations/create/search',
+    phone: '+44 20 7440 1450',
   },
   {
     id: 33,
@@ -500,6 +514,8 @@ const PLACES = [
     tip: 'Book ahead — the room is small. Ask for recommendations from lesser-known distilleries. The bartenders have strong opinions.',
     type: 'Victorian gin parlour — 300+ gins, Around the World in 80 Days theme',
     website: 'https://mr-foggs.com/gin-parlour',
+    resUrl: 'https://www.sevenrooms.com/explore/mrfoggscollection/reservations/create/search?venues=foggsginparlour,mrfoggstavern',
+    phone: '+44 20 7590 3605',
   },
   {
     id: 35,
@@ -530,6 +546,8 @@ const PLACES = [
     tip: 'Book ahead for weekends. Ask what spirit the bar manager is currently obsessed with — the answer changes and is always interesting.',
     type: '1920s Shanghai cocktail bar above Chinatown',
     website: 'https://www.opiumchinatown.com',
+    resUrl: 'https://www.opiumchinatown.com/reservations',
+    phone: '+44 20 7734 7276',
   },
   {
     id: 38,
@@ -545,6 +563,8 @@ const PLACES = [
     tip: 'Book ahead. The beef Wellington is the kitchen\'s signature. Budget from £70 per person with something pressed for.',
     type: 'Theatrical brasserie with champagne button at every table',
     website: 'https://bobbobricard.com',
+    resUrl: 'https://www.sevenrooms.com/explore/bobbobricardsoho/reservations/create/search',
+    phone: '+44 20 3145 1000',
   },
   {
     id: 72,
@@ -560,6 +580,8 @@ const PLACES = [
     tip: 'Order game — it is what this kitchen has done for 225 years. Potted shrimps to start, a suet pudding to finish. Book ahead for weekends.',
     type: 'London\'s oldest restaurant (established 1798)',
     website: 'https://rules.co.uk',
+    resUrl: 'https://www.sevenrooms.com/reservations/rules',
+    phone: '+44 20 7836 5314',
   },
   {
     id: 69,
@@ -576,6 +598,8 @@ const PLACES = [
     type: 'Jerusalem and Eastern Mediterranean restaurant',
     awards: 'Michelin Bib Gourmand 2026',
     website: 'https://www.thepalomar.co.uk',
+    resUrl: 'https://www.sevenrooms.com/explore/thepalomar/reservations/create/search',
+    phone: '+44 20 7439 8777',
   },
   {
     id: 68,
@@ -591,6 +615,8 @@ const PLACES = [
     tip: 'The half-pint rule means order wine. Book the restaurant upstairs for lunch. Arrive before 19:00 for space at the bar.',
     type: 'Soho institution — the Free French HQ in WWII (est. 1891)',
     website: 'https://frenchhousesoho.com',
+    resUrl: 'https://dishcult.com/restaurant/thefrenchhouse',
+    phone: '+44 20 7437 2477',
   },
   {
     id: 79,
@@ -671,7 +697,6 @@ const PLACES = [
     hours: 'Antiques: Sat 08:00–19:00; General market: Mon–Fri 09:00–18:00',
     tip: 'Arrive before 09:00 on Saturdays for antiques. The northern end under the Westway has the best vintage with far fewer people.',
     type: 'World\'s largest antique street market — Saturdays, Notting Hill',
-    website: 'https://www.portobelloroad.co.uk',
     direct_image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Portobello_Road_Market_in_London,_spring_2013_(4).JPG',
   },
   {
@@ -689,6 +714,8 @@ const PLACES = [
     type: 'Three Michelin-star restaurant — Notting Hill',
     awards: '⭐⭐⭐ Three Michelin Stars · 5 AA Rosettes · La Liste 98/100 (2025)',
     website: 'https://corebyclaresmyth.com',
+    resUrl: 'https://www.opentable.co.uk/r/core-by-clare-smyth-london',
+    phone: '+44 20 3937 5086',
   },
   {
     id: 47,
@@ -739,6 +766,8 @@ const PLACES = [
     type: 'London\'s only Michelin-starred pub — Fulham',
     awards: '⭐ One Michelin Star · London\'s only Michelin-starred pub · Top 50 Gastropubs UK',
     website: 'https://www.harwoodarms.com',
+    resUrl: 'https://www.opentable.co.uk/harwood-arms',
+    phone: '+44 20 7386 1847',
   },
   {
     id: 82,
