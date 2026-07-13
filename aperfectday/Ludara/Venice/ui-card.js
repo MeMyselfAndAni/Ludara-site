@@ -264,7 +264,7 @@ function _populateCard(p){
     contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
   }
   if(p.phone){
-    contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>Call</a>`;
+    contacts += `<a class="pc-contact-pill pc-call-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>${p.phone}</a>`;
   }
   if(p.website){
     contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener"><span class="pc-ico">🌐</span>Website</a>`;

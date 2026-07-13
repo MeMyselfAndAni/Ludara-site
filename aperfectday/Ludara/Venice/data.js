@@ -253,7 +253,6 @@ const PLACES = [
     tip: 'Book at least two weeks ahead for dinner. There are two sittings per service — confirm your time. The crudo di scampi is always on the menu in some form when scampi are running.',
     type: 'MICHELIN-listed trattoria — 22 seats, daily-changing market menu',
     awards: 'MICHELIN Guide Italia 2026',
-    website: 'http://www.osterialletestiere.it',
     resUrl: 'https://www.dishcult.com/restaurant/osteriaalletestiere',
     phone: '+39 041 522 7220',
   },

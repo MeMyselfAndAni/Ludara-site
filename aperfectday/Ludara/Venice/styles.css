@@ -1512,6 +1512,13 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   color: #fff;
 }
 
+/* Call button shows the actual number — smaller so it wraps to two lines and fits */
+.pc-call-pill {
+  font-size: 0.52rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
 /* Counter (nbhd mode) */
 .pc-counter {
   font-size: 0.68rem;
