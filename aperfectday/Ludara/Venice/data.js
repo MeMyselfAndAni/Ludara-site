@@ -90,7 +90,9 @@ const PLACES = [
     tip: 'Book ahead — the room is small. Tell Paolo your budget and let him choose the wine. The sarde in saor is a benchmark version of the dish.',
     type: 'MICHELIN-listed bacaro and wine bar — canal-side, Cannaregio',
     awards: 'MICHELIN Guide Italia 2026',
-    website: 'https://www.vinidagigio.com',
+    website: 'https://vinidagigio.it',
+    resUrl: 'https://vinidagigio.it/en/book-table/',
+    phone: '+39 041 528 5140',
   },
   {
     id: 6,
@@ -106,6 +108,8 @@ const PLACES = [
     tip: 'The outdoor canal-side tables are first-come. Arrive at 18:00 when they open in the evening and you will get one. Ask what arrived from the market that morning.',
     type: 'Canal-front bacaro — natural wines, Cannaregio',
     website: 'https://www.osteriaanicestellato.com',
+    resUrl: 'https://lanicestellato.superbexperience.com/',
+    phone: '+39 041 720 744',
   },
   {
     id: 7,
@@ -121,6 +125,7 @@ const PLACES = [
     tip: 'The late closing makes this the obvious last stop of an evening. The kitchen genuinely runs until 1am — not a token menu, the full kitchen.',
     type: '18th-century osteria — creative Venetian, open until 1am',
     website: 'https://www.anticaadelaide.com',
+    phone: '+39 041 523 2629',
   },
   {
     id: 8,
@@ -167,6 +172,7 @@ const PLACES = [
     tip: 'Arrive early — by 12:30 it fills. Order the francobolli (small tramezzini squares) and the baccalà mantecato on white polenta. The house wine is better than it needs to be at this price.',
     type: 'Venice\'s oldest bacaro — est. 1462, Rialto',
     website: 'https://www.cantinadomori.com',
+    phone: '+39 041 522 5401',
   },
   {
     id: 11,
@@ -182,6 +188,7 @@ const PLACES = [
     tip: 'Lunch only. Come between 11:00 and 12:30 to see the full board before the best pieces sell. Ask Matteo what is freshest. Cash preferred.',
     type: 'Standing cicchetti bar — market-to-bar, Rialto',
     website: 'https://veneziaautentica.com/venice-bacaro-bar-osteria-all-arco/',
+    phone: '+39 041 520 5666',
   },
   {
     id: 12,
@@ -212,6 +219,8 @@ const PLACES = [
     type: 'MICHELIN-listed Venetian fish restaurant — Rialto',
     awards: 'MICHELIN Guide Italia 2026',
     website: 'https://www.antichecarampane.com',
+    resUrl: 'https://www.dishcult.com/restaurant/antichecarampane',
+    phone: '+39 041 524 0165',
   },
   {
     id: 14,
@@ -245,6 +254,8 @@ const PLACES = [
     type: 'MICHELIN-listed trattoria — 22 seats, daily-changing market menu',
     awards: 'MICHELIN Guide Italia 2026',
     website: 'http://www.osterialletestiere.it',
+    resUrl: 'https://www.dishcult.com/restaurant/osteriaalletestiere',
+    phone: '+39 041 522 7220',
   },
   {
     id: 16,
@@ -261,6 +272,8 @@ const PLACES = [
     type: 'MICHELIN-listed trattoria — seasonal Venetian since 1987',
     awards: 'MICHELIN Guide Italia 2026',
     website: 'https://www.ristorantealcovo.com',
+    resUrl: 'https://ristorantealcovo.com/prenota/',
+    phone: '+39 041 522 3812',
   },
   {
     id: 17,
@@ -415,6 +428,7 @@ const PLACES = [
     tip: 'No reservation required for lunch. The bacaro seating at the bar is good for cicchetti and a glass before the proper lunch sitting. Ask what the secondo is today before ordering.',
     type: 'Neighbourhood trattoria — market Venetian cooking, Santa Croce',
     website: 'https://www.osteriamocenigo.com',
+    phone: '+39 041 523 1703',
   },
   {
     id: 27,
@@ -430,6 +444,8 @@ const PLACES = [
     tip: 'Order the flan di zucca con Montasio — it has been on the menu for decades for good reason. The canal table is first-come but worth arriving early for. Book for dinner.',
     type: 'Vegetable-focused trattoria — pumpkin flan, canal-side, Santa Croce',
     website: 'https://www.lazucca.it',
+    resUrl: 'https://www.lazucca.it/en/reservation/',
+    phone: '+39 041 524 1570',
   },
 
   // ── SAN MARCO ─────────────────────────────────────────────────────────────
@@ -596,6 +612,7 @@ const PLACES = [
     tip: 'Order the risotto di gò. If moleche are listed, order those too — they are only available in spring and autumn and this is one of the best places in Venice to eat them. Book well in advance for weekends.',
     type: 'Lagoon trattoria — risotto di gò since 1965, canal-side Burano',
     website: 'https://www.gattonero.com',
+    phone: '+39 041 730 120',
   },
 
   // ── TORCELLO — additional places ──────────────────────────────────────────
@@ -629,6 +646,8 @@ const PLACES = [
     tip: 'Book the garden table in advance — the walled garden is the reason to come. Arrive by the first morning vaporetto, visit the cathedral first, then lunch here. The return boat is a half-hour walk away and the schedule should be checked before you sit down.',
     type: 'Historic garden restaurant — since 1934, Hemingway\'s table, Torcello',
     website: 'https://www.locandacipriani.com',
+    resUrl: 'https://www.sevenrooms.com/reservations/locandaciprianitorcello',
+    phone: '+39 041 2676600',
   },
 
   // ── SAN MARCO — additional place ──────────────────────────────────────────
@@ -665,6 +684,8 @@ const PLACES = [
     tip: 'Book two to three weeks ahead — this is not a restaurant where walk-ins happen. Ask Maurizio\'s advice on the wine; he will not oversell. The tasting menu lets the kitchen decide based on what arrived that morning.',
     type: 'Venetian seafood institution — lagoon sourcing since 1978, San Polo',
     website: 'https://www.ristorantedafiore.com',
+    resUrl: 'https://www.ristorantedafiore.com/en/book/',
+    phone: '+39 041 721 308',
   },
   {
     id: 42,
@@ -680,7 +701,9 @@ const PLACES = [
     tip: 'Order the antipasto di mare and let it run its full course before ordering anything else. Book ahead — the courtyard fills fast in good weather and the interior is not large. The restaurant closes for most of January.',
     type: 'MICHELIN Bib Gourmand — hidden courtyard, Castello seafood',
     awards: 'MICHELIN Guide Italia 2026 — Bib Gourmand',
-    website: 'https://www.cortescontavenezia.com',
+    website: 'https://www.cortescontave.com',
+    resUrl: 'https://www.cortescontave.com/en/reservations/',
+    phone: '+39 041 522 7024',
   },
   {
     id: 43,
@@ -696,6 +719,7 @@ const PLACES = [
     tip: "The campo outside is one of the most peaceful spots in Venice. Eat early and stay for the quiet. Ask what the kitchen is proud of that day — the menu changes frequently and the staff will tell you.",
     type: 'Neighbourhood osteria — Cannaregio, creative Venetian, no tourists',
     website: 'https://osteriaortodeimori.com',
+    phone: '+39 041 524 3677',
   },
 
 ];
