@@ -243,6 +243,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-522-0688",
     website: "https://thefarmhousetn.com",
+    resUrl: "https://www.opentable.com/r/the-farm-house-nashville",
     direct_image: "https://images.squarespace-cdn.com/content/v1/5e3b0484b754a35dcb40dcfe/6b3283d2-3dbd-4512-8748-984008ec3364/Pork+Belly+Best+Happy-Hour+Nashville.jpg"
   },
 
@@ -262,7 +263,8 @@ const PLACES = [
     type: "Japanese Tapas & Sushi",
     blog: "", 
     phone: "+1 629-226-2583",
-    website: "https://bluesushisakegrill.com", 
+    website: "https://bluesushisakegrill.com",
+    resUrl: "https://www.opentable.com/r/blue-sushi-sake-grill-fifth-and-broadway-nashville", 
   },
 
   {
@@ -302,6 +304,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-751-8111",
     website: "https://pinewoodsocial.com",
+    resUrl: "https://www.opentable.com/pinewood-social",
     direct_image: "https://pinewoodsocial.com/cdn/shop/files/10.22.25-pinewoodsocial-8264_4.jpg?v=1764095550"
   },
 
@@ -342,6 +345,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-238-2359",
     website: "https://eddiev.com",
+    resUrl: "https://www.opentable.com/r/eddie-vs-nashville",
     direct_image: "https://img.ctykit.com/cdn/tn-nashville/images/tr:w-1800/ev-homepage-golden-nights-hero-1080x1920.png"
   },
 
@@ -381,7 +385,7 @@ const PLACES = [
     type: "Speakeasy Cocktail & Cigar Lounge",
     blog: "", 
     phone: "+1 629-217-1930",
-    website: "https://redphonebooth.com",
+    website: "https://www.redphonebooth.com/locations/tn/nashville",
     direct_image: "https://popmenucloud.com/cdn-cgi/image/width=600,height=600,fit=scale-down,format=auto,quality=60/tscbiyal/cb986073-9b13-4e12-979f-c7e1e04a4898.png"
   },
 
@@ -598,7 +602,8 @@ const PLACES = [
     type: "James Beard Italian-Southern",
     blog: "", 
     phone: "+1 615-736-5838", 
-    website: "https://cityhousenashville.com", 
+    website: "https://cityhousenashville.com",
+    resUrl: "https://www.opentable.com/r/city-house-nashville", 
   },
 
   {
@@ -617,7 +622,8 @@ const PLACES = [
     type: "Modern Pasta & Seasonal Cuisine",
     blog: "", 
     phone: "+1 615-866-9897", 
-    website: "https://rolfanddaughters.com", 
+    website: "https://rolfanddaughters.com",
+    resUrl: "https://resy.com/cities/nashville-tn/venues/rolf-and-daughters", 
   },
 
   {
@@ -636,7 +642,8 @@ const PLACES = [
     type: "Oyster Bar & Seasonal Restaurant",
     blog: "", 
     phone: "+1 615-490-8042", 
-    website: "https://henriettared.com", 
+    website: "https://henriettared.com",
+    resUrl: "https://www.opentable.com/r/henrietta-red-nashville-3", 
   },
 
   {
@@ -674,7 +681,8 @@ const PLACES = [
     type: "Japanese Bakery & All-Day Café",
     blog: "", 
     phone: "", 
-    website: "https://www.babychancafe.com", 
+    website: "https://www.babychancafe.com",
+    resUrl: "https://www.opentable.com/r/babychan-nashville", 
   },
 
   // ─── THE GULCH ───────────────────────────────────────────────────────
@@ -714,7 +722,8 @@ const PLACES = [
     type: "Michelin-Starred Tasting Menu (15 courses)",
     blog: "", 
     phone: "+1 615-810-8200", 
-    website: "https://www.thecatbirdseatrestaurant.com", 
+    website: "https://www.thecatbirdseatrestaurant.com",
+    resUrl: "https://www.opentable.com/r/the-catbird-seat",
   },
 
   {
@@ -752,7 +761,8 @@ const PLACES = [
     type: "James Beard Craft Cocktail Bar",
     blog: "", 
     phone: "+1 615-810-8200",
-    website: "https://www.thepattersonnashville.com", 
+    website: "https://www.thepattersonnashville.com",
+    resUrl: "https://www.opentable.com/r/the-patterson-house-nashville", 
   },
 
   {
@@ -830,6 +840,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-993-5988",
     website: "https://www.1hotels.com/nashville/taste/1-kitchen",
+    resUrl: "https://www.opentable.com/r/1-kitchen-nashville",
     direct_image: "https://www.1hotels.com/sites/1hotels.com/files/styles/card/public/brandfolder/kkpjffxqw877ccnhbrwnfxh5/1_Hotels_NVL_1_Kitchen_Dinner_0960h2881.png?h=cfc9e117&itok=MyjynTUW"
   },
 
@@ -850,6 +861,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-208-2762",
     website: "https://thefinchnashville.com",
+    resUrl: "https://www.opentable.com/r/the-finch-nashville",
     direct_image: "https://images.getbento.com/accounts/5b9eaaecba84ff0a05eebe931fa7dee3/media/images/6383DSC05320_1.jpg?w=1200&fit=crop&auto=compress,format&cs=origin&crop=focalpoint&fp-x=0.5&fp-y=0.5"
   },
 
@@ -870,6 +882,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-499-4248",
     website: "https://maizdelavida.com",
+    resUrl: "https://www.opentable.com/r/maiz-de-la-vida-nashville",
     direct_image: "https://images.squarespace-cdn.com/content/v1/690646896fa1ec6272589e52/14dcf475-1b4e-4e98-9711-58f61ddde444/maizdlv_040226_reedit-56.jpg"
   },
 
@@ -889,7 +902,8 @@ const PLACES = [
     type: "Tennessee BBQ (dry rub)",
     blog: "", 
     phone: "+1 615-829-6023",
-    website: "https://peglegporker.com", 
+    website: "https://peglegporker.com",
+    resUrl: "https://resy.com/cities/nashville-tn/venues/peg-leg-porker",
   },
 
   {
@@ -950,7 +964,8 @@ const PLACES = [
     type: "James Beard Japanese Comfort Food",
     blog: "", 
     phone: "",
-    website: "https://www.kisserrestaurant.com", 
+    website: "https://www.kisserrestaurant.com",
+    resUrl: "https://www.opentable.com/r/kisser-nashville", 
   },
 
   {
@@ -969,7 +984,8 @@ const PLACES = [
     type: "Craft Burger & Beer Garden",
     blog: "", 
     phone: "+1 615-712-9517", 
-    website: "https://thepharmacyburger.com", 
+    website: "https://thepharmacyburger.com",
+    resUrl: "https://www.exploretock.com/the-pharmacy-burger-parlor-nashville", 
   },
 
   {
@@ -988,7 +1004,8 @@ const PLACES = [
     type: "Michelin-Recognised Wine Bar & Restaurant",
     blog: "", 
     phone: "+1 629-729-4332", 
-    website: "https://badideanashville.com", 
+    website: "https://badideanashville.com",
+    resUrl: "https://www.opentable.com/r/bad-idea-wine-bar-nashville", 
   },
 
   {
@@ -1028,7 +1045,8 @@ const PLACES = [
     type: "Michelin-Starred Seasonal Cuisine",
     blog: "", 
     phone: "", 
-    website: "https://locustnashville.com", 
+    website: "https://locustnashville.com",
+    resUrl: "https://www.opentable.com/r/locust-nashville", 
   },
 
   {
@@ -1048,6 +1066,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-490-8434", 
     website: "https://bastionnashville.com",
+    resUrl: "https://www.opentable.com/r/bastion-nashville",
     direct_image: "https://images.squarespace-cdn.com/content/v1/63c0626eaf766c4379fb79f9/82989a7d-0a3e-4bb7-8991-ddcb2a8a66fc/Bastion-February2025-71.jpg"
   },
 
@@ -1066,8 +1085,9 @@ const PLACES = [
     tip: "Happy hour runs daily with $6.50 wine and taco boards — the best value on 12th Ave. The guacamole is made to order tableside.",
     type: "Elevated Modern Mexican",
     blog: "", 
-    phone: "+1 615-800-4899", 
-    website: "https://fondanashville.com", 
+    phone: "+1 615-800-4899",
+    website: "https://fondanashville.com",
+    resUrl: "https://www.opentable.com/r/fonda-on-12th-nashville",
   },
 
   {
@@ -1224,6 +1244,7 @@ const PLACES = [
     blog: "",
     phone: "+1 615-320-1740",
     website: "https://amerigo.net/nashville",
+    resUrl: "https://www.opentable.com/r/amerigo-west-end-nashville",
     direct_image: "https://images.unsplash.com/photo-1662197480393-2a82030b7b83?fm=jpg&q=80&w=1200&auto=format&fit=crop"
   },
 

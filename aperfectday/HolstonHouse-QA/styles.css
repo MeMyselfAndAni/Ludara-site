@@ -1610,10 +1610,15 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 /* Phone / website pills */
 .pc-contacts {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   margin-bottom: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.pc-contacts::-webkit-scrollbar { display: none; }
+.pc-contacts .pc-contact-pill { flex: 0 0 auto; }
 .pc-contact-pill {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 6px 14px;
@@ -1628,6 +1633,18 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   white-space: nowrap;
 }
 .pc-contact-pill:hover { background: #31261d; color: white; }
+
+/* One-click booking button — filled accent so it reads as the primary action */
+.pc-reserve-pill {
+  background: #b8960a;
+  border-color: #b8960a;
+  color: #fff;
+}
+.pc-reserve-pill:hover {
+  background: #a3850a;
+  border-color: #a3850a;
+  color: #fff;
+}
 
 /* Counter (nbhd mode) */
 .pc-counter {

@@ -194,6 +194,16 @@ function _activateMarker(p){
   if(map) map.panTo({lat:p.lat, lng:p.lng});
 }
 
+// ── Booking button label, adapted to category ─────────────────
+// Keeps the affordance truthful: a museum is not "a table".
+function _reserveMeta(p){
+  const dining = ['breakfast','lunch','dinner','bbq','bar'];
+  const ticketed = ['attraction','music'];
+  if(dining.includes(p.cat))   return { icon:'📅', label:'Reserve a table' };
+  if(ticketed.includes(p.cat))  return { icon:'🎟️', label:'Book tickets' };
+  return { icon:'🔗', label:'Book online' };
+}
+
 // ── Populate all fields ───────────────────────────────────────
 function _populateCard(p){
   CARD_PLACE = p;
@@ -256,8 +266,15 @@ function _populateCard(p){
   }
 
   let contacts = '';
+  // One-click booking button: uses resUrl (OpenTable/Resy/Tock/own booking page)
+  // when present, otherwise falls back to the place's own website.
+  const bookUrl = p.resUrl || p.website;
+  if(bookUrl){
+    const meta = _reserveMeta(p);
+    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${bookUrl}" target="_blank" rel="noopener">${meta.icon} ${meta.label}</a>`;
+  }
   if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
-  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
+  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener">🌐 Website</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
   var awardsEl = document.getElementById('pc-awards');
