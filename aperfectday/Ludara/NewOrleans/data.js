@@ -129,6 +129,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-581-3467",
     website: "https://www.gwfins.com",
+    resUrl: "https://www.opentable.com/gw-fins",
   },
 
   {
@@ -147,7 +148,7 @@ const PLACES = [
     type: "Craft Cocktail Bar",
     blog: "",
     phone: "+1 504-324-6045",
-    website: "https://www.bartonique.com",
+    website: "https://www.instagram.com/bartonique/",
   },
 
   {
@@ -166,7 +167,8 @@ const PLACES = [
     type: "Historic Revolving Bar",
     blog: "",
     phone: "+1 504-523-3341",
-    website: "https://www.hotelmonteleone.com/entertainment/carousel-bar",
+    website: "https://www.hotelmonteleone.com/dine-drink/carousel-bar/",
+    resUrl: "https://resy.com/cities/new-orleans-la/venues/carousel-bar-and-lounge",
   },
 
   {
@@ -205,6 +207,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-265-8816",
     website: "https://www.jewelnola.com",
+    resUrl: "https://www.opentable.com/r/jewel-of-the-south-new-orleans",
   },
 
   // ─── MARIGNY & BYWATER ───────────────────────────────────────────────────
@@ -283,6 +286,7 @@ const PLACES = [
     blog: "",
     phone: "",
     website: "https://www.n7nola.com",
+    resUrl: "https://www.opentable.com/r/n7-new-orleans",
   },
 
   {
@@ -398,7 +402,7 @@ const PLACES = [
     type: "Neighbourhood Music Lounge",
     blog: "",
     phone: "+1 504-975-3955",
-    website: "https://www.facebook.com/KermitsMotherInLawLounge",
+    website: "https://www.kermitslounge.com",
   },
 
   // ─── GARDEN DISTRICT ─────────────────────────────────────────────────────
@@ -439,6 +443,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-899-8221",
     website: "https://www.commanderspalace.com",
+    resUrl: "https://resy.com/cities/new-orleans-la/venues/commanders-palace",
   },
 
   {
@@ -458,25 +463,6 @@ const PLACES = [
     blog: "",
     phone: "",
     website: "",
-  },
-
-  {
-    id: 24,
-    nbhd: "garden-district",
-    name: "Coquette",
-    cat: "food",
-    emoji: "🦞",
-    address: "2800 Magazine Street, Garden District",
-    lat: 29.9338,
-    lng: -90.0952,
-    search: "Coquette restaurant Magazine Street New Orleans Garden District",
-    note: "Ian McNulty of the Times-Picayune has championed Coquette for 17 years as the most consistently excellent restaurant on Magazine Street. Chef Michael Stoltzfus runs a kitchen that is always different and never predictable — wide-ranging imagination, deft technique, exuberantly fresh ingredients. The long bar up front is prime territory for a solo meal or a drop-in visit for a snack and a cocktail. A New Orleans institution.",
-    hours: "Tue–Sat 17:30–22:00",
-    tip: "Bar seats are first-come, first-served. Order whatever sounds most unusual — it is always the best thing on the menu.",
-    type: "Contemporary Creole Restaurant",
-    blog: "",
-    phone: "+1 504-265-0421",
-    website: "https://www.coquettenola.com",
   },
 
   {
@@ -573,25 +559,26 @@ const PLACES = [
     blog: "",
     phone: "+1 504-588-2123",
     website: "https://www.cochonrestaurant.com",
+    resUrl: "https://resy.com/cities/new-orleans-la/venues/cochon",
   },
 
   {
     id: 30,
     nbhd: "warehouse",
-    name: "Maison de la Luz / Bar Marilou",
+    name: "Maison Métier, Unbound Collection by Hyatt",
     cat: "landmark",
     emoji: "🌟",
     address: "546 Carondelet Street, Warehouse District",
     lat: 29.9480,
     lng: -90.0712,
-    search: "Maison de la Luz Bar Marilou New Orleans boutique hotel Warehouse",
-    note: "The most glamorous boutique hotel in New Orleans — embossed linen keys, twin grand staircases, and a bespoke concierge experience. Bar Marilou is accessed through a faux bookcase and has earned a devoted following for its European-accented cocktails. The Modern Muse (vodka, Pineau des Charentes, verjus, pepita orgeat, mint) is the signature. Non-guests are welcome at the bar.",
-    hours: "Daily 17:00–00:00",
-    tip: "You do not need to be staying to drink at Bar Marilou. Arrive before 8pm for a seat on a sofa.",
-    type: "Luxury Boutique Hotel & Bar",
+    search: "Maison Metier New Orleans Unbound Collection by Hyatt boutique hotel Warehouse District",
+    note: "New Orleans's most glamorous small hotel, now part of the Unbound Collection by Hyatt and a MICHELIN Key holder two years running. The interiors are by Studio Shamshiri: 67 rooms and suites that feel less like a hotel than a lavish, art-filled residence, blending restored heritage architecture with a curated global art collection. The signature experience is Salon Salon, a hidden cocktail bar and restaurant reached through a bookcase door, French in spirit and run with the Paris team behind the former Bar Marilou. Non-guests are welcome.",
+    hours: "Salon Salon: Mon–Thu 17:00–00:00; Fri–Sat 16:00–00:00; Sun 17:00–00:00",
+    tip: "You do not need to be a guest to visit Salon Salon: find the hidden door off Carondelet Street. Reserve on Resy, and time your visit for the live music on Tuesday and Thursday evenings.",
+    type: "Unbound Collection by Hyatt Hotel & Salon Salon Bar",
     blog: "",
-    phone: "+1 504-814-0770",
-    website: "https://www.maisondeluz.com",
+    phone: "+1 504-814-7720",
+    website: "https://maisonmetier.com",
   },
 
   {
@@ -689,6 +676,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-945-5635",
     website: "https://www.cafedegas.com",
+    resUrl: "https://www.opentable.com/cafe-degas",
   },
 
   {
@@ -726,7 +714,7 @@ const PLACES = [
     type: "Po-Boy Institution",
     blog: "",
     phone: "+1 504-482-3047",
-    website: "https://www.parkwaybakeryandtavern.com",
+    website: "https://www.parkwaypoorboys.com",
   },
 
   {
@@ -768,6 +756,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-506-9272",
     website: "https://www.kingswaynola.com",
+    resUrl: "https://www.opentable.com/r/kingsway-new-orleans",
   },
 
   {
@@ -825,6 +814,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-895-1111",
     website: "https://www.clancysneworleans.com",
+    resUrl: "https://resy.com/cities/new-orleans-la/venues/clancys",
   },
 
   {
@@ -900,6 +890,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-891-3377",
     website: "https://www.lapetitegrocery.com",
+    resUrl: "https://www.opentable.com/r/la-petite-grocery-new-orleans",
   },
 
   {
@@ -938,6 +929,7 @@ const PLACES = [
     blog: "",
     phone: "+1 504-399-6954",
     website: "https://www.fives.bar",
+    resUrl: "https://resy.com/cities/new-orleans-la/venues/fives-bar",
   },
 
   {

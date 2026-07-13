@@ -108,9 +108,13 @@ window.addEventListener('load', function() {
 
 // Add navigate button with distance to place cards
 window.addEventListener('load', function() {
+  // Navigate moved into the compact action row (Reserve · Call · Website · Navigate)
+  // in ui-card.js, so this full-width card button is disabled. List distance
+  // badges (updateListDistances) above are kept.
+  return;
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
-  
+
   new MutationObserver(function() {
     var name = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });

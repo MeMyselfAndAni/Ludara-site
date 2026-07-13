@@ -194,6 +194,15 @@ function _activateMarker(p){
   if(map) map.panTo({lat:p.lat, lng:p.lng});
 }
 
+// ── Booking button label, adapted to category (keeps the affordance truthful) ──
+function _reserveMeta(p){
+  const dining = ['food','pub','cafe','dining','bacaro','breakfast','lunch','dinner','bbq','bar'];
+  const ticketed = ['attraction','music'];
+  if(dining.includes(p.cat))   return { icon:'📅', label:'Reserve a table', short:'Reserve' };
+  if(ticketed.includes(p.cat))  return { icon:'🎟️', label:'Book tickets', short:'Tickets' };
+  return { icon:'🔗', label:'Book online', short:'Book' };
+}
+
 // ── Populate all fields ───────────────────────────────────────
 function _populateCard(p){
   CARD_PLACE = p;
@@ -245,9 +254,24 @@ function _populateCard(p){
     tipEl.style.display = 'none';
   }
 
+  // Compact action row: Reserve · Call · Website · Navigate (one line, always visible).
+  // Reserve appears ONLY when a real reservation link exists (resUrl).
   let contacts = '';
-  if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
-  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
+  if(p.resUrl){
+    const meta = _reserveMeta(p);
+    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
+  }
+  if(p.phone){
+    contacts += `<a class="pc-contact-pill pc-call-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>${p.phone}</a>`;
+  }
+  if(p.website){
+    contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener"><span class="pc-ico">🌐</span>Website</a>`;
+  }
+  if(p.lat && p.lng){
+    const dest = p.lat + ',' + p.lng;
+    const navUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+    contacts += `<a class="pc-contact-pill pc-nav-pill" href="${navUrl}" target="_blank" rel="noopener"><span class="pc-ico">🚶</span>Navigate</a>`;
+  }
   document.getElementById('pc-contacts').innerHTML = contacts;
 
   var awardsEl = document.getElementById('pc-awards');

@@ -26,7 +26,6 @@ const PHOTO_CREDITS = {
   21: { author: "TonyTheTiger", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:20080622_St._Charles_St._Trolley_behind_tree_with_Mardi_Gras_beads.JPG" },
   22: { author: "Commander's Palace", license: "", url: "https://www.commanderspalace.com", venue:true },
   23: { author: "MusikAnimal", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Tombs_at_Lafayette_Cemetery_No_1_Garden_District_New_Orleans.JPG" },
-  24: { author: "Coquette", license: "", url: "https://www.coquettenola.com", venue:true },
   25: { author: "Nicolas Henderson", license: "CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:New_Orleans,_LA_April_2017_-_Commercial_buildings_on_Magazine_Street.jpg" },
   26: { author: "The Avenue Pub", license: "", url: "https://theavenuepub.com", venue:true },
   27: { author: "Tony Webster", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:The_National_World_War_II_Museum_(27748358075).jpg" },
