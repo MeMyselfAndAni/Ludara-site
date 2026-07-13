@@ -199,9 +199,9 @@ function _activateMarker(p){
 function _reserveMeta(p){
   const dining = ['breakfast','lunch','dinner','bbq','bar'];
   const ticketed = ['attraction','music'];
-  if(dining.includes(p.cat))   return { icon:'📅', label:'Reserve a table' };
-  if(ticketed.includes(p.cat))  return { icon:'🎟️', label:'Book tickets' };
-  return { icon:'🔗', label:'Book online' };
+  if(dining.includes(p.cat))   return { icon:'📅', label:'Reserve a table', short:'Reserve' };
+  if(ticketed.includes(p.cat))  return { icon:'🎟️', label:'Book tickets', short:'Tickets' };
+  return { icon:'🔗', label:'Book online', short:'Book' };
 }
 
 // ── Populate all fields ───────────────────────────────────────
@@ -265,16 +265,26 @@ function _populateCard(p){
     tipEl.style.display = 'none';
   }
 
+  // Compact action row: Reserve · Call · Website · Navigate (one line, always visible).
   let contacts = '';
-  // One-click booking button: uses resUrl (OpenTable/Resy/Tock/own booking page)
-  // when present, otherwise falls back to the place's own website.
-  const bookUrl = p.resUrl || p.website;
-  if(bookUrl){
+  // Reserve button appears ONLY when a real reservation link exists (resUrl:
+  // OpenTable/Resy/Tock/own booking page). No resUrl means no Reserve button —
+  // the guest just gets Call, Website and Navigate.
+  if(p.resUrl){
     const meta = _reserveMeta(p);
-    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${bookUrl}" target="_blank" rel="noopener">${meta.icon} ${meta.label}</a>`;
+    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
   }
-  if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
-  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener">🌐 Website</a>`;
+  if(p.phone){
+    contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>Call</a>`;
+  }
+  if(p.website){
+    contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener"><span class="pc-ico">🌐</span>Website</a>`;
+  }
+  if(p.lat && p.lng){
+    const dest = p.lat + ',' + p.lng;
+    const navUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+    contacts += `<a class="pc-contact-pill pc-nav-pill" href="${navUrl}" target="_blank" rel="noopener"><span class="pc-ico">🚶</span>Navigate</a>`;
+  }
   document.getElementById('pc-contacts').innerHTML = contacts;
 
   var awardsEl = document.getElementById('pc-awards');

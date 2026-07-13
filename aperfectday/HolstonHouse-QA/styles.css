@@ -1607,23 +1607,25 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   margin-right: 5px;
 }
 
-/* Phone / website pills */
+/* Action row — Reserve · Call · Website · Navigate, four equal compact buttons */
 .pc-contacts {
   display: flex;
-  flex-wrap: nowrap;
   gap: 6px;
-  margin-bottom: 4px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  margin: 12px 0 4px;
 }
-.pc-contacts::-webkit-scrollbar { display: none; }
-.pc-contacts .pc-contact-pill { flex: 0 0 auto; }
 .pc-contact-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem; font-weight: 600;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 9px 4px;
+  border-radius: 12px;
+  font-size: 0.62rem; font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
   text-decoration: none;
   border: 1.5px solid #31261d;
   color: #31261d;
@@ -1632,17 +1634,18 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif;
   white-space: nowrap;
 }
+.pc-contact-pill .pc-ico { font-size: 1.05rem; line-height: 1; }
 .pc-contact-pill:hover { background: #31261d; color: white; }
 
-/* One-click booking button — filled accent so it reads as the primary action */
+/* One-click booking button — warm terracotta so it reads as the primary action */
 .pc-reserve-pill {
-  background: #b8960a;
-  border-color: #b8960a;
+  background: #c0562e;
+  border-color: #c0562e;
   color: #fff;
 }
 .pc-reserve-pill:hover {
-  background: #a3850a;
-  border-color: #a3850a;
+  background: #a3481f;
+  border-color: #a3481f;
   color: #fff;
 }
 
