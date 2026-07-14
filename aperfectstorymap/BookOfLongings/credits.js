@@ -12,7 +12,7 @@
 //   2  The Cave ......... Maria's own photo (a real Galilee cave, for the fictional place)
 //   3  Nazareth ......... Maria's own photo
 //   4  Sea of Galilee ... Maria's own photo
-//   5  Jordan River ..... Wikimedia Commons (Berthold Werner, CC BY 3.0)
+//   5  Jordan River ..... Maria's own photo
 //   6  Alexandria ....... Wikimedia Commons (Alberto-g-rovi, CC BY-SA 3.0)
 //   7  Temple of Isis ... AI illustration (ancient site, unlocated)
 //   8  Therapeutae ...... AI illustration (ancient site, unlocated)
