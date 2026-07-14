@@ -105,11 +105,11 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 
-  /* ── Splash card — ancient parchment / lamplight ── */
-  /* Image-light demo: no photograph behind the splash, just a warm dark wash. */
+  /* ── Splash card — Galilee hills backdrop (Maria's photo, images/splash.jpg) ── */
+  /* Dark wash over the landscape so the gold title stays readable. */
   .splash { background:
-    linear-gradient(rgba(20,16,10,0.88), rgba(12,10,7,0.94)),
-    radial-gradient(circle at 50% 28%, #2a2416, #0f0d0a) !important; }
+    linear-gradient(rgba(12,10,7,0.80), rgba(12,10,7,0.90)),
+    url('images/splash.jpg') center / cover no-repeat #0f0d0a !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
     background: #0f0d0a !important; color: #d4a043 !important;

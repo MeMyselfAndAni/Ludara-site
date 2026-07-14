@@ -28,7 +28,7 @@ const PHOTO_CREDITS = {
   2:  { author: 'Maria Lando' },
   3:  { author: 'Maria Lando' },
   4:  { author: 'Maria Lando' },
-  5:  { author: 'Berthold Werner', license: 'CC BY 3.0',    url: 'https://commons.wikimedia.org/wiki/File:Jordan_Baptism_site_BW_4.JPG' },
+  5:  { author: 'Maria Lando' },
   6:  { author: 'Alberto-g-rovi', license: 'CC BY-SA 3.0',  url: 'https://commons.wikimedia.org/wiki/File:Ciudadela_de_qaitbay-alejandria-2007.JPG' },
   7:  { prefix: 'Illustration', author: 'generated for A Perfect Story Map' },
   8:  { prefix: 'Illustration', author: 'generated for A Perfect Story Map' },
