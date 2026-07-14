@@ -210,6 +210,7 @@
     <div class="pc-address" id="pc-address"></div>
     <div class="pc-awards" id="pc-awards" style="display:none"></div>
     <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-contacts" id="pc-contacts"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
       <span class="pc-emily-by"></span>
@@ -218,7 +219,6 @@
       <span class="pc-tip-label">💡 Visitor Tip</span>
       <span id="pc-tip-text"></span>
     </div>
-    <div class="pc-contacts" id="pc-contacts"></div>
     <div class="pc-counter" id="pc-counter" style="display:none"></div>
   </div>
 </div>
@@ -379,6 +379,9 @@ window.addEventListener('load', function() {
 <!-- Navigate button — injected into card when a place opens, shows distance if location known -->
 <script>
 window.addEventListener('load', function() {
+  // Navigate now lives in the compact action row (Reserve · Call · Website · Navigate)
+  // built in ui-card.js, so this standalone full-width button is disabled.
+  return;
   var titleEl = document.getElementById('pc-title');
   if (!titleEl) return;
   new MutationObserver(function() {
