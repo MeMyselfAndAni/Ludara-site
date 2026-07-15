@@ -108,7 +108,7 @@
   /* ── Splash card — Galilee hills backdrop (Maria's photo, images/splash.jpg) ── */
   /* Dark wash over the landscape so the gold title stays readable. */
   .splash { background:
-    linear-gradient(rgba(12,10,7,0.80), rgba(12,10,7,0.90)),
+    linear-gradient(rgba(12,10,7,0.28), rgba(12,10,7,0.58)),
     url('images/splash.jpg') center / cover no-repeat #0f0d0a !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
@@ -125,6 +125,7 @@
     max-width: 1200px !important;
     width: 95vw !important;
     text-align: center;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.6);
   }
   .splash-eyebrow {
     font-family: 'Cinzel Decorative', serif;
@@ -183,6 +184,7 @@
     padding: 13px 36px !important;
     border-radius: 0 !important;
     cursor: pointer;
+    text-shadow: none !important;
     transition: background 0.2s, color 0.2s;
   }
   .splash-btn:hover {
