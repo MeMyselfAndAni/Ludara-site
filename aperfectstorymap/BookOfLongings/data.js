@@ -62,7 +62,7 @@ const PLACES = [
     search: 'Nazareth old city Galilee hills stone houses',
     note: 'The heart of the novel: the small, poor village where Ana makes a married life with Jesus, his mother Mary, and his brothers, trading the comfort of Sepphoris for a crowded compound and the daily work of a peasant household. Nazareth was an obscure Galilean hamlet in the first century, which is precisely why the book sets Ana\'s deepest years here, far from her father\'s court. Today it is the largest Arab city in Israel; at its open-air Nazareth Village, first-century terraces, olive presses and houses are rebuilt to show the world Ana steps into.',
     book: 'The heart of the book: the marriage years',
-    visit: 'Nazareth Village, an open-air recreation of first-century life, is the closest you can come to Ana and Jesus\'s daily world.',
+    visit: 'The domed Basilica of the Annunciation is Nazareth\'s great landmark. Tradition places the angel\'s visit to Mary here. For the world of the book, Nazareth Village recreates first-century life in the open air.',
     type: 'With Jesus, his mother Mary, and Yaltha',
     website: 'https://www.nazarethvillage.com',
   },
@@ -122,7 +122,7 @@ const PLACES = [
     search: 'Jerusalem Temple Mount Western Wall old city stone',
     note: 'The great pilgrim destination of the book\'s Judea: the Temple that draws Ana and Jesus, with the Passover crowds, up to Jerusalem. In the novel\'s time this was Herod\'s Temple, the vast rebuilt sanctuary at the centre of Jewish life. Rome destroyed it in the year 70, a generation after the story; what survives is the Western Wall, part of the huge platform that held it, still the most revered site in Judaism. The scale of the place is the point: it is the stage on which the story turns from a marriage to a public tragedy.',
     book: 'Passover in Jerusalem',
-    visit: 'The Western Wall and the Temple Mount platform stand in the Old City; modest dress and security checks apply.',
+    visit: 'The photo shows the Second Temple model at the Israel Museum, Jerusalem. The Temple itself was destroyed by Rome soon after the novel. Today the Western Wall and the Temple Mount platform remain in the Old City.',
     type: 'Ana, Jesus and the Passover crowds',
   },
   {
