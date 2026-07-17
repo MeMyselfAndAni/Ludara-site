@@ -760,6 +760,16 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 }
 .splash.hidden { opacity: 0; pointer-events: none; display: none; }
 
+/* Larger splash on laptop / desktop only — phones keep the base sizes above */
+@media (min-width: 768px) {
+  .splash-inner     { max-width: 600px; gap: 24px; }
+  .splash-hh-logo   { height: 260px; max-width: 560px; }
+  .splash-hotel-desc { font-size: 1.2rem; max-width: 520px; }
+  .splash-city-desc { font-size: 1.0rem; max-width: 520px; }
+  .splash-btn       { font-size: 1.12rem; padding: 16px 46px; }
+  .splash-footer a  { font-size: 0.78rem; }
+}
+
 /* ── OPEN NOW PILL ── */
 .pill-opennow { border-color: #802f2d; color: white; }
 .pill-opennow.active { background: #802f2d; border-color: #802f2d; color: white; }
@@ -1647,6 +1657,13 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   background: #a07f45;
   border-color: #a07f45;
   color: #fff;
+}
+
+/* Call button shows the actual number — smaller so it wraps to two lines and fits */
+.pc-call-pill {
+  font-size: 0.52rem;
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* Counter (nbhd mode) */
