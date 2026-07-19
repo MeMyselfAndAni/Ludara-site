@@ -27,7 +27,7 @@ const STRINGS = {
       drag_reorder:'Drag ⠿ to reorder stops', itinerary:'🗺 Itinerary', auto:'↺ Auto',
       empty_saved:'Tap ♡ on any place<br>to save it here',
       saved_cleared:'Saved places cleared.', on_map:'on map',
-      splash_welcome:"Welcome to Winterthur — Henry Francis du Pont's country estate, where a naturalistic 60-acre garden, a house filled with American decorative arts, and children's Enchanted Woods spread across a thousand acres. This guide helps you find each garden, gallery and trail, and plan your own day across the estate.",
+      splash_welcome:"Welcome to Winterthur — Henry Francis du Pont's country estate, with a naturalistic 60-acre garden, a house of American decorative arts, and the children's Enchanted Woods, set across a thousand acres. This guide helps you find your way and plan a perfect day.",
       splash_hours:'🕐 Open Tuesday–Sunday · 10:00 am–5:00 pm · Garden, house & galleries',
       splash_enter:'Enter the Estate Map',
       splash_note:'A demo guide built from winterthur.org · July 2026.',
