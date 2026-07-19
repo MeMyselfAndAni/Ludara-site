@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Perfect Day at Winterthur — Museum, Garden &amp; Library</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Open Graph / WhatsApp rich preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Winterthur · A Perfect Day">
+<meta property="og:title" content="A Perfect Day at Winterthur Museum, Garden & Library">
+<meta property="og:description" content="An interactive visitor map of the Winterthur estate: the historic house and galleries, the naturalistic 60-acre garden, Enchanted Woods and every trail — with the story behind each place. Works on any phone, no app.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="styles.css">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Suez+One&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+  /* ── BRAND COLOR — Winterthur gold ── */
+  :root { --brand: #b8860b; --brand-faint: rgba(184,134,11,0.12); --brand-glow: rgba(184,134,11,0.3); }
+
+  .mgl-marker { background: none !important; border: none !important; }
+  .maplibregl-ctrl-bottom-right { bottom: 80px !important; }
+  .maplibregl-ctrl-attrib { font-size: 9px !important; }
+
+  /* Hebrew runs render right-to-left automatically; this keeps mixed lines tidy */
+  .he { direction: rtl; unicode-bidi: isolate; }
+
+  /* Neighbourhood bubbles */
+  .nbhd-bubble { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .nbhd-label { white-space: normal !important; text-align: center; max-width: 72px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+
+  .pc-photo-img { object-fit: contain !important; }
+  .pc-address { font-size: 0.8rem; color: #8a7d6c; margin: 2px 0 6px; }
+  .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
+
+  .sheet { display: flex !important; flex-direction: column !important; }
+  .places-list { flex: 1 1 auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; overscroll-behavior: contain !important; max-height: none !important; padding-bottom: 60px !important; }
+  .saved-empty-hint { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 28px; text-align: center; }
+  .saved-empty-icon { font-size: 1.8rem; width: 60px; height: 60px; border-radius: 50%; background: color-mix(in srgb, var(--brand) 12%, white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--brand); }
+  .saved-empty-title { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .saved-empty-body { font-size: 0.78rem; color: #999; line-height: 1.65; max-width: 220px; }
+
+  .locate-btn.locate-active { box-shadow: 0 0 0 3px var(--brand-faint) !important; }
+  .pc-btn-nav { opacity: 1 !important; pointer-events: all !important; }
+  .pc-btn-nav.prev { left: 14px; right: auto; }
+  .pc-btn-nav.next { right: 14px; left: auto; }
+
+  .pill-saved { border-color: var(--brand) !important; color: var(--brand) !important; }
+  .pill-saved:hover { background: white !important; }
+  .pill-saved.active { background: var(--brand) !important; border-color: var(--brand) !important; color: white !important; }
+  .pill-saved-count { color: var(--brand) !important; }
+  .pill-saved.active .pill-saved-count { color: white !important; }
+  .pc-btn-fav.faved { color: #e0245e !important; }
+  .saved-action-btn { display:inline-flex; align-items:center; justify-content:center; flex:1; min-width:80px; padding:9px 8px; border:none; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer; font-family:'Rubik',sans-serif; background:var(--brand); color:white; transition:filter 0.15s; }
+  .saved-action-btn:hover { filter:brightness(0.9); }
+
+  #pc-body { position: relative; }
+  #pc-body::after { content:''; pointer-events:none; position:sticky; bottom:0; left:0; right:0; display:block; height:32px; margin-top:-32px; background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.95)); }
+
+  .user-dot-inner { width:14px !important; height:14px !important; border-radius:50% !important; background:var(--brand) !important; border:2.5px solid white !important; box-shadow:0 0 0 3px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.35) !important; }
+  .user-dot-outer { width:14px !important; height:14px !important; }
+
+  .saved-panel { display:flex !important; flex-direction:column !important; }
+  #saved-place-list { flex:1 1 auto !important; overflow-y:auto !important; -webkit-overflow-scrolling:touch !important; overscroll-behavior:contain !important; padding-bottom:120px !important; }
+  .saved-item-num { width:22px; height:22px; border-radius:50%; background:var(--brand); color:white; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin:0 8px 0 2px; }
+  .saved-stats-bar { display:flex; align-items:center; gap:6px; padding:8px 16px; background:rgba(0,0,0,0.04); font-size:0.75rem; font-weight:600; color:#555; border-bottom:1px solid #eee; flex-wrap:wrap; }
+  .saved-walk-connector { text-align:center; font-size:0.68rem; color:#aaa; padding:4px 0; font-weight:500; border-bottom:1px dashed #f0f0f0; }
+  .pc-btn-fav { font-size: 1.6rem !important; }
+  .pill-saved .heart-icon { font-size: 1.3em; vertical-align: -0.1em; }
+  #saved-panel-count .heart-icon { font-size: 1.3em; vertical-align: -0.1em; color: var(--brand); }
+  .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
+
+  /* ── Splash — MUZA ── */
+  .splash { background: linear-gradient(150deg, #24463a 0%, #2f5347 55%, #6b5a1c 100%) !important; }
+  .splash-inner { border: 1px solid rgba(233,225,210,0.5) !important; outline: 1px solid rgba(233,225,210,0.2) !important; outline-offset: 7px !important; background: rgba(20,16,14,0.30) !important; padding: 36px 60px 30px !important; max-width: 820px !important; width: 92vw !important; text-align:center; }
+  .splash-eyebrow { font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:600; letter-spacing:0.34em; color:#e6c34d; text-transform:uppercase; margin-bottom:14px; }
+  .splash-title { font-family:'Suez One',serif; font-weight:700; color:#f7f1e8; font-size:clamp(1.6rem,4.2vw,2.3rem); line-height:1.1; letter-spacing:0.02em; margin:2px 0 8px; text-shadow:0 2px 18px rgba(0,0,0,0.5); }
+  .splash-he { font-family:'Suez One',serif; direction:rtl; font-size:clamp(2.0rem,6vw,3.0rem); font-weight:400; color:#f7f1e8; letter-spacing:0.03em; line-height:1.1; margin:0 0 18px; text-shadow:0 2px 18px rgba(0,0,0,0.5); }
+  .splash-ornament { display:block; color:#e6c34d; font-size:1rem; letter-spacing:0.6em; margin:0 auto 14px; }
+  .splash-sub { font-family:'Rubik',sans-serif; font-size:1.04rem; font-weight:300; line-height:1.7; color:rgba(247,241,232,0.95); max-width:520px; margin:0 auto 26px; }
+  .splash-btn { font-family:'Suez One',serif !important; font-size:0.82rem !important; letter-spacing:0.2em !important; text-transform:uppercase; background:#e6c34d !important; border:1px solid #e6c34d !important; color:#2f5347 !important; padding:13px 38px !important; border-radius:0 !important; cursor:pointer; transition:background 0.2s,color 0.2s; }
+  .splash-btn:hover { background:transparent !important; color:#e6c34d !important; }
+  .splash-note { font-family:'Rubik',sans-serif; font-size:0.72rem; color:rgba(233,201,176,0.7); margin-top:18px; }
+  .splash-footer { margin-top:14px; font-size:0.85rem; font-weight:700; }
+  .splash-footer a { color:#e6c34d; text-decoration:none; }
+  .splash-footer a:hover { color:#fff; }
+  .splash-sub.he { margin-bottom:12px; }
+  @media (max-width:600px){
+    .splash-inner { padding:30px 20px 24px !important; }
+    .splash-sub { font-size:0.86rem !important; line-height:1.55 !important; margin-bottom:10px; }
+  }
+
+  /* ── Brand fonts ── */
+  body { font-family:'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .pc-title, #pc-title { font-family:'Rubik', -apple-system, 'Segoe UI', sans-serif; font-weight:700; letter-spacing:-0.005em; line-height:1.2; }
+  .place-name { font-family:'Rubik', sans-serif !important; font-size:1.05rem !important; font-weight:600 !important; line-height:1.25 !important; }
+  .place-type { font-size:0.74rem !important; }
+
+  /* ── Header — MUZA ── */
+  header { background:#2f5347 !important; }
+  /* Centered MUZA (Hebrew) logo — museum logo is dark, so render it white on the dark header */
+  .header-muza-center { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:30px; width:auto; max-width:42vw; object-fit:contain; filter:brightness(0) invert(1); opacity:0.95; z-index:3; pointer-events:none; }
+  .wl-logo { color:#f5efe6 !important; }
+  .header-divider { background:rgba(245,239,230,0.35) !important; }
+  .header-text h1, .header-text h1 em { color:#f5efe6 !important; font-family:'Suez One', Georgia, serif !important; font-style:normal !important; }
+  .header-sub { color:rgba(245,239,230,0.8) !important; }
+  .header-ludara-text, .ludara-line1, .ludara-line2, .header-ludara-brand { color:rgba(245,239,230,0.85) !important; }
+  /* Hide the old multi-part right side + the redundant centre block */
+  .header-btn, .header-ludara, .header-apd-mobile { display:none !important; }
+  /* Single credit link on the right — hover reveals it is a link to aperfectday */
+  .header-credit-link, .header-credit-link:link, .header-credit-link:visited { margin-left:auto; align-self:center; color:rgba(245,239,230,0.85) !important; text-decoration:none !important; cursor:pointer; pointer-events:auto; font-family:'Rubik',sans-serif; font-size:0.82rem; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; transition:color 0.15s, background 0.15s; }
+  .header-credit-link:hover { color:#ffffff !important; text-decoration:underline !important; background:rgba(245,239,230,0.14); }
+  @media (max-width:768px){
+    header { display:flex !important; flex-direction:row !important; align-items:center !important; justify-content:space-between !important; gap:8px !important; height:56px !important; min-height:56px !important; padding:5px 10px !important; }
+    .header-title { order:1 !important; display:flex !important; flex-direction:column !important; align-items:flex-start !important; justify-content:center !important; gap:0 !important; flex:1 1 auto !important; min-width:0 !important; position:static !important; transform:none !important; padding:0 !important; max-width:44% !important; }
+    .header-title > a, .header-divider, .header-text { display:none !important; }
+    .header-apd-mobile { display:flex !important; flex-direction:column !important; align-items:flex-start !important; }
+    .header-apd-m1 { font-family:'Rubik', sans-serif !important; font-size:0.8rem !important; line-height:1.18 !important; letter-spacing:0.02em !important; color:#e6c34d !important; }
+    .header-apd-m1b { font-family:'Suez One', Georgia, serif !important; font-size:0.86rem !important; line-height:1.14 !important; color:#f5efe6 !important; white-space:nowrap !important; }
+    .header-apd-m2 { display:none !important; }   /* drop "Pavilions & current exhibitions" on mobile */
+    .header-credit-link { order:2 !important; position:static !important; flex:0 0 auto !important; align-self:center !important; margin:0 !important; font-size:0.72rem !important; max-width:112px !important; white-space:normal !important; text-align:right !important; line-height:1.25 !important; padding:1px 2px 1px 4px !important; }
+    .header-muza-center { height:17px !important; max-width:30vw !important; }
+    .filter-bar { top:66px !important; margin-top:0 !important; }
+    #lang-fixed { top:108px !important; right:10px !important; }   /* language toggle */
+    #lang-menu { top:146px !important; right:10px !important; }     /* menu opens below the toggle */
+    #list-toggle { top:150px !important; }                          /* "Places" button sits right below the language toggle */
+  }
+  /* Bilingual cards — render the \n in the data as real line breaks so English and Hebrew sit on separate lines */
+  #pc-note { white-space: pre-line; }
+  /* Remove the decorative vertical rule on the description block */
+  .pc-note-wrap { border-left: 0 !important; }
+  /* Tip — Hebrew line then English line */
+  #pc-tip-text { display:block; white-space:pre-line; margin-top:3px; }
+  /* Title row — English name on the left, Hebrew name on the right, same size */
+  #pc-title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+  #pc-title-row #pc-title, #pc-title-he { font-size:1.2rem !important; line-height:1.2 !important; flex:1 1 0; min-width:0; }
+  #pc-title-he { direction:rtl; text-align:right; font-family:'Suez One', Georgia, serif; font-weight:700; letter-spacing:0.01em; color:#1f1b18; }
+
+  /* ── Filter pills ── */
+  .filter-bar { padding-top:0 !important; padding-bottom:4px !important; margin-top:-5px !important; }
+  .filter-bar .pill { font-family:'Rubik',sans-serif !important; font-size:0.84rem !important; font-weight:600 !important; padding:7px 14px !important; letter-spacing:0.005em; }
+  .filter-bar .pill .dot { width:9px !important; height:9px !important; }
+  @media (max-width:768px){ .filter-bar .pill { font-size:0.78rem !important; padding:6px 12px !important; } }
+  .filter-bar .pill.active { background:#2f5347 !important; border-color:#2f5347 !important; color:#fff !important; }
+  .filter-bar .pill-saved.active { background:var(--brand) !important; border-color:var(--brand) !important; color:#fff !important; }
+  .filter-bar .pill-saved.active .heart-icon, .filter-bar .pill-saved.active .pill-saved-count { color:#fff !important; }
+
+  /* ── Zone bubble bar ── */
+  #nbhd-bar { background:#2f5347 !important; padding:2px 10px 4px !important; }
+  #nbhd-title { color:#2f5347 !important; bottom:86px !important; font-weight:700 !important; font-size:0.8rem !important; letter-spacing:0.14em !important; }
+  .nbhd-ring { width:48px !important; height:48px !important; padding:2px !important; }
+  .nbhd-ring-inner { font-size:18px !important; }
+  .nbhd-label { font-family:'Rubik',sans-serif !important; color:#f5efe6 !important; font-size:0.72rem !important; font-weight:600 !important; max-width:82px !important; line-height:1.2 !important; }
+  .nbhd-active .nbhd-ring { background:#e6c34d !important; color:#2f5347 !important; }
+
+  #offline-save-btn, #list-toggle-desktop, .desktop-list-btn, .list-toggle { background:#2f5347 !important; }
+  .trip-btn-circle { background:#2f5347 !important; border-color:rgba(233,201,176,0.7) !important; }
+  .trip-btn-circle.active { background:#e6c34d !important; border-color:#2f5347 !important; border-width:3px !important; }
+  button[onclick="restartTutorial()"] { background:#2f5347 !important; color:#e6c34d !important; border-color:rgba(233,201,176,0.5) !important; }
+</style>
+</head>
+<body>
+
+<!-- Welcome Splash -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-eyebrow">A Perfect Day</div>
+    <h1 class="splash-title">Winterthur</h1>
+    <div style="font-family:'Suez One',Georgia,serif;font-size:clamp(1.0rem,3vw,1.4rem);color:#f7f1e8;letter-spacing:0.05em;margin:0 0 16px;opacity:0.92">Museum, Garden &amp; Library</div>
+    <span class="splash-ornament">— ✦ —</span>
+    <!-- Single screen: auto-detected language intro, hours, Enter, and one-tap other-language buttons -->
+    <div id="splash-info">
+      <p class="splash-sub" id="splash-sub-text"></p>
+      <div style="margin:0 auto 22px;padding:10px 18px;border:1px solid rgba(233,201,176,0.45);border-radius:7px;display:inline-block;font-family:'Rubik',sans-serif;line-height:1.5">
+        <div id="splash-hours-text" style="font-size:0.9rem;color:#f7f1e8"></div>
+      </div>
+      <div><button class="splash-btn" id="splash-enter-btn" onclick="closeSplash()" style="min-width:240px">Enter the Estate Map</button></div>
+      <div style="margin-top:18px">
+        <div class="splash-lang-label" id="splash-otherlang" style="margin-bottom:8px"></div>
+        <div class="splash-lang-row" id="splash-lang-row"><!-- other-language buttons generated by renderSplashInfo() --></div>
+      </div>
+      <div class="splash-note" id="splash-note-text" style="margin-top:16px"></div>
+    </div>
+    <div class="splash-footer">
+      <a href="https://ludara.ai/aperfectday/" target="_blank">by Ludara.AI</a>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading the estate…</div>
+</div>
+
+<style>
+  /* ── Language toggle — fixed, upper-right, above the Places button ── */
+  #lang-fixed{ position:fixed; z-index:430; top:128px; right:16px;
+    background:#9e2b25; color:#fff; border:1.5px solid #fff; border-radius:50px;
+    padding:6px 12px; font-family:'Rubik',sans-serif; font-weight:700; font-size:0.72rem;
+    line-height:1; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.42); white-space:nowrap; }
+  #lang-fixed b{ font-weight:800; }
+  #lang-fixed #lang-label{ display:inline-flex; align-items:center; gap:5px; }
+  #lang-fixed svg{ display:inline-block; vertical-align:-2px; border-radius:2px; }
+  /* Language menu (opens below the toggle; scales to any number of languages) */
+  #lang-menu{ display:none; position:fixed; z-index:431; top:166px; right:16px; background:#2f5347; border:1.5px solid #e6c34d; border-radius:12px; padding:5px; box-shadow:0 6px 20px rgba(0,0,0,0.5); }
+  #lang-menu .lang-opt{ display:flex; align-items:center; gap:8px; width:100%; min-width:132px; background:none; border:none; color:#f5efe6; font-family:'Rubik',sans-serif; font-size:0.86rem; font-weight:600; padding:9px 14px; border-radius:8px; cursor:pointer; white-space:nowrap; text-align:start; }
+  #lang-menu .lang-opt:hover{ background:rgba(233,201,176,0.16); }
+  #lang-menu .lang-opt.active{ background:#9e2b25; }
+  #lang-menu .lang-opt svg{ border-radius:2px; flex:0 0 auto; }
+  /* Desktop: keep the Places button clearly below the language toggle (overrides styles.css top:140) */
+  @media (min-width:769px){
+    #lang-fixed { top:124px; right:18px; }
+    #lang-menu  { top:162px; right:18px; }
+    #list-toggle { top:184px !important; right:18px !important; }
+  }
+
+  /* ── Hebrew mode: right-align text areas (map chrome stays LTR) ── */
+  body.rtl .pc-title,
+  body.rtl .pc-type,
+  body.rtl .pc-address,
+  body.rtl .pc-note,
+  body.rtl .pc-tip,
+  body.rtl #pc-tip-text,
+  body.rtl .pc-cat,
+  body.rtl .place-info,
+  body.rtl .sheet-title{ direction:rtl; text-align:right; }
+  body.rtl .pc-tip{ text-align:right; }
+
+  /* Splash language chooser — both intros show; visitor picks a language */
+  .splash-lang-label{ font-family:'Rubik',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#e6c34d; margin:0 0 14px; }
+  .splash-lang-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .splash-btn-en{ background:transparent !important; color:#e6c34d !important; }
+  .splash-btn-en:hover{ background:#e6c34d !important; color:#2f5347 !important; }
+  .splash-btn-alt{ font-size:0.72rem !important; padding:9px 20px !important; letter-spacing:0.12em !important; background:transparent !important; color:#e6c34d !important; }
+  .splash-btn-alt:hover{ background:#e6c34d !important; color:#2f5347 !important; }
+</style>
+
+<!-- Header -->
+<header>
+  <div class="header-title">
+    <a href="https://ludara.ai/aperfectday/" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
+      <span class="wl-logo">A Perfect Day</span>
+    </a>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <h1 data-i18n-html="hdr_guide_h1"><em>Winterthur</em> Visitor Guide</h1>
+      <div class="header-sub" data-i18n="hdr_sub">Museum, Garden &amp; Library</div>
+    </div>
+    <div class="header-apd-mobile">
+      <div class="header-apd-m1" data-i18n="hdr_apd_in">A Perfect Day at</div>
+      <div class="header-apd-m1b" data-i18n="hdr_museum">Winterthur</div>
+      <div class="header-apd-m2" data-i18n="hdr_sub">Museum, Garden &amp; Library</div>
+    </div>
+  </div>
+  <a class="header-credit-link" href="https://ludara.ai/aperfectday/" target="_blank" rel="noopener" aria-label="Open A Perfect Day by Ludara.AI" title="Link — opens A Perfect Day at ludara.ai/aperfectday" data-i18n="credit">Interactive map by Ludara.AI ↗</a>
+</header>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> <span data-i18n="f_saved">Saved</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span><span data-i18n="f_all">All</span></button>
+  <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_pavilion">House &amp; Galleries</span></button>
+  <button class="pill" onclick="fc(this,'outdoor')"><span class="dot" style="background:#3f7d4e"></span><span data-i18n="f_outdoor">Gardens</span></button>
+  <button class="pill" onclick="fc(this,'hall')"><span class="dot" style="background:#c8761b"></span><span data-i18n="f_hall">Family</span></button>
+  <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#b1892b"></span><span data-i18n="f_heritage">Tram Tour</span></button>
+  <button class="pill" onclick="fc(this,'service')"><span class="dot" style="background:#3a6ea5"></span><span data-i18n="f_service">Eat &amp; Shop</span></button>
+</div>
+
+<!-- Language toggle — fixed, upper-right, above the Places button -->
+<button id="lang-fixed" onclick="toggleLang()" title="Language" aria-label="Switch language" style="display:none"><span id="lang-label">EN</span></button>
+<div id="lang-menu"><!-- options generated from LANGS by updateLangToggle() --></div>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Zone bubble bar -->
+<div id="nbhd-title" data-i18n="zones_title">Campus zones</div>
+<div id="nbhd-bar">
+  <div class="nbhd-bar-handle" id="nbhd-handle">
+    <div class="nbhd-handle-grip">⠿</div>
+  </div>
+  <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
+    <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
+      <span class="nbhd-label" data-i18n="z_all">All</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-core" role="button" tabindex="0" onclick="selectNbhd('core', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🏛️</div></div>
+      <span class="nbhd-label" data-i18n="z_core">Museum &amp; House</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-east" role="button" tabindex="0" onclick="selectNbhd('east', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌸</div></div>
+      <span class="nbhd-label" data-i18n="z_east">The Garden</span>
+    </div>
+    <div class="nbhd-bubble" id="nbhd-park" role="button" tabindex="0" onclick="selectNbhd('park', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🌳</div></div>
+      <span class="nbhd-label" data-i18n="z_park">Visitor Center</span>
+    </div>
+  </div>
+</div>
+
+<!-- Place card -->
+<div id="place-card-dim" onclick="closePlaceCard(true)"></div>
+<div id="place-card">
+  <div class="pc-photo-wrap" id="pc-photo-wrap">
+    <div class="pc-photo-placeholder" id="pc-emoji">📍</div>
+    <img class="pc-photo-img" id="pc-img" alt="">
+    <span class="pc-photo-credit" id="pc-credit"></span>
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
+    <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
+    <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">♡</button>
+    <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
+    <button class="pc-btn-nav next" id="pc-nav-next" onclick="cardNext()" style="display:none">›</button>
+  </div>
+  <div class="pc-body" id="pc-body">
+    <div class="pc-cat" id="pc-cat"></div>
+    <div class="pc-title" id="pc-title"></div>
+    <div class="pc-type" id="pc-type"></div>
+    <div class="pc-address" id="pc-address"></div>
+    <div class="pc-awards" id="pc-awards" style="display:none"></div>
+    <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-note-wrap">
+      <div class="pc-note" id="pc-note"></div>
+    </div>
+    <div class="pc-tip" id="pc-tip" style="display:none">
+      <span class="pc-tip-label" data-i18n="tip_label">💡 Tip</span>
+      <span id="pc-tip-text"></span>
+    </div>
+    <div class="pc-contacts" id="pc-contacts"></div>
+    <div class="pc-counter" id="pc-counter" style="display:none"></div>
+  </div>
+</div>
+
+<div id="stories-overlay"></div>
+<div id="pin-pulse"></div>
+
+<!-- Trip plan overlay -->
+<div id="trip-overlay">
+  <div class="trip-panel">
+    <div class="trip-header">
+      <div class="trip-title" data-i18n="trip_title">🗺 Your Saved Places Route</div>
+      <button class="trip-close" onclick="closeTripPlan()">✕</button>
+    </div>
+    <div id="trip-content" class="trip-content"></div>
+    <div class="trip-footer">
+      <button class="trip-maps-btn" onclick="openTripInMaps()" data-i18n="trip_maps">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()" data-i18n="trip_pdf">⬇ Download PDF Guide</button>
+      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()" data-i18n="trip_share">🔗 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- List toggle (mobile) -->
+<button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
+  <span class="list-toggle-icon">☰</span>
+  <span class="list-toggle-label" data-i18n="places">Places</span>
+  <span class="count-badge" id="list-badge">25</span>
+</button>
+
+<button onclick="restartTutorial()" title="Show tutorial" style="
+  position:fixed; bottom:224px; right:12px; z-index:1100;
+  border:none; border-radius:24px; padding:8px 14px; font-size:0.72rem;
+  font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  font-family:'Suez One',serif; letter-spacing:0.08em; -webkit-tap-highlight-color:transparent;">
+  <span data-i18n="guide">Guide</span>
+</button>
+
+
+<button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
+</button>
+
+<!-- Save-for-offline button — caches the whole guide so it works on the grounds without a signal -->
+<button class="locate-btn" id="offline-save-btn" onclick="saveOffline(this)" title="Save this guide for offline use" style="bottom:154px">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+</button>
+<script>
+function saveOffline(btn){
+  try{
+    if('serviceWorker' in navigator && navigator.serviceWorker.controller){
+      navigator.serviceWorker.controller.postMessage({ action:'SAVE_OFFLINE' });
+    }
+    if(btn){ btn.classList.add('locate-active'); setTimeout(function(){ btn.classList.remove('locate-active'); }, 1800); }
+    var text = '✓ Saved for offline — works on the grounds without a signal';
+    if(typeof _toast === 'function'){ _toast(text, 3000); return; }
+    var el = document.getElementById('_offline-toast'); if(el) el.remove();
+    el = document.createElement('div'); el.id='_offline-toast'; el.textContent = text;
+    el.style.cssText='position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#2f5347;color:#e6c34d;padding:10px 18px;border-radius:24px;border:2px solid #e6c34d;font-family:Rubik,sans-serif;font-weight:600;font-size:0.78rem;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.4)';
+    document.body.appendChild(el); setTimeout(function(){ if(el.parentNode) el.remove(); }, 3000);
+  }catch(e){}
+}
+</script>
+
+<button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
+  <span id="list-toggle-desktop-icon">☰</span>
+  <span data-i18n="places">Places</span>
+  <span id="list-badge-desktop">25</span>
+</button>
+
+<!-- Places list sheet -->
+<div class="sheet" id="sheet">
+  <div class="sheet-handle-area" onclick="toggleSheet()">
+    <div class="sheet-handle"></div>
+  </div>
+  <div class="sheet-header">
+    <span class="sheet-title" id="sheet-title">25 Places</span>
+    <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" data-i18n="clear_btn">🗑 Clear</button>
+    <button class="sheet-close" onclick="toggleSheet()">✕</button>
+  </div>
+  <div class="places-list" id="places-list"></div>
+  <div class="list-footer-brand">
+    <span data-i18n="footer_by">Interactive map by</span>
+    <a href="https://ludara.ai/aperfectday/" target="_blank">A Perfect Day · Ludara.AI</a>
+  </div>
+</div>
+
+<!-- Saved Panel -->
+<div id="saved-panel" class="saved-panel">
+  <div class="saved-panel-header">
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">♥</span> <span data-i18n="saved_panel">Your Saved Places</span></div>
+    <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
+  </div>
+  <div class="saved-panel-actions">
+    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()" data-i18n="full_route">🗺 Full Route</button>
+    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()" data-i18n="pdf_guide">📄 PDF Guide</button>
+    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()" data-i18n="save_map">🖼 Save Map</button>
+  </div>
+  <div class="saved-place-list" id="saved-place-list">
+    <div class="saved-empty-hint">
+      <div class="saved-empty-icon">♡</div>
+      <div class="saved-empty-title" data-i18n="no_saved_title">No saved places yet</div>
+      <div class="saved-empty-body" data-i18n="no_saved_body">Tap ♡ on any pavilion to save it here — then plan your route, download a PDF, or save the map for offline use.</div>
+    </div>
+  </div>
+</div>
+
+<button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
+  <span class="desktop-list-btn-icon">☰</span>
+  <span data-i18n="places">Places</span>
+  <span class="desktop-list-count" id="desktop-list-count">25</span>
+</button>
+
+<!-- JS modules — load order is critical, do not reorder -->
+<script>const IMAGES_PATH = "photos/";</script>
+<script>let map;</script>
+<script src="data.js"></script>
+<script src="credits.js"></script>
+<script src="photos.js"></script>
+<script src="map-core.js"></script><!-- MUST be before map.js -->
+<script src="map.js"></script>
+<script src="ui-card.js"></script>
+<script src="ui-filter.js"></script>
+<script src="ui-stories.js"></script>
+<script src="ui-favourites.js"></script>
+<script src="ui-pdf.js"></script>
+<script src="i18n.js"></script>
+
+<style>
+.trip-launcher { position: fixed; left: 12px; top: 40%; transform: translateY(-50%); z-index: 350; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.trip-launcher-label { font-family:'Rubik',sans-serif; font-size:0.54rem; font-weight:800; text-transform:uppercase; letter-spacing:0.12em; color:#2f5347; margin-bottom:-7px; pointer-events:none; text-align:center; line-height:1.3; }
+.trip-btn-circle { width:56px; height:56px; border-radius:50%; border:2px solid rgba(233,201,176,0.8); cursor:pointer; position:relative; display:flex; align-items:center; justify-content:center; padding:0; box-shadow:0 3px 14px rgba(0,0,0,0.35); transition:background 0.18s, border-color 0.18s, box-shadow 0.18s; -webkit-tap-highlight-color:transparent; }
+.trip-btn-circle:hover { box-shadow:0 4px 18px rgba(0,0,0,0.45); }
+.trip-btn-svg { width:52px; height:52px; overflow:visible; pointer-events:none; }
+.trip-btn-emoji-html { position:absolute; top:38%; left:50%; transform:translate(-50%,-50%); font-size:1.35rem; line-height:1; pointer-events:none; z-index:1; }
+.trip-arc-label { font-family:'Rubik',sans-serif; font-size:6.2px; font-weight:700; text-transform:uppercase; letter-spacing:1.4px; fill:#e6c34d; }
+.trip-btn-circle.active .trip-arc-label { fill:#2f5347; }
+</style>
+
+<script>
+/* ── PRESET ROUTES ── */
+var _TRIPS = {
+  twohour:  { name: 'Two-Hour Visit', ids: [3, 5, 1], note: 'Garden tram tour, the March Bank, then the house' },
+  fourhour: { name: 'Four-Hour Visit', ids: [1, 2, 3, 6, 8], note: 'Galleries, the tureens, tram tour and the gardens' },
+  family:   { name: 'Family Visit', ids: [4, 3, 13], note: 'Enchanted Woods, the tram and the Reflecting Pool' }
+};
+function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
+function loadTrip(key) {
+  var trip = _TRIPS[key]; if (!trip) return;
+  var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
+  localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
+  if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var sp = document.getElementById("pill-saved");
+  if (sp && !sp.classList.contains("active")) {
+    if (typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
+  document.querySelectorAll(".trip-btn-circle").forEach(function(p){ p.classList.remove("active"); });
+  var ap = document.getElementById("trip-btn-" + key);
+  if (ap) ap.classList.add("active");
+  var _tn = (typeof t==='function') ? t('trip_'+key+'_name') : trip.name;
+  var _nt = (typeof t==='function') ? t('trip_'+key+'_note') : trip.note;
+  var _ld = (typeof t==='function') ? t('trip_loaded') : 'loaded';
+  var _sw = (typeof t==='function') ? t('stops_word') : 'stops';
+  _tripToast(_tn + " " + _ld + " — " + trip.ids.length + " " + _sw, _nt, prev, key);
+}
+function _tripToast(msg, note, prev, key) {
+  var ex = document.getElementById("_trip-toast"); if (ex) ex.remove();
+  var el = document.createElement("div"); el.id = "_trip-toast";
+  el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:#2f5347;color:#e6c34d;padding:10px 18px;border-radius:24px;border:2px solid #e6c34d;font-size:0.78rem;font-weight:600;font-family:Rubik,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.40);display:flex;align-items:center;gap:12px;";
+  el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.7">' + note + '</span>' : '') + "</span>"
+    + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
+    + 'style="background:none;border:1px solid #e6c34d;color:#e6c34d;border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Rubik,sans-serif;">' + ((typeof t==='function')?t('undo'):'Undo') + '</button>';
+  document.body.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
+}
+function _undoTrip(prev, key) {
+  var el = document.getElementById("_trip-toast"); if (el) el.remove();
+  localStorage.setItem(_favsKey(), JSON.stringify(prev));
+  if (typeof _clearSavedOrder === "function") _clearSavedOrder();
+  if (typeof refreshFavourites === "function") refreshFavourites();
+  var ap = document.getElementById("trip-btn-" + key); if (ap) ap.classList.remove("active");
+  if (!prev.length) {
+    var sp = document.getElementById("pill-saved");
+    if (sp && sp.classList.contains("active") && typeof toggleSavedFilter === "function") toggleSavedFilter(sp);
+  } else if (typeof applyFilters === "function") { applyFilters(); }
+}
+</script>
+
+<!-- Preset route launcher -->
+<div class="trip-launcher" id="trip-launcher">
+  <span class="trip-launcher-label" data-i18n-html="our_picks_html">Day<br>Trips</span>
+  <button class="trip-btn-circle" id="trip-btn-twohour" onclick="loadTrip('twohour')" title="Two-Hour Visit">
+    <span class="trip-btn-emoji-html">⏱️</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-twohour" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-twohour" startOffset="50%" text-anchor="middle" data-i18n="arc_two">2 Hours</textPath></text>
+    </svg>
+  </button>
+  <button class="trip-btn-circle" id="trip-btn-fourhour" onclick="loadTrip('fourhour')" title="Four-Hour Visit">
+    <span class="trip-btn-emoji-html">🗺️</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-fourhour" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-fourhour" startOffset="50%" text-anchor="middle" data-i18n="arc_four">4 Hours</textPath></text>
+    </svg>
+  </button>
+  <button class="trip-btn-circle" id="trip-btn-family" onclick="loadTrip('family')" title="Family Visit">
+    <span class="trip-btn-emoji-html">🧚</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-family" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-family" startOffset="50%" text-anchor="middle" data-i18n="arc_family">Family</textPath></text>
+    </svg>
+  </button>
+</div>
+
+<script>
+window.TutorialConfig = {
+  doneKey:     'wt_tour_v1',
+  cityName:    'Winterthur',
+  demoPlaceId: 5,
+  demoSavedIds: [5, 6, 8, 4, 1],
+  tripNames:   "a Two-Hour Visit, a Four-Hour Visit, or a Family Visit"
+};
+</script>
+<script src="tutorial.js"></script>
+
+<!-- Address display — populates pc-address when a card opens -->
+<script>
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  var addrEl  = document.getElementById('pc-address');
+  if (!titleEl || !addrEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    addrEl.textContent = (place && place.address) ? '📍 ' + place.address : '';
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+</script>
+
+<!-- Bilingual title split removed — the language toggle now shows one language, so the
+     place name uses the full card width on its own line. -->
+
+
+<!-- Navigate button — injected into card when a place opens, shows distance if location known -->
+<script>
+window.addEventListener('load', function() {
+  var titleEl = document.getElementById('pc-title');
+  if (!titleEl) return;
+  new MutationObserver(function() {
+    var name  = titleEl.textContent.trim();
+    var place = PLACES.find(function(p) { return p.name === name; });
+    if (!place) return;
+    var existing = document.getElementById('pc-nav-btn');
+    if (existing) existing.remove();
+    var btn = document.createElement('button');
+    btn.id = 'pc-nav-btn';
+    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#9e2b25';
+    btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
+    var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
+      ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
+    btn.innerHTML = (typeof t==='function'?t('walk_here'):'🚶 Walk here (Google Maps)') + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() {
+      var dest = place.lat+','+place.lng;
+      var url = window._userLat && window._userLng
+        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
+        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
+      window.open(url, '_blank');
+    };
+    var hours = document.getElementById('pc-hours');
+    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+  }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+});
+</script>
+
+<!-- Hide zone bubbles with no places -->
+<script>
+window.addEventListener('load', function() {
+  document.querySelectorAll('#nbhd-bubbles-row .nbhd-bubble').forEach(function(bubble) {
+    if (bubble.id === 'nbhd-all') return;
+    var key = bubble.id.replace('nbhd-', '');
+    var count = PLACES.filter(function(p) { return p.nbhd === key; }).length;
+    if (count === 0) bubble.style.display = 'none';
+  });
+});
+</script>
+
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show campus zones">🗺 Zones</button>
+
+<!-- Fire initMap() after ALL scripts have loaded -->
+<script>
+  window.addEventListener('load', initMap);
+</script>
+
+<!-- ── UNIFIED SAVED PANEL + CLEAR ALL (newer panel, as in Venice) ── -->
+<script>
+function clearAllSaved() {
+  if (!favourites || favourites.length === 0) return;
+  if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
+  favourites = []; saveFavs(); clearTripRoute();
+  var pill = document.getElementById('pill-saved');
+  if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
+  if (typeof _toast === 'function') _toast((typeof t==='function')?t('saved_cleared'):'Saved places cleared.', 2500);
+}
+if (typeof window.toggleDesktopList !== 'function') {
+  window.toggleDesktopList = function () { if (typeof toggleSheet === 'function') toggleSheet(); };
+}
+
+(function() {
+  var _origRenderList = window.renderList;
+  window.renderList = function() {
+    var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
+    if (!isSaved) {
+      if (typeof clearTripRoute === 'function') clearTripRoute();
+      var scb0 = document.getElementById('sheet-clear-btn');
+      if (scb0) scb0.style.display = 'none';
+      var t0 = document.getElementById('sheet-title');
+      if (t0) { t0.style.color = ''; t0.style.fontWeight = ''; }
+      if (_origRenderList) _origRenderList();
+      return;
+    }
+    var places = typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces() : [];
+    var titleEl = document.getElementById('sheet-title');
+    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em;color:var(--brand)">♥</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' ' + ((typeof t==='function')?t('saved_word'):'Saved') : ((typeof t==='function')?t('saved_panel'):'Saved Places')) + '</span>';
+    var badge = document.getElementById('list-badge');
+    if (badge) badge.textContent = places.length;
+    var scb = document.getElementById('sheet-clear-btn');
+    if (scb) scb.style.display = places.length > 0 ? 'inline-block' : 'none';
+    var ob = document.getElementById('saved-mode-banner');
+    if (ob) ob.remove();
+    var listEl = document.getElementById('places-list');
+    if (!listEl) return;
+    if (places.length === 0) {
+      listEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap ♡ on any place<br>to save it here</div>';
+      return;
+    }
+    function fmtTime(m) { return m < 60 ? '~'+m+'m' : '~'+Math.floor(m/60)+'h '+(m%60?(m%60)+'m':''); }
+    function fallbackDist(pl) {
+      var d=0; for(var i=1;i<pl.length;i++) if(typeof haversineM==='function') d+=haversineM(pl[i-1],pl[i]); return d;
+    }
+    function updateTrip(pl) {
+      if (typeof _lastRouteStats !== 'undefined') _lastRouteStats = null;
+      var d = fallbackDist(pl);
+      showTrip(pl, d, Math.max(5, Math.round(d * 1.35 / 50)));
+      if (typeof _fetchRouteStats === 'function' && pl.length >= 2 && navigator.onLine) {
+        _fetchRouteStats(pl).then(function(rs) {
+          _lastRouteStats = rs;
+          var icon = rs.travelMode === 'driving' ? '🚗' : '🚶';
+          var we = document.getElementById('saved-stat-walk-sheet');
+          if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
+          if (rs.legMins) rs.legMins.forEach(function(m, i) {
+            var c = document.getElementById('saved-conn-' + i);
+            if (c) c.textContent = '↓ ~' + m + ' ' + (rs.travelMode === 'driving' ? (typeof t==='function'?t('min_drive'):'min drive') : (typeof t==='function'?t('min_walk'):'min walk'));
+          });
+        }).catch(function(){});
+      }
+    }
+    function showTrip(pl, distM, walkMins) {
+      var mode = 'walking';   // MUZA is walking-only
+      var icon = '🚶';
+      var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
+      var html =
+        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+' '+(pl.length===1?(typeof t==='function'?t('stop_one'):'stop'):(typeof t==='function'?t('stops_word'):'stops'))+'</span>'+
+        '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
+        '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
+        '<div style="display:flex;padding:8px 10px;gap:5px;">'+
+        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
+        '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
+        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">'+(typeof t==='function'?t('trip_share'):'🔗 Share')+'</button></div>';
+      var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
+      html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">'+(typeof t==='function'?t('drag_reorder'):'Drag to reorder')+
+        (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">'+(typeof t==='function'?t('autosort'):'↺ Auto-sort')+'</a>':'')+'</div>';
+      pl.forEach(function(p,i) {
+        html += '<div class="place-row '+(p.id===AID?'active':'')+'" draggable="true" data-id="'+p.id+'" id="row-'+p.id+'">'+
+          '<span class="saved-grip" style="font-size:1.3rem;color:#bbb;padding:0 10px 0 4px;cursor:grab;flex-shrink:0;touch-action:none">⠇</span>'+
+          '<div class="saved-item-num">'+(i+1)+'</div><div class="place-thumb" id="thumb-'+p.id+'">'+(p.emoji||'📍')+'</div>'+
+          '<div class="place-info" onclick="openDetail('+p.id+')" style="cursor:pointer;flex:1">'+
+          '<div class="place-name">'+p.name+'</div><div class="place-type">'+(CL[p.cat]||p.cat)+'</div>'+
+          '<div class="place-addr">'+(p.address||'')+'</div></div>'+
+          '<span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">›</span></div>';
+        if (i < pl.length-1) html += '<div class="saved-walk-connector" id="saved-conn-'+i+'">↓</div>';
+      });
+      listEl.innerHTML = html;
+      if (listEl.parentNode) listEl.parentNode.appendChild(listEl);
+      var al = document.getElementById('saved-autosort-link');
+      if (al) al.addEventListener('click', function(e) { e.preventDefault(); if(typeof _clearSavedOrder==='function')_clearSavedOrder(); if(typeof updateFavUI==='function')updateFavUI(); });
+      wireDrag(pl); loadThumbs(pl);
+      if (pl.length>=2 && typeof _fetchRouteStats==='function' && navigator.onLine) {
+        _fetchRouteStats(pl).then(function(s) {
+          var we=document.getElementById('saved-stat-walk-sheet');
+          if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
+          if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent='↓ ~'+m+' '+(s.travelMode==='driving'?(typeof t==='function'?t('min_drive'):'min drive'):(typeof t==='function'?t('min_walk'):'min walk'));});
+        }).catch(function(){});
+      }
+    }
+    function wireDrag(pl) {
+      var src=null;
+      listEl.querySelectorAll('.place-row[draggable]').forEach(function(row) {
+        row.addEventListener('dragstart',function(e){src=parseInt(this.dataset.id);this.style.opacity='0.5';e.dataTransfer.effectAllowed='move';});
+        row.addEventListener('dragend',function(){this.style.opacity='';listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});});
+        row.addEventListener('dragover',function(e){e.preventDefault();listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});this.style.borderTop='2px solid var(--brand)';});
+        row.addEventListener('drop',function(e){
+          e.stopPropagation();var tgt=parseInt(this.dataset.id);if(src===tgt)return;
+          var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});
+          var fi=ids.indexOf(src),ti=ids.indexOf(tgt);if(fi<0||ti<0)return;
+          ids.splice(fi,1);ids.splice(ti,0,src);
+          if(typeof _setSavedOrder==='function')_setSavedOrder(ids);
+          setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);
+        });
+        var ts=null;
+        row.addEventListener('touchstart',function(e){ts=(e.target&&e.target.closest&&e.target.closest('.saved-grip'))?this:null;},{passive:true});
+        row.addEventListener('touchmove',function(e){if(!ts)return;e.preventDefault();var ov=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts)or.style.borderTop='2px solid var(--brand)';},{passive:false});
+        row.addEventListener('touchend',function(e){if(!ts)return;var ov=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);var or=ov&&ov.closest('.place-row[draggable]');listEl.querySelectorAll('.place-row').forEach(function(r){r.style.borderTop='';});if(or&&or!==ts){var ids=Array.from(listEl.querySelectorAll('.place-row[draggable]')).map(function(r){return parseInt(r.dataset.id);});var si=parseInt(ts.dataset.id),ti=parseInt(or.dataset.id);var fi=ids.indexOf(si),ti2=ids.indexOf(ti);if(fi>=0&&ti2>=0){ids.splice(fi,1);ids.splice(ti2,0,si);if(typeof _setSavedOrder==='function')_setSavedOrder(ids);setTimeout(function(){if(typeof getSortedFavPlaces==='function'){updateTrip(getSortedFavPlaces());if(typeof drawSavedRoute==='function')drawSavedRoute();}},50);}}ts=null;},{passive:true});
+      });
+    }
+    function loadThumbs(pl) {
+      var imgBase=typeof IMAGES_PATH!=='undefined'?IMAGES_PATH:'images/';
+      pl.forEach(function(p){
+        var th=document.getElementById('thumb-'+p.id);if(!th)return;
+        if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
+        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
+      });
+    }
+    updateTrip(places);
+  };
+
+  var _origUpdateFavUI = window.updateFavUI;
+  window.updateFavUI = function() {
+    try { if (_origUpdateFavUI) _origUpdateFavUI(); } catch(e) {}
+    var pill=document.getElementById('pill-saved');
+    if(pill){var hs=pill.querySelector('.heart-icon');if(hs)hs.textContent=(typeof favourites!=='undefined'&&favourites.length>0)?'♥':'♡';}
+    var btn=document.getElementById('sheet-clear-btn');
+    if(btn)btn.style.display=(typeof savedFilterActive!=='undefined'&&savedFilterActive&&typeof favourites!=='undefined'&&favourites.length>0)?'inline-block':'none';
+    setTimeout(function(){
+      if(typeof favourites!=='undefined'&&favourites.length>0){
+        var pl=typeof getSortedFavPlaces==='function'?getSortedFavPlaces():favourites.slice();
+        if(typeof window.updateTripWithRouteStats==='function')window.updateTripWithRouteStats(pl);
+      }
+    },200);
+  };
+})();
+</script>
+
+<!-- Brand color for map route line and numbered markers -->
+<script>
+window.addEventListener('load', function() {
+  var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#9e2b25';
+  var _origInitMapSources = window.initMapSources;
+  window.initMapSources = function() {
+    if (_origInitMapSources) _origInitMapSources();
+    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
+  };
+  var _origEnsure = window._ensureRouteLayer;
+  window._ensureRouteLayer = function() {
+    if (_origEnsure) _origEnsure();
+    if (map && map.getLayer('trip-route-line')) map.setPaintProperty('trip-route-line', 'line-color', brand);
+  };
+  window._addNumberedMarkers = function(places) {
+    places.forEach(function(p, i) {
+      var el = document.createElement('div');
+      el.style.cssText = ['width:26px','height:26px','border-radius:50%','background:'+brand,'border:2.5px solid white','color:white','font-size:0.68rem','font-weight:700','display:flex','align-items:center','justify-content:center','box-shadow:0 2px 8px rgba(0,0,0,0.35)','font-family:sans-serif','z-index:'+(9000+i)].join(';');
+      el.textContent = i + 1; el.style.cursor = 'pointer';
+      el.addEventListener('click', function() { if (typeof openDetail === 'function') openDetail(p.id); });
+      var marker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lng, p.lat]).addTo(map);
+      tripMarkers.push(marker);
+    });
+  };
+});
+</script>
+
+<!-- Register service worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+
+</body>
+</html>
