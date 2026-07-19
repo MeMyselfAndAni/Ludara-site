@@ -36,10 +36,10 @@ for %%F in (index.html data.js map.js map-core.js i18n.js ui-card.js ui-filter.j
 )
 
 echo.
-echo Copying local photos (place-*.jpg) into the live site...
-copy /Y "%WORKING%\photos\place-*.jpg" "%DEPLOY%\photos\" >nul && echo   copied photos
-rem  Note: most place images load directly from winterthur.org (see data.js "img" fields);
-rem  only the local place-*.jpg files need copying.
+echo Copying local photos into the live site...
+copy /Y "%WORKING%\photos\*.jpg" "%DEPLOY%\photos\" >nul && echo   copied photos
+rem  All place images are now hosted locally in photos\ (place-*.jpg) plus the
+rem  splash background (splash.jpg). This copies every .jpg so nothing is missed.
 
 echo.
 echo Navigating to deploy folder...

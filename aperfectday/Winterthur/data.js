@@ -29,7 +29,6 @@ const PLACES = [
     id: 2, nbhd: "core", cat: "pavilion", emoji: "🍲",
     lat: 39.80607, lng: -75.60048,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Dorrance_Gallery_Detail_East_Side-1024x819.jpg",
     website: "https://www.winterthur.org/campbell-collection-of-soup-tureens-2/",
     en: {
       name: "Campbell Collection of Soup Tureens",
@@ -43,7 +42,6 @@ const PLACES = [
     id: 3, nbhd: "park", cat: "heritage", emoji: "🚋",
     lat: 39.80913198, lng: -75.60401548,
     hours: "Tue–Sun 10:00–16:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Winterthur-August2022-BeccaMathias-7952-scaled.jpg",
     website: "https://www.winterthur.org/garden-tram/",
     en: {
       name: "Garden Tram Tour · Board Here",
@@ -57,7 +55,6 @@ const PLACES = [
     id: 4, nbhd: "east", cat: "hall", emoji: "🧚",
     lat: 39.80621756, lng: -75.59788418,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/enchanted-woods-rob-cardillo-rcp_180719_3562_web-small.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/enchanted-woods/",
     en: {
       name: "Enchanted Woods",
@@ -71,7 +68,6 @@ const PLACES = [
     id: 5, nbhd: "east", cat: "outdoor", emoji: "🌼",
     lat: 39.8071, lng: -75.6006,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-leitch-002-2.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "March Bank",
@@ -98,7 +94,6 @@ const PLACES = [
     id: 7, nbhd: "east", cat: "outdoor", emoji: "🌷",
     lat: 39.807051, lng: -75.597132,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Garden_04-2021-Cardillo-002-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Sundial Garden",
@@ -112,7 +107,6 @@ const PLACES = [
     id: 8, nbhd: "east", cat: "outdoor", emoji: "🌿",
     lat: 39.80617444, lng: -75.596727,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/garden_04-2019-schneck-061-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Quarry Garden",
@@ -126,7 +120,6 @@ const PLACES = [
     id: 9, nbhd: "east", cat: "outdoor", emoji: "🌼",
     lat: 39.80745, lng: -75.60015,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-cardillo-006-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Winterhazel Walk",
@@ -140,7 +133,6 @@ const PLACES = [
     id: 10, nbhd: "east", cat: "outdoor", emoji: "🌲",
     lat: 39.8066, lng: -75.601,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Garden_06-2018-Leitch-008.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Pinetum",
@@ -154,7 +146,6 @@ const PLACES = [
     id: 11, nbhd: "east", cat: "outdoor", emoji: "🌺",
     lat: 39.8059, lng: -75.6004,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-leitch-015.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Magnolia Bend",
@@ -168,7 +159,6 @@ const PLACES = [
     id: 12, nbhd: "east", cat: "outdoor", emoji: "🌸",
     lat: 39.8069, lng: -75.5989,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Winterthur-May2024-7441-scaled.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Peony Garden",
@@ -195,7 +185,6 @@ const PLACES = [
     id: 14, nbhd: "east", cat: "outdoor", emoji: "🍁",
     lat: 39.808, lng: -75.5985,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-cardillo-006-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
       name: "Oak Hill",
@@ -222,7 +211,6 @@ const PLACES = [
     id: 16, nbhd: "park", cat: "service", emoji: "🛍️",
     lat: 39.80890447, lng: -75.60370794,
     hours: "Tue–Sun 10:00–17:00",
-    img: "https://www.winterthur.org/wp-content/uploads/DSC_5047-16x9-2-1024x576.jpg",
     website: "https://www.winterthur.org/shop/",
     en: {
       name: "Museum Store",
@@ -237,7 +225,6 @@ const PLACES = [
     id: 17, nbhd: "east", cat: "heritage", emoji: "🚋",
     lat: 39.80635, lng: -75.59805,
     hours: "Tue–Sun 10:00–16:00",
-    img: "https://www.winterthur.org/wp-content/uploads/enchanted-woods-rob-cardillo-rcp_180719_3562_web-small.jpg",
     website: "https://www.winterthur.org/garden-tram/",
     en: {
       name: "Tram Stop · Enchanted Woods",
@@ -251,7 +238,6 @@ const PLACES = [
     id: 18, nbhd: "core", cat: "heritage", emoji: "🚋",
     lat: 39.80620, lng: -75.60075,
     hours: "Tue–Sun 10:00–16:00",
-    img: "https://www.winterthur.org/wp-content/uploads/Winterthur-August2022-BeccaMathias-7952-scaled.jpg",
     website: "https://www.winterthur.org/garden-tram/",
     en: {
       name: "Tram Stop · Museum",

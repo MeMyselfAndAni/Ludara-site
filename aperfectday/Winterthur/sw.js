@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'winterthur-shell-v1';
+var SHELL_CACHE = 'winterthur-shell-v2';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
@@ -23,6 +23,26 @@ var SHELL_FILES = [
   './tutorial.js',
   './credits.js',
   './favicon.svg',
+  // Place photos + splash — precache so "Save offline" works fully
+  './photos/splash.jpg',
+  './photos/place-1.jpg',
+  './photos/place-2.jpg',
+  './photos/place-3.jpg',
+  './photos/place-4.jpg',
+  './photos/place-5.jpg',
+  './photos/place-6.jpg',
+  './photos/place-7.jpg',
+  './photos/place-8.jpg',
+  './photos/place-9.jpg',
+  './photos/place-10.jpg',
+  './photos/place-11.jpg',
+  './photos/place-12.jpg',
+  './photos/place-13.jpg',
+  './photos/place-14.jpg',
+  './photos/place-16.jpg',
+  './photos/place-17.jpg',
+  './photos/place-18.jpg',
+  './photos/place-23.jpg',
 ];
 
 self.addEventListener('install', function(event) {
