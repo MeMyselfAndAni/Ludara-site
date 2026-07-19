@@ -8,8 +8,8 @@ let LANG = 'he';
 
 const STRINGS = {
   en: {
-    cl:        { pavilion:'Pavilions', hall:'Exhibition Halls', heritage:'Heritage', outdoor:'Gardens & Outdoor', service:'Services' },
-    catLabels: { pavilion:'Pavilion', hall:'Exhibition Hall', heritage:'Heritage Site', outdoor:'Garden & Outdoor', service:'Service' },
+    cl:        { pavilion:'Pavilions', hall:'Exhibition Halls', heritage:'Heritage', outdoor:'Gardens & Outdoor', service:'Services', restroom:'Restrooms' },
+    catLabels: { pavilion:'Pavilion', hall:'Exhibition Hall', heritage:'Heritage Site', outdoor:'Garden & Outdoor', service:'Service', restroom:'Restroom' },
     zones:     { east:'Eastern Pavilions', core:'Central Core', park:'Western Park' },
     ui: {
       hdr_apd_in:'A Perfect Day in', hdr_museum:'Eretz Israel Museum',
@@ -17,7 +17,7 @@ const STRINGS = {
       hdr_guide_h1:'<em>Eretz Israel Museum</em> Guide',
       credit:'Interactive map by Ludara.AI ↗',
       f_saved:'Saved', f_all:'All', f_pavilion:'Pavilions', f_hall:'Exhibition Halls',
-      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services',
+      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services', f_restroom:'Restrooms',
       zones_title:'Campus zones', z_all:'All', z_east:'Eastern Pavilions', z_core:'Central Core', z_park:'Western Park',
       places:'Places', places_word:'Places', guide:'Guide',
       trip_title:'🗺 Your Saved Places Route', trip_maps:'🗺 Open in Google Maps',
@@ -49,8 +49,8 @@ const STRINGS = {
     }
   },
   he: {
-    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים למבקרים' },
-    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות למבקרים' },
+    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים למבקרים', restroom:'שירותים' },
+    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות למבקרים', restroom:'שירותים' },
     zones:     { east:'הביתנים המזרחיים', core:'מתחם המרכז', park:'הפארק המערבי' },
     ui: {
       hdr_apd_in:'A Perfect Day —', hdr_museum:'מוזיאון ארץ ישראל',
@@ -58,7 +58,7 @@ const STRINGS = {
       hdr_guide_h1:'מדריך <em>מוזיאון ארץ ישראל</em>',
       credit:'מפה אינטראקטיבית מאת Ludara.AI ↗',
       f_saved:'שמורים', f_all:'הכול', f_pavilion:'ביתנים', f_hall:'אולמות תערוכה',
-      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים',
+      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים', f_restroom:'שירותים',
       zones_title:'אזורי המתחם', z_all:'הכול', z_east:'הביתנים המזרחיים', z_core:'מתחם המרכז', z_park:'הפארק המערבי',
       places:'מקומות', places_word:'מקומות', guide:'מדריך',
       trip_title:'🗺 מסלול המקומות השמורים', trip_maps:'🗺 פתחו ב‑Google Maps',
@@ -90,8 +90,8 @@ const STRINGS = {
     }
   },
   ru: {
-    cl:        { pavilion:"Павильоны", hall:"Выставочные залы", heritage:"Археология", outdoor:"Сады и территория", service:"Услуги" },
-    catLabels: { pavilion:"Павильон", hall:"Выставочный зал", heritage:"Археологический объект", outdoor:"Сад и территория", service:"Услуга" },
+    cl:        { pavilion:"Павильоны", hall:"Выставочные залы", heritage:"Археология", outdoor:"Сады и территория", service:"Услуги", restroom:"Туалеты" },
+    catLabels: { pavilion:"Павильон", hall:"Выставочный зал", heritage:"Археологический объект", outdoor:"Сад и территория", service:"Услуга", restroom:"Туалет" },
     zones:     { east:"Восточные павильоны", core:"Центральная часть", park:"Западный парк" },
     ui: {
       hdr_apd_in:"A Perfect Day —",
@@ -105,7 +105,7 @@ const STRINGS = {
       f_hall:"Выставочные залы",
       f_heritage:"Археология",
       f_outdoor:"Сады и территория",
-      f_service:"Услуги",
+      f_service:"Услуги", f_restroom:"Туалеты",
       zones_title:"Зоны кампуса",
       z_all:"Все",
       z_east:"Восточные павильоны",
@@ -172,8 +172,8 @@ const STRINGS = {
     }
   },
   ar: {
-    cl:        { pavilion:"الأجنحة", hall:"قاعات العرض", heritage:"التراث", outdoor:"الحدائق والساحات", service:"الخدمات" },
-    catLabels: { pavilion:"جناح", hall:"قاعة عرض", heritage:"موقع تراثي", outdoor:"حديقة وساحة", service:"خدمة" },
+    cl:        { pavilion:"الأجنحة", hall:"قاعات العرض", heritage:"التراث", outdoor:"الحدائق والساحات", service:"الخدمات", restroom:"دورات المياه" },
+    catLabels: { pavilion:"جناح", hall:"قاعة عرض", heritage:"موقع تراثي", outdoor:"حديقة وساحة", service:"خدمة", restroom:"دورة مياه" },
     zones:     { east:"الأجنحة الشرقية", core:"المنطقة المركزية", park:"الحديقة الغربية" },
     ui: {
       hdr_apd_in:"A Perfect Day —",
@@ -187,7 +187,7 @@ const STRINGS = {
       f_hall:"قاعات العرض",
       f_heritage:"التراث",
       f_outdoor:"الحدائق والساحات",
-      f_service:"الخدمات",
+      f_service:"الخدمات", f_restroom:"دورات المياه",
       zones_title:"المناطق",
       z_all:"الكل",
       z_east:"الأجنحة الشرقية",

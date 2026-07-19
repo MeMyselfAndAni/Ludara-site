@@ -25,6 +25,7 @@ const CC = {
   'heritage': '#7a5230',   // brown — archaeology & heritage sites
   'outdoor':  '#3f7d4e',   // green — gardens, park, open-air
   'service':  '#3a6ea5',   // blue — entrance, tickets, shop, café, planetarium
+  'restroom': '#5b7b8a',   // slate — public restrooms
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
@@ -34,6 +35,7 @@ const CL = {
   'heritage': 'Heritage',
   'outdoor':  'Gardens & Outdoor',
   'service':  'Services',
+  'restroom': 'Restrooms',
 };
 
 // ─── Zone ("neighbourhood") colours ───────────────────────────────────────────
