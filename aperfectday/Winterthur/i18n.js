@@ -7,8 +7,8 @@ let LANG = 'en';
 
 const STRINGS = {
   en: {
-    cl:        { pavilion:'House & Galleries', hall:'Family', heritage:'Tram Tour', outdoor:'Gardens', service:'Eat & Shop' },
-    catLabels: { pavilion:'House & Galleries', hall:'Family', heritage:'Tram Tour', outdoor:'Garden', service:'Visitor Services' },
+    cl:        { pavilion:'House & Galleries', hall:'Family', heritage:'Tram Tour', outdoor:'Gardens', service:'Eat & Shop', restroom:'Restrooms' },
+    catLabels: { pavilion:'House & Galleries', hall:'Family', heritage:'Tram Tour', outdoor:'Garden', service:'Visitor Services', restroom:'Restroom' },
     zones:     { core:'Museum & House', east:'The Garden', park:'Visitor Center' },
     ui: {
       hdr_apd_in:'A Perfect Day at', hdr_museum:'Winterthur',
@@ -16,7 +16,7 @@ const STRINGS = {
       hdr_guide_h1:'<em>Winterthur</em> Visitor Guide',
       credit:'Interactive map by Ludara.AI ↗',
       f_saved:'Saved', f_all:'All', f_pavilion:'House & Galleries', f_hall:'Family',
-      f_heritage:'Tram Tour', f_outdoor:'Gardens', f_service:'Eat & Shop',
+      f_heritage:'Tram Tour', f_outdoor:'Gardens', f_service:'Eat & Shop', f_restroom:'Restrooms',
       zones_title:'Estate areas', z_all:'All', z_east:'The Garden', z_core:'Museum & House', z_park:'Visitor Center',
       places:'Places', places_word:'Places', guide:'Guide',
       trip_title:'🗺 Your Saved Places Route', trip_maps:'🗺 Open in Google Maps',

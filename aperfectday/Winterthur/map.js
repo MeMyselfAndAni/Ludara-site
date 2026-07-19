@@ -23,6 +23,7 @@ const CC = {
   'heritage': '#b1892b',   // gold  — tram tour
   'outdoor':  '#3f7d4e',   // green — the garden
   'service':  '#3a6ea5',   // blue  — café, museum store
+  'restroom': '#5b7b8a',   // slate — restrooms
 };
 
 // ─── Category labels (overwritten by i18n) ────────────────────────────────────

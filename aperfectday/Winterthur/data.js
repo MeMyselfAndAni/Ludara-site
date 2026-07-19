@@ -14,7 +14,7 @@
 const PLACES = [
   {
     id: 1, nbhd: "core", cat: "pavilion", emoji: "🏛️",
-    lat: 39.80784995, lng: -75.6017867,
+    lat: 39.80612, lng: -75.60056,
     hours: "Tue–Sun 10:00–15:30",
     website: "https://www.winterthur.org/exhibitions-and-collections/museum/galleries/",
     en: {
@@ -27,7 +27,7 @@ const PLACES = [
   },
   {
     id: 2, nbhd: "core", cat: "pavilion", emoji: "🍲",
-    lat: 39.80781, lng: -75.60169,
+    lat: 39.80607, lng: -75.60048,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/Dorrance_Gallery_Detail_East_Side-1024x819.jpg",
     website: "https://www.winterthur.org/campbell-collection-of-soup-tureens-2/",
@@ -46,7 +46,7 @@ const PLACES = [
     img: "https://www.winterthur.org/wp-content/uploads/Winterthur-August2022-BeccaMathias-7952-scaled.jpg",
     website: "https://www.winterthur.org/garden-tram/",
     en: {
-      name: "Garden Tram Tour",
+      name: "Garden Tram Tour · Board Here",
       role: "30-minute narrated tram",
       zone: "Visitor Center",
       desc: "A 30-minute narrated tram tour that begins at the Visitor Center and ends at the museum, with a stop in Enchanted Woods — an easy way to see highlights of the garden from your seat. Included with admission; members free. Weather and space permitting.",
@@ -69,7 +69,7 @@ const PLACES = [
   },
   {
     id: 5, nbhd: "east", cat: "outdoor", emoji: "🌼",
-    lat: 39.8073, lng: -75.599,
+    lat: 39.8071, lng: -75.6006,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-leitch-002-2.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -83,7 +83,7 @@ const PLACES = [
   },
   {
     id: 6, nbhd: "east", cat: "outdoor", emoji: "🌸",
-    lat: 39.8077, lng: -75.5987,
+    lat: 39.8054, lng: -75.5992,
     hours: "Tue–Sun 10:00–17:00",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
     en: {
@@ -96,7 +96,7 @@ const PLACES = [
   },
   {
     id: 7, nbhd: "east", cat: "outdoor", emoji: "🌷",
-    lat: 39.80725654, lng: -75.59715033,
+    lat: 39.807051, lng: -75.597132,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/Garden_04-2021-Cardillo-002-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -124,7 +124,7 @@ const PLACES = [
   },
   {
     id: 9, nbhd: "east", cat: "outdoor", emoji: "🌼",
-    lat: 39.8075, lng: -75.5989,
+    lat: 39.80745, lng: -75.60015,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-cardillo-006-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -138,7 +138,7 @@ const PLACES = [
   },
   {
     id: 10, nbhd: "east", cat: "outdoor", emoji: "🌲",
-    lat: 39.8079, lng: -75.5982,
+    lat: 39.8066, lng: -75.601,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/Garden_06-2018-Leitch-008.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -152,7 +152,7 @@ const PLACES = [
   },
   {
     id: 11, nbhd: "east", cat: "outdoor", emoji: "🌺",
-    lat: 39.8076, lng: -75.5985,
+    lat: 39.8059, lng: -75.6004,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-leitch-015.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -166,7 +166,7 @@ const PLACES = [
   },
   {
     id: 12, nbhd: "east", cat: "outdoor", emoji: "🌸",
-    lat: 39.807, lng: -75.5976,
+    lat: 39.8069, lng: -75.5989,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/Winterthur-May2024-7441-scaled.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -193,7 +193,7 @@ const PLACES = [
   },
   {
     id: 14, nbhd: "east", cat: "outdoor", emoji: "🍁",
-    lat: 39.8069, lng: -75.597,
+    lat: 39.808, lng: -75.5985,
     hours: "Tue–Sun 10:00–17:00",
     img: "https://www.winterthur.org/wp-content/uploads/garden_04-2021-cardillo-006-2-1024x683.jpg",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
@@ -231,5 +231,71 @@ const PLACES = [
       desc: "The Winterthur Museum Store, open the full estate day for gifts, books and garden-inspired finds at the Visitor Center.",
       tip: ""
     }
+  }
+,
+  {
+    id: 17, nbhd: "east", cat: "heritage", emoji: "🚋",
+    lat: 39.80635, lng: -75.59805,
+    hours: "Tue–Sun 10:00–16:00",
+    img: "https://www.winterthur.org/wp-content/uploads/enchanted-woods-rob-cardillo-rcp_180719_3562_web-small.jpg",
+    website: "https://www.winterthur.org/garden-tram/",
+    en: {
+      name: "Tram Stop · Enchanted Woods",
+      role: "Garden tram stop",
+      zone: "The Garden",
+      desc: "The narrated garden tram tour stops here at Enchanted Woods — hop off to explore the children's fairy-tale garden, then reboard, or carry on to the museum.",
+      tip: "A great place to break the ride if you're visiting with children."
+    }
+  },
+  {
+    id: 18, nbhd: "core", cat: "heritage", emoji: "🚋",
+    lat: 39.80620, lng: -75.60075,
+    hours: "Tue–Sun 10:00–16:00",
+    img: "https://www.winterthur.org/wp-content/uploads/Winterthur-August2022-BeccaMathias-7952-scaled.jpg",
+    website: "https://www.winterthur.org/garden-tram/",
+    en: {
+      name: "Tram Stop · Museum",
+      role: "Garden tram stop",
+      zone: "Museum & House",
+      desc: "The garden tram tour ends here at the museum. From the Visitor Center, the 30-minute narrated ride carries you across the 60-acre garden to the house.",
+      tip: "Ride out from the Visitor Center, then explore the house and galleries on foot."
+    }
+  },
+  {
+    id: 19, nbhd: "east", cat: "outdoor", emoji: "🌳",
+    lat: 39.806737, lng: -75.596086,
+    hours: "Tue–Sun 10:00–17:00",
+    website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
+    en: {
+      name: "Sycamore with Cement Core",
+      role: "Landmark specimen tree",
+      zone: "The Garden",
+      desc: "A beloved old sycamore on the garden route near the Sundial Garden — a favourite estate landmark, named for the cement core within its trunk.",
+      tip: ""
+    }
+  },
+  {
+    id: 20, nbhd: "east", cat: "restroom", emoji: "🚻",
+    lat: 39.806107, lng: -75.596853,
+    hours: "Tue–Sun 10:00–17:00",
+    website: "",
+    en: { name: "Restrooms · Garden", role: "Visitor restroom", zone: "The Garden",
+      desc: "Public restrooms in the garden, near the Sundial Garden.", tip: "" }
+  },
+  {
+    id: 21, nbhd: "park", cat: "restroom", emoji: "🚻",
+    lat: 39.80900, lng: -75.60380,
+    hours: "Tue–Sun 10:00–17:00",
+    website: "",
+    en: { name: "Restrooms · Visitor Center", role: "Visitor restroom", zone: "Visitor Center",
+      desc: "Public restrooms at the Visitor Center, by the café and shop.", tip: "" }
+  },
+  {
+    id: 22, nbhd: "core", cat: "restroom", emoji: "🚻",
+    lat: 39.80625, lng: -75.60045,
+    hours: "Tue–Sun 10:00–17:00",
+    website: "",
+    en: { name: "Restrooms · Museum", role: "Visitor restroom", zone: "Museum & House",
+      desc: "Public restrooms at the museum.", tip: "" }
   }
 ];

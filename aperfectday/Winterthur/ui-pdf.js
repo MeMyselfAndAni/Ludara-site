@@ -96,7 +96,7 @@ async function generatePDF(){
   const cards = places.map((p, i) => {
     const photoUrl = photoCache[p.id]?.url || '';
     const gradient = {
-      landmark:'linear-gradient(135deg,#0f0d0a,#3a2a14)',
+      landmark:'linear-gradient(135deg,#2f5347,#6b5a1c)',
       food:    'linear-gradient(135deg,#7a3020,#c06040)',
       cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
       church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
@@ -104,7 +104,7 @@ async function generatePDF(){
       soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
       pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
       nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
-    }[p.cat] || 'linear-gradient(135deg,#0f0d0a,#3a2a14)';
+    }[p.cat] || 'linear-gradient(135deg,#2f5347,#6b5a1c)';
 
     const catColors = {
       landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
@@ -168,7 +168,7 @@ async function generatePDF(){
   .pdf-cover {
     width: 100%; height: 100vh;
     min-height: 100vh;
-    background: #0f0d0a;
+    background: linear-gradient(150deg, #24463a 0%, #2f5347 55%, #6b5a1c 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -445,7 +445,7 @@ async function generatePDF(){
 
 <!-- COVER -->
 <div class="pdf-cover">
-  <div class="pdf-cover-logo">${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'A Perfect Day'} · A Perfect Day by Ludara</div>
+  <div class="pdf-cover-logo">A Perfect Day by Ludara.AI</div>
   <div class="pdf-cover-title">${typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City Guide'}</div>
   <div class="pdf-cover-subtitle">${typeof t==='function'?t('pdf_cover_sub'):'Your personal day guide'}</div>
   <div class="pdf-cover-divider"></div>
@@ -459,8 +459,8 @@ async function generatePDF(){
       <div class="pdf-stat-label">${typeof t==='function' ? (_routeStats.travelMode === 'driving' ? t('pdf_driving') : _routeStats.travelMode === 'boat' ? t('pdf_travel_time') : t('pdf_walking')) : 'Walking'}</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">${formatDistanceValue(totalM)}</div>
-      <div class="pdf-stat-label">${formatDistanceUnit()}</div>
+      <div class="pdf-stat-num">${(typeof formatDistance==='function'?formatDistance(totalM):totalM+' m').replace(/[^0-9.]/g,'')}</div>
+      <div class="pdf-stat-label">${(typeof formatDistance==='function'?formatDistance(totalM):'m').replace(/[0-9.\s]/g,'')}</div>
     </div>
   </div>
   <div class="pdf-cover-by">${typeof t==='function'?t('pdf_curated_by'):'Curated by'} ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
