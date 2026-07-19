@@ -16,7 +16,7 @@ async function preloadAllImages(places) {
 
       // Try to load the image
       const img = new Image();
-      const imagePath = (typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg';
+      const imagePath = place.img || ((typeof IMAGES_PATH !== 'undefined' ? IMAGES_PATH : 'images/') + 'place-' + place.id + '.jpg');
       
       img.onload = () => {
         // Cache the loaded image if photoCache exists
