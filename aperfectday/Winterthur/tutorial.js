@@ -13,15 +13,15 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One interactive map with 26 attractions to explore: temporary and permanent exhibitions, beautiful gardens and a 3,000-year-old tell.',
+      body: 'One interactive map for the whole estate — the house and galleries, the naturalistic garden, children’s Enchanted Woods and every trail — with the story behind each place.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      title: 'The Eretz Israel Museum Guide',
-      body: 'Every pin is worth your time: a groundbreaking crafts & design biennale, a pavilion of ancient glass, an ancient olive press, fine mosaics, and relaxing gardens. Tap any icon to see what is there.',
+      title: 'The Winterthur Guide',
+      body: 'Every pin is worth your time: Henry Francis du Pont’s house and its American treasures, the March Bank’s millions of late-winter bulbs, Azalea Woods in full bloom, the children’s Enchanted Woods, and the narrated tram that carries you through it all. Tap any icon to see what’s there.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -37,7 +37,7 @@
     },
     {
       title: 'Filter by place type',
-      body: 'Looking only for the pavilions, or just the gardens and heritage sites? Tap a category at the top to show only what you want, the map follows.',
+      body: 'Looking only for the house and galleries, or just the gardens? Tap a category at the top to show only what you want, the map follows.',
       target: '.filter-bar',
       cardPos: 'center',
       closeCard: true,
@@ -46,7 +46,7 @@
     },
     {
       title: 'Explore by Zone',
-      body: 'Each bubble is a part of the grounds: the eastern pavilions, the central core, or the western park. Tap one to zoom straight to it.',
+      body: 'Each bubble is a part of the estate: the Museum & House, the Garden, or the Visitor Center. Tap one to zoom straight to it.',
       target: '#nbhd-bar',
       cardPos: 'center',
       closeCard: true,
@@ -96,7 +96,7 @@
       btn: 'Next'
     },
     {
-      title: 'Our Day Trip Picks',
+      title: 'Recommended Routes',
       body: 'Looking for inspiration? We have suggestions for you. One tap on the left loads a full ready-to-go day — ' + TRIP_NAMES + '.',
       target: '#trip-launcher',
       cardPos: 'center',
@@ -105,7 +105,7 @@
     },
     {
       title: 'Navigate',
-      body: 'The museum grounds are large and the signs are sparse. Tap the circle to find yourself on the map.',
+      body: 'The estate spreads across a thousand acres and it’s easy to lose your bearings. Tap the circle to find yourself on the map.',
       target: null,
       targets: ['#locate-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
@@ -116,7 +116,7 @@
     },
     {
       title: "You're all set!",
-      body: 'The museum is yours to explore. Go find your perfect day.',
+      body: 'The estate is yours to explore. Go find your perfect day.',
       target: null,
       cardPos: 'center',
       mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */

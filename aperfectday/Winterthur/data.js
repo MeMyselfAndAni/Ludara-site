@@ -301,5 +301,18 @@ const PLACES = [
     img: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20400%20260%27%3E%3Crect%20width%3D%27400%27%20height%3D%27260%27%20fill%3D%27%232f5347%27/%3E%3Crect%20x%3D%27198%27%20y%3D%2755%27%20width%3D%274%27%20height%3D%27150%27%20fill%3D%27%23e6c34d%27/%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27140%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Crect%20x%3D%27123%27%20y%3D%2796%27%20width%3D%2734%27%20height%3D%2752%27%20rx%3D%278%27/%3E%3Crect%20x%3D%27128%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27142%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27260%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Cpath%20d%3D%27M260%2094%20L232%20164%20H288%20Z%27/%3E%3Crect%20x%3D%27250%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27261%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3C/g%3E%3C/svg%3E",
     en: { name: "Restrooms · Museum", role: "Visitor restroom", zone: "Museum & House",
       desc: "Public restrooms at the museum.", tip: "" }
+  },
+  {
+    id: 23, nbhd: "core", cat: "hall", emoji: "🧸",
+    lat: 39.80605, lng: -75.60040,
+    hours: "Sat 10:30–15:30",
+    website: "https://www.winterthur.org/fun-for-families/",
+    en: {
+      name: "Touch-It Room",
+      role: "Hands-on room for kids",
+      zone: "Museum & House",
+      desc: "An interactive space where children can handle objects from the past and pretend like they’re living long ago — a favourite for families. Included with admission.",
+      tip: "Open Saturdays, 10:30 am–3:30 pm."
+    }
   }
 ];
