@@ -3,35 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <title>Ludara.AI: Personalized, Gamified Storytelling</title>
-  <meta name="description" content="Ludara.AI turns any content into a personalized, gamified experience for culture, tourism, wellness and education. Our flagship product is A Perfect Day, interactive maps for hotels, museums, campuses and developments." />
+  <meta name="description" content="Ludara.AI builds AI products that turn content into personalized, gamified experiences. Flagship lines: A Perfect Day (interactive, branded, multilingual guides for hotels, museums, gardens and developments) and A Perfect Story Map (the real places behind books and screen)." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/favicon.svg" type="image/svg">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ludara.AI">
   <meta property="og:title" content="Ludara.AI: Personalized, Gamified Storytelling">
-  <meta property="og:description" content="We turn content into personalized, gamified experiences. Flagship product: A Perfect Day, interactive maps for hotels, museums, campuses and developments.">
+  <meta property="og:description" content="AI products that turn content into personalized, gamified experiences. Flagship lines: A Perfect Day and A Perfect Story Map.">
   <meta property="og:url" content="https://ludara.ai/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ludara.AI: Personalized, Gamified Storytelling">
-  <meta name="twitter:description" content="Personalized, gamified storytelling. Flagship: A Perfect Day, interactive maps for hotels, museums, campuses and developments.">
+  <meta name="twitter:description" content="Personalized, gamified storytelling. Flagship lines: A Perfect Day and A Perfect Story Map.">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SEY87L8PFW');</script>
 
   <style>
+    /* Self-hosted fonts — no external dependency, never substituted */
+    @font-face{font-family:'Fraunces';src:url('assets/fonts/fraunces-var.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+    @font-face{font-family:'Fraunces';src:url('assets/fonts/fraunces-var-italic.woff2') format('woff2');font-weight:100 900;font-style:italic;font-display:swap}
+    @font-face{font-family:'Inter';src:url('assets/fonts/inter-var.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+    @font-face{font-family:'Inter';src:url('assets/fonts/inter-var-italic.woff2') format('woff2');font-weight:100 900;font-style:italic;font-display:swap}
     :root{--bg:#0e0f12;--card:#16181d;--text:#e9eef6;--muted:#a9b3c7;--brand:#6aa3ff;--brand-2:#8fd3ff;--border:#23262d;--gold:#b8965a;--gold-l:#d4b07a;
-      --t-h1:clamp(44px,5.5vw,64px);--t-h2:clamp(22px,2.4vw,28px);--t-body:16px;--t-kicker:12px;--gap:12px}
-    h1{font-size:var(--t-h1);line-height:1.1;margin:0 0 var(--gap);font-weight:800;letter-spacing:-.02em}
-    h2,h3{font-size:var(--t-h2);line-height:1.25;margin:0 0 var(--gap);font-weight:700;letter-spacing:-.01em}
+      --t-h1:clamp(40px,5vw,58px);--t-h2:clamp(22px,2.4vw,28px);--t-body:16px;--t-kicker:12px;--gap:12px;
+      --map-cream:#f6e9c9;--map-cream-2:#efd9a6;--navy:#173a5e;
+      --gdn:#eef0d8;--gdn-2:#d9e2b0;--green:#2f5d3f;
+      --parch:#ece0c8;--parch-2:#dcc79c;--plum:#5c2a36;--plum-2:#7a3a48;--ink:#3a2a1e}
+    h1{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:var(--t-h1);line-height:1.08;margin:0 0 var(--gap);font-weight:560;letter-spacing:-.01em;font-optical-sizing:auto;font-variation-settings:'SOFT' 0,'WONK' 0}
+    h2,h3{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:var(--t-h2);line-height:1.25;margin:0 0 var(--gap);font-weight:600;letter-spacing:-.005em;font-optical-sizing:auto;font-variation-settings:'SOFT' 0,'WONK' 0}
     p{font-size:var(--t-body);line-height:1.6;margin:0 0 var(--gap)}
     p:last-child{margin-bottom:0}
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;overflow-x:hidden}
+    a{color:var(--gold-l);text-decoration:none} a:hover{text-decoration:underline}
     .wrap{max-width:1100px;margin:0 auto;padding:24px}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:16px;flex-wrap:wrap}
     .logo a{font-weight:800;letter-spacing:.3px;color:#fff}
     .menu{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff}
+    .menu a{color:var(--muted)} .menu a.active,.menu a:hover{color:#fff;text-decoration:none}
     .has-dropdown{position:relative}
     .has-dropdown > a .caret{font-size:10px;margin-left:3px;opacity:.7;display:inline-block;transition:transform .15s ease}
     .has-dropdown:hover > a .caret,.has-dropdown:focus-within > a .caret,.has-dropdown.open > a .caret{transform:rotate(180deg)}
@@ -43,44 +51,117 @@
     .dropdown::before{content:'';position:absolute;top:-6px;left:0;right:0;height:12px}
     .dropdown a{display:block;padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
     .dropdown a:hover{background:rgba(184,150,90,.10);color:#fff;text-decoration:none}
-    .hero{display:grid;gap:18px;grid-template-columns:1fr;align-items:center;padding:42px 0}
-    .hero p{color:var(--muted)}
-    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:7px 14px 7px 8px;color:var(--text);font-size:14px;font-weight:500;text-decoration:none;background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));box-shadow:0 1px 2px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
-    a.pill:hover{border-color:var(--gold-l);color:#fff;background:linear-gradient(180deg,rgba(184,150,90,0.22),rgba(184,150,90,0.06));box-shadow:0 6px 14px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.10),0 0 0 1px rgba(212,176,122,0.25);transform:translateY(-1px);text-decoration:none}
-    .pill .flag{width:22px;height:16px;display:block;border-radius:3px;object-fit:cover;box-shadow:0 0 0 1px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.5)}
+
+    /* ===== HERO (company) ===== */
+    .lhero{text-align:center;max-width:820px;margin:0 auto;padding:48px 0 8px}
+    .eyebrow{color:var(--gold-l);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:var(--t-kicker);margin-bottom:16px}
+    .lhero h1 em{font-style:normal;color:var(--gold-l)}
+    .lead{color:var(--muted);font-size:18px;max-width:62ch;margin:14px auto 22px}
+    .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:0}
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,var(--gold-l),var(--gold));color:#241a09;padding:13px 22px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;transition:filter .15s ease,transform .15s ease}
+    .btn-gold:hover{filter:brightness(1.06);transform:translateY(-1px);text-decoration:none}
+    .btn-line{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);color:var(--text);padding:13px 22px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;transition:border-color .15s ease,color .15s ease}
+    .btn-line:hover{border-color:var(--gold-l);color:var(--gold-l);text-decoration:none}
+    .trustline{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:13.5px}
+    .trustline .dot{width:8px;height:8px;border-radius:50%;background:#1fae4d;display:inline-block}
+    .trustline b{color:#c8d0dc;font-weight:700}
+
+    .flabel{text-align:center;color:var(--gold-l);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:var(--t-kicker);margin:44px 0 6px}
+    .fsub{text-align:center;color:var(--muted);font-size:16px;margin:0 auto 18px;max-width:60ch}
+
+    /* ===== PRODUCT CARDS (3) ===== */
+    .areas{display:grid;grid-template-columns:1fr;gap:20px}
+    @media(min-width:640px){.areas{grid-template-columns:1fr 1fr}}
+    @media(min-width:1000px){.areas{grid-template-columns:repeat(3,1fr)}}
+    .area{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .area-media{position:relative;aspect-ratio:16/10;overflow:hidden;background:#1b1e25}
+    .area-media .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .35s ease}
+    .area-media a:hover .shot{transform:scale(1.04)}
+    .area-media .badge{top:auto;bottom:10px;left:10px;right:auto;z-index:9}
+    .area-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+    .badge{position:absolute;top:44px;right:12px;z-index:8;font-weight:800;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:20px;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+    .badge.live{background:#1fae4d;color:#062d13}
+    .badge.new{background:var(--gold-l);color:#241a09}
+    .area .fam{color:var(--gold-l);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:11px;margin-bottom:6px}
+    .area h3{margin:0 0 8px;font-size:20px;line-height:1.15}
+    .area .tag-en{color:var(--muted);font-size:13.5px;line-height:1.5;margin-bottom:14px;flex:1}
+    .area-foot{border-top:1px solid var(--border);padding-top:13px}
+    .proof-line{color:var(--muted);font-size:12.5px;line-height:1.5;margin-bottom:11px}
+    .proof-line b{color:#e9eef6;font-weight:700}
+    .area-cta{color:var(--gold-l);font-weight:700;font-size:14px}
+    .area-cta:hover{color:#e6c98f;text-decoration:none}
+
+    /* A Perfect Day — Hotels (cream city map) */
+    .apd{background:radial-gradient(120% 120% at 30% 10%,var(--map-cream),var(--map-cream-2))}
+    .apd .bar{position:absolute;top:0;left:0;right:0;height:32px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 11px;color:#fff;z-index:6}
+    .apd .bar b{font-weight:800;font-size:12px}
+    .apd .bar .m{color:#b9c6d6;font-size:9px;font-weight:700;letter-spacing:.05em}
+    .apd .river{position:absolute;left:-10%;right:-10%;top:60%;height:30px;background:linear-gradient(180deg,#bfe0f2,#a7d3ee);transform:rotate(-7deg);border-radius:30px;opacity:.85}
+    .apd .chips{position:absolute;top:40px;left:9px;right:9px;display:flex;gap:5px;flex-wrap:wrap;z-index:6}
+    .apd .chip{background:#fff;color:var(--navy);border:1px solid rgba(23,58,94,.15);font-weight:700;font-size:9px;padding:3px 7px;border-radius:12px}
+    .apd .chip.on{background:var(--navy);color:#fff}
+    .street{position:absolute;background:rgba(23,58,94,.12)}
+
+    /* A Perfect Day — Museums (garden/campus map) */
+    .amu{background:radial-gradient(120% 120% at 35% 12%,var(--gdn),var(--gdn-2))}
+    .amu .bar{position:absolute;top:0;left:0;right:0;height:32px;background:var(--green);display:flex;align-items:center;justify-content:space-between;padding:0 11px;color:#f1f6ec;z-index:6}
+    .amu .bar b{font-weight:800;font-size:12px}
+    .amu .bar .m{color:#cfe0c8;font-size:9px;font-weight:700;letter-spacing:.05em}
+    .amu .chips{position:absolute;top:40px;left:9px;right:9px;display:flex;gap:5px;flex-wrap:wrap;z-index:6}
+    .amu .chip{background:#fff;color:var(--green);border:1px solid rgba(47,93,63,.16);font-weight:700;font-size:9px;padding:3px 7px;border-radius:12px}
+    .amu .chip.on{background:var(--green);color:#fff}
+    .amu .bldg{position:absolute;left:40%;top:46%;width:20%;height:20%;background:#c9b48f;border:2px solid #fff;border-radius:4px;box-shadow:0 3px 8px rgba(0,0,0,.2);z-index:4}
+    .amu .path{position:absolute;background:rgba(47,93,63,.14)}
+
+    /* A Perfect Story Map (parchment narrative) */
+    .asm{background:radial-gradient(120% 120% at 70% 15%,var(--parch),var(--parch-2))}
+    .asm .bar{position:absolute;top:0;left:0;right:0;height:32px;background:var(--plum);display:flex;align-items:center;justify-content:space-between;padding:0 11px;color:#f3e7d8;z-index:6}
+    .asm .bar b{font-weight:800;font-size:12px}
+    .asm .route{position:absolute;inset:0;z-index:4}
+    .asm .rpin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--plum-2);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:800;border:2px solid #fff;box-shadow:0 3px 7px rgba(0,0,0,.28);z-index:5}
+    .asm .quote{position:absolute;left:11px;bottom:11px;right:32%;background:rgba(255,255,255,.92);border-left:3px solid var(--plum);border-radius:8px;padding:7px 9px;font-size:10px;color:var(--ink);font-style:italic;z-index:6;box-shadow:0 6px 14px rgba(0,0,0,.14)}
+    .asm .quote span{display:block;font-style:normal;font-weight:700;color:var(--plum);font-size:9px;margin-top:2px}
+
+    .pin{position:absolute;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;border:2px solid #fff;box-shadow:0 3px 7px rgba(0,0,0,.25);z-index:5}
+
+    /* ===== TRUST BADGE (Option B) ===== */
+    .trust-badge{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;text-align:center;margin-top:20px}
+    .trust-badge .kick{color:var(--gold-l);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+    .trust-badge .sent{display:block;margin:8px auto 16px;max-width:60ch;color:#c8d0dc;font-size:15.5px}
+    .trust-badge .sent b{color:#fff}
+    .plate{display:inline-flex;align-items:center;gap:30px;background:linear-gradient(180deg,#faf3e3,#ece0c6);border:1px solid rgba(184,150,90,.5);border-radius:16px;padding:18px 34px;box-shadow:0 24px 46px -14px rgba(0,0,0,.7),0 8px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -3px 6px rgba(150,120,60,.18)}
+    .plate img{display:block}
+    .plate .hh{height:82px}
+    .plate .ub{height:84px}
+    .plate .pdiv{width:1px;height:66px;background:rgba(120,90,40,.28)}
+    @media(max-width:520px){.plate{gap:18px;padding:14px 20px}.plate .hh{height:56px}.plate .ub{height:60px}}
+
+    /* ===== Why Ludara (kept) ===== */
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px}
-    .kicker,.kicker-gold{color:var(--gold-l);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:var(--t-kicker);margin-bottom:var(--gap)}
+    .kicker{color:var(--gold-l);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:var(--t-kicker);margin-bottom:var(--gap)}
     .grid-3{display:grid;gap:16px;grid-template-columns:1fr} @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
-    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
-    .footer-links{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-bottom:10px}
-    .footer-links a{color:var(--muted)} .footer-links a:hover{color:#fff}
-    .serif{letter-spacing:-.02em}
-    .serif em{font-style:italic;color:var(--gold-l)}
-    .gold-rule{height:2px;width:56px;background:var(--gold);border-radius:2px;margin:16px 0 6px}
-    .why{padding:28px}
-    .why .grid-3{margin-top:10px;gap:22px}
-    .why .feature{padding:4px 0}
+    .why-band{background:#f7f3ec;border-top:1px solid rgba(184,150,90,.22);border-bottom:1px solid rgba(184,150,90,.22);margin:26px calc(50% - 50vw) 0;padding:44px calc(50vw - 50%)}
+    .why-inner{max-width:1100px;margin:0 auto;padding:0 24px}
+    .why-band .kicker{color:#9a7d3f}
+    .why-title{text-align:center;color:#1a2030;font-size:clamp(26px,3vw,34px);font-weight:600;margin:0 0 30px;letter-spacing:-.01em}
+    .why-band .grid-3{margin-top:12px;gap:26px;grid-template-columns:1fr}
+    @media(min-width:640px){.why-band .grid-3{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:980px){.why-band .grid-3{grid-template-columns:repeat(4,1fr)}}
+    .why-band h3{font-size:1.18rem}
+    .why-band .feature{background:#fffdf7;border:1px solid rgba(184,150,90,.24);border-radius:16px;padding:22px 22px;box-shadow:0 3px 12px rgba(120,90,30,.05)}
+    .why-band h3,.why-band .icon-title span{color:#1a2030}
+    .why-band .icon{color:#b8965a;opacity:1}
+    .why-band .feature-note{color:#6b6150}
     .icon-title{display:flex;align-items:center;gap:10px}
     .icon{width:22px;height:22px;color:var(--gold-l);opacity:.9;flex-shrink:0}
     .feature-note{color:var(--muted)}
-    .btn{display:inline-block;background:var(--brand);color:#0b0c10;padding:10px 14px;border-radius:10px;font-weight:600;text-decoration:none}
-    .btn:hover{opacity:.9}
-    .btn-ghost{display:inline-block;border:1px solid var(--border);color:var(--muted);padding:10px 14px;border-radius:10px;font-weight:500;text-decoration:none}
-    .btn-ghost:hover{border-color:var(--brand);color:#fff}
-    .flagship{padding:26px}
-    .flagship-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .flagship-sub{color:var(--muted)}
-    /* SECTOR CARDS */
-    .sectors{display:grid;gap:14px;grid-template-columns:1fr;margin:18px 0 6px}
-    @media(min-width:720px){.sectors{grid-template-columns:repeat(2,1fr)}}
-    .sector{display:block;background:#f4ecdb;border:2px solid var(--gold);border-radius:12px;padding:18px 20px;text-decoration:none;box-shadow:0 0 0 1px rgba(184,150,90,0.15),0 4px 16px rgba(0,0,0,0.35);transition:border-color .18s ease,transform .18s ease,background .18s ease,box-shadow .18s ease}
-    .sector:hover{border-color:var(--gold-l);background:#f9f3e6;transform:translateY(-2px);box-shadow:0 0 0 1px rgba(212,176,122,0.5),0 10px 28px rgba(184,150,90,0.30);text-decoration:none}
-    .sector h3{font-size:1.08rem;margin:0 0 4px;color:#2a2016}
-    .sector p{font-size:0.9rem;color:#6b6150;margin:0;line-height:1.55}
-    .sector .go{display:inline-block;margin-top:10px;color:#a06a2a;font-size:0.8rem;font-weight:700;letter-spacing:.02em}
-    .examples-line{color:var(--muted);font-size:14px;margin-top:12px}
-    .examples-line a{color:var(--gold-l);font-weight:600}
-    .flagship-pills{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+    .btn{display:inline-block;background:linear-gradient(180deg,var(--gold-l),var(--gold));color:#241a09;padding:11px 18px;border-radius:10px;font-weight:700;text-decoration:none}
+    .btn:hover{filter:brightness(1.06);text-decoration:none}
+
+    .footer{border-top:1px solid var(--border);margin-top:48px;padding:22px 0;color:var(--muted);font-size:14px;text-align:center}
+    .footer-links{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-bottom:10px}
+    .footer-links a{color:var(--muted)} .footer-links a:hover{color:#fff}
+
     [data-animate]{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
     [data-animate].in{opacity:1;transform:none}
     @media(prefers-reduced-motion:reduce){[data-animate]{opacity:1;transform:none}}
@@ -97,8 +178,8 @@
           <div class="dropdown" role="menu">
             <a class="dd-group" href="/aperfectday/" role="menuitem">A Perfect Day</a>
             <a class="dd-sub" href="/aperfectday/" role="menuitem">Hotels</a>
-            <a class="dd-sub" href="/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
-            <a class="dd-sub" href="/universities.html" role="menuitem">Universities</a>
+            <a class="dd-sub" href="/museums.html" role="menuitem">Museums</a>
+            <a class="dd-sub" href="/museums.html" role="menuitem">Botanical Gardens &amp; Historical Sites</a>
             <a class="dd-sub" href="/realestate.html" role="menuitem">Real Estate</a>
             <div class="dd-sep" aria-hidden="true"></div>
             <a class="dd-group" href="/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
@@ -111,76 +192,121 @@
       </div>
     </nav>
 
-    <section class="card hero" data-animate>
-      <div>
-        <div class="pill">Ludus &#8594; Ludara • Personalized • Gamified</div>
-        <h1 class="serif">Ludara.AI turns any content into a <em>personalized, gamified</em> experience.</h1>
-        <div class="gold-rule" aria-hidden="true"></div>
-        <p>Built for culture, tourism, wellness and education. From <em>ludus</em>, Latin for play and learn, we make every journey engaging and personal.</p>
+    <!-- ===== COMPANY HERO ===== -->
+    <section class="lhero">
+      <h1 class="serif">Interactive, multilingual products for <em>culture, tourism and storytelling.</em></h1>
+      <p class="lead">Three products, live today.</p>
+      <div class="cta-row">
+        <a class="btn-gold" href="/aperfectday/ludara/london/" target="_blank" rel="noopener">See a live guide &#8594;</a>
+        <a class="btn-line" href="/contact.html">Request a demo</a>
       </div>
     </section>
 
-    <section class="card why" aria-labelledby="value" data-animate>
-      <div class="kicker" id="value">Why Ludara</div>
+    <div class="flabel">Our products</div>
+    <p class="fsub">Curated and branded interactive maps.</p>
+
+    <!-- ===== THREE PRODUCT CARDS ===== -->
+    <section class="areas">
+
+      <!-- A PERFECT DAY · HOTELS -->
+      <div class="area">
+        <div class="area-media">
+          <span class="badge live">Live</span>
+          <a href="/aperfectday/ludara/london/" target="_blank" rel="noopener"><img class="shot" src="assets/demos/hotels.jpg" alt="A Perfect Day — London interactive city guide"></a>
+        </div>
+        <div class="area-body">
+          <div class="fam">A Perfect Day</div>
+          <h3>For Hotels &amp; Resorts</h3>
+          <div class="tag-en">Concierge-quality city guides your guests carry with them, curated by locals and branded for your property.</div>
+          <div class="area-foot">
+            <div class="proof-line"><b>9</b> cities live &middot; up to <b>100</b> curated attractions &middot; multilingual</div>
+            <a class="area-cta" href="/aperfectday/ludara/london/" target="_blank" rel="noopener">See the live London guide &#8594;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- A PERFECT DAY · MUSEUMS -->
+      <div class="area">
+        <div class="area-media">
+          <span class="badge live">Live demo</span>
+          <a href="/aperfectday/muza/" target="_blank" rel="noopener"><img class="shot" src="assets/demos/museum.jpg" alt="A Perfect Day — Eretz Israel Museum map"></a>
+        </div>
+        <div class="area-body">
+          <div class="fam">A Perfect Day</div>
+          <h3>For Museums, Botanical Gardens &amp; Historical Sites</h3>
+          <div class="tag-en">A pin for every exhibit, garden and historic site &mdash; with what&rsquo;s on now, in every visitor&rsquo;s language.</div>
+          <div class="area-foot">
+            <div class="proof-line">Live <b>4-language</b> demo &middot; Eretz Israel Museum &middot; in discussion with more</div>
+            <a class="area-cta" href="/aperfectday/muza/" target="_blank" rel="noopener">See the museum demo &#8594;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- A PERFECT STORY MAP -->
+      <div class="area">
+        <div class="area-media">
+          <span class="badge live">Live</span>
+          <a href="/aperfectstorymap/shantaram/" target="_blank" rel="noopener"><img class="shot" src="assets/demos/storymap.jpg" alt="A Perfect Story Map — Shantaram, the novel's Mumbai"></a>
+        </div>
+        <div class="area-body">
+          <div class="fam">A Perfect Story Map</div>
+          <h3>For Books &amp; Screen</h3>
+          <div class="tag-en">Walk the real places behind a story: see where it travels, visualize every setting, and search by character or chapter.</div>
+          <div class="area-foot">
+            <div class="proof-line">A natural companion for readers, screen audiences &amp; book clubs &middot; multilingual</div>
+            <a class="area-cta" href="/aperfectstorymap/shantaram/" target="_blank" rel="noopener">See the Story Map demo &#8594;</a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== TRUST BADGE (Option B) ===== -->
+    <section class="trust-badge">
+      <span class="kick">Live at</span>
+      <span class="sent"><b>Holston House Nashville</b> &mdash; an <b>Unbound Collection by Hyatt</b> hotel</span>
+      <div class="plate">
+        <img class="hh" src="assets/hh-logo-black.png" alt="Holston House Nashville">
+        <span class="pdiv"></span>
+        <img class="ub" src="assets/ub-unbound-navy.png" alt="The Unbound Collection by Hyatt">
+      </div>
+    </section>
+
+    <!-- ===== Why Ludara (kept) ===== -->
+    <section class="why-band" aria-labelledby="value" data-animate>
+      <div class="why-inner">
+      <h2 class="why-title" id="value">Why Ludara</h2>
       <div class="grid-3">
         <div class="feature">
           <h3 class="icon-title">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-            <span>Personalized</span>
+            <span>Curated</span>
           </h3>
-          <p class="feature-note">Narratives adapt to interests, culture and language, so every visitor gets a journey that feels made for them.</p>
+          <p class="feature-note">Only places worth the visit, hand-picked from local critics, reviews and your team&rsquo;s own knowledge. Every place and quote is sourced and approved, never invented.</p>
+        </div>
+        <div class="feature">
+          <h3 class="icon-title">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9s1.3-6.5 3.8-9z"/></svg>
+            <span>Multilingual</span>
+          </h3>
+          <p class="feature-note">One link, every language. International visitors read every place and story in their own &mdash; we handle all the translation for you.</p>
         </div>
         <div class="feature">
           <h3 class="icon-title">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 7 7 7 7 3"/><path d="M7 7a7 7 0 0 1 12 5"/><polyline points="21 17 17 17 17 21"/><path d="M17 17a7 7 0 0 1-12-5"/></svg>
-            <span>Engaging</span>
+            <span>Always current</span>
           </h3>
-          <p class="feature-note">Interactivity and gamification capture attention and bring people back, rather than sitting unread in a drawer.</p>
+          <p class="feature-note">Minimal work on your side &mdash; we host and update everything for you, refreshed with seasonal events and preset itineraries, always ready to share.</p>
         </div>
         <div class="feature">
           <h3 class="icon-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-3z"/><path d="M9.5 12.5l2 2 3-4"/></svg>
-            <span>Brand-safe</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v7M17 20h4"/></svg>
+            <span>No app needed</span>
           </h3>
-          <p class="feature-note">Curated sources, tone control and privacy-first design protect your audience and your name.</p>
+          <p class="feature-note">No app to download. A QR code opens the map on any device &mdash; embedded in your website and linked in every reservation confirmation.</p>
         </div>
       </div>
-    </section>
-
-    <!-- Flagship + sectors -->
-    <section class="card flagship" data-animate aria-labelledby="flagship">
-      <div class="flagship-head">
-        <div class="kicker-gold" id="flagship">Our flagship product</div>
-        <a href="/aperfectday/" style="color:var(--muted)">Explore A Perfect Day &#8594;</a>
       </div>
-      <h2 class="serif">A Perfect Day: <em>interactive maps</em> for places worth exploring.</h2>
-      <div class="gold-rule" aria-hidden="true"></div>
-      <p class="flagship-sub">One interactive, multilingual map product, shaped for four kinds of place. Curated, fully branded, no app to download, and maintained for you.</p>
-
-      <div class="sectors">
-        <a class="sector" href="/aperfectday/">
-          <h3>Hotels</h3>
-          <p>Concierge-quality city guides your guests carry with them, curated by locals and branded for your property.</p>
-          <span class="go">Explore hotels &#8594;</span>
-        </a>
-        <a class="sector" href="/museums.html">
-          <h3>Museums, Zoos &amp; Gardens</h3>
-          <p>A pin for every pavilion, exhibit or enclosure, with what is on now, in every visitor's language.</p>
-          <span class="go">Explore museums, zoos &amp; gardens &#8594;</span>
-        </a>
-        <a class="sector" href="/universities.html">
-          <h3>Universities</h3>
-          <p>A clean, multilingual campus map that launches fast and stays current, without a heavy production.</p>
-          <span class="go">Explore universities &#8594;</span>
-        </a>
-        <a class="sector" href="/realestate.html">
-          <h3>Real Estate</h3>
-          <p>Two maps in one, the development and the neighbourhood around it, so buyers fall for the home and the life.</p>
-          <span class="go">Explore real estate &#8594;</span>
-        </a>
-      </div>
-
-      <p class="examples-line">See it live: <a href="/aperfectday/ludara/london/" target="_blank" rel="noopener">London city guide</a> &nbsp;·&nbsp; <a href="/aperfectday/muza/" target="_blank" rel="noopener">Eretz Israel Museum map</a></p>
     </section>
 
     <!-- Contact CTA -->
@@ -194,6 +320,7 @@
       <div class="footer-links">
         <a href="/">Home</a>
         <a href="/aperfectday/">A Perfect Day</a>
+        <a href="/aperfectstorymap/">A Perfect Story Map</a>
         <a href="/about.html">About</a>
         <a href="/contact.html">Contact</a>
       </div>
