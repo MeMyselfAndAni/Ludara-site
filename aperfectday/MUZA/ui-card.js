@@ -9,11 +9,11 @@ let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 
 const CAT_COLORS = {
   pavilion:'#9e2b25', hall:'#c8761b', heritage:'#7a5230',
-  outdoor:'#3f7d4e', service:'#3a6ea5'
+  outdoor:'#3f7d4e', service:'#3a6ea5', restroom:'#5b7b8a'
 };
 const CAT_LABELS = {
   pavilion:'Pavilion', hall:'Exhibition Hall', heritage:'Heritage Site',
-  outdoor:'Garden & Outdoor', service:'Service'
+  outdoor:'Garden & Outdoor', service:'Service', restroom:'Restroom'
 };
 const CAT_GRADIENTS = {
   pavilion:'linear-gradient(135deg,#6e1a16,#9e2b25)',
@@ -21,6 +21,7 @@ const CAT_GRADIENTS = {
   heritage:'linear-gradient(135deg,#4a3018,#7a5230)',
   outdoor: 'linear-gradient(135deg,#1f4a2c,#3f7d4e)',
   service: 'linear-gradient(135deg,#1f3f5c,#3a6ea5)',
+  restroom:'linear-gradient(135deg,#41606d,#5b7b8a)',
 };
 
 // ── Open card from list ────────────────────────────────────────

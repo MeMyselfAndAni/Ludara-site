@@ -4,7 +4,7 @@ const photoCache = {};
 function fetchPhoto(p, callback){
   if(photoCache[p.id] !== undefined){ callback(photoCache[p.id]); return; }
   const basePath = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
-  const url = basePath + 'place-' + p.id + '.jpg';
+  const url = (p.img ? p.img : basePath + 'place-' + p.id + '.jpg');
   const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
   photoCache[p.id] = { url: url, attr: attr };
   callback(photoCache[p.id]);
@@ -18,7 +18,7 @@ function preloadAllPhotos(){
     setTimeout(() => {
       if(photoCache[p.id]) return; // already cached
       const img = new Image();
-      const url = basePath + 'place-' + p.id + '.jpg';
+      const url = (p.img ? p.img : basePath + 'place-' + p.id + '.jpg');
       const attr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
       img.onload = () => { photoCache[p.id] = { url: url, attr: attr }; };
       img.src = url;

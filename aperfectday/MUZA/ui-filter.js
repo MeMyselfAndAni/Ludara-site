@@ -300,9 +300,10 @@ function renderList(){
     sorted.forEach(p => {
       const thumb = document.getElementById('thumb-' + p.id);
       if(!thumb) return;
+      const _src = (p.img || imgBase + 'place-' + p.id + '.jpg');
       const img = new Image();
-      img.onload = function(){ if(thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">'; };
-      img.src = imgBase + 'place-' + p.id + '.jpg';
+      img.onload = function(){ if(thumb) thumb.innerHTML = '<img src="' + _src + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">'; };
+      img.src = _src;
     });
     return;
   }
@@ -347,9 +348,10 @@ function renderList(){
   filtered.forEach(p=>{
     const thumb = document.getElementById(`thumb-${p.id}`);
     if(!thumb) return;
+    const _src = (p.img || imgBase + 'place-' + p.id + '.jpg');
     const img = new Image();
-    img.onload = () => { thumb.innerHTML = `<img src="${imgBase}place-${p.id}.jpg" alt="${p.name}" loading="lazy">`; };
-    img.src = imgBase + 'place-' + p.id + '.jpg';
+    img.onload = () => { thumb.innerHTML = `<img src="${_src}" alt="${p.name}" loading="lazy">`; };
+    img.src = _src;
   });
 }
 

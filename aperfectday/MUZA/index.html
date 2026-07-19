@@ -723,7 +723,7 @@ if (typeof window.toggleDesktopList !== 'function') {
       pl.forEach(function(p){
         var th=document.getElementById('thumb-'+p.id);if(!th)return;
         if(window.photoCache&&photoCache[p.id]&&photoCache[p.id].url){th.innerHTML='<img src="'+photoCache[p.id].url+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';return;}
-        var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+imgBase+'place-'+p.id+'.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=imgBase+'place-'+p.id+'.jpg';
+        var _src=(p.img||imgBase+'place-'+p.id+'.jpg');var img=new Image();img.onload=function(){if(th)th.innerHTML='<img src="'+_src+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">';};img.src=_src;
       });
     }
     updateTrip(places);
