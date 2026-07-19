@@ -39,7 +39,7 @@ const STRINGS = {
       trip_fourhour_name:'Four-Hour Visit', trip_fourhour_note:'Galleries, the tureens, tram tour and the gardens',
       trip_family_name:'Family Visit', trip_family_note:'Enchanted Woods, the tram and the Reflecting Pool',
       trip_loaded:'loaded', stops_word:'stops', undo:'Undo',
-      our_picks_html:'Day<br>Trips', arc_two:'2 Hours', arc_four:'4 Hours', arc_family:'Family',
+      our_picks_html:'Recommended<br>Routes', arc_two:'2 Hours', arc_four:'4 Hours', arc_family:'Family',
       stop_one:'stop', min_walk:'min walk', min_drive:'min drive', min_here:'min here',
       mins_total:'total', walking_word:'walking', autosort:'↺ Auto-sort',
       walk_here:'🚶 Walk here (Google Maps)', clear_btn:'🗑 Clear',

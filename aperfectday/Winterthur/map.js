@@ -85,9 +85,10 @@ function initMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-  map.on('error', function() {
-    // Silent reload — client sees nothing, transient errors self-heal
-    setTimeout(function() { location.reload(); }, 2000);
+  map.on('error', function(e) {
+    // Log transient tile/style errors; MapLibre recovers on its own. No page reload
+    // (a reload could loop on a slow first load and look like a hang).
+    try { console.warn('map error:', e && e.error && e.error.message); } catch(_){}
   });
 
   map.on('load', () => {

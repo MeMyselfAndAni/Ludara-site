@@ -31,6 +31,7 @@
   .nbhd-label { white-space: normal !important; text-align: center; max-width: 72px; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 
   .pc-photo-img { object-fit: contain !important; }
+  .pc-photo-wrap { background: linear-gradient(135deg,#2f5347 0%,#24463a 100%) !important; }
   .pc-address { font-size: 0.8rem; color: #8a7d6c; margin: 2px 0 6px; }
   .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
 
@@ -681,6 +682,8 @@ if (typeof window.toggleDesktopList !== 'function') {
           var icon = rs.travelMode === 'driving' ? '🚗' : '🚶';
           var we = document.getElementById('saved-stat-walk-sheet');
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
+          var de = document.getElementById('saved-stat-dist-sheet');
+          if (de && typeof formatDistance === 'function') de.textContent = '📏 ' + formatDistance(rs.distM);
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
             if (c) c.textContent = '↓ ~' + m + ' ' + (rs.travelMode === 'driving' ? (typeof t==='function'?t('min_drive'):'min drive') : (typeof t==='function'?t('min_walk'):'min walk'));
@@ -695,7 +698,7 @@ if (typeof window.toggleDesktopList !== 'function') {
       var html =
         '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+' '+(pl.length===1?(typeof t==='function'?t('stop_one'):'stop'):(typeof t==='function'?t('stops_word'):'stops'))+'</span>'+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
-        '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
+        '<span class="saved-stat-dot">·</span><span id="saved-stat-dist-sheet">📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
         '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
@@ -722,6 +725,8 @@ if (typeof window.toggleDesktopList !== 'function') {
         _fetchRouteStats(pl).then(function(s) {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
+          var de2=document.getElementById('saved-stat-dist-sheet');
+          if(de2 && typeof formatDistance==='function') de2.textContent='📏 '+formatDistance(s.distM);
           if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent='↓ ~'+m+' '+(s.travelMode==='driving'?(typeof t==='function'?t('min_drive'):'min drive'):(typeof t==='function'?t('min_walk'):'min walk'));});
         }).catch(function(){});
       }

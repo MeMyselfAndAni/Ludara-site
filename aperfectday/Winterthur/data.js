@@ -266,6 +266,7 @@ const PLACES = [
     lat: 39.806737, lng: -75.596086,
     hours: "Tue–Sun 10:00–17:00",
     website: "https://www.winterthur.org/exhibitions-and-collections/garden/",
+    img: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20400%20300%27%3E%3Crect%20width%3D%27400%27%20height%3D%27300%27%20fill%3D%27%232f5347%27/%3E%3Cg%20fill%3D%27%23e6c34d%27%3E%3Crect%20x%3D%27192%27%20y%3D%27168%27%20width%3D%2716%27%20height%3D%2796%27%20rx%3D%274%27/%3E%3Ccircle%20cx%3D%27200%27%20cy%3D%27120%27%20r%3D%2758%27/%3E%3Ccircle%20cx%3D%27150%27%20cy%3D%27146%27%20r%3D%2740%27/%3E%3Ccircle%20cx%3D%27250%27%20cy%3D%27146%27%20r%3D%2740%27/%3E%3Ccircle%20cx%3D%27200%27%20cy%3D%2784%27%20r%3D%2738%27/%3E%3C/g%3E%3C/svg%3E",
     en: {
       name: "Sycamore with Cement Core",
       role: "Landmark specimen tree",
@@ -279,6 +280,7 @@ const PLACES = [
     lat: 39.806107, lng: -75.596853,
     hours: "Tue–Sun 10:00–17:00",
     website: "",
+    img: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20400%20260%27%3E%3Crect%20width%3D%27400%27%20height%3D%27260%27%20fill%3D%27%232f5347%27/%3E%3Crect%20x%3D%27198%27%20y%3D%2755%27%20width%3D%274%27%20height%3D%27150%27%20fill%3D%27%23e6c34d%27/%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27140%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Crect%20x%3D%27123%27%20y%3D%2796%27%20width%3D%2734%27%20height%3D%2752%27%20rx%3D%278%27/%3E%3Crect%20x%3D%27128%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27142%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27260%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Cpath%20d%3D%27M260%2094%20L232%20164%20H288%20Z%27/%3E%3Crect%20x%3D%27250%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27261%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3C/g%3E%3C/svg%3E",
     en: { name: "Restrooms · Garden", role: "Visitor restroom", zone: "The Garden",
       desc: "Public restrooms in the garden, near the Sundial Garden.", tip: "" }
   },
@@ -287,6 +289,7 @@ const PLACES = [
     lat: 39.80900, lng: -75.60380,
     hours: "Tue–Sun 10:00–17:00",
     website: "",
+    img: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20400%20260%27%3E%3Crect%20width%3D%27400%27%20height%3D%27260%27%20fill%3D%27%232f5347%27/%3E%3Crect%20x%3D%27198%27%20y%3D%2755%27%20width%3D%274%27%20height%3D%27150%27%20fill%3D%27%23e6c34d%27/%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27140%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Crect%20x%3D%27123%27%20y%3D%2796%27%20width%3D%2734%27%20height%3D%2752%27%20rx%3D%278%27/%3E%3Crect%20x%3D%27128%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27142%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27260%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Cpath%20d%3D%27M260%2094%20L232%20164%20H288%20Z%27/%3E%3Crect%20x%3D%27250%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27261%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3C/g%3E%3C/svg%3E",
     en: { name: "Restrooms · Visitor Center", role: "Visitor restroom", zone: "Visitor Center",
       desc: "Public restrooms at the Visitor Center, by the café and shop.", tip: "" }
   },
@@ -295,6 +298,7 @@ const PLACES = [
     lat: 39.80625, lng: -75.60045,
     hours: "Tue–Sun 10:00–17:00",
     website: "",
+    img: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20400%20260%27%3E%3Crect%20width%3D%27400%27%20height%3D%27260%27%20fill%3D%27%232f5347%27/%3E%3Crect%20x%3D%27198%27%20y%3D%2755%27%20width%3D%274%27%20height%3D%27150%27%20fill%3D%27%23e6c34d%27/%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27140%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Crect%20x%3D%27123%27%20y%3D%2796%27%20width%3D%2734%27%20height%3D%2752%27%20rx%3D%278%27/%3E%3Crect%20x%3D%27128%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27142%27%20y%3D%27142%27%20width%3D%2710%27%20height%3D%2758%27%20rx%3D%273%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23f7f1e8%27%3E%3Ccircle%20cx%3D%27260%27%20cy%3D%2772%27%20r%3D%2717%27/%3E%3Cpath%20d%3D%27M260%2094%20L232%20164%20H288%20Z%27/%3E%3Crect%20x%3D%27250%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3Crect%20x%3D%27261%27%20y%3D%27160%27%20width%3D%279%27%20height%3D%2748%27%20rx%3D%273%27/%3E%3C/g%3E%3C/svg%3E",
     en: { name: "Restrooms · Museum", role: "Visitor restroom", zone: "Museum & House",
       desc: "Public restrooms at the museum.", tip: "" }
   }
