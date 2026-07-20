@@ -428,9 +428,13 @@ function openTripInMaps(){
     const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
     const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
 
-    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);
-    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', ' + cityName);
-    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', ' + cityName)).join('|');
+    // Holston pattern: use each stop's curated `search` string when present (Google
+    // resolves the named venue); otherwise fall back to lat,lng so places without a
+    // searchable name still land on the exact spot.
+    const g = p => p.search ? encodeURIComponent(p.search) : p.lat + ',' + p.lng;
+    const origin = g(stops[0]);
+    const dest   = g(stops[stops.length-1]);
+    const waypts = stops.slice(1,-1).map(g).join('%7C');
 
     const url = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest +
       (waypts ? '&waypoints=' + waypts : '') + '&travelmode=' + travelMode;

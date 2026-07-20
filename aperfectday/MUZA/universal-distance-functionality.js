@@ -35,8 +35,8 @@ function formatDistance(meters) {
 }
 
 // Enhanced navigate to place function with user location
-function navigateToPlace(destLat, destLng, destName) {
-  var dest = destLat + ',' + destLng;
+function navigateToPlace(destLat, destLng, destName, destSearch) {
+  var dest = destSearch ? encodeURIComponent(destSearch) : destLat + ',' + destLng;
   var url = window._userLat && window._userLng
     ? 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking'
     : 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
@@ -149,7 +149,7 @@ window.addEventListener('load', function() {
       (distStr ? '  <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
 
     btn.onclick = function() {
-      navigateToPlace(place.lat, place.lng, place.name);
+      navigateToPlace(place.lat, place.lng, place.name, place.search);
     };
 
     // Insert button after hours element
