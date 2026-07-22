@@ -12,6 +12,7 @@
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
+      /* 1 — Welcome */
       title: 'Welcome to Your Perfect Day in ' + CITY,
       body: 'One interactive map for the whole estate — the house and galleries, the naturalistic garden, children’s Enchanted Woods and every trail — with the story behind each place.',
       target: null,
@@ -20,6 +21,7 @@
       btn: 'Next'
     },
     {
+      /* 2 — Explore the pins */
       title: 'The Winterthur Guide',
       body: 'Every pin is worth your time: Henry Francis du Pont’s house and its American treasures, the March Bank’s millions of late-winter bulbs, Azalea Woods in full bloom, the children’s Enchanted Woods, and the narrated tram that carries you through it all. Tap any icon to see what’s there.',
       target: null,
@@ -28,6 +30,7 @@
       btn: 'Next'
     },
     {
+      /* 3 — Inside the card */
       title: 'Inside the place card',
       body: 'Each card has a place description, visitor tip and direct Google Maps navigation link.',
       target: null,
@@ -36,42 +39,37 @@
       btn: 'Next'
     },
     {
-      title: 'Filter by place type',
-      body: 'Looking only for the house and galleries, or just the gardens? Tap a category at the top to show only what you want, the map follows.',
+      /* 4 — Ready-made day trips (moved up so visitors meet it early) */
+      title: 'Ready-made day trips',
+      body: 'Short on time? One tap on the left loads a full, ready-to-go day — ' + TRIP_NAMES + '. A whole route, planned for you.',
+      target: '#trip-launcher',
+      cardPos: 'center',
+      closeCard: true,
+      demo: 'close-saved-pulse',
+      btn: 'Next'
+    },
+    {
+      /* 5 — Filter by type & area (merged: category bar + zone bubbles) */
+      title: 'Filter by type & area',
+      body: 'Looking only for the house and galleries, or just the gardens? Tap a category at the top to show only what you want. Or tap a zone below — Museum & House, The Garden, Visitor Center — to jump straight to that part of the estate. The map follows either way.',
       target: '.filter-bar',
+      dualTargets: ['.filter-bar', '#nbhd-bar'],  /* desktop: highlight both; mobile: highlight the top bar, copy points to the zones below */
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',
       btn: 'Next'
     },
     {
-      title: 'Explore by Zone',
-      body: 'Each bubble is a part of the estate: the Museum & House, the Garden, or the Visitor Center. Tap one to zoom straight to it.',
-      target: '#nbhd-bar',
-      cardPos: 'center',
-      closeCard: true,
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Save your favorites',
-      body: 'Find something that makes you stop? Tap the heart. It stays in your list for the whole trip, even when you close the map.',
+      /* 6 — Save your favourites (merged: tap heart + saved list in one demo) */
+      title: 'Save your favourites',
+      body: 'Found something you love? Tap the heart to save it. Your saved places gather under Saved — tap any to reopen its card, and drag to arrange them in the order you’ll walk.',
       target: null,
       cardPos: 'center',
-      demo: 'open-card',
+      demo: 'save-and-show',
       btn: 'Next'
     },
     {
-      title: 'Your saved places',
-      body: 'Tap Saved to see your list. Tap any row to reopen the card. Drag to arrange them in the order you plan to walk.',
-      target: null,
-      dualTargets: ['#pill-saved', '#sheet'],
-      targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
-      cardPos: 'center',
-      demo: 'show-saved',
-      btn: 'Next'
-    },
-    {
+      /* 7 — Google Maps navigation */
       title: 'Navigate with Google Maps',
       body: 'Ready to walk? Open your full route in Google Maps, or tap any saved place to navigate there directly.',
       target: '#sheet button[onclick="openTripInMaps()"]',
@@ -80,6 +78,7 @@
       btn: 'Next'
     },
     {
+      /* 8 — PDF */
       title: 'Download a PDF guide',
       body: 'Tap PDF Guide to get a beautifully designed guide with all your picks, ready to share or print before you leave.',
       target: '#sheet button[onclick="generatePDF()"]',
@@ -88,6 +87,7 @@
       btn: 'Next'
     },
     {
+      /* 9 — Share */
       title: 'Share your map',
       body: 'Send this map to a travel companion or keep it for the next visit. One tap to share by message or email.',
       target: '#sheet button[onclick="shareItinerary()"]',
@@ -96,25 +96,19 @@
       btn: 'Next'
     },
     {
-      title: 'Recommended Routes',
-      body: 'Looking for inspiration? We have suggestions for you. One tap on the left loads a full ready-to-go day — ' + TRIP_NAMES + '.',
-      target: '#trip-launcher',
-      cardPos: 'center',
-      demo: 'close-saved-pulse',
-      btn: 'Next'
-    },
-    {
+      /* 10 — Locate yourself */
       title: 'Navigate',
       body: 'The estate spreads across a thousand acres and it’s easy to lose your bearings. Tap the circle to find yourself on the map.',
       target: null,
       targets: ['#locate-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
       cardPos: 'center',
-      demo: 'close-sheet',
+      demo: 'close-saved-sheet',
       mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
       btn: 'Next'
     },
     {
+      /* 11 — All set */
       title: "You're all set!",
       body: 'The estate is yours to explore. Go find your perfect day.',
       target: null,
@@ -133,98 +127,16 @@
   /* Always mark the final step as Done */
   if (STEPS.length > 0) { STEPS[STEPS.length - 1].btn = 'Done ✓'; }
 
-  /* ── Hebrew tutorial strings (keyed by English title) ── */
-  var TUT_BTN_HE = { 'Next':'הבא', 'Done':'סיום', 'Done ✓':'סיום ✓' };
-  var TUT_HE = {
-    ['Welcome to Your Perfect Day in ' + CITY]: { title:'ברוכים הבאים ליום מושלם במוזיאון ארץ ישראל',
-      body:'מפה אינטראקטיבית אחת עם 26 אטרקציות לגלות: תערוכות מתחלפות וקבועות, גנים יפים ותל בן 3,000 שנה.' },
-    'The Eretz Israel Museum Guide': { title:'המדריך למוזיאון ארץ ישראל',
-      body:'כל סיכה שווה את זמנכם: ביאנלה פורצת דרך לאומנות ולעיצוב, ביתן של זכוכית עתיקה, בית בד עתיק, פסיפסים, וגנים מרגיעים. הקישו על סמל כלשהו כדי לראות מה יש שם.' },
-    'Inside the place card': { title:'בתוך כרטיס המקום',
-      body:'בכל כרטיס תמצאו תיאור של המקום, טיפ למבקר וקישור ניווט ישיר ל‑Google Maps.' },
-    'Filter by place type': { title:'סינון לפי סוג',
-      body:'מחפשים רק את הביתנים, או רק את הגנים ואתרי המורשת? הקישו על קטגוריה למעלה כדי להציג רק את מה שתרצו — והמפה תתעדכן.' },
-    'Explore by Zone': { title:'חקרו לפי אזור',
-      body:'כל בועה היא חלק מהמתחם: הביתנים המזרחיים, מתחם המרכז, או הפארק המערבי. הקישו על אחת כדי לזום ישר אליה.' },
-    'Save your favorites': { title:'שמרו את המועדפים',
-      body:'מצאתם משהו שעוצר אתכם? הקישו על הלב. הוא יישאר ברשימה שלכם לאורך כל הביקור, גם כשתסגרו את המפה.' },
-    'Your saved places': { title:'המקומות השמורים שלכם',
-      body:'הקישו «שמורים» כדי לראות את הרשימה. הקישו על שורה כדי לפתוח שוב את הכרטיס. גררו כדי לסדר אותם לפי סדר ההליכה.' },
-    'Navigate with Google Maps': { title:'ניווט עם Google Maps',
-      body:'מוכנים לצאת לדרך? פתחו את המסלול המלא ב‑Google Maps, או הקישו על מקום שמור כדי לנווט ישר אליו.' },
-    'Download a PDF guide': { title:'הורדת מדריך PDF',
-      body:'הקישו «מדריך PDF» כדי לקבל מדריך מעוצב עם כל הבחירות שלכם, מוכן לשיתוף או להדפסה לפני היציאה.' },
-    'Share your map': { title:'שתפו את המפה',
-      body:'שלחו את המפה לבן לוויה, או שמרו אותה לביקור הבא. הקשה אחת לשיתוף בהודעה או במייל.' },
-    'Our Day Trip Picks': { title:'המסלולים המומלצים שלנו',
-      body:'מחפשים השראה? יש לנו הצעות בשבילכם. הקשה אחת בצד טוענת יום שלם מוכן מראש.' },
-    'Navigate': { title:'מצאו את עצמכם',
-      body:'שטח המוזיאון גדול והשילוט מועט. הקישו על העיגול כדי למצוא את מיקומכם על המפה.' },
-    "You're all set!": { title:'הכול מוכן!',
-      body:'המוזיאון כולו פתוח לפניכם. צאו למצוא את היום המושלם שלכם.' }
-  };
-  var TUT_BTN_RU = { 'Next':'Далее', 'Done':'Готово', 'Done ✓':'Готово ✓' };
-  var TUT_RU = {
-    ['Welcome to Your Perfect Day in ' + CITY]: { title:'Добро пожаловать в ваш идеальный день в Музее Эрец-Исраэль',
-      body:'Одна интерактивная карта с 26 объектами: временные и постоянные выставки, прекрасные сады и телль возрастом 3000 лет.' },
-    'The Eretz Israel Museum Guide': { title:'Путеводитель по Музею Эрец-Исраэль',
-      body:'Каждая метка стоит вашего времени: новаторская биеннале ремёсел и дизайна, павильон древнего стекла, старинная маслодавильня, изящные мозаики и тенистые сады. Нажмите любой значок, чтобы узнать, что там.' },
-    'Inside the place card': { title:'Внутри карточки места',
-      body:'В каждой карточке — описание места, совет для посетителя и прямая ссылка для навигации в Google Maps.' },
-    'Filter by place type': { title:'Фильтр по типу',
-      body:'Ищете только павильоны или только сады и места наследия? Нажмите категорию вверху, чтобы показать лишь нужное, — карта обновится.' },
-    'Explore by Zone': { title:'По зонам',
-      body:'Каждый кружок — часть территории: восточные павильоны, центральная часть или западный парк. Нажмите один, чтобы сразу приблизиться.' },
-    'Save your favorites': { title:'Сохраняйте избранное',
-      body:'Что-то зацепило? Нажмите сердечко. Оно останется в вашем списке на всю поездку, даже если закрыть карту.' },
-    'Your saved places': { title:'Ваши выбранные места',
-      body:'Нажмите «Выбранное», чтобы увидеть список. Нажмите строку, чтобы снова открыть карточку. Перетаскивайте, чтобы расставить в порядке прогулки.' },
-    'Navigate with Google Maps': { title:'Навигация в Google Maps',
-      body:'Готовы идти? Откройте весь маршрут в Google Maps или нажмите выбранное место, чтобы пройти прямо к нему.' },
-    'Download a PDF guide': { title:'Скачать PDF-путеводитель',
-      body:'Нажмите «PDF-путеводитель», чтобы получить красиво оформленный путеводитель со всеми вашими выборами — готовый поделиться или распечатать перед выходом.' },
-    'Share your map': { title:'Поделитесь картой',
-      body:'Отправьте карту спутнику или сохраните для следующего визита. Одно касание — поделиться сообщением или письмом.' },
-    'Our Day Trip Picks': { title:'Наши маршруты на день',
-      body:'Ищете вдохновение? У нас есть предложения. Одно касание слева загружает готовый день.' },
-    'Navigate': { title:'Найдите себя',
-      body:'Территория музея большая, а указателей мало. Нажмите кружок, чтобы найти себя на карте.' },
-    "You're all set!": { title:'Всё готово!',
-      body:'Музей в вашем распоряжении. Составьте свой идеальный день.' }
-  };
-  var TUT_BTN_AR = { 'Next':'التالي', 'Done':'تم', 'Done ✓':'تم ✓' };
-  var TUT_AR = {
-    ['Welcome to Your Perfect Day in ' + CITY]: { title:'أهلا بكم في يومكم المثالي في متحف أرض إسرائيل',
-      body:'خريطة تفاعلية واحدة بها 26 معلما لاكتشافها: معارض مؤقتة ودائمة، وحدائق جميلة، وتل عمره 3000 عام.' },
-    'The Eretz Israel Museum Guide': { title:'دليل متحف أرض إسرائيل',
-      body:'كل علامة تستحق وقتك: بيناليه رائد للحِرف والتصميم، وجناح زجاج قديم، ومعصرة زيتون عتيقة، وفسيفساء أنيقة، وحدائق ممتدة الظلال. اضغط أي أيقونة لترى ما فيها.' },
-    'Inside the place card': { title:'داخل بطاقة المكان',
-      body:'تضمّ كل بطاقة وصفاً للمكان، ونصيحة للزائر، ورابط تنقّل مباشر عبر Google Maps.' },
-    'Filter by place type': { title:'التصفية حسب النوع',
-      body:'تبحث عن الأجنحة فقط، أو عن الحدائق ومواقع التراث فقط؟ اضغط فئة في الأعلى لعرض ما تريد فقط — وستتبعك الخريطة.' },
-    'Explore by Zone': { title:'استكشف حسب المنطقة',
-      body:'كل فقاعة جزء من المتحف: الأجنحة الشرقية، أو المنطقة المركزية، أو الحديقة الغربية. اضغط واحدة للتقريب إليها مباشرةً.' },
-    'Save your favorites': { title:'احفظ مفضّلاتك',
-      body:'وجدت ما يستوقفك؟ اضغط القلب. سيبقى في قائمتك طوال الزيارة، حتى لو أغلقت الخريطة.' },
-    'Your saved places': { title:'أماكنك المحفوظة',
-      body:'اضغط «المحفوظة» لرؤية قائمتك. اضغط أي صف لإعادة فتح البطاقة. اسحب لترتيبها حسب مسار سيرك.' },
-    'Navigate with Google Maps': { title:'التنقّل عبر Google Maps',
-      body:'جاهز للمشي؟ افتح مسارك الكامل في Google Maps، أو اضغط أي مكان محفوظ للتوجّه إليه مباشرةً.' },
-    'Download a PDF guide': { title:'تنزيل دليل PDF',
-      body:'اضغط «دليل PDF» للحصول على دليل أنيق التصميم بكل اختياراتك، جاهز للمشاركة أو الطباعة قبل خروجك.' },
-    'Share your map': { title:'شارك خريطتك',
-      body:'أرسل الخريطة إلى رفيق رحلتك أو احتفظ بها للزيارة القادمة. ضغطة واحدة للمشاركة برسالة أو بريد إلكتروني.' },
-    'Our Day Trip Picks': { title:'مساراتنا المقترحة لليوم',
-      body:'تبحث عن إلهام؟ لدينا اقتراحات لك. ضغطة واحدة على الجانب تحمّل يوما كاملا جاهزا.' },
-    'Navigate': { title:'حدّد موقعك',
-      body:'مساحة المتحف واسعة واللافتات قليلة. اضغط الدائرة لتحديد موقعك على الخريطة.' },
-    "You're all set!": { title:'كل شيء جاهز!',
-      body:'المتحف بين يديك. اذهب واعثر على يومك المثالي.' }
-  };
-  var TUT_BY_LANG = { he: TUT_HE, ru: TUT_RU, ar: TUT_AR };
-  var TUT_BTN_BY_LANG = { he: TUT_BTN_HE, ru: TUT_BTN_RU, ar: TUT_BTN_AR };
-  var TUT_SKIP_BY_LANG = { he:'דלג לסוף', ru:'Перейти к концу', ar:'تخطٍّ إلى النهاية' };
-  function _tutHE(){ return (typeof LANG !== 'undefined' && LANG === 'he'); }
+  /* ── Multilingual tutorial copy ──────────────────────────────────
+     The Winterthur guide is English-only, so the tour ships no per-language
+     dictionaries. (The previous Hebrew/Russian/Arabic blocks here were
+     leftover Eretz Israel Museum copy and were removed 2026-07-22.)
+     showStep() looks these maps up and safely falls back to the English
+     STEPS text when a language has no entry — to add a language later,
+     populate these maps keyed by the English step title. */
+  var TUT_BY_LANG      = {};
+  var TUT_BTN_BY_LANG  = {};
+  var TUT_SKIP_BY_LANG = {};
 
 
   /* ── Inject CSS ─────────────────────────────────────────────── */
@@ -266,6 +178,23 @@
     '@keyframes tut-tap{',
     '  0%{transform:translate(-50%,-50%) scale(0.3);opacity:1;}',
     '  100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;}}',
+    /* Drag grip + one-time hint (card stays centred; user can shift it) */
+    '#tut-grip{width:38px;height:4px;border-radius:3px;background:rgba(49,38,29,0.22);margin:0 auto 12px;}',
+    '#tut-hint{font-size:0.68rem;color:rgba(49,38,29,0.5);text-align:center;margin:-6px 0 4px;',
+    '  transition:opacity 0.4s ease;}',
+    /* "New here?" nudge — one-time invite that appears 5s after the map opens */
+    '#tut-nudge{position:fixed;right:12px;bottom:272px;z-index:1200;max-width:236px;',
+    '  background:#2f5347;color:#f5edd8;border-radius:14px;padding:12px 14px 12px;',
+    '  box-shadow:0 6px 24px rgba(0,0,0,0.35);font-family:"Rubik","Inter",sans-serif;',
+    '  opacity:0;transform:translateY(8px);transition:opacity 0.3s ease,transform 0.3s ease;pointer-events:all;}',
+    '#tut-nudge.show{opacity:1;transform:translateY(0);}',
+    '#tut-nudge-txt{font-size:0.82rem;line-height:1.45;margin:2px 16px 10px 0;}',
+    '#tut-nudge-go{background:#e6c34d;color:#2f5347;border:none;border-radius:16px;',
+    '  padding:7px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:"Rubik","Inter",sans-serif;',
+    '  letter-spacing:0.02em;}',
+    '#tut-nudge-go:hover{background:#efd06a;}',
+    '#tut-nudge-x{position:absolute;top:6px;right:8px;background:none;border:none;',
+    '  color:rgba(245,237,216,0.7);font-size:0.9rem;line-height:1;cursor:pointer;padding:2px 4px;}',
   ].join('');
   document.head.appendChild(style);
 
@@ -284,13 +213,15 @@
   var card = document.createElement('div');
   card.id = 'tut-card';
   card.innerHTML = [
+    '<div id="tut-grip" title="Drag to move"></div>',
     '<div id="tut-dots"></div>',
     '<h3 id="tut-title"></h3>',
     '<p id="tut-body"></p>',
     '<div id="tut-actions">',
     '  <button id="tut-skip">Skip to the end</button>',
     '  <button id="tut-next">Next</button>',
-    '</div>'
+    '</div>',
+    '<div id="tut-hint">✋ Drag to move this card</div>'
   ].join('');
 
   overlay.appendChild(spot);
@@ -300,6 +231,8 @@
   /* ── Drag-to-move card ──────────────────────────────────────── */
   card.addEventListener('pointerdown', function (e) {
     if (e.target.tagName === 'BUTTON') return;   /* don't steal button clicks */
+    /* Once the user starts dragging, they've got it — hide the hint */
+    var _h = document.getElementById('tut-hint'); if (_h) _h.style.opacity = '0';
     var r = card.getBoundingClientRect();
     _drag.active = true;
     _drag.startX = e.clientX;
@@ -347,6 +280,9 @@
   var _demoCardOpen  = false;
   var _demoSavedOn   = false;
   var _demoSavedBkp  = null;
+  var _hintTimer     = null;
+  var _nudgeTimer    = null;
+  var _showToken     = 0;   /* bumped each step so a slow demo can't hijack a later step */
 
   /* ── Drag state ─────────────────────────────────────────────── */
   var _drag = { active: false, startX: 0, startY: 0, cardX: 0, cardY: 0 };
@@ -451,6 +387,16 @@
   }
 
   function showSavedDemo() {
+    /* Idempotent: if the saved demo is already up, just make sure the sheet
+       is visible (later sheet-button steps rely on this). */
+    if (_demoSavedOn) {
+      var pill0 = document.getElementById('pill-saved');
+      if (pill0 && !pill0.classList.contains('active') && typeof toggleSavedFilter === 'function') {
+        toggleSavedFilter(pill0);
+      }
+      if (typeof openSheet === 'function') { openSheet(); }
+      return;
+    }
     /* Close demo card if open */
     closeDemoCard();
     /* Suppress route drawing AND map re-fitting for the duration of the demo */
@@ -500,6 +446,29 @@
       window._fitRouteBounds = window._tutFitBoundsOrig;
       window._tutFitBoundsOrig = undefined;
     }
+  }
+
+  /* Merged "Save your favourites" demo: open a card and fill the heart,
+     then open the Saved list so both halves are shown in one step. */
+  function saveAndShowDemo() {
+    var tok = _showToken;                 /* if the user advances, don't hijack the next step */
+    openDemoCard();                       /* opens DEMO_PLACE card, blinks heart at +600ms */
+    setTimeout(function () {
+      if (_showToken !== tok) return;
+      showSavedDemo();                    /* closes card, injects saved places, opens the sheet */
+      setTimeout(function () {
+        if (_showToken !== tok) return;
+        if (window.innerWidth >= 768) { setSpotDual(['#pill-saved', '#sheet']); }
+        else { setSpot(null); }           /* no shading on mobile — matches the old saved step */
+      }, 550);
+    }, 2600);
+  }
+
+  /* Locate step cleanup: put the saved demo away AND close the sheet,
+     so the map is clear when we spotlight the locate button. */
+  function closeSavedSheetDemo() {
+    closeSavedDemo();
+    if (typeof closeSheet === 'function') { closeSheet(); }
   }
 
   /* ── General helpers ────────────────────────────────────────── */
@@ -667,15 +636,21 @@
 
   /* ── Show a step ────────────────────────────────────────────── */
   function showStep(n) {
+    _showToken++;   /* invalidate any pending demo from the previous step */
     clearBeacons();
     clearLauncherAnim();
     clearDualOverlay();
 
     var step = STEPS[n];
 
-    /* Close any open place card if this step requests it — unconditional */
+    /* Close any open place card if this step requests it — unconditional.
+       Wrapped so a throw here can't stop the step's text from rendering. */
     if (step.closeCard) {
-      if (typeof closePlaceCard === 'function') { closePlaceCard(false); }
+      try {
+        if (typeof closePlaceCard === 'function') { closePlaceCard(false); }
+      } catch (err) {
+        try { console.warn('tutorial: closeCard failed on step ' + n, err); } catch (_) {}
+      }
       _demoCardOpen = false;
     }
 
@@ -706,7 +681,10 @@
           setSpotDual(step.dualTargets);
         }
       } else {
-        setSpot(null); /* no shading on mobile for this step */
+        /* Mobile: highlight the primary target (e.g. the category bar);
+           the copy points to the second target (the zones just below). */
+        if (targetEl) { setSpot(targetEl); }
+        else { setSpot(null); }
       }
     } else if (step.targets) {
       if (step.targetsDelay) {
@@ -716,40 +694,66 @@
         setSpotMulti(step.targets);
       }
     } else if (step.target && (step.target.indexOf('saved-action') !== -1 || step.target.indexOf('#sheet button') !== -1)) {
+      /* These buttons live inside the Saved sheet — make sure it's open even
+         if the user raced past "Save your favourites" before its demo ran. */
+      if (step.target.indexOf('#sheet button') !== -1 && typeof showSavedDemo === 'function') {
+        showSavedDemo();
+      }
       setTimeout(function () {
         var el = document.querySelector(step.target);
         if (el && el.getBoundingClientRect().width > 0) { setSpot(el); setCard(0, el); }
         else { setSpot(null); }
-      }, 120);
+      }, 300);
     } else {
       setSpot(targetEl);
     }
 
-    if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
-    if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
-    if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
-    if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    3000); }
-    if (step.demo === 'open-card-delayed-no-heart') { setTimeout(function() {
-      if (!_demoCardOpen && typeof openDetail === 'function') {
-        openDetail(DEMO_PLACE);
-        _demoCardOpen = true;
+    /* Demo dispatch — wrapped so a single broken demo can never freeze the
+       tour (the card title/body are already set above). */
+    try {
+      if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
+      if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
+      if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
+      if (step.demo === 'open-card-delayed')  { setTimeout(openDemoCard,    3000); }
+      if (step.demo === 'open-card-delayed-no-heart') { setTimeout(function() {
+        if (!_demoCardOpen && typeof openDetail === 'function') {
+          openDetail(DEMO_PLACE);
+          _demoCardOpen = true;
+        }
+      }, 3000); }
+      if (step.demo === 'scroll-card')       { scrollCardDemo(); }
+      if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
+      if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
+      if (step.demo === 'save-and-show')     { setTimeout(saveAndShowDemo,   350); }
+      if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
+      if (step.demo === 'close-saved')       { setTimeout(closeSavedDemo, 100); }
+      if (step.demo === 'close-saved-sheet') { setTimeout(closeSavedSheetDemo, 100); }
+      if (step.demo === 'close-sheet')        { setTimeout(function() {
+        if (typeof closeSheet === 'function') { closeSheet(); }
+      }, 100); }
+      if (step.demo === 'close-saved-pulse') {
+        setTimeout(function () {
+          closeSavedDemo();
+          /* On mobile, close the places list so trip-launcher icons are visible */
+          if (window.innerWidth < 768 && typeof closeSheet === 'function') { closeSheet(); }
+          setTimeout(pulseLauncher, 400);
+        }, 100);
       }
-    }, 3000); }
-    if (step.demo === 'scroll-card')       { scrollCardDemo(); }
-    if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
-    if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
-    if (step.demo === 'pulse-launcher')    { setTimeout(pulseLauncher,    350); }
-    if (step.demo === 'close-saved')       { setTimeout(closeSavedDemo, 100); }
-    if (step.demo === 'close-sheet')        { setTimeout(function() {
-      if (typeof closeSheet === 'function') { closeSheet(); }
-    }, 100); }
-    if (step.demo === 'close-saved-pulse') {
-      setTimeout(function () {
-        closeSavedDemo();
-        /* On mobile, close the places list so trip-launcher icons are visible */
-        if (window.innerWidth < 768 && typeof closeSheet === 'function') { closeSheet(); }
-        setTimeout(pulseLauncher, 400);
-      }, 100);
+    } catch (err) {
+      try { console.warn('tutorial: demo failed on step ' + n, err); } catch (_) {}
+    }
+
+    /* One-time "drag to move" hint — first step only, auto-fades */
+    var _hint = document.getElementById('tut-hint');
+    if (_hint) {
+      if (n === 0) {
+        _hint.style.display = 'block';
+        _hint.style.opacity = '1';
+        clearTimeout(_hintTimer);
+        _hintTimer = setTimeout(function () { _hint.style.opacity = '0'; }, 4500);
+      } else {
+        _hint.style.display = 'none';
+      }
     }
   }
 
@@ -792,6 +796,64 @@
     localStorage.removeItem(DONE_KEY);
     launch();
   };
+
+  /* ── "New here?" nudge — one-time invite, 5s after the map opens ──
+     A gentle, non-blocking prompt that sits just above the Guide button.
+     It does NOT start the tour on its own — tapping "Take the tour" does.
+     Shows once (per browser), and stays quiet if the tour was taken. */
+  var NUDGE_KEY = DONE_KEY + '_nudge';
+
+  function _mapReady() {
+    var s = document.getElementById('splash');
+    return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
+  }
+
+  function dismissNudge() {
+    if (_nudgeTimer) { clearTimeout(_nudgeTimer); _nudgeTimer = null; }
+    var n = document.getElementById('tut-nudge');
+    if (!n) return;
+    n.classList.remove('show');
+    setTimeout(function () { n.parentNode && n.parentNode.removeChild(n); }, 350);
+  }
+
+  function showNudge() {
+    /* Don't nag: skip if the tour was taken, the nudge already appeared,
+       or the tour is on screen right now. */
+    if (localStorage.getItem(DONE_KEY) || localStorage.getItem(NUDGE_KEY)) return;
+    if (overlay.parentNode) return;
+    if (document.getElementById('tut-nudge')) return;
+    if (!style.parentNode) { document.head.appendChild(style); }  /* ensure nudge CSS is present */
+    localStorage.setItem(NUDGE_KEY, '1');   /* appears once */
+
+    var n = document.createElement('div');
+    n.id = 'tut-nudge';
+    n.innerHTML = [
+      '<button id="tut-nudge-x" aria-label="Dismiss">✕</button>',
+      '<div id="tut-nudge-txt">👋 New here? Let me show you around.</div>',
+      '<button id="tut-nudge-go">Take the tour</button>'
+    ].join('');
+    document.body.appendChild(n);
+    requestAnimationFrame(function () { n.classList.add('show'); });
+
+    document.getElementById('tut-nudge-go').addEventListener('click', function () {
+      dismissNudge();
+      launch();
+    });
+    document.getElementById('tut-nudge-x').addEventListener('click', dismissNudge);
+
+    /* Tuck it away after 15s if ignored (already marked as shown) */
+    _nudgeTimer = setTimeout(dismissNudge, 15000);
+  }
+
+  (function scheduleNudge() {
+    if (localStorage.getItem(DONE_KEY) || localStorage.getItem(NUDGE_KEY)) return;
+    var waitReady = function () {
+      if (_mapReady()) { setTimeout(showNudge, 5000); }   /* 5s after the map becomes visible */
+      else { setTimeout(waitReady, 300); }
+    };
+    if (document.readyState === 'complete') { waitReady(); }
+    else { window.addEventListener('load', waitReady); }
+  })();
 
   /* ── Auto-start on first visit DISABLED 2026-06-14 (per Maria) ──
      Visitors now explore the map first and open the tutorial themselves
