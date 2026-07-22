@@ -44,11 +44,8 @@ function _openNaverWithFallback(app, web){
   document.addEventListener('visibilitychange', function(){ if(document.hidden){ clearTimeout(timer); } }, { once: true });
   window.location.href = app;
 }
-// "Reserve a taxi" — dials Seoul International Taxi on a phone, opens its booking site on desktop.
-function openTaxi(){
-  if(_isMobile()){ window.location.href = 'tel:+8216442255'; }
-  else { window.open('https://www.intltaxi.co.kr/reservation/book', '_blank', 'noopener'); }
-}
+// Taxi — Uber operates in Seoul (as UT) and opens the app on a phone or the web on desktop.
+function openTaxi(){ window.open('https://m.uber.com/', '_blank', 'noopener'); }
 function openNaver(p, mode){
   if(!p) return;
   var name = encodeURIComponent(_naverKoreanName(p) || p.name || '');
