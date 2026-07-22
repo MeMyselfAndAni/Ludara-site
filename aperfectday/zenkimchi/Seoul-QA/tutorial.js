@@ -73,7 +73,7 @@
     },
     {
       title: 'Navigate',
-      body: 'Ready to go? Open your full route in Google Maps, or tap any saved place to navigate there directly.',
+      body: 'Ready to go? Open your full route in Naver Map, or tap any saved place to navigate there directly.',
       target: '#sheet button[onclick="openTripInMaps()"]',
       cardPos: 'center',
       demo: null,

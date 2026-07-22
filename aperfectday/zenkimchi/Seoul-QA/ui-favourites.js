@@ -328,7 +328,7 @@ function planFavTrip(){
 
   document.getElementById('trip-overlay').classList.add('open');
 
-  // Add the missing trip footer with proper Google Maps button
+  // Add the missing trip footer with proper Naver Map button
   const existingFooter = document.querySelector('.trip-footer');
   if (!existingFooter) {
     const tripPanel = document.querySelector('.trip-panel');
@@ -416,7 +416,7 @@ function jumpToTripStop(id){
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 
-// ── GOOGLE MAPS BUTTON FIX ───────────────────────────────────
+// ── NAVER MAP BUTTON FIX ───────────────────────────────────
 // RED buttons call openTripInMaps() directly - no interceptor needed
 
 // Combined multi-stop route in Naver. Naver's walking-route URL scheme supports a

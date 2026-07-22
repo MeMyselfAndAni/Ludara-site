@@ -135,7 +135,7 @@ async function generatePDF(){
         ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
-          <span class="pdf-qr-label">Scan for Google Maps</span>
+          <span class="pdf-qr-label">Scan for Naver Map</span>
           ${p.website ? `<a class="pdf-website" href="${p.website}">${p.website.replace('https://','')}</a>` : ''}
         </div>
       </div>

@@ -27,7 +27,7 @@ const FILES = {
   65: 'Gwanghwamun Square 4.jpg'
 };
 
-const WIDTH = 1200;
+const WIDTH = 900;   // Commons serves a pre-resized thumbnail — keeps files web-light (~100-250KB)
 const OUT_DIR = path.join(__dirname, 'images');
 if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
 

@@ -7,7 +7,7 @@ let ANF = 'all';     // active neighbourhood filter
 // ── MAP CORE — shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
-// ── Naver Map deep links (Google Maps is crippled in South Korea) ─────
+// ── Naver Map deep links (the standard map & navigation app in South Korea) ─────
 // Opens the Naver Map app via nmap:// when installed (guests in Korea almost
 // always have it); otherwise falls back to Naver's web map.
 function _naverKoreanName(p){
@@ -31,15 +31,23 @@ function naverRouteUrl(places, mode){
   params.push('dlat='+destP.lat, 'dlng='+destP.lng, 'dname='+nm(destP), 'appname=ludara.ai');
   return 'nmap://route/' + mode + '?' + params.join('&');
 }
+function _isMobile(){ return /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent || ''); }
 function _openNaverWithFallback(app, web){
-  var opened = false;
-  var onHide = function(){ if(document.hidden){ opened = true; } };
-  document.addEventListener('visibilitychange', onHide);
-  setTimeout(function(){
-    document.removeEventListener('visibilitychange', onHide);
-    if(!opened && !document.hidden && web){ window.open(web, '_blank'); }
-  }, 1400);
-  window.location.href = app;   // tries the Naver app; if absent, timer opens the web map
+  // Desktop (or anywhere without the Naver app): open Naver on the web in a new tab.
+  // window.open runs inside the click gesture here, so it is NOT popup-blocked.
+  if(!_isMobile()){
+    if(web){ window.open(web, '_blank', 'noopener'); }
+    return;
+  }
+  // Phone: try the Naver app; if it doesn't take over in ~1.2s, open the web map.
+  var timer = setTimeout(function(){ if(!document.hidden && web){ window.location.href = web; } }, 1200);
+  document.addEventListener('visibilitychange', function(){ if(document.hidden){ clearTimeout(timer); } }, { once: true });
+  window.location.href = app;
+}
+// "Reserve a taxi" — dials Seoul International Taxi on a phone, opens its booking site on desktop.
+function openTaxi(){
+  if(_isMobile()){ window.location.href = 'tel:+8216442255'; }
+  else { window.open('https://www.intltaxi.co.kr/reservation/book', '_blank', 'noopener'); }
 }
 function openNaver(p, mode){
   if(!p) return;

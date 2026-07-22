@@ -141,7 +141,7 @@ window.addEventListener('load', function() {
       ? formatDistance(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' 
       : '';
     
-    btn.innerHTML = '🚶 Navigate on Google Maps' + 
+    btn.innerHTML = '🚶 Navigate on Naver Map' + 
       (distStr ? '  <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     
     btn.onclick = function() { 
@@ -172,7 +172,7 @@ function updateNavigateButton() {
     ? formatDistance(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' 
     : '';
   
-  btn.innerHTML = '🚶 Navigate on Google Maps' + 
+  btn.innerHTML = '🚶 Navigate on Naver Map' + 
     (distStr ? '  <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
 }
 

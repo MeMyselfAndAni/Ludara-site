@@ -261,7 +261,7 @@
 </button>
 
 <!-- Reserve a taxi — Seoul International Taxi (official foreigner service, English 24/7) -->
-<a href="tel:+8216442255" title="Reserve a taxi — Seoul International Taxi (English, 24/7)" style="
+<a onclick="openTaxi()" title="Reserve a taxi — Seoul International Taxi (dials on phone, opens booking on desktop)" style="
   position:fixed; bottom:268px; right:12px; z-index:1100;
   background:#b8960a; color:#14243f; text-decoration:none;
   border:none; border-radius:24px;
@@ -353,7 +353,7 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Navigate in Google Maps using place search names -->
+<!-- Navigate in Naver Map using place search names -->
 <script>
 // ✅ FIXED: openTripInMaps() now comes ONLY from ui-favourites.js
 // Removed duplicate function that was ignoring manual ordering
@@ -416,8 +416,8 @@ window.addEventListener('load', function() {
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
     btn.innerHTML = '🚶 Navigate on Naver Map' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
     btn.onclick = function() { openNaver(place, 'walk'); };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+    // Legacy single "Navigate" button removed — the Holston-style action row
+    // (Reserve / Call / Website / Navigate) already covers navigation.
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>
@@ -494,7 +494,7 @@ function clearAllSaved() {
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
-        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
+        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Naver Map</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
