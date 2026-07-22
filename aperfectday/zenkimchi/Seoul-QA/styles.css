@@ -1463,10 +1463,15 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   margin-bottom: 4px;
 }
 .pc-contact-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem; font-weight: 600;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  padding: 9px 4px;
+  border-radius: 12px;
+  font-size: 0.62rem; font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
   text-decoration: none;
   border: 1.5px solid #1a3a5c;
   color: #1a3a5c;
@@ -1475,7 +1480,27 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif;
   white-space: nowrap;
 }
+.pc-contact-pill .pc-ico { font-size: 1.05rem; line-height: 1; }
 .pc-contact-pill:hover { background: #1a3a5c; color: white; }
+
+/* One-tap booking button — Seoul gold, primary action */
+.pc-reserve-pill { background: #b8960a; border-color: #b8960a; color: #fff; }
+.pc-reserve-pill:hover { background: #9c7e08; border-color: #9c7e08; color: #fff; }
+
+/* Call button shows the actual number — smaller so it wraps to two lines and fits */
+.pc-call-pill { font-size: 0.52rem; white-space: normal; word-break: break-word; }
+
+/* Walk-in only — muted, non-clickable tag (not a button) */
+.pc-nores-pill {
+  background: #f0efe6;
+  border-color: #ddd8c6;
+  color: #9a9484;
+  font-size: 0.55rem;
+  font-weight: 600;
+  cursor: default;
+  white-space: normal;
+}
+.pc-nores-pill:hover { background: #f0efe6; color: #9a9484; }
 
 /* Counter (nbhd mode) */
 .pc-counter {

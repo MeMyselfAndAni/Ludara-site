@@ -39,7 +39,6 @@ const PLACES = [
     type: 'Korean BBQ',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -60,7 +59,6 @@ const PLACES = [
     type: 'Korean BBQ',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -285,7 +283,6 @@ const PLACES = [
     type: 'Kimchi Jjigae',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -306,7 +303,6 @@ const PLACES = [
     type: 'Bibimbap',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -327,7 +323,6 @@ const PLACES = [
     type: 'Samgyetang (Ginseng Chicken Soup)',
     blog: 'https://zenkimchi.com/zenkimchi-korean-food-journal/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -388,8 +383,6 @@ const PLACES = [
     type: 'Buddhist Temple Cuisine',
     blog: 'https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/',
     website: '',
-    resUrl: "https://www.catchtable.net/shop/Y2F0Y2hfYzh3YnZFVHVueWI4WENBVURxNFdTQT09",
-    phone: "+82 2-733-2081",
   },
 
   {
@@ -430,7 +423,6 @@ const PLACES = [
     type: 'Bossam with Oysters',
     blog: 'https://zenkimchi.com/zenkimchi-korean-food-journal/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -493,8 +485,6 @@ const PLACES = [
     type: 'Naengmyeon (Cold Buckwheat Noodles)',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    resUrl: "https://www.catchtable.net/shop/Y2F0Y2hfc0EvanB2VHpFTGdIeTlaL0dUVkpxdz09",
-    phone: "+82 2-2265-0151",
   },
 
   {
@@ -515,7 +505,6 @@ const PLACES = [
     type: 'North Korean Cuisine',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -596,7 +585,6 @@ const PLACES = [
     type: 'Braised Chicken',
     blog: 'https://zenkimchi.com/tour-tips/restaurants-myeong-dong-quick-guide/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -637,7 +625,6 @@ const PLACES = [
     type: 'Chinese Hot Pot',
     blog: 'https://zenkimchi.com/tour-tips/restaurants-myeong-dong-quick-guide/',
     website: '',
-    resUrl: "https://www.catchtable.net/shop/haidilao_myungdong",
   },
 
   // ─── ITAEWON / YONGSAN ───────────────────────────────────────────────────
@@ -661,7 +648,6 @@ const PLACES = [
     blog: 'https://zenkimchi.com/zenkimchi-korean-food-journal/restaurants/linus-bama-style-bbq/',
     phone: '02-790-2920',
     website: '',
-    resUrl: "https://www.catchtable.net/shop/linusbbq",
   },
 
   {
@@ -704,7 +690,6 @@ const PLACES = [
     type: 'Royal Jeonju Bibimbap',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -725,7 +710,6 @@ const PLACES = [
     type: 'Kimchi Jjigae (3-Year-Old Kimchi)',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    noRes: true,
   },
 
   {
@@ -908,8 +892,6 @@ const PLACES = [
     type: 'Naengmyeon (Cold Buckwheat Noodles)',
     blog: 'https://zenkimchi.com/tour-tips/must-eat-korean-food-in-seoul-and-where-to-eat-it/',
     website: '',
-    phone: "+82 2-2683-2615",
-    noRes: true,
   },
 
   {
@@ -1154,7 +1136,6 @@ const PLACES = [
     tip: 'Book the Huwon tour online well in advance — it sells out weeks ahead in spring and autumn. The moonlight tour (cgg.cha.go.kr) is one of the best evening experiences in the city.',
     type: 'Royal palace (1405) & UNESCO Secret Garden — Jongno',
     website: 'https://cgg.cha.go.kr',
-    resUrl: "https://royal.khs.go.kr/ROYAL/contents/R601000000.do?schGroupCode=cdg",
   },
 
   {
@@ -1244,7 +1225,6 @@ const PLACES = [
     tip: 'Book tickets online — capacity is limited and weekends sell out. The museum shop has the best art publications and design objects in Seoul.',
     type: 'Private art museum — Botta, Nouvel & Koolhaas buildings, Itaewon',
     website: 'https://www.leeum.org',
-    resUrl: "https://ticket.leeum.org/leeum/personal/exhibitList.do",
   },
 
   // --- GANGNAM ---

@@ -1,4 +1,3 @@
-
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
   // Toggle off if already active
@@ -250,7 +249,11 @@ window.addEventListener('load', function() {
       var dy = Math.abs(e.changedTouches[0].clientY - startY);
       if(dy > 10) return;
       e.preventDefault();
-      var nbhd = bubble.id.replace('nbhd-','');
+      // Read the key from the onclick attribute so Seoul's 'nbhd-X' prefix
+      // is preserved while unprefixed cities (London, Nashville, etc.) still work.
+      var onclickVal = bubble.getAttribute('onclick') || '';
+      var match = onclickVal.match(/selectNbhd\(\s*'([^']+)'/);
+      var nbhd = match ? match[1] : bubble.id.replace('nbhd-','');
       selectNbhd(nbhd, bubble);
     }, {passive:false});
   });

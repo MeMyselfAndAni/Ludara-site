@@ -166,6 +166,34 @@ function _closeSearch(){
 }
 
 
+// ── Distance helpers ─────────────────────────────────────────
+function _distM(lat1, lng1, lat2, lng2) {
+  var R = 6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function _fmtDist(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km';
+}
+
+function updateListDistances() {
+  if (!window._userLat) return;
+  PLACES.forEach(function(place) {
+    var row = document.getElementById('row-' + place.id);
+    if (!row) return;
+    var badge = row.querySelector('.dist-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'dist-badge';
+      badge.style.cssText = 'display:inline-block;font-size:0.72rem;color:#888;background:rgba(0,0,0,0.06);border-radius:10px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle';
+      var nameEl = row.querySelector('.place-name');
+      if (nameEl) nameEl.appendChild(badge);
+    }
+    badge.textContent = _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng));
+  });
+}
+
 // ── Hours display formatter ───────────────────────────────────
 // Converts 24hr time to 12hr AM/PM when TIME_FORMAT === '12h'
 // TIME_FORMAT is defined per guide in map.js (default: '24h')
@@ -393,6 +421,9 @@ function locateMe(){
 
       map.panTo([lng, lat]);  // MapLibre: [lng, lat]
       if(map.getZoom() < 14) map.setZoom(15);
+      window._userLat = lat;
+      window._userLng = lng;
+      updateListDistances();
     },
     err => {
       btn.classList.remove('locating');
@@ -528,5 +559,14 @@ if(typeof document !== 'undefined'){
         _initSearch();
       }
     }, 200);
+
+    // Re-apply distance badges whenever the list re-renders
+    var _listEl = document.getElementById('places-list');
+    if (_listEl) {
+      var _distObserver = new MutationObserver(function() {
+        if (window._userLat) updateListDistances();
+      });
+      _distObserver.observe(_listEl, { childList: true });
+    }
   });
 }

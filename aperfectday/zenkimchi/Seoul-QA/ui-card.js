@@ -218,11 +218,7 @@ function _populateCard(p){
       }
     };
     img.src = url;
-    if(attr){
-      const tmp = document.createElement('div');
-      tmp.innerHTML = attr;
-      document.getElementById('pc-credit').textContent = '© ' + (tmp.querySelector('a')?.textContent || 'Google');
-    }
+    document.getElementById('pc-credit').innerHTML = attr || '';
   };
 
   if(photoCache[p.id]?.url){
@@ -249,10 +245,39 @@ function _populateCard(p){
     tipEl.style.display = 'none';
   }
 
+  // Compact action row: Reserve · Call · Website · Navigate (matches Holston guide).
+  // Reserve appears ONLY when a real reservation link exists (resUrl: CatchTable,
+  // Naver booking, or the venue's own booking page). No resUrl means no Reserve button.
   let contacts = '';
-  if(p.phone)   contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}">📞 ${p.phone}</a>`;
-  if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
+  if(p.resUrl){
+    const dining = ['bbq','food','pub','bar'];
+    const meta = dining.includes(p.cat) ? {icon:'📅',short:'Reserve'}
+               : (p.cat==='landmark' ? {icon:'🎟️',short:'Tickets'} : {icon:'🔗',short:'Book'});
+    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
+  } else if(p.noRes){
+    // Confirmed walk-in only — a non-clickable tag so guests know not to try booking.
+    contacts += `<span class="pc-contact-pill pc-nores-pill">No reservations<br>walk in</span>`;
+  }
+  if(p.phone){
+    contacts += `<a class="pc-contact-pill pc-call-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>${p.phone}</a>`;
+  }
+  if(p.website){
+    contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener"><span class="pc-ico">🌐</span>Website</a>`;
+  }
+  if(p.lat && p.lng){
+    contacts += `<a class="pc-contact-pill pc-nav-pill" onclick="openNaverById(${p.id},'walk')" style="cursor:pointer"><span class="pc-ico">🚶</span>Navigate</a>`;
+  }
   document.getElementById('pc-contacts').innerHTML = contacts;
+
+  var awardsEl = document.getElementById('pc-awards');
+  if (awardsEl) {
+    if (p.awards) {
+      awardsEl.textContent = '🏆 ' + p.awards;
+      awardsEl.style.display = '';
+    } else {
+      awardsEl.style.display = 'none';
+    }
+  }
 
   _updateFavBtn();
 
@@ -349,6 +374,24 @@ document.addEventListener('keydown', e => {
   }, {passive:true});
 })();
 
+
+// ── Swipe left/right on photo to navigate cards (mobile) ────
+(function(){
+  var wrap = document.getElementById('pc-photo-wrap');
+  if (!wrap) return;
+  var touchStartX = 0, touchStartY = 0;
+  wrap.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  wrap.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) { cardNext(); } else { cardPrev(); }
+    }
+  }, { passive: true });
+})();
 // ── Draggable card on desktop ─────────────────────────────────
 (function initCardDrag(){
   const card   = document.getElementById('place-card');

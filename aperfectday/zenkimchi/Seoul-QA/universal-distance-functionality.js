@@ -34,13 +34,9 @@ function formatDistance(meters) {
   }
 }
 
-// Enhanced navigate to place function with user location
+// Navigate to a place — delegates to the shared Naver helper in map-core.js
 function navigateToPlace(destLat, destLng, destName) {
-  var dest = destLat + ',' + destLng;
-  var url = window._userLat && window._userLng
-    ? 'https://www.google.com/maps/dir/?api=1&origin=' + window._userLat + ',' + window._userLng + '&destination=' + dest + '&travelmode=walking'
-    : 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
-  window.open(url, '_blank');
+  if (typeof openNaver === 'function') { openNaver({ lat: destLat, lng: destLng, name: destName }, 'walk'); }
 }
 
 // Enhanced locateMe function that stores user location

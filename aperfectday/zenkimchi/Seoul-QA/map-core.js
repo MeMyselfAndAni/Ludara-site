@@ -7,6 +7,57 @@ let ANF = 'all';     // active neighbourhood filter
 // ── MAP CORE — shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
+// ── Naver Map deep links (Google Maps is crippled in South Korea) ─────
+// Opens the Naver Map app via nmap:// when installed (guests in Korea almost
+// always have it); otherwise falls back to Naver's web map.
+function _naverKoreanName(p){
+  var s = ((p && p.name) || '') + '';
+  var m = s.match(/[가-힣][가-힣A-Za-z0-9()\s]*/);   // Korean run — best match for Naver's place DB
+  return (m ? m[0] : s).trim();
+}
+function naverPlaceUrl(p){
+  return 'https://map.naver.com/p/search/' + encodeURIComponent(_naverKoreanName(p) || (p && p.name) || '');
+}
+// Combined multi-stop route: start + up to 5 waypoints (v1..v5) + destination.
+function naverRouteUrl(places, mode){
+  mode = mode || 'walk';
+  var stops = (places || []).slice(0, 7);
+  if(!stops.length) return '';
+  var nm = function(p){ return encodeURIComponent(_naverKoreanName(p) || p.name || ''); };
+  var startP = stops[0], destP = stops[stops.length-1];
+  var vias = stops.slice(1, -1).slice(0, 5);
+  var params = ['slat='+startP.lat, 'slng='+startP.lng, 'sname='+nm(startP)];
+  vias.forEach(function(p,i){ var n=i+1; params.push('v'+n+'lat='+p.lat, 'v'+n+'lng='+p.lng, 'v'+n+'name='+nm(p)); });
+  params.push('dlat='+destP.lat, 'dlng='+destP.lng, 'dname='+nm(destP), 'appname=ludara.ai');
+  return 'nmap://route/' + mode + '?' + params.join('&');
+}
+function _openNaverWithFallback(app, web){
+  var opened = false;
+  var onHide = function(){ if(document.hidden){ opened = true; } };
+  document.addEventListener('visibilitychange', onHide);
+  setTimeout(function(){
+    document.removeEventListener('visibilitychange', onHide);
+    if(!opened && !document.hidden && web){ window.open(web, '_blank'); }
+  }, 1400);
+  window.location.href = app;   // tries the Naver app; if absent, timer opens the web map
+}
+function openNaver(p, mode){
+  if(!p) return;
+  var name = encodeURIComponent(_naverKoreanName(p) || p.name || '');
+  var app = (mode === 'walk')
+    ? 'nmap://route/walk?' + ((window._userLat && window._userLng) ? 'slat='+window._userLat+'&slng='+window._userLng+'&sname='+encodeURIComponent('내 위치')+'&' : '') + 'dlat='+p.lat+'&dlng='+p.lng+'&dname='+name+'&appname=ludara.ai'
+    : 'nmap://place?lat='+p.lat+'&lng='+p.lng+'&name='+name+'&appname=ludara.ai';
+  _openNaverWithFallback(app, naverPlaceUrl(p));
+}
+function openNaverById(id, mode){
+  var p = (typeof PLACES !== 'undefined') ? PLACES.find(function(x){ return x.id === id; }) : null;
+  openNaver(p, mode);
+}
+// Legacy shim — some code paths call navigateToPlace(lat,lng,name)
+function navigateToPlace(destLat, destLng, destName){
+  openNaver({ lat: destLat, lng: destLng, name: destName }, 'walk');
+}
+
 
 
 // ── MAP SOURCES + LAYERS INIT ─────────────────────────────────
