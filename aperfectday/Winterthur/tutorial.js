@@ -14,7 +14,7 @@
     {
       /* 1 — Welcome */
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One interactive map for the whole estate — the house and galleries, the naturalistic garden, children’s Enchanted Woods and every trail — with the story behind each place.',
+      body: 'One interactive map for the whole estate — house, gardens, Enchanted Woods, every trail — each with the story behind it.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -23,7 +23,7 @@
     {
       /* 2 — Explore the pins */
       title: 'The Winterthur Guide',
-      body: 'Every pin is worth your time: Henry Francis du Pont’s house and its American treasures, the March Bank’s millions of late-winter bulbs, Azalea Woods in full bloom, the children’s Enchanted Woods, and the narrated tram that carries you through it all. Tap any icon to see what’s there.',
+      body: 'Every pin has a story — the house, the gardens, the Enchanted Woods, the narrated tram. Tap any icon to see what’s there.',
       target: null,
       cardPos: 'center',
       demo: 'open-card-delayed-no-heart',
@@ -51,7 +51,7 @@
     {
       /* 5 — Filter by type & area (merged: category bar + zone bubbles) */
       title: 'Filter by type & area',
-      body: 'Looking only for the house and galleries, or just the gardens? Tap a category at the top to show only what you want. Or tap a zone below — Museum & House, The Garden, Visitor Center — to jump straight to that part of the estate. The map follows either way.',
+      body: 'Tap a category at the top to show just one kind of place — or tap a zone below to jump to that part of the estate. The map follows either way.',
       target: '.filter-bar',
       dualTargets: ['.filter-bar', '#nbhd-bar'],  /* desktop: highlight both; mobile: highlight the top bar, copy points to the zones below */
       cardPos: 'center',
@@ -96,15 +96,14 @@
       btn: 'Next'
     },
     {
-      /* 10 — Locate yourself */
-      title: 'Navigate',
-      body: 'The estate spreads across a thousand acres and it’s easy to lose your bearings. Tap the circle to find yourself on the map.',
+      /* 10 — Locate yourself + save the guide offline (both bottom-right buttons, together) */
+      title: 'Find your way — and save offline',
+      body: 'Tap the circle to find yourself on the map. And since there’s no signal out on the grounds, tap Save offline to keep the whole guide on your phone.',
       target: null,
-      targets: ['#locate-btn'],
-      targetsDelay: 200,  /* wait for close-sheet animation before spotlighting */
+      targets: ['#locate-btn', '#offline-save-btn'],
+      targetsDelay: 200,  /* wait for close-sheet animation before spotlighting both */
       cardPos: 'center',
       demo: 'close-saved-sheet',
-      mobileCardOffset: -75,  /* move card ~2cm up on mobile only */
       btn: 'Next'
     },
     {
@@ -614,20 +613,15 @@
   }
 
   function setCard(extraOffset, targetEl) {
-    var vw      = window.innerWidth;
-    var vh      = window.innerHeight;
-    var cardW   = Math.min(290, vw - 52);
-    var left    = Math.max(16, (vw - cardW) / 2);
-    var cardH   = card.offsetHeight || 240;
-    var top;
-    var r = (targetEl && targetEl.getBoundingClientRect) ? targetEl.getBoundingClientRect() : null;
-    if (r && r.width > 0) {
-      top = (r.top > vh * 0.48) ? (r.top - cardH - 18) : (r.bottom + 18);
-      top = Math.max(72, Math.min(top, vh - cardH - 14));
-    } else {
-      var mobileOffset = vw < 768 ? 40 : 0;
-      top = Math.max(80, (vh - 280) / 2 + mobileOffset + (extraOffset || 0));
-    }
+    var vw    = window.innerWidth;
+    var vh    = window.innerHeight;
+    var cardW = Math.min(290, vw - 52);
+    var left  = Math.max(16, (vw - cardW) / 2);
+    var cardH = card.offsetHeight || 240;
+    /* Always centred on every step, so the card never jumps around. It's
+       draggable — the user shifts it aside to see a highlighted control.
+       (targetEl and extraOffset are intentionally ignored now.) */
+    var top = Math.max(72, Math.round((vh - cardH) / 2));
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;touch-action:none;' +
