@@ -574,8 +574,7 @@ const PLACES = [
     "hours": "Daily, lunch and dinner",
     "tip": "",
     "type": "Charcoal Grilled DalkGalbi",
-    "blog": "https://zenkimchi.com/zenkimchi-korean-food-journal/restaurants/great-korean-restaurant-franchises/",
-    "website": "http://www.oraikorea.com/"
+    "blog": "https://zenkimchi.com/zenkimchi-korean-food-journal/restaurants/great-korean-restaurant-franchises/"
   },
   {
     "id": 33,
@@ -661,8 +660,7 @@ const PLACES = [
     "hours": "Daily, lunch and dinner",
     "tip": "Bring a bottle of pinot noir for the Clay Pot Duck.",
     "type": "Clay Pot Duck / Budae Jjigae",
-    "blog": "https://zenkimchi.com/zenkimchi-korean-food-journal/restaurants/great-korean-restaurant-franchises/",
-    "website": "http://www.nolboo.co.kr/"
+    "blog": "https://zenkimchi.com/zenkimchi-korean-food-journal/restaurants/great-korean-restaurant-franchises/"
   },
   {
     "id": 38,
@@ -884,8 +882,7 @@ const PLACES = [
     "hours": "Wed, Mon 09:00, 18:00",
     "tip": "Skip the Changing of the Guard if you're short on time: it's more cosplay than ceremony.",
     "type": "Royal Palace",
-    "blog": "https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/",
-    "website": "https://www.royalpalace.go.kr"
+    "blog": "https://zenkimchi.com/tour-tips/what-to-actually-do-in-seoul-a-real-top-10-list-with-zero-bullsht/"
   },
   {
     "id": 51,
@@ -952,8 +949,7 @@ const PLACES = [
     "note": "Six hundred traditional hanok on a hillside between two palaces, still residential. Bukchon Alley 11 gives the most photographed view in the city: tiled rooftops against the skyline.",
     "hours": "Outdoor neighbourhood, always accessible. Culture Center: Tue, Sun 09:00, 18:00.",
     "tip": "Come before 09:00 or after 17:00; the signs asking for quiet are not decorative.",
-    "type": "Traditional hanok neighbourhood, between Gyeongbokgung & Changdeokgung, Jongno",
-    "website": "https://bukchon.seoul.go.kr"
+    "type": "Traditional hanok neighbourhood, between Gyeongbokgung & Changdeokgung, Jongno"
   },
   {
     "id": 55,
@@ -985,8 +981,7 @@ const PLACES = [
     "note": "The street from Gyeongbokgung to Bukchon has Seoul's highest density of independent galleries, around thirty in converted hanok. The craft shops sell celadon and hanji well above Insadong quality.",
     "hours": "Most galleries and shops Tue-Sun 10:00-18:00; closed Mon.",
     "tip": "Walk Samcheong-ro from Anguk Station toward Bukchon; the galleries cluster densest near Bukchon-ro.",
-    "type": "30+ art galleries & traditional craft shops, between palace and Bukchon, Jongno",
-    "website": "https://www.whankimuseum.org"
+    "type": "30+ art galleries & traditional craft shops, between palace and Bukchon, Jongno"
   },
   {
     "id": 57,
@@ -1098,8 +1093,7 @@ const PLACES = [
     "note": "Twelve riverside parks line the Han; Yeouido is the most used. Summer evenings the banks fill with Seoulites picnicking on delivery food, local culture most visitors miss entirely.",
     "hours": "Open 24 hours. Bike rental: dawn to dusk.",
     "tip": "Go at dusk; order fried chicken delivery to the entrance, exactly how Seoulites eat on summer nights.",
-    "type": "Han River riverside park, cycling, picnic culture & city views, Yeouido",
-    "website": "https://hangang.seoul.go.kr"
+    "type": "Han River riverside park, cycling, picnic culture & city views, Yeouido"
   },
   {
     "id": 64,
@@ -1114,8 +1108,7 @@ const PLACES = [
     "note": "A granite massif rising to 836 metres on Seoul's edge, 30 minutes by metro. The Baegundae route ends on bare granite with an unobstructed panorama of the city.",
     "hours": "Open year-round. Entrance gates close at 16:00 in winter. No facilities on upper sections.",
     "tip": "Go on a weekday and bring water; there are no vendors above the visitor centre.",
-    "type": "Granite national park, 836m peak & fortress wall, 30 min by metro from city centre",
-    "website": "https://bukhansan.knps.or.kr"
+    "type": "Granite national park, 836m peak & fortress wall, 30 min by metro from city centre"
   },
   {
     "id": 65,
@@ -1130,7 +1123,6 @@ const PLACES = [
     "note": "Redesigned in 2022, doubled in width with traffic removed, a proper civic forecourt to Gyeongbokgung. The Yi Sun-sin and King Sejong statues stand on axis with the palace gate.",
     "hours": "24 hours",
     "tip": "On clear days the view frames Baegundae peak in Bukhansan directly behind the palace gate.",
-    "type": "Redesigned civic square (2022) & opened presidential residence (free), central Seoul",
-    "website": "https://www.opencheongwadae.kr"
+    "type": "Redesigned civic square (2022) & opened presidential residence (free), central Seoul"
   }
 ];
