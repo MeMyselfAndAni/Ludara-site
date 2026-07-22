@@ -14,25 +14,16 @@
     {
       /* 1 — Welcome */
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One interactive map for the whole estate — house, gardens, Enchanted Woods, every trail — each with the story behind it.',
+      body: 'One interactive map for the whole estate — everything worth your time, in one place.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      /* 2 — Explore the pins */
-      title: 'The Winterthur Guide',
-      body: 'Every pin has a story — the house, the gardens, the Enchanted Woods, the narrated tram. Tap any icon to see what’s there.',
-      target: null,
-      cardPos: 'center',
-      demo: 'open-card-delayed-no-heart',
-      btn: 'Next'
-    },
-    {
-      /* 3 — Inside the card */
-      title: 'Inside the place card',
-      body: 'Each card has a place description, visitor tip and direct Google Maps navigation link.',
+      /* 2 — Tap a pin → open its card (merged: old "Winterthur Guide" hook + card contents) */
+      title: 'Tap a pin to open its card',
+      body: 'Tap any pin to see what’s there. Each card has the place’s story, a visitor tip, and a direct Google Maps navigation link.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
@@ -41,7 +32,7 @@
     {
       /* 4 — Ready-made day trips (moved up so visitors meet it early) */
       title: 'Ready-made day trips',
-      body: 'Short on time? One tap on the left loads a full, ready-to-go day — ' + TRIP_NAMES + '. A whole route, planned for you.',
+      body: 'We’ve prepared a few recommended routes for you — ' + TRIP_NAMES + '. One tap on the left loads the whole day.',
       target: '#trip-launcher',
       cardPos: 'center',
       closeCard: true,
@@ -98,7 +89,7 @@
     {
       /* 10 — Locate yourself + save the guide offline (both bottom-right buttons, together) */
       title: 'Find your way — and save offline',
-      body: 'Tap the circle to find yourself on the map. And since there’s no signal out on the grounds, tap Save offline to keep the whole guide on your phone.',
+      body: 'Tap the circle to find yourself on the map. And if there’s no signal out on the grounds, tap Save offline to keep the whole guide on your phone.',
       target: null,
       targets: ['#locate-btn', '#offline-save-btn'],
       targetsDelay: 200,  /* wait for close-sheet animation before spotlighting both */
