@@ -386,7 +386,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   transform: scale(1.08);
 }
 .nbhd-bubble.nbhd-active .nbhd-label {
-  color: var(--accent);
+  color: var(--gold);
   font-weight: 700;
 }
 
@@ -398,10 +398,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     left: 0; right: 0;
     bottom: 0;
     padding: 4px 6px 6px;      /* safe-area bottom on notched phones */
-    background: rgba(255,255,255,0.97);
+    background: rgba(26,58,92,0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(0,0,0,0.08);
+    border-top: 1px solid rgba(255,255,255,0.15);
     border-radius: 10px 10px 0 0;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -743,7 +743,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   gap: 0;
   padding: 4px 10px 6px;
   overflow: visible;
-  background: rgba(255,255,255,0.97);
+  background: rgba(26,58,92,0.97);
 }
 
 .nbhd-bubble {
@@ -776,7 +776,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   width: 100%; height: 100%;
   border-radius: 50%;
   border: 2.5px solid white;
-  background: var(--accent);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -786,7 +786,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .nbhd-label {
   font-size: 0.62rem;
   font-weight: 600;
-  color: #1a3a5c;
+  color: #ffffff;
   text-align: center;
   max-width: 64px;
   line-height: 1.2;
@@ -1463,10 +1463,15 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   margin-bottom: 4px;
 }
 .pc-contact-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem; font-weight: 600;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  padding: 9px 4px;
+  border-radius: 12px;
+  font-size: 0.62rem; font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
   text-decoration: none;
   border: 1.5px solid #1a3a5c;
   color: #1a3a5c;
@@ -1475,7 +1480,27 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif;
   white-space: nowrap;
 }
+.pc-contact-pill .pc-ico { font-size: 1.05rem; line-height: 1; }
 .pc-contact-pill:hover { background: #1a3a5c; color: white; }
+
+/* One-tap booking button — Seoul gold, primary action */
+.pc-reserve-pill { background: #b8960a; border-color: #b8960a; color: #fff; }
+.pc-reserve-pill:hover { background: #9c7e08; border-color: #9c7e08; color: #fff; }
+
+/* Call button shows the actual number — smaller so it wraps to two lines and fits */
+.pc-call-pill { font-size: 0.52rem; white-space: normal; word-break: break-word; }
+
+/* Walk-in only — muted, non-clickable tag (not a button) */
+.pc-nores-pill {
+  background: #f0efe6;
+  border-color: #ddd8c6;
+  color: #9a9484;
+  font-size: 0.55rem;
+  font-weight: 600;
+  cursor: default;
+  white-space: normal;
+}
+.pc-nores-pill:hover { background: #f0efe6; color: #9a9484; }
 
 /* Counter (nbhd mode) */
 .pc-counter {

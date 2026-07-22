@@ -85,6 +85,10 @@ async function generatePDF(){
   const totalM    = _routeStats.distM;
   const totalMins = _routeStats.walkMins;
 
+  // Combined-route QR — opens the whole itinerary in the Naver Map app
+  const routeUrl = (typeof naverRouteUrl === 'function') ? naverRouteUrl(places) : '';
+  const routeQr  = routeUrl ? `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(routeUrl)}` : '';
+
   // Build HTML for each place card
   const cards = places.map((p, i) => {
     const photoUrl = photoCache[p.id]?.url || '';
@@ -104,7 +108,7 @@ async function generatePDF(){
       church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
     };
 
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+    const mapsUrl = (typeof naverPlaceUrl === 'function') ? naverPlaceUrl(p) : `https://map.naver.com/p/search/${encodeURIComponent(p.name)}`;
     const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(mapsUrl)}`;
 
     const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
@@ -131,7 +135,7 @@ async function generatePDF(){
         ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
-          <span class="pdf-qr-label">Scan for Google Maps</span>
+          <span class="pdf-qr-label">Scan for Naver Map</span>
           ${p.website ? `<a class="pdf-website" href="${p.website}">${p.website.replace('https://','')}</a>` : ''}
         </div>
       </div>
@@ -446,6 +450,10 @@ async function generatePDF(){
       <div class="pdf-stat-label">${formatDistanceUnit()}</div>
     </div>
   </div>
+  ${routeQr ? `<div style="margin-top:16px;text-align:center">
+    <img src="${routeQr}" style="width:120px;height:120px" alt="Naver route QR"/>
+    <div style="font-size:0.72rem;color:#666;margin-top:5px">Scan to open the whole route in Naver Map</div>
+  </div>` : ''}
   <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
   <div class="pdf-cover-date">${date}</div>
 </div>

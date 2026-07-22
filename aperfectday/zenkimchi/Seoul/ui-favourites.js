@@ -328,7 +328,7 @@ function planFavTrip(){
 
   document.getElementById('trip-overlay').classList.add('open');
 
-  // Add the missing trip footer with proper Google Maps button
+  // Add the missing trip footer with proper Naver Map button
   const existingFooter = document.querySelector('.trip-footer');
   if (!existingFooter) {
     const tripPanel = document.querySelector('.trip-panel');
@@ -336,7 +336,7 @@ function planFavTrip(){
     footer.className = 'trip-footer';
     footer.innerHTML = `
       <button class="trip-maps-btn" onclick="openTripInMaps()">
-        🗺 Open in Google Maps
+        🗺 Open route in Naver Map
       </button>
     `;
     tripPanel.appendChild(footer);
@@ -416,27 +416,25 @@ function jumpToTripStop(id){
 }
 function closeTripPlan(){ document.getElementById('trip-overlay').classList.remove('open'); }
 
-// ── GOOGLE MAPS BUTTON FIX ───────────────────────────────────
+// ── NAVER MAP BUTTON FIX ───────────────────────────────────
 // RED buttons call openTripInMaps() directly - no interceptor needed
 
+// Combined multi-stop route in Naver. Naver's walking-route URL scheme supports a
+// start, up to 5 waypoints (v1..v5), and a destination — so the whole itinerary
+// opens as one route in the Naver app. Web (no app) can't do multi-stop, so it
+// falls back to the first stop's Naver page.
 function openTripInMaps(){
   try {
     const places = getSortedFavPlaces();
     if(!places.length) return;
-
-    const stops = places.slice(0,8);
-    const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
-    const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
-
-    const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);
-    const dest   = encodeURIComponent(stops[stops.length-1].search || stops[stops.length-1].name + ', ' + cityName);
-    const waypts = stops.slice(1,-1).map(p=>encodeURIComponent(p.search || p.name + ', ' + cityName)).join('|');
-
-    const url = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest +
-      (waypts ? '&waypoints=' + waypts : '') + '&travelmode=' + travelMode;
-    window.open(url, '_blank');
+    const mode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'car' : 'walk';
+    const app = (typeof naverRouteUrl === 'function') ? naverRouteUrl(places, mode) : '';
+    const web = (typeof naverPlaceUrl === 'function') ? naverPlaceUrl(places[0]) : '';
+    if(!app){ _toast('Could not build route'); return; }
+    if(typeof _openNaverWithFallback === 'function'){ _openNaverWithFallback(app, web); }
+    else { window.location.href = app; }
   } catch (error) {
-    _toast('Error opening Google Maps');
+    _toast('Error opening Naver Map');
   }
 }
 

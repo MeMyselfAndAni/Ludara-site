@@ -12,8 +12,8 @@
 <meta property="og:title" content="A Perfect Day in Seoul — ZenKimchi Food Guide">
 <meta property="og:description" content="65 curated restaurants, street food spots and hidden gems across Seoul — hand-picked by ZenKimchi, Korea's original food and culture blog. Your insider Seoul guide.">
 <meta property="og:image" content="https://ludara.ai/aperfectday/zenkimchi/seoul/og-preview.jpg">
-<meta property="og:image:width" content="630">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="A Perfect Day in Seoul — ZenKimchi Food Guide">
 <meta name="twitter:description" content="65 curated restaurants, street food spots and hidden gems across Seoul, hand-picked by ZenKimchi.">
@@ -221,6 +221,7 @@
     <div class="pc-address" id="pc-address"></div>
     <div class="pc-awards" id="pc-awards" style="display:none"></div>
     <div class="pc-hours" id="pc-hours"></div>
+    <div class="pc-contacts" id="pc-contacts"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
       <span class="pc-emily-by">— Joe, ZenKimchi</span>
@@ -229,7 +230,6 @@
       <span class="pc-tip-label">💡 Visitor Tip</span>
       <span id="pc-tip-text"></span>
     </div>
-    <div class="pc-contacts" id="pc-contacts"></div>
     <div class="pc-counter" id="pc-counter" style="display:none"></div>
   </div>
 </div>
@@ -246,7 +246,7 @@
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
-      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open in Google Maps</button>
+      <button class="trip-maps-btn" onclick="openTripInMaps()">🗺 Open route in Naver Map</button>
       <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
       <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
     </div>
@@ -259,6 +259,17 @@
   <span class="list-toggle-label">Places</span>
   <span class="count-badge" id="list-badge">65</span>
 </button>
+
+<!-- Reserve a taxi — Seoul International Taxi (official foreigner service, English 24/7) -->
+<a onclick="openTaxi()" title="Get a taxi with Uber (opens the app on your phone, the web on desktop)" style="
+  position:fixed; bottom:268px; right:12px; z-index:1100;
+  background:#b8960a; color:#14243f; text-decoration:none;
+  border:none; border-radius:24px;
+  padding:8px 14px; font-size:0.75rem; font-weight:700; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3); white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;">
+  🚕 Get a taxi
+</a>
 
 <button onclick="restartTutorial()" title="Show tutorial" style="
   position:fixed; bottom:224px; right:12px; z-index:1100;
@@ -331,6 +342,7 @@
 <!-- JS modules — load order is critical -->
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
+<script src="credits.js"></script>
 <script src="data.js"></script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script>
@@ -341,7 +353,7 @@
 <script src="ui-favourites.js"></script>
 <script src="ui-pdf.js"></script>
 
-<!-- Navigate in Google Maps using place search names -->
+<!-- Navigate in Naver Map using place search names -->
 <script>
 // ✅ FIXED: openTripInMaps() now comes ONLY from ui-favourites.js
 // Removed duplicate function that was ignoring manual ordering
@@ -402,16 +414,10 @@ window.addEventListener('load', function() {
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';
-    btn.innerHTML = '🚶 Navigate on Google Maps' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
-    btn.onclick = function() {
-      var dest = place.lat+','+place.lng;
-      var url = window._userLat && window._userLng
-        ? 'https://www.google.com/maps/dir/?api=1&origin='+window._userLat+','+window._userLng+'&destination='+dest+'&travelmode=walking'
-        : 'https://www.google.com/maps/dir/?api=1&destination='+dest+'&travelmode=walking';
-      window.open(url, '_blank');
-    };
-    var hours = document.getElementById('pc-hours');
-    if (hours && hours.parentNode) hours.parentNode.insertBefore(btn, hours.nextSibling);
+    btn.innerHTML = '🚶 Navigate on Naver Map' + (distStr ? ' <span style="opacity:0.65;font-weight:400;font-size:0.78rem">· ' + distStr + '</span>' : '');
+    btn.onclick = function() { openNaver(place, 'walk'); };
+    // Legacy single "Navigate" button removed — the Holston-style action row
+    // (Reserve / Call / Website / Navigate) already covers navigation.
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>
@@ -488,7 +494,7 @@ function clearAllSaved() {
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
-        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Google Maps</button>'+
+        '<button class="saved-action-btn" onclick="openTripInMaps()" style="flex:1">🗺 Naver Map</button>'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
         '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
