@@ -611,21 +611,19 @@
     var cardH = card.offsetHeight || 240;
     var extra = extraOffset || 0;
     var top;
-    /* Desktop: centred (plenty of room, nothing gets covered).
-       Mobile: keep the card clear of the highlighted element — sit high when
-       it is in the lower half, low (below centre) when it is high or absent,
-       so the tour never explains something it is covering. */
-    if (vw < 768) {
-      var targetMid = null;
-      if (targetEl && targetEl.getBoundingClientRect) {
-        var r = targetEl.getBoundingClientRect();
-        if (r.height > 0) { targetMid = r.top + r.height / 2; }
-      }
-      if (targetMid !== null && targetMid > vh * 0.5) {
-        top = Math.max(72, Math.round(vh * 0.12) + extra);            /* target low  -> card high */
+    /* Desktop: centred. Mobile: place the card just ABOVE the highlighted
+       element if there is room, otherwise just BELOW it, so it can never cover
+       what it is explaining. The CSS transition glides it between positions. */
+    if (vw < 768 && targetEl && targetEl.getBoundingClientRect) {
+      var r = targetEl.getBoundingClientRect();
+      if (r.height > 0 && r.top > cardH + 88) {
+        top = r.top - cardH - 16;                 /* room above the target */
+      } else if (r.height > 0) {
+        top = r.bottom + 16;                      /* otherwise below the target */
       } else {
-        top = Math.max(72, Math.round((vh - cardH) / 2) + 113 + extra); /* target high -> card low */
+        top = Math.round((vh - cardH) / 2) + extra;
       }
+      top = Math.max(72, Math.min(top, vh - cardH - 16));
     } else {
       top = Math.max(72, Math.round((vh - cardH) / 2) + extra);
     }
@@ -687,10 +685,9 @@
           setSpotDual(step.dualTargets);
         }
       } else {
-        /* Mobile: highlight the primary target (e.g. the category bar);
-           the copy points to the second target (the zones just below). */
-        if (targetEl) { setSpot(targetEl); }
-        else { setSpot(null); }
+        /* Mobile: highlight both bars — type at the top and area at the bottom.
+           The card is positioned clear of them by setCard(). */
+        setSpotDual(step.dualTargets);
       }
     } else if (step.targets) {
       if (step.targetsDelay) {
