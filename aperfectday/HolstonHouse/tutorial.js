@@ -13,47 +13,40 @@
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: '30 seconds. That\'s all it takes to explore Nashville like an insider. Tap Next to start.',
+      body: 'We curated ' + (typeof PLACES !== 'undefined' ? PLACES.length : 63) + ' places for you to explore and plan your perfect day in ' + CITY + '. Tap Next to start.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      /* Merged: open a pin's card + what is inside it */
-      title: 'Tap a pin to open its card',
-      body: 'Tap any pin to see our pick. Each card opens with a one-tap row on top to reserve a table, call, open the website or navigate, then our insider tip and hours.',
-      target: null,
-      cardPos: 'center',
-      demo: 'scroll-card',
-      btn: 'Next'
-    },
-    {
-      /* Day Trip Picks moved up so visitors meet them early */
-      title: 'Our Day Trip Picks',
-      body: 'Looking for inspiration? One tap on the left loads a full ready-to-go day, ' + TRIP_NAMES + '.',
-      target: '#trip-launcher',
-      cardPos: 'center',
-      closeCard: true,
-      demo: 'close-saved-pulse',
-      btn: 'Next'
-    },
-    {
-      title: 'Filter by place type',
-      body: 'In the mood for live music? Great coffee? Slide the bar to find your category — the map keeps only those spots visible.',
+      /* Filter by type + area (merged), shown before the card step */
+      title: 'Filter by type and area',
+      body: 'Slide the top bar to filter by place type, or tap a ' + CITY + ' neighborhood below to zoom in. The map follows either way.',
       target: '.filter-bar',
+      dualTargets: ['.filter-bar', '#nbhd-bar'],
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',
       btn: 'Next'
     },
     {
-      title: 'Explore by neighborhood',
-      body: 'Each button at the bottom is a ' + CITY + ' neighborhood. Tap to zoom straight in. Tap again to zoom back out.',
-      target: '#nbhd-bar',
+      /* Tap a pin -> the card opens (visible tap, then the card animates in) */
+      title: 'Tap a pin to open its card',
+      body: 'Tap any pin to see our pick. Each card opens with a one-tap row on top to reserve a table, call, open the website or navigate, then our insider tip and hours.',
+      target: null,
+      cardPos: 'center',
+      demo: 'tap-pin',
+      btn: 'Next'
+    },
+    {
+      /* Day Trip Picks */
+      title: 'Our Day Trip Picks',
+      body: 'Looking for inspiration? One tap on the left loads a full ready-to-go day, ' + TRIP_NAMES + '.',
+      target: '#trip-launcher',
       cardPos: 'center',
       closeCard: true,
-      demo: null,
+      demo: 'close-saved-pulse',
       btn: 'Next'
     },
     {
@@ -323,6 +316,31 @@
     }
   }
 
+  function tapPinDemo() {
+    /* Find a visible marker near screen centre to "tap" */
+    var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
+    var markers = document.querySelectorAll('.leaflet-marker-icon');
+    markers.forEach(function (m) {
+      var r = m.getBoundingClientRect();
+      if (r.width === 0) return;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if (cy > 90 && cy < window.innerHeight * 0.6 &&
+          cx > 60 && cx < window.innerWidth - 60) { tapX = cx; tapY = cy; }
+    });
+    /* Slow, visible "tap" on the pin: a ripple, a second confirming tap,
+       then the place card opens and animates in on its own. */
+    _showTapRipple(tapX, tapY);
+    setTimeout(function () { _showTapRipple(tapX, tapY); }, 400);
+    setTimeout(function () {
+      if (!_demoCardOpen && typeof openDetail === 'function') {
+        openDetail(DEMO_PLACE);
+        _demoCardOpen = true;
+      }
+      /* Slide the tour card clear of the now-open place card */
+      setTimeout(function () { setCard(0, null); }, 320);
+    }, 1350);
+  }
+
   function closeDemoCard() {
     if (_demoCardOpen && typeof closePlaceCard === 'function') {
       closePlaceCard(false);
@@ -577,7 +595,18 @@
       }
       top = Math.max(72, Math.min(top, vh - cardH - 16));
     } else {
+      /* Desktop: centred, unless a place card is open (then sit beside it so
+         the tour never covers the card it is explaining). */
       top = Math.max(80, Math.round((vh - cardH) / 2) + extra);
+      var pcD = document.getElementById('place-card');
+      if (!targetEl && pcD && pcD.classList.contains('open')) {
+        var rd = pcD.getBoundingClientRect();
+        if (rd.width > 0) {
+          if (rd.left - cardW - 24 >= 16)            { left = Math.round(rd.left - cardW - 24); }
+          else if (rd.right + cardW + 24 <= vw - 16) { left = Math.round(rd.right + 24); }
+          else { top = Math.min(vh - cardH - 16, rd.bottom + 16); }
+        }
+      }
     }
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
@@ -655,6 +684,7 @@
         _demoCardOpen = true;
       }
     }, 3000); }
+    if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
