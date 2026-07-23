@@ -609,13 +609,30 @@
     var cardW = Math.min(290, vw - 52);
     var left  = Math.max(16, (vw - cardW) / 2);
     var cardH = card.offsetHeight || 240;
-    /* Always centred on every step, so the card never jumps around. It's
-       draggable — the user shifts it aside to see a highlighted control.
-       (targetEl and extraOffset are intentionally ignored now.) */
-    var top = Math.max(72, Math.round((vh - cardH) / 2));
+    var extra = extraOffset || 0;
+    var top;
+    /* Desktop: centred (plenty of room, nothing gets covered).
+       Mobile: keep the card clear of the highlighted element — sit high when
+       it is in the lower half, low (below centre) when it is high or absent,
+       so the tour never explains something it is covering. */
+    if (vw < 768) {
+      var targetMid = null;
+      if (targetEl && targetEl.getBoundingClientRect) {
+        var r = targetEl.getBoundingClientRect();
+        if (r.height > 0) { targetMid = r.top + r.height / 2; }
+      }
+      if (targetMid !== null && targetMid > vh * 0.5) {
+        top = Math.max(72, Math.round(vh * 0.12) + extra);            /* target low  -> card high */
+      } else {
+        top = Math.max(72, Math.round((vh - cardH) / 2) + 113 + extra); /* target high -> card low */
+      }
+    } else {
+      top = Math.max(72, Math.round((vh - cardH) / 2) + extra);
+    }
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;touch-action:none;' +
+      'transition:top 0.28s ease, left 0.28s ease;' +
       'left:' + left + 'px;top:' + top + 'px;';
   }
 
@@ -654,7 +671,11 @@
     var _skip = document.getElementById('tut-skip'); if(_skip) _skip.textContent = TUT_SKIP_BY_LANG[_tl] || 'Skip to the end';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, targetEl);
+    var posTarget = targetEl
+      || (step.dualTargets && document.querySelector(step.dualTargets[step.dualTargets.length - 1]))
+      || (step.targets && document.querySelector(step.targets[step.targets.length - 1]))
+      || null;
+    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, posTarget);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.dualTargets) {
       clearDualOverlay();
