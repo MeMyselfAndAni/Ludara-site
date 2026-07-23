@@ -20,19 +20,22 @@
       btn: 'Next'
     },
     {
-      title: 'Our Curated ' + CITY + ' Guide',
-      body: 'Every pin on this map earned its spot. Tap any icon to see our pick — a local insider tip, working hours, and a direct link to the place.',
-      target: null,
-      cardPos: 'center',
-      demo: 'open-card-delayed-no-heart',
-      btn: 'Next'
-    },
-    {
-      title: 'Inside the place card',
-      body: 'The good stuff is in here. Read our take on the place, then scroll down for the phone number and website.',
+      /* Merged: open a pin's card + what is inside it */
+      title: 'Tap a pin to open its card',
+      body: 'Tap any pin to see our pick. Each card opens with a one-tap row on top to reserve a table, call, open the website or navigate, then our insider tip and hours.',
       target: null,
       cardPos: 'center',
       demo: 'scroll-card',
+      btn: 'Next'
+    },
+    {
+      /* Day Trip Picks moved up so visitors meet them early */
+      title: 'Our Day Trip Picks',
+      body: 'Looking for inspiration? One tap on the left loads a full ready-to-go day, ' + TRIP_NAMES + '.',
+      target: '#trip-launcher',
+      cardPos: 'center',
+      closeCard: true,
+      demo: 'close-saved-pulse',
       btn: 'Next'
     },
     {
@@ -93,14 +96,6 @@
       target: '#sheet button[onclick="shareItinerary()"]',
       cardPos: 'center',
       demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Our Day Trip Picks',
-      body: 'Looking for inspiration? We have suggestions for you. One tap on the left loads a full ready-to-go day — ' + TRIP_NAMES + '.',
-      target: '#trip-launcher',
-      cardPos: 'center',
-      demo: 'close-saved-pulse',
       btn: 'Next'
     },
     {
@@ -172,6 +167,16 @@
     '@keyframes tut-tap{',
     '  0%{transform:translate(-50%,-50%) scale(0.3);opacity:1;}',
     '  100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;}}',
+    '#tut-nudge{position:fixed;right:12px;bottom:316px;z-index:1200;max-width:236px;',
+    '  background:#31261d;color:#f5edd8;border-radius:14px;padding:12px 14px 12px;',
+    '  box-shadow:0 6px 24px rgba(0,0,0,0.35);font-family:"Inter",sans-serif;',
+    '  opacity:0;transform:translateY(8px);transition:opacity 0.3s ease,transform 0.3s ease;pointer-events:all;}',
+    '#tut-nudge.show{opacity:1;transform:translateY(0);}',
+    '#tut-nudge-txt{font-size:0.82rem;line-height:1.45;margin:2px 16px 10px 0;}',
+    '#tut-nudge-go{background:#b8965a;color:#31261d;border:none;border-radius:16px;',
+    '  padding:7px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:"Inter",sans-serif;letter-spacing:0.02em;}',
+    '#tut-nudge-go:hover{background:#c8a86a;}',
+    '#tut-nudge-x{position:absolute;top:6px;right:8px;background:none;border:none;color:rgba(245,237,216,0.7);font-size:0.9rem;line-height:1;cursor:pointer;padding:2px 4px;}',
   ].join('');
   document.head.appendChild(style);
 
@@ -550,17 +555,35 @@
     dualOverlay.style.display = 'block';
   }
 
-  function setCard(extraOffset) {
-    var vw      = window.innerWidth;
-    var vh      = window.innerHeight;
-    var cardW   = Math.min(290, vw - 52);
-    var mobileOffset = vw < 768 ? 113 : 0; /* ~3 cm below centre on mobile */
-    var extra   = extraOffset || 0;
+  function setCard(extraOffset, targetEl) {
+    var vw    = window.innerWidth;
+    var vh    = window.innerHeight;
+    var cardW = Math.min(290, vw - 52);
+    var left  = Math.max(16, (vw - cardW) / 2);
+    var cardH = card.offsetHeight || 240;
+    var extra = extraOffset || 0;
+    var top;
+    /* Desktop: centred. Mobile: place the card just ABOVE the highlighted
+       element if there is room, otherwise just BELOW it, so it can never cover
+       what it is explaining. The CSS transition glides it between positions. */
+    if (vw < 768 && targetEl && targetEl.getBoundingClientRect) {
+      var r = targetEl.getBoundingClientRect();
+      if (r.height > 0 && r.top > cardH + 88) {
+        top = r.top - cardH - 16;                 /* room above the target */
+      } else if (r.height > 0) {
+        top = r.bottom + 16;                      /* otherwise below the target */
+      } else {
+        top = Math.round((vh - cardH) / 2) + extra;
+      }
+      top = Math.max(72, Math.min(top, vh - cardH - 16));
+    } else {
+      top = Math.max(80, Math.round((vh - cardH) / 2) + extra);
+    }
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
       'box-shadow:0 8px 40px rgba(0,0,0,0.30);pointer-events:all;z-index:9001;' +
-      'left:' + Math.max(16, (vw - cardW) / 2) + 'px;' +
-      'top:'  + Math.max(80, (vh - 280) / 2 + mobileOffset + extra) + 'px;';
+      'transition:top 0.28s ease, left 0.28s ease;' +
+      'left:' + left + 'px;top:' + top + 'px;';
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
@@ -587,7 +610,11 @@
     nextBtn.textContent = step.btn;
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
-    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);
+    var posTarget = targetEl
+      || (step.dualTargets && document.querySelector(step.dualTargets[step.dualTargets.length - 1]))
+      || (step.targets && document.querySelector(step.targets[step.targets.length - 1]))
+      || null;
+    setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0, posTarget);
     /* For sheet action buttons — keep spot visible and let CSS transition slide it smoothly */
     if (step.dualTargets) {
       clearDualOverlay();
@@ -685,6 +712,52 @@
     localStorage.removeItem(DONE_KEY);
     launch();
   };
+
+  /* ── "New here?" nudge — one-time invite, 5s after the map opens ──
+     A gentle, non-blocking prompt above the button stack. Tapping
+     "Take the tour" starts the tour; it appears once per browser and
+     stays quiet if the tour was already taken. */
+  var _nudgeTimer = null;
+  var NUDGE_KEY   = DONE_KEY + '_nudge';
+  function _mapReady() {
+    var s = document.getElementById('splash');
+    return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
+  }
+  function dismissNudge() {
+    if (_nudgeTimer) { clearTimeout(_nudgeTimer); _nudgeTimer = null; }
+    var n = document.getElementById('tut-nudge');
+    if (!n) return;
+    n.classList.remove('show');
+    setTimeout(function () { n.parentNode && n.parentNode.removeChild(n); }, 350);
+  }
+  function showNudge() {
+    if (localStorage.getItem(DONE_KEY) || localStorage.getItem(NUDGE_KEY)) return;
+    if (overlay.parentNode) return;
+    if (document.getElementById('tut-nudge')) return;
+    if (!style.parentNode) { document.head.appendChild(style); }
+    localStorage.setItem(NUDGE_KEY, '1');
+    var n = document.createElement('div');
+    n.id = 'tut-nudge';
+    n.innerHTML = [
+      '<button id="tut-nudge-x" aria-label="Dismiss">✕</button>',
+      '<div id="tut-nudge-txt">👋 New here? Let me show you around.</div>',
+      '<button id="tut-nudge-go">Take the tour</button>'
+    ].join('');
+    document.body.appendChild(n);
+    requestAnimationFrame(function () { n.classList.add('show'); });
+    document.getElementById('tut-nudge-go').addEventListener('click', function () { dismissNudge(); launch(); });
+    document.getElementById('tut-nudge-x').addEventListener('click', dismissNudge);
+    _nudgeTimer = setTimeout(dismissNudge, 15000);
+  }
+  (function scheduleNudge() {
+    if (localStorage.getItem(DONE_KEY) || localStorage.getItem(NUDGE_KEY)) return;
+    var waitReady = function () {
+      if (_mapReady()) { setTimeout(showNudge, 5000); }
+      else { setTimeout(waitReady, 300); }
+    };
+    if (document.readyState === 'complete') { waitReady(); }
+    else { window.addEventListener('load', waitReady); }
+  })();
 
   /* ── Auto-start on first visit DISABLED 2026-06-12 (per Maria) ──
      Visitors now explore the map first and open the tutorial themselves

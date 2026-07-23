@@ -7,6 +7,9 @@ let ANF = 'all';     // active neighbourhood filter
 // ── MAP CORE — shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
+// "Get a taxi" — Uber opens the app on a phone and the web version on a desktop.
+function openTaxi(){ window.open('https://m.uber.com/', '_blank', 'noopener'); }
+
 
 
 // ── MAP SOURCES + LAYERS INIT ─────────────────────────────────

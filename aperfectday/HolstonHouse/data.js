@@ -623,7 +623,7 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-866-9897", 
     website: "https://rolfanddaughters.com",
-    resUrl: "https://resy.com/cities/nashville-tn/venues/rolf-and-daughters", 
+    resUrl: "https://www.opentable.com/r/rolf-and-daughters-nashville", 
   },
 
   {
@@ -903,7 +903,6 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-829-6023",
     website: "https://peglegporker.com",
-    resUrl: "https://resy.com/cities/nashville-tn/venues/peg-leg-porker",
   },
 
   {
