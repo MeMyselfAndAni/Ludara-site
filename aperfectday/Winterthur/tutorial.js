@@ -14,33 +14,14 @@
     {
       /* 1 — Welcome */
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'One interactive map for the whole estate — everything worth your time, in one place.',
+      body: 'We curated ' + (typeof PLACES !== 'undefined' ? PLACES.length : 23) + ' places for you to explore and plan your perfect day at ' + CITY + '.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      /* 2 — Tap a pin → open its card (merged: old "Winterthur Guide" hook + card contents) */
-      title: 'Tap a pin to open its card',
-      body: 'Tap any pin to see what’s there. Each card has the place’s story, a visitor tip, and a direct Google Maps navigation link.',
-      target: null,
-      cardPos: 'center',
-      demo: 'scroll-card',
-      btn: 'Next'
-    },
-    {
-      /* 4 — Ready-made day trips (moved up so visitors meet it early) */
-      title: 'Ready-made day trips',
-      body: 'We’ve prepared a few recommended routes for you — ' + TRIP_NAMES + '. One tap on the left loads the whole day.',
-      target: '#trip-launcher',
-      cardPos: 'center',
-      closeCard: true,
-      demo: 'close-saved-pulse',
-      btn: 'Next'
-    },
-    {
-      /* 5 — Filter by type & area (merged: category bar + zone bubbles) */
+      /* 2 — Filter by type & area (merged: category bar + zone bubbles), shown before the card step */
       title: 'Filter by type & area',
       body: 'Tap a category at the top to show just one kind of place — or tap a zone below to jump to that part of the estate. The map follows either way.',
       target: '.filter-bar',
@@ -48,6 +29,25 @@
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',
+      btn: 'Next'
+    },
+    {
+      /* 3 — Tap a pin → the card opens (visible tap, then the card animates in) */
+      title: 'Tap a pin to open its card',
+      body: 'Tap any pin to see what’s there. Each card has the place’s story, a visitor tip, and a direct Google Maps navigation link.',
+      target: null,
+      cardPos: 'center',
+      demo: 'tap-pin',
+      btn: 'Next'
+    },
+    {
+      /* 4 — Ready-made day trips */
+      title: 'Ready-made day trips',
+      body: 'We’ve prepared a few recommended routes for you — ' + TRIP_NAMES + '. One tap on the left loads the whole day.',
+      target: '#trip-launcher',
+      cardPos: 'center',
+      closeCard: true,
+      demo: 'close-saved-pulse',
       btn: 'Next'
     },
     {
@@ -338,6 +338,31 @@
     }
   }
 
+  function tapPinDemo() {
+    /* Find a visible marker near screen centre to "tap" */
+    var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
+    var markers = document.querySelectorAll('.leaflet-marker-icon');
+    markers.forEach(function (m) {
+      var r = m.getBoundingClientRect();
+      if (r.width === 0) return;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if (cy > 90 && cy < window.innerHeight * 0.6 &&
+          cx > 60 && cx < window.innerWidth - 60) { tapX = cx; tapY = cy; }
+    });
+    /* Slow, visible "tap" on the pin: a ripple, a second confirming tap,
+       then the place card opens and animates in on its own. */
+    _showTapRipple(tapX, tapY);
+    setTimeout(function () { _showTapRipple(tapX, tapY); }, 400);
+    setTimeout(function () {
+      if (!_demoCardOpen && typeof openDetail === 'function') {
+        openDetail(DEMO_PLACE);
+        _demoCardOpen = true;
+      }
+      /* Slide the tour card clear of the now-open place card */
+      setTimeout(function () { setCard(0, null); }, 320);
+    }, 1350);
+  }
+
   function closeDemoCard() {
     if (_demoCardOpen && typeof closePlaceCard === 'function') {
       closePlaceCard(false);
@@ -625,7 +650,18 @@
       }
       top = Math.max(72, Math.min(top, vh - cardH - 16));
     } else {
+      /* Desktop: centred, unless a place card is open (then sit beside it so
+         the tour never covers the card it is explaining). */
       top = Math.max(72, Math.round((vh - cardH) / 2) + extra);
+      var pcD = document.getElementById('place-card');
+      if (!targetEl && pcD && pcD.classList.contains('open')) {
+        var rd = pcD.getBoundingClientRect();
+        if (rd.width > 0) {
+          if (rd.left - cardW - 24 >= 16)            { left = Math.round(rd.left - cardW - 24); }
+          else if (rd.right + cardW + 24 <= vw - 16) { left = Math.round(rd.right + 24); }
+          else { top = Math.min(vh - cardH - 16, rd.bottom + 16); }
+        }
+      }
     }
     card.style.cssText = 'position:fixed;background:#f5edd8;border-radius:16px;' +
       'padding:20px 22px 16px;max-width:290px;width:calc(100vw - 52px);' +
@@ -724,6 +760,7 @@
           _demoCardOpen = true;
         }
       }, 3000); }
+      if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
       if (step.demo === 'scroll-card')       { scrollCardDemo(); }
       if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
       if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
