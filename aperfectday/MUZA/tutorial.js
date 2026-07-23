@@ -20,22 +20,7 @@
       btn: 'Next'
     },
     {
-      title: 'The Eretz Israel Museum Guide',
-      body: 'Every pin is worth your time: a groundbreaking crafts & design biennale, a pavilion of ancient glass, an ancient olive press, fine mosaics, and relaxing gardens. Tap any icon to see what is there.',
-      target: null,
-      cardPos: 'center',
-      demo: 'open-card-delayed-no-heart',
-      btn: 'Next'
-    },
-    {
-      title: 'Inside the place card',
-      body: 'Each card has a place description, visitor tip and direct Google Maps navigation link.',
-      target: null,
-      cardPos: 'center',
-      demo: 'scroll-card',
-      btn: 'Next'
-    },
-    {
+      /* Filter + Zone moved up so visitors filter before opening a card */
       title: 'Filter by place type',
       body: 'Looking only for the pavilions, or just the gardens and heritage sites? Tap a category at the top to show only what you want, the map follows.',
       target: '.filter-bar',
@@ -51,6 +36,23 @@
       cardPos: 'center',
       closeCard: true,
       demo: null,
+      btn: 'Next'
+    },
+    {
+      /* Tap a pin -> the card opens (visible tap, then the card animates in) */
+      title: 'The Eretz Israel Museum Guide',
+      body: 'Every pin is worth your time: a groundbreaking crafts & design biennale, a pavilion of ancient glass, an ancient olive press, fine mosaics, and relaxing gardens. Tap any icon to see what is there.',
+      target: null,
+      cardPos: 'center',
+      demo: 'tap-pin',
+      btn: 'Next'
+    },
+    {
+      title: 'Inside the place card',
+      body: 'Each card has a place description, visitor tip and direct Google Maps navigation link.',
+      target: null,
+      cardPos: 'center',
+      demo: 'scroll-card',
       btn: 'Next'
     },
     {
@@ -412,6 +414,31 @@
     }
   }
 
+  function tapPinDemo() {
+    /* Find a visible marker near screen centre to "tap" */
+    var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
+    var markers = document.querySelectorAll('.leaflet-marker-icon');
+    markers.forEach(function (m) {
+      var r = m.getBoundingClientRect();
+      if (r.width === 0) return;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if (cy > 90 && cy < window.innerHeight * 0.6 &&
+          cx > 60 && cx < window.innerWidth - 60) { tapX = cx; tapY = cy; }
+    });
+    /* Slow, visible "tap" on the pin: a ripple, a second confirming tap,
+       then the place card opens and animates in on its own. */
+    _showTapRipple(tapX, tapY);
+    setTimeout(function () { _showTapRipple(tapX, tapY); }, 400);
+    setTimeout(function () {
+      if (!_demoCardOpen && typeof openDetail === 'function') {
+        openDetail(DEMO_PLACE);
+        _demoCardOpen = true;
+      }
+      /* Slide the tour card clear of the now-open place card */
+      setTimeout(function () { setCard(0, null); }, 320);
+    }, 1350);
+  }
+
   function closeDemoCard() {
     if (_demoCardOpen && typeof closePlaceCard === 'function') {
       closePlaceCard(false);
@@ -735,6 +762,7 @@
         _demoCardOpen = true;
       }
     }, 3000); }
+    if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
     if (step.demo === 'show-saved')        { setTimeout(showSavedDemo,     350); }
