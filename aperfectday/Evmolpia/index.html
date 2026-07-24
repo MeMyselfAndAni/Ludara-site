@@ -574,8 +574,8 @@ function clearAllSaved() {
    reachable here. Fix: write to localStorage directly then call
    refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
-  oldtown: { name: 'Ancient Plovdiv', ids: [1,2,3,4], note: '' },
-  kapana:  { name: 'Kapana walk', ids: [15,16,17,18], note: '' }
+  heritage: { name: 'Rhodope Heritage Day', ids: [21,23,22], note: 'Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress' },
+  wine:     { name: 'Wine & History Day', ids: [24,25], note: 'A tasting at Villa Yustina, then the Red Church' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
@@ -617,13 +617,30 @@ function _undoTrip(prev, key) {
 }
 </script>
 
+<div class="trip-launcher" id="trip-launcher">
+  <span class="trip-launcher-label">Evmolpia<br>Recommends</span>
+  <button class="trip-btn-circle" id="trip-btn-heritage" onclick="loadTrip('heritage')" title="Rhodope Heritage Day">
+    <span class="trip-btn-emoji-html">🏛️</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-heritage" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-heritage" startOffset="50%" text-anchor="middle">Heritage</textPath></text>
+    </svg>
+  </button>
+  <button class="trip-btn-circle" id="trip-btn-wine" onclick="loadTrip('wine')" title="Wine &amp; History Day">
+    <span class="trip-btn-emoji-html">🍷</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-wine" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-wine" startOffset="50%" text-anchor="middle">Wine Day</textPath></text>
+    </svg>
+  </button>
+</div>
 <script>
   window.TutorialConfig = {
     doneKey:      'evmolpia_tour_v1',
     cityName:     'Plovdiv',
     demoPlaceId:  1,
     demoSavedIds: [1, 2, 8, 14, 17],
-    tripNames:    'Ancient Plovdiv, Kapana or the Main Street'
+    tripNames:    'a Rhodope Heritage Day or a Wine & History Day'
   };
 </script>
 <script src="tutorial.js"></script>

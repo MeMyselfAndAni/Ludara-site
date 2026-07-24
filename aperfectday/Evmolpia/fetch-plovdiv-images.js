@@ -14,6 +14,7 @@
 //   7 Kapana District      Predavatel          Public domain
 //  21 Bachkovo Monastery   Michael Desnoyelles CC BY-SA 4.0
 //  22 Asen's Fortress      Eric T Gunther      CC BY-SA 3.0
+//  25 The Red Church       Spasimir Pilev      CC BY-SA 4.0
 
 const https = require('https');
 const fs = require('fs');
@@ -28,7 +29,8 @@ const FILES = {
   6: 'Plovdiv -- Dzhumaya Mosque 01.jpg',
   7: 'Plovdiv Kapana.jpg',
   21: 'Bachkovo Monastery - Inside court and church.jpg',
-  22: "Asen's Fortress view from road.JPG"
+  22: "Asen's Fortress view from road.JPG",
+  25: 'Red Church in Perushtitsa 2020 01.jpg'
 };
 
 // Venue photos — each place's own website/hero image (venue-credited in credits.js).
@@ -41,7 +43,8 @@ const VENUE_URLS = {
   13: 'https://hemingway.bg/wp-content/uploads/2023/01/%D0%A2%D0%B0%D0%BB%D0%B8%D0%B0%D1%82%D0%B5%D0%BB%D0%B8-%D0%91%D0%BE%D0%BB%D0%BE%D0%BD%D0%B5%D0%B7%D0%B5-1150x750.jpg',
   15: 'https://artnewscafe.com/wp-content/uploads/2022/03/DSC0047-2-scaled.jpg',
   17: 'https://catandmouse.bg/assets/front/img/about/01t.jpg',
-  19: 'https://andromeda-art.com/style/images/art/S/S-C2.jpg'
+  19: 'https://andromeda-art.com/style/images/art/S/S-C2.jpg',
+  24: 'https://villayustina.com/wp-content/uploads/DSC8502.jpg'
 };
 
 const WIDTH = 1000; // downscaled server-side; good for the detail card
@@ -101,7 +104,7 @@ function download(id, fileUrl) {
     }
   }
   console.log('\nDone. Images are in ' + OUT_DIR);
-  console.log('16 of 22 places now have a photo; the 6 Facebook/Instagram-only');
-  console.log('venues (Pavaj, Rahat Tepe, Monkey House, Dwell, Vino Culture, SKLAD) keep the emoji card.');
+  console.log('18 of 25 places now have a photo; the social-only venues');
+  console.log('(Pavaj, Rahat Tepe, Monkey House, Dwell, Vino Culture, SKLAD) + Da Hapnem keep the emoji card.');
   console.log('Open index.html to see them.');
 })();
