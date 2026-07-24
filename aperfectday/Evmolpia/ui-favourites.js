@@ -182,14 +182,17 @@ function _drawStraightRoute(places){
 }
 
 async function _fetchOSRMRoute(places){
-  // OSRM driving routing — uses the official OSRM demo server (reliable, car profile)
+  // Foot routing for in-town walking trips; driving only for far-flung day trips.
+  const _routeBase = _tripNeedsDriving(places)
+    ? 'https://router.project-osrm.org/route/v1/driving/'
+    : 'https://routing.openstreetmap.de/routed-foot/route/v1/walking/';
   const allCoords = [];
   const CHUNK = 10;
 
   for(let i = 0; i < places.length - 1; i += CHUNK - 1){
     const chunk = places.slice(i, Math.min(i + CHUNK, places.length));
     const coords = chunk.map(p => p.lng + ',' + p.lat).join(';');
-    const url = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`;
+    const url = `${_routeBase}${coords}?overview=full&geometries=geojson`;
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
       const data = await res.json();
@@ -239,7 +242,7 @@ function drawSavedRoute(){
 }
 
 // ── DWELL TIMES ───────────────────────────────────────────────
-const DWELL = { landmark:25, church:20, food:75, cafe:40, market:35, soviet:25, pub:25, nature:40 };
+const DWELL = { attraction:25, dining:70, cafe:35, bar:40, craft:20, landmark:25, church:20, food:75, market:35, soviet:25, pub:25, nature:40 };
 function getDwell(cat){ return DWELL[cat] || 25; }
 function formatMins(mins){
   if(mins < 60) return `${mins} min`;
@@ -251,6 +254,13 @@ function haversineM(a, b){
   const R = 6371000, dLat = (b.lat-a.lat)*Math.PI/180, dLng = (b.lng-a.lng)*Math.PI/180;
   const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
   return 2*R*Math.asin(Math.sqrt(h));
+}
+// Rule: a trip is "driving" when any single leg would take more than 30 min to walk.
+function _tripNeedsDriving(pl){
+  for(var i=0;i<pl.length-1;i++){
+    if(haversineM(pl[i], pl[i+1]) / 58 * 1.35 > 30) return true;
+  }
+  return false;
 }
 function formatWalk(m){
   const mins = Math.round(m/58);
@@ -282,10 +292,7 @@ function planFavTrip(){
   if(favourites.length < 2){ _toast('Save at least 2 places first ♡'); return; }
   const places = getSortedFavPlaces();
   // Day trips (or any leg over 3 km) are driven, not walked — switch mode + labels.
-  let isDriving = places.some(p => p.nbhd === 'daytrip');
-  if(!isDriving){
-    for(let k=0;k<places.length-1;k++){ if(haversineM(places[k],places[k+1]) > 3000){ isDriving = true; break; } }
-  }
+  let isDriving = _tripNeedsDriving(places);
   const legMins = m => isDriving ? Math.round(m*1.35/833) : Math.round(m/58*1.35);
   const modeIcon = isDriving ? '🚗' : '🚶';
   const modeWord = isDriving ? 'driving' : 'walking';
@@ -429,9 +436,7 @@ function openTripInMaps(){
     if(!places.length) return;
 
     const stops = places.slice(0,8);
-    let _drive = stops.some(function(p){ return p.nbhd === 'daytrip'; });
-    if(!_drive){ for(var _k=0;_k<stops.length-1;_k++){ if(haversineM(stops[_k],stops[_k+1])>3000){ _drive=true; break; } } }
-    const travelMode = (_drive || (_lastRouteStats && _lastRouteStats.travelMode === 'driving')) ? 'driving' : 'walking';
+    const travelMode = _tripNeedsDriving(stops) ? 'driving' : 'walking';
     const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
 
     const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);

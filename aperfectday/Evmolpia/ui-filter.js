@@ -524,7 +524,7 @@ function toggleOpenNow(el){
 }
 
 function isOpenNow(place){
-  if(!place.hours) return true;
+  if(!place.hours) return false;
   const h = place.hours.toLowerCase().trim();
   if(h.includes('always') || h.includes('24 hour') || h.includes('24/7') || h.includes('24h') || h.includes('open 24')) return true;
 
@@ -549,8 +549,8 @@ function isOpenNow(place){
 
   // Handles midnight-crossing e.g. 22:00–02:00
   function timeInRange(seg){
-    const m = seg.match(/(\d{1,2}):(\d{2})\s*[–\-]\s*(\d{1,2}):(\d{2})/);
-    if(!m) return true;
+    const m = seg.match(/(\d{1,2}):(\d{2})\s*(?:[–\-]|to)\s*(\d{1,2}):(\d{2})/);
+    if(!m) return false;  // no clear time range -> do not claim "open now"
     const open  = +m[1]*60 + +m[2];
     const close = +m[3]*60 + +m[4];
     return close < open
@@ -577,7 +577,7 @@ function isOpenNow(place){
     if(todayOk && timeInRange(seg)) return true;
   }
 
-  return !anyRecognised; // unrecognised format → assume open; recognised but no match → closed
+  return false; // vague or unrecognised hours -> never falsely claim "open now"
 }
 
 function applyFilters(){
