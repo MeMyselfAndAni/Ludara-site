@@ -15,6 +15,7 @@
 //  21 Bachkovo Monastery   Michael Desnoyelles CC BY-SA 4.0
 //  22 Asen's Fortress      Eric T Gunther      CC BY-SA 3.0
 //  25 The Red Church       Spasimir Pilev      CC BY-SA 4.0
+//  27 St Constantine&Helena Explorer1940        CC BY-SA 4.0
 
 const https = require('https');
 const fs = require('fs');
@@ -30,7 +31,8 @@ const FILES = {
   7: 'Plovdiv Kapana.jpg',
   21: 'Bachkovo Monastery - Inside court and church.jpg',
   22: "Asen's Fortress view from road.JPG",
-  25: 'Red Church in Perushtitsa 2020 01.jpg'
+  25: 'Red Church in Perushtitsa 2020 01.jpg',
+  27: 'Plovdiv -- Church of St Constantine and Helena.jpg'
 };
 
 // Venue photos — each place's own website/hero image (venue-credited in credits.js).
@@ -104,7 +106,7 @@ function download(id, fileUrl) {
     }
   }
   console.log('\nDone. Images are in ' + OUT_DIR);
-  console.log('18 of 25 places now have a photo; the social-only venues');
+  console.log('19 of 27 places now have a photo; the social-only venues');
   console.log('(Pavaj, Rahat Tepe, Monkey House, Dwell, Vino Culture, SKLAD) + Da Hapnem keep the emoji card.');
   console.log('Open index.html to see them.');
 })();

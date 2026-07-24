@@ -281,14 +281,21 @@ function getSortedFavPlaces(){
 function planFavTrip(){
   if(favourites.length < 2){ _toast('Save at least 2 places first ♡'); return; }
   const places = getSortedFavPlaces();
-  let totalWalkSecs = 0, totalDwell = 0;
+  // Day trips (or any leg over 3 km) are driven, not walked — switch mode + labels.
+  let isDriving = places.some(p => p.nbhd === 'daytrip');
+  if(!isDriving){
+    for(let k=0;k<places.length-1;k++){ if(haversineM(places[k],places[k+1]) > 3000){ isDriving = true; break; } }
+  }
+  const legMins = m => isDriving ? Math.round(m*1.35/833) : Math.round(m/58*1.35);
+  const modeIcon = isDriving ? '🚗' : '🚶';
+  const modeWord = isDriving ? 'driving' : 'walking';
+  const legWord  = isDriving ? 'drive' : 'walk';
+  _lastRouteStats = { travelMode: isDriving ? 'driving' : 'walking' };
+  let totalWalkMins = 0, totalDwell = 0;
   places.forEach((p, i) => {
     totalDwell += getDwell(p.cat);
-    if(i < places.length-1){
-      totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 58 * 60 * 1.35);
-    }
+    if(i < places.length-1){ totalWalkMins += legMins(haversineM(p, places[i+1])); }
   });
-  const totalWalkMins = Math.round(totalWalkSecs/60);
   const totalMins = totalWalkMins + totalDwell;
   let totalDistM = 0;
   for(let i=1;i<places.length;i++) totalDistM += haversineM(places[i-1],places[i]);
@@ -300,15 +307,14 @@ function planFavTrip(){
     <div class="trip-summary">
       <span>🗺 ${places.length} stops</span>
       <span>⏱ ~${formatMins(totalMins)} total</span>
-      <span>🚶 ${formatMins(totalWalkMins)} walking</span>
+      <span>${modeIcon} ${formatMins(totalWalkMins)} ${modeWord}</span>
       <span>📏 ${(totalDistM/1000).toFixed(1)} km</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
       Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
     </div>` +
   places.map((p,i)=>{
-    const walkToNext = i < places.length-1
-      ? Math.round(haversineM(p,places[i+1])/58*1.35) : null;
+    const walkToNext = i < places.length-1 ? legMins(haversineM(p,places[i+1])) : null;
     return `
     <div class="trip-stop" draggable="true" data-id="${p.id}" onclick="jumpToTripStop(${p.id})" style="cursor:default">
       <span style="font-size:1.1rem;color:#ccc;padding:0 8px 0 2px;cursor:grab;flex-shrink:0;touch-action:none" class="trip-drag-handle">⠿</span>
@@ -321,7 +327,7 @@ function planFavTrip(){
       </div>
 
     </div>
-    ${walkToNext!==null?`<div class="trip-connector">🚶 ~${walkToNext} min walk</div>`:''}`;
+    ${walkToNext!==null?`<div class="trip-connector">${modeIcon} ~${walkToNext} min ${legWord}</div>`:''}`;
   }).join('');
 
   document.getElementById('trip-overlay').classList.add('open');
@@ -423,7 +429,9 @@ function openTripInMaps(){
     if(!places.length) return;
 
     const stops = places.slice(0,8);
-    const travelMode = (_lastRouteStats && _lastRouteStats.travelMode === 'driving') ? 'driving' : 'walking';
+    let _drive = stops.some(function(p){ return p.nbhd === 'daytrip'; });
+    if(!_drive){ for(var _k=0;_k<stops.length-1;_k++){ if(haversineM(stops[_k],stops[_k+1])>3000){ _drive=true; break; } } }
+    const travelMode = (_drive || (_lastRouteStats && _lastRouteStats.travelMode === 'driving')) ? 'driving' : 'walking';
     const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
 
     const origin = encodeURIComponent(stops[0].search || stops[0].name + ', ' + cityName);

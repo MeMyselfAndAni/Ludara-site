@@ -22,6 +22,7 @@ const PHOTO_CREDITS = {
   22: { author: "Eric T Gunther", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Asen's_Fortress_view_from_road.JPG", venue:false },
   24: { author: "Villa Yustina", license: "", url: "https://villayustina.com/en/", venue:true },
   25: { author: "Spasimir Pilev", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Red_Church_in_Perushtitsa_2020_01.jpg", venue:false },
+  27: { author: "Explorer1940", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Plovdiv_--_Church_of_St_Constantine_and_Helena.jpg", venue:false },
 };
 
 // Build the credit anchor HTML for a place id (returns '' if none).

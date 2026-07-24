@@ -94,7 +94,7 @@
     <div class="splash-logo-row">
       <img src="Branding/evmolpia-wordmark-white.png" class="splash-hh-logo" alt="Hotel Evmolpia, Old Town Plovdiv">
     </div>
-    <p class="splash-hotel-desc">Discover Plovdiv with a curated map from Hotel Evmolpia: the Old Town, Kapana, and the best of the city.</p>
+    <p class="splash-hotel-desc">Long before it was Plovdiv, this city was Evmolpia, one of the oldest in Europe. Discover it with a curated map from the hotel that still carries its ancient name: the Old Town, Kapana, and the stories in between.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">Interactive map by A Perfect Day · Ludara.AI</a>
@@ -168,10 +168,6 @@
     <div class="nbhd-bubble" id="nbhd-center" role="button" tabindex="0" onclick="selectNbhd('center', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🚶</div></div>
       <span class="nbhd-label">Main Street</span>
-    </div>
-    <div class="nbhd-bubble" id="nbhd-daytrip" role="button" tabindex="0" onclick="selectNbhd('daytrip', this)">
-      <div class="nbhd-ring"><div class="nbhd-ring-inner">⛰️</div></div>
-      <span class="nbhd-label">Day Trips</span>
     </div>
 
   </div>
@@ -574,8 +570,9 @@ function clearAllSaved() {
    reachable here. Fix: write to localStorage directly then call
    refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
-  heritage: { name: 'Rhodope Heritage Day', ids: [21,23,22], note: 'Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress' },
-  wine:     { name: 'Wine & History Day', ids: [24,25], note: 'A tasting at Villa Yustina, then the Red Church' }
+  oldtown: { name: 'A Day in Old Plovdiv', ids: [1,29,27,2,11,28,5,6,7], note: 'The Roman theatre, an Armenian merchant\'s painted house, a hilltop of ruins, the bird mosaics, then Kapana' },
+  south: { name: 'A Day South: Bachkovo & Asen\'s Fortress', ids: [21,23,22], note: 'Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress' },
+  west:  { name: 'A Day West: Vines & Old Stones', ids: [24,26,25], note: 'A tasting at Villa Yustina, the 1876 story in Perushtitsa, then the Red Church' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
@@ -619,18 +616,25 @@ function _undoTrip(prev, key) {
 
 <div class="trip-launcher" id="trip-launcher">
   <span class="trip-launcher-label">Evmolpia<br>Recommends</span>
-  <button class="trip-btn-circle" id="trip-btn-heritage" onclick="loadTrip('heritage')" title="Rhodope Heritage Day">
-    <span class="trip-btn-emoji-html">🏛️</span>
+  <button class="trip-btn-circle" id="trip-btn-oldtown" onclick="loadTrip('oldtown')" title="A Day in Old Plovdiv">
+    <span class="trip-btn-emoji-html">🎭</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-heritage" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-heritage" startOffset="50%" text-anchor="middle">Heritage</textPath></text>
+      <defs><path id="arc-oldtown" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-oldtown" startOffset="50%" text-anchor="middle">Old Town</textPath></text>
     </svg>
   </button>
-  <button class="trip-btn-circle" id="trip-btn-wine" onclick="loadTrip('wine')" title="Wine &amp; History Day">
+  <button class="trip-btn-circle" id="trip-btn-south" onclick="loadTrip('south')" title="A Day South: Bachkovo &amp; Asen's Fortress">
+    <span class="trip-btn-emoji-html">🏛️</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-south" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-south" startOffset="50%" text-anchor="middle">South Day</textPath></text>
+    </svg>
+  </button>
+  <button class="trip-btn-circle" id="trip-btn-west" onclick="loadTrip('west')" title="A Day West: Vines &amp; Old Stones">
     <span class="trip-btn-emoji-html">🍷</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-wine" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-wine" startOffset="50%" text-anchor="middle">Wine Day</textPath></text>
+      <defs><path id="arc-west" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-west" startOffset="50%" text-anchor="middle">West Day</textPath></text>
     </svg>
   </button>
 </div>
@@ -640,7 +644,7 @@ function _undoTrip(prev, key) {
     cityName:     'Plovdiv',
     demoPlaceId:  1,
     demoSavedIds: [1, 2, 8, 14, 17],
-    tripNames:    'a Rhodope Heritage Day or a Wine & History Day'
+    tripNames:    'a Day in Old Plovdiv, a Day South to Bachkovo, or a Day West through the vineyards'
   };
 </script>
 <script src="tutorial.js"></script>
