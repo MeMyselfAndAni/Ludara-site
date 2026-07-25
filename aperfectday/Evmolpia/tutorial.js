@@ -648,11 +648,17 @@
     if (step.dualTargets) {
       clearDualOverlay();
       if (window.innerWidth >= 768) {
+        var _drawDual = function() { setSpotDual(step.dualTargets); };
         if (step.targetsDelay) {
           setSpot(null);
-          setTimeout(function() { setSpotDual(step.dualTargets); }, step.targetsDelay);
+          setTimeout(function() {
+            _drawDual();
+            /* Re-sync after the sheet finishes sliding in — fixes first-run offset */
+            setTimeout(_drawDual, 350);
+            setTimeout(_drawDual, 750);
+          }, step.targetsDelay);
         } else {
-          setSpotDual(step.dualTargets);
+          _drawDual();
         }
       } else {
         setSpot(null); /* no shading on mobile for this step */
