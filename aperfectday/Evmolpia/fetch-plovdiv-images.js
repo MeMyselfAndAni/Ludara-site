@@ -111,7 +111,7 @@ function download(id, fileUrl) {
     }
   }
   console.log('\nDone. Images are in ' + OUT_DIR);
-  console.log('22 of 29 places now have a photo; the social-only venues');
+  console.log('22 of 30 places now have a photo; the social-only venues');
   console.log('(Pavaj, Rahat Tepe, Monkey House, Dwell, Vino Culture, SKLAD) + Da Hapnem keep the emoji card.');
   console.log('Open index.html to see them.');
 })();
