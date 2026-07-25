@@ -94,7 +94,7 @@
     <div class="splash-logo-row">
       <img src="Branding/evmolpia-wordmark-white.png" class="splash-hh-logo" alt="Hotel Evmolpia, Old Town Plovdiv">
     </div>
-    <p class="splash-hotel-desc">Long before it was Plovdiv, this city was Evmolpia, one of the oldest in Europe. Discover it with a curated map from the hotel that still carries its ancient name.</p>
+    <p class="splash-hotel-desc">Before it was Plovdiv, it was Eumolpia, one of Europe's oldest cities. Follow a curated map from the hotel that keeps this ancient name alive, through the Old Town, Kapana, and the stories woven between them.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">Interactive map by A Perfect Day · Ludara.AI</a>
@@ -571,8 +571,8 @@ function clearAllSaved() {
    refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
   oldtown: { name: 'A Day in Old Plovdiv', ids: [30,1,29,27,2,11,28,5,6,7], note: 'From the hotel: the Roman theatre, a painted merchant house, a hilltop of ruins, the bird mosaics, then Kapana' },
-  south: { name: 'A Day South: Bachkovo & Asen\'s Fortress', ids: [30,21,23,22], note: 'From the hotel: Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress' },
-  west:  { name: 'A Day West: Vines & Old Stones', ids: [30,24,26,25], note: 'From the hotel: a tasting at Villa Yustina, the 1876 story in Perushtitsa, then the Red Church' }
+  south: { name: 'A Day South: Bachkovo & Asen\'s Fortress', ids: [30,21,23,22], note: 'From the hotel: Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress. Best Wed to Sun. On Mon and Tue the fortress is closed, so make Bachkovo Monastery (open daily) a longer visit with an unhurried tavern lunch.' },
+  west:  { name: 'A Day West: Vines & Old Stones', ids: [30,26,25,24], note: 'From the hotel: the 1876 story in Perushtitsa, the Red Church, then a tasting and lunch at Villa Yustina. Best Wed to Sun. On Mon and Tue the Red Church is closed, so lead with the tasting and lunch at Villa Yustina (open daily) and add a wander through Perushtitsa.' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
