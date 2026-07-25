@@ -571,8 +571,8 @@ function clearAllSaved() {
    refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
   oldtown: { name: 'A Day in Old Plovdiv', ids: [30,1,29,27,2,11,28,5,6,7], note: 'From the hotel: the Roman theatre, a painted merchant house, a hilltop of ruins, the bird mosaics, then Kapana' },
-  south: { name: 'A Day South: Bachkovo & Asen\'s Fortress', ids: [30,21,23,22], note: 'From the hotel: Bachkovo Monastery, a riverside tavern lunch, then Asen\'s Fortress. Best Wed to Sun. On Mon and Tue the fortress is closed, so make Bachkovo Monastery (open daily) a longer visit with an unhurried tavern lunch.' },
-  west:  { name: 'A Day West: Vines & Old Stones', ids: [30,26,25,24], note: 'From the hotel: the 1876 story in Perushtitsa, the Red Church, then a tasting and lunch at Villa Yustina. Best Wed to Sun. On Mon and Tue the Red Church is closed, so lead with the tasting and lunch at Villa Yustina (open daily) and add a wander through Perushtitsa.' }
+  south: { name: 'A Day South: Bachkovo & Asen\'s Fortress', ids: [30,21,23,22], note: '<span style="color:#c0392b;font-weight:700">⚠ Asen\'s Fortress is closed Mon and Tue.</span>' },
+  west:  { name: 'A Day West: Vines & Old Stones', ids: [30,26,25,24], note: '<span style="color:#c0392b;font-weight:700">⚠ The Red Church is closed Mon and Tue.</span>' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
@@ -597,11 +597,11 @@ function _tripToast(msg, note, prev, key) {
   var el = document.createElement("div"); el.id = "_trip-toast";
   var brand = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim() || "#ff2a00";
   el.style.cssText = "position:fixed;top:110px;left:50%;transform:translateX(-50%);background:white;color:#31261d;padding:10px 18px;border-radius:24px;border:2px solid "+brand+";font-size:0.78rem;font-weight:600;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.18);display:flex;align-items:center;gap:12px;";
-  el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.66rem;font-weight:400;opacity:0.65">' + note + '</span>' : '') + "</span>"
+  el.innerHTML = "<span>📍 " + msg + (note ? '<br><span style="font-size:0.72rem;font-weight:400;">' + note + '</span>' : '') + "</span>"
     + '<button onclick="_undoTrip(' + JSON.stringify(prev) + ',\'' + key + '\')" '
     + 'style="background:none;border:1px solid ' + brand + ';color:' + brand + ';border-radius:12px;padding:3px 10px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Undo</button>';
   document.body.appendChild(el);
-  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 12000);
 }
 function _undoTrip(prev, key) {
   var el = document.getElementById("_trip-toast"); if (el) el.remove();
