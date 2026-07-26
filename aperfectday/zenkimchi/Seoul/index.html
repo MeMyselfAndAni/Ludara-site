@@ -79,6 +79,59 @@
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
 
+  /* ── Filter pills — raised 3D, navy and gold ── */
+  .filter-bar { gap: 9px !important; padding: 0 12px 8px !important; }
+  .pill {
+    padding: 10px 16px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    border: 2px solid rgba(18,41,74,0.24) !important;
+    background: #ffffff !important;
+    color: #12294a !important;
+    box-shadow:
+      0 3px 0 rgba(18,41,74,0.16),
+      0 7px 15px rgba(18,41,74,0.16),
+      inset 0 1px 0 rgba(255,255,255,0.95) !important;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease !important;
+  }
+  .pill:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 4px 0 rgba(18,41,74,0.20),
+      0 10px 20px rgba(18,41,74,0.20),
+      inset 0 1px 0 rgba(255,255,255,0.95) !important;
+  }
+  .pill:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(18,41,74,0.18), 0 3px 8px rgba(18,41,74,0.16) !important;
+  }
+  .pill .dot {
+    width: 11px !important; height: 11px !important; border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.92), 0 1px 3px rgba(0,0,0,0.35);
+  }
+  .pill.active {
+    background: linear-gradient(180deg, #1c3d67, #12294a) !important;
+    border-color: #12294a !important;
+    color: #f4efe4 !important;
+    box-shadow:
+      0 3px 0 rgba(0,0,0,0.30),
+      0 9px 20px rgba(18,41,74,0.36),
+      inset 0 1px 0 rgba(255,255,255,0.20) !important;
+  }
+  .pill-saved.active {
+    background: linear-gradient(180deg, #cba76a, #b8965a) !important;
+    border-color: #a8823f !important;
+    color: #15110a !important;
+  }
+  .pill-opennow { border-color: rgba(46,125,50,0.55) !important; color: #2e7d32 !important; }
+  .pill-opennow.active {
+    background: linear-gradient(180deg, #3a8f3f, #2e7d32) !important;
+    color: #ffffff !important; border-color: #2e7d32 !important;
+  }
+  @media (max-width: 600px) {
+    .pill { padding: 9px 13px !important; font-size: 0.73rem !important; }
+  }
+
   /* ── Splash — Seoul, ink and gold ── */
   #splash {
     overflow: hidden;
@@ -262,7 +315,7 @@
 <header>
   <div class="header-title">
     <a href="https://ludara.ai/aperfectday" target="_blank" style="pointer-events:all;text-decoration:none;flex-shrink:0;">
-      <span class="wl-logo">ZenKimchi</span>
+      <span class="wl-logo">A Perfect Day</span>
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
@@ -280,13 +333,13 @@
 <div class="filter-bar">
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
-  <button class="pill" onclick="fc(this,'bbq')"><span class="dot" style="background:#c0392b"></span>🔥 Korean BBQ</button>
-  <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#d4a043"></span>🍗 Chimaek &amp; Hof</button>
-  <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#e8724a"></span>🥢 Korean Kitchen</button>
-  <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#6b9e6e"></span>🏮 Markets &amp; Street</button>
-  <button class="pill" onclick="fc(this,'bar')"><span class="dot" style="background:#2c3e7a"></span>🌃 Bars &amp; Night</button>
-  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#8b6bb1"></span>☕ Café Seoul</button>
-  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#6090c8"></span>🏯 Palaces, Art &amp; Parks</button>
+  <button class="pill" onclick="fc(this,'bbq')"><span class="dot" style="background:#a8813f"></span>🔥 Korean BBQ</button>
+  <button class="pill" onclick="fc(this,'pub')"><span class="dot" style="background:#8a6a38"></span>🍗 Chimaek &amp; Hof</button>
+  <button class="pill" onclick="fc(this,'food')"><span class="dot" style="background:#c9a566"></span>🥢 Korean Kitchen</button>
+  <button class="pill" onclick="fc(this,'market')"><span class="dot" style="background:#2f5586"></span>🏮 Markets &amp; Street</button>
+  <button class="pill" onclick="fc(this,'bar')"><span class="dot" style="background:#6b6152"></span>🌃 Bars &amp; Night</button>
+  <button class="pill" onclick="fc(this,'cafe')"><span class="dot" style="background:#6e8cb0"></span>☕ Café Seoul</button>
+  <button class="pill" onclick="fc(this,'landmark')"><span class="dot" style="background:#12294a"></span>🏯 Palaces, Art &amp; Parks</button>
   <button class="pill pill-opennow" id="pill-opennow" onclick="toggleOpenNow(this)">🟢 Open Now</button>
 </div>
 
