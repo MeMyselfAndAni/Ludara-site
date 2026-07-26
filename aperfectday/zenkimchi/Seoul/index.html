@@ -79,22 +79,47 @@
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 .pc-awards { font-size: 0.72rem; color: #b8860b; font-weight: 600; margin: 0 0 8px; line-height: 1.5; }
 
-  /* ── Splash — GM demo additions ── */
-  .splash-inner      { max-width: 680px !important; width: 90vw !important; padding: 40px 40px 32px !important; }
-  .splash            .wl-logo { font-size: 1rem !important; }
-  .splash-tagline    { font-size: 0.84rem !important; letter-spacing: 0.08em; text-transform: uppercase;
-                       color: var(--brand); margin: 6px 0 0; font-style: normal; font-weight: 700; }
-  .splash-divider    { width: 40px; height: 3px; background: var(--brand); border: none;
-                       border-radius: 2px; margin: 10px auto 18px; }
-  .splash-hotel-desc { font-style: italic; font-size: 1.05rem !important; line-height: 1.72;
-                       color: #555; margin-top: 0; margin-bottom: 24px; }
-  .splash-sample     { font-size: 0.92rem !important; color: #555; margin: 14px 0 0; font-style: italic; }
-  .splash-footer a   { color: var(--brand) !important; font-size: 0.88rem !important; }
+  /* ── Splash — Seoul, ink and gold ── */
+  #splash {
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 110% 70% at 50% 118%, rgba(184,150,90,0.30) 0%, rgba(184,150,90,0) 52%),
+      linear-gradient(170deg, #0b0d12 0%, #12161f 45%, #1a2130 72%, #232c3d 100%) !important;
+  }
+  /* Seoul outline: hanok eaves and Gyeongbokgung roofline, N Seoul Tower on Namsan,
+     DDP curve and Lotte World Tower. Stylised, not a surveyed skyline. */
+  #splash .splash-skyline {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 0;
+    width: 132%; max-width: 1600px; z-index: 1; pointer-events: none; opacity: 0.95;
+  }
+  #splash .splash-inner {
+    position: relative; z-index: 3;
+    max-width: 680px !important; width: 90vw !important; padding: 40px 40px 32px !important;
+    background: rgba(8,10,15,0.50);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(184,150,90,0.34);
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.60);
+  }
+  #splash .wl-logo      { font-size: 1rem !important; color: #cbbf9f !important; }
+  #splash .splash-title { color: #f4efe4; }
+  #splash .splash-tagline { font-size: 0.84rem !important; letter-spacing: 0.08em; text-transform: uppercase;
+                       color: #b8965a; margin: 6px 0 0; font-style: normal; font-weight: 700; }
+  #splash .splash-divider { width: 54px; height: 2px; background: linear-gradient(90deg, rgba(184,150,90,0), #b8965a 50%, rgba(184,150,90,0));
+                       border: none; border-radius: 2px; margin: 12px auto 18px; }
+  #splash .splash-hotel-desc { font-style: italic; font-size: 1.05rem !important; line-height: 1.72;
+                       color: #ded8ca; margin-top: 0; margin-bottom: 24px; }
+  #splash .splash-sample { font-size: 0.92rem !important; color: #8f8879; margin: 14px 0 0; font-style: italic; }
+  #splash .splash-btn { background: linear-gradient(135deg, #c9a566, #a8823f); color: #15110a;
+                       font-weight: 800; box-shadow: 0 10px 30px rgba(184,150,90,0.35); }
+  #splash .splash-btn:hover { background: linear-gradient(135deg, #d4b075, #b58e48); }
+  #splash .splash-footer a { color: #b8965a !important; font-size: 0.88rem !important; }
 
   @media (max-width: 600px) {
-    .splash-inner      { padding: 32px 20px 24px !important; }
-    .splash-hotel-desc { font-size: 0.88rem !important; }
-    .splash-sample     { font-size: 0.82rem !important; }
+    #splash .splash-inner { padding: 32px 20px 24px !important; }
+    #splash .splash-hotel-desc { font-size: 0.88rem !important; }
+    #splash .splash-sample { font-size: 0.82rem !important; }
+    #splash .splash-skyline { width: 190%; opacity: 0.85; }
   }
 </style>
 </head>
@@ -102,15 +127,38 @@
 
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
+  <svg class="splash-skyline" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#b8965a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M0,200 L0,168 L38,168 L46,158 L92,158 L100,168 L138,168 L138,200"/>
+      <path d="M120,168 L120,150 Q168,132 216,150 L216,168"/>
+      <path d="M150,150 L150,140 Q184,128 218,140 L218,150"/>
+      <path d="M232,200 L232,152 L246,152 L246,138 L262,138 L262,152 L276,152 L276,200"/>
+      <path d="M300,200 L300,146 L318,146 L318,130 L336,130 L336,146 L354,146 L354,200"/>
+      <path d="M380,200 L380,120 L404,120 L404,200"/>
+      <path d="M420,200 L420,138 L448,138 L448,200"/>
+      <path d="M470,200 L470,110 L488,110 L488,200"/>
+      <path d="M560,200 L560,96 L572,96 L578,60 L584,26 L590,14 L596,26 L602,60 L608,96 L620,96 L620,200"/>
+      <path d="M566,72 Q590,54 614,72 L614,88 Q590,100 566,88 Z"/>
+      <path d="M650,200 L650,132 L676,132 L676,200"/>
+      <path d="M700,200 L700,118 L724,118 L724,200"/>
+      <path d="M746,200 L746,158 Q800,120 856,158 L856,200"/>
+      <path d="M880,200 L880,126 L902,126 L902,200"/>
+      <path d="M926,200 L926,146 L946,146 L946,200"/>
+      <path d="M1000,200 L1000,64 Q1018,20 1036,64 L1036,200"/>
+      <path d="M1070,200 L1070,136 L1092,136 L1092,200"/>
+      <path d="M1116,200 L1116,152 L1140,152 L1140,200"/>
+      <path d="M1160,200 L1160,162 L1200,162 L1200,200"/>
+    </g>
+  </svg>
   <div class="splash-inner">
     <div class="splash-logo-row">
       <span class="wl-logo">A Perfect Day</span>
     </div>
-    <h2 class="splash-title">Seoul Food Guide</h2>
+    <h2 class="splash-title">Seoul Guide</h2>
     <p class="splash-tagline">A curated city guide, built for luxury hotels</p>
     <p class="splash-sample">This is a sample guide — yours will be branded for your hotel and curated for your city.</p>
     <hr class="splash-divider">
-    <p class="splash-hotel-desc">The BBQ restaurant Anthony Bourdain called essential, UNESCO royal palaces, late-night street food alleys, and <span class="place-count-all">65</span> places hand-picked by ZenKimchi.</p>
+    <p class="splash-hotel-desc">Royal palaces and hanok lanes, the BBQ house Anthony Bourdain called essential, late-night market alleys and the bars locals keep to themselves. <span class="place-count-all">65</span> places hand-picked with ZenKimchi.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">ludara.ai</a>
