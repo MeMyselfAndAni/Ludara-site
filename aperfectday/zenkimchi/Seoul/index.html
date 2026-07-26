@@ -132,6 +132,46 @@
     .pill { padding: 9px 13px !important; font-size: 0.73rem !important; }
   }
 
+  /* ── Header band — taller, gold edge ── */
+  header {
+    padding: 14px 16px 13px !important;
+    border-bottom: 2px solid rgba(184,150,90,0.55) !important;
+    box-shadow: 0 4px 22px rgba(9,20,38,0.45) !important;
+  }
+  .header-divider { height: 46px !important; background: rgba(184,150,90,0.45) !important; }
+
+  /* Places counter must clear the taller pills */
+  .list-toggle, #list-toggle {
+    background: rgba(18,41,74,0.92) !important;
+    border: 1.5px solid rgba(184,150,90,0.45) !important;
+    box-shadow: 0 4px 14px rgba(9,20,38,0.40) !important;
+  }
+  .list-toggle .count-badge, #list-toggle .count-badge {
+    background: rgba(184,150,90,0.85) !important; color: #15110a !important;
+  }
+
+  @media (min-width: 768px) {
+    .filter-bar { top: 96px !important; }
+    .list-toggle, #list-toggle { top: 158px !important; }
+  }
+  @media (max-width: 767px) {
+    /* mobile band was 6px/7px padding with the credit line hidden */
+    header { padding: 11px 12px 12px !important; }
+    h1, h1 em { font-size: 1.04rem !important; }
+    .wl-logo { font-size: 1rem !important; }
+    .header-sub {
+      display: block !important;
+      font-size: 0.55rem !important;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72) !important;
+    }
+    .header-sub-by { display: none !important; }
+    .filter-bar { top: 88px !important; }
+    .list-toggle, #list-toggle { top: 150px !important; }
+  }
+
   /* ── Splash — Seoul, ink and gold ── */
   #splash {
     overflow: hidden;
