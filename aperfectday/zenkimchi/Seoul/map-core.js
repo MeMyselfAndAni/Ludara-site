@@ -80,7 +80,7 @@ function initMapSources() {
   if(!map.getSource('trip-route')){
     map.addSource('trip-route', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates:[] } } });
     map.addLayer({ id:'trip-route-line', type:'line', source:'trip-route',
-      paint:{ 'line-color':'#e00040', 'line-width':4, 'line-opacity':0.85 } });
+      paint:{ 'line-color':'#b8965a', 'line-width':4, 'line-opacity':0.9 } });
   }
 }
 

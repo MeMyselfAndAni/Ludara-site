@@ -22,11 +22,11 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-  /* ── BRAND COLOR — Korean red ── */
+  /* ── BRAND COLOR — navy and gold ── */
   :root {
-    --brand: #ff2a00;
-    --brand-faint: rgba(255,42,0,0.12);
-    --brand-glow: rgba(200,16,46,0.35);
+    --brand: #b8965a;
+    --brand-faint: rgba(184,150,90,0.14);
+    --brand-glow: rgba(184,150,90,0.35);
   }
 
   .mgl-marker { background: none !important; border: none !important; }
@@ -266,8 +266,8 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>Seoul</em> Food Guide</h1>
-      <div class="header-sub"><span class="place-count-all">65</span> hand-picked places<span class="header-sub-by"> · by Joe</span></div>
+      <h1><em>Seoul</em> Guide</h1>
+      <div class="header-sub">made together with ZenKimchi · <span class="place-count-all">65</span> hand-picked places</div>
     </div>
   </div>
   <div class="header-ludara">
@@ -544,7 +544,7 @@ window.addEventListener('load', function() {
     if (existing) existing.remove();
     var btn = document.createElement('button');
     btn.id = 'pc-nav-btn';
-    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#ff2a00';
+    var brand = getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#b8965a';
     btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;padding:8px 18px;background:white;color:'+brand+';border:1.5px solid '+brand+';border-radius:24px;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%';
     var distStr = (window._userLat && window._userLng && typeof _distM === 'function')
       ? _fmtDist(_distM(window._userLat, window._userLng, place.lat, place.lng)) + ' away' : '';

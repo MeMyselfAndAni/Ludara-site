@@ -7,24 +7,28 @@ let CARD_IDX     = 0;
 let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 // AID is declared in data.js
 
+// Navy to gold ramp. Cool steps = places you go and see, warm steps = places you eat and drink.
 const CAT_COLORS = {
-  landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
-  church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
+  landmark:'#12294a', market:'#2f5586', cafe:'#6e8cb0',
+  bar:'#6b6152', pub:'#8a6a38', bbq:'#a8813f', food:'#c9a566',
+  church:'#1e3c62', soviet:'#4a4338', nature:'#4a6689'
 };
 const CAT_LABELS = {
-  landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
-  church:'Church & Spiritual', market:'Market & Shopping',
-  soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature & Views'
+  landmark:'Landmark', market:'Market & Shopping', cafe:'Café',
+  bar:'Bar', pub:'Pub & Bar', bbq:'Korean BBQ', food:'Restaurant',
+  church:'Church & Spiritual', soviet:'Soviet Heritage', nature:'Nature & Views'
 };
 const CAT_GRADIENTS = {
-  landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
-  food:    'linear-gradient(135deg,#7a3020,#c06040)',
-  cafe:    'linear-gradient(135deg,#1a3a2a,#2a7a4a)',
-  church:  'linear-gradient(135deg,#1a1a5c,#3a3a9c)',
-  market:  'linear-gradient(135deg,#5c3a1a,#9c6a3a)',
-  soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
-  pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
-  nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
+  landmark:'linear-gradient(135deg,#0d1c33,#12294a)',
+  market:  'linear-gradient(135deg,#1e3c62,#2f5586)',
+  cafe:    'linear-gradient(135deg,#4a6689,#6e8cb0)',
+  bar:     'linear-gradient(135deg,#4a4338,#6b6152)',
+  pub:     'linear-gradient(135deg,#5e4726,#8a6a38)',
+  bbq:     'linear-gradient(135deg,#75592b,#a8813f)',
+  food:    'linear-gradient(135deg,#8a6a34,#c9a566)',
+  church:  'linear-gradient(135deg,#14294a,#1e3c62)',
+  soviet:  'linear-gradient(135deg,#332e26,#4a4338)',
+  nature:  'linear-gradient(135deg,#33485f,#4a6689)',
 };
 
 // ── Open card from list ────────────────────────────────────────
