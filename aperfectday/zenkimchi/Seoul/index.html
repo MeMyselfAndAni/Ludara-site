@@ -86,20 +86,42 @@
       radial-gradient(ellipse 110% 70% at 50% 118%, rgba(184,150,90,0.30) 0%, rgba(184,150,90,0) 52%),
       linear-gradient(170deg, #0b0d12 0%, #12161f 45%, #1a2130 72%, #232c3d 100%) !important;
   }
-  /* Seoul outline: hanok eaves and Gyeongbokgung roofline, N Seoul Tower on Namsan,
-     DDP curve and Lotte World Tower. Stylised, not a surveyed skyline. */
+  /* Seoul outline: hanok eaves and the palace gate, Namsan with N Seoul Tower,
+     Banpo bridge, DDP curve and Lotte World Tower. Stylised, not a surveyed skyline. */
+  /* outline crosses the middle of the panel and runs behind the card */
   #splash .splash-skyline {
-    position: absolute; left: 50%; transform: translateX(-50%); bottom: 0;
-    width: 132%; max-width: 1600px; z-index: 1; pointer-events: none; opacity: 0.95;
+    position: absolute; left: 0; right: 0; bottom: 34%;
+    width: 100%; height: clamp(150px, 27vh, 260px);
+    z-index: 1; pointer-events: none; opacity: 0.9;
+  }
+  /* mirrored reflection below the horizon, fading out */
+  #splash .splash-skyline-reflection {
+    position: absolute; left: 0; right: 0; top: 66%;
+    width: 100%; height: clamp(150px, 27vh, 260px);
+    z-index: 1; pointer-events: none; opacity: 0.16;
+    transform: scaleY(-1);
+    -webkit-mask-image: linear-gradient(to top, transparent 8%, rgba(0,0,0,0.9) 92%);
+            mask-image: linear-gradient(to top, transparent 8%, rgba(0,0,0,0.9) 92%);
+  }
+  /* warm lift along the horizon line */
+  #splash::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 66%;
+    background: linear-gradient(to top, rgba(184,150,90,0.14), rgba(184,150,90,0.03) 46%, rgba(184,150,90,0));
+    z-index: 0; pointer-events: none;
   }
   #splash .splash-inner {
     position: relative; z-index: 3;
-    max-width: 680px !important; width: 90vw !important; padding: 40px 40px 32px !important;
-    background: rgba(8,10,15,0.50);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(184,150,90,0.34);
+    max-width: 540px !important; width: 88vw !important; padding: 36px 34px 30px !important;
+    background: linear-gradient(158deg, rgba(24,29,40,0.80) 0%, rgba(10,13,19,0.74) 58%, rgba(6,8,12,0.80) 100%);
+    backdrop-filter: blur(14px) saturate(120%); -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid rgba(184,150,90,0.40);
     border-radius: 22px;
-    box-shadow: 0 24px 70px rgba(0,0,0,0.60);
+    box-shadow:
+      0 44px 96px rgba(0,0,0,0.66),
+      0 14px 34px rgba(0,0,0,0.48),
+      0 0 70px rgba(184,150,90,0.10),
+      inset 0 1px 0 rgba(255,255,255,0.11),
+      inset 0 -1px 0 rgba(0,0,0,0.46);
   }
   #splash .wl-logo      { font-size: 1rem !important; color: #cbbf9f !important; }
   #splash .splash-title { color: #f4efe4; }
@@ -116,10 +138,11 @@
   #splash .splash-footer a { color: #b8965a !important; font-size: 0.88rem !important; }
 
   @media (max-width: 600px) {
-    #splash .splash-inner { padding: 32px 20px 24px !important; }
+    #splash .splash-inner { padding: 28px 20px 22px !important; max-width: 92vw !important; }
     #splash .splash-hotel-desc { font-size: 0.88rem !important; }
     #splash .splash-sample { font-size: 0.82rem !important; }
-    #splash .splash-skyline { width: 190%; opacity: 0.85; }
+    #splash .splash-skyline { height: clamp(100px, 18vh, 150px); bottom: 30%; opacity: 0.75; }
+    #splash .splash-skyline-reflection { height: clamp(100px, 18vh, 150px); top: 70%; opacity: 0.12; }
   }
 </style>
 </head>
@@ -127,28 +150,91 @@
 
 <!-- Welcome Splash -->
 <div class="splash" id="splash">
-  <svg class="splash-skyline" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <g fill="none" stroke="#b8965a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
-      <path d="M0,200 L0,168 L38,168 L46,158 L92,158 L100,168 L138,168 L138,200"/>
-      <path d="M120,168 L120,150 Q168,132 216,150 L216,168"/>
-      <path d="M150,150 L150,140 Q184,128 218,140 L218,150"/>
-      <path d="M232,200 L232,152 L246,152 L246,138 L262,138 L262,152 L276,152 L276,200"/>
-      <path d="M300,200 L300,146 L318,146 L318,130 L336,130 L336,146 L354,146 L354,200"/>
-      <path d="M380,200 L380,120 L404,120 L404,200"/>
-      <path d="M420,200 L420,138 L448,138 L448,200"/>
-      <path d="M470,200 L470,110 L488,110 L488,200"/>
-      <path d="M560,200 L560,96 L572,96 L578,60 L584,26 L590,14 L596,26 L602,60 L608,96 L620,96 L620,200"/>
-      <path d="M566,72 Q590,54 614,72 L614,88 Q590,100 566,88 Z"/>
-      <path d="M650,200 L650,132 L676,132 L676,200"/>
-      <path d="M700,200 L700,118 L724,118 L724,200"/>
-      <path d="M746,200 L746,158 Q800,120 856,158 L856,200"/>
-      <path d="M880,200 L880,126 L902,126 L902,200"/>
-      <path d="M926,200 L926,146 L946,146 L946,200"/>
-      <path d="M1000,200 L1000,64 Q1018,20 1036,64 L1036,200"/>
-      <path d="M1070,200 L1070,136 L1092,136 L1092,200"/>
-      <path d="M1116,200 L1116,152 L1140,152 L1140,200"/>
-      <path d="M1160,200 L1160,162 L1200,162 L1200,200"/>
+  <svg class="splash-skyline" viewBox="0 0 2400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#b8965a" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+      <!-- hanok eaves -->
+      <path d="M20,236 Q90,208 160,236"/><path d="M40,236 L40,258"/><path d="M140,236 L140,258"/>
+      <path d="M170,244 Q220,222 270,244"/><path d="M185,244 L185,258"/><path d="M255,244 L255,258"/>
+      <!-- palace gate -->
+      <path d="M300,240 Q380,212 460,240"/><path d="M320,240 L320,258"/><path d="M440,240 L440,258"/>
+      <path d="M330,214 Q380,194 430,214"/><path d="M345,214 L345,240"/><path d="M415,214 L415,240"/>
+      <!-- blocks -->
+      <path d="M500,258 L500,200 L540,200 L540,258"/>
+      <path d="M560,258 L560,180 L592,180 L592,258"/>
+      <path d="M612,258 L612,214 L646,214 L646,258"/>
+      <path d="M666,258 L666,192 L700,192 L700,258"/>
+      <!-- Namsan with N Seoul Tower -->
+      <path d="M740,258 Q860,178 980,258"/>
+      <path d="M856,198 L856,126"/><path d="M868,198 L868,126"/>
+      <path d="M846,126 Q862,110 878,126 L878,138 Q862,150 846,138 Z"/>
+      <path d="M862,110 L862,58"/>
+      <!-- blocks -->
+      <path d="M1010,258 L1010,208 L1046,208 L1046,258"/>
+      <path d="M1066,258 L1066,186 L1098,186 L1098,258"/>
+      <path d="M1118,258 L1118,220 L1150,220 L1150,258"/>
+      <!-- Banpo bridge -->
+      <path d="M1200,232 L1480,232"/>
+      <path d="M1220,232 Q1260,204 1300,232"/><path d="M1300,232 Q1340,204 1380,232"/><path d="M1380,232 Q1420,204 1460,232"/>
+      <path d="M1220,232 L1220,258"/><path d="M1300,232 L1300,258"/><path d="M1380,232 L1380,258"/><path d="M1460,232 L1460,258"/>
+      <!-- DDP -->
+      <path d="M1520,258 Q1560,206 1630,204 Q1700,202 1740,258"/>
+      <!-- blocks -->
+      <path d="M1780,258 L1780,196 L1812,196 L1812,258"/>
+      <path d="M1832,258 L1832,222 L1862,222 L1862,258"/>
+      <!-- Lotte World Tower -->
+      <path d="M1912,258 L1932,80 Q1955,44 1978,80 L1998,258"/>
+      <!-- blocks -->
+      <path d="M2040,258 L2040,190 L2076,190 L2076,258"/>
+      <path d="M2096,258 L2096,216 L2126,216 L2126,258"/>
+      <path d="M2146,258 L2146,168 L2178,168 L2178,258"/>
+      <path d="M2198,258 L2198,226 L2232,226 L2232,258"/>
+      <path d="M2252,258 L2252,200 L2288,200 L2288,258"/>
+      <path d="M2308,258 L2308,232 L2400,232"/>
     </g>
+    <path d="M0,258 L2400,258" stroke="#b8965a" stroke-width="1.4" opacity="0.42" fill="none"/>
+  </svg>
+  <svg class="splash-skyline-reflection" viewBox="0 0 2400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#b8965a" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+      <!-- hanok eaves -->
+      <path d="M20,236 Q90,208 160,236"/><path d="M40,236 L40,258"/><path d="M140,236 L140,258"/>
+      <path d="M170,244 Q220,222 270,244"/><path d="M185,244 L185,258"/><path d="M255,244 L255,258"/>
+      <!-- palace gate -->
+      <path d="M300,240 Q380,212 460,240"/><path d="M320,240 L320,258"/><path d="M440,240 L440,258"/>
+      <path d="M330,214 Q380,194 430,214"/><path d="M345,214 L345,240"/><path d="M415,214 L415,240"/>
+      <!-- blocks -->
+      <path d="M500,258 L500,200 L540,200 L540,258"/>
+      <path d="M560,258 L560,180 L592,180 L592,258"/>
+      <path d="M612,258 L612,214 L646,214 L646,258"/>
+      <path d="M666,258 L666,192 L700,192 L700,258"/>
+      <!-- Namsan with N Seoul Tower -->
+      <path d="M740,258 Q860,178 980,258"/>
+      <path d="M856,198 L856,126"/><path d="M868,198 L868,126"/>
+      <path d="M846,126 Q862,110 878,126 L878,138 Q862,150 846,138 Z"/>
+      <path d="M862,110 L862,58"/>
+      <!-- blocks -->
+      <path d="M1010,258 L1010,208 L1046,208 L1046,258"/>
+      <path d="M1066,258 L1066,186 L1098,186 L1098,258"/>
+      <path d="M1118,258 L1118,220 L1150,220 L1150,258"/>
+      <!-- Banpo bridge -->
+      <path d="M1200,232 L1480,232"/>
+      <path d="M1220,232 Q1260,204 1300,232"/><path d="M1300,232 Q1340,204 1380,232"/><path d="M1380,232 Q1420,204 1460,232"/>
+      <path d="M1220,232 L1220,258"/><path d="M1300,232 L1300,258"/><path d="M1380,232 L1380,258"/><path d="M1460,232 L1460,258"/>
+      <!-- DDP -->
+      <path d="M1520,258 Q1560,206 1630,204 Q1700,202 1740,258"/>
+      <!-- blocks -->
+      <path d="M1780,258 L1780,196 L1812,196 L1812,258"/>
+      <path d="M1832,258 L1832,222 L1862,222 L1862,258"/>
+      <!-- Lotte World Tower -->
+      <path d="M1912,258 L1932,80 Q1955,44 1978,80 L1998,258"/>
+      <!-- blocks -->
+      <path d="M2040,258 L2040,190 L2076,190 L2076,258"/>
+      <path d="M2096,258 L2096,216 L2126,216 L2126,258"/>
+      <path d="M2146,258 L2146,168 L2178,168 L2178,258"/>
+      <path d="M2198,258 L2198,226 L2232,226 L2232,258"/>
+      <path d="M2252,258 L2252,200 L2288,200 L2288,258"/>
+      <path d="M2308,258 L2308,232 L2400,232"/>
+    </g>
+    <path d="M0,258 L2400,258" stroke="#b8965a" stroke-width="1.4" opacity="0.42" fill="none"/>
   </svg>
   <div class="splash-inner">
     <div class="splash-logo-row">
