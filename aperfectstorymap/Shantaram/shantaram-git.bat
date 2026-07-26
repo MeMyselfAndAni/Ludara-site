@@ -32,7 +32,7 @@ if not exist "%DEPLOY%\images" mkdir "%DEPLOY%\images"
 
 echo.
 echo Copying story map files into the live site...
-for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg) do (
+for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js) do (
   if exist "%WORKING%\%%F" (
     copy /Y "%WORKING%\%%F" "%DEPLOY%\%%F" >nul && echo   copied %%F
   ) else (
@@ -42,7 +42,12 @@ for %%F in (index.html data.js map.js map-core.js ui-card.js ui-filter.js ui-sto
 rem --- IMAGES ARE MANAGED DIRECTLY IN THE DEPLOY FOLDER. ---
 rem --- This script does NOT copy or overwrite them, so your edits in
 rem ---   %DEPLOY%\images  are preserved. ---
-echo   (images in the deploy folder are left untouched)
+rem --- EXCEPTION: og-image.jpg (the social link preview) is generated in
+rem ---   the working copy, so it IS copied. Other images stay untouched. ---
+if exist "%WORKING%\images\og-image.jpg" (
+  copy /Y "%WORKING%\images\og-image.jpg" "%DEPLOY%\images\og-image.jpg" >nul && echo   copied images\og-image.jpg
+)
+echo   (all other images in the deploy folder are left untouched)
 
 echo.
 echo Navigating to deploy folder...
