@@ -150,10 +150,11 @@
     background: rgba(184,150,90,0.85) !important; color: #15110a !important;
   }
 
-  @media (min-width: 768px) {
-    .filter-bar { top: 96px !important; }
-    .list-toggle, #list-toggle { top: 158px !important; }
-  }
+  /* Filter bar hugs the band: --hdr-h is measured from the real header by JS below,
+     so it self-corrects whatever the band height ends up being on a given screen. */
+  .filter-bar { top: calc(var(--hdr-h, 72px) + 8px) !important; }
+  .list-toggle, #list-toggle { top: calc(var(--hdr-h, 72px) + 8px + 54px) !important; }
+
   @media (max-width: 767px) {
     /* mobile band was 6px/7px padding with the credit line hidden */
     header { padding: 11px 12px 12px !important; }
@@ -166,10 +167,10 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.72) !important;
+      white-space: nowrap;
     }
-    .header-sub-by { display: none !important; }
-    .filter-bar { top: 88px !important; }
-    .list-toggle, #list-toggle { top: 150px !important; }
+    .header-sub-by, .header-sub-count { display: none !important; }
+    .list-toggle, #list-toggle { top: calc(var(--hdr-h, 60px) + 8px + 50px) !important; }
   }
 
   /* ── Splash — Seoul, ink and gold ── */
@@ -360,7 +361,7 @@
     <div class="header-divider"></div>
     <div class="header-text">
       <h1><em>Seoul</em> Guide</h1>
-      <div class="header-sub">made together with ZenKimchi · <span class="place-count-all">65</span> hand-picked places</div>
+      <div class="header-sub">made together with ZenKimchi<span class="header-sub-count"> · <span class="place-count-all">65</span> hand-picked places</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -811,6 +812,24 @@ window.TutorialConfig = {
 };
 </script>
 <script src="tutorial.js"></script>
+
+<script>
+/* Measure the real header height so the filter bar always sits ~8px below the band,
+   whatever the band wraps to on a given screen. */
+(function(){
+  function setHeaderHeight(){
+    var h = document.querySelector('header');
+    if(!h) return;
+    document.documentElement.style.setProperty('--hdr-h', h.offsetHeight + 'px');
+  }
+  setHeaderHeight();
+  window.addEventListener('load', setHeaderHeight);
+  window.addEventListener('resize', setHeaderHeight);
+  window.addEventListener('orientationchange', function(){ setTimeout(setHeaderHeight, 150); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderHeight);
+  setTimeout(setHeaderHeight, 400);
+})();
+</script>
 
 </body>
 </html>
