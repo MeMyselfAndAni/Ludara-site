@@ -130,7 +130,7 @@ async function generatePDF(overridePlaces, customSubtitle){
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
-        ${p.note ? `<div class="pdf-card-note">"${p.note}"</div>` : ''}
+        ${p.note ? `<div class="pdf-card-note">${p.note}</div>` : ''}
         ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 If you visit</span> ${p.visit}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
