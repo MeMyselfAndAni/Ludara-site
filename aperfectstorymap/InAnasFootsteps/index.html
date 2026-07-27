@@ -274,6 +274,19 @@
   </div>
 </div>
 
+
+<script>
+/* Progressive splash: the light image paints first, the sharp one replaces it once downloaded */
+(function(){
+  var hd = new Image();
+  hd.onload = function(){
+    var el = document.getElementById('splash');
+    if(el) el.style.setProperty('background', "url('images/splash-hd.jpg') center / cover no-repeat #0f0d0a", 'important');
+  };
+  hd.src = 'images/splash-hd.jpg';
+})();
+</script>
+
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
