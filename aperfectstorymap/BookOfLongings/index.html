@@ -119,6 +119,7 @@
   .splash { background:
     linear-gradient(rgba(12,10,7,0.28), rgba(12,10,7,0.58)),
     url('images/splash.jpg') center / cover no-repeat #0f0d0a !important; }
+  .splash .splash-footer a { color: #d4a84b !important; }
   /* Story Path — the signature button, bold gold */
   .pill-storypath {
     background: #0f0d0a !important; color: #d4a043 !important;
@@ -268,7 +269,7 @@
   var hd = new Image();
   hd.onload = function(){
     var el = document.getElementById('splash');
-    if(el) el.style.setProperty('background', "url('images/splash-hd.jpg') center / cover no-repeat #0f0d0a", 'important');
+    if(el) el.style.setProperty('background', "linear-gradient(rgba(12,10,7,0.28), rgba(12,10,7,0.58)), url('images/splash-hd.jpg') center / cover no-repeat #0f0d0a", 'important');
   };
   hd.src = 'images/splash-hd.jpg';
 })();
