@@ -12,7 +12,7 @@ Every card loads `images/place-<id>.jpg`. Missing files fall back to the emoji m
 | 2 | The Cave in the Hills | **Your photo** (a real Galilee cave) | place-2.jpg | Photo: Maria Lando |
 | 3 | Nazareth | **Your photo** | place-3.jpg | Photo: Maria Lando |
 | 4 | The Sea of Galilee | **Your photo** | place-4.jpg | Photo: Maria Lando |
-| 5 | The Jordan River | Commons | place-5.jpg | Berthold Werner — CC BY 3.0 |
+| 5 | The Jordan River | **Your photo** | place-5.jpg | Photo: Maria Lando |
 | 6 | Alexandria | Commons | place-6.jpg | Alberto-g-rovi — CC BY-SA 3.0 |
 | 7 | The Temple of Isis | **AI** (ancient, unlocated) | place-7.jpg | Illustration |
 | 8 | The Therapeutae, Lake Mareotis | **AI** (ancient, unlocated) | place-8.jpg | Illustration |
@@ -27,7 +27,6 @@ Credits are already wired in `credits.js`. If you use your **own** Bethany photo
 
 Run **`fetch-bookoflongings-images.bat`** (double-click) to pull the Jordan River and Alexandria images into `images/`. It offers the Bethany fallback as an optional extra. All licenses verified on the Commons file pages 2026-07-14.
 
-- Jordan River: https://commons.wikimedia.org/wiki/File:Jordan_Baptism_site_BW_4.JPG (Berthold Werner, CC BY 3.0 — Quality Image; the actual baptism reach, Israel on the left, Jordan on the right)
 - Alexandria: https://commons.wikimedia.org/wiki/File:Ciudadela_de_qaitbay-alejandria-2007.JPG (Alberto-g-rovi, CC BY-SA 3.0 — the Qaitbay citadel on the sea, standing on the site of the ancient Pharos lighthouse)
 - Bethany: https://commons.wikimedia.org/wiki/File:Bethany_Lazarus_church.jpg (Djampa, CC BY-SA 4.0 — the Barluzzi Church of Saint Lazarus, the modern landmark at Bethany)
 - Golgotha: https://commons.wikimedia.org/wiki/File:Jerusalem_Holy_Sepulchre_BW_19.JPG (Berthold Werner, CC BY-SA 3.0 — the Church of the Holy Sepulchre entrance facade)

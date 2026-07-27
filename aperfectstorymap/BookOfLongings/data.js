@@ -1,5 +1,5 @@
 // A Perfect Story Map — The Book of Longings
-// data.js — 12 places from the novel's world
+// data.js — 16 places from the novel's world
 //
 // v1 — July 2026 — UNLISTED CONCEPT DEMO for publisher pitches only.
 // Not affiliated with Sue Monk Kidd or her publishers.
@@ -73,15 +73,72 @@ const PLACES = [
     cat: 'ministry',
     emoji: '🌊',
     address: 'Sea of Galilee (Lake Kinneret), northern shore',
-    lat: 32.8807, lng: 35.5750,
+    lat: 32.8300, lng: 35.5900,
     search: 'Sea of Galilee Kinneret shore fishing boats dawn',
     note: 'The wide freshwater lake where, in the novel, Jesus falls in with the fishermen Andrew, Simon and John, and the pull of a public calling begins to draw him away from Ana and the household in Nazareth. The Sea of Galilee is real and still ringed by the places of the story: Capernaum on its north shore, the gentle hill remembered as the Mount of Beatitudes above it. For a book so concerned with what a woman must give up when a man is called to something larger, the open water is the right horizon.',
     book: 'As Jesus is drawn toward his ministry',
     visit: 'The northern shore, Capernaum and the Mount of Beatitudes, is walkable and quiet at dawn, the lake much as the book describes it.',
     type: 'Jesus with Andrew, Simon and John',
   },
+  {
+    id: 13,
+    nbhd: 'galilee',
+    name: 'Magdala (Migdal)',
+    cat: 'home',
+    emoji: '🕎',
+    address: 'Magdala Archaeological Park, Migdal, Sea of Galilee',
+    lat: 32.8256, lng: 35.5164,
+    search: 'Magdala stone synagogue menorah Migdal excavation',
+    note: 'In the novel this is where Jesus finds steady work: building Magdala\'s grand synagogue, walking home to Nazareth and Ana every couple of weeks. The real discovery behind the scene is remarkable: in 2009 archaeologists uncovered a first-century synagogue here, and at its heart the Magdala Stone, a carved block bearing one of the oldest known images of the Temple menorah, cut while the Temple still stood. The town was also Mary Magdalene\'s home; her name means \'of Magdala\'. Few places let a reader stand this close to the world the book rebuilds.',
+    book: 'The marriage years: Jesus\'s work away from home',
+    visit: 'The Magdala archaeological park on the lakeshore is open daily; the first-century synagogue and the Magdala Stone are the heart of the visit.',
+    type: 'Jesus at work; Ana keeping the Nazareth household',
+  },
+  {
+    id: 14,
+    nbhd: 'galilee',
+    name: 'Capernaum (Kfar Nahum)',
+    cat: 'ministry',
+    emoji: '🎣',
+    address: 'Capernaum, northern shore of the Sea of Galilee',
+    lat: 32.8809, lng: 35.5753,
+    search: 'Capernaum synagogue ruins Sea of Galilee Peter house',
+    note: 'Late in the novel, word reaches Ana that Jesus is teaching at Capernaum, the fishing town that has become the center of his new life. The real Kfar Nahum, \'the village of Nahum\', is one of the best-preserved corners of first-century Galilee: the black basalt foundations beneath the later white synagogue date to the very period of the story, and beside them stands the traditional house of Peter the fisherman.',
+    book: 'Late in the novel: word of the ministry reaches Ana',
+    visit: 'The site on the north shore is open daily; look for the basalt first-century foundations beneath the white synagogue, and the memorial church suspended over Peter\'s house.',
+    type: 'Jesus and the fishermen; the news that reaches Ana',
+  },
+  {
+    id: 15,
+    nbhd: 'galilee',
+    name: 'Tiberias',
+    cat: 'home',
+    emoji: '👑',
+    address: 'Tiberias, western shore of the Sea of Galilee',
+    lat: 32.7959, lng: 35.5310,
+    search: 'Tiberias Sea of Galilee Herod Antipas ancient city lakeshore',
+    note: 'The seat of the novel\'s menace. While the book unfolds, Herod Antipas builds this new capital on the lakeshore and names it Tiberias, flattery aimed at the emperor in Rome, and rules Galilee from it. In Ana\'s story he is the shadow that never lifts: the tetrarch her father serves, following the court from Sepphoris to the new capital later in the book, the power whose anger she must finally escape. The Gospels never once record Jesus entering the city: pious Galileans shunned Antipas\'s capital, built in part over a graveyard, and the book\'s Jesus keeps the same distance. It is the one place on this map defined by the people who refused to go there.',
+    book: 'The shadow over the Galilee chapters; her father follows the court here',
+    visit: 'Modern Tiberias is the lively hub of the lake: the promenade, boat crossings, and the hot springs and ancient synagogue mosaics of Hamat Tiberias just south of town.',
+    type: 'Herod Antipas: the power Ana and Jesus both keep at a distance',
+  },
 
   // ── JUDEA ─────────────────────────────────────────────────────────────────
+
+  {
+    id: 16,
+    nbhd: 'judea',
+    name: 'Caesarea Maritima',
+    cat: 'exile',
+    emoji: '⛵',
+    address: 'Caesarea National Park, Mediterranean coast',
+    lat: 32.4987, lng: 34.8918,
+    search: 'Caesarea Maritima harbor Roman ruins Mediterranean aqueduct',
+    note: 'The gate to Egypt. When Galilee turns dangerous, Ana and Yaltha make for the coast and board a ship for Alexandria from Herod the Great\'s showpiece port. Caesarea was the Rome of the province: a vast man-made harbor, a theater by the waves, a hippodrome, temples, and the seat of the Roman prefects; the famous stone naming Pontius Pilate was found in its theater. In the book it is the hinge between two worlds: the last stones of the land of her girlhood, and the first step of her exile.',
+    book: 'The flight to Egypt: Ana and Yaltha sail from here',
+    visit: 'Caesarea National Park is open daily: the theater, the hippodrome along the surf, the harbor promenade, and the Roman aqueduct on the beach just to the north.',
+    type: 'Ana and Yaltha, boarding the ship to Alexandria',
+  },
 
   {
     id: 5,

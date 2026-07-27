@@ -12,9 +12,6 @@ echo.
 cd /d "%~dp0"
 if not exist "images" mkdir "images"
 
-echo Downloading place-5.jpg  (Jordan River - Berthold Werner, CC BY 3.0)...
-curl -L -s -o "images\place-5.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Jordan_Baptism_site_BW_4.JPG?width=1400"
-
 echo Downloading place-6.jpg  (Alexandria - Alberto-g-rovi, CC BY-SA 3.0)...
 curl -L -s -o "images\place-6.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Ciudadela_de_qaitbay-alejandria-2007.JPG?width=1400"
 
@@ -34,6 +31,7 @@ echo   place-1.jpg  Sepphoris / Zippori
 echo   place-2.jpg  The Cave (your Galilee cave photo)
 echo   place-3.jpg  Nazareth
 echo   place-4.jpg  Sea of Galilee
+echo   place-5.jpg  The Jordan River
 echo   place-10.jpg Temple, Jerusalem (Second Temple model)
 echo   place-11.jpg Gethsemane
 echo The 2 AI images are place-7.jpg (Temple of Isis) and place-8.jpg (Therapeutae).
