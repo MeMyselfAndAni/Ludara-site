@@ -448,3 +448,9 @@ let mapCheckInterval = setInterval(() => {
     clearInterval(mapCheckInterval);
   }
 }, 500);
+
+// ── APD ANALYTICS ──────────────────────────────
+// Fires a labelled GA4 event via the site's existing gtag. Guarded no-op if gtag absent.
+function apdTrack(name, params){
+  try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){}
+}

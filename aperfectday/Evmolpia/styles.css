@@ -1265,7 +1265,9 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
     padding: 0 10px;
     gap: 0;
   }
-  .hh-logo-full { height: clamp(55px, 13vw, 90px); }   /* scales on small screens */
+  .hh-logo-full { height: clamp(38px, 9vw, 58px); }   /* smaller hotel name in header on phones */
+  /* Splash wordmark: fit the screen width on phones (one line, scaled down) */
+  .splash-hh-logo { height: auto; width: min(480px, 86vw); max-width: none; }
   .splash-hotel-desc { display: block; }   /* show hotel blurb on mobile splash */
   .splash-divider { display: none; }
   .splash-ub-logo { display: none; }      /* Unbound Collection logo — desktop only */
@@ -1344,8 +1346,8 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* Show mobile text, hide desktop text */
   .header-apd-desktop { display: none; }
   .header-apd-mobile { display: flex; flex-direction: column; }
-  .header-apd-m1 { font-size: clamp(0.52rem, 3.2vw, 0.72rem); }
-  .header-apd-m2 { font-size: clamp(0.38rem, 2.2vw, 0.52rem); }
+  .header-apd-m1 { font-size: clamp(0.66rem, 3.8vw, 0.9rem); }
+  .header-apd-m2 { font-size: clamp(0.4rem, 2.3vw, 0.55rem); }
 
   /* Filter bar just below the header */
   /* filter-bar top is driven by --header-h JS variable — no override needed */

@@ -579,6 +579,7 @@ function _favsKey() {
 }
 function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
+  if (typeof apdTrack === 'function') apdTrack('trip_loaded', { trip: key, trip_name: trip.name || key });
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
   if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids); // keep trip order: hotel first & last

@@ -49,7 +49,7 @@ function isFav(id){ return favourites.includes(id); }
 function toggleFav(){
   if(!AID) return;
   if(isFav(AID)){ favourites = favourites.filter(x => x !== AID); }
-  else { favourites.push(AID); }
+  else { favourites.push(AID); if(typeof apdTrack === 'function') apdTrack('save_place', { place_id: AID }); }
   saveFavs();
   syncFavBtn(AID);
   if(savedFilterActive) applyFilters();
@@ -436,6 +436,7 @@ function openTripInMaps(){
     if(!places.length) return;
 
     const stops = places.slice(0,8);
+    if (typeof apdTrack === 'function') apdTrack('navigate_trip', { stops: stops.length });
     const travelMode = _tripNeedsDriving(stops) ? 'driving' : 'walking';
     const cityName = typeof GUIDE_CITY !== 'undefined' ? GUIDE_CITY : 'City';
 
@@ -452,6 +453,7 @@ function openTripInMaps(){
 }
 
 function shareItinerary() {
+  if (typeof apdTrack === 'function') apdTrack('share_itinerary');
   if (!favourites || favourites.length === 0) {
     _toast('Save some places first ♡');
     return;
