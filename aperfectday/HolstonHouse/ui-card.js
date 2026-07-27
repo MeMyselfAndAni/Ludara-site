@@ -43,6 +43,7 @@ function openDetail(id){
   if(CARD_IDX < 0) CARD_IDX = 0;
 
   const p = PLACES.find(x => x.id === id);
+  if(typeof apdTrack === 'function' && p) apdTrack('place_open', { place_id: p.id, place_name: p.name });
   if(!p) return;
 
   _activateMarker(p);
@@ -272,18 +273,18 @@ function _populateCard(p){
   // the guest just gets Call, Website and Navigate.
   if(p.resUrl){
     const meta = _reserveMeta(p);
-    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
+    contacts += `<a class="pc-contact-pill pc-reserve-pill" href="${p.resUrl}" target="_blank" rel="noopener" onclick="apdTrack('reserve',{place_id:${p.id}})"><span class="pc-ico">${meta.icon}</span>${meta.short}</a>`;
   }
   if(p.phone){
-    contacts += `<a class="pc-contact-pill" href="tel:${p.phone.replace(/\s/g,'')}"><span class="pc-ico">📞</span>Call</a>`;
+    contacts += `<a class="pc-contact-pill pc-call-pill" href="tel:${p.phone.replace(/\s/g,'')}" onclick="apdTrack('call',{place_id:${p.id}})"><span class="pc-ico">📞</span>${p.phone}</a>`;
   }
   if(p.website){
-    contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener"><span class="pc-ico">🌐</span>Website</a>`;
+    contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank" rel="noopener" onclick="apdTrack('website',{place_id:${p.id}})"><span class="pc-ico">🌐</span>Website</a>`;
   }
   if(p.lat && p.lng){
     const dest = p.lat + ',' + p.lng;
     const navUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
-    contacts += `<a class="pc-contact-pill pc-nav-pill" href="${navUrl}" target="_blank" rel="noopener"><span class="pc-ico">🚶</span>Navigate</a>`;
+    contacts += `<a class="pc-contact-pill pc-nav-pill" href="${navUrl}" target="_blank" rel="noopener" onclick="apdTrack('navigate',{place_id:${p.id}})"><span class="pc-ico">🚶</span>Navigate</a>`;
   }
   document.getElementById('pc-contacts').innerHTML = contacts;
 

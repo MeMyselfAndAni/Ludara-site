@@ -52,6 +52,7 @@ async function generatePDF(){
     alert('Save some places first using the ♡ button, then generate your guide.');
     return;
   }
+  if(typeof apdTrack === 'function') apdTrack('download_pdf', { count: places.length });
 
   // Show loading message
   if (typeof _toast === 'function') {

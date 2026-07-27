@@ -7,8 +7,15 @@ let ANF = 'all';     // active neighbourhood filter
 // ── MAP CORE — shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
+// ── APD ANALYTICS ─────────────────────────────────────────────
+// Fires a labelled GA4 event via the site's existing gtag (G-SEY87L8PFW).
+// Guarded: if gtag isn't present (e.g. offline / working copy) it no-ops safely.
+function apdTrack(name, params){
+  try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){}
+}
+
 // "Get a taxi" — Uber opens the app on a phone and the web version on a desktop.
-function openTaxi(){ window.open('https://m.uber.com/', '_blank', 'noopener'); }
+function openTaxi(){ apdTrack('get_taxi'); window.open('https://m.uber.com/', '_blank', 'noopener'); }
 
 
 
