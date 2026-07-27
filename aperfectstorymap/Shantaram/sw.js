@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apsm-shantaram-shell-v6';   // bump this on every deploy to push updates
+var SHELL_CACHE = 'apsm-shantaram-shell-v7';   // bump this on every deploy to push updates
 var TILE_CACHE  = 'apsm-shantaram-tiles-v1';
 
 var SHELL_FILES = [
@@ -43,7 +43,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(k) {
-          return k.startsWith('apd-shell-') && k !== SHELL_CACHE;
+          return k.startsWith('apsm-shantaram-shell-') && k !== SHELL_CACHE;
         }).map(function(k) { return caches.delete(k); })
       );
     }).then(function() { return self.clients.claim(); })
