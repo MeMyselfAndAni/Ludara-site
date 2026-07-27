@@ -36,6 +36,10 @@ const PHOTO_CREDITS = {
   10: { author: 'Maria Lando' },
   11: { author: 'Maria Lando' },
   12: { author: 'Berthold Werner', license: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Jerusalem_Holy_Sepulchre_BW_19.JPG' },
+  13: { author: 'Maria Lando' },
+  14: { author: 'Maria Lando' },
+  15: { prefix: 'Illustration', author: 'Tveria reconstruction by AI, based on a drawing by Izhar Hershenfeld' },
+  16: { author: 'Maria Lando' },
 };
 
 // Build the credit HTML for a place id (returns '' if none).

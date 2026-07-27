@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>The Book of Longings Map — Ana's Journey Through Galilee, Egypt & Jerusalem | A Perfect Story Map</title>
+<title>In Ana's Footsteps: The Book of Longings Map of Ana's Journey | A Perfect Story Map</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- UNLISTED CONCEPT DEMO — do not index, do not share publicly -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="A Perfect Story Map by Ludara.AI">
 <meta name="description" content="Explore Sue Monk Kidd's The Book of Longings on a free interactive map: Sepphoris, Nazareth, Alexandria and Jerusalem — every place in Ana's journey, with real photos, a story path and a printable book-club guide. An unofficial reading companion.">
 <link rel="canonical" href="https://ludara.ai/aperfectstorymap/inanasfootsteps/">
-<meta property="og:title" content="The Book of Longings — Ana's world on one interactive map">
+<meta property="og:title" content="In Ana's Footsteps: The Book of Longings on one interactive map">
 <meta property="og:description" content="Sepphoris, Nazareth, Alexandria, Jerusalem: follow Ana's whole journey across the real places of Sue Monk Kidd's novel. A free reading companion for readers and book clubs, made by an Israeli tour guide who knows this land.">
 <meta property="og:url" content="https://ludara.ai/aperfectstorymap/inanasfootsteps/">
 <meta property="og:image" content="https://ludara.ai/aperfectstorymap/inanasfootsteps/images/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Book of Longings — Ana's world on one interactive map">
+<meta name="twitter:title" content="In Ana's Footsteps: The Book of Longings on one interactive map">
 <meta name="twitter:description" content="Follow Ana's whole journey across the real places of the novel. A free reading companion for readers and book clubs.">
 <meta name="twitter:image" content="https://ludara.ai/aperfectstorymap/inanasfootsteps/images/og-image.jpg">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebPage",
- "name":"The Book of Longings Map — Ana's Journey",
+ "name":"In Ana's Footsteps: The Book of Longings Map",
  "url":"https://ludara.ai/aperfectstorymap/inanasfootsteps/",
  "description":"A free, unofficial interactive map companion to the novel: every place in Ana's journey with photos and a printable book-club guide.",
  "about":{"@type":"Book","name":"The Book of Longings","author":{"@type":"Person","name":"Sue Monk Kidd"}},
@@ -129,6 +129,8 @@
     linear-gradient(rgba(12,10,7,0.28), rgba(12,10,7,0.58)),
     url('images/splash.jpg') center / cover no-repeat #0f0d0a !important; }
   /* Story Path — the signature button, bold gold */
+  a.pill-tour { border-color: #2a7a72 !important; color: #2a7a72 !important; text-decoration: none; font-weight: 700; }
+  a.pill-tour:hover { background: #2a7a72 !important; color: white !important; }
   .pill-storypath {
     background: #0f0d0a !important; color: #d4a043 !important;
     border: 1.5px solid #d4a043 !important; font-weight: 700 !important;
@@ -257,8 +259,8 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-eyebrow">A Perfect Story Map</div>
-    <h1 class="splash-title">The Book of Longings</h1>
-    <p class="splash-sample" style="margin-top:2px;font-style:italic;">a novel by Sue Monk Kidd</p>
+    <h1 class="splash-title">In Ana's Footsteps</h1>
+    <p class="splash-sample" style="margin-top:2px;font-style:italic;">following The Book of Longings, a novel by Sue Monk Kidd</p>
     <p class="splash-sample">An unofficial companion, made with love for this novel.</p>
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub">From the mosaics of Sepphoris and the hills of Nazareth to the harbour of Alexandria and the Temple in Jerusalem: Ana's whole world on one map, so every reader can see where her story lives.</p>
@@ -286,8 +288,8 @@
     </a>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1><em>The Book of Longings</em> Map</h1>
-      <div class="header-sub">the novel's world<span class="header-sub-by"> · by Ludara</span></div>
+      <h1>In Ana's Footsteps</h1>
+      <div class="header-sub">following <em>The Book of Longings</em><span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
   <div class="header-ludara">
@@ -304,6 +306,7 @@
        & the Passion) removed for clarity — threads still show as pin colors and card
        labels, and search finds places and characters. Pills can return per-title if a publisher wants them. -->
   <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="Draw the novel's journey, in order">📖 Story Path</button>
+  <a class="pill pill-tour" href="https://holylandwithmaria.com/#tour-bookoflongings" target="_blank" rel="noopener" title="Join the In Ana's Footsteps tour: two days in the Galilee and Jerusalem, or a live virtual tour for your book club">🚶 Tour: in Israel or on Zoom</a>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="Place or character…" oninput="_topSearch(this.value)"
@@ -546,7 +549,10 @@
    Sepphoris → the cave → Nazareth → the Sea of Galilee → the Jordan →
    Alexandria → the Temple of Isis → the Therapeutae → Bethany →
    the Temple in Jerusalem → Gethsemane → Golgotha */
-var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+/* Magdala (13) sits in the marriage years, between Nazareth and the lake.
+   Capernaum (14) is deliberately OFF the path: Ana only hears of it, so it
+   stays a map marker, not a step on her journey. */
+var STORY_PATH_IDS = [1, 2, 3, 13, 4, 5, 16, 6, 7, 8, 9, 10, 11, 12];
 var _storyPathOn = false;
 
 /* Top-bar search: filters map pins and the places list by place name,
