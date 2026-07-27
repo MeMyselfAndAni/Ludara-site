@@ -103,7 +103,7 @@ const PLACES = [
     address: 'Capernaum, northern shore of the Sea of Galilee',
     lat: 32.8809, lng: 35.5753,
     search: 'Capernaum synagogue ruins Sea of Galilee Peter house',
-    note: 'Late in the novel, word reaches Ana that Jesus is teaching at Capernaum, the fishing town that has become the center of his new life. The real Kfar Nahum, \'the village of Nahum\', is one of the best-preserved corners of first-century Galilee: the black basalt foundations beneath the later white synagogue date to the very period of the story, and beside them stands the traditional house of Peter the fisherman. For readers, this is where the quiet marriage years give way to public life.',
+    note: 'Late in the novel, word reaches Ana that Jesus is teaching at Capernaum, the fishing town that has become the center of his new life. The real Kfar Nahum, \'the village of Nahum\', is one of the best-preserved corners of first-century Galilee: the black basalt foundations beneath the later white synagogue date to the very period of the story, and beside them stands the traditional house of Peter the fisherman.',
     book: 'Late in the novel: word of the ministry reaches Ana',
     visit: 'The site on the north shore is open daily; look for the basalt first-century foundations beneath the white synagogue, and the memorial church suspended over Peter\'s house.',
     type: 'Jesus and the fishermen; the news that reaches Ana',
