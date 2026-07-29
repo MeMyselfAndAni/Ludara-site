@@ -22,11 +22,13 @@
 //   17 Yaroslavl ........ Alisa & Mark Rozenblat's wedding, 1962
 //   20 Rehovot .......... Nina Kliot (Friedland), Rehovot 1994
 //   21 Jerusalem ........ Baruch & Rachel Kliot's wedding, 2009
-//   6, 9, 15, 18, 19 .... no surviving photo — emoji placeholder
+//   9, 15, 18, 19 ...... no surviving photo — emoji placeholder
+//   6  Tula ............. young Benjamin Kliot (Maria, Jul 29)
 
 const FAMILY_ARCHIVE = 'ארכיון המשפחה · семейный архив';
 
 const PHOTO_CREDITS = {
+  6:  { author: FAMILY_ARCHIVE },   // Tula — young Benjamin Kliot
   25: { author: FAMILY_ARCHIVE },   // Ramat HaSharon — Maria and family
   26: { author: FAMILY_ARCHIVE },   // Raanana — Dmitry & Zoya's family: Mark & Nikol
   24: { author: FAMILY_ARCHIVE },   // Ashdod — Ilya & Olga's family: Lital, Nir & Ron
