@@ -10,100 +10,71 @@
   var DEMO_SAVED_IDS  = CFG.demoSavedIds  || null; /* array of 3-5 real place IDs */
 
   /* ── Step definitions ───────────────────────────────────────── */
+  /* Language helper — Guide follows the language chosen on the splash */
+  function _ru(){ return (typeof LANG !== 'undefined' && LANG === 'ru'); }
+  function FS(o){
+    return {
+      get title(){ return _ru() ? o.tr : o.th; },
+      get body(){  return _ru() ? o.br : o.bh; },
+      get btn(){   return o.done ? (_ru() ? 'Готово ✓' : 'סיום ✓') : (_ru() ? 'Далее' : 'הבא'); },
+      target: o.target || null,
+      dualTargets: o.dualTargets,
+      targetsDelay: o.targetsDelay,
+      cardPos: o.cardPos || 'center',
+      demo: o.demo || null,
+      closeCard: o.closeCard,
+      mobileCardOffset: o.mobileCardOffset,
+      done: o.done
+    };
+  }
   var STEPS = [
-    {
-      title: 'The World of The Book of Longings',
-      body: 'One map, the novel\'s whole world: from Ana\'s Galilee to the Temple in Jerusalem and the shores of Egypt. This short tour shows you how to travel it. Tap Next to begin.',
-      target: null,
-      cardPos: 'center',
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Story Path',
-      body: 'The gold button draws the novel\'s whole journey in order, from Sepphoris and Nazareth to Alexandria and back to Jerusalem for the final Passover. It is the map\'s home view: tap it any time to see the shape of the book again.',
-      target: '#pill-storypath',
-      cardPos: 'center',
-      demo: 'close-saved-pulse',
-      btn: 'Next'
-    },
-    {
-      title: 'The Story, Mapped',
-      body: 'Every pin is a scene: the city where Ana is born, the cave where she hides her writings, the hill where the story ends. Tap any icon to see what happens there in the book.',
-      target: null,
-      cardPos: 'center',
-      demo: 'open-card-delayed-no-heart',
-      btn: 'Next'
-    },
-    {
-      title: 'Inside the place card',
-      body: 'Each card tells you what happens here in the novel, who you meet, whether Ana, Yaltha, Jesus or Judas, and where it sits in the story. At the bottom, a short "If you visit" note for readers who make the real journey.',
-      target: null,
-      cardPos: 'center',
-      demo: 'scroll-card',
-      btn: 'Next'
-    },
-    {
-      title: 'Find any place, or any character',
-      body: 'Type in the search field: a place, or a name like Ana or Yaltha, and the map shows only their scenes. Pin colors mark the story\'s threads: Ana\'s Galilee, Her Book of Longings, Exile in Alexandria, Jesus & the Ministry, Passover & the Passion.',
-      target: '#topbar-search',
-      cardPos: 'center',
-      closeCard: true,
-      demo: 'scroll-filter',
-      btn: 'Next'
-    },
-    {
-      title: 'The story\'s regions',
-      body: 'Each bubble is a chapter of the novel\'s geography: Galilee, Judea, Egypt. Tap one to zoom straight into that part of the story.',
-      target: '#nbhd-bar',
-      cardPos: 'center',
-      closeCard: true,
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Bookmark the story',
-      body: 'Reached a place in the book, or found a scene you love? Tap the bookmark. Your marks remain when you close the map: a record of your journey through the novel.',
-      target: null,
-      cardPos: 'center',
-      demo: 'open-card',
-      btn: 'Next'
-    },
-    {
-      title: 'Your bookmarks',
-      body: 'Tap Bookmarks to see your list. Tap any row to reopen the card. Drag to arrange them in reading order, or walking order if you visit.',
-      target: null,
-      dualTargets: ['#pill-saved', '#sheet'],
-      targetsDelay: 550,  /* wait for show-saved demo to open the sheet */
-      cardPos: 'center',
-      demo: 'show-saved',
-      btn: 'Next'
-    },
-    {
-      title: 'Download a PDF companion',
-      body: 'Tap PDF Guide to turn your bookmarks into a printable companion, made for a book club evening or a reading group handout.',
-      target: '#sheet button[onclick="generatePDF()"]',
-      cardPos: 'center',
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: 'Share your map of the book',
-      body: 'Bookmark the scenes that stayed with you and send your map to a friend: this is the story that got me. One tap to share by message or email.',
-      target: '#sheet button[onclick="shareItinerary()"]',
-      cardPos: 'center',
-      demo: null,
-      btn: 'Next'
-    },
-    {
-      title: "You're all set!",
-      body: 'The novel\'s world is yours to explore. Go find your perfect story.',
-      target: null,
-      cardPos: 'center',
-      mobileCardOffset: -75,  /* match Navigate step so card doesn't jump */
-      demo: null,
-      btn: 'Done'
-    }
+    FS({ th:'סיפור המשפחה שלנו', tr:'История нашей семьи',
+         bh:'מפה אחת, מאה שנים של מסעות משפחה: מהעיירות בבלארוס, דרך המלחמה והפינוי, עד ישראל של היום. הסיור הקצר הזה מראה איך מטיילים בה.',
+         br:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.' }),
+    FS({ th:'מסע המשפחה', tr:'Путь семьи',
+         bh:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
+         br:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
+         target:'#pill-storypath', demo:'close-saved-pulse' }),
+    FS({ th:'הסיפור, על המפה', tr:'История на карте',
+         bh:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
+         br:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
+         demo:'open-card-delayed-no-heart' }),
+    FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места',
+         bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית — מה יש במקום היום.',
+         br:'Каждая карточка рассказывает, что здесь случилось и кто из семьи связан с этим местом, с фотографиями из семейного архива. Кнопки с именами ведут прямо в древо, а внизу — что там сегодня.',
+         demo:'scroll-card' }),
+    FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека',
+         bh:'הקלידו שם של מקום או של בן משפחה — והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים את הענפים: פרידלנד, קליוט, לנדו ושכטר, מלחמה ופינוי, ישראל.',
+         br:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
+         target:'#topbar-search', closeCard:true, demo:'scroll-filter' }),
+    FS({ th:'אזורי הסיפור', tr:'Регионы истории',
+         bh:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל. לחיצה מקרבת ישר לאותו חלק של המסע.',
+         br:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
+         target:'#nbhd-bar', closeCard:true }),
+    FS({ th:'עץ המשפחה', tr:'Древо семьи',
+         bh:'הכפתור 🌳 פותח את עץ המשפחה — כל בני המשפחה בשלושה ענפים צבעוניים. לחיצה על אדם מציירת את מסע חייו על המפה; כפתורי הענפים מדגישים כל שם משפחה, וגלגלת העכבר מקרבת ומרחיקה.',
+         br:'Кнопка 🌳 открывает семейное древо — вся семья в трёх цветных ветвях. Нажмите на человека — его жизненный путь появится на карте; кнопки ветвей подсвечивают каждую фамилию, а колесо мыши приближает и отдаляет.',
+         target:'#pill-tree' }),
+    FS({ th:'סימניות', tr:'Закладки',
+         bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
+         br:'Нашли место, которое тронуло сердце? Нажмите на закладку. Отметки сохраняются и после закрытия карты — запись вашего путешествия по семейной истории.',
+         demo:'open-card' }),
+    FS({ th:'הסימניות שלכם', tr:'Ваши закладки',
+         bh:'לחצו על "סימניות" כדי לראות את הרשימה. לחיצה על שורה פותחת מחדש את הכרטיס; אפשר לגרור ולסדר.',
+         br:'Нажмите «Закладки», чтобы увидеть список. Нажатие на строку снова открывает карточку; порядок можно менять перетаскиванием.',
+         dualTargets:['#pill-saved','#sheet'], targetsDelay:550, demo:'show-saved' }),
+    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF',
+         bh:'לחצו PDF כדי להפוך את הסימניות לחוברת מודפסת — למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
+         br:'Нажмите PDF, чтобы превратить закладки в печатную брошюру — для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
+         target:'#sheet button[onclick="generatePDF()"]' }),
+    FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй',
+         bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
+         br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
+         target:'#sheet button[onclick="shareItinerary()"]' }),
+    FS({ th:'הכול מוכן!', tr:'Всё готово!',
+         bh:'עולם המשפחה פתוח לפניכם — צאו למסע.',
+         br:'Мир семьи открыт перед вами — в путь.',
+         mobileCardOffset:-75, done:true })
   ];
 
   /* ── Filter steps that need optional UI elements ───────────── */
@@ -112,7 +83,7 @@
     STEPS = STEPS.filter(function (s) { return s.demo !== 'close-saved-pulse'; });
   }
   /* Always mark the final step as Done */
-  if (STEPS.length > 0) { STEPS[STEPS.length - 1].btn = 'Done ✓'; }
+  /* Final step label comes from the step's own btn getter */
 
   /* ── Inject CSS ─────────────────────────────────────────────── */
   var style = document.createElement('style');
@@ -566,6 +537,8 @@
     titleEl.textContent = step.title;
     bodyEl.textContent  = step.body;
     nextBtn.textContent = step.btn;
+    var _sk = document.getElementById('tut-skip');
+    if(_sk) _sk.textContent = (typeof LANG !== 'undefined' && LANG === 'ru') ? 'Пропустить' : 'לדלג';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);

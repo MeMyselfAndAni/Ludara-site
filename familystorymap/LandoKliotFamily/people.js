@@ -36,12 +36,24 @@ const PEOPLE = [
   { id:'rachel',    he:'רחל קליאוט', ru:'Рахель Клиот', years:'', role:'רעיית ברוך · жена Баруха', branch:'kliot', col:1.4, row:3, places:[21] },
 
   // ── The meeting point of Kliot × Friedland ───────────────────────────────
-  { id:'anna',      he:'אנה קליאוט־לנדו', ru:'Анна', years:'נ׳ 1948', role:'המחברת · автор воспоминаний', branch:'kliot', col:11, row:3, places:[10,7,20] },
-  { id:'michael_br',he:'מיכאל קליאוט', ru:'Михаил Клиот', years:'נ׳ 1950', role:'אחי · мой брат', branch:'kliot', col:12.4, row:3, places:[10,16,7] },
+  { id:'anna',      he:'אנה קליאוט־לנדו', ru:'Анна', years:'נ׳ 1948', role:'המחברת · автор воспоминаний', branch:'kliot', col:11, row:3, places:[10,7,20,22,23] },
+  { id:'michael_br',he:'מיכאל קליאוט', ru:'Михаил Клиот', years:'נ׳ 1950', role:'אחי ז״ל · мой брат, светлой памяти', branch:'kliot', col:12.4, row:3, places:[10,16,7] },
   { id:'nina_s',    he:'נינה סמישבה', ru:'Нина Самышева', years:'', role:'רעייתו; מטפלת במצבות · жена', branch:'kliot', col:13.6, row:3, places:[10] },
-  { id:'ilya',      he:'איליה קליאוט', ru:'Илья Клиот', years:'', role:'בנם, עלה לישראל · их сын, в Израиле', branch:'kliot', col:13, row:4, places:[10,20] },
-  { id:'masha',     he:'מאשה לנדו', ru:'Маша Ландо', years:'', role:'בתנו, מכון ויצמן · наша дочь', branch:'lando', col:10.4, row:4, places:[7,20] },
-  { id:'dima',      he:'דימה לנדו', ru:'Дима Ландо', years:'', role:'בננו · наш сын', branch:'lando', col:11.6, row:4, places:[7,20] },
+  { id:'ilya',      he:'איליה קליאוט', ru:'Илья Клиот', years:'', role:'חי באשדוד עם משפחתו · живёт в Ашдоде с семьёй', branch:'kliot', col:14.4, row:4, places:[10,24] },
+  { id:'moshe_bar', he:'משה בר', ru:'Моше Бар', years:'', role:'אבי נאור, נדיה ונילי · отец Наора, Нади и Нили', branch:'lando', col:8.2, row:4, places:[] },
+  { id:'natasha',   he:'נטשה גורביץ׳', ru:'Наташа Гуревич', years:'', role:'אם מארק וניקול · мать Марка и Николь', branch:'lando', col:10.6, row:4, places:[] },
+  { id:'naor',      he:'נאור בר', ru:'Наор Бар', years:'', role:'בן מריה ומשה · сын Марии и Моше', branch:'lando', col:7.6, row:5, places:[25] },
+  { id:'nadia',     he:'נדיה בר', ru:'Надя Бар', years:'', role:'בת מריה ומשה · дочь Марии и Моше', branch:'lando', col:8.6, row:5, places:[25] },
+  { id:'nili',      he:'נילי בר', ru:'Нили Бар', years:'', role:'בת מריה ומשה · дочь Марии и Моше', branch:'lando', col:9.6, row:5, places:[25] },
+  { id:'zoya',      he:'זויה לנדו', ru:'Зоя Ландо', years:'', role:'רעייתו השנייה של דמיטרי · вторая жена Дмитрия', branch:'lando', col:13.0, row:4, places:[26] },
+  { id:'mark_d',    he:'מארק לנדו', ru:'Марк Ландо', years:'', role:'בן דמיטרי ונטשה · сын Дмитрия и Наташи', branch:'lando', col:10.8, row:5, places:[26] },
+  { id:'nikol',     he:'ניקול לנדו', ru:'Николь Ландо', years:'', role:'בת דמיטרי ונטשה · дочь Дмитрия и Наташи', branch:'lando', col:11.8, row:5, places:[26] },
+  { id:'olga',      he:'אולגה קליוט', ru:'Ольга Клиот', years:'', role:'רעיית איליה · жена Ильи', branch:'kliot', col:15.6, row:4, places:[24] },
+  { id:'lital',     he:'ליטל קליוט', ru:'Литаль Клиот', years:'', role:'בת איליה ואולגה · дочь Ильи и Ольги', branch:'kliot', col:13.8, row:5, places:[24] },
+  { id:'nir',       he:'ניר קליוט', ru:'Нир Клиот', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги', branch:'kliot', col:14.8, row:5, places:[24] },
+  { id:'ron',       he:'רון קליוט', ru:'Рон Клиот', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги', branch:'kliot', col:15.8, row:5, places:[24] },
+  { id:'masha',     he:'מאשה (מריה) לנדו', ru:'Маша (Мария) Ландо', years:'', role:'יזמה את העלייה; מייסדת Ludara.AI · инициатор алии; основательница Ludara.AI', branch:'lando', col:9.4, row:4, places:[7,20,23,25] },
+  { id:'dima',      he:'דימה (דמיטרי) לנדו', ru:'Дима (Дмитрий) Ландо', years:'', role:'חי ברעננה עם משפחתו · живёт в Раанане с семьёй', branch:'lando', col:11.8, row:4, places:[7,20,26] },
 
   // ── FRIEDLAND — צד אמא ───────────────────────────────────────────────────
   { id:'yosi',      he:'יוסף (יוסי) פרידלנד', ru:'Иосиф (Йоси) Фридланд', years:'', role:'אבי סבא זלמן · отец деда Залмана', branch:'friedland', col:15.6, row:0, places:[1] },
@@ -62,9 +74,9 @@ const PEOPLE = [
   { id:'markr',     he:'מארק רוזנבלט', ru:'Марк Розенблат', years:'', role:'בעלה של אליסה (1962) · муж Алисы', branch:'friedland', col:16, row:3, places:[17] },
   { id:'raya_f',    he:'רעיה', ru:'Рая', years:'', role:'בת פולינה · дочь Полины', branch:'friedland', col:17.4, row:3, places:[10] },
   { id:'yegor',     he:'יגור', ru:'Егор', years:'', role:'בן גרישה ופולינה · сын Гриши', branch:'friedland', col:18.6, row:3, places:[10] },
-  { id:'boris_r',   he:'בוריס רוזנבלט', ru:'Борис Розенблат', years:'', role:'בן אליסה · сын Алисы', branch:'friedland', col:15, row:4, places:[17] },
-  { id:'yevgeny',   he:'יבגני רוזנבלט', ru:'Евгений Розенблат', years:'', role:'בן אליסה · сын Алисы', branch:'friedland', col:16, row:4, places:[17] },
-  { id:'michael_idf',he:'מיכאל', ru:'Михаил', years:'', role:'נכד אליסה, לוחם בצה״ל · внук Алисы, боец ЦАХАЛа', branch:'friedland', col:15.5, row:5, places:[20] },
+  { id:'boris_r',   he:'בוריס רוזנבלט', ru:'Борис Розенблат', years:'', role:'בן אליסה · сын Алисы', branch:'friedland', col:16.8, row:4, places:[17] },
+  { id:'yevgeny',   he:'יבגני רוזנבלט', ru:'Евгений Розенблат', years:'', role:'בן אליסה · сын Алисы', branch:'friedland', col:17.8, row:4, places:[17] },
+  { id:'michael_idf',he:'מיכאל', ru:'Михаил', years:'', role:'נכד אליסה, לוחם בצה״ל · внук Алисы, боец ЦАХАЛа', branch:'friedland', col:17.1, row:5, places:[20] },
 
   // ── LANDO & SCHECHTER — צד מישה ──────────────────────────────────────────
   { id:'david_s',   he:'דויד שכטר', ru:'Давид Шехтер', years:'', role:'סבא של מישה · дед Миши', branch:'lando', col:23.6, row:0, places:[8] },
@@ -101,6 +113,10 @@ const FAMILY_UNIONS = [
   { p:['raisa'],             c:['sasha','emma'] },
   { p:['benjamin','nina'],   c:['anna','michael_br'] },
   { p:['michael_br','nina_s'], c:['ilya'] },
+  { p:['ilya','olga'],       c:['lital','nir','ron'] },
+  { p:['dima','natasha'],    c:['mark_d','nikol'] },
+  { p:['dima','zoya'],       c:[] },
+  { p:['masha','moshe_bar'], c:['naor','nadia','nili'] },
   // Friedland
   { p:['yosi','zina'],       c:['sam','zalman','ida','polya','avram'] },
   { p:['sam','dora'],        c:[] },

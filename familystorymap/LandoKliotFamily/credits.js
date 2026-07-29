@@ -27,6 +27,9 @@
 const FAMILY_ARCHIVE = 'ארכיון המשפחה · семейный архив';
 
 const PHOTO_CREDITS = {
+  25: { author: FAMILY_ARCHIVE },   // Ramat HaSharon — Maria and family
+  26: { author: FAMILY_ARCHIVE },   // Raanana — Dmitry & Zoya's family: Mark & Nikol
+  24: { author: FAMILY_ARCHIVE },   // Ashdod — Ilya & Olga's family: Lital, Nir & Ron
   1:  { author: FAMILY_ARCHIVE },
   2:  { author: FAMILY_ARCHIVE },
   3:  { author: FAMILY_ARCHIVE },

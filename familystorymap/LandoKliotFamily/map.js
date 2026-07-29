@@ -14,7 +14,7 @@ const MAP_CENTER        = [38.0000, 50.0000];   // [lng, lat] — between Belaru
 const MAP_ZOOM          = 4;
 const OFFLINE_CENTER    = { lat: 50.0000, lng: 38.0000 };
 const GUIDE_CITY        = 'Family Journey';
-const BLOGGER_NAME      = 'A Perfect Story Map';
+const BLOGGER_NAME      = 'Family Story Map';
 const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
 
 // ─── Category colours ─────────────────────────────────────────────────────────

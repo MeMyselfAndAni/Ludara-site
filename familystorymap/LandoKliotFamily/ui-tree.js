@@ -8,7 +8,7 @@
 // Load order: after people.js, map.js and ui-card.js.
 
 (function(){
-  const COLW = 175, ROWH = 150, NW = 168, NH = 72, PADX = 50, PADY = 70;
+  const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
   const BRANCH_HEADERS = [
     { branch:'kliot',     label:'קליוט — צד אבא · Клиоты',            col:0    },
@@ -39,12 +39,12 @@
       #tree-scroll { flex:1; overflow:auto; direction:ltr; cursor:grab; }
       #tree-scroll.dragging { cursor:grabbing; }
       .tree-node { cursor:pointer; }
-      .tree-node rect { fill:#fffdf7; stroke-width:2; rx:10; }
+      .tree-node rect { fill:#fffdf7; stroke-width:2; rx:12; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.45)); }
       .tree-node:hover rect { fill:#fff3d6; }
       .tree-node text { font-family:'Inter','Segoe UI',sans-serif; pointer-events:none; }
       .tree-node .t-he { font-size:13px; font-weight:700; fill:#1a1a1a; }
       .tree-node .t-ru { font-size:10.5px; fill:#555; }
-      .tree-node .t-role { font-size:9.5px; fill:#8a7a55; }
+      .tree-node .t-role { font-size:9.3px; fill:#7a6a45; }
       .tree-node.no-places rect { stroke-dasharray:none; opacity:0.92; }
       .tree-node .t-pin { font-size:10px; }
       .tree-node.pulse rect { animation: treePulse 1.2s ease-in-out 3; }
@@ -53,6 +53,20 @@
       .pc-people-label { width:100%; font-size:0.68rem; font-weight:700; color:#8a7a55; letter-spacing:0.04em; unicode-bidi:plaintext; }
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
+      /* Branch highlight — select a last name, its branch lights up, the rest dims */
+      #tree-svg.hl-kliot     .tree-node:not(.br-kliot),
+      #tree-svg.hl-friedland .tree-node:not(.br-friedland),
+      #tree-svg.hl-lando     .tree-node:not(.br-lando) { opacity:0.16; }
+      #tree-svg.hl-kliot     .tree-edge:not(.br-kliot),
+      #tree-svg.hl-friedland .tree-edge:not(.br-friedland),
+      #tree-svg.hl-lando     .tree-edge:not(.br-lando) { opacity:0.10; }
+      #tree-svg.hl-kliot     .tree-node.br-kliot rect     { fill:#f2f7ea; stroke-width:3.5; }
+      #tree-svg.hl-friedland .tree-node.br-friedland rect { fill:#eaf2fb; stroke-width:3.5; }
+      #tree-svg.hl-lando     .tree-node.br-lando rect     { fill:#e9f6f6; stroke-width:3.5; }
+      .tree-node, .tree-edge { transition:opacity 0.25s; }
+      .tree-btn.hl-on-kliot     { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
+      .tree-btn.hl-on-friedland { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
+      .tree-btn.hl-on-lando     { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
       @media (max-width:768px){ .tree-hint { display:none; } }
     `;
     document.head.appendChild(style);
@@ -63,9 +77,9 @@
       <div class="tree-header">
         <span class="tree-title">🌳 עץ המשפחה · Древо семьи</span>
         <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה · нажмите на человека — его путь появится на карте</span>
-        <button class="tree-btn" onclick="window._treeJump('kliot')">קליוט</button>
-        <button class="tree-btn" onclick="window._treeJump('friedland')">פרידלנד</button>
-        <button class="tree-btn" onclick="window._treeJump('lando')">לנדו</button>
+        <button class="tree-btn" id="tree-btn-kliot" onclick="window._treeJump('kliot')">קליוט</button>
+        <button class="tree-btn" id="tree-btn-friedland" onclick="window._treeJump('friedland')">פרידלנד</button>
+        <button class="tree-btn" id="tree-btn-lando" onclick="window._treeJump('lando')">לנדו</button>
         <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
         <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
         <button class="tree-btn" onclick="window._treeFit()">⤢</button>
@@ -97,6 +111,7 @@
     FAMILY_UNIONS.forEach(u => {
       const ps = u.p.map(byId).filter(Boolean);
       if(!ps.length) return;
+      s += `<g class="tree-edge br-${ps[0].branch}">`;
       let mx, my;
       if(ps.length === 2){
         const [a,b] = ps;
@@ -116,26 +131,42 @@
           s += `<path d="M ${cx(k)} ${busY} L ${cx(k)} ${nodeY(k)}" stroke="#9c8a5a" stroke-width="1.8" fill="none"/>`;
         });
       }
+      s += `</g>`;
     });
 
     // Dotted "descent known, exact line open" edges
     FAMILY_EXTRA_EDGES.forEach(e => {
       const a = byId(e.from), b = byId(e.to);
       if(!a || !b) return;
-      s += `<path d="M ${cx(a)} ${nodeY(a)+NH} C ${cx(a)} ${nodeY(a)+NH+50}, ${cx(b)} ${nodeY(b)-50}, ${cx(b)} ${nodeY(b)}" stroke="#9c8a5a" stroke-width="1.6" stroke-dasharray="4 5" fill="none" opacity="0.8"/>`;
+      s += `<g class="tree-edge br-${a.branch}"><path d="M ${cx(a)} ${nodeY(a)+NH} C ${cx(a)} ${nodeY(a)+NH+50}, ${cx(b)} ${nodeY(b)-50}, ${cx(b)} ${nodeY(b)}" stroke="#9c8a5a" stroke-width="1.6" stroke-dasharray="4 5" fill="none" opacity="0.8"/></g>`;
     });
 
-    // Nodes
+    // Nodes — 4 centred lines: HE name, RU name, years + HE role, RU role.
+    // Each line is ellipsized so text always stays inside the card.
+    const fit = (t, n) => (t && t.length > n) ? t.slice(0, n-1) + '…' : (t || '');
     PEOPLE.forEach(p => {
       const c = col(p.branch);
       const hasPlaces = p.places && p.places.length;
-      const pin = hasPlaces ? `<text class="t-pin" x="${NW-14}" y="16">📍</text>` : '';
-      const yearsRole = [p.years, p.role].filter(Boolean).join(' · ');
-      s += `<g class="tree-node ${hasPlaces?'':'no-places'}" id="tn-${p.id}" transform="translate(${nodeX(p)},${nodeY(p)})" onclick="window._treePersonClick('${p.id}')">
-        <rect width="${NW}" height="${NH}" rx="10" stroke="${c}"/>
-        <text class="t-he" x="${NW/2}" y="20" text-anchor="middle">${esc(p.he)}</text>
-        <text class="t-ru" x="${NW/2}" y="36" text-anchor="middle">${esc(p.ru)}</text>
-        <text class="t-role" x="${NW/2}" y="52" text-anchor="middle">${esc(yearsRole.length > 46 ? yearsRole.slice(0,45) + '…' : yearsRole)}</text>
+      const pin = hasPlaces ? `<text class="t-pin" x="${NW-16}" y="17">📍</text>` : '';
+      const parts  = (p.role || '').split(' · ');
+      const roleHe = parts.shift() || '';
+      const roleRu = parts.join(' · ');
+      const isRu   = (typeof LANG !== 'undefined' && LANG === 'ru');
+      const isHe   = (typeof LANG !== 'undefined' && LANG === 'he');
+      let yrs = p.years || '';
+      if(isRu) yrs = yrs.replace('נרצחה','погибла').replace('נפל','погиб').replace("נפ׳ בגיל","ум. в").replace("נפ׳","ум.").replace("נ׳","р.").replace('נישא','женился').replace('פולין · Польша','Польша');
+      if(isHe) yrs = yrs.replace('פולין · Польша','פולין');
+      let l3, l4;
+      if(isRu){ l3 = [yrs, roleRu || roleHe].filter(Boolean).join(' · '); l4 = ''; }
+      else if(isHe){ l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = ''; }
+      else { l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = roleRu; }
+      if(!l3){ l3 = l4; l4 = ''; }
+      s += `<g class="tree-node br-${p.branch} ${hasPlaces?'':'no-places'}" id="tn-${p.id}" transform="translate(${nodeX(p)},${nodeY(p)})" onclick="window._treePersonClick('${p.id}')">
+        <rect width="${NW}" height="${NH}" rx="12" stroke="${c}"/>
+        <text class="t-he" x="${NW/2}" y="22" text-anchor="middle">${esc(fit(isRu ? p.ru : p.he, 26))}</text>
+        <text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(isRu ? p.he : p.ru, 30))}</text>
+        <text class="t-role" x="${NW/2}" y="57" text-anchor="middle">${esc(fit(l3, 36))}</text>
+        <text class="t-role" x="${NW/2}" y="72" text-anchor="middle">${esc(fit(l4, 36))}</text>
         ${pin}
       </g>`;
     });
@@ -162,10 +193,26 @@
     zoom = Math.max(0.15, (sc.clientWidth - 20) / canvasW);
     applyZoom(); sc.scrollLeft = 0; sc.scrollTop = 0;
   };
+  let _hlBranch = null;
+  function _applyHighlight(){
+    const svg = document.getElementById('tree-svg');
+    if(svg){
+      svg.classList.remove('hl-kliot','hl-friedland','hl-lando');
+      if(_hlBranch) svg.classList.add('hl-' + _hlBranch);
+    }
+    ['kliot','friedland','lando'].forEach(b => {
+      const btn = document.getElementById('tree-btn-' + b);
+      if(btn) btn.classList.toggle('hl-on-' + b, _hlBranch === b);
+    });
+  }
   window._treeJump = branch => {
-    const first = PEOPLE.filter(p => p.branch === branch).sort((a,b) => a.col - b.col)[0];
-    const sc = document.getElementById('tree-scroll');
-    if(first && sc) sc.scrollTo({ left: nodeX(first)*zoom - 40, top: 0, behavior:'smooth' });
+    _hlBranch = (_hlBranch === branch) ? null : branch;   // click again to clear
+    _applyHighlight();
+    if(_hlBranch){
+      const first = PEOPLE.filter(p => p.branch === branch).sort((a,b) => a.col - b.col)[0];
+      const sc = document.getElementById('tree-scroll');
+      if(first && sc) sc.scrollTo({ left: nodeX(first)*zoom - 40, top: 0, behavior:'smooth' });
+    }
   };
 
   window.openFamilyTree = function(personId){
@@ -192,12 +239,12 @@
   window._treePersonClick = function(personId){
     const per = byId(personId);
     if(!per) return;
-    const label = per.he + ' · ' + per.ru;
+    const label = (typeof LANG !== 'undefined' && LANG === 'ru') ? per.ru : (typeof LANG !== 'undefined' && LANG === 'he') ? per.he : per.he + ' · ' + per.ru;
     const pl = (per.places || []).map(id => PLACES.find(p => p.id === id)).filter(Boolean);
     if(!pl.length){
       const n = document.getElementById('tn-' + personId);
       if(n){ n.classList.remove('pulse'); void n.getBoundingClientRect(); n.classList.add('pulse'); }
-      if(typeof _toast === 'function') _toast(label + ' — אין מקומות מקושרים במפה · нет мест на карте', 2800);
+      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה · нет мест на карте') : ' — אין מקומות מקושרים במפה'), 2800);
       return;
     }
     closeFamilyTree();
@@ -222,7 +269,7 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + ' — המסע על המפה · путь на карте', 3800);
+    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה · путь на карте') : ' — המסע על המפה'), 3800);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
@@ -236,16 +283,33 @@
     const folks = PEOPLE.filter(per => (per.places || []).includes(place.id));
     if(!folks.length){ host.innerHTML = ''; return; }
     const colOf = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
-    host.innerHTML = '<span class="pc-people-label">🌳 מי קשור למקום · кто связан с этим местом</span>' +
+    const isRu = (typeof LANG !== 'undefined' && LANG === 'ru');
+    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום · кто связан с этим местом') : '🌳 מי קשור למקום · кто связан с этим местом';
+    host.innerHTML = '<span class="pc-people-label">' + lbl + '</span>' +
       folks.map(per =>
-        `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(per.he)}</button>`
+        `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(isRu ? per.ru : per.he)}</button>`
       ).join('');
   }
 
-  // ── Drag-to-pan inside the tree ──────────────────────────────────────────
+  // ── Drag-to-pan + mouse-wheel zoom inside the tree ───────────────────────
   function enableDrag(){
     const sc = document.getElementById('tree-scroll');
     if(!sc) return;
+    // Wheel = zoom, centred on the cursor (trackpad pinch works too)
+    sc.addEventListener('wheel', function(e){
+      e.preventDefault();
+      const f = e.deltaY < 0 ? 1.12 : 1/1.12;
+      const rect = sc.getBoundingClientRect();
+      const mx = e.clientX - rect.left + sc.scrollLeft;
+      const my = e.clientY - rect.top  + sc.scrollTop;
+      const before = zoom;
+      zoom = Math.min(1.6, Math.max(0.15, zoom * f));
+      if(zoom === before) return;
+      const k = zoom / before;
+      applyZoom();
+      sc.scrollLeft = mx * k - (e.clientX - rect.left);
+      sc.scrollTop  = my * k - (e.clientY - rect.top);
+    }, { passive:false });
     let down = false, sx = 0, sy = 0, sl = 0, st = 0, moved = false;
     sc.addEventListener('pointerdown', e => { down = true; moved = false; sx = e.clientX; sy = e.clientY; sl = sc.scrollLeft; st = sc.scrollTop; });
     sc.addEventListener('pointermove', e => {
@@ -257,6 +321,8 @@
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────
+  window._treeRebuild = function(){ render(); };
+
   window.addEventListener('load', function(){
     injectDom();
     render();
