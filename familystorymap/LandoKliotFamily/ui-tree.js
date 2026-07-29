@@ -75,7 +75,7 @@
     ov.id = 'tree-overlay';
     ov.innerHTML = `
       <div class="tree-header">
-        <span class="tree-title">🌳 עץ המשפחה · Древо семьи</span>
+        <span class="tree-title">🌳 עץ המשפחה · Дерево семьи</span>
         <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה · нажмите на человека — его путь появится на карте</span>
         <button class="tree-btn" id="tree-btn-kliot" onclick="window._treeJump('kliot')">קליוט</button>
         <button class="tree-btn" id="tree-btn-friedland" onclick="window._treeJump('friedland')">פרידלנד</button>
