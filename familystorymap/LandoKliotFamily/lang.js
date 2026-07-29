@@ -87,7 +87,7 @@ function applyLanguage(lang){
   _L10N.ui.forEach(function(pair){ pair[0].textContent = pickLang(pair[1]); });
 
   var h1 = document.querySelector('header .header-text h1');
-  if(h1) h1.textContent = lang === 'he' ? 'סיפור המשפחה שלנו' : 'История нашей семьи';
+  if(h1) h1.textContent = lang === 'he' ? 'משפחת לנדו־קליוט' : 'Семья Ландо-Клиот';
   var sub = document.querySelector('.header-sub');
   if(sub) sub.textContent = lang === 'he' ? 'על פי זיכרונותיה של אנה' : 'по воспоминаниям Анны';
   var st = document.getElementById('sheet-title');
