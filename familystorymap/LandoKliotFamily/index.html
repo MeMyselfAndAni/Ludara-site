@@ -254,9 +254,35 @@
 // Read brand color from CSS — keeps JS and CSS in sync
 </script>
 <style>
-  /* Language switch pill — must be unmissable */
-  #pill-lang { border: 2px solid #c9a227 !important; background: #fdf3d7 !important; font-weight: 800 !important; color: #6b5416 !important; box-shadow: 0 1px 6px rgba(201,162,39,0.45); }
-  #pill-lang:hover { background: #f7e7b6 !important; }
+  /* ── Family-tree launcher — big, on the left, impossible to miss ── */
+  #tree-fab-wrap { position: fixed; left: 14px; top: 38%; transform: translateY(-50%); z-index: 460;
+    display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  #tree-fab { width: 72px; height: 72px; border-radius: 50%; cursor: pointer; padding: 0;
+    background: #0f0d0a; border: 2.5px solid rgba(212,168,75,0.85);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.4); transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent; }
+  #tree-fab:hover { transform: scale(1.07); box-shadow: 0 6px 24px rgba(0,0,0,0.5); background: #26221c; }
+  #tree-fab svg { width: 52px; height: 52px; pointer-events: none; }
+  #tree-fab-label { font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 800;
+    color: #0f0d0a; background: rgba(255,253,247,0.92); border-radius: 10px; padding: 3px 10px;
+    letter-spacing: 0.03em; text-align: center; box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+    unicode-bidi: plaintext; max-width: 110px; line-height: 1.35; }
+  @media (max-width: 768px) { #tree-fab-wrap { top: auto; bottom: 215px; transform: none; }
+    #tree-fab { width: 60px; height: 60px; } #tree-fab svg { width: 42px; height: 42px; } }
+
+  /* ── HE/RU language toggle — lower-right corner of the map ── */
+  #lang-fab { position: fixed; right: 12px; bottom: 158px; z-index: 1100;
+    width: 52px; height: 52px; border-radius: 50%; cursor: pointer; padding: 0;
+    background: #0f0d0a; border: 2px solid rgba(212,168,75,0.85);
+    display: flex; align-items: center; justify-content: center; gap: 2px;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.78rem;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4); -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s; }
+  #lang-fab:hover { transform: scale(1.07); background: #26221c; }
+  #lang-fab .lf-he, #lang-fab .lf-ru { color: #6a5a3a; transition: color 0.2s; }
+  #lang-fab .lf-sep { color: #6a5a3a; font-weight: 400; }
+  #lang-fab.lf-on-he .lf-he, #lang-fab.lf-on-ru .lf-ru { color: #d4a84b; }
   /* Family Edition: bilingual HE/RU text — each paragraph aligns by its own script */
   #pc-note, #pc-tip-text { white-space: pre-line; unicode-bidi: plaintext; }
   #pc-title, #pc-type, .place-name, .place-type, .place-addr, #nbhd-title, .nbhd-label { unicode-bidi: plaintext; }
@@ -330,8 +356,6 @@
        & the Passion) removed for clarity — threads still show as pin colors and card
        labels, and search finds places and characters. Pills can return per-title if a publisher wants them. -->
   <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="לצייר את מסע המשפחה לפי הסדר · Нарисовать путь семьи по порядку">📜 מסע המשפחה · Путь семьи</button>
-  <button class="pill" id="pill-lang" onclick="toggleLanguage()" title="החלפת שפה · сменить язык">🌐</button>
-  <button class="pill" id="pill-tree" onclick="openFamilyTree()" title="עץ המשפחה — לחיצה על אדם מציגה את מסעו במפה · Дерево семьи">🌳 עץ המשפחה · Дерево</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="מקום או שם · место или имя" oninput="_topSearch(this.value)"
@@ -457,6 +481,29 @@
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
   <span id="list-badge-desktop">40</span>
+</button>
+
+<!-- Family-tree launcher -->
+<div id="tree-fab-wrap">
+  <button id="tree-fab" onclick="openFamilyTree()" title="עץ המשפחה · Дерево семьи">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <!-- three foliage crowns — one per family branch -->
+      <circle cx="22" cy="24" r="13" fill="#3a6ea5"/>
+      <circle cx="42" cy="22" r="12" fill="#2f8f8f"/>
+      <circle cx="32" cy="14" r="11" fill="#6b8e4e"/>
+      <circle cx="32" cy="26" r="10" fill="#7da55e"/>
+      <!-- gold trunk and boughs -->
+      <path d="M30.5 58 L30.5 40 Q30.5 34 24 28 M33.5 58 L33.5 40 Q33.5 34 41 27 M32 44 L32 30"
+            stroke="#c9a227" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M26 58 Q32 55 38 58" stroke="#c9a227" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </svg>
+  </button>
+  <div id="tree-fab-label">עץ המשפחה · Дерево семьи</div>
+</div>
+
+<!-- HE/RU language toggle -->
+<button id="lang-fab" onclick="toggleLanguage()" title="החלפת שפה · сменить язык">
+  <span class="lf-he">עב</span><span class="lf-sep">/</span><span class="lf-ru">RU</span>
 </button>
 
 <!-- Places list sheet -->

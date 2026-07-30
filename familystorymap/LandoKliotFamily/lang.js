@@ -43,7 +43,7 @@ function pickBlock(str){
 // ── Snapshot of the original bilingual values (taken once, on first switch) ──
 var _L10N = null;
 var _UI_SELECTOR =
-  '#pill-storypath, #pill-tree, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
+  '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
   '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn';
 
 function _snapshot(){
@@ -97,11 +97,12 @@ function applyLanguage(lang){
   var closeBtn = document.querySelector('#tree-overlay .tree-close');
   if(closeBtn) closeBtn.textContent = lang === 'he' ? '✕ סגירה' : '✕ Закрыть';
 
-  // The 🌐 pill offers the OTHER language
-  var lp = document.getElementById('pill-lang');
-  if(lp){
-    lp.textContent = lang === 'he' ? '🌐 Русский' : '🌐 עברית';
-    lp.title = lang === 'he' ? 'Переключить на русский' : 'מעבר לעברית';
+  // The HE/RU corner toggle highlights the active language
+  var lf = document.getElementById('lang-fab');
+  if(lf){
+    lf.classList.toggle('lf-on-he', lang === 'he');
+    lf.classList.toggle('lf-on-ru', lang === 'ru');
+    lf.title = lang === 'he' ? 'Переключить на русский' : 'מעבר לעברית';
   }
 
   // ── Re-render everything that was built from the data ──
