@@ -112,7 +112,8 @@ function _placeMatchesQuery(p, q){
       var per = PEOPLE[i];
       if(per.places && per.places.indexOf(p.id) !== -1 &&
          ((per.he && per.he.toLowerCase().includes(q)) ||
-          (per.ru && per.ru.toLowerCase().includes(q)))) return true;
+          (per.ru && per.ru.toLowerCase().includes(q)) ||
+          (per.en && per.en.toLowerCase().includes(q)))) return true;
     }
   }
   return false;

@@ -11,9 +11,9 @@
   const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
   const BRANCH_HEADERS = [
-    { branch:'kliot',     label:'קליוט — צד אבא · Клиоты',            col:0    },
-    { branch:'friedland', label:'פרידלנד — צד אמא · Фридланды',        col:13.2 },
-    { branch:'lando',     label:'לנדו ושכטר — צד מישה · Ландо и Шехтеры', col:23.6 },
+    { branch:'kliot',     label:'קליוט — צד אבא · Клиоты · Kliot — father’s side',            col:0    },
+    { branch:'friedland', label:'פרידלנד — צד אמא · Фридланды · Friedland — mother’s side',        col:13.2 },
+    { branch:'lando',     label:'לנדו ושכטר — צד מישה · Ландо и Шехтеры · Lando & Schechter', col:23.6 },
   ];
 
   const nodeX = p => PADX + p.col * COLW;
@@ -75,11 +75,11 @@
     ov.id = 'tree-overlay';
     ov.innerHTML = `
       <div class="tree-header">
-        <span class="tree-title">🌳 עץ המשפחה · Дерево семьи</span>
-        <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה · нажмите на человека — его путь появится на карте</span>
-        <button class="tree-btn" id="tree-btn-kliot" onclick="window._treeJump('kliot')">קליוט</button>
-        <button class="tree-btn" id="tree-btn-friedland" onclick="window._treeJump('friedland')">פרידלנד</button>
-        <button class="tree-btn" id="tree-btn-lando" onclick="window._treeJump('lando')">לנדו</button>
+        <span class="tree-title">🌳 עץ המשפחה · Дерево семьи · Family Tree</span>
+        <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה · нажмите на человека — его путь появится на карте · click a person — their journey appears on the map</span>
+        <button class="tree-btn" id="tree-btn-kliot" onclick="window._treeJump('kliot')">קליוט · Клиоты · Kliot</button>
+        <button class="tree-btn" id="tree-btn-friedland" onclick="window._treeJump('friedland')">פרידלנד · Фридланды · Friedland</button>
+        <button class="tree-btn" id="tree-btn-lando" onclick="window._treeJump('lando')">לנדו · Ландо · Lando</button>
         <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
         <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
         <button class="tree-btn" onclick="window._treeFit()">⤢</button>
@@ -104,7 +104,7 @@
 
     // Branch headers
     BRANCH_HEADERS.forEach(h => {
-      s += `<text x="${PADX + h.col*COLW}" y="${PADY-30}" style="font-family:'Fraunces',Georgia,serif;font-size:22px;font-weight:700;fill:${col(h.branch)}">${esc(h.label)}</text>`;
+      s += `<text x="${PADX + h.col*COLW}" y="${PADY-30}" style="font-family:'Fraunces',Georgia,serif;font-size:22px;font-weight:700;fill:${col(h.branch)}">${esc(typeof pickLang === 'function' ? pickLang(h.label) : h.label)}</text>`;
     });
 
     // Union connectors (behind nodes)
@@ -150,21 +150,28 @@
       const pin = hasPlaces ? `<text class="t-pin" x="${NW-16}" y="17">📍</text>` : '';
       const parts  = (p.role || '').split(' · ');
       const roleHe = parts.shift() || '';
-      const roleRu = parts.join(' · ');
+      let roleRu = '', roleEn = '';
+      parts.forEach(function(t2){
+        if(/[Ѐ-ӿ]/.test(t2)) roleRu = roleRu ? roleRu + ' · ' + t2 : t2;
+        else roleEn = roleEn ? roleEn + ' · ' + t2 : t2;
+      });
       const isRu   = (typeof LANG !== 'undefined' && LANG === 'ru');
       const isHe   = (typeof LANG !== 'undefined' && LANG === 'he');
+      const isEn   = (typeof LANG !== 'undefined' && LANG === 'en');
       let yrs = p.years || '';
       if(isRu) yrs = yrs.replace('נרצחה','погибла').replace('נפל','погиб').replace("נפ׳ בגיל","ум. в").replace("נפ׳","ум.").replace("נ׳","р.").replace('נישא','женился').replace('פולין · Польша','Польша');
       if(isHe) yrs = yrs.replace('פולין · Польша','פולין');
+      if(isEn) yrs = yrs.replace('נרצחה','murdered').replace('נפל','fell').replace("נפ׳ בגיל","d. at").replace("נפ׳","d.").replace("נ׳","b.").replace('נישא','m.').replace('פולין · Польша','Poland');
       let l3, l4;
-      if(isRu){ l3 = [yrs, roleRu || roleHe].filter(Boolean).join(' · '); l4 = ''; }
+      if(isEn){ l3 = [yrs, roleEn || roleRu || roleHe].filter(Boolean).join(' · '); l4 = ''; }
+      else if(isRu){ l3 = [yrs, roleRu || roleHe].filter(Boolean).join(' · '); l4 = ''; }
       else if(isHe){ l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = ''; }
       else { l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = roleRu; }
       if(!l3){ l3 = l4; l4 = ''; }
       s += `<g class="tree-node br-${p.branch} ${hasPlaces?'':'no-places'}" id="tn-${p.id}" transform="translate(${nodeX(p)},${nodeY(p)})" onclick="window._treePersonClick('${p.id}')">
         <rect width="${NW}" height="${NH}" rx="12" stroke="${c}"/>
-        <text class="t-he" x="${NW/2}" y="22" text-anchor="middle">${esc(fit(isRu ? p.ru : p.he, 26))}</text>
-        <text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(isRu ? p.he : p.ru, 30))}</text>
+        <text class="t-he" x="${NW/2}" y="22" text-anchor="middle">${esc(fit(isEn ? (p.en || p.ru) : isRu ? p.ru : p.he, 26))}</text>
+        <text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(isEn ? p.he : isRu ? p.he : p.ru, 30))}</text>
         <text class="t-role" x="${NW/2}" y="57" text-anchor="middle">${esc(fit(l3, 36))}</text>
         <text class="t-role" x="${NW/2}" y="72" text-anchor="middle">${esc(fit(l4, 36))}</text>
         ${pin}
@@ -239,12 +246,12 @@
   window._treePersonClick = function(personId){
     const per = byId(personId);
     if(!per) return;
-    const label = (typeof LANG !== 'undefined' && LANG === 'ru') ? per.ru : (typeof LANG !== 'undefined' && LANG === 'he') ? per.he : per.he + ' · ' + per.ru;
+    const label = (typeof LANG !== 'undefined' && LANG === 'en') ? (per.en || per.he) : (typeof LANG !== 'undefined' && LANG === 'ru') ? per.ru : (typeof LANG !== 'undefined' && LANG === 'he') ? per.he : per.he + ' · ' + per.ru;
     const pl = (per.places || []).map(id => PLACES.find(p => p.id === id)).filter(Boolean);
     if(!pl.length){
       const n = document.getElementById('tn-' + personId);
       if(n){ n.classList.remove('pulse'); void n.getBoundingClientRect(); n.classList.add('pulse'); }
-      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה · нет мест на карте') : ' — אין מקומות מקושרים במפה'), 2800);
+      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה · нет мест на карте · no places linked on the map') : ' — אין מקומות מקושרים במפה'), 2800);
       return;
     }
     closeFamilyTree();
@@ -269,7 +276,7 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה · путь на карте') : ' — המסע על המפה'), 3800);
+    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה · путь на карте · the journey on the map') : ' — המסע על המפה'), 3800);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
@@ -284,10 +291,11 @@
     if(!folks.length){ host.innerHTML = ''; return; }
     const colOf = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
     const isRu = (typeof LANG !== 'undefined' && LANG === 'ru');
-    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום · кто связан с этим местом') : '🌳 מי קשור למקום · кто связан с этим местом';
+    const isEn = (typeof LANG !== 'undefined' && LANG === 'en');
+    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום · кто связан с этим местом · who is connected to this place') : '🌳 מי קשור למקום · кто связан с этим местом · who is connected to this place';
     host.innerHTML = '<span class="pc-people-label">' + lbl + '</span>' +
       folks.map(per =>
-        `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(isRu ? per.ru : per.he)}</button>`
+        `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(isEn ? (per.en || per.he) : isRu ? per.ru : per.he)}</button>`
       ).join('');
   }
 

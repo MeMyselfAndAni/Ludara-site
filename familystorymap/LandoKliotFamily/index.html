@@ -285,16 +285,16 @@
 
   /* ── HE/RU language toggle — lower-right corner of the map ── */
   #lang-fab { position: fixed; right: 12px; bottom: 158px; z-index: 1100;
-    width: 52px; height: 52px; border-radius: 50%; cursor: pointer; padding: 0;
+    width: 56px; height: 56px; border-radius: 50%; cursor: pointer; padding: 0;
     background: #0f0d0a; border: 2px solid rgba(212,168,75,0.85);
-    display: flex; align-items: center; justify-content: center; gap: 2px;
-    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.78rem;
+    display: flex; align-items: center; justify-content: center; gap: 1px;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.6rem;
     box-shadow: 0 3px 14px rgba(0,0,0,0.4); -webkit-tap-highlight-color: transparent;
     transition: transform 0.15s; }
   #lang-fab:hover { transform: scale(1.07); background: #26221c; }
-  #lang-fab .lf-he, #lang-fab .lf-ru { color: #6a5a3a; transition: color 0.2s; }
+  #lang-fab .lf-he, #lang-fab .lf-ru, #lang-fab .lf-en { color: #6a5a3a; transition: color 0.2s; }
   #lang-fab .lf-sep { color: #6a5a3a; font-weight: 400; }
-  #lang-fab.lf-on-he .lf-he, #lang-fab.lf-on-ru .lf-ru { color: #d4a84b; }
+  #lang-fab.lf-on-he .lf-he, #lang-fab.lf-on-ru .lf-ru, #lang-fab.lf-on-en .lf-en { color: #d4a84b; }
   /* Family Edition: bilingual HE/RU text — each paragraph aligns by its own script */
   #pc-note, #pc-tip-text { white-space: pre-line; unicode-bidi: plaintext; }
   #pc-title, #pc-type, .place-name, .place-type, .place-addr, #nbhd-title, .nbhd-label { unicode-bidi: plaintext; }
@@ -311,10 +311,11 @@
     <p class="splash-sample" style="margin-top:2px;font-style:italic;">История нашей семьи</p>
     <p class="splash-sample">על פי זיכרונותיה של אנה · по воспоминаниям Анны</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub" style="unicode-bidi:plaintext;">מבוברויסק ומוויטבסק, דרך טמבוב, אוראל ואודסה — עד רחובות וירושלים: מאה שנים של מסעות משפחה על מפה אחת.<br>Из Бобруйска и Витебска — через Тамбов, Урал и Одессу — до Реховота и Иерусалима: сто лет семейных дорог на одной карте.</p>
+    <p class="splash-sub" style="unicode-bidi:plaintext;">מבוברויסק ומוויטבסק, דרך טמבוב, אוראל ואודסה — עד רחובות וירושלים: מאה שנים של מסעות משפחה על מפה אחת.<br>Из Бобруйска и Витебска — через Тамбов, Урал и Одессу — до Реховота и Иерусалима: сто лет семейных дорог на одной карте.<br>From Bobruisk and Vitebsk — through Tambov, the Urals and Odessa — to Rehovot and Jerusalem: a century of family journeys on one map.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <button class="splash-btn" onclick="setLangAndEnter('he')">עברית — להיכנס לסיפור</button>
       <button class="splash-btn" onclick="setLangAndEnter('ru')">Русский — войти в историю</button>
+      <button class="splash-btn" onclick="setLangAndEnter('en')">English — enter the story</button>
     </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/" target="_blank">Family Story Map · by Ludara.AI</a>
@@ -339,7 +340,7 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">טוענים את הסיפור… · Загружаем историю…</div>
+  <div class="loading-text">טוענים את הסיפור… · Загружаем историю… · Loading the story…</div>
 </div>
 
 <!-- Header -->
@@ -367,7 +368,7 @@
        Her Book of Longings / Exile in Alexandria / Jesus & the Ministry / Passover
        & the Passion) removed for clarity — threads still show as pin colors and card
        labels, and search finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="לצייר את מסע המשפחה לפי הסדר · Нарисовать путь семьи по порядку">📜 מסע המשפחה · Путь семьи</button>
+  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="לצייר את מסע המשפחה לפי הסדר · Нарисовать путь семьи по порядку">📜 מסע המשפחה · Путь семьи · Family Path</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
     <input id="topbar-search" type="search" placeholder="מקום או שם · место или имя" oninput="_topSearch(this.value)"
@@ -381,7 +382,7 @@
 
 <!-- Neighbourhood bubble bar -->
 <!-- ⚠️  Keys here, in map-venice.js NBHD_* objects, and in venice_data.js nbhd field must ALL match -->
-<div id="nbhd-title">המקומות של המשפחה · Места семьи</div>
+<div id="nbhd-title">המקומות של המשפחה · Места семьи · The Family’s Places</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
     <div class="nbhd-handle-grip">⠿</div>
@@ -393,23 +394,23 @@
     </div>
     <div class="nbhd-bubble" id="nbhd-belarus" role="button" tabindex="0" onclick="selectNbhd('belarus', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌳</div></div>
-      <span class="nbhd-label">בלארוס · Беларусь</span>
+      <span class="nbhd-label">בלארוס · Беларусь · Belarus</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-russia" role="button" tabindex="0" onclick="selectNbhd('russia', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🏠</div></div>
-      <span class="nbhd-label">רוסיה · Россия</span>
+      <span class="nbhd-label">רוסיה · Россия · Russia</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-east" role="button" tabindex="0" onclick="selectNbhd('east', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🚂</div></div>
-      <span class="nbhd-label">מזרח · Восток</span>
+      <span class="nbhd-label">מזרח · Восток · East</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-ukraine" role="button" tabindex="0" onclick="selectNbhd('ukraine', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">⚓</div></div>
-      <span class="nbhd-label">אוקראינה · Украина</span>
+      <span class="nbhd-label">אוקראינה · Украина · Ukraine</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-israel" role="button" tabindex="0" onclick="selectNbhd('israel', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌴</div></div>
-      <span class="nbhd-label">ישראל · Израиль</span>
+      <span class="nbhd-label">ישראל · Израиль · Israel</span>
     </div>
   </div>
 </div>
@@ -440,7 +441,7 @@
       <span class="pc-emily-by" style="display:none"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">🧭 היום · сегодня</span>
+      <span class="pc-tip-label">🧭 היום · сегодня · today</span>
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
@@ -480,7 +481,7 @@
   padding:8px 14px; font-size:0.72rem; font-weight:600; cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,0.4); font-family:'Cinzel Decorative',serif;
   letter-spacing:0.1em; -webkit-tap-highlight-color:transparent;">
-  מדריך · Гид
+  מדריך · Гид · Guide
 </button>
 
 <!-- "Save offline" button removed for the story map (service worker disabled during iteration) -->
@@ -510,12 +511,12 @@
       <path d="M26 58 Q32 55 38 58" stroke="#c9a227" stroke-width="3" stroke-linecap="round" fill="none"/>
     </svg>
   </button>
-  <div id="tree-fab-label">עץ המשפחה · Дерево семьи</div>
+  <div id="tree-fab-label">עץ המשפחה · Дерево семьи · Family Tree</div>
 </div>
 
 <!-- HE/RU language toggle -->
 <button id="lang-fab" onclick="toggleLanguage()" title="החלפת שפה · сменить язык">
-  <span class="lf-he">עב</span><span class="lf-sep">/</span><span class="lf-ru">RU</span>
+  <span class="lf-he">עב</span><span class="lf-sep">/</span><span class="lf-ru">RU</span><span class="lf-sep">/</span><span class="lf-en">EN</span>
 </button>
 
 <!-- Places list sheet -->
@@ -698,13 +699,13 @@ function toggleStoryPath(quiet){
   map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: quiet ? 0 : 800 });
   _storyPathOn = true;
   if(btn) btn.classList.add('active');
-  if(!quiet && typeof _toast === 'function') _toast(typeof pickLang==='function' ? pickLang('מסע המשפחה לפי הסדר: מרצ׳יצה ובוברויסק עד רחובות · Путь семьи по порядку: от Речицы и Бобруйска до Реховота.') : 'מסע המשפחה', 4000);
+  if(!quiet && typeof _toast === 'function') _toast(typeof pickLang==='function' ? pickLang('מסע המשפחה לפי הסדר: מרצ׳יצה ובוברויסק עד רחובות · Путь семьи по порядку: от Речицы и Бобруйска до Реховота. · The family path in order, from Rechytsa to Rehovot.') : 'מסע המשפחה', 4000);
 }
 
 /* Full Story Path PDF: every place of the novel's journey, in story order */
 function generateStoryPathPDF(){
   var pl = STORY_PATH_IDS.map(function(id){ return PLACES.find(function(p){ return p.id === id; }); }).filter(Boolean);
-  if(typeof generatePDF === 'function') generatePDF(pl, typeof pickLang==='function' ? pickLang("סיפור המשפחה שלנו · История нашей семьи") : "Family Story Map");
+  if(typeof generatePDF === 'function') generatePDF(pl, typeof pickLang==='function' ? pickLang("סיפור המשפחה שלנו · История нашей семьи · Our family story") : "Family Story Map");
 }
 
 /* Any action that clears the route (filters, saved mode) also resets the button */

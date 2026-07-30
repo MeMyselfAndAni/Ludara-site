@@ -13,12 +13,12 @@ const CAT_COLORS = {
   landmark:'#e8724a'
 };
 const CAT_LABELS = {
-  // Family story threads (match CL in map.js)
-  friedland:'\u05e4\u05e8\u05d9\u05d3\u05dc\u05e0\u05d3 \u2014 \u05e6\u05d3 \u05d0\u05de\u05d0 \u00b7 \u0424\u0440\u0438\u0434\u043b\u0430\u043d\u0434\u044b',
-  kliot:'\u05e7\u05dc\u05d9\u05d5\u05d8 \u2014 \u05e6\u05d3 \u05d0\u05d1\u05d0 \u00b7 \u041a\u043b\u0438\u043e\u0442\u044b',
-  lando:'\u05dc\u05e0\u05d3\u05d5 \u05d5\u05e9\u05db\u05d8\u05e8 \u00b7 \u041b\u0430\u043d\u0434\u043e \u0438 \u0428\u0435\u0445\u0442\u0435\u0440\u044b',
-  war:'\u05de\u05dc\u05d7\u05de\u05d4 \u05d5\u05e4\u05d9\u05e0\u05d5\u05d9 \u00b7 \u0412\u043e\u0439\u043d\u0430 \u0438 \u044d\u0432\u0430\u043a\u0443\u0430\u0446\u0438\u044f',
-  israel:'\u05d9\u05e9\u05e8\u05d0\u05dc \u00b7 \u0418\u0437\u0440\u0430\u0438\u043b\u044c',
+  // Family story threads (match CL in map.js) — HE · RU · EN
+  friedland:'פרידלנד — צד אמא · Фридланды · Friedland — mother\u2019s side',
+  kliot:'קליוט — צד אבא · Клиоты · Kliot — father\u2019s side',
+  lando:'לנדו ושכטר · Ландо и Шехтеры · Lando & Schechter',
+  war:'מלחמה ופינוי · Война и эвакуация · War & evacuation',
+  israel:'ישראל · Израиль · Israel',
   landmark:'Landmark'
 };
 const CAT_GRADIENTS = {

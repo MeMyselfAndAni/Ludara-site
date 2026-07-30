@@ -12,11 +12,12 @@
   /* ── Step definitions ───────────────────────────────────────── */
   /* Language helper — Guide follows the language chosen on the splash */
   function _ru(){ return (typeof LANG !== 'undefined' && LANG === 'ru'); }
+  function _en(){ return (typeof LANG !== 'undefined' && LANG === 'en'); }
   function FS(o){
     return {
-      get title(){ return _ru() ? o.tr : o.th; },
-      get body(){  return _ru() ? o.br : o.bh; },
-      get btn(){   return o.done ? (_ru() ? 'Готово ✓' : 'סיום ✓') : (_ru() ? 'Далее' : 'הבא'); },
+      get title(){ return _en() ? o.te : _ru() ? o.tr : o.th; },
+      get body(){  return _en() ? o.be : _ru() ? o.br : o.bh; },
+      get btn(){   return o.done ? (_en() ? 'Done ✓' : _ru() ? 'Готово ✓' : 'סיום ✓') : (_en() ? 'Next' : _ru() ? 'Далее' : 'הבא'); },
       target: o.target || null,
       dualTargets: o.dualTargets,
       targetsDelay: o.targetsDelay,
@@ -28,50 +29,50 @@
     };
   }
   var STEPS = [
-    FS({ th:'סיפור המשפחה שלנו', tr:'История нашей семьи',
+    FS({ th:'סיפור המשפחה שלנו', tr:'История нашей семьи', te:'Our Family Story', be:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.',
          bh:'מפה אחת, מאה שנים של מסעות משפחה: מהעיירות בבלארוס, דרך המלחמה והפינוי, עד ישראל של היום. הסיור הקצר הזה מראה איך מטיילים בה.',
          br:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.' }),
-    FS({ th:'מסע המשפחה', tr:'Путь семьи',
+    FS({ th:'מסע המשפחה', tr:'Путь семьи', te:'The Family Path', be:'The gold button draws the whole family journey in order — from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.',
          bh:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
          br:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
          target:'#pill-storypath', demo:'close-saved-pulse' }),
-    FS({ th:'הסיפור, על המפה', tr:'История на карте',
+    FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped', be:'Every pin is a chapter of the family\'s life: the city where grandmother Nina was born, the village where grandfather Zakhar was saved, the home in Tambov. Tap any icon to read what happened there.',
          bh:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
          br:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
          demo:'open-card-delayed-no-heart' }),
-    FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места',
+    FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom — what is there today.',
          bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית — מה יש במקום היום.',
          br:'Каждая карточка рассказывает, что здесь случилось и кто из семьи связан с этим местом, с фотографиями из семейного архива. Кнопки с именами ведут прямо в дерево, а внизу — что там сегодня.',
          demo:'scroll-card' }),
-    FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека',
+    FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека', te:'Find a Place or a Person', be:'Type a place name or a family member\'s name — the map shows only their places. Pin colors mark the branches: Friedland, Kliot, Lando & Schechter, war & evacuation, Israel.',
          bh:'הקלידו שם של מקום או של בן משפחה — והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים את הענפים: פרידלנד, קליוט, לנדו ושכטר, מלחמה ופינוי, ישראל.',
          br:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
          target:'#topbar-search', closeCard:true, demo:'scroll-filter' }),
-    FS({ th:'אזורי הסיפור', tr:'Регионы истории',
+    FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions', be:'Each bubble is a chapter of geography: Belarus & Lithuania, Russia, the Urals & Asia, Ukraine, Israel. Tap one to zoom straight into that part of the journey.',
          bh:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל. לחיצה מקרבת ישר לאותו חלק של המסע.',
          br:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
          target:'#nbhd-bar', closeCard:true }),
-    FS({ th:'עץ המשפחה', tr:'Дерево семьи',
+    FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The tree button opens the family tree — the whole family in three colored branches. Click a person and their life journey appears on the map; the branch buttons highlight each family name, and the mouse wheel zooms.',
          bh:'הכפתור 🌳 פותח את עץ המשפחה — כל בני המשפחה בשלושה ענפים צבעוניים. לחיצה על אדם מציירת את מסע חייו על המפה; כפתורי הענפים מדגישים כל שם משפחה, וגלגלת העכבר מקרבת ומרחיקה.',
          br:'Кнопка 🌳 открывает семейное дерево — вся семья в трёх цветных ветвях. Нажмите на человека — его жизненный путь появится на карте; кнопки ветвей подсвечивают каждую фамилию, а колесо мыши приближает и отдаляет.',
          target:'#tree-fab' }),
-    FS({ th:'סימניות', tr:'Закладки',
+    FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed — a record of your journey through the family story.',
          bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
          br:'Нашли место, которое тронуло сердце? Нажмите на закладку. Отметки сохраняются и после закрытия карты — запись вашего путешествия по семейной истории.',
          demo:'open-card' }),
-    FS({ th:'הסימניות שלכם', tr:'Ваши закладки',
+    FS({ th:'הסימניות שלכם', tr:'Ваши закладки', te:'Your Bookmarks', be:'Tap Bookmarks to see your list. Tapping a row reopens the card; drag to rearrange.',
          bh:'לחצו על "סימניות" כדי לראות את הרשימה. לחיצה על שורה פותחת מחדש את הכרטיס; אפשר לגרור ולסדר.',
          br:'Нажмите «Закладки», чтобы увидеть список. Нажатие на строку снова открывает карточку; порядок можно менять перетаскиванием.',
          dualTargets:['#pill-saved','#sheet'], targetsDelay:550, demo:'show-saved' }),
-    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF',
+    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF', be:'Tap PDF to turn your bookmarks into a printable booklet — for a family gathering, an evening of memories, or a gift to the next generation.',
          bh:'לחצו PDF כדי להפוך את הסימניות לחוברת מודפסת — למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
          br:'Нажмите PDF, чтобы превратить закладки в печатную брошюру — для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
          target:'#sheet button[onclick="generatePDF()"]' }),
-    FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй',
+    FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world — by message or email, in one tap.',
          bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
          br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
          target:'#sheet button[onclick="shareItinerary()"]' }),
-    FS({ th:'הכול מוכן!', tr:'Всё готово!',
+    FS({ th:'הכול מוכן!', tr:'Всё готово!', te:'All Set!', be:'The family\'s world is open before you — set out on the journey.',
          bh:'עולם המשפחה פתוח לפניכם — צאו למסע.',
          br:'Мир семьи открыт перед вами — в путь.',
          mobileCardOffset:-75, done:true })
@@ -538,7 +539,7 @@
     bodyEl.textContent  = step.body;
     nextBtn.textContent = step.btn;
     var _sk = document.getElementById('tut-skip');
-    if(_sk) _sk.textContent = (typeof LANG !== 'undefined' && LANG === 'ru') ? 'Пропустить' : 'לדלג';
+    if(_sk) _sk.textContent = (typeof LANG !== 'undefined' && LANG === 'en') ? 'Skip' : (typeof LANG !== 'undefined' && LANG === 'ru') ? 'Пропустить' : 'לדלג';
 
     var targetEl = step.target ? document.querySelector(step.target) : null;
     setCard(window.innerWidth < 768 ? (step.mobileCardOffset || 0) : 0);

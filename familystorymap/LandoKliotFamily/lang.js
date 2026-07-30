@@ -1,32 +1,37 @@
 // Family Story Map
-// lang.js — single-language mode (HE or RU), chosen on the splash screen and
-// switchable at any time with the 🌐 pill inside the map.
-// The data stays bilingual in data.js/people.js ('עברית · Русский' fields and
-// HE\n\nRU paragraphs). On the first applyLanguage() call the original
-// bilingual values are snapshotted; every switch re-derives from that
-// snapshot, so the language can be changed back and forth without reloading.
+// lang.js — single-language mode (HE, RU or EN), chosen on the splash screen
+// and switchable at any time with the corner language button.
+// The data stays trilingual in data.js/people.js ('עברית · Русский · English'
+// fields and HE\n\nRU\n\nEN paragraph blocks). On the first applyLanguage()
+// call the original values are snapshotted; every switch re-derives from that
+// snapshot, so the language can be changed freely without reloading.
 // Load AFTER data.js + people.js, BEFORE the ui-*.js files use the data.
 
-var LANG = null;   // null = bilingual (only before the splash choice), 'he' | 'ru'
+var LANG = null;   // null = multilingual (only before the splash choice), 'he' | 'ru' | 'en'
 
 function _hasHe(t){ return /[֐-׿]/.test(t); }
 function _hasRu(t){ return /[Ѐ-ӿ]/.test(t); }
+function _hasEn(t){ return /[A-Za-z]/.test(t); }
 
-// One-line bilingual strings: 'עברית · Русский · 1910' → keep my script + neutral
+// Pick the right value out of he/ru/en by current language
+function L3(he, ru, en){ return LANG === 'ru' ? ru : LANG === 'en' ? en : he; }
+
+// One-line trilingual strings: 'עברית · Русский · English · 1910' →
+// keep the parts of my script + neutral parts (years, emoji, numbers)
 function pickLang(str){
   if(!LANG || !str) return str;
   var parts = String(str).split(' · ');
   var keep = parts.filter(function(t){
-    var he = _hasHe(t), ru = _hasRu(t);
-    if(he && ru) return true;      // mixed part — keep
-    if(he) return LANG === 'he';
-    if(ru) return LANG === 'ru';
-    return true;                   // neutral (years, emoji, numbers)
+    var he = _hasHe(t), ru = _hasRu(t), en = _hasEn(t);
+    if(he) return LANG === 'he';       // Hebrew part (may contain Latin brand names)
+    if(ru) return LANG === 'ru';       // Cyrillic part
+    if(en) return LANG === 'en';       // Latin-only part = English
+    return true;                       // neutral (years, emoji, numbers)
   });
   return keep.join(' · ') || str;
 }
 
-// Paragraph blocks: HE paragraph(s) + RU paragraph(s) separated by blank lines
+// Paragraph blocks: HE / RU / EN paragraphs — each classified by dominant script
 function pickBlock(str){
   if(!LANG || !str) return str;
   var paras = String(str).split(/\n\s*\n/);
@@ -34,13 +39,17 @@ function pickBlock(str){
   var keep = paras.filter(function(t){
     var heC = (t.match(/[֐-׿]/g) || []).length;
     var ruC = (t.match(/[Ѐ-ӿ]/g) || []).length;
-    if(!heC && !ruC) return true;
-    return LANG === 'he' ? heC >= ruC : ruC >= heC;
+    var enC = (t.match(/[A-Za-z]/g) || []).length;
+    if(!heC && !ruC && !enC) return true;                  // neutral
+    var max = Math.max(heC, ruC, enC);
+    if(LANG === 'he') return heC === max;
+    if(LANG === 'ru') return ruC === max;
+    return enC === max && heC < max && ruC < max;          // en: mostly Latin
   });
   return keep.join('\n\n') || str;
 }
 
-// ── Snapshot of the original bilingual values (taken once, on first switch) ──
+// ── Snapshot of the original trilingual values (taken once, on first switch) ──
 var _L10N = null;
 var _UI_SELECTOR =
   '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
@@ -62,9 +71,9 @@ function _snapshot(){
 }
 
 function applyLanguage(lang){
-  _snapshot();               // capture bilingual originals before the first filter
+  _snapshot();               // capture trilingual originals before the first filter
   LANG = lang;
-  document.documentElement.setAttribute('lang', lang === 'he' ? 'he' : 'ru');
+  document.documentElement.setAttribute('lang', lang);
 
   // ── Content: places (always re-derived from the snapshot) ──
   if(typeof PLACES !== 'undefined') PLACES.forEach(function(p){
@@ -87,35 +96,36 @@ function applyLanguage(lang){
   _L10N.ui.forEach(function(pair){ pair[0].textContent = pickLang(pair[1]); });
 
   var h1 = document.querySelector('header .header-text h1');
-  if(h1) h1.textContent = lang === 'he' ? 'משפחת לנדו־קליוט' : 'Семья Ландо-Клиот';
+  if(h1) h1.textContent = L3('משפחת לנדו־קליוט', 'Семья Ландо-Клиот', 'The Lando–Kliot Family');
   var sub = document.querySelector('.header-sub');
-  if(sub) sub.textContent = lang === 'he' ? 'על פי זיכרונותיה של אנה' : 'по воспоминаниям Анны';
+  if(sub) sub.textContent = L3('על פי זיכרונותיה של אנה', 'по воспоминаниям Анны', 'from the memoirs of Anna');
   var st = document.getElementById('sheet-title');
-  if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + (lang === 'he' ? ' מקומות' : ' мест');
+  if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
   var si = document.getElementById('topbar-search');
-  if(si) si.placeholder = lang === 'he' ? 'מקום או שם…' : 'место или имя…';
+  if(si) si.placeholder = L3('מקום או שם…', 'место или имя…', 'place or name…');
   var closeBtn = document.querySelector('#tree-overlay .tree-close');
-  if(closeBtn) closeBtn.textContent = lang === 'he' ? '✕ סגירה' : '✕ Закрыть';
+  if(closeBtn) closeBtn.textContent = L3('✕ סגירה', '✕ Закрыть', '✕ Close');
 
   // Button labels that were plain English in the template
   var _setTxt = function(id, txt){ var el = document.getElementById(id); if(el) el.textContent = txt; };
-  _setTxt('pill-saved-label',   lang === 'he' ? 'סימניות' : 'Закладки');
-  _setTxt('desktop-list-label', lang === 'he' ? 'מקומות' : 'Места');
-  _setTxt('nbhd-all-label',     lang === 'he' ? 'הכול' : 'Все');
-  _setTxt('saved-panel-label',  lang === 'he' ? 'הסימניות שלכם' : 'Ваши закладки');
-  _setTxt('saved-route-btn',    lang === 'he' ? '🗺 מסלול מלא' : '🗺 Весь маршрут');
+  _setTxt('pill-saved-label',   L3('סימניות', 'Закладки', 'Bookmarks'));
+  _setTxt('desktop-list-label', L3('מקומות', 'Места', 'Places'));
+  _setTxt('nbhd-all-label',     L3('הכול', 'Все', 'All'));
+  _setTxt('saved-panel-label',  L3('הסימניות שלכם', 'Ваши закладки', 'Your bookmarks'));
+  _setTxt('saved-route-btn',    L3('🗺 מסלול מלא', '🗺 Весь маршрут', '🗺 Full itinerary'));
   _setTxt('saved-pdf-btn',      '📄 PDF');
-  _setTxt('saved-map-btn',      lang === 'he' ? '🖼 שמירת מפה' : '🖼 Сохранить карту');
+  _setTxt('saved-map-btn',      L3('🖼 שמירת מפה', '🖼 Сохранить карту', '🖼 Save map'));
   _setTxt('trip-pdf-btn',       '⬇ PDF');
-  _setTxt('trip-share-btn',     lang === 'he' ? '🔗 שיתוף' : '🔗 Поделиться');
-  _setTxt('sheet-clear-label',  lang === 'he' ? '🗑 ניקוי' : '🗑 Очистить');
+  _setTxt('trip-share-btn',     L3('🔗 שיתוף', '🔗 Поделиться', '🔗 Share'));
+  _setTxt('sheet-clear-label',  L3('🗑 ניקוי', '🗑 Очистить', '🗑 Clear'));
 
-  // The HE/RU corner toggle highlights the active language
+  // Corner language button: highlight the active code
   var lf = document.getElementById('lang-fab');
   if(lf){
     lf.classList.toggle('lf-on-he', lang === 'he');
     lf.classList.toggle('lf-on-ru', lang === 'ru');
-    lf.title = lang === 'he' ? 'Переключить на русский' : 'מעבר לעברית';
+    lf.classList.toggle('lf-on-en', lang === 'en');
+    lf.title = L3('Переключить язык / switch language', 'החלפת שפה / switch language', 'החלפת שפה / сменить язык');
   }
 
   // ── Re-render everything that was built from the data ──
@@ -125,9 +135,11 @@ function applyLanguage(lang){
   if(typeof window._treeRebuild === 'function') window._treeRebuild();
 }
 
-// In-map language toggle (the 🌐 pill)
+// In-map language toggle: cycles he → ru → en → he
 function toggleLanguage(){
-  applyLanguage(LANG === 'he' ? 'ru' : 'he');
+  var order = ['he', 'ru', 'en'];
+  var next = order[(order.indexOf(LANG) + 1) % order.length];
+  applyLanguage(next);
 }
 
 // Splash language buttons

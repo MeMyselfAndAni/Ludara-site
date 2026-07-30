@@ -49,6 +49,7 @@ async function preloadAllImages(places) {
 async function generatePDF(overridePlaces, customSubtitle){
   window._pdfCoverSubtitle = customSubtitle || null;
   var _ruP = (typeof LANG !== 'undefined' && LANG === 'ru');
+  var _enP = (typeof LANG !== 'undefined' && LANG === 'en');
   const places = (overridePlaces && overridePlaces.length) ? overridePlaces : getSortedFavPlaces();
   if(!places || places.length === 0){
     alert('Bookmark some places first using the 🔖 button, then generate your guide.');
@@ -75,7 +76,7 @@ async function generatePDF(overridePlaces, customSubtitle){
     }
   }
 
-  const date = new Date().toLocaleDateString(_ruP ? 'ru-RU' : 'he-IL', {
+  const date = new Date().toLocaleDateString(_enP ? 'en-GB' : _ruP ? 'ru-RU' : 'he-IL', {
     day: 'numeric', month: 'long', year: 'numeric'
   });
 
@@ -132,10 +133,10 @@ async function generatePDF(overridePlaces, customSubtitle){
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
         ${p.note ? `<div class="pdf-card-note">${p.note}</div>` : ''}
-        ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 ${_ruP ? 'сегодня' : 'היום'}</span> ${p.visit}</div>` : ''}
+        ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 ${_enP ? 'today' : _ruP ? 'сегодня' : 'היום'}</span> ${p.visit}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
-          <span class="pdf-qr-label">${_ruP ? 'Сканируйте для Google Maps' : 'סריקה ל־Google Maps'}</span>
+          <span class="pdf-qr-label">${_enP ? 'Scan for Google Maps' : _ruP ? 'Сканируйте для Google Maps' : 'סריקה ל־Google Maps'}</span>
           ${p.website ? `<a class="pdf-website" href="${p.website}">${p.website.replace('https://','')}</a>` : ''}
         </div>
       </div>
@@ -144,10 +145,10 @@ async function generatePDF(overridePlaces, customSubtitle){
   }).join('');
 
   const html = `<!DOCTYPE html>
-<html lang="${_ruP ? 'ru' : 'he'}">
+<html lang="${_enP ? 'en' : _ruP ? 'ru' : 'he'}">
 <head>
 <meta charset="UTF-8">
-<title>${_ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'} · Family Story Map</title>
+<title>${_enP ? 'The Lando–Kliot Family' : _ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'} · Family Story Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -433,20 +434,20 @@ async function generatePDF(overridePlaces, customSubtitle){
 <!-- COVER — Book Story Guide -->
 <div class="pdf-cover">
   <div class="pdf-cover-logo">Family Story Map by Ludara</div>
-  <div class="pdf-cover-title">${_ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'}</div>
-  <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || (_ruP ? 'История семьи — отмеченные места, в вашем порядке' : 'סיפור המשפחה — המקומות שסימנתם, לפי הסדר שלכם')}</div>
+  <div class="pdf-cover-title">${_enP ? 'The Lando–Kliot Family' : _ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'}</div>
+  <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || (_enP ? 'The family story — your bookmarked places, in your order' : _ruP ? 'История семьи — отмеченные места, в вашем порядке' : 'סיפור המשפחה — המקומות שסימנתם, לפי הסדר שלכם')}</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
       <div class="pdf-stat-num">${places.length}</div>
-      <div class="pdf-stat-label">${_ruP ? 'отмеченных мест' : 'מקומות מסומנים'}</div>
+      <div class="pdf-stat-label">${_enP ? 'bookmarked places' : _ruP ? 'отмеченных мест' : 'מקומות מסומנים'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">🌳</div>
-      <div class="pdf-stat-label">${_ruP ? 'по воспоминаниям Анны' : 'על פי זיכרונותיה של אנה'}</div>
+      <div class="pdf-stat-label">${_enP ? 'from the memoirs of Anna' : _ruP ? 'по воспоминаниям Анны' : 'על פי זיכרונותיה של אנה'}</div>
     </div>
   </div>
-  <div class="pdf-cover-by">${_ruP ? 'Создано с Family Story Map' : 'נוצר עם Family Story Map'}</div>
+  <div class="pdf-cover-by">${_enP ? 'Created with Family Story Map' : _ruP ? 'Создано с Family Story Map' : 'נוצר עם Family Story Map'}</div>
   <div class="pdf-cover-date">${date}</div>
 </div>
 
@@ -457,7 +458,7 @@ async function generatePDF(overridePlaces, customSubtitle){
 
 <!-- BRANDING FOOTER -->
 <div class="pdf-brand-footer">
-  <div class="pdf-brand-footer-label">${_ruP ? 'Интерактивная семейная карта создана с' : 'מפה משפחתית אינטראקטיבית שנוצרה עם'}</div>
+  <div class="pdf-brand-footer-label">${_enP ? 'Interactive family map created with' : _ruP ? 'Интерактивная семейная карта создана с' : 'מפה משפחתית אינטראקטיבית שנוצרה עם'}</div>
   <div class="pdf-brand-footer-name">Family Story Map</div>
   <div class="pdf-brand-footer-url">ludara.ai</div>
 </div>
