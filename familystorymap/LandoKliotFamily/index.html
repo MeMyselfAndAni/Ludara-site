@@ -254,6 +254,18 @@
 // Read brand color from CSS — keeps JS and CSS in sync
 </script>
 <style>
+  /* ── Larger button labels (Maria: HE/RU text under buttons was too small) ── */
+  .nbhd-label { font-size: 0.78rem !important; max-width: 88px !important; letter-spacing: 0.02em !important; }
+  #nbhd-title { font-size: 0.85rem !important; }
+  .pill { font-size: 0.86rem !important; }
+  #guide-btn { font-size: 0.85rem !important; }
+  #tree-fab-label { font-size: 0.78rem !important; max-width: 132px !important; }
+  .desktop-list-btn, .sheet-title { font-size: 0.9rem !important; }
+  @media (max-width: 767px) {
+    #nbhd-bar .nbhd-label { font-size: 0.6rem !important; }
+    .pill { font-size: 0.78rem !important; }
+  }
+
   /* ── Family-tree launcher — big, on the left, impossible to miss ── */
   #tree-fab-wrap { position: fixed; left: 14px; top: 38%; transform: translateY(-50%); z-index: 460;
     display: flex; flex-direction: column; align-items: center; gap: 7px; }
@@ -361,7 +373,7 @@
     <input id="topbar-search" type="search" placeholder="מקום או שם · место или имя" oninput="_topSearch(this.value)"
            style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px 6px 32px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
   </span>
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> Bookmarks <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> <span id="pill-saved-label">Bookmarks</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
 <!-- Map -->
@@ -377,7 +389,7 @@
   <div class="nbhd-bubbles-row" id="nbhd-bubbles-row">
     <div class="nbhd-bubble nbhd-active" id="nbhd-all" role="button" tabindex="0" onclick="selectNbhd('all', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🗺</div></div>
-      <span class="nbhd-label">All</span>
+      <span class="nbhd-label" id="nbhd-all-label">All</span>
     </div>
     <div class="nbhd-bubble" id="nbhd-belarus" role="button" tabindex="0" onclick="selectNbhd('belarus', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌳</div></div>
@@ -449,8 +461,8 @@
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
       <!-- Google Maps trip button removed: reading-first bookmarks -->
-      <button class="trip-maps-btn trip-pdf-btn" onclick="generatePDF()">⬇ Download PDF Guide</button>
-      <button class="trip-maps-btn trip-share-btn" onclick="shareItinerary()">🔗 Share Itinerary</button>
+      <button class="trip-maps-btn trip-pdf-btn" id="trip-pdf-btn" onclick="generatePDF()">⬇ PDF</button>
+      <button class="trip-maps-btn trip-share-btn" id="trip-share-btn" onclick="shareItinerary()">🔗 Share</button>
     </div>
   </div>
 </div>
@@ -479,7 +491,7 @@
 
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
-  <span>Places</span>
+  <span id="desktop-list-label">Places</span>
   <span id="list-badge-desktop">40</span>
 </button>
 
@@ -514,7 +526,7 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">21 מקומות · мест</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all bookmarks" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all bookmarks" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" id="sheet-clear-label">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -527,13 +539,13 @@
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">🔖</span> Your Bookmarks</div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">🔖</span> <span id="saved-panel-label">Your Bookmarks</span></div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" onclick="planFavTrip()">🗺 Full Itinerary</button>
-    <button class="saved-action-btn saved-action-pdf" onclick="generatePDF()">📄 PDF Guide</button>
-    <button class="saved-action-btn saved-action-map" onclick="saveMapImage()">🖼 Save Map</button>
+    <button class="saved-action-btn saved-action-route" id="saved-route-btn" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-pdf" id="saved-pdf-btn" onclick="generatePDF()">📄 PDF</button>
+    <button class="saved-action-btn saved-action-map" id="saved-map-btn" onclick="saveMapImage()">🖼 Save Map</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
@@ -547,7 +559,7 @@
 
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
-  <span>Places</span>
+  <span id="desktop-list-label">Places</span>
   <span class="desktop-list-count" id="desktop-list-count">21</span>
 </button>
 

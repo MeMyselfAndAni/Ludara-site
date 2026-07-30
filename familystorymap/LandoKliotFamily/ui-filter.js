@@ -98,6 +98,26 @@ function _initDragOnList(el){
 // ── Search ────────────────────────────────────────────────────
 let _searchQuery = '';
 
+/* A place matches the query if any of its own fields match — or if a family
+   member linked to it matches by name, in either Hebrew or Russian, whatever
+   the current display language is. */
+function _placeMatchesQuery(p, q){
+  if(!q) return true;
+  if(p.name && p.name.toLowerCase().includes(q)) return true;
+  if(p.type && p.type.toLowerCase().includes(q)) return true;
+  if(p.address && p.address.toLowerCase().includes(q)) return true;
+  if(p.search && p.search.toLowerCase().includes(q)) return true;
+  if(typeof PEOPLE !== 'undefined'){
+    for(var i = 0; i < PEOPLE.length; i++){
+      var per = PEOPLE[i];
+      if(per.places && per.places.indexOf(p.id) !== -1 &&
+         ((per.he && per.he.toLowerCase().includes(q)) ||
+          (per.ru && per.ru.toLowerCase().includes(q)))) return true;
+    }
+  }
+  return false;
+}
+
 function _initSearch(){
   const titleEl = document.getElementById('sheet-title');
   if(!titleEl || document.getElementById('search-icon-btn')) return;
@@ -315,10 +335,7 @@ function renderList(){
     const catOk    = AF === 'all' || p.cat === AF;
     const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
     const openOk   = !openNowActive || isOpenNow(p);
-    const searchOk = !_searchQuery
-      || p.name.toLowerCase().includes(_searchQuery)
-      || (p.type && p.type.toLowerCase().includes(_searchQuery))       // characters line
-      || (p.address && p.address.toLowerCase().includes(_searchQuery)); // city / country
+    const searchOk = !_searchQuery || _placeMatchesQuery(p, _searchQuery);
     return catOk && nbhdOk && openOk && searchOk;
   });
   const count = filtered.length;
@@ -534,9 +551,7 @@ function applyFilters(){
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
       const searchOk = (typeof _searchQuery === 'undefined') || !_searchQuery
-        || p.name.toLowerCase().includes(_searchQuery)
-        || (p.type && p.type.toLowerCase().includes(_searchQuery))       // characters line
-        || (p.address && p.address.toLowerCase().includes(_searchQuery)); // city / country
+        || _placeMatchesQuery(p, _searchQuery);
       visible = catOk && openOk && nbhdOk && searchOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);

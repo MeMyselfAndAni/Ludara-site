@@ -97,6 +97,19 @@ function applyLanguage(lang){
   var closeBtn = document.querySelector('#tree-overlay .tree-close');
   if(closeBtn) closeBtn.textContent = lang === 'he' ? '✕ סגירה' : '✕ Закрыть';
 
+  // Button labels that were plain English in the template
+  var _setTxt = function(id, txt){ var el = document.getElementById(id); if(el) el.textContent = txt; };
+  _setTxt('pill-saved-label',   lang === 'he' ? 'סימניות' : 'Закладки');
+  _setTxt('desktop-list-label', lang === 'he' ? 'מקומות' : 'Места');
+  _setTxt('nbhd-all-label',     lang === 'he' ? 'הכול' : 'Все');
+  _setTxt('saved-panel-label',  lang === 'he' ? 'הסימניות שלכם' : 'Ваши закладки');
+  _setTxt('saved-route-btn',    lang === 'he' ? '🗺 מסלול מלא' : '🗺 Весь маршрут');
+  _setTxt('saved-pdf-btn',      '📄 PDF');
+  _setTxt('saved-map-btn',      lang === 'he' ? '🖼 שמירת מפה' : '🖼 Сохранить карту');
+  _setTxt('trip-pdf-btn',       '⬇ PDF');
+  _setTxt('trip-share-btn',     lang === 'he' ? '🔗 שיתוף' : '🔗 Поделиться');
+  _setTxt('sheet-clear-label',  lang === 'he' ? '🗑 ניקוי' : '🗑 Очистить');
+
   // The HE/RU corner toggle highlights the active language
   var lf = document.getElementById('lang-fab');
   if(lf){
