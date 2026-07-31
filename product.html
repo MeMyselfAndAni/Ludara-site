@@ -72,7 +72,6 @@
     /* ===== PRODUCT CARDS (3) ===== */
     .areas{display:grid;grid-template-columns:1fr;gap:20px}
     @media(min-width:640px){.areas{grid-template-columns:1fr 1fr}}
-    @media(min-width:1000px){.areas{grid-template-columns:repeat(3,1fr)}}
     .area{background:linear-gradient(180deg,#191c22,#131519);border:1.5px solid var(--gold);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 46px -16px rgba(0,0,0,.85),0 6px 14px rgba(0,0,0,.5),0 0 22px -8px rgba(184,150,90,.35),inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
     .area:hover{transform:translateY(-6px);border-color:var(--gold-l);box-shadow:0 36px 62px -16px rgba(0,0,0,.9),0 12px 22px rgba(0,0,0,.55),0 0 30px -6px rgba(212,176,122,.45),inset 0 1px 0 rgba(255,255,255,.1)}
     .area-media{position:relative;aspect-ratio:16/10;overflow:hidden;background:#1b1e25}
@@ -179,11 +178,6 @@
     .vcard ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
     .vcard li{margin-bottom:4px}
   </style>
-
-  <!-- SEO -->
-  <link rel="canonical" href="https://ludara.ai/product.html">
-  <meta property="og:image" content="https://ludara.ai/assets/og-image.jpg">
-  <meta name="twitter:image" content="https://ludara.ai/assets/og-image.jpg">
 </head>
 <body>
   <div class="wrap">
@@ -203,6 +197,8 @@
             <a class="dd-group" href="/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
             <a class="dd-sub" href="/aperfectstorymap/" role="menuitem">Books</a>
             <a class="dd-sub" href="/aperfectstorymap/screen.html" role="menuitem">Screen</a>
+            <div class="dd-sep" aria-hidden="true"></div>
+            <a class="dd-group" href="/familystorymap.html" role="menuitem">A Family Story Map</a>
           </div>
         </div>
         <a href="/about.html">About</a>
@@ -213,7 +209,7 @@
     <!-- ===== COMPANY HERO ===== -->
     <section class="lhero">
       <h1 class="serif">Interactive, multilingual products for <em>culture, tourism and storytelling.</em></h1>
-      <p class="lead">Three products, live today.</p>
+      <p class="lead">Four products, live today.</p>
       <div class="cta-row">
         <a class="btn-gold" href="/aperfectday/ludara/london/" target="_blank" rel="noopener">See a live guide &#8594;</a>
         <a class="btn-line" href="/contact.html">Request a demo</a>
@@ -283,6 +279,25 @@
         </div>
       </div>
 
+
+      <!-- A FAMILY STORY MAP -->
+      <div class="area">
+        <div class="area-head">
+          <div class="fam">A Family Story Map</div>
+          <h3>For Families &amp; Family Historians</h3>
+        </div>
+        <div class="area-media">
+          <span class="badge new">New</span>
+          <a href="/familystorymap.html"><img class="shot" src="assets/demos/familystorymap.webp" alt="A Family Story Map — a century of one family's journeys on a single map" loading="lazy" decoding="async" width="820" height="392"></a>
+        </div>
+        <div class="area-body">
+          <div class="tag-en">Every place a family lived, fled and rebuilt, on one map &mdash; with their own photographs, the story behind each place, and a family tree linked to the map.</div>
+          <div class="area-foot">
+            <div class="proof-line">First map built &middot; <b>26</b> places &middot; <b>80</b> family members &middot; <b>3</b> languages &middot; private by default</div>
+            <a class="area-cta" href="/familystorymap.html">How a Family Story Map works &#8594;</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ===== TRUST BADGE (Option B) ===== -->
@@ -321,6 +336,7 @@
         <a href="/">Home</a>
         <a href="/aperfectday/">A Perfect Day</a>
         <a href="/aperfectstorymap/">A Perfect Story Map</a>
+        <a href="/familystorymap.html">A Family Story Map</a>
         <a href="/about.html">About</a>
         <a href="/contact.html">Contact</a>
       </div>
