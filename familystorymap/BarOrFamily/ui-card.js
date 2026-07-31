@@ -19,6 +19,7 @@ const CAT_LABELS = {
   war:'שנות המלחמה והנדודים',
   israel:'ישראל — הבית החדש',
   memorial:'מסעות החזרה והזיכרון',
+  baror:'בר־אור — המשפחה שאחרי',
   landmark:'Landmark'
 };
 const CAT_GRADIENTS = {
@@ -28,6 +29,7 @@ const CAT_GRADIENTS = {
   war:'linear-gradient(135deg,#7d2f22,#a4402f)',
   israel:'linear-gradient(135deg,#a07d1c,#c9a227)',
   memorial:'linear-gradient(135deg,#443753,#5b4b6e)',
+  baror:'linear-gradient(135deg,#236e6e,#2f8f8f)',
 };
 
 // ── Open card from list ────────────────────────────────────────

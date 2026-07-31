@@ -366,7 +366,7 @@
     </div>
   </div>
   <div class="header-ludara">
-    <span class="header-ludara-text">Interactive map by</span>
+    <span class="header-ludara-text">מפה אינטראקטיבית מאת</span>
     <a class="header-ludara-brand" href="https://ludara.ai/familystorymap/" target="_blank"><span class="ludara-line1">Family Story Map</span> <span class="ludara-line2">by Ludara.AI</span></a>
   </div>
   <a class="header-btn" href="https://ludara.ai/familystorymap/" target="_blank">ludara.ai ↗</a>
@@ -378,13 +378,13 @@
        Her Book of Longings / Exile in Alexandria / Jesus & the Ministry / Passover
        & the Passion) removed for clarity — threads still show as pin colors and card
        labels, and search finds places and characters. Pills can return per-title if a publisher wants them. -->
-  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="לצייר את מסע המשפחה לפי הסדר · Нарисовать путь семьи по порядку">📜 מסע המשפחה · Путь семьи · Family Path</button>
+  <button class="pill pill-storypath" id="pill-storypath" onclick="toggleStoryPath()" title="לצייר את מסע המשפחה לפי הסדר · Нарисовать путь семьи по порядку">📜 מסע המשפחה</button>
   <span style="position:relative;display:inline-flex;align-items:center;">
     <span style="position:absolute;left:11px;font-size:0.85rem;pointer-events:none;">🔎</span>
-    <input id="topbar-search" type="search" placeholder="מקום או שם · место или имя" oninput="_topSearch(this.value)"
+    <input id="topbar-search" type="search" placeholder="מקום או שם…" oninput="_topSearch(this.value)"
            style="border:1.5px solid #ccc;border-radius:20px;padding:6px 14px 6px 32px;font-size:0.8rem;font-family:'Inter',sans-serif;outline:none;width:190px;background:rgba(255,255,255,0.95);">
   </span>
-  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> <span id="pill-saved-label">Bookmarks</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
+  <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">🔖</span> <span id="pill-saved-label">סימניות</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
 </div>
 
 <!-- Map -->
@@ -426,6 +426,10 @@
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🌴</div></div>
       <span class="nbhd-label">ישראל</span>
     </div>
+    <div class="nbhd-bubble" id="nbhd-america" role="button" tabindex="0" onclick="selectNbhd('america', this)">
+      <div class="nbhd-ring"><div class="nbhd-ring-inner">🇺🇸</div></div>
+      <span class="nbhd-label">ארצות הברית</span>
+    </div>
     <div class="nbhd-bubble" id="nbhd-memorial" role="button" tabindex="0" onclick="selectNbhd('memorial', this)">
       <div class="nbhd-ring"><div class="nbhd-ring-inner">🕯️</div></div>
       <span class="nbhd-label">אתרי זיכרון</span>
@@ -440,7 +444,7 @@
     <div class="pc-photo-placeholder" id="pc-emoji">📍</div>
     <img class="pc-photo-img" id="pc-img" alt="">
     <span class="pc-photo-credit" id="pc-credit"></span>
-    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ List</button>
+    <button class="pc-btn-back" id="pc-btn-back" onclick="cardBack()" style="display:none">‹ לרשימה</button>
     <button class="pc-btn-close" onclick="closePlaceCard(true)">✕</button>
     <button class="pc-btn-fav" id="pc-btn-fav" onclick="cardToggleFav()">🔖</button>
     <button class="pc-btn-nav prev" id="pc-nav-prev" onclick="cardPrev()" style="display:none">‹</button>
@@ -474,14 +478,14 @@
 <div id="trip-overlay">
   <div class="trip-panel">
     <div class="trip-header">
-      <div class="trip-title">🗺 Your Favourite Places Trip</div>
+      <div class="trip-title">🗺 המסלול שסימנתם</div>
       <button class="trip-close" onclick="closeTripPlan()">✕</button>
     </div>
     <div id="trip-content" class="trip-content"></div>
     <div class="trip-footer">
       <!-- Google Maps trip button removed: reading-first bookmarks -->
       <button class="trip-maps-btn trip-pdf-btn" id="trip-pdf-btn" onclick="generatePDF()">⬇ PDF</button>
-      <button class="trip-maps-btn trip-share-btn" id="trip-share-btn" onclick="shareItinerary()">🔗 Share</button>
+      <button class="trip-maps-btn trip-share-btn" id="trip-share-btn" onclick="shareItinerary()">🔗 שיתוף</button>
     </div>
   </div>
 </div>
@@ -489,11 +493,11 @@
 <!-- List toggle (mobile) -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
-  <span class="list-toggle-label">Places</span>
+  <span class="list-toggle-label">מקומות</span>
   <span class="count-badge" id="list-badge">40</span>
 </button>
 
-<button id="guide-btn" onclick="restartTutorial()" title="Show tutorial" style="
+<button id="guide-btn" onclick="restartTutorial()" title="הדרכה" style="
   position:fixed; bottom:224px; right:12px; z-index:1100;
   background:#0f0d0a; color:#d4a84b; border:1px solid #5a3e18; border-radius:0;
   padding:8px 14px; font-size:0.72rem; font-weight:600; cursor:pointer;
@@ -504,19 +508,19 @@
 
 <!-- "Save offline" button removed for the story map (service worker disabled during iteration) -->
 
-<button class="locate-btn" id="locate-btn" onclick="locateMe()" title="Show my location">
+<button class="locate-btn" id="locate-btn" onclick="locateMe()" title="המיקום שלי">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
 </button>
 
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
-  <span id="desktop-list-label">Places</span>
+  <span id="desktop-list-label">מקומות</span>
   <span id="list-badge-desktop">40</span>
 </button>
 
 <!-- Family-tree launcher -->
 <div id="tree-fab-wrap">
-  <button id="tree-fab" onclick="openFamilyTree()" title="עץ המשפחה · Дерево семьи">
+  <button id="tree-fab" onclick="openFamilyTree()" title="עץ המשפחה">
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <!-- three foliage crowns — one per family branch -->
       <circle cx="22" cy="24" r="13" fill="#3a6ea5"/>
@@ -529,7 +533,7 @@
       <path d="M26 58 Q32 55 38 58" stroke="#c9a227" stroke-width="3" stroke-linecap="round" fill="none"/>
     </svg>
   </button>
-  <div id="tree-fab-label">עץ המשפחה · Дерево семьи · Family Tree</div>
+  <div id="tree-fab-label">עץ המשפחה</div>
 </div>
 
 <!-- (no language toggle — this guide is Hebrew only) -->
@@ -542,12 +546,12 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">21 מקומות · мест</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all bookmarks" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" id="sheet-clear-label">🗑 Clear</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="ניקוי כל הסימניות" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" id="sheet-clear-label">🗑 ניקוי</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
   <div class="list-footer-brand">
-    <span>Interactive map by</span>
+    <span>מפה אינטראקטיבית מאת</span>
     <a href="https://ludara.ai/familystorymap/" target="_blank">Family Story Map · Ludara.AI</a>
   </div>
 </div>
@@ -555,27 +559,27 @@
 <!-- Saved Panel -->
 <div id="saved-panel" class="saved-panel">
   <div class="saved-panel-header">
-    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">🔖</span> <span id="saved-panel-label">Your Bookmarks</span></div>
+    <div class="saved-panel-title" id="saved-panel-count"><span class="heart-icon">🔖</span> <span id="saved-panel-label">הסימניות שלכם</span></div>
     <button class="saved-panel-close" onclick="toggleSavedFilter(document.getElementById('pill-saved'))">✕</button>
   </div>
   <div class="saved-panel-actions">
-    <button class="saved-action-btn saved-action-route" id="saved-route-btn" onclick="planFavTrip()">🗺 Full Itinerary</button>
+    <button class="saved-action-btn saved-action-route" id="saved-route-btn" onclick="planFavTrip()">🗺 המסלול המלא</button>
     <button class="saved-action-btn saved-action-pdf" id="saved-pdf-btn" onclick="generatePDF()">📄 PDF</button>
-    <button class="saved-action-btn saved-action-map" id="saved-map-btn" onclick="saveMapImage()">🖼 Save Map</button>
+    <button class="saved-action-btn saved-action-map" id="saved-map-btn" onclick="saveMapImage()">🖼 שמירת מפה</button>
   </div>
   <div class="saved-place-list" id="saved-place-list">
     <div class="saved-empty-hint">
       <div class="saved-empty-icon">🔖</div>
-      <div class="saved-empty-title">No saved places yet</div>
-      <div class="saved-empty-body">Tap 🔖 on any place to bookmark it: mark your path through the book, share your map, or download it as a PDF guide.</div>
-      <button class="saved-action-btn" onclick="generateStoryPathPDF()" style="margin-top:12px;padding:9px 18px;">📖 Download the full Story Path PDF</button>
+      <div class="saved-empty-title">עדיין לא סימנתם מקומות</div>
+      <div class="saved-empty-body">לחצו על 🔖 בכל מקום כדי לסמן אותו: סמנו את הדרך שלכם בסיפור, שתפו את המפה, או הורידו אותה כחוברת PDF.</div>
+      <button class="saved-action-btn" onclick="generateStoryPathPDF()" style="margin-top:12px;padding:9px 18px;">📖 הורדת מסע המשפחה המלא כ־PDF</button>
     </div>
   </div>
 </div>
 
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
-  <span id="desktop-list-label">Places</span>
+  <span id="desktop-list-label">מקומות</span>
   <span class="desktop-list-count" id="desktop-list-count">21</span>
 </button>
 
@@ -587,12 +591,21 @@
 /* Hebrew-only guide: no language selection, just enter. */
 function enterStory(){
   try { localStorage.setItem('fsm_seen_splash','1'); } catch(e){}
+  /* Collapse every inherited 'he · ru · en' triplet down to Hebrew. This must run
+     HERE, on entering — the same moment the trilingual guides called it — because
+     applyLanguage() touches the map, which only exists once the story is open. */
+  try { applyLanguage('he'); } catch(e){ console.warn('applyLanguage:', e && e.message); }
   var el = document.getElementById('splash');
   if (el) { el.style.opacity = '0'; setTimeout(function(){ el.style.display = 'none'; }, 500); }
 }
+/* Safety net: anything injected later (the family tree, place cards) gets swept too. */
+window.addEventListener('load', function(){
+  setTimeout(function(){ try { applyLanguage('he'); } catch(e){} }, 800);
+});
 </script>
 <script src="data.js"></script>
 <script src="people.js"></script>
+<script src="lang.js"></script>
 <script src="credits.js"></script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script><!-- MUST be before map.js -->
@@ -722,7 +735,7 @@ function toggleStoryPath(quiet){
   map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: quiet ? 0 : 800 });
   _storyPathOn = true;
   if(btn) btn.classList.add('active');
-  if(!quiet && typeof _toast === 'function') _toast(typeof pickLang==='function' ? pickLang('מסע המשפחה לפי הסדר: מרצ׳יצה ובוברויסק עד רחובות · Путь семьи по порядку: от Речицы и Бобруйска до Реховота. · The family path in order, from Rechytsa to Rehovot.') : 'מסע המשפחה', 4000);
+  if(!quiet && typeof _toast === 'function') _toast(typeof pickLang==='function' ? 'מסע המשפחה לפי הסדר: מוולברום עד קריית ביאליק' : 'מסע המשפחה', 4000);
 }
 
 /* Full Story Path PDF: every place of the novel's journey, in story order */
@@ -794,7 +807,7 @@ window.addEventListener('load', function() {
 });
 </script>
 
-<button id="nbhd-show-btn" onclick="openNbhdBar()" title="Show regions">🗺 Regions</button>
+<button id="nbhd-show-btn" onclick="openNbhdBar()" title="הצגת אזורים">🗺 אזורים</button>
 
 <!-- [15] Keep this exactly as-is — fires initMap() after ALL scripts have loaded -->
 <script>
@@ -869,7 +882,7 @@ function clearAllSaved() {
         '<span class="saved-stat-dot">·</span><span>your journey through the book</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
         '<button class="saved-action-btn" onclick="generatePDF()" style="flex:1">📄 PDF</button>'+
-        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button></div>';
+        '<button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 שיתוף</button></div>';
       var hasManual = typeof _getSavedOrder==='function' && !!_getSavedOrder();
       html += '<div style="font-size:0.7rem;color:#aaa;text-align:center;padding:4px 0 2px;">Drag ⠇ to reorder'+
         (hasManual?' &nbsp;·&nbsp; <a href="#" style="color:#aaa" id="saved-autosort-link">↺ Auto-sort</a>':'')+'</div>';

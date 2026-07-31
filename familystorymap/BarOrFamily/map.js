@@ -24,6 +24,7 @@ const CC = {
   'war':      '#a4402f',   // deep crimson — the war years and the wandering
   'israel':   '#c9a227',   // gold — the new life in Israel
   'memorial': '#5b4b6e',   // muted violet — the journeys back, and the memorials
+  'baror':    '#2f8f8f',   // teal — Zehava's own family, the life that followed
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────
@@ -33,6 +34,7 @@ const CL = {
   'war':      'שנות המלחמה והנדודים',
   'israel':   'ישראל — הבית החדש',
   'memorial': 'מסעות החזרה והזיכרון',
+  'baror':    'בר־אור — המשפחה שאחרי',
 };
 
 // ─── Region colours ────────────────────────────────────────────────────────────
@@ -44,6 +46,7 @@ const NBHD_COLORS = {
   'europe':     '#6b8e4e',
   'israel':     '#c9a227',
   'memorial':   '#5b4b6e',
+  'america':    '#2f8f8f',
 };
 
 // ─── Region display labels ─────────────────────────────────────────────────────
@@ -55,6 +58,7 @@ const NBHD_LABELS = {
   'europe':     'גרמניה וצרפת',
   'israel':     'ישראל',
   'memorial':   'אתרי זיכרון',
+  'america':    'ארצות הברית',
 };
 
 // ─── Region approximate centres ───────────────────────────────────────────────
@@ -66,6 +70,7 @@ const NBHD_APPROX_CENTERS = {
   'europe':     { lat: 48.50, lng:  8.50 },
   'israel':     { lat: 32.50, lng: 34.95 },
   'memorial':   { lat: 50.50, lng: 19.20 },
+  'america':    { lat: 42.28, lng: -83.74 },
 };
 
 // ─── Region circle override ───────────────────────────────────────────────────
