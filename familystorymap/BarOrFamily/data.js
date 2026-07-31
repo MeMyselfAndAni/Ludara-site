@@ -1,7 +1,8 @@
 // A Perfect Story Map — Family Edition
 // familystorymap / BarOrFamily / data.js
 //
-// 32 places from "הספר של זהבה" (Zehava Bar-Or, updated 06.2018), a memoir about
+// 33 places from "תינוקת בשמיכת פוך" ("A Baby in an Eiderdown"),
+// Zehava Bar-Or, updated 06.2018 — a memoir about
 // her mother Chaya of Wolbrom. Mapped July 2026.
 //
 // HEBREW ONLY — unlike LandoKliotFamily this guide is single-language.

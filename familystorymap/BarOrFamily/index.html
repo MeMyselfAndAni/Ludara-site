@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>סיפור המשפחה שלנו — משפחת אורבך ובר־אור | Family Story Map by Ludara.AI</title>
+<title>תינוקת בשמיכת פוך — מפת סיפור המשפחה | Family Story Map by Ludara.AI</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="robots" content="noindex, nofollow"><!-- private family edition — keep out of search engines -->
 <!-- UNLISTED CONCEPT DEMO — do not index, do not share publicly -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Family Story Map by Ludara.AI">
-<meta name="description" content="סיפורה של משפחה אחת על מפה אינטראקטיבית אחת: מוולברום שבפולין, דרך אוקראינה, הרי האורל ואוזבקיסטן, ועד קריית ביאליק. על פי "הספר של זהבה". Family Story Map by Ludara.AI.">
+<meta name="description" content="מפת סיפור משפחה על פי הספר &laquo;תינוקת בשמיכת פוך&raquo; מאת זהבה בר־אור: מוולברום שבפולין, דרך אוקראינה, הרי האורל ואוזבקיסטן, ועד קריית ביאליק. Family Story Map by Ludara.AI.">
 <link rel="canonical" href="https://ludara.ai/familystorymap/barorfamily/">
-<meta property="og:title" content="סיפור המשפחה שלנו — על פי ספרה של זהבה">
+<meta property="og:title" content="תינוקת בשמיכת פוך — מפת סיפור המשפחה">
 <meta property="og:description" content="מוולברום שבפולין, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק: סיפורה של חיה ובתה זהבה, על מפה אחת.">
 <meta property="og:url" content="https://ludara.ai/familystorymap/barorfamily/">
 <meta property="og:image" content="https://ludara.ai/familystorymap/barorfamily/images/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="סיפור המשפחה שלנו — על פי ספרה של זהבה">
+<meta name="twitter:title" content="תינוקת בשמיכת פוך — מפת סיפור המשפחה">
 <meta name="twitter:description" content="מוולברום שבפולין, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק: סיפורה של חיה ובתה זהבה, על מפה אחת.">
 <meta name="twitter:image" content="https://ludara.ai/familystorymap/barorfamily/images/og-image.jpg">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebPage",
- "name":"סיפור המשפחה שלנו — משפחת אורבך ובר־אור",
+ "name":"תינוקת בשמיכת פוך — מפת סיפור המשפחה",
  "url":"https://ludara.ai/familystorymap/barorfamily/",
  "description":"A private family-history map: every place the family lived across a century, with photos from the family archive.",
  "isAccessibleForFree":true,
@@ -123,12 +123,52 @@
   /* Image — show full, preserve aspect ratio */
   .pc-photo-img { width:100% !important; height:100% !important; object-fit:contain !important; object-position:center center !important; display:block !important; background:transparent !important; }
 
-  /* ── Splash card — Galilee hills backdrop (Maria's photo, images/splash.jpg) ── */
-  /* Dark wash over the landscape so the gold title stays readable. */
+  /* ── Splash card ───────────────────────────────────────────────────────────
+     The book's own cover is shown as an object (.splash-cover) rather than used as
+     wallpaper — the child's face in that photograph is the point of it, and text laid
+     across the face both obscured it and made the type hard to read.
+     The backdrop is the same photograph blurred and pushed to near-black, so it gives
+     the card depth and nothing else. Everything readable sits on a dark, even field. */
   .splash { background:
-    linear-gradient(rgba(12,10,7,0.28), rgba(12,10,7,0.58)),
-    url('images/splash.jpg') center / cover no-repeat #0f0d0a !important; }
+    linear-gradient(rgba(9,8,6,0.72), rgba(9,8,6,0.86)),
+    url('images/splash.jpg') center / cover no-repeat #0b0a07 !important; }
+  .splash-cover {
+    display: block;
+    margin: 4px auto 14px;
+    max-height: 40vh;
+    max-width: min(300px, 74vw);
+    width: auto; height: auto;
+    border-radius: 3px;
+    border: 1px solid rgba(212,168,75,0.45);
+    box-shadow: 0 22px 52px rgba(0,0,0,0.72), 0 2px 0 rgba(255,255,255,0.06) inset;
+  }
   .splash .splash-footer a { color: #d4a84b !important; }
+  /* Desktop splash: the jacket added ~290px of height, which pushed the eyebrow off
+     the top and the credit line off the bottom on a 700-820px-tall window. Tighten the
+     desktop rhythm so the whole card fits without scrolling, and let it scroll anyway
+     on anything shorter rather than clipping. */
+  .splash { overflow-y: auto !important; }
+  @media (min-width: 601px) {
+    .splash-inner   { padding: 30px 36px 26px !important; }
+    .splash-eyebrow { margin-bottom: 10px !important; }
+    .splash-cover   { max-height: min(31vh, 290px) !important; margin: 2px auto 12px !important; }
+    .splash-sample  { margin: 2px 0 0 !important; }
+    .splash-ornament{ margin: 6px auto 8px !important; }
+    .splash-sub     { font-size: 1.18rem !important; line-height: 1.6 !important;
+                      margin: 0 auto 20px !important; }
+    .splash-footer  { margin-top: 18px !important; }
+    .splash-footer p{ margin-top: 8px !important; }
+  }
+  /* Laptop screens (a 1440x700 window is the common case) need one tighter step. */
+  @media (min-width: 601px) and (max-height: 860px) {
+    .splash-inner   { padding: 18px 32px 18px !important; }
+    .splash-eyebrow { font-size: 0.82rem !important; margin-bottom: 6px !important; }
+    .splash-cover   { max-height: 25vh !important; margin: 0 auto 10px !important; }
+    .splash-ornament{ margin: 4px auto 6px !important; }
+    .splash-sub     { font-size: 1.05rem !important; margin-bottom: 14px !important; }
+    .splash-footer  { margin-top: 12px !important; }
+    .splash-footer p{ font-size: 0.66rem !important; margin-top: 6px !important; }
+  }
   /* Story Path — the signature button, bold gold */
   a.pill-tour { border-color: #2a7a72 !important; color: #2a7a72 !important; text-decoration: none; font-weight: 700; }
   a.pill-tour:hover { background: #2a7a72 !important; color: white !important; }
@@ -174,6 +214,25 @@
     color: #6a5a3a;
     text-transform: uppercase;
     margin-bottom: 30px;
+  }
+  /* The line Maria asked for: "a Family Story Map based on ...". It is the h1, so the
+     book's title is real text — readable, selectable, and announced by screen readers —
+     not only lettering baked into the jacket photograph. */
+  .splash-basedon {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.05rem, 3.4vw, 1.45rem);
+    font-weight: 400;
+    line-height: 1.55;
+    color: #efe0c2;
+    margin: 0 0 4px;
+    max-width: 34ch;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.85);
+  }
+  .splash-basedon .bookname {
+    display: block;
+    font-weight: 700;
+    font-size: 1.34em;
+    color: #edc169;
   }
   .splash-ornament {
     display: block;
@@ -243,6 +302,10 @@
     .splash-title      { font-size: 2.05rem !important; line-height: 1.06 !important;
                          margin: 0 0 4px !important; }
     .splash-sample     { font-size: 0.92rem !important; line-height: 1.45 !important; margin: 0 !important; }
+    .splash-cover      { max-height: 27vh !important; max-width: 56vw !important;
+                         margin: 0 auto 8px !important; }
+    .splash-basedon    { font-size: 0.95rem !important; line-height: 1.45 !important;
+                         margin: 0 0 2px !important; }
     .splash-ornament   { font-size: 0.8rem !important; margin: 2px auto 6px !important; }
     .splash-sub        { font-size: 0.95rem !important; line-height: 1.5 !important;
                          max-width: 100% !important; margin: 0 0 14px !important; }
@@ -355,8 +418,10 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-eyebrow">Family Story Map</div>
-    <h1 class="splash-title">סיפור המשפחה שלנו</h1>
-    <p class="splash-sample" style="unicode-bidi:plaintext;">על פי "הספר של זהבה"</p>
+    <img class="splash-cover" src="images/book-cover.jpg"
+         alt="עטיפת הספר &laquo;תינוקת בשמיכת פוך&raquo; מאת זהבה בר־אור">
+    <h1 class="splash-basedon">מפת סיפור משפחה על פי הספר<span class="bookname">תינוקת בשמיכת פוך</span></h1>
+    <p class="splash-sample" style="unicode-bidi:plaintext;">מאת זהבה בר־אור</p>
     <span class="splash-ornament">— ✦ —</span>
     <p class="splash-sub" style="unicode-bidi:plaintext;">מוולברום שבפולין — דרך אוקראינה, הרי האורל ואוזבקיסטן — ועד קריית ביאליק: דרכה של חיה ובתה זהבה, על מפה אחת.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
@@ -364,7 +429,7 @@
     </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/familystorymap/" target="_blank">Family Story Map · by Ludara.AI</a>
-      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#6a5a3a;font-weight:400;letter-spacing:0;">מפה משפחתית פרטית, על פי "הספר של זהבה" (מהדורת 06.2018).</p>
+      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#9c8757;font-weight:400;letter-spacing:0;">מפה משפחתית פרטית, על פי הספר &laquo;תינוקת בשמיכת פוך&raquo; מאת זהבה בר־אור (מהדורת 06.2018).</p>
     </div>
   </div>
 </div>
@@ -397,7 +462,7 @@
     <div class="header-divider"></div>
     <div class="header-text">
       <h1>משפחת אורבך ובר־אור</h1>
-      <div class="header-sub">על פי "הספר של זהבה"<span class="header-sub-by"> · by Ludara</span></div>
+      <div class="header-sub">על פי &laquo;תינוקת בשמיכת פוך&raquo;<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
   <div class="header-ludara">

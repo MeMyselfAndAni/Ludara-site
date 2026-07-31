@@ -29,15 +29,15 @@
     };
   }
   var STEPS = [
-    FS({ th:'סיפור המשפחה שלנו', tr:'История нашей семьи', te:'Our Family Story', be:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.',
-         bh:'מפה אחת, מאה שנים של מסעות משפחה: מהעיירות בבלארוס, דרך המלחמה והפינוי, עד ישראל של היום. הסיור הקצר הזה מראה איך מטיילים בה.',
+    FS({ th:'תינוקת בשמיכת פוך', tr:'История нашей семьи', te:'Our Family Story', be:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.',
+         bh:'מפה אחת, מאה שנים של מסע: מוולברום שבפולין, דרך אוקראינה, הרי האורל ואוזבקיסטן, ועד קריית ביאליק. הסיור הקצר הזה מראה איך מטיילים בה.',
          br:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.' }),
     FS({ th:'מסע המשפחה', tr:'Путь семьи', te:'The Family Path', be:'The gold button draws the whole family journey in order — from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.',
          bh:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מוולברום, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
          br:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
          target:'#pill-storypath', demo:'close-saved-pulse' }),
     FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped', be:'Every pin is a chapter of the family\'s life: the city where grandmother Nina was born, the village where grandfather Zakhar was saved, the home in Tambov. Tap any icon to read what happened there.',
-         bh:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
+         bh:'כל סיכה היא פרק בסיפור: העיירה שבה גדלה חיה, קרון המשא שבו נסעו, הבקתה שליד טשקנט, הבית הראשון בישראל. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
          br:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
          demo:'open-card-delayed-no-heart' }),
     FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom — what is there today.',
@@ -49,7 +49,7 @@
          br:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
          target:'#topbar-search', closeCard:true, demo:'scroll-filter' }),
     FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions', be:'Each bubble is a chapter of geography: Belarus & Lithuania, Russia, the Urals & Asia, Ukraine, Israel. Tap one to zoom straight into that part of the journey.',
-         bh:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל. לחיצה מקרבת ישר לאותו חלק של המסע.',
+         bh:'כל בועה היא פרק גאוגרפי: פולין, אוקראינה, האורל וסיביר, אוזבקיסטן, אירופה, ישראל ואתרי הזיכרון. לחיצה מקרבת ישר לאותו חלק של המסע.',
          br:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
          target:'#nbhd-bar', closeCard:true }),
     FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The tree button opens the family tree — the whole family in three colored branches. Click a person and their life journey appears on the map; the branch buttons highlight each family name, and the mouse wheel zooms.',

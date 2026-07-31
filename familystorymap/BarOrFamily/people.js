@@ -1,7 +1,7 @@
 // A Perfect Story Map — Family Edition
 // familystorymap / BarOrFamily / people.js
 //
-// 27 people from "הספר של זהבה". HEBREW ONLY.
+// 27 people from "תינוקת בשמיכת פוך" (Zehava Bar-Or). HEBREW ONLY.
 //
 // ⚠️ The book NEVER names Chaya's brothers and sisters. The single entry
 // 'chaya_siblings' stands for all of them on purpose. Do not invent names.

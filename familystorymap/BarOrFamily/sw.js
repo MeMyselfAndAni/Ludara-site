@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apsm-barorfamily-shell-v1';   // bump this on every deploy to push updates
+var SHELL_CACHE = 'apsm-barorfamily-shell-v2';   // bump this on every deploy to push updates
 var TILE_CACHE  = 'apsm-barorfamily-tiles-v1';
 
 var SHELL_FILES = [
