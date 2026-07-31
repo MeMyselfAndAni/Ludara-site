@@ -32,9 +32,16 @@ if not exist "%DEPLOY%" (
 )
 if not exist "%DEPLOY%\images" mkdir "%DEPLOY%\images"
 
+rem --- The deploy list. ADD ANY NEW FILE HERE or it will never reach the live site. ---
+rem     lang.js was missing from this list until 2026-07-30: it was created after this
+rem     script was written, so the trilingual engine was only ever live because it was
+rem     copied by hand. sw.js precaches ./lang.js, so a missing lang.js also breaks
+rem     offline mode. The check further down now catches this class of mistake.
+set "FILES=index.html data.js people.js lang.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js ui-tree.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js"
+
 echo.
 echo Copying story map files into the live site...
-for %%F in (index.html data.js people.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js ui-tree.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js) do (
+for %%F in (%FILES%) do (
   if exist "%WORKING%\%%F" (
     copy /Y "%WORKING%\%%F" "%DEPLOY%\%%F" >nul && echo   copied %%F
   ) else (
@@ -43,11 +50,30 @@ for %%F in (index.html data.js people.js map.js map-core.js ui-card.js ui-filter
 )
 
 echo.
-echo Copying images (place-*.jpg, splash, og) into the live site...
-if exist "%WORKING%\images\*.jpg" (
-  copy /Y "%WORKING%\images\*.jpg" "%DEPLOY%\images\" >nul && echo   copied images\*.jpg
+echo Checking for working files that are NOT on the deploy list...
+set "UNLISTED="
+for %%F in ("%WORKING%\*.js" "%WORKING%\*.css" "%WORKING%\*.html" "%WORKING%\*.svg") do (
+  set "HIT="
+  for %%L in (%FILES%) do if /I "%%~nxF"=="%%L" set "HIT=1"
+  if not defined HIT set "UNLISTED=!UNLISTED! %%~nxF"
+)
+if defined UNLISTED (
+  echo.
+  echo   [WARNING] These files exist in the working folder but will NOT be deployed:
+  echo            !UNLISTED!
+  echo   If the site needs one of them, add it to the FILES list at the top of this
+  echo   script, then run this again. Press a key to continue anyway.
+  pause
 ) else (
-  echo   [skip] no images\*.jpg yet
+  echo   OK - every .js/.css/.html/.svg in the working folder is on the deploy list.
+)
+
+echo.
+echo Copying images (place-*, splash, og) into the live site...
+for %%E in (jpg jpeg png webp svg) do (
+  if exist "%WORKING%\images\*.%%E" (
+    copy /Y "%WORKING%\images\*.%%E" "%DEPLOY%\images\" >nul && echo   copied images\*.%%E
+  )
 )
 
 echo.
