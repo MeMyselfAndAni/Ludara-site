@@ -80,13 +80,11 @@ async function generatePDF(overridePlaces, customSubtitle){
     day: 'numeric', month: 'long', year: 'numeric'
   });
 
-  // Use OSRM stats from planFavTrip() if already fetched, otherwise fetch now
-  const _routeStats = (typeof _lastRouteStats !== 'undefined' && _lastRouteStats)
-    ? _lastRouteStats
-    : await _fetchRouteStats(places);
-
-  const totalM    = _routeStats.distM;
-  const totalMins = _routeStats.walkMins;
+  // NOTE (Family Edition): no route/leg stats here on purpose.
+  // The city guides print "~N min walk/drive to next stop" between cards, which is
+  // meaningless for a family history spanning Belarus → Russia → Israel across a century.
+  // The OSRM fetch (_fetchRouteStats) is deliberately NOT called — it is slow, it fails
+  // on intercontinental legs, and nothing in this PDF uses the result.
 
   // Build HTML for each place card
   const cards = places.map((p, i) => {
@@ -109,13 +107,6 @@ async function generatePDF(overridePlaces, customSubtitle){
 
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
     const qrUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(mapsUrl)}`;
-
-    const distNext = i < places.length-1 ? _routeStats.distM / Math.max(places.length-1,1) : null;
-    const legMode  = _routeStats.legModes ? _routeStats.legModes[i] : (_routeStats.travelMode || 'walk');
-    const modeLabel = legMode === 'driving' ? '🚗 drive' : legMode === 'boat' ? '⛵ vaporetto' : '🚶 walk';
-    const walkNext = i < places.length-1
-      ? `<div class="pdf-walk">↓ ~${_routeStats.legMins[i]} min ${modeLabel} to next stop</div>`
-      : '';
 
     return `
     <div class="pdf-card">
@@ -140,8 +131,7 @@ async function generatePDF(overridePlaces, customSubtitle){
           ${p.website ? `<a class="pdf-website" href="${p.website}">${p.website.replace('https://','')}</a>` : ''}
         </div>
       </div>
-    </div>
-    ${walkNext}`;
+    </div>`;
   }).join('');
 
   const html = `<!DOCTYPE html>
@@ -266,10 +256,16 @@ async function generatePDF(overridePlaces, customSubtitle){
     background: white;
   }
   .pdf-card-photo {
-    width: 220px;
+    width: 260px;
     flex-shrink: 0;
-    background-size: cover;
+    /* Family Edition: archive photos are irreplaceable and often wide group shots,
+       so show the WHOLE frame rather than a centre crop. 'cover' was cutting group
+       photos down to one shoulder. Matches .pc-photo-img (contain) on screen. */
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
+    background-color: #efeae1;
+    border-right: 1px solid #e8e4dc;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
