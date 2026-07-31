@@ -226,13 +226,34 @@
   .splash-footer a { color: var(--brand); text-decoration: none; font-weight: 700; font-size: 1rem; }
   .splash-footer a:hover { color: var(--brand); }
 
+  /* ── Mobile splash (fixed 31 Jul 2026) ──────────────────────────────────
+     Was: type inflated to 1.2-1.35rem AND `.splash-sub br {display:none}`, which
+     ran all three languages together into one wall of text. The .splash box is
+     position:fixed with no scroll, so everything below the fold, including the
+     three language buttons, was unreachable on a phone.
+     Now: the container scrolls, the line breaks are back, and the type is sized
+     so the whole thing fits a 390x844 screen without scrolling at all. */
   @media (max-width: 600px) {
-    .splash-inner      { padding: 36px 20px 28px !important; }
-    .splash-sub        { font-size: 1.2rem !important; line-height: 1.55 !important; max-width: 100% !important; }
-    .splash-sub br     { display: none; }
-    .splash-sample     { font-size: 1.35rem !important; }
-    .splash-tagline    { font-size: 0.72rem !important; }
-    .splash-footer a   { font-size: 1rem !important; color: var(--brand) !important; }
+    .splash            { align-items: flex-start !important; overflow-y: auto !important;
+                         -webkit-overflow-scrolling: touch; padding: 0 !important; }
+    .splash-inner      { padding: 20px 18px 30px !important; gap: 9px !important;
+                         margin: auto 0 !important; }
+    .splash-eyebrow    { font-size: 0.68rem !important; letter-spacing: 0.24em !important;
+                         margin-bottom: 6px !important; }
+    .splash-title      { font-size: 2.05rem !important; line-height: 1.06 !important;
+                         margin: 0 0 4px !important; }
+    .splash-sample     { font-size: 0.92rem !important; line-height: 1.45 !important; margin: 0 !important; }
+    .splash-ornament   { font-size: 0.8rem !important; margin: 2px auto 6px !important; }
+    .splash-sub        { font-size: 0.95rem !important; line-height: 1.5 !important;
+                         max-width: 100% !important; margin: 0 0 14px !important; }
+    .splash-sub br     { display: block; }
+    .splash-sub .sub-en{ font-size: 1.06em !important; }
+    .splash-btn        { font-size: 0.66rem !important; letter-spacing: 0.14em !important;
+                         padding: 11px 14px !important; width: 100% !important; }
+    .splash-tagline    { font-size: 0.68rem !important; }
+    .splash-footer     { margin-top: 4px !important; }
+    .splash-footer a   { font-size: 0.86rem !important; color: var(--brand) !important; }
+    .splash-footer p   { font-size: 0.62rem !important; line-height: 1.4 !important; }
   }
   .splash-tagline {
     font-family: 'Cinzel Decorative', serif;
@@ -311,10 +332,9 @@
   <div class="splash-inner">
     <div class="splash-eyebrow">Family Story Map</div>
     <h1 class="splash-title">Our Family Story</h1>
-    <p class="splash-sample" style="margin-top:2px;font-style:italic;unicode-bidi:plaintext;">סיפור המשפחה שלנו &middot; История нашей семьи</p>
-    <p class="splash-sample" style="unicode-bidi:plaintext;">from the memoirs of Anna &middot; על פי זיכרונותיה של אנה &middot; по воспоминаниям Анны</p>
+    <p class="splash-sample" style="unicode-bidi:plaintext;">from the memoirs of Anna</p>
     <span class="splash-ornament">— ✦ —</span>
-    <p class="splash-sub" style="unicode-bidi:plaintext;"><span class="sub-en">From Bobruisk and Vitebsk — through Tambov, the Urals and Odessa — to Rehovot and Jerusalem: a century of family journeys on one map.</span><br>מבוברויסק ומוויטבסק, דרך טמבוב, אוראל ואודסה — עד רחובות וירושלים: מאה שנים של מסעות משפחה על מפה אחת.<br>Из Бобруйска и Витебска — через Тамбов, Урал и Одессу — до Реховота и Иерусалима: сто лет семейных дорог на одной карте.</p>
+    <p class="splash-sub" style="unicode-bidi:plaintext;">From Bobruisk and Vitebsk — through Tambov, the Urals and Odessa — to Rehovot and Jerusalem: a century of family journeys on one map.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <button class="splash-btn splash-btn-primary" onclick="setLangAndEnter('en')">English — enter the story</button>
       <button class="splash-btn" onclick="setLangAndEnter('he')">עברית — להיכנס לסיפור</button>
@@ -322,7 +342,7 @@
     </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/familystorymap/" target="_blank">Family Story Map · by Ludara.AI</a>
-      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#6a5a3a;font-weight:400;letter-spacing:0;">A private family map, from Part I of the memoirs. Pictured: the family in Israel, today. &middot; מפה משפחתית פרטית, על פי FamilyMemories חלק א׳. &middot; Частная семейная карта по первой части воспоминаний.</p>
+      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#6a5a3a;font-weight:400;letter-spacing:0;">A private family map, from Part I of the memoirs. Pictured: the family in Israel, today.</p>
     </div>
   </div>
 </div>
@@ -343,7 +363,7 @@
 <!-- Loading -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Loading the story… · טוענים את הסיפור… · Загружаем историю…</div>
+  <div class="loading-text">Loading the story…</div>
 </div>
 
 <!-- Header -->
