@@ -18,6 +18,7 @@ const PLACES = [
   // ── פולין — השורשים ──
   {
     id: 1,
+    years: 'עד 1939 · שיבה בסתיו 1946',
     nbhd: 'poland',
     name: 'וולברום',
     cat: 'narcyz',
@@ -33,6 +34,7 @@ const PLACES = [
   },
   {
     id: 2,
+    years: '',
     nbhd: 'poland',
     name: 'הנחל שבפאתי וולברום',
     cat: 'narcyz',
@@ -49,6 +51,7 @@ const PLACES = [
   },
   {
     id: 3,
+    years: 'לפני 1939 · 1946',
     nbhd: 'poland',
     name: 'סוסנוביץ',
     cat: 'urbach',
@@ -64,6 +67,7 @@ const PLACES = [
   },
   {
     id: 4,
+    years: 'לפני המלחמה · ביקור בקיץ 1998',
     nbhd: 'poland',
     name: 'קרקוב',
     cat: 'urbach',
@@ -79,6 +83,7 @@ const PLACES = [
   },
   {
     id: 5,
+    years: 'לפני המלחמה',
     nbhd: 'poland',
     name: 'זקופנה',
     cat: 'narcyz',
@@ -94,6 +99,7 @@ const PLACES = [
   },
   {
     id: 6,
+    years: '',
     nbhd: 'poland',
     name: 'מחנה פייסקרצ׳אם',
     cat: 'war',
@@ -111,6 +117,7 @@ const PLACES = [
   // ── אוקראינה — הלידה והאובדן ──
   {
     id: 7,
+    years: '~1939–1942',
     nbhd: 'ukraine',
     name: 'העיירה שבה נולדתי — שמה אינו ידוע',
     cat: 'war',
@@ -129,6 +136,7 @@ const PLACES = [
   // ── מזרחה — רכבות המשא ──
   {
     id: 8,
+    years: '1942',
     nbhd: 'east',
     name: 'הרי אוּרַל וערבות סיביר',
     cat: 'war',
@@ -147,6 +155,7 @@ const PLACES = [
   // ── אוזבקיסטן — המקלט ──
   {
     id: 9,
+    years: '~1942–1945',
     nbhd: 'uzbekistan',
     name: 'טשקנט',
     cat: 'war',
@@ -162,6 +171,7 @@ const PLACES = [
   },
   {
     id: 10,
+    years: '~1942–1945',
     nbhd: 'uzbekistan',
     name: 'הכפר שליד טשקנט — שמו אינו ידוע',
     cat: 'war',
@@ -178,6 +188,7 @@ const PLACES = [
   },
   {
     id: 11,
+    years: '~1945–1946',
     nbhd: 'uzbekistan',
     name: 'בוכרה',
     cat: 'war',
@@ -193,6 +204,7 @@ const PLACES = [
   },
   {
     id: 12,
+    years: '~1945–1946',
     nbhd: 'east',
     name: 'עיירה שאת שמה לא ידעתי',
     cat: 'war',
@@ -211,6 +223,7 @@ const PLACES = [
   // ── גרמניה וצרפת — הדרך ארצה ──
   {
     id: 13,
+    years: '~1946–1949',
     nbhd: 'europe',
     name: 'הופגייסמר',
     cat: 'war',
@@ -226,6 +239,7 @@ const PLACES = [
   },
   {
     id: 14,
+    years: '',
     nbhd: 'europe',
     name: 'קאסל',
     cat: 'war',
@@ -241,6 +255,7 @@ const PLACES = [
   },
   {
     id: 15,
+    years: 'פברואר 1949',
     nbhd: 'europe',
     name: 'מרסיי',
     cat: 'war',
@@ -258,6 +273,7 @@ const PLACES = [
   // ── ישראל — הבית החדש ──
   {
     id: 16,
+    years: 'ראשית מרץ 1949',
     nbhd: 'israel',
     name: 'נמל חיפה',
     cat: 'israel',
@@ -273,6 +289,7 @@ const PLACES = [
   },
   {
     id: 17,
+    years: '1949',
     nbhd: 'israel',
     name: 'נתניה',
     cat: 'israel',
@@ -288,6 +305,7 @@ const PLACES = [
   },
   {
     id: 18,
+    years: '1949–1950 ואילך',
     nbhd: 'israel',
     name: 'קריית מוצקין',
     cat: 'israel',
@@ -303,6 +321,7 @@ const PLACES = [
   },
   {
     id: 19,
+    years: '',
     nbhd: 'israel',
     name: 'תל-אביב',
     cat: 'israel',
@@ -318,6 +337,7 @@ const PLACES = [
   },
   {
     id: 20,
+    years: '',
     nbhd: 'israel',
     name: 'ירושלים',
     cat: 'israel',
@@ -333,6 +353,7 @@ const PLACES = [
   },
   {
     id: 21,
+    years: '9 במאי 1971',
     nbhd: 'israel',
     name: 'בית עלמין צור שלום (קרית ביאליק)',
     cat: 'israel',
@@ -349,6 +370,7 @@ const PLACES = [
   },
   {
     id: 22,
+    years: '',
     nbhd: 'europe',
     name: 'נמל התעופה בפרנקפורט',
     cat: 'memorial',
@@ -366,6 +388,7 @@ const PLACES = [
   // ── מסעות החזרה ואתרי הזיכרון ──
   {
     id: 23,
+    years: 'ביקור: קיץ 1998',
     nbhd: 'memorial',
     name: 'אושוויץ־בירקנאו',
     cat: 'memorial',
@@ -382,6 +405,7 @@ const PLACES = [
   },
   {
     id: 24,
+    years: 'ביקור: קיץ 1998',
     nbhd: 'memorial',
     name: 'פלשוב',
     cat: 'memorial',
@@ -397,6 +421,7 @@ const PLACES = [
   },
   {
     id: 25,
+    years: '',
     nbhd: 'memorial',
     name: 'ורשה',
     cat: 'memorial',
@@ -412,6 +437,7 @@ const PLACES = [
   },
   {
     id: 26,
+    years: '',
     nbhd: 'memorial',
     name: 'טרבלינקה',
     cat: 'memorial',
@@ -427,6 +453,7 @@ const PLACES = [
   },
   {
     id: 27,
+    years: '',
     nbhd: 'memorial',
     name: 'מיידאנק',
     cat: 'memorial',
@@ -442,6 +469,7 @@ const PLACES = [
   },
   {
     id: 28,
+    years: '',
     nbhd: 'memorial',
     name: 'טרזינשטאט',
     cat: 'memorial',
@@ -457,6 +485,7 @@ const PLACES = [
   },
   {
     id: 29,
+    years: '',
     nbhd: 'memorial',
     name: 'דכאו',
     cat: 'memorial',
@@ -472,6 +501,7 @@ const PLACES = [
   },
   {
     id: 30,
+    years: '',
     nbhd: 'memorial',
     name: 'מינכן',
     cat: 'memorial',
@@ -487,6 +517,7 @@ const PLACES = [
   },
   {
     id: 31,
+    years: '',
     nbhd: 'memorial',
     name: 'מוזיאון השואה בוושינגטון',
     cat: 'memorial',
@@ -502,6 +533,7 @@ const PLACES = [
   },
   {
     id: 32,
+    years: '',
     nbhd: 'memorial',
     name: 'בקעת הקהילות- \'יד ושם\'',
     cat: 'memorial',
@@ -520,6 +552,7 @@ const PLACES = [
   // ── ארצות הברית — השנים שאחרי ──
   {
     id: 33,
+    years: '1976–1979',
     nbhd: 'america',
     name: 'אן ארבור, מישיגן',
     cat: 'baror',

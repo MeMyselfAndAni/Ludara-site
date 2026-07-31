@@ -263,8 +263,8 @@ function renderList(){
       }
     }
     filtered = sorted;
-    const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} on map` : '';
-    document.getElementById('sheet-title').textContent = `🔖 ${sorted.length} Bookmarked${catNote}`;
+    const catNote = (AF && AF !== 'all') ? ` · +${CL[AF]||AF} על המפה` : '';
+    document.getElementById('sheet-title').textContent = `🔖 ${sorted.length} סימניות${catNote}`;
     document.getElementById('list-badge').textContent = sorted.length;
 
     // Banner with auto-sort reset button
@@ -275,9 +275,9 @@ function renderList(){
       banner.id = 'saved-mode-banner';
       banner.className = 'saved-mode-banner';
       const hasManual = !!_getSavedOrder();
-      banner.innerHTML = `<span>Drag ⠿ to reorder stops</span>
-        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 Itinerary</button>
-        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">↺ Auto</button>' : ''}`;
+      banner.innerHTML = `<span>גררו ⠿ כדי לשנות את הסדר</span>
+        <button class="saved-plan-btn" onclick="planFavTrip()">🗺 מסלול</button>
+        ${hasManual ? '<button class="saved-plan-btn" style="margin-left:4px" onclick="_clearSavedOrder();renderList();if(typeof drawSavedRoute===\'function\')drawSavedRoute()">↺ אוטומטי</button>' : ''}`;
       const header = sheet.querySelector('.sheet-header');
       if(header) header.insertAdjacentElement('afterend', banner);
     } else {
@@ -288,7 +288,7 @@ function renderList(){
         const btn = document.createElement('button');
         btn.className = 'saved-plan-btn saved-auto-reset';
         btn.style.marginLeft = '4px';
-        btn.textContent = '↺ Auto';
+        btn.textContent = '↺ אוטומטי';
         btn.onclick = function(){ _clearSavedOrder(); renderList(); if(typeof drawSavedRoute==='function') drawSavedRoute(); };
         banner.appendChild(btn);
       } else if(!hasManual && autoBtn){
@@ -297,14 +297,15 @@ function renderList(){
     }
 
     el.innerHTML = allSaved.length === 0
-      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">Tap 🔖 on any place<br>to bookmark it here</div>'
+      ? '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;">הקישו 🔖 על מקום<br>כדי לשמור אותו כאן</div>'
       : sorted.map((p,i) => `
         <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}" draggable="true" data-id="${p.id}" style="cursor:grab">
           <span class="drag-handle" style="font-size:1.1rem;color:#ccc;margin:0 6px 0 2px;cursor:grab;flex-shrink:0;touch-action:none">⠿</span>
-          <div class="trip-stop-num" style="margin:0 8px 0 0;flex-shrink:0">${i+1}</div>
+          <div class="stop-num" style="background:${CC[p.cat]};margin:0 8px 0 0">${p.id}</div>
           <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
           <div class="place-info">
             <div class="place-name">${p.name}</div>
+            ${p.years ? `<div class="stop-years">${p.years}</div>` : ''}
             <div class="place-type">${CL[p.cat]}</div>
             <div class="place-addr">${p.address}</div>
           </div>
@@ -344,8 +345,8 @@ function renderList(){
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
   const _titleText = _searchQuery
-    ? (count + ' match' + (count !== 1 ? 'es' : ''))
-    : (nbhdName + count + ' Places');
+    ? (count + (count === 1 ? ' תוצאה' : ' תוצאות'))
+    : (nbhdName + count + (count === 1 ? ' מקום' : ' מקומות'));
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
@@ -353,15 +354,17 @@ function renderList(){
   const _actionRow = `
     <div style="display:flex;padding:8px 10px 6px;gap:5px;">
       <button class="saved-action-btn" onclick="if(typeof generateStoryPathPDF==='function')generateStoryPathPDF()" style="flex:1">📄 PDF</button>
-      <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 Share</button>
+      <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 שיתוף</button>
     </div>`;
 
   el.innerHTML = _actionRow + filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
+      <div class="stop-num" style="background:${CC[p.cat]}">${p.id}</div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
       <div class="place-info">
-        <div class="place-name">${p.name}</div>
+        <div class="place-name">${p.name}${p.uncertain ? ' <span class="stop-flag" title="הספר אינו ודאי לגבי מקום זה">⚠️</span>' : ''}</div>
+        ${p.years ? `<div class="stop-years">${p.years}</div>` : ''}
         <div class="place-type">${CL[p.cat]}</div>
         <div class="place-addr">${p.address}</div>
       </div>

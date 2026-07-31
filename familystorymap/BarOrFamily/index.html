@@ -272,6 +272,41 @@
     margin: 10px 0 0;
     line-height: 1.6;
   }
+
+  /* ── Place list: a big stop number, and the years shown as their own line ──
+     Added 31 Jul 2026. The number is the place id, i.e. its position in the
+     family's journey, so the list reads as a numbered itinerary. */
+  .stop-num {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem; font-weight: 800;
+    color: #fff;
+    margin-inline-end: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+    letter-spacing: -0.02em;
+  }
+  .stop-years {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #8a6d2f;
+    margin: 1px 0 3px;
+    letter-spacing: 0.01em;
+    /* plaintext keeps a mixed "עד 1939 · 1946" string in the right internal order,
+       but it also makes a digit-initial string like "~1942–1945" resolve LTR and
+       drift to the opposite edge of the row. Pin the alignment back to the RTL
+       start edge so every year line sits under the place name. */
+    unicode-bidi: plaintext;
+    text-align: right;
+  }
+  .stop-flag { font-size: 0.8rem; margin-inline-start: 4px; opacity: 0.85; }
+  @media (max-width: 600px) {
+    .stop-num   { width: 34px; height: 34px; font-size: 0.95rem; margin-inline-end: 8px; }
+    .stop-years { font-size: 0.8rem; }
+  }
 </style>
 
 <script>

@@ -53,19 +53,19 @@
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
       /* Branch highlight — select a last name, its branch lights up, the rest dims */
-      #tree-svg.hl-kliot     .tree-node:not(.br-kliot),
-      #tree-svg.hl-friedland .tree-node:not(.br-friedland),
-      #tree-svg.hl-lando     .tree-node:not(.br-lando) { opacity:0.16; }
-      #tree-svg.hl-kliot     .tree-edge:not(.br-kliot),
-      #tree-svg.hl-friedland .tree-edge:not(.br-friedland),
-      #tree-svg.hl-lando     .tree-edge:not(.br-lando) { opacity:0.10; }
-      #tree-svg.hl-kliot     .tree-node.br-kliot rect     { fill:#f2f7ea; stroke-width:3.5; }
-      #tree-svg.hl-friedland .tree-node.br-friedland rect { fill:#eaf2fb; stroke-width:3.5; }
-      #tree-svg.hl-lando     .tree-node.br-lando rect     { fill:#e9f6f6; stroke-width:3.5; }
+      #tree-svg.hl-narcyz .tree-node:not(.br-narcyz),
+      #tree-svg.hl-urbach .tree-node:not(.br-urbach),
+      #tree-svg.hl-baror  .tree-node:not(.br-baror) { opacity:0.16; }
+      #tree-svg.hl-narcyz .tree-edge:not(.br-narcyz),
+      #tree-svg.hl-urbach .tree-edge:not(.br-urbach),
+      #tree-svg.hl-baror  .tree-edge:not(.br-baror) { opacity:0.10; }
+      #tree-svg.hl-narcyz .tree-node.br-narcyz rect { fill:#eaf2fb; stroke-width:3.5; }
+      #tree-svg.hl-urbach .tree-node.br-urbach rect { fill:#f2f7ea; stroke-width:3.5; }
+      #tree-svg.hl-baror  .tree-node.br-baror  rect { fill:#e9f6f6; stroke-width:3.5; }
       .tree-node, .tree-edge { transition:opacity 0.25s; }
-      .tree-btn.hl-on-kliot     { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
-      .tree-btn.hl-on-friedland { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
-      .tree-btn.hl-on-lando     { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
+      .tree-btn.hl-on-narcyz { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
+      .tree-btn.hl-on-urbach { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
+      .tree-btn.hl-on-baror  { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
       @media (max-width:768px){ .tree-hint { display:none; } }
     `;
     document.head.appendChild(style);
@@ -95,9 +95,9 @@
   function buildSVG(){
     canvasW = Math.max(...PEOPLE.map(p => nodeX(p))) + NW + PADX;
     canvasH = Math.max(...PEOPLE.map(p => nodeY(p))) + NH + PADY + 40;
-    const col = b => (typeof CC !== 'undefined' && CC[
-      b === 'friedland' ? 'friedland' : b === 'kliot' ? 'kliot' : 'lando'
-    ]) || '#8a7a55';
+    // Look the branch up directly. This used to map anything that wasn't
+    // friedland/kliot onto 'lando', which meant every Bar-Or branch rendered grey.
+    const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
 
     let s = '';
 
@@ -203,10 +203,10 @@
   function _applyHighlight(){
     const svg = document.getElementById('tree-svg');
     if(svg){
-      svg.classList.remove('hl-kliot','hl-friedland','hl-lando');
+      svg.classList.remove('hl-narcyz','hl-urbach','hl-baror');
       if(_hlBranch) svg.classList.add('hl-' + _hlBranch);
     }
-    ['kliot','friedland','lando'].forEach(b => {
+    ['narcyz','urbach','baror'].forEach(b => {
       const btn = document.getElementById('tree-btn-' + b);
       if(btn) btn.classList.toggle('hl-on-' + b, _hlBranch === b);
     });
