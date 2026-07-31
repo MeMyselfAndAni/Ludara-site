@@ -101,12 +101,18 @@
     [data-animate]{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease;}
     [data-animate].in{opacity:1;transform:none;}
     @media(prefers-reduced-motion:reduce){[data-animate]{opacity:1;transform:none;}}
+  
+    /* Mobile nav fix (2026-07-30): the logo and the links collided below ~640px
+       because `nav` was a non-wrapping flex row. Appended as an override so it
+       applies regardless of how the base nav rule is formatted on each page. */
+    @media (max-width: 640px) {
+      nav { flex-wrap: wrap; gap: 4px 14px; padding: 18px 20px 8px; }
+      .nav-logo { flex: 0 0 100%; margin-bottom: 2px; }
+      .nav-links { flex-wrap: wrap; gap: 8px 16px; width: 100%; }
+      .nav-links a { font-size: 13.5px; }
+      .dropdown-nav { right: auto; left: 0; max-width: calc(100vw - 40px); }
+    }
   </style>
-
-  <!-- SEO -->
-  <link rel="canonical" href="https://ludara.ai/universities.html">
-  <meta property="og:image" content="https://ludara.ai/assets/og-image.jpg">
-  <meta name="twitter:image" content="https://ludara.ai/assets/og-image.jpg">
 </head>
 <body>
 
@@ -126,6 +132,8 @@
         <a class="dd-group" href="https://ludara.ai/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
         <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books</a>
         <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/screen.html" role="menuitem">Screen</a>
+        <div class="dd-sep" aria-hidden="true"></div>
+        <a class="dd-group" href="https://ludara.ai/familystorymap.html" role="menuitem">A Family Story Map</a>
       </div>
     </div>
     <a href="https://ludara.ai/about">About</a>
@@ -224,6 +232,7 @@
   <div class="footer-links">
     <a href="https://ludara.ai">Home</a>
     <a href="https://ludara.ai/aperfectday/">A Perfect Day</a>
+    <a href="https://ludara.ai/familystorymap.html">A Family Story Map</a>
     <a href="https://ludara.ai/about">About</a>
     <a href="https://ludara.ai/contact">Contact</a>
   </div>
