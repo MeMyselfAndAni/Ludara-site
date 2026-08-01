@@ -66,6 +66,7 @@
       .tree-btn.hl-on-narcyz { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
       .tree-btn.hl-on-urbach { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
       .tree-btn.hl-on-baror  { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
+      .tree-btn.hl-on-all    { background:#d4a84b; border-color:#d4a84b; color:#16130c; }
       @media (max-width:768px){ .tree-hint { display:none; } }
     `;
     document.head.appendChild(style);
@@ -76,6 +77,7 @@
       <div class="tree-header">
         <span class="tree-title">🌳 עץ המשפחה</span>
         <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה</span>
+        <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">הכול</button>
         <button class="tree-btn" id="tree-btn-narcyz" onclick="window._treeJump('narcyz')">נֶרציס</button>
         <button class="tree-btn" id="tree-btn-urbach" onclick="window._treeJump('urbach')">אורבך</button>
         <button class="tree-btn" id="tree-btn-baror" onclick="window._treeJump('baror')">בר־אור</button>
@@ -184,6 +186,10 @@
   function render(){
     const sc = document.getElementById('tree-scroll');
     if(sc) sc.innerHTML = buildSVG();
+    // Re-assert the branch highlight: buildSVG() replaces the <svg>, so without this
+    // the class is lost on rebuild, and the "All" chip would not read as active when
+    // the tree first opens.
+    if(typeof _applyHighlight === 'function') _applyHighlight();
   }
 
   function applyZoom(){
@@ -210,9 +216,14 @@
       const btn = document.getElementById('tree-btn-' + b);
       if(btn) btn.classList.toggle('hl-on-' + b, _hlBranch === b);
     });
+    const allBtn = document.getElementById('tree-btn-all');
+    if(allBtn) allBtn.classList.toggle('hl-on-all', !_hlBranch);
   }
+  // Clicking the active branch again clears it, but that was the ONLY way back to
+  // the whole tree and nothing on screen said so. _treeJump(null) — the "הכול"
+  // button — now clears it explicitly. (Fixed 31 Jul 2026.)
   window._treeJump = branch => {
-    _hlBranch = (_hlBranch === branch) ? null : branch;   // click again to clear
+    _hlBranch = (!branch || _hlBranch === branch) ? null : branch;
     _applyHighlight();
     if(_hlBranch){
       const first = PEOPLE.filter(p => p.branch === branch).sort((a,b) => a.col - b.col)[0];

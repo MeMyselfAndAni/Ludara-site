@@ -55,9 +55,19 @@ function pickBlock(str){
 
 // ── Snapshot of the original trilingual values (taken once, on first switch) ──
 var _L10N = null;
+// The page header is snapshotted and filtered like any other static UI string.
+// It used to be hardcoded further down as L3('משפחת לנדו־קליוט', ...) — inherited
+// verbatim from the Lando-Kliot template — so entering this map overwrote the
+// correct Bar-Or header with the wrong family's name. Sourcing it from the DOM
+// means index.html stays the single place the title is written. (Fixed 31 Jul 2026.)
 var _UI_SELECTOR =
   '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
-  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn';
+  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn,' +
+  'header .header-text h1';
+// NOTE: .header-sub is deliberately NOT in this list. It wraps a nested
+// <span class="header-sub-by"> · by Ludara</span>, and this snapshot writes back with
+// textContent, which would flatten that span away — and then pickLang would drop
+// "by Ludara" as a Latin-only segment. It is already Hebrew-only in index.html.
 
 function _snapshot(){
   if(_L10N) return;
@@ -99,10 +109,6 @@ function applyLanguage(lang){
   // ── Static UI texts (restored from snapshot, then filtered) ──
   _L10N.ui.forEach(function(pair){ pair[0].textContent = pickLang(pair[1]); });
 
-  var h1 = document.querySelector('header .header-text h1');
-  if(h1) h1.textContent = L3('משפחת לנדו־קליוט', 'Семья Ландо-Клиот', 'The Lando–Kliot Family');
-  var sub = document.querySelector('.header-sub');
-  if(sub) sub.textContent = L3('על פי זיכרונותיה של אנה', 'по воспоминаниям Анны', 'from the memoirs of Anna');
   var st = document.getElementById('sheet-title');
   if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
   var si = document.getElementById('topbar-search');
