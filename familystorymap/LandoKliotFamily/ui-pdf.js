@@ -120,6 +120,7 @@ async function generatePDF(overridePlaces, customSubtitle){
         ${p.type ? `<div class="pdf-card-type">${p.type}</div>` : ''}
         <div class="pdf-card-meta">
           ${p.book ? `<span>📖 ${p.book}</span>` : ''}
+          ${p.years ? `<span>🗓 ${p.years}</span>` : ''}
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>

@@ -322,6 +322,41 @@
   /* Family Edition: bilingual HE/RU text — each paragraph aligns by its own script */
   #pc-note, #pc-tip-text { white-space: pre-line; unicode-bidi: plaintext; }
   #pc-title, #pc-type, .place-name, .place-type, .place-addr, #nbhd-title, .nbhd-label { unicode-bidi: plaintext; }
+
+  /* ── Place list: a large stop number, and the dates on their own line ───────
+     Added 31 Jul 2026. The number is the stop's position in the story order, not
+     its id (see STOP_NO in ui-filter.js), and it carries the branch colour so the
+     list is colour-coded the same way the map pins are. */
+  .stop-num {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem; font-weight: 800;
+    color: #fff;
+    margin-inline-end: 10px;
+    letter-spacing: -0.02em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .stop-years {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #8a6d2f;
+    margin: 1px 0 3px;
+    letter-spacing: 0.01em;
+    /* plaintext keeps a mixed "עד יוני 1941" string in the right internal order.
+       The page is LTR in all three languages, so a digit-initial string like
+       "~1941–1944" would resolve LTR and drift to the far side of the row; the row
+       templates set text-align per language instead. */
+    unicode-bidi: plaintext;
+  }
+  #pc-address { font-weight: 700; color: #8a6d2f; unicode-bidi: plaintext; }
+  @media (max-width: 600px) {
+    .stop-num   { width: 34px; height: 34px; font-size: 0.95rem; margin-inline-end: 8px; }
+    .stop-years { font-size: 0.8rem; }
+  }
   .splash-title { unicode-bidi: plaintext; }
 </style>
 </head>
@@ -775,7 +810,10 @@ window.addEventListener('load', function() {
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    addrEl.textContent = ''; /* reading-first card: address line removed (still in PDF + Directions) */
+    /* Reading-first card: the address line stays out, but the stop's dates now show
+       here. They used to exist only inside the address string, so the card never
+       told you when you were. */
+    addrEl.textContent = (place && place.years) ? place.years : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>

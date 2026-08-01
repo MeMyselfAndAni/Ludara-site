@@ -96,9 +96,11 @@ function _renderNbhdList(nbhd){
   el.innerHTML = places.map(p => `
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
+      <div class="stop-num" style="background:${CC[p.cat]}">${typeof STOP_NO !== 'undefined' ? STOP_NO[p.id] : p.id}</div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
+        ${p.years ? `<div class="stop-years" style="text-align:${_T('right','left','left')}">${p.years}</div>` : ''}
         <div class="place-type">${CL[p.cat]}</div>
         <div class="place-addr">${p.address}</div>
       </div>

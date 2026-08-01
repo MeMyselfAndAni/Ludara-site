@@ -16,6 +16,9 @@ function _hasEn(t){ return /[A-Za-z]/.test(t); }
 // Pick the right value out of he/ru/en by current language
 function L3(he, ru, en){ return LANG === 'ru' ? ru : LANG === 'en' ? en : he; }
 
+// Short alias used by the ui-*.js templates for inline UI strings.
+function _T(he, ru, en){ return L3(he, ru, en); }
+
 // One-line trilingual strings: 'עברית · Русский · English · 1910' →
 // keep the parts of my script + neutral parts (years, emoji, numbers)
 function pickLang(str){
@@ -60,7 +63,8 @@ function _snapshot(){
   _L10N = { places: {}, CL: {}, CAT: {}, NBHD: {}, ui: [] };
   if(typeof PLACES !== 'undefined') PLACES.forEach(function(p){
     _L10N.places[p.id] = { name: p.name, address: p.address, type: p.type,
-                           book: p.book, note: p.note, visit: p.visit };
+                           book: p.book, note: p.note, visit: p.visit,
+                           years: p.years };
   });
   try { if(typeof CL !== 'undefined')          Object.keys(CL).forEach(function(k){ _L10N.CL[k] = CL[k]; }); } catch(e){}
   try { if(typeof CAT_LABELS !== 'undefined')  Object.keys(CAT_LABELS).forEach(function(k){ _L10N.CAT[k] = CAT_LABELS[k]; }); } catch(e){}
@@ -81,6 +85,7 @@ function applyLanguage(lang){
     if(!o) return;
     p.name    = pickLang(o.name);
     p.address = pickLang(o.address);
+    p.years   = o.years !== undefined ? pickLang(o.years) : p.years;
     p.type    = pickLang(o.type);
     p.book    = o.book  ? pickLang(o.book)   : o.book;
     p.note    = o.note  ? pickBlock(o.note)  : o.note;
