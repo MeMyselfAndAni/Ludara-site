@@ -64,10 +64,9 @@ var _UI_SELECTOR =
   '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
   '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn,' +
   'header .header-text h1';
-// NOTE: .header-sub is deliberately NOT in this list. It wraps a nested
-// <span class="header-sub-by"> · by Ludara</span>, and this snapshot writes back with
-// textContent, which would flatten that span away — and then pickLang would drop
-// "by Ludara" as a Latin-only segment. It is already Hebrew-only in index.html.
+// NOTE: .header-sub is deliberately NOT in this list. pickLang() splits on ' · ',
+// and that line reads «תינוקת בשמיכת פוך» · זהבה בר־אור — two Hebrew segments that
+// must both survive. It is Hebrew-only in index.html and needs no filtering.
 
 function _snapshot(){
   if(_L10N) return;

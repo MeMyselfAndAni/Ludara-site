@@ -134,9 +134,9 @@
     url('images/splash.jpg') center / cover no-repeat #0b0a07 !important; }
   .splash-cover {
     display: block;
-    margin: 4px auto 14px;
-    max-height: 40vh;
-    max-width: min(300px, 74vw);
+    margin: 6px auto 12px;
+    max-height: 52vh;
+    max-width: min(420px, 86vw);
     width: auto; height: auto;
     border-radius: 3px;
     border: 1px solid rgba(212,168,75,0.45);
@@ -151,11 +151,10 @@
   @media (min-width: 601px) {
     .splash-inner   { padding: 30px 36px 26px !important; }
     .splash-eyebrow { margin-bottom: 10px !important; }
-    .splash-cover   { max-height: min(31vh, 290px) !important; margin: 2px auto 12px !important; }
-    .splash-sample  { margin: 2px 0 0 !important; }
-    .splash-ornament{ margin: 6px auto 8px !important; }
-    .splash-sub     { font-size: 1.18rem !important; line-height: 1.6 !important;
-                      margin: 0 auto 20px !important; }
+    .splash-cover   { max-height: min(48vh, 420px) !important; margin: 8px auto 14px !important; }
+    .splash-overline{ font-size: 0.78rem !important; }
+    .splash-sub     { font-size: 1.05rem !important; line-height: 1.5 !important;
+                      max-width: 46ch !important; margin: 8px auto 18px !important; }
     .splash-footer  { margin-top: 18px !important; }
     .splash-footer p{ margin-top: 8px !important; }
   }
@@ -163,11 +162,11 @@
   @media (min-width: 601px) and (max-height: 860px) {
     .splash-inner   { padding: 18px 32px 18px !important; }
     .splash-eyebrow { font-size: 0.82rem !important; margin-bottom: 6px !important; }
-    .splash-cover   { max-height: 25vh !important; margin: 0 auto 10px !important; }
-    .splash-ornament{ margin: 4px auto 6px !important; }
-    .splash-sub     { font-size: 1.05rem !important; margin-bottom: 14px !important; }
-    .splash-footer  { margin-top: 12px !important; }
-    .splash-footer p{ font-size: 0.66rem !important; margin-top: 6px !important; }
+    .splash-cover   { max-height: 36vh !important; margin: 2px auto 8px !important; }
+    .splash-sub     { font-size: 0.98rem !important; line-height: 1.45 !important;
+                      margin: 6px auto 12px !important; }
+    .splash-footer  { margin-top: 8px !important; }
+    .splash-footer p{ font-size: 0.66rem !important; margin-top: 4px !important; }
   }
   /* Story Path — the signature button, bold gold */
   a.pill-tour { border-color: #2a7a72 !important; color: #2a7a72 !important; text-decoration: none; font-weight: 700; }
@@ -218,21 +217,33 @@
   /* The line Maria asked for: "a Family Story Map based on ...". It is the h1, so the
      book's title is real text — readable, selectable, and announced by screen readers —
      not only lettering baked into the jacket photograph. */
+  .splash-overline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #cbb489;
+    margin: 0;
+    opacity: 0.95;
+  }
   .splash-basedon {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(1.05rem, 3.4vw, 1.45rem);
-    font-weight: 400;
-    line-height: 1.55;
-    color: #efe0c2;
-    margin: 0 0 4px;
-    max-width: 34ch;
+    margin: 0;
     text-shadow: 0 2px 10px rgba(0,0,0,0.85);
+    display: flex; flex-direction: column; gap: 2px;
   }
   .splash-basedon .bookname {
-    display: block;
+    font-family: 'Cinzel Decorative', serif;
     font-weight: 700;
-    font-size: 1.34em;
+    font-size: clamp(1.5rem, 5.2vw, 2.1rem);
+    line-height: 1.12;
     color: #edc169;
+  }
+  .splash-basedon .byline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #cbb489;
   }
   .splash-ornament {
     display: block;
@@ -295,20 +306,18 @@
   @media (max-width: 600px) {
     .splash            { align-items: flex-start !important; overflow-y: auto !important;
                          -webkit-overflow-scrolling: touch; padding: 0 !important; }
-    .splash-inner      { padding: 20px 18px 30px !important; gap: 9px !important;
+    .splash-inner      { padding: 16px 16px 24px !important; gap: 6px !important;
                          margin: auto 0 !important; }
     .splash-eyebrow    { font-size: 0.68rem !important; letter-spacing: 0.24em !important;
                          margin-bottom: 6px !important; }
     .splash-title      { font-size: 2.05rem !important; line-height: 1.06 !important;
                          margin: 0 0 4px !important; }
-    .splash-sample     { font-size: 0.92rem !important; line-height: 1.45 !important; margin: 0 !important; }
-    .splash-cover      { max-height: 27vh !important; max-width: 56vw !important;
-                         margin: 0 auto 8px !important; }
-    .splash-basedon    { font-size: 0.95rem !important; line-height: 1.45 !important;
-                         margin: 0 0 2px !important; }
-    .splash-ornament   { font-size: 0.8rem !important; margin: 2px auto 6px !important; }
-    .splash-sub        { font-size: 0.95rem !important; line-height: 1.5 !important;
-                         max-width: 100% !important; margin: 0 0 14px !important; }
+    .splash-overline   { font-size: 0.66rem !important; letter-spacing: 0.13em !important; }
+    .splash-cover      { max-height: 50vh !important; max-width: 92vw !important;
+                         margin: 2px auto 10px !important; }
+    .splash-basedon    { margin: 0 !important; }
+    .splash-sub        { font-size: 0.9rem !important; line-height: 1.45 !important;
+                         max-width: 100% !important; margin: 4px 0 12px !important; }
     .splash-sub br     { display: block; }
     .splash-sub .sub-en{ font-size: 1.06em !important; }
     .splash-btn        { font-size: 0.66rem !important; letter-spacing: 0.14em !important;
@@ -418,18 +427,17 @@
 <div class="splash" id="splash">
   <div class="splash-inner">
     <div class="splash-eyebrow">Family Story Map</div>
+    <p class="splash-overline">מפת סיפור משפחה על פי הספר</p>
     <img class="splash-cover" src="images/book-cover.jpg"
          alt="עטיפת הספר &laquo;תינוקת בשמיכת פוך&raquo; מאת זהבה בר־אור">
-    <h1 class="splash-basedon">מפת סיפור משפחה על פי הספר<span class="bookname">תינוקת בשמיכת פוך</span></h1>
-    <p class="splash-sample" style="unicode-bidi:plaintext;">מאת זהבה בר־אור</p>
-    <span class="splash-ornament">— ✦ —</span>
+    <h1 class="splash-basedon"><span class="bookname">תינוקת בשמיכת פוך</span><span class="byline">מאת זהבה בר־אור</span></h1>
     <p class="splash-sub" style="unicode-bidi:plaintext;">מוולברום שבפולין — דרך אוקראינה, הרי האורל ואוזבקיסטן — ועד קריית ביאליק: דרכה של חיה ובתה זהבה, על מפה אחת.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <button class="splash-btn splash-btn-primary" onclick="enterStory()">להיכנס לסיפור</button>
     </div>
     <div class="splash-footer">
       <a href="https://ludara.ai/familystorymap/" target="_blank">Family Story Map · by Ludara.AI</a>
-      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#9c8757;font-weight:400;letter-spacing:0;">מפה משפחתית פרטית, על פי הספר &laquo;תינוקת בשמיכת פוך&raquo; מאת זהבה בר־אור (מהדורת 06.2018).</p>
+      <p style="margin:12px 0 0;font-size:0.72rem;line-height:1.5;color:#9c8757;font-weight:400;letter-spacing:0;">מפה משפחתית פרטית · מהדורת 06.2018</p>
     </div>
   </div>
 </div>
@@ -462,7 +470,7 @@
     <div class="header-divider"></div>
     <div class="header-text">
       <h1>משפחת אורבך ובר־אור</h1>
-      <div class="header-sub">על פי &laquo;תינוקת בשמיכת פוך&raquo;<span class="header-sub-by"> · by Ludara</span></div>
+      <div class="header-sub">על פי &laquo;תינוקת בשמיכת פוך&raquo; · זהבה בר־אור</div>
     </div>
   </div>
   <div class="header-ludara">
