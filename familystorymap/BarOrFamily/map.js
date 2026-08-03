@@ -55,8 +55,27 @@ function buildNbhdCircles() {
   return circles;
 }
 
+// ─── Right-to-left place names ────────────────────────────────────────────────
+// MapLibre cannot shape or order Hebrew and Arabic base-map labels without this
+// plugin; without it the tile labels render with their letters reversed
+// (מונגוליה came out as הילוגנומ). Same call, same guard and same lazy flag that
+// already fixed this on the MUZA guide.
+function _enableRTLMapText() {
+  try {
+    if (typeof maplibregl.getRTLTextPluginStatus !== 'function' ||
+        maplibregl.getRTLTextPluginStatus() === 'unavailable') {
+      maplibregl.setRTLTextPlugin(
+        'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
+        null,
+        true   // lazy: load when RTL text is first needed
+      );
+    }
+  } catch (e) {}
+}
+
 // ─── Map initialisation ───────────────────────────────────────────────────────
 function initMap() {
+  _enableRTLMapText();
   map = new maplibregl.Map({
     container: 'map',
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,

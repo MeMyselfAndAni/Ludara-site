@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'barorfamily',
   url:   'https://ludara.ai/familystorymap/barorfamily/',
-  cacheVersion: 25,           // bump on every deploy so the service worker updates
+  cacheVersion: 28,           // bump on every deploy so the service worker updates
 
   // Hebrew only — one entry means no language switcher.
   languages: ['he'],
@@ -46,12 +46,12 @@ var FAMILY = {
 
   // ── Story threads = the `cat` field in data.js ──────────────────────────────
   threads: [
-    { key:'narcyz',   color:'#3a6ea5', dark:'#2c5580', tint:'#eaf2fb', label:'משפחת נֶרציס — צד אמא' },
-    { key:'urbach',   color:'#6b8e4e', dark:'#516d3b', tint:'#f2f7ea', label:'משפחת אורבך — צד אבא' },
+    { key:'narcyz',   color:'#3a6ea5', dark:'#2c5580', tint:'#eaf2fb', label:'משפחת נֶרציס, צד אמא' },
+    { key:'urbach',   color:'#6b8e4e', dark:'#516d3b', tint:'#f2f7ea', label:'משפחת אורבך, צד אבא' },
     { key:'war',      color:'#a4402f', dark:'#7d2f22', tint:'#fbecea', label:'שנות המלחמה והנדודים' },
-    { key:'israel',   color:'#c9a227', dark:'#a07d1c', tint:'#fbf4e2', label:'ישראל — הבית החדש' },
+    { key:'israel',   color:'#c9a227', dark:'#a07d1c', tint:'#fbf4e2', label:'ישראל, הבית החדש' },
     { key:'memorial', color:'#5b4b6e', dark:'#443753', tint:'#f0ecf4', label:'מסעות החזרה והזיכרון' },
-    { key:'baror',    color:'#2f8f8f', dark:'#236e6e', tint:'#e9f6f6', label:'בר־אור — המשפחה שאחרי' },
+    { key:'baror',    color:'#2f8f8f', dark:'#236e6e', tint:'#e9f6f6', label:'בר־אור, המשפחה שאחרי' },
   ],
 
   // ── Regions = the `nbhd` field in data.js, and the bubbles in index.html ────
@@ -62,7 +62,7 @@ var FAMILY = {
   regions: [
     { key:'poland',     color:'#3a6ea5', minRadius:120000, center:{ lat:50.20, lng:19.60 },  label:'פולין' },
     { key:'ukraine',    color:'#2f8f8f', minRadius:120000, center:{ lat:48.02, lng:37.80 },  label:'אוקראינה' },
-    { key:'east',       color:'#a4402f', minRadius:200000, center:{ lat:55.00, lng:59.50 },  label:'מזרחה — אורל וסיביר' },
+    { key:'east',       color:'#a4402f', minRadius:200000, center:{ lat:55.00, lng:59.50 },  label:'מזרחה: אורל וסיביר' },
     { key:'uzbekistan', color:'#c07a2f', minRadius:150000, center:{ lat:40.50, lng:66.80 },  label:'אוזבקיסטן' },
     { key:'europe',     color:'#6b8e4e', minRadius:120000, center:{ lat:48.50, lng: 8.50 },  label:'גרמניה וצרפת' },
     { key:'israel',     color:'#c9a227', minRadius:30000,  center:{ lat:32.50, lng:34.95 },  label:'ישראל' },
@@ -75,9 +75,9 @@ var FAMILY = {
   tutorial: {
     title:   'תינוקת בשמיכת פוך',
     intro:   'מפה אחת, מאה שנים של מסע: מוולברום שבפולין, דרך אוקראינה, הרי האורל ואוזבקיסטן, ועד קריית ביאליק. הסיור הקצר הזה מראה איך מטיילים בה.',
-    path:    'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מוולברום, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
+    path:    'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר: מוולברום, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
     pins:    'כל סיכה היא פרק בסיפור: העיירה שבה גדלה חיה, קרון המשא שבו נסעו, הבקתה שליד טשקנט, הבית הראשון בישראל. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
-    search:  'הקלידו שם של מקום או של בן משפחה — והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים: משפחת נֶרציס, משפחת אורבך, שנות המלחמה, ישראל, ואתרי הזיכרון.',
+    search:  'הקלידו שם של מקום או של בן משפחה, והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים: משפחת נֶרציס, משפחת אורבך, שנות המלחמה, ישראל, ואתרי הזיכרון.',
     regions: 'כל בועה היא פרק גאוגרפי: פולין, אוקראינה, האורל וסיביר, אוזבקיסטן, אירופה, ישראל ואתרי הזיכרון. לחיצה מקרבת ישר לאותו חלק של המסע.',
   },
 

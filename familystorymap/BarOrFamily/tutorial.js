@@ -112,6 +112,10 @@
        applyLanguage() sets <html lang>, so the card can follow it. */
     'html[lang="he"] #tut-card{direction:rtl;text-align:right;}',
     'html[lang="he"] #tut-dots{justify-content:flex-start;}',
+    /* The family tree fills the screen during its own step. Dimming it made the
+       thing being demonstrated hard to see, so the shading is dropped while the
+       tree is open and the guide card floats over it unshaded. */
+    '#tut-overlay.tut-nodim #tut-spot{box-shadow:none !important;}',
     '#tut-skip{background:none;border:none;font-size:0.72rem;color:rgba(49,38,29,0.45);cursor:pointer;',
     '  font-family:"Inter",sans-serif;padding:4px 0;}',
     '#tut-next{background:#31261d;color:#f5edd8;border:none;border-radius:20px;padding:9px 22px;',
@@ -410,11 +414,15 @@
       if (typeof window._treeDemo !== 'function') return;
       window._treeDemo(true);
       _treeDemoOpen = true;
+      var ov = document.getElementById('tut-overlay');
+      if (ov) ov.classList.add('tut-nodim');
       _runTreeTour();
     }, 1200));
   }
   function closeTreeDemo() {
     _stopTreeTour();
+    var _ov = document.getElementById('tut-overlay');
+    if (_ov) _ov.classList.remove('tut-nodim');
     if (!_treeDemoOpen) return;
     if (typeof window._treeJump === 'function') window._treeJump(null);
     if (typeof window._treeDemo === 'function') window._treeDemo(false);
