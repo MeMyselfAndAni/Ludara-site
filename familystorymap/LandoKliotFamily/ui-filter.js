@@ -382,8 +382,8 @@ function renderList(){
 }
 
 // Stop numbers for the place list.
-// Deliberately NOT p.id: the Lando-Kliot ids were assigned before the places were
-// grouped by region, so id 8 (Odessa) is the eighteenth entry in the list. This is
+// Deliberately NOT p.id: in some maps the ids were assigned before the places were
+// grouped by region, so id 8 can be the eighteenth entry in the list. This is
 // the place's position in the curated story order — the order PLACES is written in,
 // which is the order the list and the map path present it. Computed once at load, so
 // filtering by branch or searching never renumbers the stops out from under the reader.

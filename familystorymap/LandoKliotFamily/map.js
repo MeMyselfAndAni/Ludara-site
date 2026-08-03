@@ -1,78 +1,40 @@
 // A Perfect Story Map — Family Edition
-// map.js — familystorymap: the family memoir of Anna (FamilyMemories, Part 1)
-// v1 — July 2026. A genealogy prototype: one family's places, 1890s → today.
+// map.js — SHARED ENGINE FILE. Identical in every family map.
 //
-// Five story threads (categories): Friedland (mother's side) · Kliot (father's
-//   side) · Lando & Schechter (husband's side) · War & evacuation · Israel
-// Five regions: belarus, russia, east, ukraine, israel
+// Everything family-specific lives in family.js, which must load BEFORE this file.
+// If you find yourself typing a family name, a branch key or a region name in
+// here, it belongs in family.js instead — that is exactly how a previous family's
+// names used to survive into a new map.
 //
-// ⚠️  Keys in NBHD_* objects, region bubbles in index.html,
-//      and the nbhd field in data.js MUST ALL match exactly.
+// ⚠️  FAMILY.regions[].key, the region bubbles in index.html, and the `nbhd`
+//     field in data.js MUST ALL match exactly. _tools/check-map.js verifies this.
 
-const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
-const MAP_CENTER        = [38.0000, 50.0000];   // [lng, lat] — between Belarus, Russia, Ukraine and Israel
-const MAP_ZOOM          = 4;
-const OFFLINE_CENTER    = { lat: 50.0000, lng: 38.0000 };
-const GUIDE_CITY        = 'Family Journey';
-const BLOGGER_NAME      = 'Family Story Map';
-const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
+const MAPTILER_KEY   = 'V3bgGWhyO1Rik6g1non6';
+const MAP_CENTER     = FAMILY.map.center;              // [lng, lat]
+const MAP_ZOOM       = FAMILY.map.zoom;
+const OFFLINE_CENTER = { lat: FAMILY.map.center[1], lng: FAMILY.map.center[0] };
+const GUIDE_CITY     = 'Family Journey';
+const BLOGGER_NAME   = 'Family Story Map';
+const GUIDE_TIMEZONE = FAMILY.map.timezone;
 
-// ─── Category colours ─────────────────────────────────────────────────────────
-const CC = {
-  'friedland': '#3a6ea5',   // horizon blue — Friedland, mother's side (Bobruisk)
-  'kliot':     '#6b8e4e',   // olive green — Kliot, father's side (Drissa → Vitebsk → Tambov)
-  'lando':     '#2f8f8f',   // teal — Lando & Schechter, husband's side (Odessa, Moscow)
-  'war':       '#a4402f',   // deep crimson — war & evacuation, 1941–1945
-  'israel':    '#c9a227',   // gold — the aliyah and the new life
-};
+// ─── Story threads: colours and labels, in the order family.js lists them ─────
+const CC = {}, CL = {}, THREAD_TINT = {};
+FAMILY.threads.forEach(function(t){ CC[t.key] = t.color; CL[t.key] = t.label; THREAD_TINT[t.key] = t.tint; });
 
-// ─── Category labels ──────────────────────────────────────────────────────────
-const CL = {
-  'friedland': 'פרידלנד — צד אמא · Фридланды · Friedland — mother\'s side',
-  'kliot':     'קליוט — צד אבא · Клиоты · Kliot — father\'s side',
-  'lando':     'לנדו ושכטר · Ландо и Шехтеры · Lando & Schechter',
-  'war':       'מלחמה ופינוי · Война и эвакуация · War & evacuation',
-  'israel':    'ישראל · Израиль · Israel',
-};
-
-// ─── Region colours ────────────────────────────────────────────────────────────
-const NBHD_COLORS = {
-  'belarus':   '#3a6ea5',
-  'russia':    '#6b8e4e',
-  'east':      '#a4402f',
-  'ukraine':   '#2f8f8f',
-  'israel':    '#c9a227',
-};
-
-// ─── Region display labels ─────────────────────────────────────────────────────
-const NBHD_LABELS = {
-  'belarus':   'בלארוס וליטא · Беларусь и Литва · Belarus & Lithuania',
-  'russia':    'רוסיה · Россия · Russia',
-  'east':      'אוראל ואסיה · Урал и Азия · Urals & Asia',
-  'ukraine':   'אוקראינה · Украина · Ukraine',
-  'israel':    'ישראל · Израиль · Israel',
-};
-
-// ─── Region approximate centres ───────────────────────────────────────────────
-const NBHD_APPROX_CENTERS = {
-  'belarus':   { lat: 54.50, lng: 28.50 },
-  'russia':    { lat: 54.50, lng: 39.50 },
-  'east':      { lat: 52.00, lng: 80.00 },
-  'ukraine':   { lat: 48.50, lng: 32.50 },
-  'israel':    { lat: 31.83, lng: 35.00 },
-};
+// ─── Regions ──────────────────────────────────────────────────────────────────
+const NBHD_COLORS = {}, NBHD_LABELS = {}, NBHD_APPROX_CENTERS = {}, NBHD_MIN_RADIUS = {};
+FAMILY.regions.forEach(function(r){
+  NBHD_COLORS[r.key]         = r.color;
+  NBHD_LABELS[r.key]         = r.label;
+  NBHD_APPROX_CENTERS[r.key] = r.center;
+  // Country-sized regions: without a minimum, a region holding a single place
+  // would be drawn at the city-guide default of 80 m and be invisible.
+  NBHD_MIN_RADIUS[r.key]     = r.minRadius || 120000;
+});
 
 // ─── Region circle override ───────────────────────────────────────────────────
 // map-core's buildNbhdCircles() is tuned for city-sized districts; these regions
 // span whole countries. Use ALL places per region with a large minimum radius.
-const NBHD_MIN_RADIUS = {
-  'belarus':   120000,
-  'russia':    150000,
-  'east':      200000,
-  'ukraine':   120000,
-  'israel':    30000,
-};
-
 function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {

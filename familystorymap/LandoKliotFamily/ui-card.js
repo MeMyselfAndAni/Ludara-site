@@ -7,29 +7,18 @@ let CARD_IDX     = 0;
 let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 // AID is declared in data.js
 
-const CAT_COLORS = {
-  // Family story threads (match CC in map.js)
-  friedland:'#3a6ea5', kliot:'#6b8e4e', lando:'#2f8f8f', war:'#a4402f', israel:'#c9a227',
-  landmark:'#e8724a'
-};
-const CAT_LABELS = {
-  // Family story threads (match CL in map.js) — HE · RU · EN
-  friedland:'פרידלנד — צד אמא · Фридланды · Friedland — mother\u2019s side',
-  kliot:'קליוט — צד אבא · Клиоты · Kliot — father\u2019s side',
-  lando:'לנדו ושכטר · Ландо и Шехтеры · Lando & Schechter',
-  war:'מלחמה ופינוי · Война и эвакуация · War & evacuation',
-  israel:'ישראל · Израиль · Israel',
-  landmark:'Landmark'
-};
-const CAT_GRADIENTS = {
-  // Family story threads
-  friedland:'linear-gradient(135deg,#12314c,#3a6ea5)',
-  kliot:    'linear-gradient(135deg,#2f3a1e,#6b8e4e)',
-  lando:    'linear-gradient(135deg,#123a3a,#2f8f8f)',
-  war:      'linear-gradient(135deg,#4a160e,#a4402f)',
-  israel:   'linear-gradient(135deg,#5c4a12,#c9a227)',
-  landmark: 'linear-gradient(135deg,#1a3a5c,#2a5298)',
-};
+// Card colours and labels, derived from FAMILY.threads — the same source map.js
+// uses for CC/CL, so the card, the pin, the list stripe and the tree can never
+// disagree about what colour a branch is. 'landmark' is the city-guide fallback
+// for any category a family map does not define.
+const CAT_COLORS = { landmark:'#e8724a' };
+const CAT_LABELS = { landmark:'Landmark' };
+const CAT_GRADIENTS = { landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)' };
+FAMILY.threads.forEach(function(t){
+  CAT_COLORS[t.key]    = t.color;
+  CAT_LABELS[t.key]    = t.label;
+  CAT_GRADIENTS[t.key] = 'linear-gradient(135deg,' + (t.dark || t.color) + ',' + t.color + ')';
+});
 
 // ── Open card from list ────────────────────────────────────────
 function openDetail(id){

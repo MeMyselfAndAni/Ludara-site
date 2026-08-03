@@ -1,13 +1,17 @@
-// Family Story Map
-// lang.js — single-language mode (HE, RU or EN), chosen on the splash screen
-// and switchable at any time with the corner language button.
+// lang.js — SHARED ENGINE FILE. Identical in every family map.
+// Single-language mode, chosen on the splash screen and switchable with the corner
+// language button. FAMILY.languages decides which languages exist: a single-entry
+// list (e.g. ['he']) locks the map to that language and makes the switcher a no-op.
 // The data stays trilingual in data.js/people.js ('עברית · Русский · English'
 // fields and HE\n\nRU\n\nEN paragraph blocks). On the first applyLanguage()
 // call the original values are snapshotted; every switch re-derives from that
 // snapshot, so the language can be changed freely without reloading.
 // Load AFTER data.js + people.js, BEFORE the ui-*.js files use the data.
 
-var LANG = null;   // null = multilingual (only before the splash choice), 'he' | 'ru' | 'en'
+var LANGS = (typeof FAMILY !== 'undefined' && FAMILY.languages) || ['he','ru','en'];
+// null = multilingual (only before the splash choice). A one-language map starts
+// locked, so inherited 'עברית · Русский · English' triplets collapse immediately.
+var LANG = LANGS.length === 1 ? LANGS[0] : null;
 
 function _hasHe(t){ return /[֐-׿]/.test(t); }
 function _hasRu(t){ return /[Ѐ-ӿ]/.test(t); }
@@ -100,10 +104,20 @@ function applyLanguage(lang){
   // ── Static UI texts (restored from snapshot, then filtered) ──
   _L10N.ui.forEach(function(pair){ pair[0].textContent = pickLang(pair[1]); });
 
+  // The header comes from FAMILY, which is the one file that knows which family
+  // this map is about. It used to be a hardcoded L3(...) literal here, so entering
+  // a COPIED map overwrote its header with the previous family's name.
   var h1 = document.querySelector('header .header-text h1');
-  if(h1) h1.textContent = L3('משפחת לנדו־קליוט', 'Семья Ландо-Клиот', 'The Lando–Kliot Family');
+  if(h1 && FAMILY.title) h1.textContent = pickLang(FAMILY.title);
   var sub = document.querySelector('.header-sub');
-  if(sub) sub.textContent = L3('על פי זיכרונותיה של אנה', 'по воспоминаниям Анны', 'from the memoirs of Anna');
+  if(sub && FAMILY.credit){
+    // Replace only the text, keeping any nested markup (the " · by Ludara" span),
+    // which a plain textContent assignment would silently delete.
+    var _keep = [].slice.call(sub.children);
+    sub.textContent = pickLang(FAMILY.credit);
+    _keep.forEach(function(el){ sub.appendChild(el); });
+  }
+
   var st = document.getElementById('sheet-title');
   if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
   var si = document.getElementById('topbar-search');
@@ -140,15 +154,24 @@ function applyLanguage(lang){
   if(typeof window._treeRebuild === 'function') window._treeRebuild();
 }
 
-// In-map language toggle: cycles he → ru → en → he
+// In-map language toggle: cycles through FAMILY.languages. A one-language map has
+// nothing to cycle to, so this is a no-op there rather than a special-cased file.
 function toggleLanguage(){
-  var order = ['he', 'ru', 'en'];
-  var next = order[(order.indexOf(LANG) + 1) % order.length];
-  applyLanguage(next);
+  if(LANGS.length < 2) return;
+  applyLanguage(LANGS[(LANGS.indexOf(LANG) + 1) % LANGS.length]);
 }
 
 // Splash language buttons
 function setLangAndEnter(lang){
-  applyLanguage(lang);
+  applyLanguage(LANGS.indexOf(lang) >= 0 ? lang : LANGS[0]);
   if(typeof closeSplash === 'function') closeSplash();
+  else if(typeof enterStory === 'function') enterStory();
+}
+
+// A one-language map collapses its inherited triplets as soon as the DOM is ready;
+// a multilingual one waits for the reader's choice on the splash.
+if(LANGS.length === 1){
+  document.addEventListener('DOMContentLoaded', function(){
+    try { applyLanguage(LANGS[0]); } catch(e){}
+  });
 }

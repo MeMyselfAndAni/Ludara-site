@@ -7,14 +7,22 @@
 // Data comes from people.js (PEOPLE, FAMILY_UNIONS, FAMILY_EXTRA_EDGES).
 // Load order: after people.js, map.js and ui-card.js.
 
+// ui-tree.js — SHARED ENGINE FILE. Identical in every family map.
+// Branch keys, colours, labels and headings all come from FAMILY (family.js).
+// Nothing in here may name a family: every hardcoded branch key used to be a way
+// for one family's names to survive into another family's map.
 (function(){
+  const _TB   = (FAMILY.tree && FAMILY.tree.branches) || [];
+  const _KEYS = _TB.map(b => b.key);
+  const _HL   = _KEYS.map(k => 'hl-' + k);
+
   const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
-  const BRANCH_HEADERS = [
-    { branch:'kliot',     label:'קליוט — צד אבא · Клиоты · Kliot — father’s side',            col:0    },
-    { branch:'friedland', label:'פרידלנד — צד אמא · Фридланды · Friedland — mother’s side',        col:13.2 },
-    { branch:'lando',     label:'לנדו ושכטר — צד מישה · Ландо и Шехтеры · Lando & Schechter', col:23.6 },
-  ];
+  // A branch with col:null draws no heading — used when the family is one line of
+  // descent rather than parallel branches.
+  const BRANCH_HEADERS = _TB
+    .filter(b => b.header && b.col !== null && b.col !== undefined)
+    .map(b => ({ branch:b.key, label:b.header, col:b.col }));
 
   const nodeX = p => PADX + p.col * COLW;
   const nodeY = p => PADY + p.row * ROWH;
@@ -53,20 +61,14 @@
       .pc-people-label { width:100%; font-size:0.68rem; font-weight:700; color:#8a7a55; letter-spacing:0.04em; unicode-bidi:plaintext; }
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
-      /* Branch highlight — select a last name, its branch lights up, the rest dims */
-      #tree-svg.hl-kliot     .tree-node:not(.br-kliot),
-      #tree-svg.hl-friedland .tree-node:not(.br-friedland),
-      #tree-svg.hl-lando     .tree-node:not(.br-lando) { opacity:0.16; }
-      #tree-svg.hl-kliot     .tree-edge:not(.br-kliot),
-      #tree-svg.hl-friedland .tree-edge:not(.br-friedland),
-      #tree-svg.hl-lando     .tree-edge:not(.br-lando) { opacity:0.10; }
-      #tree-svg.hl-kliot     .tree-node.br-kliot rect     { fill:#f2f7ea; stroke-width:3.5; }
-      #tree-svg.hl-friedland .tree-node.br-friedland rect { fill:#eaf2fb; stroke-width:3.5; }
-      #tree-svg.hl-lando     .tree-node.br-lando rect     { fill:#e9f6f6; stroke-width:3.5; }
+      /* Branch highlight — select a last name, its branch lights up, the rest dims.
+         Generated from FAMILY.tree.branches, so adding a branch needs no CSS edit. */
+      ${_KEYS.map(k => `#tree-svg.hl-${k} .tree-node:not(.br-${k}) { opacity:0.16; }
+      #tree-svg.hl-${k} .tree-edge:not(.br-${k}) { opacity:0.10; }
+      #tree-svg.hl-${k} .tree-node.br-${k} rect { fill:${(THREAD_TINT && THREAD_TINT[k]) || '#f3efe6'}; stroke-width:3.5; }
+      .tree-btn.hl-on-${k} { background:${(CC && CC[k]) || '#8a7a55'}; border-color:${(CC && CC[k]) || '#8a7a55'}; color:#fff; }`).join('\n      ')}
       .tree-node, .tree-edge { transition:opacity 0.25s; }
-      .tree-btn.hl-on-kliot     { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
-      .tree-btn.hl-on-friedland { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
-      .tree-btn.hl-on-lando     { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
+      .tree-btn.hl-on-all    { background:#d4a84b; border-color:#d4a84b; color:#16130c; }
       @media (max-width:768px){ .tree-hint { display:none; } }
     `;
     document.head.appendChild(style);
@@ -75,11 +77,10 @@
     ov.id = 'tree-overlay';
     ov.innerHTML = `
       <div class="tree-header">
-        <span class="tree-title">🌳 עץ המשפחה · Дерево семьи · Family Tree</span>
-        <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה · нажмите на человека — его путь появится на карте · click a person — their journey appears on the map</span>
-        <button class="tree-btn" id="tree-btn-kliot" onclick="window._treeJump('kliot')">קליוט · Клиоты · Kliot</button>
-        <button class="tree-btn" id="tree-btn-friedland" onclick="window._treeJump('friedland')">פרידלנד · Фридланды · Friedland</button>
-        <button class="tree-btn" id="tree-btn-lando" onclick="window._treeJump('lando')">לנדו · Ландо · Lando</button>
+        <span class="tree-title">${FAMILY.tree.title}</span>
+        <span class="tree-hint">${FAMILY.tree.hint}</span>
+        <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">${FAMILY.tree.allChip}</button>
+        ${_TB.map(b => `<button class="tree-btn" id="tree-btn-${b.key}" onclick="window._treeJump('${b.key}')">${b.chip}</button>`).join('\n        ')}
         <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
         <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
         <button class="tree-btn" onclick="window._treeFit()">⤢</button>
@@ -96,9 +97,10 @@
   function buildSVG(){
     canvasW = Math.max(...PEOPLE.map(p => nodeX(p))) + NW + PADX;
     canvasH = Math.max(...PEOPLE.map(p => nodeY(p))) + NH + PADY + 40;
-    const col = b => (typeof CC !== 'undefined' && CC[
-      b === 'friedland' ? 'friedland' : b === 'kliot' ? 'kliot' : 'lando'
-    ]) || '#8a7a55';
+    // Look the branch up directly in the thread colours. An earlier version mapped
+    // anything that wasn't friedland/kliot onto 'lando', so every branch of the
+    // next family rendered grey — the exact failure this file is now built to avoid.
+    const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
 
     let s = '';
 
@@ -185,6 +187,10 @@
   function render(){
     const sc = document.getElementById('tree-scroll');
     if(sc) sc.innerHTML = buildSVG();
+    // Re-assert the branch highlight: buildSVG() replaces the <svg>, so without this
+    // the class is lost on rebuild, and the "All" chip would not read as active when
+    // the tree first opens.
+    if(typeof _applyHighlight === 'function') _applyHighlight();
   }
 
   function applyZoom(){
@@ -204,16 +210,21 @@
   function _applyHighlight(){
     const svg = document.getElementById('tree-svg');
     if(svg){
-      svg.classList.remove('hl-kliot','hl-friedland','hl-lando');
+      svg.classList.remove.apply(svg.classList, _HL);
       if(_hlBranch) svg.classList.add('hl-' + _hlBranch);
     }
-    ['kliot','friedland','lando'].forEach(b => {
+    _KEYS.forEach(b => {
       const btn = document.getElementById('tree-btn-' + b);
       if(btn) btn.classList.toggle('hl-on-' + b, _hlBranch === b);
     });
+    const allBtn = document.getElementById('tree-btn-all');
+    if(allBtn) allBtn.classList.toggle('hl-on-all', !_hlBranch);
   }
+  // Clicking the active branch again clears it, but that was the ONLY way back to
+  // the whole tree and nothing on screen said so. _treeJump(null) — the "all"
+  // chip — now clears it explicitly. (Fixed 31 Jul 2026.)
   window._treeJump = branch => {
-    _hlBranch = (_hlBranch === branch) ? null : branch;   // click again to clear
+    _hlBranch = (!branch || _hlBranch === branch) ? null : branch;
     _applyHighlight();
     if(_hlBranch){
       const first = PEOPLE.filter(p => p.branch === branch).sort((a,b) => a.col - b.col)[0];
@@ -251,7 +262,7 @@
     if(!pl.length){
       const n = document.getElementById('tn-' + personId);
       if(n){ n.classList.remove('pulse'); void n.getBoundingClientRect(); n.classList.add('pulse'); }
-      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה · нет мест на карте · no places linked on the map') : ' — אין מקומות מקושרים במפה'), 2800);
+      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה') : ' — אין מקומות מקושרים במפה'), 2800);
       return;
     }
     closeFamilyTree();
@@ -276,7 +287,7 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה · путь на карте · the journey on the map') : ' — המסע על המפה'), 3800);
+    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה') : ' — המסע על המפה'), 3800);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
@@ -292,7 +303,7 @@
     const colOf = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
     const isRu = (typeof LANG !== 'undefined' && LANG === 'ru');
     const isEn = (typeof LANG !== 'undefined' && LANG === 'en');
-    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום · кто связан с этим местом · who is connected to this place') : '🌳 מי קשור למקום · кто связан с этим местом · who is connected to this place';
+    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום') : '🌳 מי קשור למקום';
     host.innerHTML = '<span class="pc-people-label">' + lbl + '</span>' +
       folks.map(per =>
         `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(isEn ? (per.en || per.he) : isRu ? per.ru : per.he)}</button>`

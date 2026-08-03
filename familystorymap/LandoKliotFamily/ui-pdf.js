@@ -139,7 +139,7 @@ async function generatePDF(overridePlaces, customSubtitle){
 <html lang="${_enP ? 'en' : _ruP ? 'ru' : 'he'}">
 <head>
 <meta charset="UTF-8">
-<title>${_enP ? 'The Lando–Kliot Family' : _ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'} · Family Story Map</title>
+<title>${typeof pickLang === 'function' ? pickLang(FAMILY.title) : FAMILY.title} · Family Story Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -431,7 +431,7 @@ async function generatePDF(overridePlaces, customSubtitle){
 <!-- COVER — Book Story Guide -->
 <div class="pdf-cover">
   <div class="pdf-cover-logo">Family Story Map by Ludara</div>
-  <div class="pdf-cover-title">${_enP ? 'The Lando–Kliot Family' : _ruP ? 'Семья Ландо-Клиот' : 'משפחת לנדו־קליוט'}</div>
+  <div class="pdf-cover-title">${typeof pickLang === 'function' ? pickLang(FAMILY.title) : FAMILY.title}</div>
   <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || (_enP ? 'The family story — your bookmarked places, in your order' : _ruP ? 'История семьи — отмеченные места, в вашем порядке' : 'סיפור המשפחה — המקומות שסימנתם, לפי הסדר שלכם')}</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
