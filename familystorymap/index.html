@@ -132,17 +132,19 @@
     .who-card p { font-size:13.5px; font-weight:300; color:var(--dark-muted); line-height:1.6; }
 
     /* PRICING */
-    .price-grid { display:grid; gap:16px; grid-template-columns:1fr; margin-top:24px; }
-    @media(min-width:900px){ .price-grid{ grid-template-columns:repeat(3,1fr); } }
-    .price-card { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:26px 24px; display:flex; flex-direction:column; }
-    .price-card.featured { border-color:rgba(184,150,90,0.55); box-shadow:0 6px 26px rgba(184,150,90,0.12); }
-    .price-card h3 { font-family:'Fraunces',Georgia,serif; font-size:1.3rem; font-weight:600; color:var(--warm-text); margin-bottom:2px; }
-    .price-num { font-family:'Fraunces',Georgia,serif; font-size:34px; font-weight:600; color:var(--gold); line-height:1.15; margin:10px 0 2px; }
+    .price-solo { background:var(--warm-card); border:1px solid rgba(184,150,90,0.55); border-radius:var(--radius); box-shadow:0 6px 26px rgba(184,150,90,0.12); margin-top:24px; display:grid; grid-template-columns:1fr; }
+    @media(min-width:820px){ .price-solo{ grid-template-columns:320px 1fr; } }
+    .price-head { padding:30px 28px; border-bottom:1px solid var(--warm-border); }
+    @media(min-width:820px){ .price-head{ border-bottom:none; border-right:1px solid var(--warm-border); } }
+    .price-head h3 { font-family:'Fraunces',Georgia,serif; font-size:1.45rem; font-weight:600; color:var(--warm-text); margin-bottom:2px; }
+    .price-num { font-family:'Fraunces',Georgia,serif; font-size:46px; font-weight:600; color:var(--gold); line-height:1.1; margin:10px 0 4px; }
     .price-from { font-size:12px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--warm-muted); }
-    .price-card p { color:var(--warm-muted); font-size:14px; line-height:1.7; font-weight:300; margin-top:12px; }
-    .price-card ul { list-style:none; margin-top:14px; }
-    .price-card li { color:var(--warm-muted); font-size:13.5px; font-weight:300; line-height:1.55; padding-left:18px; position:relative; margin-bottom:7px; }
-    .price-card li::before { content:'\2014'; position:absolute; left:0; color:var(--gold); }
+    .price-head p { color:var(--warm-muted); font-size:14.5px; line-height:1.7; font-weight:300; margin-top:16px; }
+    .price-body { padding:30px 28px; }
+    .price-body h4 { font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+    .price-body ul { list-style:none; }
+    .price-body li { color:var(--warm-muted); font-size:14px; font-weight:300; line-height:1.6; padding-left:20px; position:relative; margin-bottom:9px; }
+    .price-body li::before { content:'\2713'; position:absolute; left:0; color:var(--gold); font-size:12px; top:2px; }
     .addons { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:22px 24px; margin-top:16px; }
     .addons h4 { font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
     .addon-row { display:grid; grid-template-columns:1fr auto; gap:10px 20px; align-items:baseline; padding:9px 0; border-top:1px solid var(--warm-border); }
@@ -266,7 +268,7 @@
     <div class="stat-bar">
       <div class="stat-item"><div class="stat-num">26</div><div class="stat-label">places mapped</div></div>
       <div class="stat-item"><div class="stat-num">80</div><div class="stat-label">family members on the tree</div></div>
-      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">languages, one link</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">languages, one link, everyone at once</div></div>
       <div class="stat-item"><div class="stat-num">100</div><div class="stat-label">years of family journeys</div></div>
     </div>
     <p class="sub-warm" style="margin:18px auto 0;text-align:center;max-width:70ch;">Built from a single memoir written by one grandmother. Every place verified, every photograph from the family&rsquo;s own archive.</p>
@@ -311,6 +313,13 @@
   <div class="inner">
     <p class="kicker-warm">Why a map, and not another document</p>
     <h2 class="warm">A family history you can actually walk through.</h2>
+
+    <div class="built" style="margin-top:20px;">
+      <h3>It brings the family back together</h3>
+      <p>A book goes to one person and stays on their shelf. A map goes to everyone at once, on a single link, each of them reading it in the language they think in. Relatives who live continents apart find themselves on the same street, on the same evening, looking at the same house.</p>
+      <p style="margin-top:12px;font-style:italic;">On the first map we built, family in Belarus and family in Israel are exploring it at the same time, in their own languages.</p>
+    </div>
+
     <div class="grid-3" style="margin-top:22px;">
       <div class="feat-card"><h3>A pin for every place</h3><p>The house, the shtetl, the factory, the camp, the first apartment in a new country. We find the historic address, place it accurately, and attach the photograph and the passage of the story that belongs there.</p></div>
       <div class="feat-card"><h3>The journey as one path</h3><p>A century of displacement is hard to hold in your head and obvious on a map. One tap draws the whole route, or one person&rsquo;s route, in the order it actually happened.</p></div>
@@ -355,59 +364,38 @@
   <div class="inner">
     <p class="kicker-warm">What it costs</p>
     <h2 class="warm">One payment. No subscription, ever.</h2>
-    <p class="sub-warm" style="margin-top:10px;">Every family arrives with something different: a finished memoir, a recorded interview, a tree file, or a shoebox. We quote each family properly once we have seen what you have. These are the starting points.</p>
+    <p class="sub-warm" style="margin-top:10px;">A map built from a written family history starts at $3,000. What moves the price is size: how many places the story visits, how large the tree is, and how many languages your family reads.</p>
 
-    <div class="price-grid">
-
-      <div class="price-card">
-        <h3>From your memoir</h3>
+    <div class="price-solo">
+      <div class="price-head">
+        <h3>A Family Story Map</h3>
         <div class="price-num">$3,000</div>
-        <div class="price-from">starting price</div>
+        <div class="price-from">starting price, one payment</div>
         <p>You already have the story written down: a memoir, a book, a family history. We do the rest.</p>
+      </div>
+      <div class="price-body">
+        <h4>What is included</h4>
         <ul>
-          <li>Every place read out of the text, located and verified</li>
-          <li>The family&rsquo;s own words at each pin, never paraphrased</li>
-          <li>The family tree, linked to the map</li>
-          <li>The whole journey drawn as one path</li>
-          <li>One language, add any other for $1,000 each</li>
+          <li>Every place read out of your text, located and verified, including towns that were renamed and borders that moved</li>
+          <li>The family&rsquo;s own words at each place, quoted exactly, never paraphrased</li>
+          <li>Your own photographs, scanned, cleaned and placed where they belong</li>
+          <li>A line on each place as it stands today</li>
+          <li>The family tree, linked to the map: tap a person and their journey draws itself</li>
+          <li>The whole journey as one path, in the order it happened</li>
+          <li>The printable book, laid out place by place, with a QR code to each location</li>
+          <li>Anything your source does not settle is marked uncertain rather than guessed</li>
+          <li>One language</li>
+          <li><b style="color:var(--warm-text);font-weight:600;">One update round in the first year.</b> Once the family sees the map they start remembering. Everything they send you in that first year goes in, in one pass, at no extra cost</li>
         </ul>
       </div>
-
-      <div class="price-card featured">
-        <h3>Researched edition</h3>
-        <div class="price-num">$5,500</div>
-        <div class="price-from">starting price</div>
-        <p>For places where no family photograph survived, and for stories that need the record filled in around them.</p>
-        <ul>
-          <li>Everything in the first tier</li>
-          <li>Archive and historical image research, every image credited</li>
-          <li>What stands at each place today</li>
-          <li>Historical context checked against the record</li>
-          <li>The printable book, laid out place by place</li>
-        </ul>
-      </div>
-
-      <div class="price-card">
-        <h3>Heirloom edition</h3>
-        <div class="price-num">On request</div>
-        <div class="price-from">priced per family</div>
-        <p>The full commission, for a family with a large archive or a gathering to build it around.</p>
-        <ul>
-          <li>Every language your family reads, in one link</li>
-          <li>Extended tree across many branches and generations</li>
-          <li>Larger place counts and additional source material</li>
-          <li>Prepared for a reunion, a memorial or a milestone</li>
-        </ul>
-      </div>
-
     </div>
 
     <div class="addons">
       <h4>Add to any map</h4>
       <div class="addon-row"><span>Each additional language, produced in full: the stories, the tree, the interface, the printed book</span><b>$1,000</b></div>
-      <div class="addon-row"><span>Heritage trip edition: the map built for walking the actual places, working offline where there is no signal</span><b>from $1,000</b></div>
       <div class="addon-row"><span>Printed and bound copies of the book</span><b>per copy</b></div>
-      <div class="addon-row"><span>New photographs and stories added later, appearing in every language</span><b>quoted per addition</b></div>
+      <div class="addon-row"><span>A larger family: more places, more branches, more source material</span><b>quoted</b></div>
+      <div class="addon-row"><span>A further update round: everything the family has sent since, added in one pass, in every language. Bought when you want one, never on a schedule</span><b>$600</b></div>
     </div>
 
     <div class="built">
