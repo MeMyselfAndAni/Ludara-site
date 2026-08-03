@@ -184,7 +184,13 @@
       const isRu   = (typeof LANG !== 'undefined' && LANG === 'ru');
       const isHe   = (typeof LANG !== 'undefined' && LANG === 'he');
       const isEn   = (typeof LANG !== 'undefined' && LANG === 'en');
-      let yrs = p.years || '';
+      // A years value may already be a ' · ' joined triplet, as Semyon Kliot's
+      // 'נפ׳ ~2015 · ум. ~2015 · d. ~2015' is. Nothing filtered it, so every
+      // language printed all three segments on one card. Filter it first: the
+      // word swaps below then only ever see the reader's own segment, and a
+      // Hebrew-only value still falls through to them exactly as before,
+      // because pickLang returns the original string when no segment survives.
+      let yrs = (typeof pickLang === 'function') ? pickLang(p.years || '') : (p.years || '');
       if(isRu) yrs = yrs.replace('נרצחה','погибла').replace('נפל','погиб').replace("נפ׳ בגיל","ум. в").replace("נפ׳","ум.").replace("נ׳","р.").replace('נישא','женился').replace('פולין · Польша','Польша');
       if(isHe) yrs = yrs.replace('פולין · Польша','פולין');
       if(isEn) yrs = yrs.replace('נרצחה','murdered').replace('נפל','fell').replace("נפ׳ בגיל","d. at").replace("נפ׳","d.").replace("נ׳","b.").replace('נישא','m.').replace('פולין · Польша','Poland');

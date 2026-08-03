@@ -24,7 +24,7 @@ const PEOPLE = [
   { id:'chana_dichter', he:'חנה דיכטר ז"ל', years:'', role:'דודתו של רמי, מורתה של זהבה', branch:'baror', col:0.5, row:1, places:[18] },
   { id:'chaya', he:'חיה - הֶלָה', years:'נפטרה 9 במאי 1971', role:'אמה של זהבה, ילידת וולברום', branch:'narcyz', col:2.5, row:1, places:[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21] },
   { id:'chaya_siblings', he:'אחיה ואחיותיה של חיה', years:'', role:'אחים ואחיות שהספר אינו נוקב בשמם', branch:'narcyz', col:1.5, row:1, places:[1] },
-  { id:'golda_yora', he:'גולדה יורה – ניימרק', years:'', role:'בת דודתה של חיה, ניצולת מחנות', branch:'narcyz', col:5.8, row:1, places:[1, 6, 19] },
+  { id:'golda_yora', he:'גולדה יורה-ניימרק', years:'', role:'בת דודתה של חיה, ניצולת מחנות', branch:'narcyz', col:5.8, row:1, places:[1, 6, 19] },
   { id:'natan', he:'נתן אורבך', years:'', role:'אביה של זהבה, נלקח ולא שב', branch:'urbach', col:4.5, row:1, places:[3, 4, 1, 7] },
 
   // ── זהבה ובני דורה ──
@@ -80,5 +80,5 @@ const FAMILY_EXTRA_EDGES = [
   { from:'chaya',      to:'golda_yora',       label:'בת דודתה' },
   { from:'golda_yora', to:'golda_nephew',     label:'בן אחותה' },
   { from:'rami',       to:'chana_dichter',    label:'דודתו' },
-  { from:'chaya',      to:'feigele',          label:'⚠️ דודה — הספר אינו אומר מצד מי' },
+  { from:'chaya',      to:'feigele',          label:'⚠️ דודה: הספר אינו אומר מצד מי' },
 ];
