@@ -211,6 +211,18 @@
     text-shadow: none !important;
     transition: background 0.2s, color 0.2s;
   }
+  /* Cinzel Decorative carries no Hebrew glyphs, so Hebrew silently fell back to a
+     generic serif and came out visibly smaller than the English and Russian
+     buttons beside it. Uppercasing and wide letter-spacing do nothing for Hebrew
+     either, and the spacing actively hurts its rhythm. Many readers of these maps
+     are elderly, so the Hebrew is set larger, not merely equal. */
+  .splash-btn[lang="he"] {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif !important;
+    font-size: 1.28rem !important;
+    letter-spacing: 0.02em !important;
+    text-transform: none !important;
+    line-height: 1.25 !important;
+  }
   .splash-btn:hover {
     background: transparent !important;
     border-color: #5a3e18 !important;
@@ -250,6 +262,7 @@
     .splash-sub .sub-en{ font-size: 1.06em !important; }
     .splash-btn        { font-size: 0.66rem !important; letter-spacing: 0.14em !important;
                          padding: 11px 14px !important; width: 100% !important; }
+    .splash-btn[lang="he"] { font-size: 1.12rem !important; letter-spacing: 0.02em !important; }
     .splash-tagline    { font-size: 0.68rem !important; }
     .splash-footer     { margin-top: 4px !important; }
     .splash-footer a   { font-size: 0.86rem !important; color: var(--brand) !important; }
@@ -407,7 +420,7 @@
     <p class="splash-sub" style="unicode-bidi:plaintext;">From Bobruisk and Vitebsk — through Tambov, the Urals and Odessa — to Rehovot and Jerusalem: a century of family journeys on one map.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <button class="splash-btn splash-btn-primary" onclick="setLangAndEnter('en')">English — enter the story</button>
-      <button class="splash-btn" onclick="setLangAndEnter('he')">עברית — להיכנס לסיפור</button>
+      <button class="splash-btn" lang="he" onclick="setLangAndEnter('he')">עברית — להיכנס לסיפור</button>
       <button class="splash-btn" onclick="setLangAndEnter('ru')">Русский — войти в историю</button>
     </div>
     <div class="splash-footer">
