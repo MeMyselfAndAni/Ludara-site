@@ -1,5 +1,5 @@
-// A Perfect Story Map — Family Edition
-// ui-tree.js — the family tree overlay, linked both ways with the map:
+// A Perfect Story Map: Family Edition
+// ui-tree.js: the family tree overlay, linked both ways with the map:
 //   • tree → map : click a person, their life journey is drawn on the map
 //                  (numbered stops + route line, like the Family Path)
 //   • map → tree : every place card shows chips of the people who lived there;
@@ -7,7 +7,7 @@
 // Data comes from people.js (PEOPLE, FAMILY_UNIONS, FAMILY_EXTRA_EDGES).
 // Load order: after people.js, map.js and ui-card.js.
 
-// ui-tree.js — SHARED ENGINE FILE. Identical in every family map.
+// ui-tree.js: SHARED ENGINE FILE. Identical in every family map.
 // Branch keys, colours, labels and headings all come from FAMILY (family.js).
 // Nothing in here may name a family: every hardcoded branch key used to be a way
 // for one family's names to survive into another family's map.
@@ -22,7 +22,7 @@
 
   const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
-  // A branch with col:null draws no heading — used when the family is one line of
+  // A branch with col:null draws no heading, used when the family is one line of
   // descent rather than parallel branches.
   const BRANCH_HEADERS = _TB
     .filter(b => b.header && b.col !== null && b.col !== undefined)
@@ -65,7 +65,7 @@
       .pc-people-label { width:100%; font-size:0.68rem; font-weight:700; color:#8a7a55; letter-spacing:0.04em; unicode-bidi:plaintext; }
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
-      /* Branch highlight — select a last name, its branch lights up, the rest dims.
+      /* Branch highlight: select a last name, its branch lights up, the rest dims.
          Generated from FAMILY.tree.branches, so adding a branch needs no CSS edit. */
       ${_KEYS.map(k => `#tree-svg.hl-${k} .tree-node:not(.br-${k}) { opacity:0.16; }
       #tree-svg.hl-${k} .tree-edge:not(.br-${k}) { opacity:0.10; }
@@ -103,7 +103,7 @@
     canvasH = Math.max(...PEOPLE.map(p => nodeY(p))) + NH + PADY + 40;
     // Look the branch up directly in the thread colours. An earlier version had a
     // hardcoded ternary over one family's branch keys, so every branch of the next
-    // family fell through to a missing key and rendered grey — the exact failure
+    // family fell through to a missing key and rendered grey, the exact failure
     // this file is now built to avoid.
     const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
 
@@ -148,7 +148,7 @@
       s += `<g class="tree-edge br-${a.branch}"><path d="M ${cx(a)} ${nodeY(a)+NH} C ${cx(a)} ${nodeY(a)+NH+50}, ${cx(b)} ${nodeY(b)-50}, ${cx(b)} ${nodeY(b)}" stroke="#9c8a5a" stroke-width="1.6" stroke-dasharray="4 5" fill="none" opacity="0.8"/></g>`;
     });
 
-    // Nodes — 4 centred lines: HE name, RU name, years + HE role, RU role.
+    // Nodes: 4 centred lines: HE name, RU name, years + HE role, RU role.
     // Each line is ellipsized so text always stays inside the card.
     const fit = (t, n) => (t && t.length > n) ? t.slice(0, n-1) + '…' : (t || '');
     PEOPLE.forEach(p => {
@@ -175,12 +175,22 @@
       else if(isHe){ l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = ''; }
       else { l3 = [yrs, roleHe].filter(Boolean).join(' · '); l4 = roleRu; }
       if(!l3){ l3 = l4; l4 = ''; }
+      // One name, in the language the reader chose. This line used to print a
+      // second name in another script (Hebrew under the English card, Russian
+      // under the Hebrew one), so every card showed two languages at once.
+      // It is only drawn now if no language has been chosen yet.
+      const name1 = isEn ? (p.en || p.ru || p.he) : isRu ? (p.ru || p.he) : p.he;
+      const name2 = (typeof LANG !== 'undefined' && LANG) ? '' : (p.ru || '');
+      // With the second name gone the card would carry a blank band, so the role
+      // lines move up to sit under the name.
+      const yRole1 = name2 ? 57 : 44;
+      const yRole2 = name2 ? 72 : 59;
       s += `<g class="tree-node br-${p.branch} ${hasPlaces?'':'no-places'}" id="tn-${p.id}" transform="translate(${nodeX(p)},${nodeY(p)})" onclick="window._treePersonClick('${p.id}')">
         <rect width="${NW}" height="${NH}" rx="12" stroke="${c}"/>
-        <text class="t-he" x="${NW/2}" y="22" text-anchor="middle">${esc(fit(isEn ? (p.en || p.ru) : isRu ? p.ru : p.he, 26))}</text>
-        <text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(isEn ? p.he : isRu ? p.he : p.ru, 30))}</text>
-        <text class="t-role" x="${NW/2}" y="57" text-anchor="middle">${esc(fit(l3, 36))}</text>
-        <text class="t-role" x="${NW/2}" y="72" text-anchor="middle">${esc(fit(l4, 36))}</text>
+        <text class="t-he" x="${NW/2}" y="${name2 ? 22 : 26}" text-anchor="middle">${esc(fit(name1, 26))}</text>
+        ${name2 ? `<text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(name2, 30))}</text>` : ''}
+        <text class="t-role" x="${NW/2}" y="${yRole1}" text-anchor="middle">${esc(fit(l3, 36))}</text>
+        <text class="t-role" x="${NW/2}" y="${yRole2}" text-anchor="middle">${esc(fit(l4, 36))}</text>
         ${pin}
       </g>`;
     });
@@ -226,8 +236,8 @@
     if(allBtn) allBtn.classList.toggle('hl-on-all', !_hlBranch);
   }
   // Clicking the active branch again clears it, but that was the ONLY way back to
-  // the whole tree and nothing on screen said so. _treeJump(null) — the "all"
-  // chip — now clears it explicitly. (Fixed 31 Jul 2026.)
+  // the whole tree and nothing on screen said so. _treeJump(null), the "all"
+  // chip, now clears it explicitly. (Fixed 31 Jul 2026.)
   window._treeJump = branch => {
     _hlBranch = (!branch || _hlBranch === branch) ? null : branch;
     _applyHighlight();
@@ -240,7 +250,7 @@
 
   // ── Browser Back ─────────────────────────────────────────────────────────
   // The tree is a DOM overlay, not a page, so Back used to leave the site entirely
-  // — from the tree you landed back on Google. Opening the tree now pushes a history
+  // from the tree you landed back on Google. Opening the tree now pushes a history
   // entry, and clicking a person pushes another, so Back walks: person's journey →
   // tree → map, and only leaves the site from the map. (31 Jul 2026.)
   const _HIST = (typeof history !== 'undefined' && history.pushState);
@@ -293,7 +303,7 @@
     }
   };
   // fromHistory === true means popstate is already unwinding, so just close.
-  // Otherwise the X unwinds the history entry and lets popstate do the closing —
+  // Otherwise the X unwinds the history entry and lets popstate do the closing,
   // popstate is asynchronous, so doing both here would race.
   window.closeFamilyTree = function(fromHistory){
     const ov = document.getElementById('tree-overlay');
@@ -316,7 +326,7 @@
     if(!pl.length){
       const n = document.getElementById('tn-' + personId);
       if(n){ n.classList.remove('pulse'); void n.getBoundingClientRect(); n.classList.add('pulse'); }
-      if(typeof _toast === 'function') _toast(label + _L(' — אין מקומות מקושרים במפה', ' — нет связанных мест на карте', ' — no linked places on the map'), 2800);
+      if(typeof _toast === 'function') _toast(label + _L(': אין מקומות מקושרים במפה', ' — нет связанных мест на карте', ': no linked places on the map'), 2800);
       return;
     }
     closeFamilyTree();
@@ -341,7 +351,7 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + _L(' — המסע על המפה', ' — путь показан на карте', ' — journey shown on the map'), 3800);
+    if(typeof _toast === 'function') _toast('📍 ' + label + _L(': המסע על המפה', ' — путь показан на карте', ': journey shown on the map'), 3800);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
@@ -351,7 +361,7 @@
     if(!titleEl || !host) return;
     const name = titleEl.textContent.trim();
     // The `type` line under the card title names the same people the chips below it
-    // do — a semicolon-separated list of names sitting directly above buttons with
+    // do: a semicolon-separated list of names sitting directly above buttons with
     // exactly those names on them. Hide it whenever there are chips, and leave it
     // visible when there are none, so a place with no linked person still says who
     // was there. (31 Jul 2026.)

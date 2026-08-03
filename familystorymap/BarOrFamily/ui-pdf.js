@@ -46,6 +46,19 @@ async function preloadAllImages(places) {
   return results;
 }
 
+/* The booklet cover used the 🌳 emoji, which renders as a different picture on
+   every machine and looks nothing like the map. The map has a drawn tree whose
+   three crowns carry this family's own branch colours. Lift that same SVG out of
+   the page so the cover, the guide and the map all show one identical tree.
+   Falls back to the emoji only if the button is somehow absent. */
+function _pdfTreeIcon(){
+  var s = document.querySelector('#tree-fab svg');
+  if (!s) return '🌳';
+  var c = s.cloneNode(true);
+  c.setAttribute('style', 'width:1em;height:1em;display:inline-block;vertical-align:-0.12em;');
+  return c.outerHTML;
+}
+
 async function generatePDF(overridePlaces, customSubtitle){
   window._pdfCoverSubtitle = customSubtitle || null;
   var _ruP = (typeof LANG !== 'undefined' && LANG === 'ru');
@@ -143,7 +156,7 @@ async function generatePDF(overridePlaces, customSubtitle){
   }).join('');
 
   const html = `<!DOCTYPE html>
-<html lang="${_enP ? 'en' : _ruP ? 'ru' : 'he'}">
+<html lang="${_enP ? 'en' : _ruP ? 'ru' : 'he'}" dir="${(_enP || _ruP) ? 'ltr' : 'rtl'}">
 <head>
 <meta charset="UTF-8">
 <title>${typeof pickLang === 'function' ? pickLang(FAMILY.title) : FAMILY.title} · Family Story Map</title>
@@ -157,6 +170,19 @@ async function generatePDF(overridePlaces, customSubtitle){
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  /* Hebrew booklets were being laid out left to right: the text ran RTL but every
+     block still hugged the left edge, and rows like the QR caption came out
+     backwards. dir="rtl" on <html> flips the flow; these rules align the text and
+     let the flex rows follow it. Anything deliberately centred stays centred. */
+  html[dir="rtl"] body { text-align: right; }
+  html[dir="rtl"] .pdf-card-meta,
+  html[dir="rtl"] .pdf-card-qr-row { flex-direction: row-reverse; justify-content: flex-end; }
+  html[dir="rtl"] .pdf-cover,
+  html[dir="rtl"] .pdf-cover-stats,
+  html[dir="rtl"] .pdf-footer { text-align: center; }
+  html[dir="rtl"] .pdf-card-note { border-left: none; border-right: 2px solid #d4a84b; padding-left: 0; padding-right: 10px; }
+  html[dir="rtl"] .pdf-tip-label { margin-right: 0; margin-left: 4px; }
 
   /* ── COVER PAGE ── */
   .pdf-cover {
@@ -447,7 +473,7 @@ async function generatePDF(overridePlaces, customSubtitle){
       <div class="pdf-stat-label">${_enP ? 'places' : _ruP ? 'мест' : 'מקומות'}</div>
     </div>
     <div class="pdf-stat">
-      <div class="pdf-stat-num">🌳</div>
+      <div class="pdf-stat-num">${_pdfTreeIcon()}</div>
       <div class="pdf-stat-label">${(typeof pickLang === 'function' && typeof FAMILY !== 'undefined' && FAMILY.credit) ? pickLang(FAMILY.credit) : ''}</div>
     </div>
   </div>

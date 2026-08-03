@@ -1,4 +1,4 @@
-// lang.js — SHARED ENGINE FILE. Identical in every family map.
+// lang.js: SHARED ENGINE FILE. Identical in every family map.
 // Single-language mode, chosen on the splash screen and switchable with the corner
 // language button. FAMILY.languages decides which languages exist: a single-entry
 // list (e.g. ['he']) locks the map to that language and makes the switcher a no-op.
@@ -38,7 +38,7 @@ function pickLang(str){
   return keep.join(' · ') || str;
 }
 
-// Paragraph blocks: HE / RU / EN paragraphs — each classified by dominant script
+// Paragraph blocks: HE / RU / EN paragraphs, each classified by dominant script
 function pickBlock(str){
   if(!LANG || !str) return str;
   var paras = String(str).split(/\n\s*\n/);
@@ -126,7 +126,14 @@ function applyLanguage(lang){
   if(closeBtn) closeBtn.textContent = L3('✕ סגירה', '✕ Закрыть', '✕ Close');
 
   // Button labels that were plain English in the template
-  var _setTxt = function(id, txt){ var el = document.getElementById(id); if(el) el.textContent = txt; };
+  // getElementById returns only the FIRST element with an id, so a stray duplicate
+  // id in the markup silently swallows the translation. That has now bitten twice:
+  // the Clear chip, and the Places button (a dead display:none copy of
+  // #desktop-list-label sat earlier in the document and absorbed every update).
+  // Setting every element that carries the id makes the bug impossible.
+  var _setTxt = function(id, txt){
+    document.querySelectorAll('[id="' + id + '"]').forEach(function(el){ el.textContent = txt; });
+  };
   _setTxt('pill-saved-label',   L3('סימניות', 'Закладки', 'Bookmarks'));
   _setTxt('desktop-list-label', L3('מקומות', 'Места', 'Places'));
   _setTxt('nbhd-all-label',     L3('הכול', 'Все', 'All'));
@@ -170,7 +177,7 @@ function toggleLanguage(){
 // Splash language buttons
 function setLangAndEnter(lang){
   // Entering the story must not depend on applyLanguage() succeeding. If anything
-  // inside it throws — a filter that needs the map before the map exists, say — the
+  // inside it throws (a filter that needs the map before the map exists, say) the
   // reader would be stranded on a splash screen whose button appears to do nothing.
   try { applyLanguage(LANGS.indexOf(lang) >= 0 ? lang : LANGS[0]); }
   catch(e){ if(window.console) console.warn('applyLanguage:', e && e.message); }
