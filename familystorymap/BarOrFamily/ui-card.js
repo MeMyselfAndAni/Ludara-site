@@ -157,7 +157,7 @@ function _showSlide(idx){
   CARD_IDX = idx;
   const p = CARD_LIST[idx];
   if(!p){ closePlaceCard(); return; }
-  if(map) map.panTo({lat:p.lat, lng:p.lng});
+  if(typeof focusPlace === 'function') focusPlace(p);
   _activateMarker(p);
   _refreshNav();
   _populateCard(p);
@@ -187,7 +187,7 @@ function _activateMarker(p){
   }
   AID = p.id;
   if(markers[p.id]){ markers[p.id].setIcon(makeIcon(p,true)); markers[p.id].setZIndex(10); }
-  if(map) map.panTo({lat:p.lat, lng:p.lng});
+  if(typeof focusPlace === 'function') focusPlace(p);
 }
 
 // ── Populate all fields ───────────────────────────────────────

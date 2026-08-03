@@ -163,7 +163,11 @@ function toggleLanguage(){
 
 // Splash language buttons
 function setLangAndEnter(lang){
-  applyLanguage(LANGS.indexOf(lang) >= 0 ? lang : LANGS[0]);
+  // Entering the story must not depend on applyLanguage() succeeding. If anything
+  // inside it throws — a filter that needs the map before the map exists, say — the
+  // reader would be stranded on a splash screen whose button appears to do nothing.
+  try { applyLanguage(LANGS.indexOf(lang) >= 0 ? lang : LANGS[0]); }
+  catch(e){ if(window.console) console.warn('applyLanguage:', e && e.message); }
   if(typeof closeSplash === 'function') closeSplash();
   else if(typeof enterStory === 'function') enterStory();
 }
