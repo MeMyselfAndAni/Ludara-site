@@ -843,7 +843,19 @@ window.addEventListener('load', function(){
    Kyiv (1964) → Rehovot (1991).
    OFF the path, as side-markers: Kharkiv (9), Pskov (15), Yaroslavl (17),
    Leningrad (18), Chita (19), Jerusalem (21). */
-var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 16, 20];
+/* The family's life journey, in story order: Wolbrom through Ukraine, the Urals,
+   Uzbekistan, Germany and Marseille to Israel, then Chaya's grave and the three
+   years in Ann Arbor. The 1998 return journeys to the camps (22 to 32) are a
+   separate chapter and stay off this line, which would otherwise double back
+   across Europe after it had reached America.
+
+   This list used to be [1,2,3,4,5,6,7,8,10,11,12,13,14,16,20], which is the id
+   list of the map this folder was copied from, inherited and never adapted. It
+   happened to land on real places here, so nothing looked broken, but Tashkent,
+   Marseille, Netanya, Tel Aviv, Kiryat Motzkin and Ann Arbor were all missing
+   from a line whose own toast says it runs to Kiryat Bialik. check-map now fails
+   if this list matches a sibling map's. */
+var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 33];
 var _storyPathOn = false;
 
 /* Top-bar search: filters map pins and the places list by place name,
@@ -947,8 +959,8 @@ window.addEventListener('load', function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
     /* Reading-first card: the address line stays out, but the stop's dates show
-       here, the same as on the Lando-Kliot map. Without this the card never told
-       you when you were. */
+       here, the same as on the other family maps. Without this the card never
+       told you when you were. */
     addrEl.textContent = (place && place.years) ? place.years : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });

@@ -184,9 +184,9 @@
       const isRu   = (typeof LANG !== 'undefined' && LANG === 'ru');
       const isHe   = (typeof LANG !== 'undefined' && LANG === 'he');
       const isEn   = (typeof LANG !== 'undefined' && LANG === 'en');
-      // A years value may already be a ' · ' joined triplet, as Semyon Kliot's
-      // 'נפ׳ ~2015 · ум. ~2015 · d. ~2015' is. Nothing filtered it, so every
-      // language printed all three segments on one card. Filter it first: the
+      // A years value may already be a ' · ' joined triplet, one segment per
+      // language. Nothing filtered it, so a card that carried one printed all
+      // three languages at once, whichever the reader chose. Filter it first: the
       // word swaps below then only ever see the reader's own segment, and a
       // Hebrew-only value still falls through to them exactly as before,
       // because pickLang returns the original string when no segment survives.
