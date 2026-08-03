@@ -214,7 +214,9 @@ function _populateCard(p){
       }
     };
     img.onerror = () => {
-      // No surviving photo for this place — show its emoji on the gradient
+      // No surviving photo for this place, so show its emoji on the gradient.
+      // Record it so the list stops re-requesting the same missing file.
+      if(typeof markPhotoMissing === 'function') markPhotoMissing(captureId);
       if(CARD_PLACE?.id === captureId){
         img.classList.remove('loaded');
         placeholder.style.opacity = '1';
@@ -242,7 +244,24 @@ function _populateCard(p){
   // Story maps: book position is woven into the note text; this slot stays empty
   document.getElementById('pc-hours').innerHTML   = '';
 
-  document.getElementById('pc-note').textContent = p.note || '';
+  // A long story covering several periods used to arrive as one dense block.
+  // Any single newline inside a note is now rendered as a paragraph break, so a
+  // story can be shaped in data.js without touching this file. textContent is
+  // still used per paragraph, so nothing in the family's own words is treated
+  // as markup.
+  (function(){
+    var host = document.getElementById('pc-note');
+    if(!host) return;
+    host.textContent = '';
+    var parts = String(p.note || '').split(/\n+/).map(function(t){ return t.trim(); }).filter(Boolean);
+    if(parts.length <= 1){ host.textContent = parts[0] || ''; return; }
+    parts.forEach(function(t){
+      var para = document.createElement('p');
+      para.className = 'pc-note-para';
+      para.textContent = t;
+      host.appendChild(para);
+    });
+  })();
 
   const tipEl = document.getElementById('pc-tip');
   if(p.visit){

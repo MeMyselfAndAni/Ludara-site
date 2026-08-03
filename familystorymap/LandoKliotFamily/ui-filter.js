@@ -320,8 +320,10 @@ function renderList(){
     sorted.forEach(p => {
       const thumb = document.getElementById('thumb-' + p.id);
       if(!thumb) return;
+      if(typeof photoKnownMissing === 'function' && photoKnownMissing(p.id)) return;
       const img = new Image();
       img.onload = function(){ if(thumb) thumb.innerHTML = '<img src="' + imgBase + 'place-' + p.id + '.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px">'; };
+      img.onerror = function(){ if(typeof markPhotoMissing === 'function') markPhotoMissing(p.id); };
       img.src = imgBase + 'place-' + p.id + '.jpg';
     });
     return;
@@ -392,8 +394,10 @@ function renderList(){
   filtered.forEach(p=>{
     const thumb = document.getElementById(`thumb-${p.id}`);
     if(!thumb) return;
+    if(typeof photoKnownMissing === 'function' && photoKnownMissing(p.id)) return;
     const img = new Image();
     img.onload = () => { thumb.innerHTML = `<img src="${imgBase}place-${p.id}.jpg" alt="${p.name}" loading="lazy">`; };
+    img.onerror = () => { if(typeof markPhotoMissing === 'function') markPhotoMissing(p.id); };
     img.src = imgBase + 'place-' + p.id + '.jpg';
   });
 }
