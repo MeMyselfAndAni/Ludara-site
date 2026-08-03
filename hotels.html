@@ -4,6 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>A Perfect Day: City Guides for Hotels</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ludara.AI">
+  <meta property="og:title" content="A Perfect Day for Hotels: your city, curated for your guests">
+  <meta property="og:description" content="Beautiful, interactive, multilingual maps with curated recommendations for your guests.">
+  <meta property="og:url" content="https://ludara.ai/hotels.html">
+  <meta property="og:image" content="https://ludara.ai/assets/og-hotels.jpg">
+  <meta property="og:image:secure_url" content="https://ludara.ai/assets/og-hotels.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A Perfect Day city guide for hotels, showing hand picked places across London">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A Perfect Day for Hotels: your city, curated for your guests">
+  <meta name="twitter:description" content="Beautiful, interactive, multilingual maps with curated recommendations for your guests.">
+  <meta name="twitter:image" content="https://ludara.ai/assets/og-hotels.jpg">
 <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
   <script>
@@ -342,17 +357,6 @@
     footer p { font-size: 0.9rem; color: rgba(255,255,255,0.45); }
     footer a { color: rgba(184,150,90,0.75); text-decoration: none; }
     footer a:hover { color: var(--gold-l); }
-  
-    /* Mobile nav fix (2026-07-30): the logo and the links collided below ~640px
-       because `nav` was a non-wrapping flex row. Appended as an override so it
-       applies regardless of how the base nav rule is formatted on each page. */
-    @media (max-width: 640px) {
-      nav { flex-wrap: wrap; gap: 4px 14px; padding: 18px 20px 8px; }
-      .nav-logo { flex: 0 0 100%; margin-bottom: 2px; }
-      .nav-links { flex-wrap: wrap; gap: 8px 16px; width: 100%; }
-      .nav-links a { font-size: 13.5px; }
-      .dropdown-nav { right: auto; left: 0; max-width: calc(100vw - 40px); }
-    }
   </style>
 </head>
 <body>
@@ -368,13 +372,12 @@
           <a class="dd-group" href="https://ludara.ai/aperfectday/" role="menuitem">A Perfect Day</a>
           <a class="dd-sub" href="https://ludara.ai/aperfectday/" role="menuitem">Hotels</a>
           <a class="dd-sub" href="https://ludara.ai/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+          <a class="dd-sub" href="https://ludara.ai/universities.html" role="menuitem">Universities</a>
           <a class="dd-sub" href="https://ludara.ai/realestate.html" role="menuitem">Real Estate</a>
           <div class="dd-sep" aria-hidden="true"></div>
           <a class="dd-group" href="https://ludara.ai/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
           <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/" role="menuitem">Books</a>
           <a class="dd-sub" href="https://ludara.ai/aperfectstorymap/screen.html" role="menuitem">Screen</a>
-        <div class="dd-sep" aria-hidden="true"></div>
-        <a class="dd-group" href="https://ludara.ai/familystorymap/" role="menuitem">A Family Story Map</a>
         </div>
       </div>
       <a href="https://ludara.ai/about">About</a>
