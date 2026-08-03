@@ -131,6 +131,36 @@
     .who-card h4 { font-family:'Fraunces',Georgia,serif; font-size:1.2rem; font-weight:600; color:var(--dark-text); margin-bottom:6px; }
     .who-card p { font-size:13.5px; font-weight:300; color:var(--dark-muted); line-height:1.6; }
 
+    /* PRICING */
+    .price-grid { display:grid; gap:16px; grid-template-columns:1fr; margin-top:24px; }
+    @media(min-width:900px){ .price-grid{ grid-template-columns:repeat(3,1fr); } }
+    .price-card { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:26px 24px; display:flex; flex-direction:column; }
+    .price-card.featured { border-color:rgba(184,150,90,0.55); box-shadow:0 6px 26px rgba(184,150,90,0.12); }
+    .price-card h3 { font-family:'Fraunces',Georgia,serif; font-size:1.3rem; font-weight:600; color:var(--warm-text); margin-bottom:2px; }
+    .price-num { font-family:'Fraunces',Georgia,serif; font-size:34px; font-weight:600; color:var(--gold); line-height:1.15; margin:10px 0 2px; }
+    .price-from { font-size:12px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--warm-muted); }
+    .price-card p { color:var(--warm-muted); font-size:14px; line-height:1.7; font-weight:300; margin-top:12px; }
+    .price-card ul { list-style:none; margin-top:14px; }
+    .price-card li { color:var(--warm-muted); font-size:13.5px; font-weight:300; line-height:1.55; padding-left:18px; position:relative; margin-bottom:7px; }
+    .price-card li::before { content:'\2014'; position:absolute; left:0; color:var(--gold); }
+    .addons { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:22px 24px; margin-top:16px; }
+    .addons h4 { font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+    .addon-row { display:grid; grid-template-columns:1fr auto; gap:10px 20px; align-items:baseline; padding:9px 0; border-top:1px solid var(--warm-border); }
+    .addon-row:first-of-type { border-top:none; padding-top:0; }
+    .addon-row span { color:var(--warm-muted); font-size:14px; font-weight:300; }
+    .addon-row b { color:var(--warm-text); font-size:14px; font-weight:600; white-space:nowrap; }
+    @media(max-width:640px){
+      .addon-row { grid-template-columns:1fr; gap:3px; padding:12px 0; }
+      .addon-row b { color:var(--gold); }
+    }
+    .built { background:var(--warm-card); border:1px solid var(--warm-border); border-left:3px solid var(--gold); border-radius:var(--radius); padding:24px 26px; margin-top:16px; }
+    .built h3 { font-family:'Fraunces',Georgia,serif; font-size:1.4rem; font-weight:600; color:var(--warm-text); margin-bottom:8px; }
+    .built p { color:var(--warm-muted); font-size:14.5px; font-weight:300; line-height:1.7; max-width:78ch; }
+    .built ul { list-style:none; margin-top:14px; }
+    .built li { color:var(--warm-muted); font-size:14px; font-weight:300; line-height:1.6; padding-left:18px; position:relative; margin-bottom:8px; max-width:78ch; }
+    .built li::before { content:'\2014'; position:absolute; left:0; color:var(--gold); }
+    .built li b { color:var(--warm-text); font-weight:600; }
+
     /* PRIVACY NOTE */
     .privacy-note { background:var(--dark-card); border:1px solid var(--dark-border); border-left:3px solid var(--gold); border-radius:var(--radius); padding:24px 26px; }
     .privacy-note h3 { font-family:'Fraunces',Georgia,serif; font-size:1.3rem; font-weight:600; margin-bottom:8px; }
@@ -222,6 +252,7 @@
       <div class="hero-btns">
         <a class="btn-gold" href="#get-started">Request a sample map</a>
         <a class="btn-ghost-dark" href="#how">See how it works</a>
+        <a class="btn-ghost-dark" href="#pricing">What it costs</a>
       </div>
       <img class="hero-shot" src="../assets/fsm-hero-splash.webp" alt="The opening screen of a Family Story Map: the family photograph behind a welcome in English, Hebrew and Russian" loading="lazy"/>
       <p class="hero-disc">Above: the opening screen of the first Family Story Map, built from one family&rsquo;s memoir &mdash; four branches, from Bobruisk and Vitebsk through Tambov, the Urals and Odessa to Rehovot and Jerusalem. Each reader picks their own language and enters the story. Shown with the family&rsquo;s permission; the map itself is private.</p>
@@ -316,6 +347,80 @@
       <div class="step-card"><div class="step-num">03</div><h4>We build &amp; translate</h4><p>Your map goes live on a private link, in every language your family reads, with the tree, the path and the photographs in place.</p></div>
       <div class="step-card"><div class="step-num">04</div><h4>It grows with you</h4><p>Families keep remembering. Send a new photo or a new story any time and we add it &mdash; it appears everywhere, in every language.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- PRICING (warm) -->
+<section class="warm-section" id="pricing" data-animate>
+  <div class="inner">
+    <p class="kicker-warm">What it costs</p>
+    <h2 class="warm">One payment. No subscription, ever.</h2>
+    <p class="sub-warm" style="margin-top:10px;">Every family arrives with something different &mdash; a finished memoir, a recorded interview, a tree file, or a shoebox. We quote each family properly once we have seen what you have. These are the starting points.</p>
+
+    <div class="price-grid">
+
+      <div class="price-card">
+        <h3>From your memoir</h3>
+        <div class="price-num">$3,000</div>
+        <div class="price-from">starting price</div>
+        <p>You already have the story written down &mdash; a memoir, a book, a family history. We do the rest.</p>
+        <ul>
+          <li>Every place read out of the text, located and verified</li>
+          <li>The family&rsquo;s own words at each pin, never paraphrased</li>
+          <li>The family tree, linked to the map</li>
+          <li>The whole journey drawn as one path</li>
+          <li>One language &mdash; add any other for $1,000 each</li>
+        </ul>
+      </div>
+
+      <div class="price-card featured">
+        <h3>Researched edition</h3>
+        <div class="price-num">$5,500</div>
+        <div class="price-from">starting price</div>
+        <p>For places where no family photograph survived, and for stories that need the record filled in around them.</p>
+        <ul>
+          <li>Everything in the first tier</li>
+          <li>Archive and historical image research, every image credited</li>
+          <li>What stands at each place today</li>
+          <li>Historical context checked against the record</li>
+          <li>The printable book, laid out place by place</li>
+        </ul>
+      </div>
+
+      <div class="price-card">
+        <h3>Heirloom edition</h3>
+        <div class="price-num">On request</div>
+        <div class="price-from">priced per family</div>
+        <p>The full commission, for a family with a large archive or a gathering to build it around.</p>
+        <ul>
+          <li>Every language your family reads, in one link</li>
+          <li>Extended tree across many branches and generations</li>
+          <li>Larger place counts and additional source material</li>
+          <li>Prepared for a reunion, a memorial or a milestone</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="addons">
+      <h4>Add to any map</h4>
+      <div class="addon-row"><span>Each additional language, produced in full &mdash; the stories, the tree, the interface, the printed book</span><b>$1,000</b></div>
+      <div class="addon-row"><span>Heritage trip edition &mdash; the map built for walking the actual places, working offline where there is no signal</span><b>from $1,000</b></div>
+      <div class="addon-row"><span>Printed and bound copies of the book</span><b>per copy</b></div>
+      <div class="addon-row"><span>New photographs and stories added later, appearing in every language</span><b>quoted per addition</b></div>
+    </div>
+
+    <div class="built">
+      <h3>Built for life</h3>
+      <p>Genealogy platforms charge a family every year, forever, and the story disappears the month they stop paying. That is not how an heirloom should work. You pay once.</p>
+      <ul>
+        <li><b>Ten years of hosting included</b> in the build price. No annual fee, no renewal notice, nothing to forget to pay.</li>
+        <li><b>It works offline once opened.</b> On a plane, at a graveside, in a village with no signal &mdash; the map and the stories are already on the phone.</li>
+        <li><b>Your own domain if you want one.</b> You register it and pay the registrar directly, around $20 a year; we point the map at it at no charge.</li>
+      </ul>
+    </div>
+
+    <p class="sub-warm" style="margin-top:22px;"><a href="#get-started" style="color:var(--gold);font-weight:600;text-decoration:none;">Tell us what you have &rarr;</a> and we will come back within one business day with what a map of it would look like, and what it would cost.</p>
   </div>
 </section>
 
