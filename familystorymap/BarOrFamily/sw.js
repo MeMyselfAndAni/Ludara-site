@@ -29,6 +29,7 @@ var SHELL_FILES = [
   './credits.js',
   './ui-pdf.js',
   './ui-stories.js',
+  './tutorial.js',
   './favicon.svg',
 ];
 

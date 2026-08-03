@@ -69,6 +69,11 @@
       .pc-people-label { width:100%; font-size:0.68rem; font-weight:700; color:#8a7a55; letter-spacing:0.04em; unicode-bidi:plaintext; }
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
+      /* Hebrew place cards read right to left, but this row is a flex container,
+         so the chips still stacked from the left edge under a right-aligned
+         label. applyLanguage() sets <html lang>, so the row can follow it. */
+      html[lang="he"] .pc-people { justify-content:flex-end; }
+      html[lang="he"] .pc-people-label { text-align:right; }
       /* Branch highlight: select a last name, its branch lights up, the rest dims.
          Generated from FAMILY.tree.branches, so adding a branch needs no CSS edit. */
       ${_KEYS.map(k => `#tree-svg.hl-${k} .tree-node:not(.br-${k}) { opacity:0.16; }
