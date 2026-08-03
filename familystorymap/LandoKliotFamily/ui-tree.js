@@ -224,6 +224,57 @@
       repeating-linear-gradient(0deg, rgba(212,168,75,0.03) 0 1px, transparent 1px ${ROWH}px)">${s}</svg>`;
   }
 
+  /* Keep every line of text inside its card, by MEASURING it.
+     buildSVG trims by counting characters, and a character count is not a width:
+     a Hebrew name in Fraunces is far wider than the same number of Latin letters
+     in Inter, so a line that passed the count still ran out through the side of
+     the rectangle. This pass asks the browser how wide each line actually is and
+     chops it until it fits, which is correct in any language and any font.
+     It is a no-op while the tree is hidden, because a hidden element measures 0,
+     so openFamilyTree calls it again once the overlay is on screen. */
+  function fitNodeText(){
+    const svg = document.getElementById('tree-svg');
+    if(!svg) return false;
+    const maxW = NW - 16;                      // 8px of breathing room each side
+    let measurable = false;
+    svg.querySelectorAll('g.tree-node text').forEach(function(t){
+      if(t.classList.contains('t-pin')) return;     // the 📍 is anchored, not centred
+      // Always chop from the ORIGINAL line, never from an already chopped one, so
+      // this can run again after the web font arrives without eating the text a
+      // second time.
+      let full = t.getAttribute('data-full');
+      if(full === null){ full = t.textContent; t.setAttribute('data-full', full); }
+      if(t.textContent !== full) t.textContent = full;
+      if(!full) return;
+      let w = 0;
+      try { w = t.getComputedTextLength(); } catch(e){ return; }
+      if(w > 0) measurable = true;
+      if(w <= maxW) return;
+      // binary chop, so a 45 character line costs about six measurements
+      let lo = 0, hi = full.length;
+      while(lo < hi){
+        const mid = (lo + hi + 1) >> 1;
+        t.textContent = full.slice(0, mid) + '…';
+        let m = 0; try { m = t.getComputedTextLength(); } catch(e){ break; }
+        if(m <= maxW) lo = mid; else hi = mid - 1;
+      }
+      t.textContent = lo > 0 ? full.slice(0, lo).replace(/[\s·,;-]+$/, '') + '…' : '';
+    });
+    return measurable;
+  }
+  window._treeFitText = fitNodeText;
+
+  /* The fonts are the whole reason this has to be measured twice. Fraunces and
+     Inter arrive from the network with font-display:swap, so the first paint uses
+     a narrower fallback face. A line measured then looks like it fits, and when
+     the real face swaps in it grows and runs out through the side of the card.
+     Re-measure once the fonts are actually in. */
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ fitNodeText(); }).catch(function(){});
+    try { document.fonts.addEventListener('loadingdone', function(){ fitNodeText(); }); } catch(e){}
+  }
+  window.addEventListener('resize', function(){ fitNodeText(); });
+
   function render(){
     const sc = document.getElementById('tree-scroll');
     if(sc) sc.innerHTML = buildSVG();
@@ -231,6 +282,7 @@
     // the class is lost on rebuild, and the "All" chip would not read as active when
     // the tree first opens.
     if(typeof _applyHighlight === 'function') _applyHighlight();
+    fitNodeText();
   }
 
   function applyZoom(){
@@ -321,6 +373,9 @@
     if(!wasOpen && !_suppressPop) _push('tree', personId);
     ov.classList.add('open');
     if(!document.getElementById('tree-svg')) render();
+    // If the tree was built while the overlay was hidden, every line measured 0
+    // and nothing could be trimmed. Now that it is on screen, measure for real.
+    fitNodeText();
     if(personId){
       const p = byId(personId);
       const sc = document.getElementById('tree-scroll');
