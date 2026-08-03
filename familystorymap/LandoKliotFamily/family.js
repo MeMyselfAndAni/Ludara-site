@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 22,          // bump on every deploy so the service worker updates
+  cacheVersion: 23,          // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -85,7 +85,7 @@ var FAMILY = {
     path: {
       he:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
       ru:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
-      en:'The gold button draws the whole family journey in order — from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.' },
+      en:'The gold button draws the whole family journey in order: from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.' },
     pins: {
       he:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
       ru:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
@@ -93,7 +93,7 @@ var FAMILY = {
     search: {
       he:'הקלידו שם של מקום או של בן משפחה — והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים את הענפים: פרידלנד, קליוט, לנדו ושכטר, מלחמה ופינוי, ישראל.',
       ru:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
-      en:'Type a place name or a family member\'s name — the map shows only their places. Pin colors mark the branches: Friedland, Kliot, Lando & Schechter, war & evacuation, Israel.' },
+      en:'Type a place name or a family member\'s name, and the map shows only their places. Pin colors mark the branches: Friedland, Kliot, Lando & Schechter, war & evacuation, Israel.' },
     regions: {
       he:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל. לחיצה מקרבת ישר לאותו חלק של המסע.',
       ru:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
