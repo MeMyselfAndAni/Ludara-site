@@ -484,39 +484,3 @@ async function generatePDF(overridePlaces, customSubtitle){
   };
 }
 
-/* ── The booklet button in the Place List header ─────────────────────────────
-   Family maps hide bookmarking (see styles.css), so the PDF is offered straight
-   from the Place List instead of from the bookmarks panel. Injected from the
-   shared engine rather than written into each map's index.html, so every map
-   gets it from one place. generatePDF() with no argument now falls back to
-   every place, so this needs no setup from the reader. */
-(function(){
-  function _pdfBtnLabel(){
-    return (typeof L3 === 'function')
-      ? L3('\u{1F4C4} חוברת PDF', '\u{1F4C4} Буклет PDF', '\u{1F4C4} PDF booklet')
-      : '\u{1F4C4} PDF';
-  }
-  function _injectPdfBtn(){
-    var hdr = document.querySelector('.sheet-header');
-    if (!hdr || document.getElementById('sheet-pdf-btn')) return;
-    var b = document.createElement('button');
-    b.id = 'sheet-pdf-btn';
-    b.type = 'button';
-    b.textContent = _pdfBtnLabel();
-    b.addEventListener('click', function(e){
-      e.stopPropagation();
-      if (typeof generatePDF === 'function') generatePDF();
-    });
-    var close = hdr.querySelector('.sheet-close');
-    if (close) hdr.insertBefore(b, close); else hdr.appendChild(b);
-  }
-  window._refreshPdfBtnLabel = function(){
-    var b = document.getElementById('sheet-pdf-btn');
-    if (b) b.textContent = _pdfBtnLabel();
-  };
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', _injectPdfBtn);
-  } else {
-    _injectPdfBtn();
-  }
-})();

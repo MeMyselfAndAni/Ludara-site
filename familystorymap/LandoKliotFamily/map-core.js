@@ -4,7 +4,7 @@ let AID = null;      // active place ID
 let AF  = 'all';     // active category filter
 let ANF = 'all';     // active neighbourhood filter
 
-// ── MAP CORE — shared across all guides (do not edit) ────────
+// ── MAP CORE: shared across all guides (do not edit) ────────
 // Guide-specific config (MAPTILER_KEY, MAP_CENTER etc) is in map.js
 
 
@@ -28,7 +28,7 @@ function initMapSources() {
   }
 }
 
-// ── NEIGHBOURHOOD CIRCLES — dynamically calculated from place data ─
+// ── NEIGHBOURHOOD CIRCLES: dynamically calculated from place data ─
 
 
 function _haversineM(a, b) {
@@ -37,7 +37,7 @@ function _haversineM(a, b) {
   return 2*R*Math.asin(Math.sqrt(h));
 }
 
-// ── DISTANCE FORMATTING — Imperial vs Metric ─────────────────────────────────
+// ── DISTANCE FORMATTING: Imperial vs Metric ─────────────────────────────────
 // DISTANCE_UNITS is defined per guide in map.js: 'imperial' (US) or 'metric' (default)
 function formatDistance(meters) {
   if (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial') {
@@ -95,7 +95,7 @@ function buildNbhdCircles() {
       _haversineM(approxCenter, p) < 5000);  // 5km to include outliers like Chronicles of Georgia
 
     if (ps.length === 0) {
-      // No valid places — tiny 40m dot to show neighbourhood exists but is empty
+      // No valid places, so a tiny 40m dot to show neighbourhood exists but is empty
       circles.push({ id:nbhd, lat:approxCenter.lat, lng:approxCenter.lng, radius:40, color });
     } else {
       // Centroid of valid places
@@ -199,7 +199,7 @@ function makeIconHTML(p, active) {
     const s = 58;
     // The pulsing halo is drawn INSIDE this svg, sharing the pin's own centre
     // (${s/2}, ${s/2}). It used to be a ::before/::after on the marker <div>, centred on
-    // that element's box — and any difference between the box and the pin, however
+    // that element's box, and any difference between the box and the pin, however
     // small, showed up as an off-centre ring. overflow:visible lets the halo paint
     // outside the 58x58 viewBox without changing the marker's layout size.
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="overflow:visible">
@@ -239,13 +239,13 @@ function makeIconHTML(p, active) {
   </svg>`;
 }
 
-// makeIcon shim — returns an object with enough API for ui-card.js
+// makeIcon shim: returns an object with enough API for ui-card.js
 function makeIcon(p, active) {
   return { html: makeIconHTML(p, active), active };
 }
 
 // Centre a place in the VISIBLE part of the map.
-// map.panTo() puts it in the geometric centre of the viewport — which on desktop is
+// map.panTo() puts it in the geometric centre of the viewport, which on desktop is
 // underneath the place card, and on a phone is behind the bottom sheet. So the card
 // described a city you could not see. Offset by half the card, and pull the zoom in
 // far enough that a country-scale view actually shows where the place is.
@@ -323,7 +323,7 @@ maplibregl.Map.prototype.panTo = function(center, options) {
   return _mlPanTo.call(this, center, options);
 };
 
-// fitBounds shim — accept array of {lat,lng} objects
+// fitBounds shim: accept an array of {lat,lng} objects
 const _mlFitBounds = maplibregl.Map.prototype.fitBounds;
 maplibregl.Map.prototype.fitBounds = function(bounds, options) {
   // If passed as Leaflet-style LatLngBounds or array of latlng objects
@@ -348,20 +348,56 @@ async function saveForOffline() {
   if (!navigator.onLine) { alert('Connect to WiFi first to save the map for offline use.'); return; }
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving...'; }
 
-  const lat = OFFLINE_CENTER.lat, lng = OFFLINE_CENTER.lng;
-  const tiles = [];
+  // ── Which tiles to save ────────────────────────────────────────────────────
+  // This used to be the city-guide logic: zoom 10 to 16, in one square around a
+  // single centre. That is right for a walkable city and wrong for a family map.
+  // FAMILY.map.center on these maps is a point in open country between the
+  // places, and the map opens at zoom 4 spanning whole countries, so it fetched
+  // 847 street-level tiles of terrain the reader never sees. Every one of those
+  // is a billable MapTiler request.
+  //
+  // Instead: the whole journey at the zooms the map actually opens at, then a
+  // small ring around each real place for when the reader taps a pin. A Set
+  // dedupes the overlap where places sit close together.
+  const _seen = new Set();
+  const _tileUrl = (z, x, y) =>
+    `https://api.maptiler.com/tiles/v3/${z}/${x}/${y}.pbf?key=${MAPTILER_KEY}`;
+  const _add = (z, x, y) => { if (x >= 0 && y >= 0) _seen.add(z + '/' + x + '/' + y); };
 
-  // Cache MapTiler vector tiles for city area
-  const pads = { 10:1, 11:2, 12:3, 13:4, 14:6, 15:7, 16:8 };
-  for (const [z, pad] of Object.entries(pads)) {
-    const zoom = parseInt(z);
-    const c = latLngToTile(lat, lng, zoom);
-    for (let dx = -pad; dx <= pad; dx++) {
-      for (let dy = -pad; dy <= pad; dy++) {
-        tiles.push(`https://api.maptiler.com/tiles/v3/${zoom}/${c.x+dx}/${c.y+dy}.pbf?key=${MAPTILER_KEY}`);
-      }
+  const _places = (typeof PLACES !== 'undefined' && PLACES.length)
+    ? PLACES.filter(p => typeof p.lat === 'number' && typeof p.lng === 'number')
+    : [{ lat: OFFLINE_CENTER.lat, lng: OFFLINE_CENTER.lng }];
+
+  // 1. Overview: the whole family journey, at the zooms the map opens at.
+  let _mnLa = 90, _mxLa = -90, _mnLn = 180, _mxLn = -180;
+  _places.forEach(p => {
+    _mnLa = Math.min(_mnLa, p.lat); _mxLa = Math.max(_mxLa, p.lat);
+    _mnLn = Math.min(_mnLn, p.lng); _mxLn = Math.max(_mxLn, p.lng);
+  });
+  for (let z = 3; z <= 5; z++) {
+    const a = latLngToTile(_mxLa, _mnLn, z), b = latLngToTile(_mnLa, _mxLn, z);
+    for (let x = Math.min(a.x, b.x); x <= Math.max(a.x, b.x); x++) {
+      for (let y = Math.min(a.y, b.y); y <= Math.max(a.y, b.y); y++) _add(z, x, y);
     }
   }
+
+  // 2. Each real place, closer in. Zoom 8 keeps one ring of surrounding country
+  //    so the town is not stranded on a single tile; 10 and 12 are the tile the
+  //    place itself sits on, which is what focusPlace() lands on.
+  const _rings = { 8: 1, 10: 0, 12: 0 };
+  _places.forEach(p => {
+    for (const [z, pad] of Object.entries(_rings)) {
+      const zoom = parseInt(z), c = latLngToTile(p.lat, p.lng, zoom);
+      for (let dx = -pad; dx <= pad; dx++) {
+        for (let dy = -pad; dy <= pad; dy++) _add(zoom, c.x + dx, c.y + dy);
+      }
+    }
+  });
+
+  const tiles = Array.from(_seen).map(k => {
+    const [z, x, y] = k.split('/');
+    return _tileUrl(z, x, y);
+  });
 
   // Also cache style JSON and fonts
   const extras = [
@@ -391,7 +427,7 @@ async function saveForOffline() {
   }
 }
 
-// ── PAN TO NEIGHBOURHOOD — called from ui-stories.js ─────────
+// ── PAN TO NEIGHBOURHOOD: called from ui-stories.js ─────────
 function panToNbhd(lng, lat, zoom) {
   if (!map) return;
   try {

@@ -1627,14 +1627,3 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 #fav-count-badge,
 #sheet-clear-btn,
 #trip-pdf-btn { display: none !important; }
-
-/* PDF button injected into the Place List header by ui-pdf.js */
-#sheet-pdf-btn {
-  background: none; border: none; cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem; font-weight: 700;
-  color: var(--brand, #1a3a5c);
-  padding: 4px 8px; border-radius: 6px;
-  white-space: nowrap; margin-inline-start: auto;
-}
-#sheet-pdf-btn:hover { background: rgba(0,0,0,0.05); }

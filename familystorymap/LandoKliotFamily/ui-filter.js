@@ -370,7 +370,7 @@ function renderList(){
   /* Action row: PDF + Share available from the main (Story Path) list too */
   const _actionRow = `
     <div style="display:flex;padding:8px 10px 6px;gap:5px;">
-      <button class="saved-action-btn" onclick="if(typeof generateStoryPathPDF==='function')generateStoryPathPDF()" style="flex:1">📄 PDF</button>
+      <button class="saved-action-btn" id="list-pdf-btn" onclick="if(typeof generatePDF==='function')generatePDF()" style="flex:1">📄 ${_T('חוברת PDF', 'Буклет PDF', 'PDF')}</button>
       <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
     </div>`;
 
