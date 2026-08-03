@@ -551,10 +551,14 @@ function apdTrack(name, params){
 // taking the family path and the region circles with it.
 function setMapLanguage(lang) {
   if (typeof map === 'undefined' || !map) return;
-  var field = ['coalesce',
-    ['get', 'name:' + lang],
-    ['get', 'name:latin'],
-    ['get', 'name']];
+  // Per-language fallbacks, matching the MUZA guide. A Hebrew reader looking at
+  // Belarus gets name:he where MapTiler has it, then a Latin transliteration,
+  // which is far more readable than falling through to Cyrillic.
+  var field;
+  if (lang === 'he')      field = ['coalesce', ['get','name:he'], ['get','name:latin'], ['get','name']];
+  else if (lang === 'ru') field = ['coalesce', ['get','name:ru'], ['get','name:en'], ['get','name']];
+  else if (lang === 'ar') field = ['coalesce', ['get','name:ar'], ['get','name:en'], ['get','name']];
+  else                    field = ['coalesce', ['get','name:en'], ['get','name:latin'], ['get','name']];
   var style;
   try { style = map.getStyle(); } catch (e) { return; }
   if (!style || !style.layers) return;

@@ -25,7 +25,7 @@
 //   9, 15, 18, 19 ...... no surviving photo — emoji placeholder
 //   6  Tula ............. young Benjamin Kliot (Maria, Jul 29)
 
-const FAMILY_ARCHIVE = 'ארכיון המשפחה · семейный архив';
+const FAMILY_ARCHIVE = 'ארכיון המשפחה · семейный архив · Family archive';
 
 const PHOTO_CREDITS = {
   6:  { author: FAMILY_ARCHIVE },   // Tula — young Benjamin Kliot
@@ -54,8 +54,13 @@ const PHOTO_CREDITS = {
 function photoCreditHtml(id){
   var c = (typeof PHOTO_CREDITS !== 'undefined') ? PHOTO_CREDITS[id] : null;
   if(!c || !c.author) return '';
-  var prefix = c.prefix || 'Photo';
-  var label  = prefix + ': ' + c.author + (c.license ? ' — ' + c.license : '');
+  // The credit printed every language at once, because the author string is a
+  // '·' separated triplet and nothing filtered it, and the word "Photo" was
+  // hardcoded English. Both now follow the reader's language.
+  var _pick = (typeof pickLang === 'function') ? pickLang : function(t){ return t; };
+  var prefix = c.prefix ? _pick(c.prefix)
+             : (typeof L3 === 'function' ? L3('צילום', 'Фото', 'Photo') : 'Photo');
+  var label  = prefix + ': ' + _pick(c.author) + (c.license ? ', ' + _pick(c.license) : '');
   if(!c.url) return '<span class="pc-credit-text">' + label + '</span>';
   return '<a href="' + c.url + '" target="_blank" rel="noopener nofollow">' + label + '</a>';
 }

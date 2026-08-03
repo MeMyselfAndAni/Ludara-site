@@ -1636,7 +1636,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
    <html lang>, so everything here keys off that and English and Russian are
    untouched. Photos, buttons and the nav arrows stay where they are. */
 html[lang="he"] .pc-body { text-align: right; }
-html[lang="he"] .pc-cat { flex-direction: row-reverse; justify-content: flex-end; }
+html[lang="he"] .pc-cat { flex-direction: row-reverse; justify-content: flex-start; }
 html[lang="he"] .pc-contacts { justify-content: flex-end; }
 html[lang="he"] .pc-note-wrap {
   border-left: none;
@@ -1645,9 +1645,34 @@ html[lang="he"] .pc-note-wrap {
 }
 html[lang="he"] .pc-tip { direction: rtl; }
 html[lang="he"] .pc-tip-label { margin-right: 0; margin-left: 5px; }
-html[lang="he"] .pc-hours { justify-content: flex-end; }
+html[lang="he"] .pc-hours { flex-direction: row-reverse; justify-content: flex-start; }
+/* Any flex row inside a Hebrew card starts from the right edge. Listing them by
+   name kept missing one, so the rule is stated once for the whole card body. */
+html[lang="he"] .pc-body [class^="pc-"],
+html[lang="he"] .pc-body [class*=" pc-"] { text-align: right; }
+html[lang="he"] .pc-credit, html[lang="he"] .pc-photo-credit { text-align: right; }
 
 /* A story that covers several periods reads as separate paragraphs rather than
    one block. Any single newline inside a note in data.js becomes a break here. */
 .pc-note-para { margin: 0 0 0.55em; }
 .pc-note-para:last-child { margin-bottom: 0; }
+
+/* ── Colour key, collapsed by default ────────────────────────────────────────
+   A family with six branches printed six full labels above the list, filling the
+   panel before the reader reached a single place. The key is now one row of dots
+   that opens on tap, and it stays open while a branch filter is active so the way
+   back to everyone is always in reach. */
+.thread-legend { flex-direction: column; align-items: stretch; gap: 6px; }
+.thread-key {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 700;
+  color: #8a7a55; padding: 0; text-align: start;
+}
+.thread-key:hover { color: #5a4c33; }
+.thread-key-dots { display: inline-flex; gap: 3px; }
+.thread-key-dots .thread-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+.thread-caret { margin-inline-start: auto; font-size: 0.7rem; opacity: 0.7; }
+.thread-chips { display: none; flex-wrap: wrap; gap: 5px; }
+.thread-legend.open .thread-chips { display: flex; }
+html[lang="he"] .thread-key { flex-direction: row-reverse; }

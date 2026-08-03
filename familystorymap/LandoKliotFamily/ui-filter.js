@@ -357,16 +357,29 @@ function renderList(){
      FAMILY.threads, so it is correct for any family without being maintained.
      Each chip also filters — fc() already exists and already toggles back to
      "all" when you click the active one. (31 Jul 2026.) */
+  /* The colour key used to print every branch label in full, which on a family
+     with six branches filled most of the panel before the reader reached a single
+     place. It now collapses to a row of dots and opens on tap. It stays open
+     while a branch filter is active, so the way back to "all" is always visible. */
+  const _legendOpen = (window._legendOpen === true) || AF !== 'all';
   const _legend = `
-    <div class="thread-legend">
-      ${FAMILY.threads.map(t => `
-        <button class="thread-chip${AF === t.key ? ' on' : ''}"
-                style="--c:${t.color}"
-                onclick="fc(null,'${t.key}')"
-                title="${_T('סינון לפי', 'Показать только', 'Show only')}: ${CL[t.key] || t.key}">
-          <span class="thread-dot"></span>${CL[t.key] || t.key}
-        </button>`).join('')}
-      ${AF !== 'all' ? `<button class="thread-chip thread-chip-all" onclick="fc(null,'all')">${_T('הכול', 'Все', 'All')}</button>` : ''}
+    <div class="thread-legend${_legendOpen ? ' open' : ''}">
+      <button class="thread-key" onclick="window._toggleLegend()"
+              title="${_T('מקרא הצבעים', 'Обозначения цветов', 'Colour key')}">
+        <span class="thread-key-dots">${FAMILY.threads.map(t => `<i class="thread-dot" style="--c:${t.color}"></i>`).join('')}</span>
+        <span class="thread-key-label">${_T('מקרא הצבעים', 'Цвета', 'Colour key')}</span>
+        <span class="thread-caret">${_legendOpen ? '\u25B4' : '\u25BE'}</span>
+      </button>
+      <div class="thread-chips">
+        ${FAMILY.threads.map(t => `
+          <button class="thread-chip${AF === t.key ? ' on' : ''}"
+                  style="--c:${t.color}"
+                  onclick="fc(null,'${t.key}')"
+                  title="${_T('סינון לפי', 'Показать только', 'Show only')}: ${CL[t.key] || t.key}">
+            <span class="thread-dot"></span>${CL[t.key] || t.key}
+          </button>`).join('')}
+        ${AF !== 'all' ? `<button class="thread-chip thread-chip-all" onclick="fc(null,'all')">${_T('הכול', 'Все', 'All')}</button>` : ''}
+      </div>
     </div>`;
 
   /* Action row: PDF + Share available from the main (Story Path) list too */
@@ -639,3 +652,11 @@ if(typeof document !== 'undefined'){
     }
   });
 }
+
+/* The colour key opens and closes on tap. Kept on window so the inline onclick in
+   the rendered list can reach it, and so the state survives a re-render. */
+window._legendOpen = false;
+window._toggleLegend = function(){
+  window._legendOpen = !window._legendOpen;
+  if (typeof renderList === 'function') renderList();
+};
