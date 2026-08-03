@@ -946,7 +946,10 @@ window.addEventListener('load', function() {
   new MutationObserver(function() {
     var name  = titleEl.textContent.trim();
     var place = PLACES.find(function(p) { return p.name === name; });
-    addrEl.textContent = ''; /* reading-first card: address line removed (still in PDF + Directions) */
+    /* Reading-first card: the address line stays out, but the stop's dates show
+       here, the same as on the Lando-Kliot map. Without this the card never told
+       you when you were. */
+    addrEl.textContent = (place && place.years) ? place.years : '';
   }).observe(titleEl, { childList: true, characterData: true, subtree: true });
 });
 </script>

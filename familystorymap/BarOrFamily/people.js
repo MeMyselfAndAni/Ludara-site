@@ -5,8 +5,10 @@
 //
 // ⚠️ The book NEVER names Chaya's brothers and sisters. The single entry
 // 'chaya_siblings' stands for all of them on purpose. Do not invent names.
-// Grandchildren have no parents[] because the book never says which son each
-// belongs to. Empty fields here are findings, not gaps to be filled in.
+// The book never says which son each grandchild belongs to. The family told
+// Maria on 3 August 2026, so the seven now sit under their own parents rather
+// than on a dashed line to Zehava. Everything else left empty here is a finding,
+// not a gap to be filled in.
 //
 //   branch : 'narcyz' (Chaya's family) | 'urbach' (Natan's family) | 'baror' (today)
 //   places : PLACES ids, in the order that person's journey unfolds
@@ -29,25 +31,25 @@ const PEOPLE = [
 
   // ── זהבה ובני דורה ──
   { id:'rachel', he:'רחל', years:'', role:'בת דודתו של רמי, בת כיתתה של זהבה', branch:'baror', col:0.5, row:2, places:[18] },
-  { id:'rami', he:'רמי', years:'', role:'בעלה של זהבה', branch:'baror', col:2.5, row:2, places:[29, 30] },
-  { id:'zehava', he:'זהבה (גולדה\'לה)', years:'נ. שלהי אוקטובר 1941', role:'מחברת הספר, בתם היחידה', branch:'baror', col:3.5, row:2, places:[7, 8, 9, 10, 11, 12, 1, 3, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
+  { id:'rami', he:'רמי', years:'', role:'בעלה של זהבה', branch:'baror', col:2.5, row:2, places:[33, 29, 30] },
+  { id:'zehava', he:'זהבה (גולדה\'לה)', years:'נ. שלהי אוקטובר 1941', role:'מחברת הספר, בתם היחידה', branch:'baror', col:3.5, row:2, places:[7, 8, 9, 10, 11, 12, 1, 3, 13, 14, 15, 16, 17, 18, 19, 20, 21, 33, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
   { id:'golda_nephew', he:'בן אחותה של דודה גולדה', years:'', role:'⚠️ נספה בשואה, שמו אינו נמסר', branch:'narcyz', col:5.8, row:2, places:[6] },
 
   // ── הבנים והכלות ──
-  { id:'gil', he:'גיל', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:3.0, row:3, places:[] },
-  { id:'li', he:'לי', years:'', role:'כלתה של זהבה', branch:'baror', col:6.0, row:3, places:[] },
-  { id:'ofer', he:'עופר', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:1.0, row:3, places:[] },
-  { id:'ron', he:'רון', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:5.0, row:3, places:[] },
-  { id:'ruti', he:'רותי', years:'', role:'כלתה של זהבה', branch:'baror', col:2.0, row:3, places:[] },
+  { id:'gil', he:'גיל', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:3.0, row:3, places:[33] },
+  { id:'li', he:'לי', years:'', role:'כלתה של זהבה', branch:'baror', col:6.5, row:3, places:[] },
+  { id:'ofer', he:'עופר', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:0.5, row:3, places:[33] },
+  { id:'ron', he:'רון', years:'', role:'בנם של זהבה ורמי', branch:'baror', col:5.5, row:3, places:[33] },
+  { id:'ruti', he:'רותי', years:'', role:'כלתה של זהבה', branch:'baror', col:1.5, row:3, places:[] },
   { id:'tamar_gil', he:'תמר', years:'', role:'כלתה של זהבה', branch:'baror', col:4.0, row:3, places:[] },
 
   // ── הנכדים ──
   { id:'dolev', he:'דוֹלֶב', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:1.5, row:4, places:[] },
-  { id:'ella', he:'אלה', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:5.5, row:4, places:[] },
-  { id:'eyal', he:'אֱיָל', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:6.5, row:4, places:[] },
+  { id:'ella', he:'אלה', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:2.5, row:4, places:[] },
+  { id:'eyal', he:'אֱיָל', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:3.5, row:4, places:[] },
   { id:'karni', he:'קרני', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:0.5, row:4, places:[] },
-  { id:'tamar_grandchild', he:'תמר', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:3.5, row:4, places:[] },
-  { id:'yonatan', he:'יונתן', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:2.5, row:4, places:[] },
+  { id:'tamar_grandchild', he:'תמר', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:6.5, row:4, places:[] },
+  { id:'yonatan', he:'יונתן', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:5.5, row:4, places:[] },
   { id:'yuval', he:'יובל', years:'', role:'נכד/ה של זהבה ורמי', branch:'baror', col:4.5, row:4, places:[] },
 ];
 
@@ -59,24 +61,19 @@ const FAMILY_UNIONS = [
   { p:['baruch_urbach','golda_urbach'],c:['natan'] },
   { p:['chaya','natan'],               c:['zehava'] },
   { p:['zehava','rami'],               c:['ofer','gil','ron'] },
-  { p:['ofer','ruti'],                 c:[] },
-  { p:['gil','tamar_gil'],             c:[] },
-  { p:['ron','li'],                    c:[] },
+  { p:['ofer','ruti'],                 c:['karni','dolev'] },
+  { p:['gil','tamar_gil'],             c:['ella','eyal','yuval'] },
+  { p:['ron','li'],                    c:['yonatan','tamar_grandchild'] },
   { p:['chana_dichter'],               c:['rachel'] },
 ];
 
 // ─── Softer links, drawn as dashed edges ──────────────────────────────────────
-// The seven grandchildren hang off Zehava rather than off a son, because the book
-// never says which grandchild belongs to which son. That is a finding, not a gap:
-// do not reassign them without the family's word.
+// The seven grandchildren used to hang off Zehava on a dashed line, because the
+// book never says which grandchild belongs to which son. Maria confirmed it with
+// the family on 3 August 2026, so each one now sits under its own parents on a
+// solid line: Ofer and Ruti have Karni and Dolev, Ron and Li have Yonatan and
+// Tamar, Gil and Tamar have Ella, Eyal and Yuval. Ron and Gil are the twins.
 const FAMILY_EXTRA_EDGES = [
-  { from:'zehava',     to:'karni',            label:'נכד/ה' },
-  { from:'zehava',     to:'dolev',            label:'נכד/ה' },
-  { from:'zehava',     to:'yonatan',          label:'נכד/ה' },
-  { from:'zehava',     to:'tamar_grandchild', label:'נכד/ה' },
-  { from:'zehava',     to:'yuval',            label:'נכד/ה' },
-  { from:'zehava',     to:'ella',             label:'נכד/ה' },
-  { from:'zehava',     to:'eyal',             label:'נכד/ה' },
   { from:'chaya',      to:'golda_yora',       label:'בת דודתה' },
   { from:'golda_yora', to:'golda_nephew',     label:'בן אחותה' },
   { from:'rami',       to:'chana_dichter',    label:'דודתו' },
