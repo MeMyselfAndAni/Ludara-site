@@ -42,7 +42,11 @@
     style.textContent = `
       #tree-overlay { position:fixed; inset:0; z-index:6000; background:#0f0d0a; display:none; flex-direction:column; }
       #tree-overlay.open { display:flex; }
-      .tree-header { display:flex; align-items:center; gap:10px; padding:10px 16px; flex-wrap:wrap; border-bottom:1px solid rgba(212,168,75,0.35); }
+      .tree-header { display:flex; flex-direction:column; gap:9px; padding:10px 16px; border-bottom:1px solid rgba(212,168,75,0.35); }
+      .tree-header-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+      .tree-header-controls { gap:8px; }
+      .tree-zoom-group { display:inline-flex; gap:6px; margin-inline-start:auto; }
+      @media (max-width:768px){ .tree-zoom-group { margin-inline-start:0; } }
       .tree-title { font-family:'Fraunces',Georgia,serif; font-size:1.25rem; color:#d4a84b; font-weight:700; unicode-bidi:plaintext; }
       .tree-hint { font-size:0.72rem; color:#bba97a; unicode-bidi:plaintext; }
       .tree-btn { background:none; border:1.5px solid rgba(212,168,75,0.6); color:#d4a84b; border-radius:16px; padding:5px 12px; font-size:0.75rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; }
@@ -79,16 +83,26 @@
 
     const ov = document.createElement('div');
     ov.id = 'tree-overlay';
+    // Two rows: the title and the close button on top, the surname chips and the
+    // zoom controls beneath. They used to share one wrapping flex row, so on a
+    // family with several branches the chips wrapped into the title and the whole
+    // header read as a jumble.
     ov.innerHTML = `
       <div class="tree-header">
-        <span class="tree-title">${FAMILY.tree.title}</span>
-        <span class="tree-hint">${FAMILY.tree.hint}</span>
-        <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">${FAMILY.tree.allChip}</button>
-        ${_TB.map(b => `<button class="tree-btn" id="tree-btn-${b.key}" onclick="window._treeJump('${b.key}')">${b.chip}</button>`).join('\n        ')}
-        <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
-        <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
-        <button class="tree-btn" onclick="window._treeFit()">⤢</button>
-        <button class="tree-btn tree-close" onclick="closeFamilyTree()">✕ סגירה · ✕ Закрыть · ✕ Close</button>
+        <div class="tree-header-row">
+          <span class="tree-title">${FAMILY.tree.title}</span>
+          <span class="tree-hint">${FAMILY.tree.hint}</span>
+          <button class="tree-btn tree-close" onclick="closeFamilyTree()">✕ סגירה · ✕ Закрыть · ✕ Close</button>
+        </div>
+        <div class="tree-header-row tree-header-controls">
+          <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">${FAMILY.tree.allChip}</button>
+          ${_TB.map(b => `<button class="tree-btn" id="tree-btn-${b.key}" onclick="window._treeJump('${b.key}')">${b.chip}</button>`).join('\n          ')}
+          <span class="tree-zoom-group">
+            <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
+            <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
+            <button class="tree-btn" onclick="window._treeFit()">⤢</button>
+          </span>
+        </div>
       </div>
       <div id="tree-scroll"></div>
     `;
@@ -417,6 +431,10 @@
 
   window.addEventListener('load', function(){
     injectDom();
+    // The header is built from FAMILY's raw trilingual strings. If the reader
+    // already chose a language before this ran, lang.js has been and gone, so
+    // ask it to filter the header now.
+    if (typeof window._applyTreeLang === 'function') window._applyTreeLang();
     render();
     enableDrag();
     // fit on first open

@@ -47,7 +47,7 @@
          bh:_FT('pins').he, br:_FT('pins').ru, be:_FT('pins').en,
          demo:'open-card-delayed-no-heart' }),
     FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom, what is there today.',
-         bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית — מה יש במקום היום.',
+         bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית, מה יש במקום היום.',
          br:'Каждая карточка рассказывает, что здесь случилось и кто из семьи связан с этим местом, с фотографиями из семейного архива. Кнопки с именами ведут прямо в дерево, а внизу — что там сегодня.',
          demo:'scroll-card' }),
     FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека', te:'Find a Place or a Person',
@@ -57,7 +57,7 @@
          bh:_FT('regions').he, br:_FT('regions').ru, be:_FT('regions').en,
          target:'#nbhd-bar', closeCard:true }),
     FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time: "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
-         bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
+         bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם: "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
          br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
          target:'#tree-fab', demo:'open-tree' }),
     FS({ th:'רשימת המקומות', tr:'Список мест', te:'The Place List', be:'The list button opens every place in the story, numbered in the order it happened, each with its photograph, its branch and its dates. Tapping a row opens that place on the map.',
@@ -69,11 +69,11 @@
          br:'Нажмите «Буклет PDF», и вся семейная история разворачивается в книгу для печати: каждое место со своей фотографией, рассказом и QR-кодом. Для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
          target:'#list-pdf-btn' }),
     FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world, by message or email, in one tap.',
-         bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
+         bh:'שלחו את המפה לקרובים בארץ ובעולם, בהודעה או במייל, בלחיצה אחת.',
          br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
-         target:'#sheet button[onclick="shareItinerary()"]' }),
+         target:'#list-share-btn' }),
     FS({ th:'הכול מוכן!', tr:'Всё готово!', te:'All Set!', be:'The family\'s world is open before you. Set out on the journey.',
-         bh:'עולם המשפחה פתוח לפניכם — צאו למסע.',
+         bh:'עולם המשפחה פתוח לפניכם. צאו למסע.',
          br:'Мир семьи открыт перед вами — в путь.',
          mobileCardOffset:-75, done:true })
   ];
@@ -107,6 +107,11 @@
     '#tut-title{font-family:"Playfair Display",serif;font-size:1.05rem;font-weight:700;color:#31261d;margin:0 0 8px;}',
     '#tut-body{font-family:"Inter",sans-serif;font-size:0.80rem;color:#4a5568;line-height:1.65;margin:0 0 16px;}',
     '#tut-actions{display:flex;justify-content:space-between;align-items:center;}',
+    /* Hebrew guide cards were laid out left to right: the paragraph ran RTL but
+       still hugged the left edge, and the full stop landed on the wrong side.
+       applyLanguage() sets <html lang>, so the card can follow it. */
+    'html[lang="he"] #tut-card{direction:rtl;text-align:right;}',
+    'html[lang="he"] #tut-dots{justify-content:flex-start;}',
     '#tut-skip{background:none;border:none;font-size:0.72rem;color:rgba(49,38,29,0.45);cursor:pointer;',
     '  font-family:"Inter",sans-serif;padding:4px 0;}',
     '#tut-next{background:#31261d;color:#f5edd8;border:none;border-radius:20px;padding:9px 22px;',
@@ -623,7 +628,8 @@
     if (step.demo !== 'open-tree') closeTreeDemo();
     /* The list stays open across its own step and the PDF step that follows,
        because the booklet button lives in the list header. */
-    if (step.demo !== 'show-list' && step.target !== '#list-pdf-btn') closeListDemo();
+    var _sheetSteps = ['#list-pdf-btn', '#list-share-btn'];
+    if (step.demo !== 'show-list' && _sheetSteps.indexOf(step.target) === -1) closeListDemo();
 
     /* Close any open place card if this step requests it — unconditional */
     if (step.closeCard) {
