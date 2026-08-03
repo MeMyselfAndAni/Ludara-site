@@ -1258,34 +1258,31 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
   #place-card-dim { background: rgba(0,0,0,0.18); pointer-events: none; }
 }
 
-/* The pin the open card is about — two offset pulses so it reads as a beacon. */
-/* line-height:0 + display:block matter: the marker div holds an inline <svg>, which
-   sits on a text baseline and leaves a few px of descender space below it. That made
-   the div taller than the pin, so a halo centred on the div sat low. */
+/* The pin the open card is about. The ring is a <circle> inside the pin's own svg
+   (see makeIconHTML in map-core.js), so it cannot drift off centre: it shares the
+   pin's coordinates. Only its radius and opacity animate. */
 .mgl-marker { position: relative; line-height: 0; font-size: 0; }
 .mgl-marker svg { display: block; }
-.mgl-marker.is-active::before,
-.mgl-marker.is-active::after {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 58px; height: 58px;
-  margin: -29px 0 0 -29px;
-  border-radius: 50%;
-  border: 3px solid #f5b800;
+.mgl-halo {
+  fill: none;
+  stroke: #f5b800;
+  stroke-width: 3;
+  opacity: 0;
   pointer-events: none;
+}
+.mgl-marker.is-active .mgl-halo {
   animation: mglHalo 2.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
 }
-.mgl-marker.is-active::after { animation-delay: 1.1s; }
+.mgl-marker.is-active .mgl-halo.b { animation-delay: 1.1s; }
 @keyframes mglHalo {
-  0%   { transform: scale(0.62); opacity: 0.95; }
-  70%  { transform: scale(1.9);  opacity: 0; }
-  100% { transform: scale(1.9);  opacity: 0; }
+  0%   { r: 18px; opacity: 0.95; }
+  70%  { r: 54px; opacity: 0; }
+  100% { r: 54px; opacity: 0; }
 }
+/* If a browser will not animate the r property, show a steady ring instead. */
 @media (prefers-reduced-motion: reduce) {
-  .mgl-marker.is-active::before,
-  .mgl-marker.is-active::after { animation: none; opacity: 0.55; transform: scale(1.25); }
-}
+  .mgl-marker.is-active .mgl-halo { animation: none; opacity: 0.6; r: 40px; }
+}}
 #place-card-dim.open { display: block; }
 
 /* The card itself */

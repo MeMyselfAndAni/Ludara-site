@@ -197,7 +197,14 @@ function makeIconHTML(p, active) {
   const emoji = p.emoji || '📍';
   if (active) {
     const s = 58;
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">
+    // The pulsing halo is drawn INSIDE this svg, sharing the pin's own centre
+    // (${s/2}, ${s/2}). It used to be a ::before/::after on the marker <div>, centred on
+    // that element's box — and any difference between the box and the pin, however
+    // small, showed up as an off-centre ring. overflow:visible lets the halo paint
+    // outside the 58x58 viewBox without changing the marker's layout size.
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="overflow:visible">
+      <circle class="mgl-halo"   cx="${s/2}" cy="${s/2}" r="18"/>
+      <circle class="mgl-halo b" cx="${s/2}" cy="${s/2}" r="18"/>
       <defs>
         <radialGradient id="ag${p.id}" cx="35%" cy="28%" r="70%">
           <stop offset="0%" stop-color="#ffe566"/>
