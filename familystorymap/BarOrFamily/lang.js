@@ -158,6 +158,12 @@ function applyLanguage(lang){
   };
   _setTxt('pill-saved-label',   L3('סימניות', 'Закладки', 'Bookmarks'));
   _setTxt('desktop-list-label', L3('מקומות', 'Места', 'Places'));
+  // There is a THIRD list button, the one actually on screen, and its label is
+  // addressed by CLASS rather than id, so every id-based fix missed it. That is
+  // why the button kept reading "Places" even once #desktop-list-label was
+  // correctly Hebrew. Set every label of either kind.
+  document.querySelectorAll('.list-toggle-label, #list-toggle-desktop-label')
+    .forEach(function(el){ el.textContent = L3('מקומות', 'Места', 'Places'); });
   _setTxt('nbhd-all-label',     L3('הכול', 'Все', 'All'));
   _setTxt('saved-panel-label',  L3('הסימניות שלכם', 'Ваши закладки', 'Your bookmarks'));
   _setTxt('saved-route-btn',    L3('🗺 מסלול מלא', '🗺 Весь маршрут', '🗺 Full itinerary'));

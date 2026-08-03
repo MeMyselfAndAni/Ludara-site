@@ -144,7 +144,7 @@ async function generatePDF(overridePlaces, customSubtitle){
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
-        ${p.note ? `<div class="pdf-card-note">${p.note}</div>` : ''}
+        ${p.note ? `<div class="pdf-card-note">${String(p.note).split(/\n+/).map(function(t){return t.trim();}).filter(Boolean).map(function(t){return '<p class="pdf-note-para">'+t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p>';}).join('')}</div>` : ''}
         ${p.visit ? `<div class="pdf-card-tip"><span class="pdf-tip-label">🧭 ${_enP ? 'today' : _ruP ? 'сегодня' : 'היום'}</span> ${p.visit}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
@@ -368,6 +368,8 @@ async function generatePDF(overridePlaces, customSubtitle){
     margin: 4px 0;
     flex: 1;
   }
+  .pdf-note-para { margin: 0 0 0.5em; }
+  .pdf-note-para:last-child { margin-bottom: 0; }
   .pdf-note-by {
     font-size: 0.62rem;
     color: #d4a84b;

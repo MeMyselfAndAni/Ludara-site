@@ -1646,3 +1646,8 @@ html[lang="he"] .pc-note-wrap {
 html[lang="he"] .pc-tip { direction: rtl; }
 html[lang="he"] .pc-tip-label { margin-right: 0; margin-left: 5px; }
 html[lang="he"] .pc-hours { justify-content: flex-end; }
+
+/* A story that covers several periods reads as separate paragraphs rather than
+   one block. Any single newline inside a note in data.js becomes a break here. */
+.pc-note-para { margin: 0 0 0.55em; }
+.pc-note-para:last-child { margin-bottom: 0; }
