@@ -371,7 +371,7 @@ function renderList(){
   const _actionRow = `
     <div style="display:flex;padding:8px 10px 6px;gap:5px;">
       <button class="saved-action-btn" id="list-pdf-btn" onclick="if(typeof generatePDF==='function')generatePDF()" style="flex:1">📄 ${_T('חוברת PDF', 'Буклет PDF', 'PDF')}</button>
-      <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
+      <button class="saved-action-btn" id="list-share-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
     </div>`;
 
   el.innerHTML = _legend + _actionRow + filtered.map(p=>`

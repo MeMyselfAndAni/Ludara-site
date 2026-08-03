@@ -78,6 +78,26 @@ function _snapshot(){
   });
 }
 
+// The tree overlay is built by ui-tree.js on the window 'load' event, which is
+// often AFTER the reader has picked a language on the splash. _snapshot() only
+// runs once, so if the overlay did not exist yet its header was never captured
+// and kept showing all three languages at once, no matter how often the reader
+// switched. Re-derive it straight from FAMILY instead of from the snapshot, and
+// let ui-tree.js call this again once it has injected the overlay.
+function _applyTreeLang(){
+  var t = (typeof FAMILY !== 'undefined' && FAMILY.tree) || {};
+  var set = function(el, val){ if(el && val) el.textContent = pickLang(val); };
+  set(document.querySelector('#tree-overlay .tree-title'), t.title);
+  set(document.querySelector('#tree-overlay .tree-hint'),  t.hint);
+  set(document.getElementById('tree-btn-all'),             t.allChip);
+  (t.branches || []).forEach(function(b){
+    set(document.getElementById('tree-btn-' + b.key), b.chip);
+  });
+  var closeBtn = document.querySelector('#tree-overlay .tree-close');
+  if(closeBtn) closeBtn.textContent = L3('✕ סגירה', '✕ Закрыть', '✕ Close');
+}
+window._applyTreeLang = _applyTreeLang;
+
 function applyLanguage(lang){
   _snapshot();               // capture trilingual originals before the first filter
   LANG = lang;
@@ -122,8 +142,7 @@ function applyLanguage(lang){
   if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
   var si = document.getElementById('topbar-search');
   if(si) si.placeholder = L3('מקום או שם…', 'место или имя…', 'place or name…');
-  var closeBtn = document.querySelector('#tree-overlay .tree-close');
-  if(closeBtn) closeBtn.textContent = L3('✕ סגירה', '✕ Закрыть', '✕ Close');
+  _applyTreeLang();
 
   // Button labels that were plain English in the template
   // getElementById returns only the FIRST element with an id, so a stray duplicate
