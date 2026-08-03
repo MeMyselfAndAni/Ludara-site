@@ -165,6 +165,11 @@ function applyLanguage(lang){
   document.querySelectorAll('.list-toggle-label, #list-toggle-desktop-label')
     .forEach(function(el){ el.textContent = L3('מקומות', 'Места', 'Places'); });
   _setTxt('nbhd-all-label',     L3('הכול', 'Все', 'All'));
+  // The Regions button's own label was plain English in the template. Its
+  // tooltip is set below; without this the button read "Regions" in Hebrew
+  // with a Hebrew tooltip hanging off it.
+  document.querySelectorAll('[id="nbhd-show-btn"], .nbhd-show-btn')
+    .forEach(function(el){ el.textContent = L3('🗺 אזורים', '🗺 Регионы', '🗺 Regions'); });
   _setTxt('saved-panel-label',  L3('הסימניות שלכם', 'Ваши закладки', 'Your bookmarks'));
   _setTxt('saved-route-btn',    L3('🗺 מסלול מלא', '🗺 Весь маршрут', '🗺 Full itinerary'));
   _setTxt('saved-pdf-btn',      '📄 PDF');
@@ -185,8 +190,35 @@ function applyLanguage(lang){
     lf.classList.toggle('lf-on-he', lang === 'he');
     lf.classList.toggle('lf-on-ru', lang === 'ru');
     lf.classList.toggle('lf-on-en', lang === 'en');
-    lf.title = L3('Переключить язык / switch language', 'החלפת שפה / switch language', 'החלפת שפה / сменить язык');
   }
+
+  // ── Tooltips ──
+  // These were written straight into index.html in English and nothing ever
+  // touched them again, so a Hebrew reader hovering the guide, location or
+  // regions button read English. The language button was worse: it showed the
+  // OTHER two languages, so the Hebrew reader got a Russian tooltip.
+  // Addressed with querySelectorAll on a selector that matches the id AND the
+  // class, because the id-only path is exactly what let the Places button stay
+  // English for hours. A map that does not carry one of these buttons simply
+  // matches nothing.
+  var _setTitle = function(sel, txt){
+    document.querySelectorAll(sel).forEach(function(el){ el.setAttribute('title', txt); });
+  };
+  _setTitle('[id="guide-btn"], .guide-btn',
+            L3('הדרכה', 'Запустить тур', 'Show tutorial'));
+  _setTitle('[id="locate-btn"], .locate-btn',
+            L3('המיקום שלי', 'Моё местоположение', 'Show my location'));
+  _setTitle('[id="nbhd-show-btn"], .nbhd-show-btn',
+            L3('הצגת אזורים', 'Показать регионы', 'Show regions'));
+  _setTitle('[id="lang-fab"], .lang-fab',
+            L3('החלפת שפה', 'Сменить язык', 'Switch language'));
+  // These two were written into index.html as a Hebrew and Russian pair joined
+  // by ' · ', with no English segment at all, and nothing ever filtered them.
+  // Every reader saw both, and the English reader saw no English.
+  _setTitle('[id="pill-storypath"], .pill-storypath',
+            L3('לצייר את מסע המשפחה לפי הסדר', 'Нарисовать путь семьи по порядку', 'Draw the family journey in order'));
+  _setTitle('[id="tree-fab"], .tree-fab',
+            L3('עץ המשפחה', 'Дерево семьи', 'Family tree'));
 
   // ── Re-render everything that was built from the data ──
   if(typeof closePlaceCard === 'function') closePlaceCard(true);
