@@ -67,7 +67,7 @@
     FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF Booklet', be:'Tap PDF booklet and the whole family story is laid out as a printable book: every place with its photograph, its story and a QR code to the location. For a family gathering, an evening of memories, or a gift to the next generation.',
          bh:'לחצו על «חוברת PDF» וכל סיפור המשפחה נפרש כספר להדפסה: כל מקום עם התצלום שלו, הסיפור וקוד QR למיקום. למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
          br:'Нажмите «Буклет PDF», и вся семейная история разворачивается в книгу для печати: каждое место со своей фотографией, рассказом и QR-кодом. Для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
-         target:'#sheet-pdf-btn' }),
+         target:'#list-pdf-btn' }),
     FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world, by message or email, in one tap.',
          bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
          br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
@@ -572,7 +572,7 @@
     if (step.demo !== 'open-tree') closeTreeDemo();
     /* The list stays open across its own step and the PDF step that follows,
        because the booklet button lives in the list header. */
-    if (step.demo !== 'show-list' && step.target !== '#sheet-pdf-btn') closeListDemo();
+    if (step.demo !== 'show-list' && step.target !== '#list-pdf-btn') closeListDemo();
 
     /* Close any open place card if this step requests it — unconditional */
     if (step.closeCard) {
