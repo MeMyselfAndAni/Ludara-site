@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'barorfamily',
   url:   'https://ludara.ai/familystorymap/barorfamily/',
-  cacheVersion: 22,           // bump on every deploy so the service worker updates
+  cacheVersion: 23,           // bump on every deploy so the service worker updates
 
   // Hebrew only — one entry means no language switcher.
   languages: ['he'],
