@@ -266,6 +266,15 @@
     });
   }
 
+  // The guided tour opens the tree to show it off. That must not leave anything in
+  // the browser history, or Back would walk through the demo instead of the map.
+  window._treeDemo = function(show){
+    _suppressPop = true;                       // no pushState while demoing
+    if(show) window.openFamilyTree();
+    else     window.closeFamilyTree(true);     // true = do not call history.back()
+    _suppressPop = false;
+  };
+
   window.openFamilyTree = function(personId){
     const ov = document.getElementById('tree-overlay');
     if(!ov) return;
