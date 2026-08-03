@@ -141,6 +141,9 @@ function applyLanguage(lang){
   _setTxt('sheet-clear-btn',    L3('🗑 ניקוי', '🗑 Очистить', '🗑 Clear'));
   var _scb = document.getElementById('sheet-clear-btn');
   if(_scb) _scb.title = L3('ניקוי כל הסימניות', 'Очистить все закладки', 'Clear all bookmarks');
+  // The booklet button is injected by ui-pdf.js, which may run before or after
+  // this, so ask it to relabel itself rather than assume the element is there.
+  if (typeof window._refreshPdfBtnLabel === 'function') window._refreshPdfBtnLabel();
   var _tt = document.querySelector('.trip-title');
   if(_tt) _tt.textContent = L3('🗺 המסלול שלכם', '🗺 Ваш маршрут', '🗺 Your itinerary');
 
