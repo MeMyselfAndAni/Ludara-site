@@ -37,7 +37,7 @@ rem     was missing from this list until 2026-07-30: it was created after this
 rem     script was written, so the trilingual engine was only ever live because it was
 rem     copied by hand. sw.js precaches ./lang.js, so a missing also breaks
 rem     offline mode. The check further down now catches this class of mistake.
-set "FILES=index.html data.js people.js lang.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js ui-tree.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js"
+set "FILES=index.html family.js data.js people.js lang.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js ui-tree.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js"
 
 echo.
 echo Copying story map files into the live site...

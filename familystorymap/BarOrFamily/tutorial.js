@@ -28,29 +28,30 @@
       done: o.done
     };
   }
+  // The sentences that name a family live in FAMILY.tutorial (family.js). A plain
+  // string there is used for every language; an object gives per-language text.
+  function _FT(k){
+    var v = (FAMILY.tutorial || {})[k] || '';
+    return (typeof v === 'string') ? { he:v, ru:v, en:v } : v;
+  }
   var STEPS = [
-    FS({ th:'תינוקת בשמיכת פוך', tr:'История нашей семьи', te:'Our Family Story', be:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.',
-         bh:'מפה אחת, מאה שנים של מסע: מוולברום שבפולין, דרך אוקראינה, הרי האורל ואוזבקיסטן, ועד קריית ביאליק. הסיור הקצר הזה מראה איך מטיילים בה.',
-         br:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.' }),
-    FS({ th:'מסע המשפחה', tr:'Путь семьи', te:'The Family Path', be:'The gold button draws the whole family journey in order — from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.',
-         bh:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר — מוולברום, דרך אוקראינה, האורל ואוזבקיסטן, ועד קריית ביאליק. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
-         br:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
+    FS({ th:_FT('title').he, tr:_FT('title').ru, te:_FT('title').en,
+         bh:_FT('intro').he, br:_FT('intro').ru, be:_FT('intro').en }),
+    FS({ th:'מסע המשפחה', tr:'Путь семьи', te:'The Family Path',
+         bh:_FT('path').he, br:_FT('path').ru, be:_FT('path').en,
          target:'#pill-storypath', demo:'close-saved-pulse' }),
-    FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped', be:'Every pin is a chapter of the family\'s life: the city where grandmother Nina was born, the village where grandfather Zakhar was saved, the home in Tambov. Tap any icon to read what happened there.',
-         bh:'כל סיכה היא פרק בסיפור: העיירה שבה גדלה חיה, קרון המשא שבו נסעו, הבקתה שליד טשקנט, הבית הראשון בישראל. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
-         br:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
+    FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped',
+         bh:_FT('pins').he, br:_FT('pins').ru, be:_FT('pins').en,
          demo:'open-card-delayed-no-heart' }),
     FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom — what is there today.',
          bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית — מה יש במקום היום.',
          br:'Каждая карточка рассказывает, что здесь случилось и кто из семьи связан с этим местом, с фотографиями из семейного архива. Кнопки с именами ведут прямо в дерево, а внизу — что там сегодня.',
          demo:'scroll-card' }),
-    FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека', te:'Find a Place or a Person', be:'Type a place name or a family member\'s name — the map shows only their places. Pin colors mark the branches: Friedland, Kliot, Lando & Schechter, war & evacuation, Israel.',
-         bh:'הקלידו שם של מקום או של בן משפחה — והמפה תציג רק את המקומות שלו. צבעי הסיכות מסמנים: משפחת נֶרציס, משפחת אורבך, שנות המלחמה, ישראל, ואתרי הזיכרון.',
-         br:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
+    FS({ th:'חיפוש מקום או אדם', tr:'Поиск места или человека', te:'Find a Place or a Person',
+         bh:_FT('search').he, br:_FT('search').ru, be:_FT('search').en,
          target:'#topbar-search', closeCard:true, demo:'scroll-filter' }),
-    FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions', be:'Each bubble is a chapter of geography: Belarus & Lithuania, Russia, the Urals & Asia, Ukraine, Israel. Tap one to zoom straight into that part of the journey.',
-         bh:'כל בועה היא פרק גאוגרפי: פולין, אוקראינה, האורל וסיביר, אוזבקיסטן, אירופה, ישראל ואתרי הזיכרון. לחיצה מקרבת ישר לאותו חלק של המסע.',
-         br:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
+    FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions',
+         bh:_FT('regions').he, br:_FT('regions').ru, be:_FT('regions').en,
          target:'#nbhd-bar', closeCard:true }),
     FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The tree button opens the family tree — the whole family in three colored branches. Click a person and their life journey appears on the map; the branch buttons highlight each family name, and the mouse wheel zooms.',
          bh:'הכפתור 🌳 פותח את עץ המשפחה — כל בני המשפחה בשלושה ענפים צבעוניים. לחיצה על אדם מציירת את מסע חייו על המפה; כפתורי הענפים מדגישים כל שם משפחה, וגלגלת העכבר מקרבת ומרחיקה.',

@@ -5,7 +5,7 @@
 // Zehava Bar-Or, updated 06.2018 — a memoir about
 // her mother Chaya of Wolbrom. Mapped July 2026.
 //
-// HEBREW ONLY — unlike LandoKliotFamily this guide is single-language.
+// HEBREW ONLY — see FAMILY.languages in family.js.
 //
 // EVERY note follows Zehava's own wording. Nothing here is invented.
 // Places the book leaves unresolved carry an explicit ⚠️ paragraph saying so;

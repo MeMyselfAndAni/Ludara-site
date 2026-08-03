@@ -7,30 +7,18 @@ let CARD_IDX     = 0;
 let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 // AID is declared in data.js
 
-const CAT_COLORS = {
-  // Family story threads (match CC in map.js)
-  friedland:'#3a6ea5', kliot:'#6b8e4e', lando:'#2f8f8f', war:'#a4402f', israel:'#c9a227',
-  landmark:'#e8724a'
-};
-const CAT_LABELS = {
-  // Family story threads (match CL in map.js) — Hebrew only
-  narcyz:'משפחת נֶרציס — צד אמא',
-  urbach:'משפחת אורבך — צד אבא',
-  war:'שנות המלחמה והנדודים',
-  israel:'ישראל — הבית החדש',
-  memorial:'מסעות החזרה והזיכרון',
-  baror:'בר־אור — המשפחה שאחרי',
-  landmark:'Landmark'
-};
-const CAT_GRADIENTS = {
-  // Family story threads
-  narcyz:'linear-gradient(135deg,#2c5580,#3a6ea5)',
-  urbach:'linear-gradient(135deg,#516d3b,#6b8e4e)',
-  war:'linear-gradient(135deg,#7d2f22,#a4402f)',
-  israel:'linear-gradient(135deg,#a07d1c,#c9a227)',
-  memorial:'linear-gradient(135deg,#443753,#5b4b6e)',
-  baror:'linear-gradient(135deg,#236e6e,#2f8f8f)',
-};
+// Card colours and labels, derived from FAMILY.threads — the same source map.js
+// uses for CC/CL, so the card, the pin, the list stripe and the tree can never
+// disagree about what colour a branch is. 'landmark' is the city-guide fallback
+// for any category a family map does not define.
+const CAT_COLORS = { landmark:'#e8724a' };
+const CAT_LABELS = { landmark:'Landmark' };
+const CAT_GRADIENTS = { landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)' };
+FAMILY.threads.forEach(function(t){
+  CAT_COLORS[t.key]    = t.color;
+  CAT_LABELS[t.key]    = t.label;
+  CAT_GRADIENTS[t.key] = 'linear-gradient(135deg,' + (t.dark || t.color) + ',' + t.color + ')';
+});
 
 // ── Open card from list ────────────────────────────────────────
 function openDetail(id){
@@ -97,9 +85,11 @@ function _renderNbhdList(nbhd){
   el.innerHTML = places.map(p => `
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
+      <div class="stop-num" style="background:${CC[p.cat]}">${typeof STOP_NO !== 'undefined' ? STOP_NO[p.id] : p.id}</div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
+        ${p.years ? `<div class="stop-years" style="text-align:${_T('right','left','left')}">${p.years}</div>` : ''}
         <div class="place-type">${CL[p.cat]}</div>
         <div class="place-addr">${p.address}</div>
       </div>

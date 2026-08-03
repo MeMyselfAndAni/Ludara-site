@@ -1,89 +1,40 @@
 // A Perfect Story Map — Family Edition
-// map.js — familystorymap: the family memoir of Anna (FamilyMemories, Part 1)
-// v1 — July 2026. A genealogy prototype: one family's places, 1890s → today.
+// map.js — SHARED ENGINE FILE. Identical in every family map.
 //
-// Five story threads (categories): Friedland (mother's side) · Kliot (father's
-//   side) · Lando & Schechter (husband's side) · War & evacuation · Israel
-// Five regions: belarus, russia, east, ukraine, israel
+// Everything family-specific lives in family.js, which must load BEFORE this file.
+// If you find yourself typing a family name, a branch key or a region name in
+// here, it belongs in family.js instead — that is exactly how a previous family's
+// names used to survive into a new map.
 //
-// ⚠️  Keys in NBHD_* objects, region bubbles in index.html,
-//      and the nbhd field in data.js MUST ALL match exactly.
+// ⚠️  FAMILY.regions[].key, the region bubbles in index.html, and the `nbhd`
+//     field in data.js MUST ALL match exactly. _tools/check-map.js verifies this.
 
-const MAPTILER_KEY      = 'V3bgGWhyO1Rik6g1non6';
-const MAP_CENTER        = [38.0000, 50.0000];   // [lng, lat] — between Belarus, Russia, Ukraine and Israel
-const MAP_ZOOM          = 4;
-const OFFLINE_CENTER    = { lat: 50.0000, lng: 38.0000 };
-const GUIDE_CITY        = 'Family Journey';
-const BLOGGER_NAME      = 'Family Story Map';
-const GUIDE_TIMEZONE    = 'Asia/Jerusalem';
+const MAPTILER_KEY   = 'V3bgGWhyO1Rik6g1non6';
+const MAP_CENTER     = FAMILY.map.center;              // [lng, lat]
+const MAP_ZOOM       = FAMILY.map.zoom;
+const OFFLINE_CENTER = { lat: FAMILY.map.center[1], lng: FAMILY.map.center[0] };
+const GUIDE_CITY     = 'Family Journey';
+const BLOGGER_NAME   = 'Family Story Map';
+const GUIDE_TIMEZONE = FAMILY.map.timezone;
 
-// ─── Category colours ─────────────────────────────────────────────────────────
-const CC = {
-  'narcyz':   '#3a6ea5',   // horizon blue — Chaya's family, Wolbrom
-  'urbach':   '#6b8e4e',   // olive green — Natan's family, Sosnowiec
-  'war':      '#a4402f',   // deep crimson — the war years and the wandering
-  'israel':   '#c9a227',   // gold — the new life in Israel
-  'memorial': '#5b4b6e',   // muted violet — the journeys back, and the memorials
-  'baror':    '#2f8f8f',   // teal — Zehava's own family, the life that followed
-};
+// ─── Story threads: colours and labels, in the order family.js lists them ─────
+const CC = {}, CL = {}, THREAD_TINT = {};
+FAMILY.threads.forEach(function(t){ CC[t.key] = t.color; CL[t.key] = t.label; THREAD_TINT[t.key] = t.tint; });
 
-// ─── Category labels ──────────────────────────────────────────────────────────
-const CL = {
-  'narcyz':   'משפחת נֶרציס — צד אמא',
-  'urbach':   'משפחת אורבך — צד אבא',
-  'war':      'שנות המלחמה והנדודים',
-  'israel':   'ישראל — הבית החדש',
-  'memorial': 'מסעות החזרה והזיכרון',
-  'baror':    'בר־אור — המשפחה שאחרי',
-};
-
-// ─── Region colours ────────────────────────────────────────────────────────────
-const NBHD_COLORS = {
-  'poland':     '#3a6ea5',
-  'ukraine':    '#2f8f8f',
-  'east':       '#a4402f',
-  'uzbekistan': '#c07a2f',
-  'europe':     '#6b8e4e',
-  'israel':     '#c9a227',
-  'memorial':   '#5b4b6e',
-  'america':    '#2f8f8f',
-};
-
-// ─── Region display labels ─────────────────────────────────────────────────────
-const NBHD_LABELS = {
-  'poland':     'פולין',
-  'ukraine':    'אוקראינה',
-  'east':       'מזרחה — אורל וסיביר',
-  'uzbekistan': 'אוזבקיסטן',
-  'europe':     'גרמניה וצרפת',
-  'israel':     'ישראל',
-  'memorial':   'אתרי זיכרון',
-  'america':    'ארצות הברית',
-};
-
-// ─── Region approximate centres ───────────────────────────────────────────────
-const NBHD_APPROX_CENTERS = {
-  'poland':     { lat: 50.20, lng: 19.60 },
-  'ukraine':    { lat: 48.02, lng: 37.80 },
-  'east':       { lat: 55.00, lng: 59.50 },
-  'uzbekistan': { lat: 40.50, lng: 66.80 },
-  'europe':     { lat: 48.50, lng:  8.50 },
-  'israel':     { lat: 32.50, lng: 34.95 },
-  'memorial':   { lat: 50.50, lng: 19.20 },
-  'america':    { lat: 42.28, lng: -83.74 },
-};
+// ─── Regions ──────────────────────────────────────────────────────────────────
+const NBHD_COLORS = {}, NBHD_LABELS = {}, NBHD_APPROX_CENTERS = {}, NBHD_MIN_RADIUS = {};
+FAMILY.regions.forEach(function(r){
+  NBHD_COLORS[r.key]         = r.color;
+  NBHD_LABELS[r.key]         = r.label;
+  NBHD_APPROX_CENTERS[r.key] = r.center;
+  // Country-sized regions: without a minimum, a region holding a single place
+  // would be drawn at the city-guide default of 80 m and be invisible.
+  NBHD_MIN_RADIUS[r.key]     = r.minRadius || 120000;
+});
 
 // ─── Region circle override ───────────────────────────────────────────────────
 // map-core's buildNbhdCircles() is tuned for city-sized districts; these regions
 // span whole countries. Use ALL places per region with a large minimum radius.
-const NBHD_MIN_RADIUS = {
-  'belarus':   120000,
-  'russia':    150000,
-  'east':      200000,
-  'ukraine':   120000,
-  'israel':    30000,
-};
-
 function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {

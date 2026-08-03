@@ -1,16 +1,23 @@
-// A Perfect Day — Service Worker v4
+// Service Worker — SHARED ENGINE FILE. Identical in every family map.
+// The cache names come from family.js, so a copied folder can never quietly share
+// another family's cache. Bump FAMILY.cacheVersion to push an update.
 // CACHE FIRST everywhere except OSRM routing.
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apsm-barorfamily-shell-v4';   // bump this on every deploy to push updates
-var TILE_CACHE  = 'apsm-barorfamily-tiles-v1';
+importScripts('./family.js');
+
+var SHELL_CACHE = 'apsm-' + FAMILY.slug + '-shell-v' + FAMILY.cacheVersion;
+var TILE_CACHE  = 'apsm-' + FAMILY.slug + '-tiles-v1';
+var SHELL_PREFIX = 'apsm-' + FAMILY.slug + '-shell-';
 
 var SHELL_FILES = [
   './',
   './index.html',
+  './family.js',
   './data.js',
   './people.js',
+  './lang.js',
   './map.js',
   './photos.js',
   './map-core.js',
@@ -45,9 +52,10 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(k) {
-          // was 'apsm-inanasfootsteps-shell-' (copied from that guide), so old shell
-          // caches were never actually purged on version bump. Fixed 2026-07-30.
-          return k.startsWith('apsm-barorfamily-shell-') && k !== SHELL_CACHE;
+          // This literal used to be copied by hand and was left as another guide's
+          // name, so old shell caches were never purged on a version bump. It is
+          // derived from FAMILY.slug now and cannot drift. (Fixed 2026-07-30.)
+          return k.startsWith(SHELL_PREFIX) && k !== SHELL_CACHE;
         }).map(function(k) { return caches.delete(k); })
       );
     }).then(function() { return self.clients.claim(); })

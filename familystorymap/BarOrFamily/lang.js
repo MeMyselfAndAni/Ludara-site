@@ -1,17 +1,17 @@
-// Family Story Map
-// lang.js — HEBREW ONLY (BarOrFamily).
-// Kept because ui-tree.js and index.html call pickLang()/L3(), and because a few
-// UI strings inherited from the Lando-Kliot template are still written as
-// 'עברית · Русский · English' triplets. This collapses them to the Hebrew part.
-// There is no language switcher in this guide.
-// and switchable at any time with the corner language button.
+// lang.js — SHARED ENGINE FILE. Identical in every family map.
+// Single-language mode, chosen on the splash screen and switchable with the corner
+// language button. FAMILY.languages decides which languages exist: a single-entry
+// list (e.g. ['he']) locks the map to that language and makes the switcher a no-op.
 // The data stays trilingual in data.js/people.js ('עברית · Русский · English'
 // fields and HE\n\nRU\n\nEN paragraph blocks). On the first applyLanguage()
 // call the original values are snapshotted; every switch re-derives from that
 // snapshot, so the language can be changed freely without reloading.
 // Load AFTER data.js + people.js, BEFORE the ui-*.js files use the data.
 
-var LANG = 'he';   // HEBREW ONLY. This guide never switches language.
+var LANGS = (typeof FAMILY !== 'undefined' && FAMILY.languages) || ['he','ru','en'];
+// null = multilingual (only before the splash choice). A one-language map starts
+// locked, so inherited 'עברית · Русский · English' triplets collapse immediately.
+var LANG = LANGS.length === 1 ? LANGS[0] : null;
 
 function _hasHe(t){ return /[֐-׿]/.test(t); }
 function _hasRu(t){ return /[Ѐ-ӿ]/.test(t); }
@@ -19,6 +19,9 @@ function _hasEn(t){ return /[A-Za-z]/.test(t); }
 
 // Pick the right value out of he/ru/en by current language
 function L3(he, ru, en){ return LANG === 'ru' ? ru : LANG === 'en' ? en : he; }
+
+// Short alias used by the ui-*.js templates for inline UI strings.
+function _T(he, ru, en){ return L3(he, ru, en); }
 
 // One-line trilingual strings: 'עברית · Русский · English · 1910' →
 // keep the parts of my script + neutral parts (years, emoji, numbers)
@@ -55,25 +58,17 @@ function pickBlock(str){
 
 // ── Snapshot of the original trilingual values (taken once, on first switch) ──
 var _L10N = null;
-// The page header is snapshotted and filtered like any other static UI string.
-// It used to be hardcoded further down as L3('משפחת לנדו־קליוט', ...) — inherited
-// verbatim from the Lando-Kliot template — so entering this map overwrote the
-// correct Bar-Or header with the wrong family's name. Sourcing it from the DOM
-// means index.html stays the single place the title is written. (Fixed 31 Jul 2026.)
 var _UI_SELECTOR =
   '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
-  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn,' +
-  'header .header-text h1';
-// NOTE: .header-sub is deliberately NOT in this list. pickLang() splits on ' · ',
-// and that line reads «תינוקת בשמיכת פוך» · זהבה בר־אור — two Hebrew segments that
-// must both survive. It is Hebrew-only in index.html and needs no filtering.
+  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn';
 
 function _snapshot(){
   if(_L10N) return;
   _L10N = { places: {}, CL: {}, CAT: {}, NBHD: {}, ui: [] };
   if(typeof PLACES !== 'undefined') PLACES.forEach(function(p){
     _L10N.places[p.id] = { name: p.name, address: p.address, type: p.type,
-                           book: p.book, note: p.note, visit: p.visit };
+                           book: p.book, note: p.note, visit: p.visit,
+                           years: p.years };
   });
   try { if(typeof CL !== 'undefined')          Object.keys(CL).forEach(function(k){ _L10N.CL[k] = CL[k]; }); } catch(e){}
   try { if(typeof CAT_LABELS !== 'undefined')  Object.keys(CAT_LABELS).forEach(function(k){ _L10N.CAT[k] = CAT_LABELS[k]; }); } catch(e){}
@@ -94,6 +89,7 @@ function applyLanguage(lang){
     if(!o) return;
     p.name    = pickLang(o.name);
     p.address = pickLang(o.address);
+    p.years   = o.years !== undefined ? pickLang(o.years) : p.years;
     p.type    = pickLang(o.type);
     p.book    = o.book  ? pickLang(o.book)   : o.book;
     p.note    = o.note  ? pickBlock(o.note)  : o.note;
@@ -107,6 +103,20 @@ function applyLanguage(lang){
 
   // ── Static UI texts (restored from snapshot, then filtered) ──
   _L10N.ui.forEach(function(pair){ pair[0].textContent = pickLang(pair[1]); });
+
+  // The header comes from FAMILY, which is the one file that knows which family
+  // this map is about. It used to be a hardcoded L3(...) literal here, so entering
+  // a COPIED map overwrote its header with the previous family's name.
+  var h1 = document.querySelector('header .header-text h1');
+  if(h1 && FAMILY.title) h1.textContent = pickLang(FAMILY.title);
+  var sub = document.querySelector('.header-sub');
+  if(sub && FAMILY.credit){
+    // Replace only the text, keeping any nested markup (the " · by Ludara" span),
+    // which a plain textContent assignment would silently delete.
+    var _keep = [].slice.call(sub.children);
+    sub.textContent = pickLang(FAMILY.credit);
+    _keep.forEach(function(el){ sub.appendChild(el); });
+  }
 
   var st = document.getElementById('sheet-title');
   if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
@@ -144,12 +154,24 @@ function applyLanguage(lang){
   if(typeof window._treeRebuild === 'function') window._treeRebuild();
 }
 
-// In-map language toggle: cycles he → ru → en → he
-function toggleLanguage(){ /* Hebrew-only guide: no-op */ }
+// In-map language toggle: cycles through FAMILY.languages. A one-language map has
+// nothing to cycle to, so this is a no-op there rather than a special-cased file.
+function toggleLanguage(){
+  if(LANGS.length < 2) return;
+  applyLanguage(LANGS[(LANGS.indexOf(LANG) + 1) % LANGS.length]);
+}
 
 // Splash language buttons
-function setLangAndEnter(){ if(typeof enterStory==='function') enterStory(); }
+function setLangAndEnter(lang){
+  applyLanguage(LANGS.indexOf(lang) >= 0 ? lang : LANGS[0]);
+  if(typeof closeSplash === 'function') closeSplash();
+  else if(typeof enterStory === 'function') enterStory();
+}
 
-
-/* Hebrew-only: collapse every inherited triplet as soon as the DOM is ready. */
-document.addEventListener('DOMContentLoaded', function(){ try { applyLanguage('he'); } catch(e){} });
+// A one-language map collapses its inherited triplets as soon as the DOM is ready;
+// a multilingual one waits for the reader's choice on the splash.
+if(LANGS.length === 1){
+  document.addEventListener('DOMContentLoaded', function(){
+    try { applyLanguage(LANGS[0]); } catch(e){}
+  });
+}

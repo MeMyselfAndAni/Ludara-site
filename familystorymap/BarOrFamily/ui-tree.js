@@ -7,13 +7,22 @@
 // Data comes from people.js (PEOPLE, FAMILY_UNIONS, FAMILY_EXTRA_EDGES).
 // Load order: after people.js, map.js and ui-card.js.
 
+// ui-tree.js — SHARED ENGINE FILE. Identical in every family map.
+// Branch keys, colours, labels and headings all come from FAMILY (family.js).
+// Nothing in here may name a family: every hardcoded branch key used to be a way
+// for one family's names to survive into another family's map.
 (function(){
+  const _TB   = (FAMILY.tree && FAMILY.tree.branches) || [];
+  const _KEYS = _TB.map(b => b.key);
+  const _HL   = _KEYS.map(k => 'hl-' + k);
+
   const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
-  const BRANCH_HEADERS = [
-    // One line of descent, not parallel branches — a single header spanning the tree.
-    { branch:'baror', label:'משפחת נֶרציס · אורבך · בר־אור', col:2.2 },
-  ];
+  // A branch with col:null draws no heading — used when the family is one line of
+  // descent rather than parallel branches.
+  const BRANCH_HEADERS = _TB
+    .filter(b => b.header && b.col !== null && b.col !== undefined)
+    .map(b => ({ branch:b.key, label:b.header, col:b.col }));
 
   const nodeX = p => PADX + p.col * COLW;
   const nodeY = p => PADY + p.row * ROWH;
@@ -52,20 +61,13 @@
       .pc-people-label { width:100%; font-size:0.68rem; font-weight:700; color:#8a7a55; letter-spacing:0.04em; unicode-bidi:plaintext; }
       .pc-person-chip { border:1.5px solid; border-radius:14px; background:#fffdf7; padding:3px 10px; font-size:0.72rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; unicode-bidi:plaintext; }
       .pc-person-chip:hover { background:#fff3d6; }
-      /* Branch highlight — select a last name, its branch lights up, the rest dims */
-      #tree-svg.hl-narcyz .tree-node:not(.br-narcyz),
-      #tree-svg.hl-urbach .tree-node:not(.br-urbach),
-      #tree-svg.hl-baror  .tree-node:not(.br-baror) { opacity:0.16; }
-      #tree-svg.hl-narcyz .tree-edge:not(.br-narcyz),
-      #tree-svg.hl-urbach .tree-edge:not(.br-urbach),
-      #tree-svg.hl-baror  .tree-edge:not(.br-baror) { opacity:0.10; }
-      #tree-svg.hl-narcyz .tree-node.br-narcyz rect { fill:#eaf2fb; stroke-width:3.5; }
-      #tree-svg.hl-urbach .tree-node.br-urbach rect { fill:#f2f7ea; stroke-width:3.5; }
-      #tree-svg.hl-baror  .tree-node.br-baror  rect { fill:#e9f6f6; stroke-width:3.5; }
+      /* Branch highlight — select a last name, its branch lights up, the rest dims.
+         Generated from FAMILY.tree.branches, so adding a branch needs no CSS edit. */
+      ${_KEYS.map(k => `#tree-svg.hl-${k} .tree-node:not(.br-${k}) { opacity:0.16; }
+      #tree-svg.hl-${k} .tree-edge:not(.br-${k}) { opacity:0.10; }
+      #tree-svg.hl-${k} .tree-node.br-${k} rect { fill:${(THREAD_TINT && THREAD_TINT[k]) || '#f3efe6'}; stroke-width:3.5; }
+      .tree-btn.hl-on-${k} { background:${(CC && CC[k]) || '#8a7a55'}; border-color:${(CC && CC[k]) || '#8a7a55'}; color:#fff; }`).join('\n      ')}
       .tree-node, .tree-edge { transition:opacity 0.25s; }
-      .tree-btn.hl-on-narcyz { background:#3a6ea5; border-color:#3a6ea5; color:#fff; }
-      .tree-btn.hl-on-urbach { background:#6b8e4e; border-color:#6b8e4e; color:#fff; }
-      .tree-btn.hl-on-baror  { background:#2f8f8f; border-color:#2f8f8f; color:#fff; }
       .tree-btn.hl-on-all    { background:#d4a84b; border-color:#d4a84b; color:#16130c; }
       @media (max-width:768px){ .tree-hint { display:none; } }
     `;
@@ -75,12 +77,10 @@
     ov.id = 'tree-overlay';
     ov.innerHTML = `
       <div class="tree-header">
-        <span class="tree-title">🌳 עץ המשפחה</span>
-        <span class="tree-hint">לחיצה על אדם מציגה את מסעו במפה</span>
-        <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">הכול</button>
-        <button class="tree-btn" id="tree-btn-narcyz" onclick="window._treeJump('narcyz')">נֶרציס</button>
-        <button class="tree-btn" id="tree-btn-urbach" onclick="window._treeJump('urbach')">אורבך</button>
-        <button class="tree-btn" id="tree-btn-baror" onclick="window._treeJump('baror')">בר־אור</button>
+        <span class="tree-title">${FAMILY.tree.title}</span>
+        <span class="tree-hint">${FAMILY.tree.hint}</span>
+        <button class="tree-btn" id="tree-btn-all" onclick="window._treeJump(null)">${FAMILY.tree.allChip}</button>
+        ${_TB.map(b => `<button class="tree-btn" id="tree-btn-${b.key}" onclick="window._treeJump('${b.key}')">${b.chip}</button>`).join('\n        ')}
         <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
         <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
         <button class="tree-btn" onclick="window._treeFit()">⤢</button>
@@ -97,8 +97,9 @@
   function buildSVG(){
     canvasW = Math.max(...PEOPLE.map(p => nodeX(p))) + NW + PADX;
     canvasH = Math.max(...PEOPLE.map(p => nodeY(p))) + NH + PADY + 40;
-    // Look the branch up directly. This used to map anything that wasn't
-    // friedland/kliot onto 'lando', which meant every Bar-Or branch rendered grey.
+    // Look the branch up directly in the thread colours. An earlier version mapped
+    // anything that wasn't friedland/kliot onto 'lando', so every branch of the
+    // next family rendered grey — the exact failure this file is now built to avoid.
     const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
 
     let s = '';
@@ -209,10 +210,10 @@
   function _applyHighlight(){
     const svg = document.getElementById('tree-svg');
     if(svg){
-      svg.classList.remove('hl-narcyz','hl-urbach','hl-baror');
+      svg.classList.remove.apply(svg.classList, _HL);
       if(_hlBranch) svg.classList.add('hl-' + _hlBranch);
     }
-    ['narcyz','urbach','baror'].forEach(b => {
+    _KEYS.forEach(b => {
       const btn = document.getElementById('tree-btn-' + b);
       if(btn) btn.classList.toggle('hl-on-' + b, _hlBranch === b);
     });
@@ -220,8 +221,8 @@
     if(allBtn) allBtn.classList.toggle('hl-on-all', !_hlBranch);
   }
   // Clicking the active branch again clears it, but that was the ONLY way back to
-  // the whole tree and nothing on screen said so. _treeJump(null) — the "הכול"
-  // button — now clears it explicitly. (Fixed 31 Jul 2026.)
+  // the whole tree and nothing on screen said so. _treeJump(null) — the "all"
+  // chip — now clears it explicitly. (Fixed 31 Jul 2026.)
   window._treeJump = branch => {
     _hlBranch = (!branch || _hlBranch === branch) ? null : branch;
     _applyHighlight();
