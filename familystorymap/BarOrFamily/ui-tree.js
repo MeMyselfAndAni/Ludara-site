@@ -368,6 +368,12 @@
     }
     if(typeof _ensureRouteLayer === 'function') _ensureRouteLayer();
     if(typeof clearTripRoute === 'function') clearTripRoute();
+    // The pill and the narrowed list are set BEFORE the path is drawn, and the
+    // order is not cosmetic. index.html wraps renderList and has it call
+    // clearTripRoute on every render outside bookmarks mode, so a render after
+    // the path was drawn wipes the path off the map. Narrow the list first, draw
+    // second, and the last thing to touch the route layer is the drawing.
+    if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
     try {
       tripPolyline = true;
       map.getSource('trip-route').setData({
@@ -380,10 +386,6 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    // The pill names whose path this is and stays until the reader dismisses it,
-    // and it narrows the place list to this person's stops. It replaces the toast
-    // that used to say the same thing for four seconds and then vanish.
-    if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
