@@ -46,7 +46,7 @@
     FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped',
          bh:_FT('pins').he, br:_FT('pins').ru, be:_FT('pins').en,
          demo:'open-card-delayed-no-heart' }),
-    FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom — what is there today.',
+    FS({ th:'בתוך כרטיס המקום', tr:'Внутри карточки места', te:'Inside a Place Card', be:'Each card tells what happened here and who in the family is connected to the place, with photos from the family archive. The name chips jump straight into the family tree, and at the bottom, what is there today.',
          bh:'כל כרטיס מספר מה קרה כאן ומי מהמשפחה קשור למקום, עם תמונות מארכיון המשפחה. שבבי השמות קופצים ישר לעץ המשפחה, ובתחתית — מה יש במקום היום.',
          br:'Каждая карточка рассказывает, что здесь случилось и кто из семьи связан с этим местом, с фотографиями из семейного архива. Кнопки с именами ведут прямо в дерево, а внизу — что там сегодня.',
          demo:'scroll-card' }),
@@ -56,11 +56,11 @@
     FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions',
          bh:_FT('regions').he, br:_FT('regions').ru, be:_FT('regions').en,
          target:'#nbhd-bar', closeCard:true }),
-    FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time — "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
+    FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time: "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
          bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
          br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
          demo:'open-tree' }),
-    FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed — a record of your journey through the family story.',
+    FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed: a record of your journey through the family story.',
          bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
          br:'Нашли место, которое тронуло сердце? Нажмите на закладку. Отметки сохраняются и после закрытия карты — запись вашего путешествия по семейной истории.',
          demo:'open-card' }),
@@ -68,15 +68,15 @@
          bh:'לחצו על "סימניות" כדי לראות את הרשימה. לחיצה על שורה פותחת מחדש את הכרטיס; אפשר לגרור ולסדר.',
          br:'Нажмите «Закладки», чтобы увидеть список. Нажатие на строку снова открывает карточку; порядок можно менять перетаскиванием.',
          dualTargets:['#pill-saved','#sheet'], targetsDelay:550, demo:'show-saved' }),
-    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF', be:'Tap PDF to turn your bookmarks into a printable booklet — for a family gathering, an evening of memories, or a gift to the next generation.',
+    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF', be:'Tap PDF to turn your bookmarks into a printable booklet: for a family gathering, an evening of memories, or a gift to the next generation.',
          bh:'לחצו PDF כדי להפוך את הסימניות לחוברת מודפסת — למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
          br:'Нажмите PDF, чтобы превратить закладки в печатную брошюру — для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
          target:'#sheet button[onclick="generatePDF()"]' }),
-    FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world — by message or email, in one tap.',
+    FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world, by message or email, in one tap.',
          bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
          br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
          target:'#sheet button[onclick="shareItinerary()"]' }),
-    FS({ th:'הכול מוכן!', tr:'Всё готово!', te:'All Set!', be:'The family\'s world is open before you — set out on the journey.',
+    FS({ th:'הכול מוכן!', tr:'Всё готово!', te:'All Set!', be:'The family\'s world is open before you. Set out on the journey.',
          bh:'עולם המשפחה פתוח לפניכם — צאו למסע.',
          br:'Мир семьи открыт перед вами — в путь.',
          mobileCardOffset:-75, done:true })
@@ -534,6 +534,21 @@
   }
 
   /* ── Show a step ────────────────────────────────────────────── */
+  /* The guide used the 🌳 emoji while the map shows a drawn tree icon whose three
+     crowns are this family's branch colours. Lift the real <svg> out of the page so
+     the guide points at the thing the reader can actually see, for any family. */
+  function _treeIconHTML() {
+    var s = document.querySelector('#tree-fab svg');
+    if (!s) return '\uD83C\uDF33';
+    var c = s.cloneNode(true);
+    c.setAttribute('style',
+      'width:1.35em;height:1.35em;vertical-align:-0.34em;display:inline-block;margin:0 1px;');
+    return c.outerHTML;
+  }
+  function _escHTML(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
   function showStep(n) {
     clearBeacons();
     clearLauncherAnim();
@@ -555,7 +570,9 @@
     });
 
     titleEl.textContent = step.title;
-    bodyEl.textContent  = step.body;
+    /* Escape first, then swap the emoji for the real icon, so the markup we insert
+       is only ever ours. */
+    bodyEl.innerHTML    = _escHTML(step.body).replace(/\uD83C\uDF33/g, _treeIconHTML());
     nextBtn.textContent = step.btn;
     var _sk = document.getElementById('tut-skip');
     if(_sk) _sk.textContent = (typeof LANG !== 'undefined' && LANG === 'en') ? 'Skip' : (typeof LANG !== 'undefined' && LANG === 'ru') ? 'Пропустить' : 'לדלג';
