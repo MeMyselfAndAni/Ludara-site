@@ -16,6 +16,10 @@
   const _KEYS = _TB.map(b => b.key);
   const _HL   = _KEYS.map(k => 'hl-' + k);
 
+  // Guarded L3: the tree is built before lang.js has been asked for a language in
+  // some load orders, and a missing L3 must not take the whole overlay down.
+  const _L = (he, ru, en) => (typeof L3 === 'function') ? L3(he, ru, en) : he;
+
   const COLW = 200, ROWH = 170, NW = 186, NH = 88, PADX = 50, PADY = 70;
 
   // A branch with col:null draws no heading — used when the family is one line of
@@ -84,7 +88,7 @@
         <button class="tree-btn" onclick="window._treeZoom(1.25)">＋</button>
         <button class="tree-btn" onclick="window._treeZoom(0.8)">－</button>
         <button class="tree-btn" onclick="window._treeFit()">⤢</button>
-        <button class="tree-btn tree-close" onclick="closeFamilyTree()">✕ סגירה</button>
+        <button class="tree-btn tree-close" onclick="closeFamilyTree()">✕ סגירה · ✕ Закрыть · ✕ Close</button>
       </div>
       <div id="tree-scroll"></div>
     `;
@@ -97,9 +101,10 @@
   function buildSVG(){
     canvasW = Math.max(...PEOPLE.map(p => nodeX(p))) + NW + PADX;
     canvasH = Math.max(...PEOPLE.map(p => nodeY(p))) + NH + PADY + 40;
-    // Look the branch up directly in the thread colours. An earlier version mapped
-    // anything that wasn't friedland/kliot onto 'lando', so every branch of the
-    // next family rendered grey — the exact failure this file is now built to avoid.
+    // Look the branch up directly in the thread colours. An earlier version had a
+    // hardcoded ternary over one family's branch keys, so every branch of the next
+    // family fell through to a missing key and rendered grey — the exact failure
+    // this file is now built to avoid.
     const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
 
     let s = '';
@@ -233,9 +238,39 @@
     }
   };
 
+  // ── Browser Back ─────────────────────────────────────────────────────────
+  // The tree is a DOM overlay, not a page, so Back used to leave the site entirely
+  // — from the tree you landed back on Google. Opening the tree now pushes a history
+  // entry, and clicking a person pushes another, so Back walks: person's journey →
+  // tree → map, and only leaves the site from the map. (31 Jul 2026.)
+  const _HIST = (typeof history !== 'undefined' && history.pushState);
+  let _suppressPop = false;
+
+  function _push(view, person){
+    if(!_HIST) return;
+    try { history.pushState({ fsm: view, person: person || null }, '', location.href); } catch(e){}
+  }
+
+  if(_HIST){
+    window.addEventListener('popstate', function(e){
+      const st = e.state || {};
+      const ov = document.getElementById('tree-overlay');
+      const open = ov && ov.classList.contains('open');
+      _suppressPop = true;                       // do not push while reacting to a pop
+      if(st.fsm === 'tree'){
+        if(!open) window.openFamilyTree(st.person || null);   // back from a journey
+      } else if(open){
+        window.closeFamilyTree(true);            // true = already handled by history
+      }
+      _suppressPop = false;
+    });
+  }
+
   window.openFamilyTree = function(personId){
     const ov = document.getElementById('tree-overlay');
     if(!ov) return;
+    const wasOpen = ov.classList.contains('open');
+    if(!wasOpen && !_suppressPop) _push('tree', personId);
     ov.classList.add('open');
     if(!document.getElementById('tree-svg')) render();
     if(personId){
@@ -248,21 +283,31 @@
       }
     }
   };
-  window.closeFamilyTree = function(){
+  // fromHistory === true means popstate is already unwinding, so just close.
+  // Otherwise the X unwinds the history entry and lets popstate do the closing —
+  // popstate is asynchronous, so doing both here would race.
+  window.closeFamilyTree = function(fromHistory){
     const ov = document.getElementById('tree-overlay');
-    if(ov) ov.classList.remove('open');
+    if(!ov || !ov.classList.contains('open')) return;
+    if(_HIST && fromHistory !== true && history.state && history.state.fsm === 'tree'){
+      history.back();
+      return;
+    }
+    ov.classList.remove('open');
   };
 
   // ── Tree → map: draw a person's journey ──────────────────────────────────
   window._treePersonClick = function(personId){
     const per = byId(personId);
     if(!per) return;
+    // The tree stays in history behind this, so Back returns to it.
+    _push('journey', personId);
     const label = (typeof LANG !== 'undefined' && LANG === 'en') ? (per.en || per.he) : (typeof LANG !== 'undefined' && LANG === 'ru') ? per.ru : (typeof LANG !== 'undefined' && LANG === 'he') ? per.he : per.he + ' · ' + per.ru;
     const pl = (per.places || []).map(id => PLACES.find(p => p.id === id)).filter(Boolean);
     if(!pl.length){
       const n = document.getElementById('tn-' + personId);
       if(n){ n.classList.remove('pulse'); void n.getBoundingClientRect(); n.classList.add('pulse'); }
-      if(typeof _toast === 'function') _toast(label + (typeof pickLang==='function' ? pickLang(' — אין מקומות מקושרים במפה') : ' — אין מקומות מקושרים במפה'), 2800);
+      if(typeof _toast === 'function') _toast(label + _L(' — אין מקומות מקושרים במפה', ' — нет связанных мест на карте', ' — no linked places on the map'), 2800);
       return;
     }
     closeFamilyTree();
@@ -287,7 +332,7 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + (typeof pickLang==='function' ? pickLang(' — המסע על המפה') : ' — המסע על המפה'), 3800);
+    if(typeof _toast === 'function') _toast('📍 ' + label + _L(' — המסע על המפה', ' — путь показан на карте', ' — journey shown on the map'), 3800);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────
@@ -296,14 +341,23 @@
     const host = document.getElementById('pc-people');
     if(!titleEl || !host) return;
     const name = titleEl.textContent.trim();
+    // The `type` line under the card title names the same people the chips below it
+    // do — a semicolon-separated list of names sitting directly above buttons with
+    // exactly those names on them. Hide it whenever there are chips, and leave it
+    // visible when there are none, so a place with no linked person still says who
+    // was there. (31 Jul 2026.)
+    const typeEl = document.getElementById('pc-type');
+    const showType = () => { if(typeEl) typeEl.style.display = ''; };
+
     const place = PLACES.find(p => p.name === name);
-    if(!place){ host.innerHTML = ''; return; }
+    if(!place){ host.innerHTML = ''; showType(); return; }
     const folks = PEOPLE.filter(per => (per.places || []).includes(place.id));
-    if(!folks.length){ host.innerHTML = ''; return; }
+    if(!folks.length){ host.innerHTML = ''; showType(); return; }
+    if(typeEl) typeEl.style.display = 'none';
     const colOf = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
     const isRu = (typeof LANG !== 'undefined' && LANG === 'ru');
     const isEn = (typeof LANG !== 'undefined' && LANG === 'en');
-    const lbl = (typeof pickLang === 'function') ? pickLang('🌳 מי קשור למקום') : '🌳 מי קשור למקום';
+    const lbl = _L('🌳 מי קשור למקום', '🌳 Кто связан с этим местом', '🌳 Who is connected to this place');
     host.innerHTML = '<span class="pc-people-label">' + lbl + '</span>' +
       folks.map(per =>
         `<button class="pc-person-chip" style="border-color:${colOf(per.branch)};color:${colOf(per.branch)}" onclick="closePlaceCard(true);openFamilyTree('${per.id}')">${esc(isEn ? (per.en || per.he) : isRu ? per.ru : per.he)}</button>`

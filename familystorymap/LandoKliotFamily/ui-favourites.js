@@ -62,7 +62,8 @@ function syncFavBtn(id){
   const faved = isFav(id);
   btn.textContent = '🔖';
   btn.classList.toggle('faved', faved);
-  btn.title = faved ? 'Remove bookmark' : 'Bookmark this place';
+  btn.title = faved ? _T('הסרת סימנייה', 'Убрать закладку', 'Remove bookmark')
+                    : _T('שמירת המקום', 'Сохранить место', 'Bookmark this place');
 }
 
 // ── SAVED FILTER ──────────────────────────────────────────────
@@ -86,7 +87,7 @@ function toggleSavedFilter(el){
   if(savedFilterActive){
     if(favourites.length === 0){
       savedFilterActive = false; el.classList.remove('active');
-      _toast('Tap 🔖 on any place to bookmark it here.');
+      _toast(_T('הקישו 🔖 על מקום כדי לשמור אותו כאן.', 'Нажмите 🔖 на месте, чтобы сохранить его здесь.', 'Tap 🔖 on any place to bookmark it here.'));
       return;
     }
     applyFilters();
@@ -281,7 +282,7 @@ function getSortedFavPlaces(){
 }
 
 function planFavTrip(){
-  if(favourites.length < 2){ _toast('Bookmark at least 2 places first 🔖'); return; }
+  if(favourites.length < 2){ _toast(_T('שמרו לפחות שני מקומות 🔖', 'Сначала сохраните хотя бы два места 🔖', 'Bookmark at least 2 places first 🔖')); return; }
   const places = getSortedFavPlaces();
   let totalWalkSecs = 0, totalDwell = 0;
   places.forEach((p, i) => {
@@ -427,7 +428,7 @@ function openTripInMaps(){
 function shareItinerary() {
   if (typeof apdTrack === 'function') apdTrack('share_itinerary');
   if (!favourites || favourites.length === 0) {
-    _toast('Bookmark some places first 🔖');
+    _toast(_T('שמרו קודם כמה מקומות 🔖', 'Сначала сохраните несколько мест 🔖', 'Bookmark some places first 🔖'));
     return;
   }
   var url = window.location.origin + window.location.pathname + '?itinerary=' + favourites.join(',');

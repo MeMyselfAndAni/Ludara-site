@@ -327,6 +327,41 @@
      Added 31 Jul 2026. The number is the stop's position in the story order, not
      its id (see STOP_NO in ui-filter.js), and it carries the branch colour so the
      list is colour-coded the same way the map pins are. */
+  /* ── Place-list colour legend ──────────────────────────────────────────────
+     What the coloured stop numbers and stripes mean. Each chip filters the map
+     and the list to that thread; clicking the active one clears the filter. */
+  .thread-legend {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    padding: 9px 10px 4px;
+  }
+  .thread-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid rgba(0,0,0,0.10);
+    background: #fffdf7;
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem; font-weight: 700;
+    color: #6a5c42;
+    cursor: pointer;
+    unicode-bidi: plaintext;
+    line-height: 1.25;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .thread-chip .thread-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--c); flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .thread-chip:hover   { border-color: var(--c); color: #3a3428; }
+  .thread-chip.on      { background: var(--c); border-color: var(--c); color: #fff; }
+  .thread-chip.on .thread-dot { background: rgba(255,255,255,0.9); }
+  .thread-chip-all     { font-weight: 800; color: #8a6d2f; border-color: #d8c9a4; }
+  @media (max-width: 600px) {
+    .thread-legend { padding: 8px 8px 3px; gap: 4px; }
+    .thread-chip   { font-size: 0.62rem; padding: 3px 8px; gap: 5px; }
+    .thread-chip .thread-dot { width: 8px; height: 8px; }
+  }
   .stop-num {
     flex-shrink: 0;
     width: 38px; height: 38px;

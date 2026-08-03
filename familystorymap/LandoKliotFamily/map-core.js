@@ -237,6 +237,34 @@ function makeIcon(p, active) {
   return { html: makeIconHTML(p, active), active };
 }
 
+// Centre a place in the VISIBLE part of the map.
+// map.panTo() puts it in the geometric centre of the viewport — which on desktop is
+// underneath the place card, and on a phone is behind the bottom sheet. So the card
+// described a city you could not see. Offset by half the card, and pull the zoom in
+// far enough that a country-scale view actually shows where the place is.
+function focusPlace(p, opts) {
+  if (!map || !p) return;
+  opts = opts || {};
+  const card = document.getElementById('place-card');
+  const open = card && card.classList.contains('open');
+  let offset = [0, 0];
+  if (open) {
+    const r = card.getBoundingClientRect();
+    const wide = window.innerWidth >= 768;
+    // A left-hand panel: shift the map right by half its width.
+    // A bottom sheet: shift up by half its height.
+    if (wide) offset = [Math.round(r.width / 2), 0];
+    else      offset = [0, -Math.round(Math.min(r.height, window.innerHeight * 0.5) / 2)];
+  }
+  const z = map.getZoom();
+  map.easeTo({
+    center: [p.lng, p.lat],
+    zoom: opts.keepZoom ? z : Math.max(z, 6),
+    offset: offset,
+    duration: 700,
+  });
+}
+
 function addMarker(p) {
   const el = document.createElement('div');
   el.className = 'mgl-marker';
@@ -261,7 +289,11 @@ function addMarker(p) {
     else this.addTo(m);
   };
   marker.setIcon = function(iconObj) {
-    this.getElement().innerHTML = iconObj.html;
+    var el = this.getElement();
+    el.innerHTML = iconObj.html;
+    // The active pin gets a pulsing ring (see .mgl-marker.is-active in styles.css),
+    // so it is obvious which pin the open card is describing.
+    el.classList.toggle('is-active', !!(iconObj && iconObj.active));
   };
   marker.setZIndex = function(z) {
     this.getElement().style.zIndex = z;

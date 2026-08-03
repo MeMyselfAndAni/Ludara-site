@@ -3,7 +3,10 @@
 
   /* ── City config (set window.TutorialConfig in each hotel's index.html) ── */
   var CFG             = window.TutorialConfig || {};
-  var DONE_KEY        = CFG.doneKey       || 'city_tour_v1';
+  // Per-family, or a reader who saw one family's tour would never be offered
+  // another's — 'city_tour_v1' was shared by every map on the domain.
+  var DONE_KEY        = CFG.doneKey       ||
+    ('apsm-' + ((typeof FAMILY !== 'undefined' && FAMILY.slug) || 'map') + '-tour-v1');
   var CITY            = CFG.cityName      || 'the city';
   var DEMO_PLACE      = CFG.demoPlaceId   || 1;
   var TRIP_NAMES      = CFG.tripNames     || 'a curated day trip';
@@ -53,9 +56,9 @@
     FS({ th:'אזורי הסיפור', tr:'Регионы истории', te:'The Story\'s Regions',
          bh:_FT('regions').he, br:_FT('regions').ru, be:_FT('regions').en,
          target:'#nbhd-bar', closeCard:true }),
-    FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The tree button opens the family tree — the whole family in three colored branches. Click a person and their life journey appears on the map; the branch buttons highlight each family name, and the mouse wheel zooms.',
-         bh:'הכפתור 🌳 פותח את עץ המשפחה — כל בני המשפחה בשלושה ענפים צבעוניים. לחיצה על אדם מציירת את מסע חייו על המפה; כפתורי הענפים מדגישים כל שם משפחה, וגלגלת העכבר מקרבת ומרחיקה.',
-         br:'Кнопка 🌳 открывает семейное дерево — вся семья в трёх цветных ветвях. Нажмите на человека — его жизненный путь появится на карте; кнопки ветвей подсвечивают каждую фамилию, а колесо мыши приближает и отдаляет.',
+    FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time — "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
+         bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
+         br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
          target:'#tree-fab' }),
     FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed — a record of your journey through the family story.',
          bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
@@ -642,36 +645,31 @@
     launch();
   };
 
-  /* ── Auto-start on first visit DISABLED 2026-06-14 (per Maria) ──
-     Visitors now explore the map first and open the tutorial themselves
-     via the "Show tutorial" button (restartTutorial()).
-     To re-enable first-visit auto-start, restore the original condition:
-     if (!localStorage.getItem(DONE_KEY)) {                            */
-  if (false) {
-    var _splashGone = function() {
-      var s = document.getElementById('splash');
-      return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
-    };
-    var _launchWhenClear = function() {
-      if (_splashGone()) { launch(); } else { setTimeout(_launchWhenClear, 80); }
-    };
-    var waitForSplashClose = function () {
-      var btn = document.querySelector('.splash-btn');
-      if (!btn) {
-        /* No splash on this page — only launch if there is genuinely no splash showing */
-        if (_splashGone()) { setTimeout(launch, 400); }
-        return;
-      }
-      btn.addEventListener('click', function () {
-        /* Poll until splash is fully hidden (display:none) before launching */
-        setTimeout(_launchWhenClear, 300);
-      }, { once: true });
-    };
-    if (document.readyState === 'complete') {
-      waitForSplashClose();
-    } else {
-      window.addEventListener('load', waitForSplashClose);
-    }
-  }
+  /* ── Auto-offer the tour to a first-time reader ──────────────────────────
+     Re-enabled 31 Jul 2026. It waits for the splash to be fully gone, then gives
+     the reader 5 seconds to look at the map before offering the tour — the same
+     rhythm the hotel guides use. DONE_KEY is per-family, and endTutorial() sets it,
+     so a returning reader is never interrupted; the 🧭 button reopens it any time. */
+  var AUTOSTART_DELAY = 5000;
+
+  var _splashGone = function() {
+    var s = document.getElementById('splash');
+    return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
+  };
+  var _launchWhenClear = function() {
+    if (_splashGone()) { setTimeout(launch, AUTOSTART_DELAY); }
+    else { setTimeout(_launchWhenClear, 120); }
+  };
+  var _maybeAutoStart = function () {
+    if (localStorage.getItem(DONE_KEY)) return;      // already seen or dismissed
+    var btn = document.querySelector('.splash-btn');
+    if (!btn) { _launchWhenClear(); return; }        // no splash on this page
+    // Any splash button (including the language chips) counts as "entered".
+    document.querySelectorAll('.splash-btn').forEach(function(b){
+      b.addEventListener('click', function () { setTimeout(_launchWhenClear, 300); }, { once: true });
+    });
+  };
+  if (document.readyState === 'complete') { _maybeAutoStart(); }
+  else { window.addEventListener('load', _maybeAutoStart); }
 
 })();

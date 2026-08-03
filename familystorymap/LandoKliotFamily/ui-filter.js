@@ -127,7 +127,7 @@ function _initSearch(){
   const iconBtn = document.createElement('button');
   iconBtn.id = 'search-icon-btn';
   iconBtn.innerHTML = '🔍';
-  iconBtn.title = 'Search places';
+  iconBtn.title = _T('חיפוש מקומות', 'Поиск мест', 'Search places');
   iconBtn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:1rem;padding:0 0 0 8px;opacity:0.6;flex-shrink:0;line-height:1;';
   iconBtn.addEventListener('click', _toggleSearch);
 
@@ -143,7 +143,7 @@ function _initSearch(){
   const input = document.createElement('input');
   input.id = 'search-input';
   input.type = 'text';
-  input.placeholder = 'Search places...';
+  input.placeholder = _T('חיפוש מקומות…', 'Поиск мест…', 'Search places…');
   input.style.cssText = [
     'display:none','width:100%','padding:7px 12px',
     'border:1.5px solid var(--brand)','border-radius:20px',
@@ -350,6 +350,23 @@ function renderList(){
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
+  /* Colour legend. The list already prints each stop's thread underneath its name,
+     but nothing said what the coloured number and stripe MEAN. Built from
+     FAMILY.threads, so it is correct for any family without being maintained.
+     Each chip also filters — fc() already exists and already toggles back to
+     "all" when you click the active one. (31 Jul 2026.) */
+  const _legend = `
+    <div class="thread-legend">
+      ${FAMILY.threads.map(t => `
+        <button class="thread-chip${AF === t.key ? ' on' : ''}"
+                style="--c:${t.color}"
+                onclick="fc(null,'${t.key}')"
+                title="${_T('סינון לפי', 'Показать только', 'Show only')}: ${CL[t.key] || t.key}">
+          <span class="thread-dot"></span>${CL[t.key] || t.key}
+        </button>`).join('')}
+      ${AF !== 'all' ? `<button class="thread-chip thread-chip-all" onclick="fc(null,'all')">${_T('הכול', 'Все', 'All')}</button>` : ''}
+    </div>`;
+
   /* Action row: PDF + Share available from the main (Story Path) list too */
   const _actionRow = `
     <div style="display:flex;padding:8px 10px 6px;gap:5px;">
@@ -357,7 +374,7 @@ function renderList(){
       <button class="saved-action-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
     </div>`;
 
-  el.innerHTML = _actionRow + filtered.map(p=>`
+  el.innerHTML = _legend + _actionRow + filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
       <div class="stop-num" style="background:${CC[p.cat]}">${STOP_NO[p.id]}</div>
@@ -408,7 +425,7 @@ function fc(el,cat){
   document.querySelectorAll('.pill:not(.pill-opennow):not(.pill-saved)').forEach(p=>p.classList.remove('active'));
   if(cat === 'all'){
     document.querySelector('.pill[onclick*="all"]')?.classList.add('active');
-  } else {
+  } else if(el){
     el.classList.add('active');
   }
   // Deactivate Saved when any category filter is clicked
