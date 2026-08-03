@@ -1,9 +1,12 @@
 // ── Photo attribution per place id ──────────────────────────────
 // A Perfect Story Map — Family Edition (familystorymap)
 //
-// Every photo on this map comes from the family archive, scanned from
-// FamilyMemories_Part1 (written by Anna). Places with no surviving photo
-// show their emoji instead (ui-card.js falls back on image error).
+// Most photos on this map come from the family archive, scanned from
+// FamilyMemories_Part1 (written by Anna). Six places had no surviving family
+// photograph, so they use freely licensed images from Wikimedia Commons, each
+// credited individually below with its author, licence and source page.
+// Any place still without a photo shows its emoji instead (ui-card.js falls
+// back on image error).
 //
 // IMAGE PLAN (place-N.jpg ← memoir image):
 //   1  Rechytsa ......... Yosef (Yosi) Friedland, father of grandpa Zalman
@@ -48,6 +51,32 @@ const PHOTO_CREDITS = {
   17: { author: FAMILY_ARCHIVE },
   20: { author: FAMILY_ARCHIVE },
   21: { author: FAMILY_ARCHIVE },
+
+  // ── Wikimedia Commons, where no family photograph survived ────────────────
+  9:  { author: 'צלם לא ידוע · неизвестный фотограф · Unknown photographer',
+        prefix: 'חרקוב, שנות ה־30 · Харьков, 1930-е · Kharkiv, 1930s',
+        license: 'נחלת הכלל · общественное достояние · Public domain',
+        url: 'https://commons.wikimedia.org/wiki/File:%D0%90%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D1%96%D0%BB%D1%96_%D0%B1%D1%96%D0%BB%D1%8F_%D0%94%D0%B5%D1%80%D0%B6%D0%BF%D1%80%D0%BE%D0%BC%D1%83_(1930-%D1%82%D1%96_%D1%80%D0%BE%D0%BA%D0%B8),_%D0%A5%D0%B0%D1%80%D0%BA%D1%96%D0%B2.PNG' },
+  15: { author: 'אלכסנדר גריבובסקי (טאס) · Александр Грибовский (ТАСС) · Alexander Gribovsky (TASS)',
+        prefix: 'סבייז׳ המשוחררת, יולי 1944 · Освобождённый Себеж, июль 1944 · Liberated Sebezh, July 1944',
+        license: 'נחלת הכלל · общественное достояние · Public domain',
+        url: 'https://commons.wikimedia.org/wiki/File:%D0%91%D0%BE%D0%B5%D1%86_%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B9_%D0%90%D1%80%D0%BC%D0%B8%D0%B8_%D0%B1%D0%B5%D1%81%D0%B5%D0%B4%D1%83%D0%B5%D1%82_%D1%81_%D0%B4%D0%B5%D1%81%D1%8F%D1%82%D0%B8%D0%BB%D0%B5%D1%82%D0%BD%D0%B8%D0%BC_%D0%92%D0%BE%D0%BB%D0%BE%D0%B4%D0%B5%D0%B9_%D0%9B%D1%83%D0%BA%D0%B8%D0%BD%D1%8B%D0%BC_%D0%B2_%D0%BE%D1%81%D0%B2%D0%BE%D0%B1%D0%BE%D0%B6%D0%B4%D0%B5%D0%BD%D0%BD%D0%BE%D0%BC_%D0%A1%D0%B5%D0%B1%D0%B5%D0%B6%D0%B5.jpg' },
+  18: { author: 'FOTO:FORTEPAN / Nagy Gyula',
+        prefix: 'נייבסקי פרוספקט, 1966 · Невский проспект, 1966 · Nevsky Prospekt, 1966',
+        license: 'CC BY-SA 3.0',
+        url: 'https://commons.wikimedia.org/wiki/File:(Leningr%C3%A1d)_Nyevszkij_sug%C3%A1r%C3%BAt._Fortepan_50308.jpg' },
+  19: { author: 'יו. מ. רביאקין · Ю. М. Ревякин · Yu. M. Revyakin (via Feconi)',
+        prefix: 'צ׳יטה, 1972 · Чита, 1972 · Chita, 1972',
+        license: 'CC BY 3.0',
+        url: 'https://commons.wikimedia.org/wiki/File:%D0%97%D0%B0%D0%B1%D0%92%D0%9E_1972_%D0%B3%D0%BE%D0%B4,_%D1%84%D0%BE%D1%82%D0%BE_%D0%AE.%D0%9C.%D0%A0%D0%B5%D0%B2%D1%8F%D0%BA%D0%B8%D0%BD%D0%B0_-_panoramio.jpg' },
+  22: { author: 'יעקב סער, לשכת העיתונות הממשלתית · Яаков Саар, ГПО · Yaakov Saar, Government Press Office',
+        prefix: 'החממות בסתריה, 1981 · Теплицы в Ситрии, 1981 · The greenhouses at Sitria, 1981',
+        license: 'CC BY-SA 3.0',
+        url: 'https://commons.wikimedia.org/wiki/File:Flickr_-_Government_Press_Office_(GPO)_-_Aeroponics_at_the_Satariya_Settlement.jpg' },
+  23: { author: 'Willem van de Poll / Nationaal Archief',
+        prefix: 'ספריית מכון ויצמן, 1960 · Библиотека Института Вейцмана, 1960 · The Weizmann Institute library, 1960',
+        license: 'CC0',
+        url: 'https://commons.wikimedia.org/wiki/File:Weizmann-instituut_Interieur_bibliotheek_met_leestafels,_rekken_met_boeken,_pla,_Bestanddeelnr_255-3914.jpg' },
 };
 
 // Build the credit HTML for a place id (returns '' if none).
