@@ -98,6 +98,62 @@ function _initDragOnList(el){
 // ── Search ────────────────────────────────────────────────────
 let _searchQuery = '';
 
+/* ── The person journey filter ─────────────────────────────────────────────
+   Set when the reader picks somebody in the family tree. While it is set the
+   place list holds only that person's stops, in the order their journey is
+   drawn on the map, and a pill over the map says whose journey it is.
+
+   Two rules keep it from becoming a trap:
+   - the pill always carries an ✕, so there is never a narrowed list with
+     nothing on screen explaining why
+   - any other filter the reader reaches for (a thread chip, the search box,
+     the bookmarks pill) replaces it rather than combining with it, and the
+     replacement is handled centrally in renderList so a per-family
+     index.html never has to know this feature exists                        */
+var PERSON_FILTER = null;   // { label:'name', ids:[placeId, …] }
+
+function _renderPersonPill(){
+  var old = document.getElementById('person-path-pill');
+  if(old) old.remove();
+  if(!PERSON_FILTER) return;
+  var el = document.createElement('div');
+  el.id = 'person-path-pill';
+  el.className = 'person-path-pill';
+  el.setAttribute('dir', 'auto');
+  var name = document.createElement('span');
+  name.className = 'ppp-name';
+  name.textContent = '👤 ' + PERSON_FILTER.label;
+  var x = document.createElement('button');
+  x.type = 'button';
+  x.className = 'ppp-x';
+  x.textContent = '✕';
+  var clearLabel = _T('הצגת כל המקומות', 'Показать все места', 'Show all places');
+  x.title = clearLabel;
+  x.setAttribute('aria-label', clearLabel);
+  x.onclick = function(){ window.clearPersonFilter(); };
+  el.appendChild(name);
+  el.appendChild(x);
+  document.body.appendChild(el);
+}
+
+/* places must already be in the order the path is drawn, so the numbers in the
+   list are the numbers on the map. */
+window.setPersonFilter = function(label, places){
+  PERSON_FILTER = { label: label, ids: places.map(function(p){ return p.id; }) };
+  _renderPersonPill();
+  renderList();      // not applyFilters: that would wipe the path just drawn
+};
+
+window.clearPersonFilter = function(quiet){
+  if(!PERSON_FILTER) return;
+  PERSON_FILTER = null;
+  _renderPersonPill();
+  if(typeof clearTripRoute === 'function') clearTripRoute();
+  if(!quiet) renderList();
+};
+
+window.isPersonFiltered = function(){ return !!PERSON_FILTER; };
+
 /* A place matches the query if any of its own fields match — or if a family
    member linked to it matches by name, in either Hebrew or Russian, whatever
    the current display language is. */
@@ -244,6 +300,13 @@ function renderList(){
   const _searchIconBtn = document.getElementById('search-icon-btn');
   const _searchInputEl = document.getElementById('search-input');
 
+  // Searching, or opening the bookmarks, is a new intent. It replaces a person's
+  // journey rather than intersecting with it. Handled here rather than in each
+  // caller, because the search box lives in the per-family index.html.
+  if(PERSON_FILTER && (_searchQuery || (typeof savedFilterActive !== 'undefined' && savedFilterActive))){
+    window.clearPersonFilter(true);
+  }
+
   if(typeof savedFilterActive !== 'undefined' && savedFilterActive){
     // Hide search in saved mode
     if(_searchIconBtn) _searchIconBtn.style.display = 'none';
@@ -335,18 +398,29 @@ function renderList(){
   // Show search icon in normal mode
   if(_searchIconBtn) _searchIconBtn.style.display = '';
 
-  filtered = PLACES.filter(p => {
-    const catOk    = AF === 'all' || p.cat === AF;
-    const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
-    const openOk   = !openNowActive || isOpenNow(p);
-    const searchOk = !_searchQuery || _placeMatchesQuery(p, _searchQuery);
-    return catOk && nbhdOk && openOk && searchOk;
-  });
+  if(PERSON_FILTER){
+    // Journey order, not story order: the map numbers this person's stops 1..N
+    // along their path, and a list that renumbered them differently would put
+    // two different numbers on the same place at the same time.
+    filtered = PERSON_FILTER.ids
+      .map(function(id){ return PLACES.find(function(p){ return p.id === id; }); })
+      .filter(Boolean);
+  } else {
+    filtered = PLACES.filter(p => {
+      const catOk    = AF === 'all' || p.cat === AF;
+      const nbhdOk   = true; /* neighbourhood selection only pans map — all markers stay visible */
+      const openOk   = !openNowActive || isOpenNow(p);
+      const searchOk = !_searchQuery || _placeMatchesQuery(p, _searchQuery);
+      return catOk && nbhdOk && openOk && searchOk;
+    });
+  }
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
-  const _titleText = _searchQuery
+  const _titleText = PERSON_FILTER
+    ? ('👤 ' + PERSON_FILTER.label + ' · ' + count + _T(' מקומות', ' мест', ' places'))
+    : _searchQuery
     ? (count + _T(count === 1 ? ' תוצאה' : ' תוצאות', count === 1 ? ' совпадение' : ' совпадений', ' match' + (count !== 1 ? 'es' : '')))
     : (nbhdName + count + _T(' מקומות', ' мест', ' Places'));
   document.getElementById('sheet-title').textContent = _titleText;
@@ -389,10 +463,10 @@ function renderList(){
       <button class="saved-action-btn" id="list-share-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
     </div>`;
 
-  el.innerHTML = _legend + _actionRow + filtered.map(p=>`
+  el.innerHTML = _legend + _actionRow + filtered.map((p,i)=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
-      <div class="stop-num" style="background:${CC[p.cat]}">${STOP_NO[p.id]}</div>
+      <div class="stop-num" style="background:${CC[p.cat]}">${PERSON_FILTER ? (i+1) : STOP_NO[p.id]}</div>
       <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
@@ -429,6 +503,8 @@ const STOP_NO = (function(){
 
 // ── FILTER ────────────────────────────────────────────────────
 function fc(el,cat){
+  // A thread chip replaces a person's journey rather than narrowing it further.
+  if(typeof window.clearPersonFilter === 'function') window.clearPersonFilter(true);
   if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
   const card = document.getElementById('place-card');
   if(card) card.classList.remove('open');

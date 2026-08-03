@@ -293,6 +293,10 @@
       const open = ov && ov.classList.contains('open');
       _suppressPop = true;                       // do not push while reacting to a pop
       if(st.fsm === 'tree'){
+        // Back out of a journey: drop the path, the pill and the narrowed list
+        // together, so the reader never returns to the tree with the previous
+        // person's stops still filtering the list behind it.
+        if(typeof window.clearPersonFilter === 'function') window.clearPersonFilter();
         if(!open) window.openFamilyTree(st.person || null);   // back from a journey
       } else if(open){
         window.closeFamilyTree(true);            // true = already handled by history
@@ -358,8 +362,8 @@
     if(typeof closePlaceCard === 'function') closePlaceCard(true);
     if(!window.map || !map.getSource){ return; }
     if(pl.length === 1){
+      if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
       if(typeof openDetail === 'function') openDetail(pl[0].id);
-      if(typeof _toast === 'function') _toast('📍 ' + label, 3000);
       return;
     }
     if(typeof _ensureRouteLayer === 'function') _ensureRouteLayer();
@@ -376,7 +380,10 @@
     pl.forEach(p => b.extend([p.lng, p.lat]));
     const m = window.innerWidth < 768;
     map.fitBounds(b, { padding: m ? {top:140,bottom:190,left:40,right:40} : {top:190,bottom:230,left:120,right:120}, duration: 800 });
-    if(typeof _toast === 'function') _toast('📍 ' + label + _L(': המסע על המפה', ' — путь показан на карте', ': journey shown on the map'), 3800);
+    // The pill names whose path this is and stays until the reader dismisses it,
+    // and it narrows the place list to this person's stops. It replaces the toast
+    // that used to say the same thing for four seconds and then vanish.
+    if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
   };
 
   // ── Map → tree: person chips on every place card ─────────────────────────

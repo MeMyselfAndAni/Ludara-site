@@ -1676,3 +1676,73 @@ html[lang="he"] .pc-credit, html[lang="he"] .pc-photo-credit { text-align: right
 .thread-chips { display: none; flex-wrap: wrap; gap: 5px; }
 .thread-legend.open .thread-chips { display: flex; }
 html[lang="he"] .thread-key { flex-direction: row-reverse; }
+
+/* ── Person journey pill ─────────────────────────────────────────────────────
+   When the reader picks somebody in the family tree, the map draws that
+   person's path and this names them, so it is never a mystery whose journey is
+   on screen. It also carries the ✕ that puts every place back in the list.
+   It sits in the free band between the top pill row and the place sheet, and
+   below both in z-order, so it never floats over a card or the list. */
+.person-path-pill {
+  position: fixed;
+  top: 186px;              /* desktop: below the filter bar AND the Places button,
+                              which sits lower and further right there */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 350;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 520px;
+  padding: 6px 7px 6px 14px;
+  border-radius: 22px;
+  background: #0f0d0a;
+  border: 2px solid rgba(212,168,75,0.85);
+  color: var(--gold);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.4);
+}
+.person-path-pill .ppp-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.person-path-pill .ppp-x {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(212,168,75,0.18);
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.person-path-pill .ppp-x:hover { background: rgba(212,168,75,0.34); }
+
+/* Hebrew reads from the right, so the name leads and the ✕ closes on the left.
+   row-reverse runs the main axis right to left, so flex-start is the right edge.
+   Inter carries no display Hebrew, so the fallback face renders visibly smaller
+   at the same nominal size: Hebrew gets its own family and a larger size. */
+html[lang="he"] .person-path-pill {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  padding: 6px 14px 6px 7px;
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-size: 1.02rem;
+  letter-spacing: 0;
+}
+
+/* On a phone the filter bar ends at 86px and the Places button occupies 92 to
+   121, so 130 is the first clear line, and the place sheet does not start until
+   252. Measured rather than guessed, and the browser test asserts the pill
+   overlaps none of them. */
+@media (max-width: 768px) {
+  .person-path-pill { top: 130px; max-width: 92vw; font-size: 0.78rem; }
+  html[lang="he"] .person-path-pill { font-size: 1rem; }
+}
