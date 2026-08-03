@@ -1613,3 +1613,28 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 #nbhd-show-btn.visible { display: flex; }
 #nbhd-show-btn:hover { background: #1a1a10; }
+
+/* ── Family edition: no bookmarking ──────────────────────────────────────────
+   Bookmarking came from the city and book guides, where it means "places I want
+   to visit". On a family map every place already belongs to the reader, so there
+   is nothing to shortlist, and the buttons only add things to explain to an
+   elderly relative. The code stays in place, the UI does not.
+   The booklet is now the whole Place List: ui-pdf.js falls back to every place
+   when nothing is bookmarked, so the PDF button works with no setup. */
+#pill-saved,
+#pc-btn-fav,
+#saved-panel,
+#fav-count-badge,
+#sheet-clear-btn,
+#trip-pdf-btn { display: none !important; }
+
+/* PDF button injected into the Place List header by ui-pdf.js */
+#sheet-pdf-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--brand, #1a3a5c);
+  padding: 4px 8px; border-radius: 6px;
+  white-space: nowrap; margin-inline-start: auto;
+}
+#sheet-pdf-btn:hover { background: rgba(0,0,0,0.05); }

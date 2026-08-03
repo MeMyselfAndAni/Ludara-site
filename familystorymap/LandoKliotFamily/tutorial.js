@@ -60,18 +60,14 @@
          bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
          br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
          demo:'open-tree' }),
-    FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed: a record of your journey through the family story.',
-         bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
-         br:'Нашли место, которое тронуло сердце? Нажмите на закладку. Отметки сохраняются и после закрытия карты — запись вашего путешествия по семейной истории.',
-         demo:'open-card' }),
-    FS({ th:'הסימניות שלכם', tr:'Ваши закладки', te:'Your Bookmarks', be:'Tap Bookmarks to see your list. Tapping a row reopens the card; drag to rearrange.',
-         bh:'לחצו על "סימניות" כדי לראות את הרשימה. לחיצה על שורה פותחת מחדש את הכרטיס; אפשר לגרור ולסדר.',
-         br:'Нажмите «Закладки», чтобы увидеть список. Нажатие на строку снова открывает карточку; порядок можно менять перетаскиванием.',
-         dualTargets:['#pill-saved','#sheet'], targetsDelay:550, demo:'show-saved' }),
-    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF', be:'Tap PDF to turn your bookmarks into a printable booklet: for a family gathering, an evening of memories, or a gift to the next generation.',
-         bh:'לחצו PDF כדי להפוך את הסימניות לחוברת מודפסת — למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
-         br:'Нажмите PDF, чтобы превратить закладки в печатную брошюру — для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
-         target:'#sheet button[onclick="generatePDF()"]' }),
+    FS({ th:'רשימת המקומות', tr:'Список мест', te:'The Place List', be:'The list button opens every place in the story, numbered in the order it happened, each with its photograph, its branch and its dates. Tapping a row opens that place on the map.',
+         bh:'כפתור הרשימה פותח את כל המקומות בסיפור, ממוספרים לפי סדר ההתרחשות, כל אחד עם התצלום שלו, הענף והתאריכים. לחיצה על שורה פותחת את המקום על המפה.',
+         br:'Кнопка списка открывает все места истории, пронумерованные по порядку событий, каждое со своей фотографией, ветвью и датами. Нажатие на строку открывает это место на карте.',
+         dualTargets:['#desktop-list-btn','#sheet'], targetsDelay:550, demo:'show-list' }),
+    FS({ th:'חוברת PDF משפחתית', tr:'Семейный PDF', te:'A Family PDF Booklet', be:'Tap PDF booklet and the whole family story is laid out as a printable book: every place with its photograph, its story and a QR code to the location. For a family gathering, an evening of memories, or a gift to the next generation.',
+         bh:'לחצו על «חוברת PDF» וכל סיפור המשפחה נפרש כספר להדפסה: כל מקום עם התצלום שלו, הסיפור וקוד QR למיקום. למפגש משפחתי, לערב זיכרונות או כמתנה לדור הבא.',
+         br:'Нажмите «Буклет PDF», и вся семейная история разворачивается в книгу для печати: каждое место со своей фотографией, рассказом и QR-кодом. Для семейной встречи, вечера воспоминаний или в подарок следующему поколению.',
+         target:'#sheet-pdf-btn' }),
     FS({ th:'שיתוף עם המשפחה', tr:'Поделиться с семьёй', te:'Share With the Family', be:'Send the map to relatives in Israel and around the world, by message or email, in one tap.',
          bh:'שלחו את המפה לקרובים בארץ ובעולם — בהודעה או במייל, בלחיצה אחת.',
          br:'Отправьте карту родным в Израиле и по всему миру — сообщением или письмом, одним нажатием.',
@@ -339,6 +335,23 @@
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
+  /* Open the Place List during its own step. Family maps have no bookmarking, so
+     the list itself is what the reader is being shown, and the PDF step that
+     follows needs the list open because the booklet button lives in its header. */
+  var _listDemoOpen = false;
+  function showListDemo() {
+    var sheet = document.getElementById('sheet');
+    if (sheet && sheet.classList.contains('open')) return;
+    if (typeof openSheet === 'function') { openSheet(); _listDemoOpen = true; }
+    else if (typeof toggleSheet === 'function') { toggleSheet(); _listDemoOpen = true; }
+  }
+  function closeListDemo() {
+    if (!_listDemoOpen) return;
+    var sheet = document.getElementById('sheet');
+    if (sheet && sheet.classList.contains('open') && typeof toggleSheet === 'function') toggleSheet();
+    _listDemoOpen = false;
+  }
+
   /* Show the family tree during its own step, so the reader sees the thing being
      described instead of a button that opens it. */
   var _treeDemoOpen = false;
@@ -557,6 +570,9 @@
     var step = STEPS[n];
     /* Leaving the tree step puts the tree away again. */
     if (step.demo !== 'open-tree') closeTreeDemo();
+    /* The list stays open across its own step and the PDF step that follows,
+       because the booklet button lives in the list header. */
+    if (step.demo !== 'show-list' && step.target !== '#sheet-pdf-btn') closeListDemo();
 
     /* Close any open place card if this step requests it — unconditional */
     if (step.closeCard) {
@@ -610,6 +626,7 @@
     }
 
     if (step.demo === 'open-tree')        { setTimeout(openTreeDemo,     420); }
+    if (step.demo === 'show-list')         { setTimeout(showListDemo,    350); }
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
@@ -645,6 +662,7 @@
     closeDemoCard();
     closeSavedDemo();
     closeTreeDemo();
+    closeListDemo();
     localStorage.setItem(DONE_KEY, '1');
     overlay.style.opacity = '0';
     setTimeout(function () {

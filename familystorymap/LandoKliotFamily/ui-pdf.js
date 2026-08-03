@@ -50,11 +50,18 @@ async function generatePDF(overridePlaces, customSubtitle){
   window._pdfCoverSubtitle = customSubtitle || null;
   var _ruP = (typeof LANG !== 'undefined' && LANG === 'ru');
   var _enP = (typeof LANG !== 'undefined' && LANG === 'en');
-  const places = (overridePlaces && overridePlaces.length) ? overridePlaces : getSortedFavPlaces();
-  if(!places || places.length === 0){
-    alert('Bookmark some places first using the 🔖 button, then generate your guide.');
-    return;
-  }
+  // Family maps have no bookmarking: the booklet is the whole Place List.
+  // Order of preference: an explicit list, then bookmarks if a map still offers
+  // them, then every place. It must never refuse to produce a booklet.
+  const places = (function(){
+    if (overridePlaces && overridePlaces.length) return overridePlaces;
+    if (typeof getSortedFavPlaces === 'function') {
+      const f = getSortedFavPlaces();
+      if (f && f.length) return f;
+    }
+    return (typeof PLACES !== 'undefined') ? PLACES.slice() : [];
+  })();
+  if(!places || places.length === 0) return;
 
   // Show loading message
   if (typeof _toast === 'function') {
@@ -83,7 +90,7 @@ async function generatePDF(overridePlaces, customSubtitle){
   // NOTE (Family Edition): no route/leg stats here on purpose.
   // The city guides print "~N min walk/drive to next stop" between cards, which is
   // meaningless for a family history spanning Belarus → Russia → Israel across a century.
-  // The OSRM fetch (_fetchRouteStats) is deliberately NOT called — it is slow, it fails
+  // The OSRM fetch (_fetchRouteStats) is deliberately NOT called: it is slow, it fails
   // on intercontinental legs, and nothing in this PDF uses the result.
 
   // Build HTML for each place card
@@ -388,7 +395,7 @@ async function generatePDF(overridePlaces, customSubtitle){
     page-break-inside: avoid;
   }
 
-  /* Branding footer — appears on every printed page */
+  /* Branding footer: appears on every printed page */
   .pdf-brand-footer {
     text-align: center;
     padding: 20px 0 28px;
@@ -428,20 +435,20 @@ async function generatePDF(overridePlaces, customSubtitle){
 </head>
 <body>
 
-<!-- COVER — Book Story Guide -->
+<!-- COVER: the family story booklet -->
 <div class="pdf-cover">
   <div class="pdf-cover-logo">Family Story Map by Ludara</div>
   <div class="pdf-cover-title">${typeof pickLang === 'function' ? pickLang(FAMILY.title) : FAMILY.title}</div>
-  <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || (_enP ? 'The family story — your bookmarked places, in your order' : _ruP ? 'История семьи — отмеченные места, в вашем порядке' : 'סיפור המשפחה — המקומות שסימנתם, לפי הסדר שלכם')}</div>
+  <div class="pdf-cover-subtitle">${window._pdfCoverSubtitle || (_enP ? 'Every place in the family story, in order' : _ruP ? 'Все места семейной истории, по порядку' : 'כל המקומות בסיפור המשפחה, לפי הסדר')}</div>
   <div class="pdf-cover-divider"></div>
   <div class="pdf-cover-stats">
     <div class="pdf-stat">
       <div class="pdf-stat-num">${places.length}</div>
-      <div class="pdf-stat-label">${_enP ? 'bookmarked places' : _ruP ? 'отмеченных мест' : 'מקומות מסומנים'}</div>
+      <div class="pdf-stat-label">${_enP ? 'places' : _ruP ? 'мест' : 'מקומות'}</div>
     </div>
     <div class="pdf-stat">
       <div class="pdf-stat-num">🌳</div>
-      <div class="pdf-stat-label">${_enP ? 'from the memoirs of Anna' : _ruP ? 'по воспоминаниям Анны' : 'על פי זיכרונותיה של אנה'}</div>
+      <div class="pdf-stat-label">${(typeof pickLang === 'function' && typeof FAMILY !== 'undefined' && FAMILY.credit) ? pickLang(FAMILY.credit) : ''}</div>
     </div>
   </div>
   <div class="pdf-cover-by">${_enP ? 'Created with Family Story Map' : _ruP ? 'Создано с Family Story Map' : 'נוצר עם Family Story Map'}</div>
@@ -476,3 +483,40 @@ async function generatePDF(overridePlaces, customSubtitle){
     }, 1200);
   };
 }
+
+/* ── The booklet button in the Place List header ─────────────────────────────
+   Family maps hide bookmarking (see styles.css), so the PDF is offered straight
+   from the Place List instead of from the bookmarks panel. Injected from the
+   shared engine rather than written into each map's index.html, so every map
+   gets it from one place. generatePDF() with no argument now falls back to
+   every place, so this needs no setup from the reader. */
+(function(){
+  function _pdfBtnLabel(){
+    return (typeof L3 === 'function')
+      ? L3('\u{1F4C4} חוברת PDF', '\u{1F4C4} Буклет PDF', '\u{1F4C4} PDF booklet')
+      : '\u{1F4C4} PDF';
+  }
+  function _injectPdfBtn(){
+    var hdr = document.querySelector('.sheet-header');
+    if (!hdr || document.getElementById('sheet-pdf-btn')) return;
+    var b = document.createElement('button');
+    b.id = 'sheet-pdf-btn';
+    b.type = 'button';
+    b.textContent = _pdfBtnLabel();
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (typeof generatePDF === 'function') generatePDF();
+    });
+    var close = hdr.querySelector('.sheet-close');
+    if (close) hdr.insertBefore(b, close); else hdr.appendChild(b);
+  }
+  window._refreshPdfBtnLabel = function(){
+    var b = document.getElementById('sheet-pdf-btn');
+    if (b) b.textContent = _pdfBtnLabel();
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _injectPdfBtn);
+  } else {
+    _injectPdfBtn();
+  }
+})();
