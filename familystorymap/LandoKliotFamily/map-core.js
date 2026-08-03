@@ -540,3 +540,28 @@ let mapCheckInterval = setInterval(() => {
 function apdTrack(name, params){
   try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){}
 }
+
+// ── Map labels in the reader's language ──────────────────────────────────────
+// MapTiler's vector tiles already carry name:he, name:ru and name:en on every
+// label, so this is a rendering switch and costs no extra tile requests. Each
+// symbol layer's text-field is repointed at the chosen language, falling back to
+// the Latin name and then to the local one where a translation is missing (many
+// small Belarusian and Uzbek towns have no Hebrew name, for instance).
+// setStyle() would have done this too, but it discards every source and layer,
+// taking the family path and the region circles with it.
+function setMapLanguage(lang) {
+  if (typeof map === 'undefined' || !map) return;
+  var field = ['coalesce',
+    ['get', 'name:' + lang],
+    ['get', 'name:latin'],
+    ['get', 'name']];
+  var style;
+  try { style = map.getStyle(); } catch (e) { return; }
+  if (!style || !style.layers) return;
+  style.layers.forEach(function (l) {
+    if (l.type !== 'symbol') return;
+    if (!l.layout || !l.layout['text-field']) return;
+    try { map.setLayoutProperty(l.id, 'text-field', field); } catch (e) {}
+  });
+}
+window.setMapLanguage = setMapLanguage;

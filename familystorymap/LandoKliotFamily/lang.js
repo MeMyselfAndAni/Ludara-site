@@ -143,6 +143,9 @@ function applyLanguage(lang){
   var si = document.getElementById('topbar-search');
   if(si) si.placeholder = L3('מקום או שם…', 'место или имя…', 'place or name…');
   _applyTreeLang();
+  // Place names on the map itself follow the reader too, using the name:xx
+  // fields already inside the vector tiles, so this costs no extra requests.
+  if (typeof setMapLanguage === 'function') setMapLanguage(lang);
 
   // Button labels that were plain English in the template
   // getElementById returns only the FIRST element with an id, so a stray duplicate

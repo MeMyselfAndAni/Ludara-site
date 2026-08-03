@@ -1282,7 +1282,7 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 /* If a browser will not animate the r property, show a steady ring instead. */
 @media (prefers-reduced-motion: reduce) {
   .mgl-marker.is-active .mgl-halo { animation: none; opacity: 0.6; r: 40px; }
-}}
+}
 #place-card-dim.open { display: block; }
 
 /* The card itself */
@@ -1627,3 +1627,22 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 #fav-count-badge,
 #sheet-clear-btn,
 #trip-pdf-btn { display: none !important; }
+
+/* ── Hebrew place cards read right to left ───────────────────────────────────
+   The card markup is direction-neutral, so Hebrew text ran RTL inside blocks
+   that were still laid out left to right: the quote's gold rule sat on the
+   wrong edge, the "today" label ended up on the left of its own sentence, and
+   the title and category hugged the left margin. applyLanguage() sets
+   <html lang>, so everything here keys off that and English and Russian are
+   untouched. Photos, buttons and the nav arrows stay where they are. */
+html[lang="he"] .pc-body { text-align: right; }
+html[lang="he"] .pc-cat { flex-direction: row-reverse; justify-content: flex-end; }
+html[lang="he"] .pc-contacts { justify-content: flex-end; }
+html[lang="he"] .pc-note-wrap {
+  border-left: none;
+  border-right: 3px solid #b8960a;
+  border-radius: 8px 0 0 8px;
+}
+html[lang="he"] .pc-tip { direction: rtl; }
+html[lang="he"] .pc-tip-label { margin-right: 0; margin-left: 5px; }
+html[lang="he"] .pc-hours { justify-content: flex-end; }

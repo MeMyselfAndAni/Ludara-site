@@ -1,9 +1,9 @@
-// A Perfect Story Map — Family Edition
-// map.js — SHARED ENGINE FILE. Identical in every family map.
+// A Perfect Story Map: Family Edition
+// map.js: SHARED ENGINE FILE. Identical in every family map.
 //
 // Everything family-specific lives in family.js, which must load BEFORE this file.
 // If you find yourself typing a family name, a branch key or a region name in
-// here, it belongs in family.js instead — that is exactly how a previous family's
+// here, it belongs in family.js instead. That is exactly how a previous family's
 // names used to survive into a new map.
 //
 // ⚠️  FAMILY.regions[].key, the region bubbles in index.html, and the `nbhd`
@@ -39,7 +39,7 @@ function buildNbhdCircles() {
   const circles = [];
   for (const [nbhd, color] of Object.entries(NBHD_COLORS)) {
     const approxCenter = NBHD_APPROX_CENTERS[nbhd];
-    const ps = PLACES.filter(p => p.nbhd === nbhd);   // no outlier cut — regions are large by design
+    const ps = PLACES.filter(p => p.nbhd === nbhd);   // no outlier cut, regions are large by design
     const minR = NBHD_MIN_RADIUS[nbhd] || 80;
 
     if (ps.length === 0) {
@@ -69,7 +69,7 @@ function initMap() {
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
   map.on('error', function() {
-    // Silent reload — client sees nothing, transient errors self-heal
+    // Silent reload: client sees nothing, transient errors self-heal
     setTimeout(function() { location.reload(); }, 2000);
   });
 
@@ -78,15 +78,11 @@ function initMap() {
       const loadingEl = document.getElementById('loading');
       if (loadingEl) loadingEl.style.display = 'none';
 
-      map.getStyle().layers.forEach(layer => {
-        if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
-          try {
-            map.setLayoutProperty(layer.id, 'text-field', [
-              'coalesce', ['get', 'name:en'], ['get', 'name'],
-            ]);
-          } catch(e) {}
-        }
-      });
+      // Every label used to be pinned to name:en here, so the map stayed in
+      // English however the reader had set the page. setMapLanguage() in
+      // map-core.js does the same job for whichever language is active, and
+      // lang.js calls it again on every switch.
+      setMapLanguage((typeof LANG !== 'undefined' && LANG) || 'en');
 
       NBHD_CIRCLES = buildNbhdCircles();
       initMapSources();
@@ -96,7 +92,7 @@ function initMap() {
 
       PLACES.forEach(p => addMarker(p));
 
-      // Open showing the WHOLE journey — Belarus to the Urals to Israel on one
+      // Open showing the WHOLE journey: Belarus to the Urals to Israel on one
       // screen (Chita stretches it east; the Family Path then refits to the path).
       const storyBounds = new maplibregl.LngLatBounds();
       PLACES.forEach(p => storyBounds.extend([p.lng, p.lat]));

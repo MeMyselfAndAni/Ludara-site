@@ -73,7 +73,7 @@ function _renderNbhdList(nbhd){
   const count  = places.length;
   // Update sheet title and all count badges
   const title = document.getElementById('sheet-title');
-  if(title) title.textContent = name + ' · ' + count + ' places';
+  if(title) title.textContent = name + ' · ' + count + (typeof L3 === 'function' ? L3(' מקומות', ' мест', ' places') : ' places');
   ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.textContent = count;
