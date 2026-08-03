@@ -42,7 +42,7 @@
          bh:_FT('intro').he, br:_FT('intro').ru, be:_FT('intro').en }),
     FS({ th:'מסע המשפחה', tr:'Путь семьи', te:'The Family Path',
          bh:_FT('path').he, br:_FT('path').ru, be:_FT('path').en,
-         target:'#pill-storypath', demo:'close-saved-pulse' }),
+         target:'#pill-storypath', demo:'story-path' }),
     FS({ th:'הסיפור, על המפה', tr:'История на карте', te:'The Story, Mapped',
          bh:_FT('pins').he, br:_FT('pins').ru, be:_FT('pins').en,
          demo:'open-card-delayed-no-heart' }),
@@ -59,7 +59,7 @@
     FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time: "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
          bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
          br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
-         demo:'open-tree' }),
+         target:'#tree-fab', demo:'open-tree' }),
     FS({ th:'רשימת המקומות', tr:'Список мест', te:'The Place List', be:'The list button opens every place in the story, numbered in the order it happened, each with its photograph, its branch and its dates. Tapping a row opens that place on the map.',
          bh:'כפתור הרשימה פותח את כל המקומות בסיפור, ממוספרים לפי סדר ההתרחשות, כל אחד עם התצלום שלו, הענף והתאריכים. לחיצה על שורה פותחת את המקום על המפה.',
          br:'Кнопка списка открывает все места истории, пронумерованные по порядку событий, каждое со своей фотографией, ветвью и датами. Нажатие на строку открывает это место на карте.',
@@ -79,9 +79,11 @@
   ];
 
   /* ── Filter steps that need optional UI elements ───────────── */
-  /* Day Trips step — skip if launcher absent or tripNames not configured */
-  if (!document.querySelector('#pill-storypath') || !CFG.tripNames) {
-    STEPS = STEPS.filter(function (s) { return s.demo !== 'close-saved-pulse'; });
+  /* Drop the Family Path step on any map that has no gold path button. The guard
+     used to test for a 'close-saved-pulse' demo and for CFG.tripNames, a hotel
+     guide leftover: the step is now identified by its own demo name. */
+  if (!document.querySelector('#pill-storypath')) {
+    STEPS = STEPS.filter(function (s) { return s.demo !== 'story-path'; });
   }
   /* Always mark the final step as Done */
   /* Final step label comes from the step's own btn getter */
@@ -335,6 +337,16 @@
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
+  /* Press the gold button during its own step, so the reader watches the family
+     path actually draw itself instead of looking at a highlighted button and
+     being told what it would do. The pill is left switched on afterwards, which
+     is also the map's default view. */
+  function showStoryPathDemo() {
+    var btn = document.getElementById('pill-storypath');
+    if (!btn || btn.classList.contains('active')) return;
+    if (typeof toggleStoryPath === 'function') toggleStoryPath(true);
+  }
+
   /* Open the Place List during its own step. Family maps have no bookmarking, so
      the list itself is what the reader is being shown, and the PDF step that
      follows needs the list open because the booklet button lives in its header. */
@@ -352,15 +364,54 @@
     _listDemoOpen = false;
   }
 
-  /* Show the family tree during its own step, so the reader sees the thing being
-     described instead of a button that opens it. */
+  /* The tree step used to describe four separate actions in a paragraph and then
+     just show a static tree. It now performs them, slowly, on a loop, so the
+     reader watches rather than reads: the button glows, the tree opens, it zooms
+     in and back out, then each family is highlighted in turn before everyone
+     comes back. Built from FAMILY.tree.branches, so a family with two branches or
+     five gets the right number of beats with no edit here. */
   var _treeDemoOpen = false;
+  var _treeTourTimers = [];
+
+  function _stopTreeTour() {
+    _treeTourTimers.forEach(clearTimeout);
+    _treeTourTimers = [];
+  }
+
+  function _runTreeTour() {
+    _stopTreeTour();
+    var keys = ((typeof FAMILY !== 'undefined' && FAMILY.tree && FAMILY.tree.branches) || [])
+                 .map(function (b) { return b.key; });
+    var beats = [];
+    beats.push([1100, function () { if (window._treeZoom) window._treeZoom(1.4); }]);   // lean in
+    beats.push([1600, function () { if (window._treeZoom) window._treeZoom(1 / 1.4); }]); // back out
+    keys.forEach(function (k) {                                                          // one family at a time
+      beats.push([1700, function () { if (window._treeJump) window._treeJump(k); }]);
+    });
+    beats.push([1700, function () { if (window._treeJump) window._treeJump(null); }]);   // everyone back
+    beats.push([2200, function () { if (_treeDemoOpen) _runTreeTour(); }]);              // and again
+
+    var t = 0;
+    beats.forEach(function (b) {
+      t += b[0];
+      _treeTourTimers.push(setTimeout(b[1], t));
+    });
+  }
+
+  /* Point at the button first, press it after a beat, then run the tour. */
   function openTreeDemo() {
     if (typeof window._treeDemo !== 'function') return;
-    window._treeDemo(true); _treeDemoOpen = true;
+    _treeTourTimers.push(setTimeout(function () {
+      if (typeof window._treeDemo !== 'function') return;
+      window._treeDemo(true);
+      _treeDemoOpen = true;
+      _runTreeTour();
+    }, 1200));
   }
   function closeTreeDemo() {
+    _stopTreeTour();
     if (!_treeDemoOpen) return;
+    if (typeof window._treeJump === 'function') window._treeJump(null);
     if (typeof window._treeDemo === 'function') window._treeDemo(false);
     _treeDemoOpen = false;
   }
@@ -627,6 +678,7 @@
 
     if (step.demo === 'open-tree')        { setTimeout(openTreeDemo,     420); }
     if (step.demo === 'show-list')         { setTimeout(showListDemo,    350); }
+    if (step.demo === 'story-path')        { setTimeout(showStoryPathDemo, 420); }
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
