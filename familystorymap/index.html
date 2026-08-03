@@ -252,7 +252,7 @@
       <h1>A hundred years of your family,<br><em>on one map that brings everyone together.</em></h1>
       <p class="hero-sub">Most family histories end up as a document nobody opens: a memoir in a drawer, a tree of names and dates, a box of photographs whose places nobody can any longer point to. We turn that material into a living interactive map: a pin for every town, street and house the family lived in, fled from, married in or is buried in, each with the photograph and the story that belongs to it. The whole journey can be drawn as one path across generations, and the family tree is linked to the map, so tapping a name traces exactly where that person&rsquo;s life took them. In every language your family reads, on any phone, with no app to download.</p>
       <div class="hero-btns">
-        <a class="btn-gold" href="#get-started">Request a sample map</a>
+        <a class="btn-gold" href="#get-started">Request a price offer</a>
         <a class="btn-ghost-dark" href="#how">See how it works</a>
         <a class="btn-ghost-dark" href="#pricing">What it costs</a>
       </div>
@@ -425,7 +425,7 @@
       <div class="cta-grid">
         <div>
           <h2>Tell us about <em>your family.</em></h2>
-          <p class="sub-dark">Send us roughly what you have and how far back it goes. We will come back within one business day with what a map of it could look like, and what it would cost.</p>
+          <p class="sub-dark">Send us roughly what you have and how far back it goes. We will come back within one business day with a price offer. If it helps, we can walk you through a finished map first so you can see exactly what you would be getting.</p>
         </div>
         <div>
           <form class="form" id="contactForm" novalidate>
@@ -439,7 +439,7 @@
               <div class="fg"><label for="languages">Languages needed</label><input type="text" id="languages" name="languages" placeholder="English, Russian, Hebrew"/></div>
             </div>
             <div class="fg"><label for="message">What do you already have? <span style="opacity:.55;text-transform:none;letter-spacing:0;">(optional)</span></label><textarea id="message" name="message" placeholder="A written memoir, a family tree, photographs, or just names and towns , and roughly how many places and how many generations."></textarea></div>
-            <button type="submit" class="submit-btn" id="submitBtn">Request a sample map</button>
+            <button type="submit" class="submit-btn" id="submitBtn">Request a price offer</button>
             <p class="form-note">No commitment. Your material stays private.</p>
           </form>
           <div class="form-success" id="formSuccess">
@@ -483,8 +483,8 @@
         document.getElementById('contactForm').style.display='none';
         document.getElementById('formSuccess').classList.add('visible');
         gtag('event','form_submit',{event_category:'outreach',event_label:'familystorymap_page'});
-      } else { btn.disabled=false; btn.textContent='Request a sample map'; alert('Something went wrong. Please try again.'); }
-    }catch(err){ btn.disabled=false; btn.textContent='Request a sample map'; alert('Something went wrong. Please try again.'); }
+      } else { btn.disabled=false; btn.textContent='Request a price offer'; alert('Something went wrong. Please try again.'); }
+    }catch(err){ btn.disabled=false; btn.textContent='Request a price offer'; alert('Something went wrong. Please try again.'); }
   });
 </script>
 
