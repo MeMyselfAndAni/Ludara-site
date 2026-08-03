@@ -59,7 +59,7 @@
     FS({ th:'עץ המשפחה', tr:'Дерево семьи', te:'The Family Tree', be:'The 🌳 button opens the family tree. The surname chips at the top highlight one branch at a time — "All" brings everyone back. Drag the tree to move it, and zoom with the mouse wheel or the ＋ － buttons. Clicking a person closes the tree and draws their life journey on the map; your browser\'s Back button brings you straight back to the tree.',
          bh:'הכפתור 🌳 פותח את עץ המשפחה. שבבי שמות המשפחה שלמעלה מדגישים ענף אחד בכל פעם — "הכול" מחזיר את כולם. אפשר לגרור את העץ, ולהתקרב ולהתרחק בגלגלת העכבר או בכפתורי ＋ －. לחיצה על אדם סוגרת את העץ ומציירת את מסע חייו על המפה; כפתור החזרה של הדפדפן יחזיר אתכם ישר לעץ.',
          br:'Кнопка 🌳 открывает семейное дерево. Кнопки фамилий сверху подсвечивают по одной ветви — «Все» возвращает всех. Дерево можно перетаскивать, а колесо мыши или кнопки ＋ － приближают и отдаляют. Нажатие на человека закрывает дерево и рисует его жизненный путь на карте; кнопка «Назад» в браузере вернёт вас прямо к дереву.',
-         target:'#tree-fab' }),
+         demo:'open-tree' }),
     FS({ th:'סימניות', tr:'Закладки', te:'Bookmarks', be:'Found a place that touches the heart? Tap the bookmark. Your marks are kept after the map is closed — a record of your journey through the family story.',
          bh:'מצאתם מקום שנוגע ללב? לחצו על הסימנייה. הסימונים נשמרים גם אחרי סגירת המפה — תיעוד של המסע שלכם בסיפור המשפחה.',
          br:'Нашли место, которое тронуло сердце? Нажмите на закладку. Отметки сохраняются и после закрытия карты — запись вашего путешествия по семейной истории.',
@@ -339,6 +339,19 @@
     /* Card stays at bottom-center (set by setCard) — no repositioning needed */
   }
 
+  /* Show the family tree during its own step, so the reader sees the thing being
+     described instead of a button that opens it. */
+  var _treeDemoOpen = false;
+  function openTreeDemo() {
+    if (typeof window._treeDemo !== 'function') return;
+    window._treeDemo(true); _treeDemoOpen = true;
+  }
+  function closeTreeDemo() {
+    if (!_treeDemoOpen) return;
+    if (typeof window._treeDemo === 'function') window._treeDemo(false);
+    _treeDemoOpen = false;
+  }
+
   function closeSavedDemo() {
     if (!_demoSavedOn) return;
     var pill = document.getElementById('pill-saved');
@@ -527,6 +540,8 @@
     clearDualOverlay();
 
     var step = STEPS[n];
+    /* Leaving the tree step puts the tree away again. */
+    if (step.demo !== 'open-tree') closeTreeDemo();
 
     /* Close any open place card if this step requests it — unconditional */
     if (step.closeCard) {
@@ -577,6 +592,7 @@
       setSpot(targetEl);
     }
 
+    if (step.demo === 'open-tree')        { setTimeout(openTreeDemo,     420); }
     if (step.demo === 'blink')             { setTimeout(addBeacons,      350); }
     if (step.demo === 'scroll-filter')     { setTimeout(scrollFilterDemo, 450); }
     if (step.demo === 'open-card')         { setTimeout(openDemoCard,     350); }
@@ -611,6 +627,7 @@
     clearLauncherAnim();
     closeDemoCard();
     closeSavedDemo();
+    closeTreeDemo();
     localStorage.setItem(DONE_KEY, '1');
     overlay.style.opacity = '0';
     setTimeout(function () {

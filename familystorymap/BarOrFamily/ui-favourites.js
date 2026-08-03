@@ -301,10 +301,10 @@ function planFavTrip(){
   const el = document.getElementById('trip-content');
   el.innerHTML = `
     <div class="trip-summary">
-      <span>🔖 ${places.length} bookmark${places.length===1?'':'s'} — your journey through the book</span>
+      <span>🔖 ${places.length} ${_T(places.length===1?'סימנייה':'סימניות',places.length===1?'закладка':'закладок','bookmark'+(places.length===1?'':'s'))} · ${_T('המסע שלכם בסיפור','ваш путь по книге','your journey through the book')}</span>
     </div>
     <div style="font-size:0.72rem;color:#888;text-align:center;padding:4px 0 8px;">
-      Drag ⠿ to reorder${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ Auto-sort</a>' : ''}
+      ${_T('גררו ⠿ כדי לשנות את הסדר','Перетащите ⠿, чтобы изменить порядок','Drag ⠿ to reorder')}${hasManualOrder ? ' &nbsp;·&nbsp; <a href="#" style="color:inherit" onclick="event.preventDefault();if(typeof _clearSavedOrder===\'function\')_clearSavedOrder();planFavTrip()">↺ ' + _T('אוטומטי','Авто','Auto-sort') + '</a>' : ''}
     </div>` +
   places.map((p,i)=>{
     const walkToNext = i < places.length-1

@@ -689,7 +689,7 @@
   <div class="sheet-header">
     <span class="sheet-title" id="sheet-title">21 מקומות · мест</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
-    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="ניקוי כל הסימניות" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;" id="sheet-clear-label">🗑 ניקוי</button>
+    <button id="sheet-clear-btn" onclick="clearAllSaved()" title="ניקוי כל הסימניות" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 ניקוי</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
   </div>
   <div class="places-list" id="places-list"></div>
@@ -984,7 +984,7 @@ function clearAllSaved() {
     }
     var places = typeof getSortedFavPlaces === 'function' ? getSortedFavPlaces() : [];
     var titleEl = document.getElementById('sheet-title');
-    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em">🔖</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + ' Bookmarked' : 'Bookmarks') + '</span>';
+    if (titleEl) titleEl.innerHTML = '<span style="font-size:1.3em;vertical-align:-0.1em">🔖</span> <span style="color:var(--brand);font-weight:700">' + (places.length > 0 ? places.length + _T(' סימניות', ' закладок', ' Bookmarked') : _T('סימניות', 'Закладки', 'Bookmarks')) + '</span>';
     var badge = document.getElementById('list-badge');
     if (badge) badge.textContent = places.length;
     var scb = document.getElementById('sheet-clear-btn');

@@ -136,7 +136,13 @@ function applyLanguage(lang){
   _setTxt('saved-map-btn',      L3('🖼 שמירת מפה', '🖼 Сохранить карту', '🖼 Save map'));
   _setTxt('trip-pdf-btn',       '⬇ PDF');
   _setTxt('trip-share-btn',     L3('🔗 שיתוף', '🔗 Поделиться', '🔗 Share'));
-  _setTxt('sheet-clear-label',  L3('🗑 ניקוי', '🗑 Очистить', '🗑 Clear'));
+  // The markup carried two ids on this one button, so 'sheet-clear-label' matched
+  // nothing and the Clear chip stayed English. Target the real id.
+  _setTxt('sheet-clear-btn',    L3('🗑 ניקוי', '🗑 Очистить', '🗑 Clear'));
+  var _scb = document.getElementById('sheet-clear-btn');
+  if(_scb) _scb.title = L3('ניקוי כל הסימניות', 'Очистить все закладки', 'Clear all bookmarks');
+  var _tt = document.querySelector('.trip-title');
+  if(_tt) _tt.textContent = L3('🗺 המסלול שלכם', '🗺 Ваш маршрут', '🗺 Your itinerary');
 
   // Corner language button: highlight the active code
   var lf = document.getElementById('lang-fab');
