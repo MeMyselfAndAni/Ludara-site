@@ -72,7 +72,7 @@ const PEOPLE = [
   { id:'avram',     he:'אברם', ru:'Абрам', en:'Avram', years:'', role:'אח של סבא · брат деда · grandfather\'s brother', branch:'friedland', col:19.9, row:1, places:[16] },
   { id:'nina',      he:'נינה (נחמה) פרידלנד', ru:'Нина (Нехама) Фридланд', en:'Nina (Nechama) Friedland', years:'~1924', role:'אמא · мама · mother', branch:'friedland', col:11.9, row:2, places:[2,12,14,10,20] },
   { id:'bella',     he:'בלה', ru:'Белла', en:'Bella', years:'', role:'האחות הבכורה · старшая сестра · the eldest sister', branch:'friedland', col:13.2, row:2, places:[2,12,10] },
-  { id:'kagan_f',   he:'קגן', ru:'Каган', en:'Kagan', years:'', role:'אביה של אליסה; שמו הפרטי אינו ידוע לנו · отец Алисы; имя нам неизвестно · Alisa\'s father; his given name is not known to us', branch:'friedland', col:14.3, row:2, places:[] },
+  { id:'kagan_f',   he:'מויסיי קגן', ru:'Моисей Каган', en:'Moisei Kagan', years:'', role:'אביה של אליסה · отец Алисы · Alisa\'s father', branch:'friedland', col:14.3, row:2, places:[] },
   { id:'polina_f',  he:'פולינה פרידלנד', ru:'Полина Фридланд', en:'Polina Friedland', years:'נ׳ ~1928', role:'מורה לשפות · преподаватель языков · language teacher', branch:'friedland', col:16.8, row:2, places:[2,12,10] },
   { id:'grisha',    he:'גרישה פרידלנד', ru:'Гриша Фридланд', en:'Grisha Friedland', years:'נפ׳ בגיל 56', role:'מנהל בית ספר · директор школы · school principal', branch:'friedland', col:18, row:2, places:[2,12,10] },
   { id:'pavlina_w', he:'פבלינה', ru:'Павлина', en:'Pavlina', years:'', role:'רעיית גרישה · жена Гриши · Grisha\'s wife', branch:'friedland', col:19.2, row:2, places:[10] },

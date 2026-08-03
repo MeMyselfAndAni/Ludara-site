@@ -1259,7 +1259,11 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 
 /* The pin the open card is about — two offset pulses so it reads as a beacon. */
-.mgl-marker { position: relative; }
+/* line-height:0 + display:block matter: the marker div holds an inline <svg>, which
+   sits on a text baseline and leaves a few px of descender space below it. That made
+   the div taller than the pin, so a halo centred on the div sat low. */
+.mgl-marker { position: relative; line-height: 0; font-size: 0; }
+.mgl-marker svg { display: block; }
 .mgl-marker.is-active::before,
 .mgl-marker.is-active::after {
   content: '';
