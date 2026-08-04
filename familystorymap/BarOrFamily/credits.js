@@ -62,6 +62,21 @@ const PHOTO_CREDITS = {
         license: 'CC BY-SA 4.0',
         url:     'https://commons.wikimedia.org/wiki/File:Krak%C3%B3w_dawny_ob%C3%B3z_koncentracyjny_KL_Plaszow_08.jpg' },
 
+  19: { author:  'צלם לא ידוע, PikiWiki Israel',
+        prefix:  'תחנת הרכבת תל־אביב מרכז, שנות ה־50',
+        license: 'נחלת הכלל',
+        url:     'https://commons.wikimedia.org/wiki/File:100193_central_tel_aviv_train_station_PikiWiki_Israel.jpg' },
+
+  22: { author:  'Donald24',
+        prefix:  'אולם היוצאים, טרמינל 1, נמל התעופה פרנקפורט',
+        license: 'CC0',
+        url:     'https://commons.wikimedia.org/wiki/File:Frankfurt_Flughafen,_Terminal_1,_Abflughalle_B.jpg' },
+
+  33: { author:  'Mhollo',
+        prefix:  'מגדל השעון של אוניברסיטת מישיגן, אן ארבור',
+        license: 'CC BY-SA 2.0',
+        url:     'https://commons.wikimedia.org/wiki/File:Burton_Memorial_Tower_2.jpg' },
+
   // ── Chosen by the Bar-Or family, 3 August 2026 ───────────────────────────
   //    Majdanek from the war, the other four as the sites are today, which is
   //    what Zehava saw on her journey in 1998.
