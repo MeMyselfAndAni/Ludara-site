@@ -388,19 +388,49 @@ document.addEventListener('keydown', e => {
 (function(){
   var card = document.getElementById('place-card');
   if (!card) return;
-  var touchStartX = 0, touchStartY = 0;
+  /* The whole card, not only the photograph. It was already bound to the card,
+     but a swipe over the text almost never passed: reading a card means the
+     body is scrollable, a thumb drifts vertically while it travels, and the old
+     test demanded the horizontal movement beat the vertical one by 1.5 to 1
+     over the entire gesture. Over the picture, where nothing scrolls, the
+     gesture was clean and it worked, which is why it looked like only the image
+     responded.
+
+     Now intent is judged from the first decisive movement rather than from the
+     whole path: once a finger has travelled 12px horizontally and more sideways
+     than up or down, the gesture is a swipe and later vertical drift is ignored.
+     A gesture that starts vertically is left alone so the card still scrolls. */
+  var sx = 0, sy = 0, decided = null, tracking = false;
+
   card.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
+    if (e.touches.length !== 1) { tracking = false; return; }
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    decided = null;
+    tracking = true;
   }, { passive: true });
+
+  card.addEventListener('touchmove', function(e) {
+    if (!tracking || decided !== null || e.touches.length !== 1) return;
+    var dx = e.touches[0].clientX - sx;
+    var dy = e.touches[0].clientY - sy;
+    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;   // too early to tell
+    decided = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';    // first decisive direction wins
+  }, { passive: true });
+
   card.addEventListener('touchend', function(e) {
+    if (!tracking) return;
+    tracking = false;
     if (window.innerWidth >= 768) return;
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx < 0) { cardNext(); } else { cardPrev(); }
-    }
+    if (decided === 'y') return;                          // a scroll, leave it alone
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) < 45) return;                        // not far enough to mean it
+    if (decided !== 'x' && Math.abs(dx) < Math.abs(dy)) return;  // no touchmove fired
+    if (dx < 0) { cardNext(); } else { cardPrev(); }
   }, { passive: true });
+
+  card.addEventListener('touchcancel', function(){ tracking = false; }, { passive: true });
 })();
 
 // ── Swipe sheet handle down to close list (mobile only) ───────
