@@ -139,7 +139,13 @@ function applyLanguage(lang){
   }
 
   var st = document.getElementById('sheet-title');
-  if(st && typeof PLACES !== 'undefined') st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places');
+  if(st && typeof PLACES !== 'undefined'){
+    // The count alone says how much there is to read. The distance says why it
+    // is worth reading, and it is the one number nobody expects.
+    var _fjk = (typeof familyJourneyKm === 'function') ? familyJourneyKm() : 0;
+    st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places')
+                   + (_fjk ? ' · ' + fmtKm(_fjk) : '');
+  }
   var si = document.getElementById('topbar-search');
   if(si) si.placeholder = L3('מקום או שם…', 'место или имя…', 'place or name…');
   _applyTreeLang();

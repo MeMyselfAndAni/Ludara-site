@@ -37,6 +37,57 @@ function _haversineM(a, b) {
   return 2*R*Math.asin(Math.sqrt(h));
 }
 
+/* ── JOURNEY DISTANCE ────────────────────────────────────────────────────────
+   How far the family actually went. Sums the straight line distance between
+   consecutive stops in the order they happened, so every figure it produces is
+   a floor and never an exaggeration: the roads, the rivers and the rail lines
+   were all longer than the great circle between two points.
+
+   Computed from each map's own coordinates at render time, so a new family map
+   reports its own number the day it ships and nothing is ever hardcoded. */
+function journeyKm(places){
+  if(!places || places.length < 2) return 0;
+  var m = 0;
+  for(var i = 1; i < places.length; i++){
+    var a = places[i-1], b = places[i];
+    if(!a || !b || typeof a.lat !== 'number' || typeof b.lat !== 'number') continue;
+    m += _haversineM(a, b);
+  }
+  return m / 1000;
+}
+
+/* 11227 -> '11,227 ק״מ' for a Hebrew reader, '11,227 km' for an English one.
+   Anything under 100 keeps one decimal so a single short leg cannot round away
+   to nothing. Respects DISTANCE_UNITS, so a US guide would read in miles. */
+function fmtKm(km){
+  if(!km) return '';
+  var imperial = (typeof DISTANCE_UNITS !== 'undefined' && DISTANCE_UNITS === 'imperial');
+  var v = imperial ? km * 0.621371 : km;
+  var n = v >= 100 ? Math.round(v) : Math.round(v * 10) / 10;
+  var unit = imperial
+    ? ' mi'
+    : (typeof L3 === 'function' ? L3(' ק״מ', ' км', ' km') : ' km');
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + unit;
+}
+
+/* The whole family journey: story path order when the family declares one,
+   otherwise the order the places are listed in. */
+function familyJourneyKm(){
+  if(typeof PLACES === 'undefined') return 0;
+  var seq = (typeof STORY_PATH_IDS !== 'undefined' && STORY_PATH_IDS && STORY_PATH_IDS.length)
+    ? STORY_PATH_IDS.map(function(id){
+        return PLACES.find(function(p){ return p.id === id; });
+      }).filter(Boolean)
+    : PLACES.slice();
+  return journeyKm(seq);
+}
+
+if (typeof window !== 'undefined') {
+  window.journeyKm       = journeyKm;
+  window.fmtKm           = fmtKm;
+  window.familyJourneyKm = familyJourneyKm;
+}
+
 // ── DISTANCE FORMATTING: Imperial vs Metric ─────────────────────────────────
 // DISTANCE_UNITS is defined per guide in map.js: 'imperial' (US) or 'metric' (default)
 function formatDistance(meters) {
