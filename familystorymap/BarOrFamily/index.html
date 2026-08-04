@@ -931,8 +931,22 @@ window.addEventListener('load', function(){
   var tries = 25;
   (function _autoPath(){
     if(_storyPathOn) return;
-    var ready = window.map && map.getSource && (function(){ try { return !!map.getSource('trip-route'); } catch(e){ return false; } })()
-                && typeof window._addNumberedMarkers === 'function';
+    /* `map` is the MapLibre instance created in map.js. Two traps here, and the
+       old guard fell into both, so the family path never drew itself at all:
+
+       1. window.map is NOT that instance. The map container carries id="map",
+          and the browser publishes every id as a global, so window.map is the
+          <div> and is always truthy. It guarded nothing.
+       2. Reading map.getSource before map.js has constructed the map throws,
+          and the throw escaped this function, so the setTimeout retry below was
+          never reached and the whole chain died on the first tick.
+
+       Everything that can throw now happens inside the try. */
+    var ready = false;
+    try {
+      ready = !!(map && typeof map.getSource === 'function' && map.getSource('trip-route'))
+              && typeof window._addNumberedMarkers === 'function';
+    } catch(e){ ready = false; }
     if(ready){ toggleStoryPath(true); return; }
     if(--tries > 0) setTimeout(_autoPath, 400);
   })();

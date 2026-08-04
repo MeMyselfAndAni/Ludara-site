@@ -122,7 +122,10 @@ function _renderPersonPill(){
   el.setAttribute('dir', 'auto');
   var name = document.createElement('span');
   name.className = 'ppp-name';
-  name.textContent = '👤 ' + PERSON_FILTER.label;
+  // Their own distance, not the family's. A grandchild who taps their
+  // grandmother should see how far SHE went.
+  name.textContent = '👤 ' + PERSON_FILTER.label
+                   + (PERSON_FILTER.km ? ' · ' + fmtKm(PERSON_FILTER.km) : '');
   var x = document.createElement('button');
   x.type = 'button';
   x.className = 'ppp-x';
@@ -139,7 +142,11 @@ function _renderPersonPill(){
 /* places must already be in the order the path is drawn, so the numbers in the
    list are the numbers on the map. */
 window.setPersonFilter = function(label, places){
-  PERSON_FILTER = { label: label, ids: places.map(function(p){ return p.id; }) };
+  PERSON_FILTER = {
+    label: label,
+    ids:   places.map(function(p){ return p.id; }),
+    km:    (typeof journeyKm === 'function') ? journeyKm(places) : 0
+  };
   _renderPersonPill();
   renderList();      // not applyFilters: that would wipe the path just drawn
 };
@@ -418,11 +425,18 @@ function renderList(){
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
     // neighbourhood labels from NBHD_LABELS in guide's map.js
   }[ANF] || ANF) + ' · ' : '';
+  /* Distance in the sheet title too: the whole journey when nothing is
+     filtered, that person's journey when one is. A region or a search shows
+     neither, because a partial sum invites the wrong comparison. */
+  const _allKm = (!PERSON_FILTER && !_searchQuery && !nbhdName && typeof familyJourneyKm === 'function')
+    ? familyJourneyKm() : 0;
   const _titleText = PERSON_FILTER
-    ? ('👤 ' + PERSON_FILTER.label + ' · ' + count + _T(' מקומות', ' мест', ' places'))
+    ? ('👤 ' + PERSON_FILTER.label + ' · ' + count + _T(' מקומות', ' мест', ' places')
+       + (PERSON_FILTER.km ? ' · ' + fmtKm(PERSON_FILTER.km) : ''))
     : _searchQuery
     ? (count + _T(count === 1 ? ' תוצאה' : ' תוצאות', count === 1 ? ' совпадение' : ' совпадений', ' match' + (count !== 1 ? 'es' : '')))
-    : (nbhdName + count + _T(' מקומות', ' мест', ' Places'));
+    : (nbhdName + count + _T(' מקומות', ' мест', ' Places')
+       + (_allKm ? ' · ' + fmtKm(_allKm) : ''));
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
