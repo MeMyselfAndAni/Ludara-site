@@ -51,7 +51,7 @@ var FAMILY = {
       label:'לנדו ושכטר · Ландо и Шехтеры · Lando & Schechter' },
     { key:'war',       color:'#a4402f', dark:'#4a160e', tint:'#fbecea',
       label:'מלחמה ופינוי · Война и эвакуация · War & evacuation' },
-    { key:'israel',    color:'#d97e26', dark:'#5c3510', tint:'#fdf0e3',
+    { key:'israel',    color:'#f2811a', dark:'#5c3208', tint:'#fef2e6',
       label:'ישראל · Израиль · Israel' },
   ],
 
@@ -68,7 +68,7 @@ var FAMILY = {
       label:'אוראל ואסיה · Урал и Азия · Urals & Asia' },
     { key:'ukraine', color:'#2f8f8f', minRadius:120000, center:{ lat:48.50, lng:32.50 },
       label:'אוקראינה · Украина · Ukraine' },
-    { key:'israel',  color:'#d97e26', minRadius:30000,  center:{ lat:31.83, lng:35.00 },
+    { key:'israel',  color:'#f2811a', minRadius:30000,  center:{ lat:31.83, lng:35.00 },
       label:'ישראל · Израиль · Israel' },
   ],
 
