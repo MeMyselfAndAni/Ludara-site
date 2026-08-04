@@ -16,8 +16,10 @@ function _toast(msg, durationMs){
     'background:white;color:' + brand + ';padding:12px 22px;border-radius:24px;' +
     'border:2px solid ' + brand + ';' +
     'font-size:0.82rem;font-weight:600;font-family:Inter,sans-serif;' +
-    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:80vw;text-align:center;' +
-    'animation:_apd-fadein 0.2s ease;pointer-events:none;white-space:nowrap;';
+    'z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.15);text-align:center;' +
+    'box-sizing:border-box;max-width:min(88vw,520px);white-space:normal;overflow-wrap:anywhere;line-height:1.35;' +
+    'animation:_apd-fadein 0.2s ease;pointer-events:none;';
+  el.setAttribute('dir', 'auto');
   el.textContent = msg;
   if(!document.getElementById('_apd-toast-style')){
     const s = document.createElement('style');
