@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>A Family Story Map: Your Family History on One Interactive Map · Ludara.AI</title>
-  <meta name="description" content="We turn a family history into a living interactive map: a pin for every place the family lived, photos from your own archive, the whole journey drawn across generations, and a family tree linked to the map. Multilingual, private, no app."/>
+  <meta name="description" content="We turn a family history into a living interactive map: a pin for every place the family lived, photographs from your own archive, the whole journey drawn across generations, and a family tree linked to the map. Private, multilingual, no app."/>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ludara.AI">
   <meta property="og:title" content="A Family Story Map: your family's history on one interactive map">
@@ -84,10 +84,10 @@
     /* HERO */
     .hero-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:48px 40px 40px; position:relative; overflow:hidden; }
     .hero-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(184,150,90,0.09) 0%,transparent 70%); pointer-events:none; }
-    .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 26px; font-weight:300; max-width:none; }
-    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:34px; }
+    .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 26px; font-weight:300; max-width:68ch; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:30px; }
     .hero-shot { width:100%; height:auto; display:block; border-radius:12px; border:1px solid var(--dark-border); box-shadow:0 18px 50px rgba(0,0,0,0.55); }
-    .hero-disc { font-size:12px; color:var(--dark-muted); opacity:.7; margin-top:12px; }
+    .hero-disc { font-size:12.5px; color:var(--dark-muted); opacity:.75; margin-top:14px; max-width:88ch; line-height:1.65; }
 
     /* BUTTONS */
     .btn-gold { display:inline-block; background:var(--gold); color:#fff; padding:12px 28px; border-radius:8px; font-size:14px; font-weight:600; text-decoration:none; transition:background .15s,transform .15s; }
@@ -95,12 +95,25 @@
     .btn-ghost-dark { display:inline-block; border:1px solid var(--dark-border); color:var(--dark-muted); padding:11px 24px; border-radius:8px; font-size:14px; text-decoration:none; transition:border-color .15s,color .15s; }
     .btn-ghost-dark:hover { border-color:var(--gold-l); color:var(--gold-l); }
 
+    @media(max-width:600px){
+      /* Lift the map closer to the top of a phone screen. */
+      .hero-wrap{ padding:32px 22px 28px; }
+      .hero-sub{ font-size:15.5px; margin:10px 0 20px; }
+      .hero-btns{ gap:9px; margin-bottom:22px; }
+    }
+
     /* STATS */
     .stat-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--warm-border); border:1px solid var(--warm-border); border-radius:var(--radius); overflow:hidden; }
     .stat-item { background:var(--warm-card); padding:24px 20px; text-align:center; }
     .stat-num { font-family:'Fraunces',Georgia,serif; font-size:40px; font-weight:600; color:var(--gold); line-height:1; margin-bottom:4px; }
     .stat-label { font-size:13px; color:var(--warm-muted); }
     @media(max-width:820px){ .stat-bar{ grid-template-columns:repeat(2,1fr); } }
+
+    /* TESTIMONIALS */
+    .quotes { display:grid; gap:16px; grid-template-columns:1fr; margin-top:22px; }
+    @media(min-width:900px){ .quotes{ grid-template-columns:repeat(3,1fr); } }
+    .quote-card { background:var(--warm-card); border:1px solid var(--warm-border); border-left:3px solid var(--gold); border-radius:var(--radius); padding:24px 26px; }
+    .quote-card blockquote { font-family:'Fraunces',Georgia,serif; font-size:1.12rem; line-height:1.62; color:var(--warm-text); font-weight:400; }
 
     /* SHOWCASE GALLERY: one column, every shot at full width (or its own captured
        size, whichever is smaller: screenshots are never upscaled, so nothing blurs). No fixed aspect boxes and no cropping, so a
@@ -151,6 +164,7 @@
     .addon-row:first-of-type { border-top:none; padding-top:0; }
     .addon-row span { color:var(--warm-muted); font-size:14px; font-weight:300; }
     .addon-row b { color:var(--warm-text); font-size:14px; font-weight:600; white-space:nowrap; }
+    .addon-note { color:var(--warm-muted); font-size:13px; font-weight:300; margin-top:12px; padding-top:12px; border-top:1px solid var(--warm-border); }
     @media(max-width:640px){
       .addon-row { grid-template-columns:1fr; gap:3px; padding:12px 0; }
       .addon-row b { color:var(--gold); }
@@ -166,7 +180,11 @@
     /* PRIVACY NOTE */
     .privacy-note { background:var(--dark-card); border:1px solid var(--dark-border); border-left:3px solid var(--gold); border-radius:var(--radius); padding:24px 26px; }
     .privacy-note h3 { font-family:'Fraunces',Georgia,serif; font-size:1.3rem; font-weight:600; margin-bottom:8px; }
-    .privacy-note p { font-size:14.5px; font-weight:300; color:var(--dark-muted); }
+    .privacy-note p { font-size:14.5px; font-weight:300; color:var(--dark-muted); max-width:82ch; }
+    .privacy-note ul { list-style:none; margin-top:14px; }
+    .privacy-note li { font-size:14px; font-weight:300; color:var(--dark-muted); line-height:1.6; padding-left:18px; position:relative; margin-bottom:8px; max-width:82ch; }
+    .privacy-note li::before { content:'\2713'; position:absolute; left:0; color:var(--gold); font-size:12px; top:2px; }
+    .privacy-note li b { color:var(--dark-text); font-weight:600; }
 
     /* GET STARTED / FORM (dark cta) */
     .cta-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:44px 40px; position:relative; overflow:hidden; }
@@ -204,7 +222,7 @@
     [data-animate] { opacity:0; transform:translateY(8px); transition:opacity .45s ease,transform .45s ease; }
     [data-animate].in { opacity:1; transform:none; }
     @media(prefers-reduced-motion:reduce){ [data-animate]{ opacity:1; transform:none; } }
-  
+
     /* Mobile nav fix (2026-07-30): the logo and the links collided below ~640px
        because `nav` was a non-wrapping flex row. Appended as an override so it
        applies regardless of how the base nav rule is formatted on each page. */
@@ -249,15 +267,16 @@
   <div class="inner">
     <div class="hero-wrap">
       <p class="kicker-dark">A Family Story Map</p>
-      <h1>A hundred years of your family,<br><em>on one map that brings everyone together.</em></h1>
-      <p class="hero-sub">Most family histories end up as a document nobody opens: a memoir in a drawer, a tree of names and dates, a box of photographs whose places nobody can any longer point to. We turn that material into a living interactive map: a pin for every town, street and house the family lived in, fled from, married in or is buried in, each with the photograph and the story that belongs to it. The whole journey can be drawn as one path across generations, and the family tree is linked to the map, so tapping a name traces exactly where that person&rsquo;s life took them. In every language your family reads, on any phone, with no app to download.</p>
+      <h1>A hundred years of your family,<br><em>on one map everyone will actually open.</em></h1>
+      <p class="hero-sub">The memoir sits in a drawer, hard to get the grandchildren to read. The tree is a list of names that says nothing about the roads people walked. We visualize your family memories on a beautiful interactive map: a pin for every place ancestors lived in, fled from and are buried in, each holding its photograph and its piece of the story. One link to share, browse on any phone, no app to install, no membership fee.</p>
       <div class="hero-btns">
-        <a class="btn-gold" href="#get-started">Request a price offer</a>
-        <a class="btn-ghost-dark" href="#how">See how it works</a>
+        <a class="btn-gold" href="#get-started">Tell us about your family</a>
+        <a class="btn-ghost-dark" href="#see">See a real map</a>
         <a class="btn-ghost-dark" href="#pricing">What it costs</a>
       </div>
-      <img class="hero-shot" src="../assets/fsm-hero-splash.webp" alt="The opening screen of a Family Story Map: the family photograph behind a welcome in English, Hebrew and Russian" loading="lazy"/>
-      <p class="hero-disc">Above: the opening screen of the first Family Story Map, built from one family&rsquo;s memoir: four branches, from Bobruisk and Vitebsk through Tambov, the Urals and Odessa to Rehovot and Jerusalem. Each reader picks their own language and enters the story. Shown with the family&rsquo;s permission; the map itself is private.</p>
+
+      <img class="hero-shot" src="../assets/fsm-map-path.webp" alt="The whole family map: a numbered path from Belarus and Lithuania through Russia and Ukraine down to Israel, with region filters along the bottom" fetchpriority="high"/>
+      <p class="hero-disc">Above: the first Family Story Map, built from one family&rsquo;s memoir. One tap numbers the stops in the order they happened, from Bobruisk and Vitebsk out to the Urals and Kazakhstan in the war, and home to Rehovot. Every pin opens into its photograph and its story, and the regions along the bottom filter the map to one chapter at a time. Shown with the family&rsquo;s permission; the map itself is private.</p>
     </div>
   </div>
 </section>
@@ -271,37 +290,52 @@
       <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">languages, one link, everyone at once</div></div>
       <div class="stat-item"><div class="stat-num">100</div><div class="stat-label">years of family journeys</div></div>
     </div>
-    <p class="sub-warm" style="margin:18px auto 0;text-align:center;max-width:70ch;">Built from a single memoir written by one grandmother. Every place verified, every photograph from the family&rsquo;s own archive.</p>
+    <p class="sub-warm" style="margin:18px auto 0;text-align:center;max-width:70ch;">Built from a single memoir written by one grandmother. Every place located and checked, every photograph from the family&rsquo;s own archive.</p>
+
+    <!-- Real words from families reading their own maps. No attribution of any
+         kind under these, by Maria's instruction: no names, and no naming of the
+         family or the map a quotation came from. -->
+    <p class="kicker-warm" style="margin-top:36px;">What families say</p>
+    <h2 class="warm">In their own words.</h2>
+    <div class="quotes">
+      <div class="quote-card">
+        <blockquote>&ldquo;Wow! The map brought my family together from across the globe. Relatives from Belarus and Israel are reviewing it together, in different languages, and discussing today.&rdquo;</blockquote>
+      </div>
+      <div class="quote-card">
+        <blockquote>&ldquo;I did not realize my great-grandmother was at the Stalingrad battle.&rdquo;</blockquote>
+      </div>
+      <div class="quote-card">
+        <blockquote>&ldquo;Now my mother&rsquo;s stories about evacuation and the boat from Marseille make sense.&rdquo;</blockquote>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- WHAT THE FAMILY SEES (dark) -->
-<section class="dark-section" data-animate>
+<section class="dark-section" id="see" data-animate>
   <div class="inner">
     <p class="kicker-dark">What the family sees</p>
     <h2 class="dark">A century of journeys, in the language each of them reads.</h2>
     <div class="shots">
 
       <div class="shot-item">
-        <div class="shot-frame"><img src="../assets/fsm-map-path.webp" alt="The whole family map: a numbered path from Belarus and Lithuania through Russia and Ukraine down to Israel, with region filters along the bottom" loading="lazy"/></div>
-        <p class="shot-cap"><b>The whole journey as one path.</b> One tap numbers the stops in the order they happened, from Belarus and Lithuania through Russia and Ukraine down to Israel. The regions along the bottom filter the map to one chapter at a time.</p>
+        <div class="shot-frame"><img src="../assets/fsm-hero-splash.webp" alt="The opening screen of a Family Story Map: the family photograph behind a welcome in English, Hebrew and Russian" loading="lazy"/></div>
+        <p class="shot-cap"><b>Everyone reads it in their own language.</b> One link opens in Hebrew, Russian or English, and each reader picks their own. Stories, names, tree and every button switch together. Shown with the family&rsquo;s permission; the map itself is private.</p>
       </div>
-
-      
 
       <div class="shot-item">
         <div class="shot-frame"><img src="../assets/fsm-place-card.webp" alt="A place card open over the map: an archive portrait, the family member connected to the place, and the passage from the memoir describing it" loading="lazy"/></div>
-        <p class="shot-cap"><b>Open a place and the story is waiting.</b> The archive photograph, who in the family is connected to it (tap the name and the tree opens on that person), the passage from the memoir in the writer&rsquo;s own words, and a line on what stands there today. Nothing paraphrased, nothing invented. Every place is listed down the side with its own portrait, branch and dates, and any of them can be bookmarked into a personal selection.</p>
+        <p class="shot-cap"><b>Open a place and the story is waiting.</b> The archive photograph, who in the family is connected to it, the passage from the memoir in the writer&rsquo;s own words, and a line on what stands there today. Nothing paraphrased, nothing invented.</p>
       </div>
 
       <div class="shot-item">
         <div class="shot-frame"><img src="../assets/fsm-family-tree.webp" alt="The family tree: generations of three branches, each person with their name in three languages and a pin linking them to the map" loading="lazy"/></div>
-        <p class="shot-cap"><b>A family tree wired into the map.</b> Generations of three branches, every name carried in all three languages. Click a person and their journey draws itself on the map: the pin on each card is the link between the two.</p>
+        <p class="shot-cap"><b>A family tree wired into the map.</b> Every name carried in all three languages. Click a person and their journey draws itself on the map, and only their places stay in the list.</p>
       </div>
 
       <div class="shot-item">
         <div class="shot-frame"><img src="../assets/fsm-pdf-book.webp" alt="The exported PDF: each place laid out with its archive photograph shown whole, the story in full, and a QR code that opens the location" loading="lazy"/></div>
-        <p class="shot-cap"><b>And it prints as a book.</b> Any selection of places exports to a PDF laid out place by place: the photograph, the story in the family&rsquo;s own words, and a QR code that opens the location on a map. The file is yours: print it at home, take it to a print shop, or simply send it to a relative who will never open a link.</p>
+        <p class="shot-cap"><b>And it prints as a book.</b> Any selection of places exports to a PDF: the photograph, the story in the family&rsquo;s own words, and a QR code that opens the location. Print it at home, or send it to a relative who will never open a link.</p>
       </div>
 
     </div>
@@ -313,20 +347,9 @@
   <div class="inner">
     <p class="kicker-warm">Why a map, and not another document</p>
     <h2 class="warm">A family history you can actually walk through.</h2>
-
     <div class="built" style="margin-top:20px;">
       <h3>It brings the family back together</h3>
-      <p>A book goes to one person and stays on their shelf. A map goes to everyone at once, on a single link, each of them reading it in the language they think in. Relatives who live continents apart find themselves on the same street, on the same evening, looking at the same house.</p>
-      <p style="margin-top:12px;font-style:italic;">On the first map we built, family in Belarus and family in Israel are exploring it at the same time, in their own languages.</p>
-    </div>
-
-    <div class="grid-3" style="margin-top:22px;">
-      <div class="feat-card"><h3>A pin for every place</h3><p>The house, the shtetl, the factory, the camp, the first apartment in a new country. We find the historic address, place it accurately, and attach the photograph and the passage of the story that belongs there.</p></div>
-      <div class="feat-card"><h3>The journey as one path</h3><p>A century of displacement is hard to hold in your head and obvious on a map. One tap draws the whole route, or one person&rsquo;s route, in the order it actually happened.</p></div>
-      <div class="feat-card"><h3>Your own archive, not stock photos</h3><p>The photographs are yours. Where a family photograph does not exist, we use properly licensed historic or public-domain images of the place, and we credit every one.</p></div>
-      <div class="feat-card"><h3>Every generation&rsquo;s language</h3><p>Grandparents read it in the language they grew up in, grandchildren in the one they were born into. The same link adapts to the reader: we produce every language.</p></div>
-      <div class="feat-card"><h3>The tree, connected to the map</h3><p>Not a separate diagram. Tap a person on the family tree and the map draws their life; tap a place and see who was there.</p></div>
-      <div class="feat-card"><h3>Nothing invented</h3><p>Every place and every quotation comes from the family&rsquo;s own material and verified sources. Where the record is uncertain, the map says so rather than filling the gap.</p></div>
+      <p>A book goes to one person and stays on their shelf. A map goes to everyone at once, on one link, each of them reading it in the language they think in. Relatives who live continents apart end up on the same street, on the same evening, looking at the same house.</p>
     </div>
   </div>
 </section>
@@ -335,12 +358,11 @@
 <section class="dark-section" data-animate>
   <div class="inner">
     <p class="kicker-dark">Who it&rsquo;s for</p>
-    <h2 class="dark">Anyone holding a family story that deserves better than a folder.</h2>
-    <div class="grid-4" style="margin-top:22px;">
-      <div class="who-card"><h4>Families</h4><p>A milestone birthday, an anniversary, a wedding, a reunion. A gift that the whole family opens on one link and keeps.</p></div>
-      <div class="who-card"><h4>Family historians &amp; memoir writers</h4><p>You have already done the research. We turn it into the thing people will actually read.</p></div>
-      <div class="who-card"><h4>Genealogy platforms &amp; archives</h4><p>A visual, shareable layer on top of the records you already hold, in every language your users read.</p></div>
-      <div class="who-card"><h4>Heritage &amp; diaspora organisations</h4><p>Map a whole community&rsquo;s migration, not just one family: where people came from, where they scattered, where they rebuilt.</p></div>
+    <h2 class="dark">For families holding a story that deserves better than a folder.</h2>
+    <div class="grid-3" style="margin-top:22px;">
+      <div class="who-card"><h4>A milestone worth marking</h4><p>A big birthday, an anniversary, a wedding, a reunion. One link the whole family opens on the day, and keeps long after it.</p></div>
+      <div class="who-card"><h4>You have already done the research</h4><p>The memoir is written, the tree is built, the folders are full. This is the part that makes the rest of the family read it.</p></div>
+      <div class="who-card"><h4>While there is still someone to ask</h4><p>The person who remembers which street, which house, which year, can still point to it. That window does not stay open.</p></div>
     </div>
   </div>
 </section>
@@ -351,10 +373,10 @@
     <p class="kicker-dark">How it works</p>
     <h2 class="dark">You send what you have. We do the rest.</h2>
     <div class="grid-4" style="margin-top:22px;">
-      <div class="step-card"><div class="step-num">01</div><h4>You send your material</h4><p>A memoir, an interview recording, a tree file, a shoebox of photographs, or just a list of names and towns. Anything is a starting point.</p></div>
-      <div class="step-card"><div class="step-num">02</div><h4>We research &amp; locate</h4><p>We find each place as it exists today, including towns that were renamed or borders that moved, and check every one against the record.</p></div>
-      <div class="step-card"><div class="step-num">03</div><h4>We build &amp; translate</h4><p>Your map goes live on a private link, in every language your family reads, with the tree, the path and the photographs in place.</p></div>
-      <div class="step-card"><div class="step-num">04</div><h4>It grows with you</h4><p>Families keep remembering. Send a new photo or a new story any time and we add it: it appears everywhere, in every language.</p></div>
+      <div class="step-card"><div class="step-num">01</div><h4>You send your material</h4><p>A memoir, an interview recording, a tree file, a shoebox of photographs, or just a list of names and towns.</p></div>
+      <div class="step-card"><div class="step-num">02</div><h4>We research and locate</h4><p>We find each place as it exists today, including towns that were renamed, and check every one against the record.</p></div>
+      <div class="step-card"><div class="step-num">03</div><h4>We build and translate</h4><p>Your map goes live on a private link, in the languages your family reads, with the tree, the path and the photographs in place.</p></div>
+      <div class="step-card"><div class="step-num">04</div><h4>It grows with you</h4><p>Families keep remembering. Send a new photo or a new story and we add it, in every language at once.</p></div>
     </div>
   </div>
 </section>
@@ -364,7 +386,7 @@
   <div class="inner">
     <p class="kicker-warm">What it costs</p>
     <h2 class="warm">One payment. No subscription, ever.</h2>
-    <p class="sub-warm" style="margin-top:10px;">A map built from a written family history starts at $3,000. What moves the price is size: how many places the story visits, how large the tree is, and how many languages your family reads.</p>
+    <p class="sub-warm" style="margin-top:10px;max-width:78ch;">A map built from a written family history starts at $3,000. Most of that is research: finding every place as it was and as it is now, checking each one against the record, and matching the right photograph and the right passage to the right pin. It is commissioned work, made once for one family, not a template. Set it beside what one big family celebration costs. The evening ends. This does not.</p>
 
     <div class="price-solo">
       <div class="price-head">
@@ -376,32 +398,34 @@
       <div class="price-body">
         <h4>What is included</h4>
         <ul>
-          <li>Every place read out of your text, located and verified, including towns that were renamed and borders that moved</li>
+          <li>Every place read out of your text, located and verified, including towns that were renamed</li>
           <li>The family&rsquo;s own words at each place, quoted exactly, never paraphrased</li>
           <li>Your own photographs, scanned, cleaned and placed where they belong</li>
           <li>A line on each place as it stands today</li>
           <li>The family tree, linked to the map: tap a person and their journey draws itself</li>
           <li>The whole journey as one path, in the order it happened</li>
-          <li>A PDF book, laid out place by place, each with its photograph, its story and a QR code that opens the location. Yours to print or forward to a relative who will never open a link</li>
+          <li>A PDF book, laid out place by place, each with its photograph, its story and a QR code that opens the location</li>
           <li>Anything your source does not settle is marked uncertain rather than guessed</li>
-          <li>One language</li>
-          <li>Up to 40 places and 100 people on the family tree, which covers most family histories</li>
-          <li>One update round in the first year. Once the family sees the map they start remembering. Everything they send you in that first year goes in, in one pass, at no extra cost</li>
+          <li>One language, and up to 40 places and 100 people on the tree, which covers most family histories</li>
+          <li>One update round in the first year. Once the family sees the map they start remembering, and everything they send in that first year goes in at no extra cost</li>
         </ul>
       </div>
     </div>
 
     <div class="addons">
       <h4>Add to any map</h4>
-      <div class="addon-row"><span>Each additional language, produced in full: the stories, the tree, the interface, the PDF book</span><b>$1,000</b></div>
+      <div class="addon-row"><span>Each additional language, produced in full: the stories, the tree, the interface and the PDF book</span><b>$1,000</b></div>
       <div class="addon-row"><span>A larger family: more than 40 places, or more than 100 people on the tree</span><b>quoted</b></div>
       <div class="addon-row"><span>A further update round: everything the family has sent since, added in one pass, in every language. Bought when you want one, never on a schedule</span><b>$600</b></div>
+      <p class="addon-note">Tell us which languages your family reads and we confirm them in the offer, before you commit to anything.</p>
     </div>
 
     <div class="built">
-      <h3>Nothing to renew</h3>
+      <h3>Yours to keep</h3>
       <ul style="margin-top:4px;">
-        <li><b>You pay once.</b> Hosting is included and there is no annual fee.</li>
+        <li><b>You pay once.</b> Hosting is included for ten years and there is no annual fee.</li>
+        <li><b>You get a copy you can keep.</b> The finished map is handed over as files you can download and host anywhere. If Ludara ever stops, your family&rsquo;s map does not.</li>
+        <li><b>The material stays yours.</b> Your photographs, your text, your family&rsquo;s words, never licensed, sold or used anywhere else.</li>
       </ul>
     </div>
   </div>
@@ -412,7 +436,13 @@
   <div class="inner">
     <div class="privacy-note">
       <h3>Private by default</h3>
-      <p>A family story is not a publication. Every map is delivered on an unlisted link, hidden from search engines, and shared only by you: with the whole family, or with two people. We never publish a family&rsquo;s map, quote it, or use it as a public example without written permission. If you would rather it were public, that is your decision to make, not ours.</p>
+      <p>A family story is not a publication. Every map ships on an unlisted link that search engines cannot find, and you decide who gets it. If you want it tighter than that, say so:</p>
+      <ul>
+        <li><b>An unlisted link.</b> Not indexed, not searchable, shared only by you.</li>
+        <li><b>A password.</b> One word the family shares, and nobody else can open the map.</li>
+        <li><b>A named list.</b> Access limited to the people you name.</li>
+      </ul>
+      <p style="margin-top:14px;">We never publish a family&rsquo;s map, quote it, or show it as an example without written permission. If you would rather it were public, that is your decision, not ours.</p>
     </div>
   </div>
 </section>
@@ -424,7 +454,7 @@
       <div class="cta-grid">
         <div>
           <h2>Tell us about <em>your family.</em></h2>
-          <p class="sub-dark">Send us roughly what you have and how far back it goes. We will come back within one business day with a price offer. If it helps, we can walk you through a finished map first so you can see exactly what you would be getting.</p>
+          <p class="sub-dark">Write a few lines about what you have and how far back it goes. We answer within one business day with a price offer, and we will walk you through a finished map first so you can see exactly what you would be getting.</p>
         </div>
         <div>
           <form class="form" id="contactForm" novalidate>
@@ -437,8 +467,8 @@
               <div class="fg"><label for="family">Family or project name</label><input type="text" id="family" name="family" placeholder="The Friedland family" required/></div>
               <div class="fg"><label for="languages">Languages needed</label><input type="text" id="languages" name="languages" placeholder="English, Russian, Hebrew"/></div>
             </div>
-            <div class="fg"><label for="message">What do you already have? <span style="opacity:.55;text-transform:none;letter-spacing:0;">(optional)</span></label><textarea id="message" name="message" placeholder="A written memoir, a family tree, photographs, or just names and towns , and roughly how many places and how many generations."></textarea></div>
-            <button type="submit" class="submit-btn" id="submitBtn">Request a price offer</button>
+            <div class="fg"><label for="message">What do you already have? <span style="opacity:.55;text-transform:none;letter-spacing:0;">(optional)</span></label><textarea id="message" name="message" placeholder="A written memoir, a family tree, photographs, or just names and towns, and roughly how many places and how many generations."></textarea></div>
+            <button type="submit" class="submit-btn" id="submitBtn">Tell us about your family</button>
             <p class="form-note">No commitment. Your material stays private.</p>
           </form>
           <div class="form-success" id="formSuccess">
@@ -475,6 +505,7 @@
   document.getElementById('contactForm').addEventListener('submit', async function(e){
     e.preventDefault();
     const btn=document.getElementById('submitBtn');
+    const label='Tell us about your family';
     btn.disabled=true; btn.textContent='Sending...';
     try{
       const res=await fetch('https://formspree.io/f/mnjwakbo',{ method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
@@ -482,8 +513,8 @@
         document.getElementById('contactForm').style.display='none';
         document.getElementById('formSuccess').classList.add('visible');
         gtag('event','form_submit',{event_category:'outreach',event_label:'familystorymap_page'});
-      } else { btn.disabled=false; btn.textContent='Request a price offer'; alert('Something went wrong. Please try again.'); }
-    }catch(err){ btn.disabled=false; btn.textContent='Request a price offer'; alert('Something went wrong. Please try again.'); }
+      } else { btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
+    }catch(err){ btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
   });
 </script>
 
