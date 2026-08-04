@@ -92,7 +92,24 @@ function initMap() {
     setTimeout(function() { location.reload(); }, 2000);
   });
 
-  map.on('load', () => {
+  /* Hebrew was arriving to a spinner, and only Hebrew. The RTL text plugin is
+     registered lazily, and MapLibre holds the 'load' event until that plugin has
+     been fetched from unpkg and every symbol layer re-laid out. English and
+     Russian never ask for the plugin, so 'load' fires at once. Measured on the
+     live map: in Hebrew it had still not fired twenty seconds after entering,
+     and everything below lives inside it. The loading overlay stayed up, the
+     place pins were never added, and the family path was drawn underneath a
+     screen nobody could see through.
+
+     So do not wait on 'load' alone. Run once, on whichever of 'load' or 'idle'
+     arrives first, and only once the STYLE is ready, which is the thing this
+     setup actually needs. The plugin can take as long as it likes; it only
+     affects how base-map labels are shaped, not whether the map works. */
+  var _setupDone = false;
+  var _mapSetup = function () {
+    if (_setupDone) return;
+    if (!(typeof map.isStyleLoaded === 'function' && map.isStyleLoaded())) return;
+    _setupDone = true;
     try {
       const loadingEl = document.getElementById('loading');
       if (loadingEl) loadingEl.style.display = 'none';
@@ -113,13 +130,20 @@ function initMap() {
 
       // Open showing the WHOLE journey: Belarus to the Urals to Israel on one
       // screen (Chita stretches it east; the Family Path then refits to the path).
+      /* Open on the JOURNEY, not on every place. Chita sits far to the east and
+         is not on the family line, so fitting all 26 pushed the opening view out
+         to Morocco and Mongolia. Fall back to all places for a map that has not
+         declared a story path yet. */
       const storyBounds = new maplibregl.LngLatBounds();
-      PLACES.forEach(p => storyBounds.extend([p.lng, p.lat]));
+      const _openOn = (typeof STORY_PATH_IDS !== 'undefined' && STORY_PATH_IDS && STORY_PATH_IDS.length)
+        ? STORY_PATH_IDS.map(id => PLACES.find(p => p.id === id)).filter(Boolean)
+        : PLACES;
+      (_openOn.length ? _openOn : PLACES).forEach(p => storyBounds.extend([p.lng, p.lat]));
       const _isMobile = window.innerWidth < 768;
       map.fitBounds(storyBounds, {
         padding: _isMobile
-          ? { top: 140, bottom: 190, left: 40,  right: 40 }
-          : { top: 190, bottom: 230, left: 120, right: 120 },
+          ? { top: 120, bottom: 150, left: 24, right: 24 }
+          : { top: 150, bottom: 170, left: 60, right: 60 },
         duration: 0,
       });
 
@@ -136,6 +160,8 @@ function initMap() {
       }
       console.error('Map load error:', err);
     }
-  });
+  };
+  map.on('load', _mapSetup);
+  map.on('idle', _mapSetup);   // fires long before the RTL plugin resolves
 }
 // ⚠️ DO NOT call initMap() here
