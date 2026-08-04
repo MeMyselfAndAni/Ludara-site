@@ -23,14 +23,14 @@ const PEOPLE = [
 
   // ── דור ההורים ──
   { id:'feigele', he:'פייגלע (פייגעל\'ה)', years:'', role:'⚠️ דודה, מצולמת עם ההורים בקרקוב', branch:'baror', col:6.8, row:1, places:[4] },
-  { id:'chana_dichter', he:'חנה דיכטר ז"ל', years:'', role:'דודתו של רמי, מורתה של זהבה', branch:'baror', col:0.5, row:1, places:[18] },
+  { id:'chana_dichter', he:'חנה דיכטר ז"ל', years:'', role:'בת דודתה של אמו של רמי, מורתה של זהבה', branch:'baror', col:0.5, row:1, places:[18] },
   { id:'chaya', he:'חיה - הֶלָה', years:'נפטרה 9 במאי 1971', role:'אמה של זהבה, ילידת וולברום', branch:'narcyz', col:2.5, row:1, places:[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21] },
   { id:'chaya_siblings', he:'אחיה ואחיותיה של חיה', years:'', role:'אחים ואחיות שהספר אינו נוקב בשמם', branch:'narcyz', col:1.5, row:1, places:[1] },
   { id:'golda_yora', he:'גולדה יורה-ניימרק', years:'', role:'בת דודתה של חיה, ניצולת מחנות', branch:'narcyz', col:5.8, row:1, places:[1, 6, 19] },
   { id:'natan', he:'נתן אורבך', years:'', role:'אביה של זהבה, נלקח ולא שב', branch:'urbach', col:4.5, row:1, places:[3, 4, 1, 7] },
 
   // ── זהבה ובני דורה ──
-  { id:'rachel', he:'רחל', years:'', role:'בת דודתו של רמי, בת כיתתה של זהבה', branch:'baror', col:0.5, row:2, places:[18] },
+  { id:'rachel', he:'רחל', years:'', role:'בת דודתו הרחוקה של רמי, בת כיתתה של זהבה', branch:'baror', col:0.5, row:2, places:[18] },
   { id:'rami', he:'רמי', years:'', role:'בעלה של זהבה', branch:'baror', col:2.5, row:2, places:[33, 29, 30] },
   { id:'zehava', he:'זהבה (גולדה\'לה)', years:'נ. שלהי אוקטובר 1941', role:'מחברת הספר, בתם היחידה', branch:'baror', col:3.5, row:2, places:[7, 8, 9, 10, 11, 12, 1, 3, 13, 14, 15, 16, 17, 18, 19, 20, 21, 33, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32] },
   { id:'golda_nephew', he:'בן אחותה של דודה גולדה', years:'', role:'⚠️ נספה בשואה, שמו אינו נמסר', branch:'narcyz', col:5.8, row:2, places:[6] },
@@ -76,6 +76,9 @@ const FAMILY_UNIONS = [
 const FAMILY_EXTRA_EDGES = [
   { from:'chaya',      to:'golda_yora',       label:'בת דודתה' },
   { from:'golda_yora', to:'golda_nephew',     label:'בן אחותה' },
-  { from:'rami',       to:'chana_dichter',    label:'דודתו' },
+  // Corrected by Ofer Bar-Or, 3 August 2026: Chana Dichter is not Rami's aunt.
+  // She is a cousin of Rami's mother, who is not herself on the tree, so the
+  // dashed line still hangs off Rami as the nearest person the reader knows.
+  { from:'rami',       to:'chana_dichter',    label:'בת דודה של אמו' },
   { from:'chaya',      to:'feigele',          label:'⚠️ דודה: הספר אינו אומר מצד מי' },
 ];
