@@ -168,8 +168,10 @@
     });
 
     // Nodes: 4 centred lines: HE name, RU name, years + HE role, RU role.
-    // Each line is ellipsized so text always stays inside the card.
-    const fit = (t, n) => (t && t.length > n) ? t.slice(0, n-1) + '…' : (t || '');
+    // The FULL text goes in. fitNodeText below wraps it onto a second line, or
+    // trims it if it truly will not fit, by measuring the painted width. This
+    // used to cut every line at a fixed character count here, which is why a
+    // role line arrived pre-truncated and could never be wrapped afterwards.
     PEOPLE.forEach(p => {
       const c = col(p.branch);
       const hasPlaces = p.places && p.places.length;
@@ -212,10 +214,10 @@
       const yRole2 = name2 ? 72 : 59;
       s += `<g class="tree-node br-${p.branch} ${hasPlaces?'':'no-places'}" id="tn-${p.id}" transform="translate(${nodeX(p)},${nodeY(p)})" onclick="window._treePersonClick('${p.id}')">
         <rect width="${NW}" height="${NH}" rx="12" stroke="${c}"/>
-        <text class="t-he" x="${NW/2}" y="${name2 ? 22 : 26}" text-anchor="middle">${esc(fit(name1, 26))}</text>
-        ${name2 ? `<text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(fit(name2, 30))}</text>` : ''}
-        <text class="t-role" x="${NW/2}" y="${yRole1}" text-anchor="middle">${esc(fit(l3, 36))}</text>
-        <text class="t-role" x="${NW/2}" y="${yRole2}" text-anchor="middle">${esc(fit(l4, 36))}</text>
+        <text class="t-he" x="${NW/2}" y="${name2 ? 22 : 26}" text-anchor="middle">${esc(name1)}</text>
+        ${name2 ? `<text class="t-ru" x="${NW/2}" y="39" text-anchor="middle">${esc(name2)}</text>` : ''}
+        <text class="t-role" x="${NW/2}" y="${yRole1}" text-anchor="middle">${esc(l3)}</text>
+        <text class="t-role" x="${NW/2}" y="${yRole2}" text-anchor="middle">${esc(l4)}</text>
         ${pin}
       </g>`;
     });
@@ -236,29 +238,83 @@
     const svg = document.getElementById('tree-svg');
     if(!svg) return false;
     const maxW = NW - 16;                      // 8px of breathing room each side
+    const LH   = 13;                           // line height for a wrapped role line
     let measurable = false;
-    svg.querySelectorAll('g.tree-node text').forEach(function(t){
-      if(t.classList.contains('t-pin')) return;     // the 📍 is anchored, not centred
-      // Always chop from the ORIGINAL line, never from an already chopped one, so
-      // this can run again after the web font arrives without eating the text a
-      // second time.
-      let full = t.getAttribute('data-full');
-      if(full === null){ full = t.textContent; t.setAttribute('data-full', full); }
-      if(t.textContent !== full) t.textContent = full;
-      if(!full) return;
-      let w = 0;
-      try { w = t.getComputedTextLength(); } catch(e){ return; }
-      if(w > 0) measurable = true;
-      if(w <= maxW) return;
-      // binary chop, so a 45 character line costs about six measurements
-      let lo = 0, hi = full.length;
-      while(lo < hi){
-        const mid = (lo + hi + 1) >> 1;
-        t.textContent = full.slice(0, mid) + '…';
-        let m = 0; try { m = t.getComputedTextLength(); } catch(e){ break; }
-        if(m <= maxW) lo = mid; else hi = mid - 1;
+
+    // Width of a candidate string, measured by the browser in the real font.
+    function widthOf(t, s){
+      const keep = t.textContent;
+      t.textContent = s;
+      let w = 0; try { w = t.getComputedTextLength(); } catch(e){}
+      t.textContent = keep;
+      return w;
+    }
+
+    // Lay `full` out inside `t` as up to `maxLines` centred lines. Breaks on the
+    // ' · ' separators first, then on spaces, and only ellipsizes when the text
+    // genuinely cannot be made to fit in the lines available.
+    function layout(t, full, maxLines){
+      const x = t.getAttribute('x');
+      t.textContent = '';
+      while(t.firstChild) t.removeChild(t.firstChild);
+      const words = full.split(/(\s+)/).filter(function(s){ return s.trim().length; });
+      const lines = [];
+      let cur = '';
+      for(let i = 0; i < words.length; i++){
+        const test = cur ? cur + ' ' + words[i] : words[i];
+        if(widthOf(t, test) <= maxW || !cur){ cur = test; continue; }
+        lines.push(cur); cur = words[i];
+        if(lines.length === maxLines) break;
       }
-      t.textContent = lo > 0 ? full.slice(0, lo).replace(/[\s·,;-]+$/, '') + '…' : '';
+      if(cur && lines.length < maxLines) lines.push(cur);
+      // Anything that did not fit gets folded onto the last line and trimmed.
+      const used = lines.join(' ');
+      if(used.length < full.length && lines.length){
+        let tail = full.slice(lines.slice(0, -1).join(' ').length).trim();
+        if(widthOf(t, tail) > maxW){
+          let lo = 0, hi = tail.length;
+          while(lo < hi){
+            const mid = (lo + hi + 1) >> 1;
+            if(widthOf(t, tail.slice(0, mid) + '…') <= maxW) lo = mid; else hi = mid - 1;
+          }
+          tail = lo > 0 ? tail.slice(0, lo).replace(/[\s·,;\-]+$/, '') + '…' : '';
+        }
+        lines[lines.length - 1] = tail;
+      }
+      const NS = 'http://www.w3.org/2000/svg';
+      lines.forEach(function(ln, i){
+        const ts = document.createElementNS(NS, 'tspan');
+        ts.setAttribute('x', x);
+        ts.setAttribute('dy', i === 0 ? 0 : LH);
+        ts.textContent = ln;
+        t.appendChild(ts);
+      });
+      return lines.length;
+    }
+
+    svg.querySelectorAll('g.tree-node').forEach(function(g){
+      const name  = g.querySelector('text.t-he');
+      const roles = g.querySelectorAll('text.t-role');
+      const all   = [].concat(name || [], [].slice.call(roles), [].slice.call(g.querySelectorAll('text.t-ru')));
+      all.forEach(function(t){
+        if(!t) return;
+        let full = t.getAttribute('data-full');
+        if(full === null){ full = t.textContent; t.setAttribute('data-full', full); }
+      });
+      if(name && !measurable && widthOf(name, name.getAttribute('data-full') || 'M') > 0) measurable = true;
+
+      // The second role line is empty in every language these maps ship, so the
+      // first one may spill onto two lines. If a map ever fills both, each keeps
+      // one line and they do not collide.
+      const secondHasText = roles[1] && (roles[1].getAttribute('data-full') || '').trim().length > 0;
+      all.forEach(function(t){
+        if(!t) return;
+        const full = t.getAttribute('data-full') || '';
+        if(!full){ while(t.firstChild) t.removeChild(t.firstChild); return; }
+        let maxLines = 1;
+        if(t === roles[0] && !secondHasText) maxLines = 2;
+        layout(t, full, maxLines);
+      });
     });
     return measurable;
   }
