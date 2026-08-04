@@ -243,6 +243,19 @@ function showNbhdCircleAnimated(nbhdId) {
 }
 
 // ── MARKERS ───────────────────────────────────────────────────
+/* A place may name a drawing in icons.js. If it does, and that file is loaded,
+   the pin uses it; otherwise the emoji is used exactly as before. Both paths are
+   here on purpose so the set can be adopted a few places at a time. */
+function _pinGlyph(p, boxSize, frac) {
+  var art = (typeof PLACE_ICONS !== 'undefined' && p.icon) ? PLACE_ICONS[p.icon] : null;
+  if (!art) return null;
+  var g = boxSize * frac;                 // how wide the drawing sits in the pin
+  var k = g / 24;                         // every icon is a 24x24 viewBox
+  var t = (boxSize - g) / 2;
+  return '<g transform="translate(' + t.toFixed(2) + ',' + t.toFixed(2) + ') scale(' +
+         k.toFixed(4) + ')" color="#ffffff" fill="#ffffff">' + art + '</g>';
+}
+
 function makeIconHTML(p, active) {
   const color = CC[p.cat] || '#888';
   const emoji = p.emoji || '📍';
@@ -268,7 +281,7 @@ function makeIconHTML(p, active) {
       </defs>
       <circle cx="${s/2}" cy="${s/2}" r="${s/2-2}" fill="white" filter="url(#af${p.id})"/>
       <circle cx="${s/2}" cy="${s/2}" r="${s/2-5}" fill="url(#ag${p.id})" stroke="white" stroke-width="2"/>
-      <text x="50%" y="54%" font-size="22" text-anchor="middle" dominant-baseline="middle">${emoji}</text>
+      ${_pinGlyph(p, s, 0.50) || `<text x="50%" y="54%" font-size="22" text-anchor="middle" dominant-baseline="middle">${emoji}</text>`}
     </svg>`;
   }
   const s = 46;
@@ -286,7 +299,7 @@ function makeIconHTML(p, active) {
     <circle cx="${s/2}" cy="${s/2}" r="${s/2-1}" fill="white" filter="url(#sh${p.id})"/>
     <circle cx="${s/2}" cy="${s/2}" r="${s/2-3.5}" fill="${color}" stroke="white" stroke-width="2"/>
     <circle cx="${s/2}" cy="${s/2}" r="${s/2-3.5}" fill="url(#g${p.id})"/>
-    <text x="50%" y="54%" font-size="18" text-anchor="middle" dominant-baseline="middle">${emoji}</text>
+    ${_pinGlyph(p, s, 0.52) || `<text x="50%" y="54%" font-size="18" text-anchor="middle" dominant-baseline="middle">${emoji}</text>`}
   </svg>`;
 }
 
