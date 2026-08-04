@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'barorfamily',
   url:   'https://ludara.ai/familystorymap/barorfamily/',
-  cacheVersion: 48,           // bump on every deploy so the service worker updates
+  cacheVersion: 50,           // bump on every deploy so the service worker updates
 
   // Hebrew only — one entry means no language switcher.
   languages: ['he'],
@@ -49,7 +49,7 @@ var FAMILY = {
     { key:'narcyz',   color:'#3a6ea5', dark:'#2c5580', tint:'#eaf2fb', label:'משפחת נֶרציס, צד אמא' },
     { key:'urbach',   color:'#6b8e4e', dark:'#516d3b', tint:'#f2f7ea', label:'משפחת אורבך, צד אבא' },
     { key:'war',      color:'#a4402f', dark:'#7d2f22', tint:'#fbecea', label:'שנות המלחמה והנדודים' },
-    { key:'israel',   color:'#c9a227', dark:'#a07d1c', tint:'#fbf4e2', label:'ישראל, הבית החדש' },
+    { key:'israel',   color:'#d97e26', dark:'#b0641c', tint:'#fdf0e3', label:'ישראל, הבית החדש' },
     { key:'memorial', color:'#5b4b6e', dark:'#443753', tint:'#f0ecf4', label:'מסעות החזרה והזיכרון' },
     { key:'baror',    color:'#2f8f8f', dark:'#236e6e', tint:'#e9f6f6', label:'בר־אור, המשפחה שאחרי' },
   ],
@@ -65,7 +65,7 @@ var FAMILY = {
     { key:'east',       color:'#a4402f', minRadius:200000, center:{ lat:55.00, lng:59.50 },  label:'מזרחה: אורל וסיביר' },
     { key:'uzbekistan', color:'#c07a2f', minRadius:150000, center:{ lat:40.50, lng:66.80 },  label:'אוזבקיסטן' },
     { key:'europe',     color:'#6b8e4e', minRadius:120000, center:{ lat:48.50, lng: 8.50 },  label:'גרמניה וצרפת' },
-    { key:'israel',     color:'#c9a227', minRadius:30000,  center:{ lat:32.50, lng:34.95 },  label:'ישראל' },
+    { key:'israel',     color:'#d97e26', minRadius:30000,  center:{ lat:32.50, lng:34.95 },  label:'ישראל' },
     { key:'memorial',   color:'#5b4b6e', minRadius:120000, center:{ lat:50.50, lng:19.20 },  label:'אתרי זיכרון' },
     { key:'america',    color:'#2f8f8f', minRadius:120000, center:{ lat:42.28, lng:-83.74 }, label:'ארצות הברית' },
   ],

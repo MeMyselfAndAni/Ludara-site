@@ -15,6 +15,7 @@ var SHELL_FILES = [
   './',
   './index.html',
   './family.js',
+  './icons.js',
   './data.js',
   './people.js',
   './lang.js',
