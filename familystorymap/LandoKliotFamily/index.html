@@ -845,49 +845,33 @@ window.addEventListener('load', function(){
 
 /* Story Path is the default view: draw it automatically once the map is ready */
 window.addEventListener('load', function(){
-  var tries = 40;                 /* 16 seconds of patience on a slow phone */
+  /* Do exactly what a reader does: wait until the map is finished, then press
+     the Family Path button. Nothing here touches the map itself.
+
+     Every earlier version of this tried to judge when the map was ready from
+     MapLibre's own flags, and every one of them was wrong in a different way:
+     too early and the route is drawn behind the splash and wiped on the way in,
+     too clever and the map is left half built. The one honest signal that
+     map.js has finished its own setup is that the place pins exist, because
+     they are added at the end of it. Wait for them, then click. */
+  var tries = 120;                       // generous: this only ever waits, never acts
   (function _autoPath(){
-    if(_storyPathOn) return;
-    /* Three separate traps lived here, and together they meant the family path
-       never drew itself on arrival at all. Verified on the live map.
+    if(_storyPathOn) return;             // already drawn, or the reader pressed it
 
-       1. The old guard tested window.map. That is NOT the MapLibre instance:
-          the container carries id="map", and a browser publishes every id as a
-          global, so window.map is the <div> and is always truthy. It guarded
-          nothing. `map` in this file is the instance map.js creates.
-       2. Reading map.getSource before map.js had constructed it threw, and the
-          throw escaped, so the retry below never ran and the chain died on the
-          first tick.
-       3. The readiness test asked for the 'trip-route' source, which does not
-          exist until a path has been drawn. It waited on the very thing it was
-          waiting to cause, so it could never have become true.
+    var splash = document.getElementById('splash');
+    var splashUp = splash && !splash.classList.contains('hidden')
+                   && getComputedStyle(splash).display !== 'none';
+    if(splashUp){ setTimeout(_autoPath, 300); return; }   // costs no budget
 
-       So do not predict readiness: attempt the draw, and retry if it is too
-       early. Anything that can throw is inside a try. */
-    /* 4. And it must not draw while the splash is still up. Drawing early looked
-          like it worked, because _storyPathOn went true within milliseconds, but
-          the reader never saw it: entering the story runs renderList, index.html
-          wraps clearTripRoute, and the route was wiped on the way in. Measured on
-          the live map: drawn at +2ms behind the splash, gone by the time anyone
-          could look at it. Wait for the splash, then draw.
-          Waiting costs no retries: a reader may sit on the language chips for a
-          minute, and that must not exhaust the budget. */
-    var splashGone = function(){
-      var s = document.getElementById('splash');
-      return !s || s.classList.contains('hidden') || getComputedStyle(s).display === 'none';
-    };
-    if(!splashGone()){ setTimeout(_autoPath, 300); return; }
-
-    var ok = false, m = null;
+    var ready = false;
     try {
-      m  = map;
-      ok = !!m && typeof m.addSource === 'function'
-           && typeof window._addNumberedMarkers === 'function'
-           && typeof PLACES !== 'undefined' && PLACES.length > 0;
-    } catch(e){ ok = false; }
-    if(ok){
-      try { toggleStoryPath(true); return; }
-      catch(e){ /* style not ready yet: fall through to the retry */ }
+      ready = typeof PLACES !== 'undefined' && PLACES.length > 0
+              && document.querySelectorAll('.maplibregl-marker').length >= PLACES.length;
+    } catch(e){ ready = false; }
+
+    if(ready){
+      var btn = document.getElementById('pill-storypath');
+      if(btn){ btn.click(); return; }
     }
     if(--tries > 0) setTimeout(_autoPath, 400);
   })();
