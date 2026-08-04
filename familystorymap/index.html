@@ -85,7 +85,8 @@
     .hero-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:48px 40px 40px; position:relative; overflow:hidden; }
     .hero-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(184,150,90,0.09) 0%,transparent 70%); pointer-events:none; }
     .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 26px; font-weight:300; max-width:68ch; }
-    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:30px; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+    .hero-note { font-size:14px; line-height:1.65; color:var(--dark-muted); border-left:2px solid var(--gold); padding-left:14px; margin:0 0 26px; max-width:72ch; }
     .hero-shot { width:100%; height:auto; display:block; border-radius:12px; border:1px solid var(--dark-border); box-shadow:0 18px 50px rgba(0,0,0,0.55); }
     .hero-disc { font-size:12.5px; color:var(--dark-muted); opacity:.75; margin-top:14px; max-width:88ch; line-height:1.65; }
 
@@ -99,7 +100,8 @@
       /* Lift the map closer to the top of a phone screen. */
       .hero-wrap{ padding:32px 22px 28px; }
       .hero-sub{ font-size:15.5px; margin:10px 0 20px; }
-      .hero-btns{ gap:9px; margin-bottom:22px; }
+      .hero-btns{ gap:9px; margin-bottom:14px; }
+      .hero-note{ font-size:13.5px; margin-bottom:20px; }
     }
 
     /* STATS */
@@ -271,12 +273,13 @@
       <p class="hero-sub">The memoir sits in a drawer, and it is hard to get the grandchildren to read it. The tree is a list of names that says nothing about the roads people walked. We visualize your family memories on a beautiful interactive map: a pin for every place an ancestor&rsquo;s life unfolded, each one opening a photograph and its piece of the story. See each person&rsquo;s life journey. Everyone reads it in their own language. One link to share, browse on any phone, no app to install, no membership fee.</p>
       <div class="hero-btns">
         <a class="btn-gold" href="#get-started">Tell us about your family</a>
-        <a class="btn-ghost-dark" href="#see">See a real map</a>
+        <a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/landokliotfamily/" target="_blank" rel="noopener">Open a real family map</a>
         <a class="btn-ghost-dark" href="#pricing">What it costs</a>
       </div>
+      <p class="hero-note">This one is my own family&rsquo;s map. I published it on purpose, so you can see exactly what you would be getting. Yours stays private unless you tell me otherwise.</p>
 
       <img class="hero-shot" src="../assets/fsm-map-hero.webp" alt="The whole family map: a numbered path from Belarus and Lithuania through Russia and Ukraine down to Israel, every place also listed down the side with its portrait and its dates, and region filters along the bottom" fetchpriority="high"/>
-      <p class="hero-disc">Above: the first Family Story Map, built from one family&rsquo;s memoir. One tap numbers the stops in the order they happened, from Bobruisk and Vitebsk out to the Urals and Kazakhstan, and home to Rehovot. Every place is listed down the side with its portrait and its dates, every pin opens into its photograph and its story, and the regions along the bottom filter the map to one chapter at a time. Shown with the family&rsquo;s permission; the map itself is private.</p>
+      <p class="hero-disc">Above: the first Family Story Map, built from one family&rsquo;s memoir. One tap numbers the stops in the order they happened, from Bobruisk and Vitebsk out to the Urals and Kazakhstan, and home to Rehovot. Every place is listed down the side with its portrait and its dates, every pin opens into its photograph and its story, and the regions along the bottom filter the map to one chapter at a time.</p>
     </div>
   </div>
 </section>
@@ -320,7 +323,7 @@
 
       <div class="shot-item">
         <div class="shot-frame"><img src="../assets/fsm-hero-splash.webp" alt="The opening screen of a Family Story Map: the family photograph behind a welcome in English, Hebrew and Russian" loading="lazy"/></div>
-        <p class="shot-cap"><b>Everyone reads it in their own language.</b> One link opens in Hebrew, Russian or English, and each reader picks their own. Stories, names, tree and every button switch together. Shown with the family&rsquo;s permission; the map itself is private.</p>
+        <p class="shot-cap"><b>Everyone reads it in their own language.</b> One link opens in Hebrew, Russian or English, and each reader picks their own. Stories, names, tree and every button switch together. Shown with the family&rsquo;s permission.</p>
       </div>
 
       <div class="shot-item">
@@ -376,7 +379,7 @@
       <div class="step-card"><div class="step-num">01</div><h4>You send your material</h4><p>A memoir, an interview recording, a tree file, a shoebox of photographs, or just a list of names and towns.</p></div>
       <div class="step-card"><div class="step-num">02</div><h4>We research and locate</h4><p>We find each place as it exists today, including towns that were renamed, and check every one against the record.</p></div>
       <div class="step-card"><div class="step-num">03</div><h4>We build and translate</h4><p>Your map goes live on a private link, in the languages your family reads, with the tree, the path and the photographs in place.</p></div>
-      <div class="step-card"><div class="step-num">04</div><h4>It grows with you</h4><p>Families keep remembering. Send a new photo or a new story and we add it, in every language at once.</p></div>
+      <div class="step-card"><div class="step-num">04</div><h4>It grows with your family</h4><p>Once the family sees the map, new photographs and memories surface. One update round in the first year is included, and further rounds can be added whenever you need them.</p></div>
     </div>
   </div>
 </section>
@@ -386,7 +389,7 @@
   <div class="inner">
     <p class="kicker-warm">What it costs</p>
     <h2 class="warm">One payment. No subscription, ever.</h2>
-    <p class="sub-warm" style="margin-top:10px;max-width:78ch;">A map built from a written family history starts at $3,000. Most of that is research: finding every place as it was and as it is now, checking each one against the record, and matching the right photograph and the right passage to the right pin. It is commissioned work, made once for one family, not a template. Set it beside what one big family celebration costs. The evening ends. This does not.</p>
+    <p class="sub-warm" style="margin-top:10px;max-width:78ch;">A map built from a written family history starts at $3,000. Most of that is research: finding every place as it was and as it is now, checking each one against the record, and matching the right photograph and the right passage to the right pin. It is commissioned work, made once for one family, not a template. Something the family keeps, and hands on. Set it beside what one big family celebration costs. The evening ends. This does not.</p>
 
     <div class="price-solo">
       <div class="price-head">
@@ -399,7 +402,7 @@
         <h4>What is included</h4>
         <ul>
           <li>Every place read out of your text, located and verified, including towns that were renamed</li>
-          <li>The family&rsquo;s own words at each place, quoted exactly, never paraphrased</li>
+          <li>The family&rsquo;s own words at each place, quoted exactly. In any additional language they are translated faithfully, never rewritten or embellished</li>
           <li>Your own photographs, scanned, cleaned and placed where they belong</li>
           <li>A line on each place as it stands today</li>
           <li>The family tree, linked to the map: tap a person and their journey draws itself</li>
@@ -415,8 +418,8 @@
     <div class="addons">
       <h4>Add to any map</h4>
       <div class="addon-row"><span>Each additional language, produced in full: the stories, the tree, the interface and the PDF book</span><b>$1,000</b></div>
-      <div class="addon-row"><span>A larger family: more than 40 places, or more than 100 people on the tree</span><b>quoted</b></div>
-      <div class="addon-row"><span>A further update round: everything the family has sent since, added in one pass, in every language. Bought when you want one, never on a schedule</span><b>$600</b></div>
+      <div class="addon-row"><span>A larger family: more than 40 places, or more than 100 people on the tree</span><b>priced individually</b></div>
+      <div class="addon-row"><span>A further update round: everything the family has sent since, added in one pass, in every language your map carries. Bought when you want one, never on a schedule</span><b>$600</b></div>
       <p class="addon-note">Tell us which languages your family reads and we confirm them in the offer, before you commit to anything.</p>
     </div>
 
