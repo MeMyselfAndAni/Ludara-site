@@ -963,6 +963,14 @@ window.addEventListener('load', function(){
     } catch(e){ ready = false; }
 
     if(ready){
+      /* The places sheet takes half a phone screen, and the welcome tour opens
+         it as one of its steps. A reader arriving should see the map, not a
+         list, so close it here if anything left it open. */
+      try {
+        var _sh = document.getElementById('sheet');
+        if(_sh && _sh.classList.contains('open') && typeof closeSheet === 'function') closeSheet();
+      } catch(e){}
+
       var btn = document.getElementById('pill-storypath');
       if(btn){ btn.click(); return; }
     }
