@@ -47,10 +47,10 @@ const PHOTO_CREDITS = {
         license: 'נחלת הכלל',
         url:     'https://commons.wikimedia.org/wiki/File:Zakopane_-_chata_goralska._1937-1939_(74197676).jpg' },
 
-  7:  { author:  'אלעזר לנגמן',
-        prefix:  'מכרה פחם בדונבס, 1938',
+  7:  { author:  'צלם לא ידוע',
+        prefix:  'עיירת מכרות בדונבס, שנות ה־30',
         license: 'נחלת הכלל',
-        url:     'https://commons.wikimedia.org/wiki/File:%D0%A8%D0%B0%D1%85%D1%82%D0%B0_%D0%B8%D0%BC._%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0.jpg' },
+        url:     'https://commons.wikimedia.org/wiki/File:1930-%D0%B5._%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%9D%D0%B0%D1%85%D0%B0%D0%BB%D0%BE%D0%B2%D0%BA%D1%83.jpg' },
 
   17: { author:  'בנו רותנברג',
         prefix:  'מעברת עולים, אפריל 1951',
@@ -62,44 +62,36 @@ const PHOTO_CREDITS = {
         license: 'CC BY-SA 4.0',
         url:     'https://commons.wikimedia.org/wiki/File:Krak%C3%B3w_dawny_ob%C3%B3z_koncentracyjny_KL_Plaszow_08.jpg' },
 
-  // ── Awaiting the family's choice ─────────────────────────────────────────
-  //    For these five the family is choosing between a photograph from the war
-  //    and the site as it is today. Uncomment the one they pick, delete the
-  //    other. See the choice sheet sent to them on 3 August 2026.
+  // ── Chosen by the Bar-Or family, 3 August 2026 ───────────────────────────
+  //    Majdanek from the war, the other four as the sites are today, which is
+  //    what Zehava saw on her journey in 1998.
 
-  // 25 ורשה
-  // 25: { author:'צלם לא ידוע, מתוך דוח שטרופ', prefix:'גטו ורשה, אפריל עד מאי 1943', license:'נחלת הכלל',
-  //       url:'https://commons.wikimedia.org/wiki/File:Stroop_Report_-_Warsaw_Ghetto_Uprising_03.jpg' },
-  // 25: { author:'Adrian Grycuk', prefix:'אנדרטת מורדי הגטו בוורשה, 2019', license:'CC BY-SA 3.0 pl',
-  //       url:'https://commons.wikimedia.org/wiki/File:Pomnik_Bohater%C3%B3w_Getta_w_Warszawie_2019.jpg' },
+  25: { author:  'Adrian Grycuk',
+        prefix:  'אנדרטת מורדי גטו ורשה, 2019',
+        license: 'CC BY-SA 3.0 pl',
+        url:     'https://commons.wikimedia.org/wiki/File:Pomnik_Bohater%C3%B3w_Getta_w_Warszawie_2019.jpg' },
 
-  // 26 טרבלינקה
-  // 26: { author:'פרנצישק זומבצקי', prefix:'טרבלינקה, 1943', license:'נחלת הכלל',
-  //       url:'https://commons.wikimedia.org/wiki/File:Treblinka_uprising_(Z%C4%85becki_1943).jpg' },
-  // 26: { author:'Adrian Grycuk', prefix:'אתר ההנצחה בטרבלינקה היום', license:'CC BY-SA 3.0 pl',
-  //       url:'https://commons.wikimedia.org/wiki/File:Treblinka_Cremation_Pit_2.jpg' },
+  26: { author:  'Adrian Grycuk',
+        prefix:  'אתר ההנצחה בטרבלינקה',
+        license: 'CC BY-SA 3.0 pl',
+        url:     'https://commons.wikimedia.org/wiki/File:Treblinka_Cremation_Pit_2.jpg' },
 
-  // 27 מיידאנק
-  // 27: { author:'צלם לא ידוע, תצלום סיור אווירי', prefix:'מיידאנק, 24 ביוני 1944', license:'נחלת הכלל',
-  //       url:'https://commons.wikimedia.org/wiki/File:Majdanek_(June_24,_1944).jpg' },
-  // 27: { author:'Alians PL', prefix:'מוזיאון מיידאנק היום', license:'CC BY-SA 3.0 pl',
-  //       url:'https://commons.wikimedia.org/wiki/File:Alians_PL,PanoramicViewsOfKLMajdanek,2012-09-09,PanoramaOf7Photos.jpg' },
+  27: { author:  'צלם לא ידוע, תצלום סיור אווירי',
+        prefix:  'מיידאנק, 24 ביוני 1944',
+        license: 'נחלת הכלל',
+        url:     'https://commons.wikimedia.org/wiki/File:Majdanek_(June_24,_1944).jpg' },
 
-  // 28 טרזינשטאט
-  // 28: { author:'אלפרד קנטור', prefix:'מסמך מגטו טרזינשטאט, 1943', license:'נחלת הכלל',
-  //       url:'https://commons.wikimedia.org/wiki/File:Alfred_Kantor_Ghetto_Theresienstadt_Best%C3%A4tigung_1943.jpg' },
-  // 28: { author:'Petr1888', prefix:'המצודה הקטנה והבית עלמין הלאומי בטרזין היום', license:'CC BY-SA 3.0',
-  //       url:'https://commons.wikimedia.org/wiki/File:Terez%C3%ADn_-_Mal%C3%A1_pevnost_a_N%C3%A1rodn%C3%AD_h%C5%99bitov1.JPG' },
+  28: { author:  'Petr1888',
+        prefix:  'המצודה הקטנה והבית עלמין הלאומי בטרזין',
+        license: 'CC BY-SA 3.0',
+        url:     'https://commons.wikimedia.org/wiki/File:Terez%C3%ADn_-_Mal%C3%A1_pevnost_a_N%C3%A1rodn%C3%AD_h%C5%99bitov1.JPG' },
 
-  // 29 דכאו
-  // 29: { author:'צלם לא ידוע', prefix:'דכאו, אפריל 1945', license:'נחלת הכלל',
-  //       url:'https://commons.wikimedia.org/wiki/File:Dachau_watchtower_b_1945-04.jpg' },
-  // 29: { author:'Kim Traynor', prefix:'אתר ההנצחה בדכאו', license:'CC BY-SA 4.0',
-  //       url:'https://commons.wikimedia.org/wiki/File:Dachau_Memorial_(iron_sculpture).JPG' },
+  29: { author:  'Kim Traynor',
+        prefix:  'אתר ההנצחה בדכאו',
+        license: 'CC BY-SA 4.0',
+        url:     'https://commons.wikimedia.org/wiki/File:Dachau_Memorial_(iron_sculpture).JPG' },
 
-  // 2 הנחל שבפאתי וולברום. אין תצלום של הנחל עצמו, זהו רחוב בוולברום היום.
-  // 2:  { author:'Kamil Czaiński', prefix:'וולברום היום', license:'CC BY-SA 4.0',
-  //       url:'https://commons.wikimedia.org/wiki/File:Wolbrom,_ulica_Krakowska_-_komisariat_policji.jpg' },
+  // 2 הנחל שבפאתי וולברום. אין תצלום של הנחל עצמו, ולכן הכרטיס מציג אייקון.
 };
 
 // Build the credit HTML for a place id (returns '' if none).
