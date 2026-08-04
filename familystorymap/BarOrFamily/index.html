@@ -928,26 +928,36 @@ window.addEventListener('load', function(){
 
 /* Story Path is the default view: draw it automatically once the map is ready */
 window.addEventListener('load', function(){
-  var tries = 25;
+  var tries = 40;                 /* 16 seconds of patience on a slow phone */
   (function _autoPath(){
     if(_storyPathOn) return;
-    /* `map` is the MapLibre instance created in map.js. Two traps here, and the
-       old guard fell into both, so the family path never drew itself at all:
+    /* Three separate traps lived here, and together they meant the family path
+       never drew itself on arrival at all. Verified on the live map.
 
-       1. window.map is NOT that instance. The map container carries id="map",
-          and the browser publishes every id as a global, so window.map is the
-          <div> and is always truthy. It guarded nothing.
-       2. Reading map.getSource before map.js has constructed the map throws,
-          and the throw escaped this function, so the setTimeout retry below was
-          never reached and the whole chain died on the first tick.
+       1. The old guard tested window.map. That is NOT the MapLibre instance:
+          the container carries id="map", and a browser publishes every id as a
+          global, so window.map is the <div> and is always truthy. It guarded
+          nothing. `map` in this file is the instance map.js creates.
+       2. Reading map.getSource before map.js had constructed it threw, and the
+          throw escaped, so the retry below never ran and the chain died on the
+          first tick.
+       3. The readiness test asked for the 'trip-route' source, which does not
+          exist until a path has been drawn. It waited on the very thing it was
+          waiting to cause, so it could never have become true.
 
-       Everything that can throw now happens inside the try. */
-    var ready = false;
+       So do not predict readiness: attempt the draw, and retry if it is too
+       early. Anything that can throw is inside a try. */
+    var ok = false, m = null;
     try {
-      ready = !!(map && typeof map.getSource === 'function' && map.getSource('trip-route'))
-              && typeof window._addNumberedMarkers === 'function';
-    } catch(e){ ready = false; }
-    if(ready){ toggleStoryPath(true); return; }
+      m  = map;
+      ok = !!m && typeof m.addSource === 'function'
+           && typeof window._addNumberedMarkers === 'function'
+           && typeof PLACES !== 'undefined' && PLACES.length > 0;
+    } catch(e){ ok = false; }
+    if(ok){
+      try { toggleStoryPath(true); return; }
+      catch(e){ /* style not ready yet: fall through to the retry */ }
+    }
     if(--tries > 0) setTimeout(_autoPath, 400);
   })();
 });
