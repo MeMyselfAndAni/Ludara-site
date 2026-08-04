@@ -437,7 +437,16 @@ function renderList(){
     ? (count + _T(count === 1 ? ' תוצאה' : ' תוצאות', count === 1 ? ' совпадение' : ' совпадений', ' match' + (count !== 1 ? 'es' : '')))
     : (nbhdName + count + _T(' מקומות', ' мест', ' Places')
        + (_allKm ? ' · ' + fmtKm(_allKm) : ''));
-  document.getElementById('sheet-title').textContent = _titleText;
+  /* dir="auto" or the bidi algorithm tears this line apart. The element has no
+     direction of its own and inherits LTR from <html>, which carries lang="he"
+     but no dir. With one number the damage was invisible; with two, a Hebrew
+     reader saw "מקומות · 11,227 ק״מ 26", the 26 stranded at the far end away
+     from the word it counts. auto takes the direction from the first strong
+     character, so Hebrew reads right to left and English and Russian are
+     untouched. Verified on the live map in all three. */
+  var _st = document.getElementById('sheet-title');
+  _st.setAttribute('dir', 'auto');
+  _st.textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
 
   /* Colour legend. The list already prints each stop's thread underneath its name,

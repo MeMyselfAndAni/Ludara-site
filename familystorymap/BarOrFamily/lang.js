@@ -143,6 +143,7 @@ function applyLanguage(lang){
     // The count alone says how much there is to read. The distance says why it
     // is worth reading, and it is the one number nobody expects.
     var _fjk = (typeof familyJourneyKm === 'function') ? familyJourneyKm() : 0;
+    st.setAttribute('dir', 'auto');   // see the note in ui-filter.js renderList
     st.textContent = PLACES.length + L3(' מקומות', ' мест', ' places')
                    + (_fjk ? ' · ' + fmtKm(_fjk) : '');
   }
