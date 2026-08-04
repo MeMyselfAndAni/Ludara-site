@@ -332,7 +332,7 @@ const PLACES = [
     name: 'קייב · Киев · Kyiv',
     cat: 'friedland',
     emoji: '🤝',
-    icon: 'town',
+    icon: 'meeting',
     address: 'אוקראינה · Украина · Ukraine',
     years: 'קיץ 1964 · лето 1964 · summer 1964',
     lat: 50.4501, lng: 30.5234,

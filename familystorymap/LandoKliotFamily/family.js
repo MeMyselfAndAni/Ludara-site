@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 55,          // bump on every deploy so the service worker updates
+  cacheVersion: 56,          // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -51,7 +51,7 @@ var FAMILY = {
       label:'לנדו ושכטר · Ландо и Шехтеры · Lando & Schechter' },
     { key:'war',       color:'#a4402f', dark:'#4a160e', tint:'#fbecea',
       label:'מלחמה ופינוי · Война и эвакуация · War & evacuation' },
-    { key:'israel',    color:'#c9a227', dark:'#5c4a12', tint:'#fbf4e2',
+    { key:'israel',    color:'#d97e26', dark:'#5c3510', tint:'#fdf0e3',
       label:'ישראל · Израиль · Israel' },
   ],
 
@@ -68,7 +68,7 @@ var FAMILY = {
       label:'אוראל ואסיה · Урал и Азия · Urals & Asia' },
     { key:'ukraine', color:'#2f8f8f', minRadius:120000, center:{ lat:48.50, lng:32.50 },
       label:'אוקראינה · Украина · Ukraine' },
-    { key:'israel',  color:'#c9a227', minRadius:30000,  center:{ lat:31.83, lng:35.00 },
+    { key:'israel',  color:'#d97e26', minRadius:30000,  center:{ lat:31.83, lng:35.00 },
       label:'ישראל · Израиль · Israel' },
   ],
 
