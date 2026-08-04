@@ -326,17 +326,25 @@
     #tree-fab { width: 60px; height: 60px; } #tree-fab svg { width: 42px; height: 42px; } }
 
   /* ── HE/RU language toggle — lower-right corner of the map ── */
+  /* The inactive languages were #6a5a3a on near-black, which measures 2.9:1.
+     Small text needs 4.5:1 to be read at all, so on a phone in daylight the two
+     languages you are not using simply vanished and the control read as one
+     word. Inactive is now 6.4:1 and the active one 11.6:1, so the difference is
+     still obvious but nothing disappears. Type is a little larger too: 0.6rem
+     was 9.6px, below what most people can read on a moving map. */
   #lang-fab { position: fixed; right: 12px; bottom: 158px; z-index: 1100;
-    width: 56px; height: 56px; border-radius: 50%; cursor: pointer; padding: 0;
-    background: #0f0d0a; border: 2px solid rgba(212,168,75,0.85);
-    display: flex; align-items: center; justify-content: center; gap: 1px;
-    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.6rem;
+    width: 60px; height: 60px; border-radius: 50%; cursor: pointer; padding: 0;
+    background: #0f0d0a; border: 2px solid rgba(212,168,75,0.9);
+    display: flex; align-items: center; justify-content: center; gap: 1.5px;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.68rem;
+    letter-spacing: 0.01em;
     box-shadow: 0 3px 14px rgba(0,0,0,0.4); -webkit-tap-highlight-color: transparent;
     transition: transform 0.15s; }
   #lang-fab:hover { transform: scale(1.07); background: #26221c; }
-  #lang-fab .lf-he, #lang-fab .lf-ru, #lang-fab .lf-en { color: #6a5a3a; transition: color 0.2s; }
-  #lang-fab .lf-sep { color: #6a5a3a; font-weight: 400; }
-  #lang-fab.lf-on-he .lf-he, #lang-fab.lf-on-ru .lf-ru, #lang-fab.lf-on-en .lf-en { color: #d4a84b; }
+  #lang-fab .lf-he, #lang-fab .lf-ru, #lang-fab .lf-en { color: #a89263; transition: color 0.2s; }
+  #lang-fab .lf-sep { color: #6f6046; font-weight: 400; }
+  #lang-fab.lf-on-he .lf-he, #lang-fab.lf-on-ru .lf-ru, #lang-fab.lf-on-en .lf-en {
+    color: #e8c46a; text-shadow: 0 0 10px rgba(232,196,106,0.45); }
   /* Family Edition: bilingual HE/RU text — each paragraph aligns by its own script */
   #pc-note, #pc-tip-text { white-space: pre-line; unicode-bidi: plaintext; }
   #pc-title, #pc-type, .place-name, .place-type, .place-addr, #nbhd-title, .nbhd-label { unicode-bidi: plaintext; }
@@ -870,6 +878,14 @@ window.addEventListener('load', function(){
     } catch(e){ ready = false; }
 
     if(ready){
+      /* The places sheet takes half a phone screen, and the welcome tour opens
+         it as one of its steps. A reader arriving should see the map, not a
+         list, so close it here if anything left it open. */
+      try {
+        var _sh = document.getElementById('sheet');
+        if(_sh && _sh.classList.contains('open') && typeof closeSheet === 'function') closeSheet();
+      } catch(e){}
+
       var btn = document.getElementById('pill-storypath');
       if(btn){ btn.click(); return; }
     }
