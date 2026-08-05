@@ -228,7 +228,10 @@ function applyLanguage(lang){
             L3('עץ המשפחה', 'Дерево семьи', 'Family tree'));
 
   // ── Re-render everything that was built from the data ──
-  if(typeof closePlaceCard === 'function') closePlaceCard(true);
+  // A language switch is not the reader closing a card, so it must not reopen the
+  // places list. On a phone that list covers half the screen, and it was springing
+  // open every time the reader tapped the language button.
+  if(typeof closePlaceCard === 'function') closePlaceCard(false);
   if(typeof renderList    === 'function') renderList();
   if(typeof applyFilters  === 'function') applyFilters();
   if(typeof window._treeRebuild === 'function') window._treeRebuild();
