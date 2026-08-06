@@ -45,7 +45,7 @@ function _openNaverWithFallback(app, web){
   window.location.href = app;
 }
 // Taxi — Uber operates in Seoul (as UT) and opens the app on a phone or the web on desktop.
-function openTaxi(){ window.open('https://m.uber.com/', '_blank', 'noopener'); }
+function openTaxi(){ apdTrack('get_taxi'); window.open('https://m.uber.com/', '_blank', 'noopener'); }
 function openNaver(p, mode){
   if(!p) return;
   var name = encodeURIComponent(_naverKoreanName(p) || p.name || '');
@@ -515,3 +515,9 @@ let mapCheckInterval = setInterval(() => {
     clearInterval(mapCheckInterval);
   }
 }, 500);
+
+// ── APD ANALYTICS ──────────────────────────────
+// Fires a labelled GA4 event via the site's existing gtag. Guarded no-op if gtag absent.
+function apdTrack(name, params){
+  try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){}
+}
