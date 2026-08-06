@@ -2,109 +2,50 @@
 setlocal enabledelayedexpansion
 echo =====================================
 echo   BAR-OR FAMILY MAP GIT COMMIT ^& DEPLOY
-echo   (A Perfect Story Map - Family Edition)
 echo =====================================
 
-set "WORKING=C:\Users\Maria\OneDrive\Dokumentumok\Claude\Projects\A Perfect Day\familystorymap\BarOrFamily"
-set "DEPLOY=C:\Users\Maria\OneDrive\Dokumentumok\Ludara\Ludara-site\familystorymap\barorfamily"
+rem  ------------------------------------------------------------------
+rem  This script commits and pushes THE FOLDER IT SITS IN.
+rem  There is no separate working copy any more. Edit the files here.
+rem  Changed 2026-08-06: the old version copied from
+rem    ...\Claude\Projects\A Perfect Day\...
+rem  over this folder. A stale copy there silently reverted three weeks
+rem  of work on 3 August, and it would have replaced the minimised MUZA
+rem  images with the full size originals. Never reintroduce a copy step.
 rem  Expected live URL after push:  https://ludara.ai/familystorymap/barorfamily/
+rem  ------------------------------------------------------------------
 rem  PRIVATE FAMILY EDITION: index.html carries noindex,nofollow.
-rem  Do NOT link it from public pages - share the URL with family only.
-rem  NOTE: mirrors inanasfootsteps-git.bat. If git reports "not inside a git
-rem  repository" below, the repo root differs - tell Claude and we adjust.
-rem  (If you'd rather serve it under /aperfectstorymap/, just change DEPLOY to
-rem   ...\Ludara-site\aperfectstorymap\barorfamily and rerun.)
+rem  Do NOT link it from public pages. Share the URL with the family only.
 
+pushd "%~dp0"
 echo.
-echo Working copy : %WORKING%
-echo Deploy folder: %DEPLOY%
+echo Folder: %CD%
 echo.
 
-if not exist "%WORKING%\index.html" (
-  echo [ERROR] Working copy not found at %WORKING%
-  pause & exit /b 1
-)
-
-rem --- Create the deploy folder if this is the first push ---
-if not exist "%DEPLOY%" (
-  echo Creating deploy folder...
-  mkdir "%DEPLOY%"
-)
-if not exist "%DEPLOY%\images" mkdir "%DEPLOY%\images"
-
-rem --- The deploy list. ADD ANY NEW FILE HERE or it will never reach the live site. ---
-rem     was missing from this list until 2026-07-30: it was created after this
-rem     script was written, so the trilingual engine was only ever live because it was
-rem     copied by hand. sw.js precaches ./lang.js, so a missing also breaks
-rem     offline mode. The check further down now catches this class of mistake.
-set "FILES=index.html family.js icons.js data.js people.js lang.js map.js map-core.js ui-card.js ui-filter.js ui-stories.js ui-favourites.js ui-pdf.js ui-tree.js tutorial.js photos.js credits.js styles.css sw.js favicon.svg minimize-images.js"
-
-echo.
-echo Copying story map files into the live site...
-for %%F in (%FILES%) do (
-  if exist "%WORKING%\%%F" (
-    copy /Y "%WORKING%\%%F" "%DEPLOY%\%%F" >nul && echo   copied %%F
-  ) else (
-    echo   [skip] %%F not found
-  )
-)
-
-echo.
-echo Checking for working files that are NOT on the deploy list...
-set "UNLISTED="
-for %%F in ("%WORKING%\*.js" "%WORKING%\*.css" "%WORKING%\*.html" "%WORKING%\*.svg") do (
-  set "HIT="
-  for %%L in (%FILES%) do if /I "%%~nxF"=="%%L" set "HIT=1"
-  if not defined HIT set "UNLISTED=!UNLISTED! %%~nxF"
-)
-if defined UNLISTED (
-  echo.
-  echo   [WARNING] These files exist in the working folder but will NOT be deployed:
-  echo            !UNLISTED!
-  echo   If the site needs one of them, add it to the FILES list at the top of this
-  echo   script, then run this again. Press a key to continue anyway.
-  pause
-) else (
-  echo   OK - every .js/.css/.html/.svg in the working folder is on the deploy list.
-)
-
-echo.
-echo Copying images (place-*, splash, og) into the live site...
-for %%E in (jpg jpeg png webp svg) do (
-  if exist "%WORKING%\images\*.%%E" (
-    copy /Y "%WORKING%\images\*.%%E" "%DEPLOY%\images\" >nul && echo   copied images\*.%%E
-  )
-)
-
-echo.
-echo Navigating to deploy folder...
-cd /d "%DEPLOY%"
-echo Current directory: %CD%
-
-rem --- Confirm we are inside a git repository (git walks up to find .git) ---
 git rev-parse --is-inside-work-tree >nul 2>&1
 if errorlevel 1 (
-  echo [ERROR] %DEPLOY% is not inside a git repository.
-  echo Tell Claude and we adjust the deploy path or the repo.
-  pause & exit /b 1
+  echo [ERROR] %CD% is not inside a git repository.
+  popd & pause & exit /b 1
 )
 
-echo.
-echo Staging changes in the barorfamily folder...
+echo Staging changes in this folder...
 git add .
 
 echo.
 echo Current status:
 git status --short
 
-rem --- Bail out cleanly if nothing changed ---
 git diff --cached --quiet
 if not errorlevel 1 (
   echo.
   echo [info] No changes to commit. Exiting.
-  pause & exit /b 0
+  popd & pause & exit /b 0
 )
 
+echo.
+echo Read the list above before continuing.
+echo Anything you did not expect means a file was edited in the wrong place.
+echo Close this window to abort.
 echo.
 set /p commit_msg="Enter commit message (or press Enter for default): "
 if "%commit_msg%"=="" set "commit_msg=Bar-Or family map: update map and tree"
@@ -112,7 +53,7 @@ if "%commit_msg%"=="" set "commit_msg=Bar-Or family map: update map and tree"
 echo.
 echo Committing: "%commit_msg%"
 git commit -m "%commit_msg%"
-if errorlevel 1 ( echo [ERROR] Commit failed. & pause & exit /b 1 )
+if errorlevel 1 ( echo [ERROR] Commit failed. & popd & pause & exit /b 1 )
 
 echo.
 echo Pushing to repository...
@@ -120,7 +61,7 @@ git push
 if errorlevel 1 (
   echo.
   echo [ERROR] Push failed. Check your branch, remote, and credentials.
-  pause & exit /b 1
+  popd & pause & exit /b 1
 )
 
 echo.
@@ -131,7 +72,8 @@ echo.
 echo Test online in a minute or two at:
 echo   https://ludara.ai/familystorymap/barorfamily/
 echo.
-echo This is the PRIVATE family edition - share the URL with family only.
+echo This is the PRIVATE family edition. Share the URL with the family only.
 echo.
+popd
 pause
 endlocal
