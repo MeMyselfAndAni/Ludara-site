@@ -1,19 +1,13 @@
 // ═══════════════════════════════════════════════════════════════════
-// minimize-images.js — A Perfect Day
-// Standalone version of the resize step from fetch-images-universal.js.
-// Same behaviour: shrink every image in /images so its longest side is
-// no more than MAX_SIZE px, save as progressive JPEG quality 85, and
-// skip images that are already small. Overwrites in place (no second
-// copy), exactly like the fetcher's resize stage.
+// minimize-images.js — A Perfect Day (Nashville)
+// Shrinks every image in /images so its longest side is no more than
+// MAX_SIZE px, saves as progressive JPEG quality 85, skips images that
+// are already small, and bakes in EXIF orientation (fixes sideways
+// phone/Instagram photos). Overwrites in place (no backup).
 //
-// Use this when you've added images by hand and just want the resize,
-// without re-running the whole fetch/verify pipeline.
-//
-// Run from the guide folder:
-//   cd Venice
+// Run from this guide folder:
+//   cd Nashville
 //   node minimize-images.js
-//
-// Needs `sharp` (same dependency as the fetcher).
 //
 // Flag:
 //   --size=N   max longest side in pixels (default 600)
@@ -27,16 +21,27 @@ const MAX_SIZE = sizeArg ? parseInt(sizeArg.split('=')[1], 10) : 600;
 
 const IMG_DIR = path.join(__dirname, 'images');
 
-// ── locate sharp (local, then Ludara general/_scripts) ────────────
+// ── locate sharp ──────────────────────────────────────────────────
+// Works from any guide folder regardless of depth: walks up the tree
+// from here, checking node_modules/sharp and general/_scripts/node_modules/sharp
+// at every level (sharp lives in aperfectday/general/_scripts).
 function loadSharp() {
-  const tries = [
-    'sharp',
-    path.join(__dirname, 'node_modules', 'sharp'),
-    path.join(__dirname, '..', '..', 'general', '_scripts', 'node_modules', 'sharp'),
-    path.join(__dirname, '..', '_scripts', 'node_modules', 'sharp'),
-  ];
-  for (const t of tries) { try { return require(t); } catch (e) {} }
-  console.error('ERROR: sharp not found. Fix: cd general\\_scripts && npm install sharp');
+  try { return require('sharp'); } catch (e) {}
+  let dir = __dirname;
+  for (let i = 0; i < 10; i++) {
+    const candidates = [
+      path.join(dir, 'node_modules', 'sharp'),
+      path.join(dir, 'general', 'node_modules', 'sharp'),
+      path.join(dir, 'general', '_scripts', 'node_modules', 'sharp'),
+      path.join(dir, '_scripts', 'node_modules', 'sharp'),
+    ];
+    for (const c of candidates) { try { return require(c); } catch (e) {} }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  console.error('ERROR: sharp not found anywhere above this folder.');
+  console.error('Fix: cd into aperfectday\\general\\_scripts and run  npm install sharp');
   process.exit(1);
 }
 const sharp = loadSharp();
@@ -44,7 +49,7 @@ const sharp = loadSharp();
 (async () => {
   if (!fs.existsSync(IMG_DIR)) { console.error('ERROR: images/ folder not found'); process.exit(1); }
 
-  const files = fs.readdirSync(IMG_DIR).filter(f => /\.(jpe?g)$/i.test(f));
+  const files = fs.readdirSync(IMG_DIR).filter(f => /\.(jpe?g|png)$/i.test(f));
   if (!files.length) { console.log('  No images to resize.'); return; }
 
   console.log('  Resizing ' + files.length + ' images (max ' + MAX_SIZE + 'px)...\n');
@@ -54,12 +59,14 @@ const sharp = loadSharp();
     const filepath = path.join(IMG_DIR, file);
     try {
       const meta = await sharp(filepath).metadata();
-      if (meta.width <= MAX_SIZE && meta.height <= MAX_SIZE) {
+      const needsRotate = meta.orientation && meta.orientation > 1;  // EXIF rotation flag set
+      if (meta.width <= MAX_SIZE && meta.height <= MAX_SIZE && !needsRotate) {
         console.log('  ✓ ' + file + ' (' + meta.width + 'x' + meta.height + ') — already small');
         skipped++; continue;
       }
       const tmpPath = filepath + '.tmp';
       await sharp(filepath)
+        .rotate()  // bake EXIF orientation into the pixels, then strip the flag (fixes sideways/inverted photos)
         .resize(MAX_SIZE, MAX_SIZE, { fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 85, progressive: true })
         .toFile(tmpPath);

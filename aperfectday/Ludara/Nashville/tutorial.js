@@ -594,7 +594,11 @@
       if (window.innerWidth >= 768) {
         if (step.targetsDelay) {
           setSpot(null);
-          setTimeout(function() { setSpotDual(step.dualTargets); }, step.targetsDelay);
+          setTimeout(function() {
+            setSpotDual(step.dualTargets);
+            setTimeout(function(){ setSpotDual(step.dualTargets); }, 350);
+            setTimeout(function(){ setSpotDual(step.dualTargets); }, 750);
+          }, step.targetsDelay);
         } else {
           setSpotDual(step.dualTargets);
         }
