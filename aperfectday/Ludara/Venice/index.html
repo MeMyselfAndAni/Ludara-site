@@ -544,6 +544,7 @@ var _TRIPS = {
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
 function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
+  if (typeof apdTrack === 'function') apdTrack('trip_loaded', { trip: key, trip_name: trip.name || key });
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
   if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);
