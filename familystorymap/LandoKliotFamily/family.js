@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 58,          // bump on every deploy so the service worker updates
+  cacheVersion: 59,          // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -70,6 +70,8 @@ var FAMILY = {
       label:'אוקראינה · Украина · Ukraine' },
     { key:'israel',  color:'#f2811a', minRadius:30000,  center:{ lat:31.83, lng:35.00 },
       label:'ישראל · Израиль · Israel' },
+    { key:'america', color:'#7a5aa8', minRadius:120000, center:{ lat:34.05, lng:-118.39 },
+      label:'ארצות הברית · США · United States' },
   ],
 
   // ── The sentences in the welcome tour that name this family ───────────────
