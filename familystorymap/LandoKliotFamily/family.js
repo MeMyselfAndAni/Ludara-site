@@ -85,9 +85,9 @@ var FAMILY = {
       ru:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.',
       en:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.' },
     path: {
-      he:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר: מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות, לוס אנג׳לס, בוסטון ורמת השרון. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
-      ru:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота, Лос-Анджелеса, Бостона и Рамат-ха-Шарона. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
-      en:'The gold button draws the whole family journey in order: from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot, Los Angeles, Boston and Ramat HaSharon. Tap it any time to see the shape of the story again.' },
+      he:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר: מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות, לוס אנג׳לס ובוסטון, ובחזרה הביתה לישראל. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
+      ru:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота, Лос-Анджелеса и Бостона и обратно домой, в Израиль. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
+      en:'The gold button draws the whole family journey in order: from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot, Los Angeles and Boston, and home to Israel. Tap it any time to see the shape of the story again.' },
     pins: {
       he:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
       ru:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
