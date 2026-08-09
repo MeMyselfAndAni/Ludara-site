@@ -85,9 +85,9 @@ var FAMILY = {
       ru:'Одна карта — сто лет семейных дорог: от местечек Беларуси, через войну и эвакуацию, до сегодняшнего Израиля. Этот короткий тур покажет, как по ней путешествовать.',
       en:'One map, a century of family journeys: from the shtetls of Belarus, through war and evacuation, to Israel today. This short tour shows you how to travel it.' },
     path: {
-      he:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר: מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
-      ru:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
-      en:'The gold button draws the whole family journey in order: from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot. Tap it any time to see the shape of the story again.' },
+      he:'הכפתור המוזהב מצייר את מסע המשפחה כולו לפי הסדר: מרצ׳יצה ובוברויסק, דרך טמבוב, אוראל וקזחסטן, עד רחובות, לוס אנג׳לס, בוסטון ורמת השרון. לחצו עליו בכל רגע כדי לראות שוב את צורת הסיפור.',
+      ru:'Золотая кнопка рисует весь путь семьи по порядку — от Речицы и Бобруйска, через Тамбов, Урал и Казахстан, до Реховота, Лос-Анджелеса, Бостона и Рамат-ха-Шарона. Нажимайте её в любой момент, чтобы снова увидеть форму истории.',
+      en:'The gold button draws the whole family journey in order: from Rechytsa and Bobruisk, through Tambov, the Urals and Kazakhstan, to Rehovot, Los Angeles, Boston and Ramat HaSharon. Tap it any time to see the shape of the story again.' },
     pins: {
       he:'כל סיכה היא פרק בחיי המשפחה: העיר שבה נולדה סבתא נינה, הכפר שבו ניצל סבא זחר, הבית בטמבוב. לחצו על כל אייקון כדי לקרוא מה קרה שם.',
       ru:'Каждый значок — глава семейной жизни: город, где родилась бабушка Нина, деревня, где спасся дед Захар, дом в Тамбове. Нажмите на значок, чтобы прочитать, что там произошло.',
@@ -97,9 +97,9 @@ var FAMILY = {
       ru:'Введите название места или имя родственника — карта покажет только его места. Цвета значков обозначают ветви: Фридланды, Клиоты, Ландо и Шехтеры, война и эвакуация, Израиль.',
       en:'Type a place name or a family member\'s name, and the map shows only their places. Pin colors mark the branches: Friedland, Kliot, Lando & Schechter, war & evacuation, Israel.' },
     regions: {
-      he:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל. לחיצה מקרבת ישר לאותו חלק של המסע.',
-      ru:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль. Нажатие приближает прямо к этой части пути.',
-      en:'Each bubble is a chapter of geography: Belarus & Lithuania, Russia, the Urals & Asia, Ukraine, Israel. Tap one to zoom straight into that part of the journey.' },
+      he:'כל בועה היא פרק גאוגרפי: בלארוס וליטא, רוסיה, אוראל ואסיה, אוקראינה, ישראל, ארצות הברית. לחיצה מקרבת ישר לאותו חלק של המסע.',
+      ru:'Каждый кружок — глава географии: Беларусь и Литва, Россия, Урал и Азия, Украина, Израиль, США. Нажатие приближает прямо к этой части пути.',
+      en:'Each bubble is a chapter of geography: Belarus & Lithuania, Russia, the Urals & Asia, Ukraine, Israel, the United States. Tap one to zoom straight into that part of the journey.' },
   },
 
   // ── The family tree ────────────────────────────────────────────────────────
