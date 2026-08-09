@@ -254,6 +254,16 @@ function _populateCard(p){
   if(p.website) contacts += `<a class="pc-contact-pill" href="${p.website}" target="_blank">🌐 Website</a>`;
   document.getElementById('pc-contacts').innerHTML = contacts;
 
+  var awardsEl = document.getElementById('pc-awards');
+  if (awardsEl) {
+    if (p.awards) {
+      awardsEl.textContent = '🏆 ' + p.awards;
+      awardsEl.style.display = '';
+    } else {
+      awardsEl.style.display = 'none';
+    }
+  }
+
   _updateFavBtn();
 
   const body = document.getElementById('pc-body');
@@ -349,6 +359,44 @@ document.addEventListener('keydown', e => {
   }, {passive:true});
 })();
 
+
+// ── Swipe left/right anywhere on card to navigate (mobile only) ────
+(function(){
+  var card = document.getElementById('place-card');
+  if (!card) return;
+  var touchStartX = 0, touchStartY = 0;
+  card.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  card.addEventListener('touchend', function(e) {
+    if (window.innerWidth >= 768) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) { cardNext(); } else { cardPrev(); }
+    }
+  }, { passive: true });
+})();
+
+// ── Swipe sheet handle down to close list (mobile only) ───────
+(function(){
+  var handle = document.querySelector('.sheet-handle-area');
+  if (!handle) return;
+  var startY = 0, startX = 0;
+  handle.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+  handle.addEventListener('touchend', function(e) {
+    if (window.innerWidth >= 768) return;
+    var dy = e.changedTouches[0].clientY - startY;
+    var dx = e.changedTouches[0].clientX - startX;
+    if (dy > 60 && Math.abs(dy) > Math.abs(dx)) {
+      if (typeof closeSheet === 'function') closeSheet();
+    }
+  }, { passive: true });
+})();
 // ── Draggable card on desktop ─────────────────────────────────
 (function initCardDrag(){
   const card   = document.getElementById('place-card');

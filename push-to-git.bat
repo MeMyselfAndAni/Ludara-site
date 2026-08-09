@@ -13,7 +13,16 @@ echo   index.html
 echo   contact.html
 echo   product.html
 echo   about.html
+echo   hotels.html
+echo   museums.html
+echo   realestate.html
+echo   universities.html
+echo   familystorymap\index.html
 echo   aperfectday\index.html
+echo   aperfectstorymap\index.html
+echo   aperfectstorymap\screen.html
+echo   sitemap.xml
+echo   robots.txt
 echo	assets\
 echo.
 echo Nothing else in the repo will be touched.
@@ -35,7 +44,7 @@ if not exist ".git" (
 
 rem --- Verify each file exists before staging ---
 set "MISSING="
-for %%F in (index.html contact.html product.html about.html aperfectday\index.html  assets) do (
+for %%F in (index.html contact.html product.html about.html hotels.html museums.html realestate.html universities.html familystorymap\index.html aperfectday\index.html aperfectstorymap\index.html aperfectstorymap\screen.html sitemap.xml robots.txt assets) do (
   if not exist "%%F" set "MISSING=!MISSING! %%F"
 )
 if not "!MISSING!"=="" (
@@ -44,8 +53,10 @@ if not "!MISSING!"=="" (
 )
 
 rem --- Stage ONLY the listed files ---
-for %%F in (index.html contact.html product.html about.html aperfectday\index.html assets) do (
-  if exist "%%F" git add -- "%%F"
+for %%F in (index.html contact.html product.html about.html hotels.html museums.html realestate.html universities.html familystorymap\index.html aperfectday\index.html aperfectstorymap\index.html aperfectstorymap\screen.html sitemap.xml robots.txt assets) do (
+  rem  -A stages additions, modifications AND deletions for this exact path,
+  rem  so retiring a page (e.g. universities.html) is committed rather than skipped.
+  git add -A -- "%%F" >nul 2>&1
 )
 
 echo.

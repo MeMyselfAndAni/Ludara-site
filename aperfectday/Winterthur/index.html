@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>A Perfect Day at Winterthur — Museum, Garden &amp; Library</title>
@@ -481,6 +482,7 @@ var _TRIPS = {
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
 function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
+  if (typeof apdTrack === 'function') apdTrack('trip_loaded', { trip: key, trip_name: trip.name || key });
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
   if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);

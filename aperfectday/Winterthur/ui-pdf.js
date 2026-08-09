@@ -52,6 +52,7 @@ async function generatePDF(){
     alert('Save some places first using the ♡ button, then generate your guide.');
     return;
   }
+  if(typeof apdTrack === 'function') apdTrack('download_pdf');
 
   // Open the print window NOW — synchronously within the tap — so mobile browsers
   // don't block it as a pop-up. It is filled in once the data is ready.

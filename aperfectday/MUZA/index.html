@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>A Perfect Day at the Eretz Israel Museum — MUZA</title>
+<link rel="canonical" href="https://ludara.ai/aperfectday/muza/">
+<meta name="description" content="A visitor guide to the Eretz Israel Museum in Tel Aviv: 29 pavilions, exhibitions and gardens on one interactive map, in Hebrew, English, Russian and Arabic.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Open Graph / WhatsApp rich preview -->
 <meta property="og:type" content="website">
@@ -459,6 +461,7 @@ var _TRIPS = {
 function _favsKey() { return 'favs_' + window.location.pathname.replace(/\//g, '_'); }
 function loadTrip(key) {
   var trip = _TRIPS[key]; if (!trip) return;
+  if (typeof apdTrack === 'function') apdTrack('trip_loaded', { trip: key, trip_name: trip.name || key });
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
   if (typeof _setSavedOrder === "function") _setSavedOrder(trip.ids);

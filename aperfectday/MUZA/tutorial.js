@@ -417,7 +417,7 @@
   function tapPinDemo() {
     /* Find a visible marker near screen centre to "tap" */
     var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
-    var markers = document.querySelectorAll('.leaflet-marker-icon');
+    var markers = document.querySelectorAll('.mgl-marker, .leaflet-marker-icon');
     markers.forEach(function (m) {
       var r = m.getBoundingClientRect();
       if (r.width === 0) return;
@@ -728,7 +728,11 @@
       if (window.innerWidth >= 768) {
         if (step.targetsDelay) {
           setSpot(null);
-          setTimeout(function() { setSpotDual(step.dualTargets); }, step.targetsDelay);
+          setTimeout(function() {
+            setSpotDual(step.dualTargets);
+            setTimeout(function(){ setSpotDual(step.dualTargets); }, 350);
+            setTimeout(function(){ setSpotDual(step.dualTargets); }, 750);
+          }, step.targetsDelay);
         } else {
           setSpotDual(step.dualTargets);
         }

@@ -40,6 +40,7 @@ function openDetail(id){
   if(CARD_IDX < 0) CARD_IDX = 0;
 
   const p = PLACES.find(x => x.id === id);
+  if(typeof apdTrack === 'function' && p) apdTrack('place_open', { place_id: p.id, place_name: p.name });
   if(!p) return;
 
   _activateMarker(p);
