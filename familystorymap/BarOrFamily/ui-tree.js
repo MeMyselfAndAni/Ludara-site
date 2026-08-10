@@ -473,7 +473,7 @@
     if(typeof closePlaceCard === 'function') closePlaceCard(true);
     if(!window.map || !map.getSource){ return; }
     if(pl.length === 1){
-      if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
+      if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl, per.id);
       if(typeof openDetail === 'function') openDetail(pl[0].id);
       return;
     }
@@ -484,7 +484,7 @@
     // clearTripRoute on every render outside bookmarks mode, so a render after
     // the path was drawn wipes the path off the map. Narrow the list first, draw
     // second, and the last thing to touch the route layer is the drawing.
-    if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl);
+    if(typeof window.setPersonFilter === 'function') window.setPersonFilter(label, pl, per.id);
     try {
       tripPolyline = true;
       map.getSource('trip-route').setData({
@@ -577,5 +577,27 @@
     // person chips whenever a place card opens / changes
     const titleEl = document.getElementById('pc-title');
     if(titleEl) new MutationObserver(renderChips).observe(titleEl, { childList:true, characterData:true, subtree:true });
+
+    // A shared person link (?person=nina) opens with that journey drawn.
+    // It waits for the map AND for the default Story Path to finish drawing
+    // (the auto-draw would otherwise paint over the person's path), then gives
+    // up waiting on the story path after ~6s and draws anyway.
+    var _sharedPerson = null;
+    try { _sharedPerson = new URLSearchParams(window.location.search).get('person'); } catch(e){}
+    if(_sharedPerson && byId(_sharedPerson)){
+      var _spTries = 30;
+      (function _openShared(){
+        // `map` is a top-level `let` in index.html: before initMap assigns it,
+        // window.map is the #map DIV and the binding itself is undefined, so
+        // every read stays inside the try.
+        var mapReady = (function(){
+          try { return !!(map && map.getSource && map.getSource('trip-route')); }
+          catch(e){ return false; }
+        })() && typeof window._addNumberedMarkers === 'function';
+        var pathSettled = (typeof _storyPathOn === 'undefined') || _storyPathOn || _spTries < 15;
+        if(mapReady && pathSettled){ window._treePersonClick(_sharedPerson); return; }
+        if(--_spTries > 0) setTimeout(_openShared, 400);
+      })();
+    }
   });
 })();

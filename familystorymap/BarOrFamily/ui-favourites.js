@@ -429,6 +429,22 @@ function openTripInMaps(){
 
 function shareItinerary() {
   if (typeof apdTrack === 'function') apdTrack('share_itinerary');
+  // A person's journey shares as that person's link (?person=nina), which
+  // reopens the map with their path drawn — not as bookmarks.
+  var _pid = (typeof getPersonFilterId === 'function') ? getPersonFilterId() : null;
+  if (_pid) {
+    var purl = window.location.origin + window.location.pathname + '?person=' + encodeURIComponent(_pid);
+    var _pmsg = _T('🔗 הקישור הועתק — נפתח עם המסע של האדם הזה על המפה.',
+                   '🔗 Ссылка скопирована — откроется с путём этого человека на карте.',
+                   "🔗 Link copied — opens with this person's journey on the map.");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(purl).then(function() { _toast(_pmsg, 3500); })
+        .catch(function() { _fallbackCopy(purl); });
+    } else {
+      _fallbackCopy(purl);
+    }
+    return;
+  }
   if (!favourites || favourites.length === 0) {
     _toast(_T('שמרו קודם כמה מקומות 🔖', 'Сначала сохраните несколько мест 🔖', 'Bookmark some places first 🔖'));
     return;

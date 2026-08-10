@@ -60,7 +60,10 @@ function _pdfTreeIcon(){
 }
 
 async function generatePDF(overridePlaces, customSubtitle){
-  window._pdfCoverSubtitle = customSubtitle || null;
+  // A person picked in the family tree narrows the booklet to their journey,
+  // and their name goes on the cover.
+  var _personLabel = (typeof getPersonFilterLabel === 'function') ? getPersonFilterLabel() : null;
+  window._pdfCoverSubtitle = customSubtitle || (_personLabel ? '👤 ' + _personLabel : null);
   var _ruP = (typeof LANG !== 'undefined' && LANG === 'ru');
   var _enP = (typeof LANG !== 'undefined' && LANG === 'en');
   // Family maps have no bookmarking: the booklet is the whole Place List.
@@ -68,6 +71,10 @@ async function generatePDF(overridePlaces, customSubtitle){
   // them, then every place. It must never refuse to produce a booklet.
   const places = (function(){
     if (overridePlaces && overridePlaces.length) return overridePlaces;
+    if (typeof getPersonFilterPlaces === 'function') {
+      const pp = getPersonFilterPlaces();
+      if (pp && pp.length) return pp;
+    }
     if (typeof getSortedFavPlaces === 'function') {
       const f = getSortedFavPlaces();
       if (f && f.length) return f;
