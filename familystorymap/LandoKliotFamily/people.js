@@ -70,7 +70,7 @@ const PEOPLE = [
   { id:'ida',       he:'אידה', ru:'Ида', en:'Ida', years:'נרצחה 1941', role:'נרצחה בגטו בוברויסק · погибла в гетто · murdered in the Bobruisk ghetto', branch:'friedland', col:17.8, row:1, places:[2] },
   { id:'polya',     he:'פוליה', ru:'Поля', en:'Polya', years:'', role:'אחות סבא · сестра деда · grandfather\'s sister', branch:'friedland', col:18.85, row:1, places:[16] },
   { id:'avram',     he:'אברם', ru:'Абрам', en:'Avram', years:'', role:'אח של סבא · брат деда · grandfather\'s brother', branch:'friedland', col:19.9, row:1, places:[16] },
-  { id:'nina',      he:'נינה (נחמה) פרידלנד', ru:'Нина (Нехама) Фридланд', en:'Nina (Nechama) Friedland', years:'~1924', role:'אמא · мама · mother', branch:'friedland', col:11.9, row:2, places:[2,12,14,10,20] },
+  { id:'nina',      he:'נינה (נחמה) פרידלנד', ru:'Нина (Нехама) Фридланд', en:'Nina (Nechama) Friedland', years:'~1924', role:'אמא · мама · mother', branch:'friedland', col:11.9, row:2, places:[2,12,29,10,20] },
   { id:'bella',     he:'בלה', ru:'Белла', en:'Bella', years:'', role:'האחות הבכורה · старшая сестра · the eldest sister', branch:'friedland', col:13.2, row:2, places:[2,12,10] },
   { id:'kagan_f',   he:'מויסיי קגן', ru:'Моисей Каган', en:'Moisei Kagan', years:'', role:'אביה של אליסה · отец Алисы · Alisa\'s father', branch:'friedland', col:14.3, row:2, places:[] },
   { id:'polina_f',  he:'פולינה פרידלנד', ru:'Полина Фридланд', en:'Polina Friedland', years:'נ׳ ~1928', role:'מורה לשפות · преподаватель языков · language teacher', branch:'friedland', col:16.8, row:2, places:[2,12,10] },

@@ -110,12 +110,13 @@ let _searchQuery = '';
      the bookmarks pill) replaces it rather than combining with it, and the
      replacement is handled centrally in renderList so a per-family
      index.html never has to know this feature exists                        */
-var PERSON_FILTER = null;   // { label:'name', ids:[placeId, …] }
+var PERSON_FILTER = null;   // { label:'name', ids:[placeId, …], personId:'nina' }
+var _pppDragPos = null;     // where the reader dragged the pill, kept until the filter clears
 
 function _renderPersonPill(){
   var old = document.getElementById('person-path-pill');
   if(old) old.remove();
-  if(!PERSON_FILTER) return;
+  if(!PERSON_FILTER){ _pppDragPos = null; return; }
   var el = document.createElement('div');
   el.id = 'person-path-pill';
   el.className = 'person-path-pill';
@@ -137,14 +138,51 @@ function _renderPersonPill(){
   el.appendChild(name);
   el.appendChild(x);
   document.body.appendChild(el);
+
+  /* The pill sits over the map and can hide the very path it names. It drags
+     anywhere with mouse or finger; the ✕ stays an ordinary button. The dragged
+     position survives re-renders (language switch) until the filter clears. */
+  el.style.touchAction = 'none';
+  el.style.cursor = 'grab';
+  if(_pppDragPos){
+    el.style.left = _pppDragPos.left + 'px';
+    el.style.top  = _pppDragPos.top + 'px';
+    el.style.transform = 'none';
+  }
+  el.addEventListener('pointerdown', function(ev){
+    if(ev.target === x) return;                    // the ✕ is a click, never a drag
+    var r = el.getBoundingClientRect();
+    var offX = ev.clientX - r.left, offY = ev.clientY - r.top;
+    try { el.setPointerCapture(ev.pointerId); } catch(e){}
+    el.style.cursor = 'grabbing';
+    function mv(e2){
+      var L = Math.max(4, Math.min(window.innerWidth  - r.width  - 4, e2.clientX - offX));
+      var T = Math.max(4, Math.min(window.innerHeight - r.height - 4, e2.clientY - offY));
+      el.style.left = L + 'px';
+      el.style.top  = T + 'px';
+      el.style.transform = 'none';
+      _pppDragPos = { left: L, top: T };
+    }
+    function up(){
+      el.style.cursor = 'grab';
+      el.removeEventListener('pointermove', mv);
+      el.removeEventListener('pointerup', up);
+      el.removeEventListener('pointercancel', up);
+    }
+    el.addEventListener('pointermove', mv);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    ev.preventDefault();
+  });
 }
 
 /* places must already be in the order the path is drawn, so the numbers in the
    list are the numbers on the map. */
-window.setPersonFilter = function(label, places){
+window.setPersonFilter = function(label, places, personId){
   PERSON_FILTER = {
     label: label,
     ids:   places.map(function(p){ return p.id; }),
+    personId: personId || null,
     km:    (typeof journeyKm === 'function') ? journeyKm(places) : 0
   };
   _renderPersonPill();
@@ -160,6 +198,17 @@ window.clearPersonFilter = function(quiet){
 };
 
 window.isPersonFiltered = function(){ return !!PERSON_FILTER; };
+
+/* The person's stops, in journey order, for whoever exports them: the PDF
+   booklet and the Share link both narrow to the selected person through these. */
+window.getPersonFilterPlaces = function(){
+  if(!PERSON_FILTER) return null;
+  return PERSON_FILTER.ids
+    .map(function(id){ return PLACES.find(function(p){ return p.id === id; }); })
+    .filter(Boolean);
+};
+window.getPersonFilterLabel = function(){ return PERSON_FILTER ? PERSON_FILTER.label : null; };
+window.getPersonFilterId    = function(){ return PERSON_FILTER ? PERSON_FILTER.personId : null; };
 
 /* A place matches the query if any of its own fields match — or if a family
    member linked to it matches by name, in either Hebrew or Russian, whatever

@@ -20,7 +20,8 @@
 //   11 Pokrovo .......... Mother's-side family group (Zalman, Malka…)
 //   12 Nizhny Tagil ..... Alisa aged 2, 1943
 //   13 Kyzylorda ........ Michael & Yakov Lando, 1944 (sent to the front)
-//   14 Stalingrad ....... Nina Friedland in uniform, 1944
+//   29 Dnieper crossing . Nina Friedland in uniform, 1944
+//   14 Stalingrad ....... Wikimedia Commons (Barmaley fountain, 1942)
 //   16 Kyiv ............. The reunion with Sam & Dora, 1964
 //   17 Yaroslavl ........ Alisa & Mark Rozenblat's wedding, 1962
 //   20 Rehovot .......... Nina Kliot (Friedland), Rehovot 1994
@@ -46,13 +47,17 @@ const PHOTO_CREDITS = {
   11: { author: FAMILY_ARCHIVE },
   12: { author: FAMILY_ARCHIVE },
   13: { author: FAMILY_ARCHIVE },
-  14: { author: FAMILY_ARCHIVE },
   16: { author: FAMILY_ARCHIVE },
   17: { author: FAMILY_ARCHIVE },
   20: { author: FAMILY_ARCHIVE },
+  29: { author: FAMILY_ARCHIVE },   // Dnieper crossing — Nina Friedland in uniform, 1944 (was place-14)
   21: { author: FAMILY_ARCHIVE },
 
   // ── Wikimedia Commons, where no family photograph survived ────────────────
+  14: { author: 'סרגיי סטרוניקוב · Сергей Струнников · Sergey Strunnikov',
+        prefix: 'מזרקת "מחול הילדים", סטלינגרד 1942 · Фонтан «Детский хоровод», Сталинград, 1942 · The Barmaley fountain, Stalingrad, 1942',
+        license: 'נחלת הכלל · общественное достояние · Public domain',
+        url: 'https://commons.wikimedia.org/wiki/File:%D0%A4%D0%BE%D0%BD%D1%82%D0%B0%D0%BD_%C2%AB%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D1%85%D0%BE%D1%80%D0%BE%D0%B2%D0%BE%D0%B4%C2%BB.jpg' },
   9:  { author: 'צלם לא ידוע · неизвестный фотограф · Unknown photographer',
         prefix: 'חרקוב, שנות ה־30 · Харьков, 1930-е · Kharkiv, 1930s',
         license: 'נחלת הכלל · общественное достояние · Public domain',
