@@ -476,8 +476,19 @@
       <div class="header-sub">История нашей семьи<span class="header-sub-by"> · by Ludara</span></div>
     </div>
   </div>
+  <!-- Top-right invitation. This slot used to repeat "Family Story Map by
+       Ludara.AI", which is already the logo on the left. Anyone reading this
+       map is the warmest possible reader for one of their own, and asking
+       them to scroll to the foot of the places list to discover that was
+       throwing them away. Trilingual: lang.js collapses the ' · ' line to the
+       language in use, via .header-cta-line in its _UI_SELECTOR. -->
   <div class="header-ludara" style="pointer-events:auto;">
-    <a class="header-ludara-brand" data-tap="1" style="pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:1px;padding:8px 8px 8px 16px;border-radius:8px;text-decoration:none;cursor:pointer;" href="https://ludara.ai/familystorymap/" target="_blank"><span class="ludara-line1" style="font-size:0.74rem;color:rgba(255,255,255,0.95);font-weight:700;">Family Story Map</span> <span class="ludara-line2" style="font-size:0.6rem;color:rgba(255,255,255,0.72);">by Ludara.AI</span></a>
+    <a class="header-cta" href="https://ludara.ai/familystorymap/?utm_source=familymap&amp;utm_medium=map&amp;utm_campaign=landokliotfamily&amp;utm_content=header#how"
+       target="_blank" rel="noopener"
+       title="מפה כזו למשפחה שלכם · Такую же карту для вашей семьи · Get a map like this for your family">
+      <span class="header-cta-line">מפה כזו למשפחה שלכם · Такую же для вашей семьи · Get one for your family</span>
+      <span class="header-cta-arrow" aria-hidden="true">›</span>
+    </a>
   </div>
 </header>
 

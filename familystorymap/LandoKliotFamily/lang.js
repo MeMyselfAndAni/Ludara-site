@@ -60,7 +60,8 @@ function pickBlock(str){
 var _L10N = null;
 var _UI_SELECTOR =
   '#pill-storypath, #tree-fab-label, .nbhd-label, #nbhd-title, .pc-tip-label, .loading-text,' +
-  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn';
+  '#tree-overlay .tree-title, #tree-overlay .tree-hint, #tree-overlay .tree-btn, #guide-btn,' +
+  '.header-cta-line';
 
 function _snapshot(){
   if(_L10N) return;

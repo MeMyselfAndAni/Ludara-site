@@ -125,9 +125,13 @@ var FAMILY = {
   //  all, which is how a customer family's map stays free of anything that
   //  sells to them while they are reading about their own grandmother.
   //  Only add it to a customer's map if that family has said yes.
-  //  The link goes straight to the enquiry form, not to the top of the page.
+  //  The link lands on #how, not on the enquiry form. Someone arriving from a
+  //  family map has just spent minutes inside the finished thing; what they
+  //  do not yet know is what it would take and what it costs. #how answers
+  //  both, with pricing directly under it and the form after that, so they
+  //  reach the form having decided rather than being asked cold.
   promo: {
-    url: 'https://ludara.ai/familystorymap/?utm_source=familymap&utm_medium=map&utm_campaign=landokliotfamily#get-started',
+    url: 'https://ludara.ai/familystorymap/?utm_source=familymap&utm_medium=map&utm_campaign=landokliotfamily#how',
     he: { title: 'גם למשפחה שלכם יש סיפור כזה.',
           body:  'ספר זיכרונות, או תיקייה של מסמכים ותצלומים, ואנחנו בונים מפה כמו זו.',
           cta:   'ספרו לנו על המשפחה שלכם' },
