@@ -1854,7 +1854,11 @@ html[lang="he"] .header-ludara-text {
 }
 .header-cta-arrow { font-size: 0.85rem; line-height: 1; }
 @media (max-width: 767px) {
-  .header-cta { padding: 5px 9px; font-size: 0.57rem; gap: 4px; border-width: 1.2px; }
+  /* The label now carries the brand name as well, which is too long for one
+     line on a phone. Let it wrap to two tight lines rather than shrink the
+     type below what anyone can read. */
+  .header-cta { padding: 5px 9px; font-size: 0.55rem; gap: 4px; border-width: 1.2px;
+                white-space: normal; max-width: 132px; line-height: 1.25; text-align: right; }
   .header-cta-arrow { font-size: 0.68rem; }
 }
 @media (max-width: 380px) {
