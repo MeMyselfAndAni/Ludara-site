@@ -469,6 +469,14 @@ function renderList(){
       const searchOk = !_searchQuery || _placeMatchesQuery(p, _searchQuery);
       return catOk && nbhdOk && openOk && searchOk;
     });
+    /* The list reads in stop order, 1..N, and not in the order PLACES happens
+       to be written in. STOP_NO numbers the route stops first, from
+       STORY_PATH_IDS, then everything off the route, so sorting by it makes the
+       numbers run straight down the panel with no jumps. Before this the first
+       nineteen came out in order and the last ten arrived scattered among them.
+       Person view is left alone: it numbers 1..N along that person's own path.
+       (11 Aug 2026.) */
+    filtered.sort(function(a, b){ return (STOP_NO[a.id] || 0) - (STOP_NO[b.id] || 0); });
   }
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
