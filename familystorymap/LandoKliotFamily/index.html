@@ -693,6 +693,15 @@
 <script src="family.js"></script><!-- MUST be first: map.js, ui-tree.js, lang.js and sw.js all read FAMILY -->
 <script src="icons.js"></script>   <!-- optional pin artwork; the map falls back to emoji without it -->
 <script src="data.js"></script>
+<script>
+/* ── THE FAMILY'S PATH: the nineteen stops of the journey, in order ──
+   Declared here, above ui-filter.js, because the stop numbers shown in the
+   places list and on each card are built from this list at load time.
+   Places NOT listed here still appear on the map and in the list; they are
+   side markers rather than stops on the route, and they are numbered after
+   the nineteen, in the order they appear in data.js. */
+var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 29, 16, 20, 27, 28, 25];
+</script>
 <script src="people.js"></script>
 <script src="lang.js"></script>
 <script src="credits.js"></script>
@@ -774,7 +783,8 @@
    Ramat HaSharon (2011).
    OFF the path, as side-markers: Kharkiv (9), Pskov (15), Yaroslavl (17),
    Leningrad (18), Chita (19), Jerusalem (21). */
-var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 29, 16, 20, 27, 28, 25];
+/* the list itself now lives above, next to data.js, because ui-filter.js
+   needs it at load time to number the stops. Edit it there. */
 var _storyPathOn = false;
 
 /* Top-bar search: filters map pins and the places list by place name,

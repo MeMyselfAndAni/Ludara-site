@@ -568,8 +568,15 @@ function renderList(){
 // which is the order the list and the map path present it. Computed once at load, so
 // filtering by branch or searching never renumbers the stops out from under the reader.
 const STOP_NO = (function(){
-  var m = {};
-  if(typeof PLACES !== 'undefined') PLACES.forEach(function(p, i){ m[p.id] = i + 1; });
+  // Stops on the drawn route are numbered exactly as the map draws them, from
+  // STORY_PATH_IDS, so a pin marked 14 is 14 in the list and on its card too.
+  // Everything else (side branches, and where the family lives now) keeps a
+  // number and its place in the list, continuing after the last route stop.
+  var m = {}, n = 0;
+  if(typeof STORY_PATH_IDS !== 'undefined' && STORY_PATH_IDS)
+    STORY_PATH_IDS.forEach(function(id){ if(!(id in m)) m[id] = ++n; });
+  if(typeof PLACES !== 'undefined')
+    PLACES.forEach(function(p){ if(!(p.id in m)) m[p.id] = ++n; });
   return m;
 })();
 
