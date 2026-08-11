@@ -543,6 +543,22 @@ function renderList(){
       <button class="saved-action-btn" id="list-share-btn" onclick="shareItinerary()" style="flex:1">🔗 ${_T('שיתוף', 'Поделиться', 'Share')}</button>
     </div>`;
 
+  /* "One for your family" card at the foot of the list. Driven entirely by
+     FAMILY.promo in each map's own family.js, so a map without that block
+     shows nothing — a customer family should not be sold to while reading
+     about their own grandmother. Hidden while a search, a branch filter or a
+     person is active: it belongs at the end of the whole journey, not
+     underneath three search results. (11 Aug 2026.) */
+  const _pc = (typeof FAMILY !== 'undefined' && FAMILY.promo) ? FAMILY.promo : null;
+  const _pt = (_pc && !PERSON_FILTER && !_searchQuery && AF === 'all')
+    ? _T(_pc.he, _pc.ru, _pc.en) : null;
+  const _promo = _pt ? `
+    <a class="list-promo" href="${_pc.url}" target="_blank" rel="noopener" dir="auto">
+      <div class="list-promo-title">${_pt.title}</div>
+      <div class="list-promo-body">${_pt.body}</div>
+      <span class="list-promo-cta">${_pt.cta}<span aria-hidden="true"> ›</span></span>
+    </a>` : '';
+
   el.innerHTML = _legend + _actionRow + filtered.map((p,i)=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
@@ -555,7 +571,7 @@ function renderList(){
         <div class="place-addr">${p.address}</div>
       </div>
       <span class="chevron">›</span>
-    </div>`).join('');
+    </div>`).join('') + _promo;
 
   const imgBase = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
   filtered.forEach(p=>{

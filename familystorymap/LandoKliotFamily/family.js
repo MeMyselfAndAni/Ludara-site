@@ -119,6 +119,25 @@ var FAMILY = {
         header:'לנדו ושכטר, צד מישה · Ландо и Шехтеры · Lando & Schechter' },
     ],
   },
+
+  // ── "One for your family" card, at the foot of the places list ─────────────
+  //  OPTIONAL, and deliberately so. A map with no promo block shows no card at
+  //  all, which is how a customer family's map stays free of anything that
+  //  sells to them while they are reading about their own grandmother.
+  //  Only add it to a customer's map if that family has said yes.
+  //  The link goes straight to the enquiry form, not to the top of the page.
+  promo: {
+    url: 'https://ludara.ai/familystorymap/?utm_source=familymap&utm_medium=map&utm_campaign=landokliotfamily#get-started',
+    he: { title: 'גם למשפחה שלכם יש סיפור כזה.',
+          body:  'ספר זיכרונות, או תיקייה של מסמכים ותצלומים, ואנחנו בונים מפה כמו זו.',
+          cta:   'ספרו לנו על המשפחה שלכם' },
+    ru: { title: 'У вашей семьи есть такая же история.',
+          body:  'Книга воспоминаний или папка документов и фотографий — и мы построим такую же карту.',
+          cta:   'Расскажите нам о вашей семье' },
+    en: { title: 'Your family has a story like this one.',
+          body:  'A memoir, or a folder of documents and photographs, and we build a map like this.',
+          cta:   'Tell us about your family' },
+  },
 };
 
 if (typeof self !== 'undefined') self.FAMILY = FAMILY;   // so sw.js can importScripts() it

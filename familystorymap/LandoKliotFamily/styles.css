@@ -1772,3 +1772,48 @@ html[lang="he"] .header-ludara-text {
   letter-spacing: 0;
   text-transform: none;
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   "ONE FOR YOUR FAMILY" CARD  (.list-promo)
+   Foot of the places list. Present only on maps whose family.js
+   carries a promo block. Reads as a quiet note, not a banner:
+   it sits after the last place, so by the time anyone sees it
+   they have already read the whole journey.
+   ════════════════════════════════════════════════════════════ */
+.list-promo {
+  display: block;
+  margin: 14px 10px 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface2);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.list-promo:hover, .list-promo:active {
+  background: var(--surface3);
+  border-color: var(--gold);
+}
+.list-promo-title {
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.35;
+}
+.list-promo-body {
+  margin-top: 5px;
+  font-size: 0.79rem;
+  line-height: 1.5;
+  color: var(--text2);
+}
+.list-promo-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent2);
+  letter-spacing: 0.01em;
+}
+.list-promo:hover .list-promo-cta { color: var(--gold); }
