@@ -48,6 +48,7 @@
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     html { scroll-behavior:smooth; }
+    section[id] { scroll-margin-top: 14px; }
     body { font-family:'Inter',system-ui,sans-serif; background:var(--dark); color:var(--dark-text); line-height:1.6; }
 
     /* NAV */
@@ -317,7 +318,7 @@
 </nav>
 
 <!-- HERO (dark) -->
-<section class="dark-section" data-animate>
+<section class="dark-section" data-animate id="top">
   <div class="inner">
     <div class="hero-wrap">
       <p class="kicker-dark">A Family Story Map</p>
@@ -345,7 +346,7 @@
 </section>
 
 <!-- STATS (warm) -->
-<section class="warm-section" data-animate>
+<section class="warm-section" data-animate id="voices">
   <div class="inner">
     <div class="stat-bar">
       <div class="stat-item"><div class="stat-num">28</div><div class="stat-label">places mapped</div></div>
@@ -410,7 +411,7 @@
 <!-- WHAT THIS IS (warm) -->
 <!-- One block, not two. The old section said what we are, then said it again
      in a card underneath. Both halves are here in four sentences. -->
-<section class="warm-section" data-animate>
+<section class="warm-section" data-animate id="what">
   <div class="inner">
     <p class="kicker-warm">What this actually is</p>
     <h2 class="warm">We are storytellers, not a genealogy service.</h2>
@@ -420,7 +421,7 @@
 </section>
 
 <!-- WHO IT'S FOR (dark) -->
-<section class="dark-section" data-animate>
+<section class="dark-section" data-animate id="who">
   <div class="inner">
     <p class="kicker-dark">Who it&rsquo;s for</p>
     <h2 class="dark">For families holding a story that deserves better than a folder.</h2>
@@ -510,7 +511,7 @@
 </section>
 
 <!-- PRIVACY (dark) -->
-<section class="dark-section" data-animate>
+<section class="dark-section" data-animate id="privacy">
   <div class="inner">
     <div class="privacy-note">
       <h3>Private by default</h3>
@@ -613,6 +614,30 @@
   }
   f.addEventListener('click', play);
   f.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+})();
+</script>
+
+<script>
+/* ── Deep links land on the right section ────────────────────────────────────
+   The family maps link straight here with #get-started. The browser jumps to
+   the anchor while the images and the video poster below the fold are still
+   settling, so the target moves after the jump and the reader arrives at "How
+   it works" instead of the form. Re-aim once the page has loaded and once more
+   a moment later, with smooth scrolling switched off so it is a jump rather
+   than a ride down through every section. (11 Aug 2026.) */
+(function(){
+  var id = (location.hash || '').slice(1);
+  if(!id) return;
+  function aim(){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var root = document.documentElement, prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    el.scrollIntoView(true);
+    root.style.scrollBehavior = prev;
+  }
+  if(document.readyState === 'complete') { aim(); setTimeout(aim, 400); }
+  else window.addEventListener('load', function(){ aim(); setTimeout(aim, 400); });
 })();
 </script>
 </body>
