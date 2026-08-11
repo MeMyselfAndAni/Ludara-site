@@ -766,6 +766,29 @@ window.addEventListener('load', function(){
 <script src="family.js"></script><!-- MUST be first: map.js, ui-tree.js, lang.js and sw.js all read FAMILY -->
 <script src="icons.js"></script>
 <script src="data.js"></script>
+<script>
+/* ── THE FAMILY'S PATH: the stops of the journey, in order ──
+   Declared here, above ui-filter.js, because the stop numbers shown in the
+   places list and on each card are built from this list at load time.
+   Places NOT listed here still appear on the map and in the list; they are
+   side markers rather than stops on the route, and they are numbered after
+   the route stops, in the order they appear in data.js.
+
+   The family's life journey, in story order: Wolbrom through Ukraine, the Urals,
+   Uzbekistan, Germany and Marseille to Israel, then Chaya's grave and the three
+   years in Ann Arbor. The 1998 return journeys to the camps (22 to 32) are a
+   separate chapter and stay off this line, which would otherwise double back
+   across Europe after it had reached America.
+
+   This list used to be [1,2,3,4,5,6,7,8,10,11,12,13,14,16,20], which is the id
+   list of the map this folder was copied from, inherited and never adapted. It
+   happened to land on real places here, so nothing looked broken, but Tashkent,
+   Marseille, Netanya, Tel Aviv, Kiryat Motzkin and Ann Arbor were all missing
+   from a line whose own toast says it runs to Kiryat Bialik. check-map now fails
+   if this list matches a sibling map's. */
+
+var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 33];
+</script>
 <script src="people.js"></script>
 <script src="lang.js"></script>
 <script src="credits.js"></script>
@@ -839,26 +862,11 @@ window.addEventListener('load', function(){
 <!-- Story Path — the signature feature, lives as the first pill in the filter bar.
      One tap draws the novel's journey in narrative order: numbered stops + route line. -->
 <script>
-/* ── THE FAMILY'S PATH ──
-   Chronological order of the family journey:
-   Rechytsa → Bobruisk → Drissa → Svencionys → Vitebsk → Tula → Moscow →
-   Odessa → Tambov → Pokrovo → Nizhny Tagil → Kyzylorda → Stalingrad →
-   Kyiv (1964) → Rehovot (1991).
-   OFF the path, as side-markers: Kharkiv (9), Pskov (15), Yaroslavl (17),
-   Leningrad (18), Chita (19), Jerusalem (21). */
-/* The family's life journey, in story order: Wolbrom through Ukraine, the Urals,
-   Uzbekistan, Germany and Marseille to Israel, then Chaya's grave and the three
-   years in Ann Arbor. The 1998 return journeys to the camps (22 to 32) are a
-   separate chapter and stay off this line, which would otherwise double back
-   across Europe after it had reached America.
-
-   This list used to be [1,2,3,4,5,6,7,8,10,11,12,13,14,16,20], which is the id
-   list of the map this folder was copied from, inherited and never adapted. It
-   happened to land on real places here, so nothing looked broken, but Tashkent,
-   Marseille, Netanya, Tel Aviv, Kiryat Motzkin and Ann Arbor were all missing
-   from a line whose own toast says it runs to Kiryat Bialik. check-map now fails
-   if this list matches a sibling map's. */
-var STORY_PATH_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 33];
+/* STORY_PATH_IDS is declared near the top of the page, immediately after
+   data.js, because ui-card.js and ui-filter.js read it at load time to build
+   the stop numbers. It used to live here and was therefore undefined when
+   they ran, which numbered the list by data.js order instead of route order.
+   Moved 11 Aug 2026. Do not move it back down. */
 var _storyPathOn = false;
 
 /* Top-bar search: filters map pins and the places list by place name,

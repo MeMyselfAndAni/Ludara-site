@@ -469,6 +469,14 @@ function renderList(){
       const searchOk = !_searchQuery || _placeMatchesQuery(p, _searchQuery);
       return catOk && nbhdOk && openOk && searchOk;
     });
+    /* The list reads in stop order, 1..N, and not in the order PLACES happens
+       to be written in. STOP_NO numbers the route stops first, from
+       STORY_PATH_IDS, then everything off the route, so sorting by it makes the
+       numbers run straight down the panel with no jumps. Before this the first
+       nineteen came out in order and the last ten arrived scattered among them.
+       Person view is left alone: it numbers 1..N along that person's own path.
+       (11 Aug 2026.) */
+    filtered.sort(function(a, b){ return (STOP_NO[a.id] || 0) - (STOP_NO[b.id] || 0); });
   }
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
@@ -568,8 +576,15 @@ function renderList(){
 // which is the order the list and the map path present it. Computed once at load, so
 // filtering by branch or searching never renumbers the stops out from under the reader.
 const STOP_NO = (function(){
-  var m = {};
-  if(typeof PLACES !== 'undefined') PLACES.forEach(function(p, i){ m[p.id] = i + 1; });
+  // Stops on the drawn route are numbered exactly as the map draws them, from
+  // STORY_PATH_IDS, so a pin marked 14 is 14 in the list and on its card too.
+  // Everything else (side branches, and where the family lives now) keeps a
+  // number and its place in the list, continuing after the last route stop.
+  var m = {}, n = 0;
+  if(typeof STORY_PATH_IDS !== 'undefined' && STORY_PATH_IDS)
+    STORY_PATH_IDS.forEach(function(id){ if(!(id in m)) m[id] = ++n; });
+  if(typeof PLACES !== 'undefined')
+    PLACES.forEach(function(p){ if(!(p.id in m)) m[p.id] = ++n; });
   return m;
 })();
 
