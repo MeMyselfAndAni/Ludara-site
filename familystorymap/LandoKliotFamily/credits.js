@@ -16,6 +16,8 @@
 //   5  Vitebsk .......... Aunt Sonya in uniform, 1943–44
 //   7  Moscow ........... Mark, Michael & Yakov Lando, ~1955
 //   8  Odessa ........... Roza's family, 1949
+//   30 Roza's town ...... Roza herself, cropped from the 1949 family photo (8)
+//   31 Red Square ....... Wikimedia Commons (Kirov's funeral, 6 Dec 1934)
 //   10 Tambov ........... Nina & Benjamin Kliot
 //   11 Pokrovo .......... Mother's-side family group (Zalman, Malka…)
 //   12 Nizhny Tagil ..... Alisa aged 2, 1943
@@ -42,7 +44,14 @@ const PHOTO_CREDITS = {
   4:  { author: FAMILY_ARCHIVE },
   5:  { author: FAMILY_ARCHIVE },
   7:  { author: FAMILY_ARCHIVE },
-  8:  { author: FAMILY_ARCHIVE },
+  // Odessa, 1949. Anna's written caption names the children as Michael (right),
+  // Vera and Pavel. A later note from her called the young man on the right
+  // Yefim, but Yefim was killed at Stalingrad in 1942, so he cannot be in a
+  // 1949 photograph. Michael, who came home from the front in 1945, is kept.
+  8:  { author: FAMILY_ARCHIVE,
+        prefix: 'יושבים: רוזה ושאול (שולה); עומדים: פאבל, ורה ומיכאל, 1949'
+              + ' · Сидят: Роза и Шауль (Шуля); стоят: Павел, Вера и Михаил, 1949'
+              + ' · Seated: Roza and Shaul (Shula); standing: Pavel, Vera and Michael, 1949' },
   10: { author: FAMILY_ARCHIVE },
   11: { author: FAMILY_ARCHIVE },
   12: { author: FAMILY_ARCHIVE },
@@ -52,8 +61,16 @@ const PHOTO_CREDITS = {
   20: { author: FAMILY_ARCHIVE },
   29: { author: FAMILY_ARCHIVE },   // Dnieper crossing — Nina Friedland in uniform, 1944 (was place-14)
   21: { author: FAMILY_ARCHIVE },
+  30: { author: FAMILY_ARCHIVE,
+        prefix: 'רוזה, מתוך תצלום המשפחה משנת 1949'
+              + ' · Роза, фрагмент семейного снимка 1949 года'
+              + ' · Roza, from the family photograph of 1949' },
 
   // ── Wikimedia Commons, where no family photograph survived ────────────────
+  31: { author: 'צלם לא ידוע · неизвестный фотограф · Unknown photographer',
+        prefix: 'הלווייתו של קירוב בכיכר האדומה, 6 בדצמבר 1934 · Похороны Кирова на Красной площади, 6 декабря 1934 · Kirov\'s funeral on Red Square, 6 December 1934',
+        license: 'נחלת הכלל · общественное достояние · Public domain',
+        url: 'https://commons.wikimedia.org/wiki/File:19341200-funeral_kirov_moscov_red_square.jpg' },
   14: { author: 'סרגיי סטרוניקוב · Сергей Струнников · Sergey Strunnikov',
         prefix: 'מזרקת "מחול הילדים", סטלינגרד 1942 · Фонтан «Детский хоровод», Сталинград, 1942 · The Barmaley fountain, Stalingrad, 1942',
         license: 'נחלת הכלל · общественное достояние · Public domain',

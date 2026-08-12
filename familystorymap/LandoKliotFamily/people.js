@@ -86,7 +86,7 @@ const PEOPLE = [
 
   // ── LANDO & SCHECHTER — צד מישה ──────────────────────────────────────────
   { id:'david_s',   he:'דויד שכטר', ru:'Давид Шехтер', en:'David Schechter', years:'', role:'סבא של מישה · дед Миши · Misha\'s grandfather', branch:'lando', col:23.6, row:1, places:[8] },
-  { id:'odiya',     he:'אודיה שכטר', ru:'Одия Шехтер', en:'Odiya Schechter', years:'', role:'סבתא של מישה · бабушка Миши · Misha\'s grandmother', branch:'lando', col:24.6, row:1, places:[8] },
+  { id:'odiya',     he:'ליה שכטר', ru:'Лия Шехтер', en:'Lia Schechter', years:'', role:'סבתא של מישה · бабушка Миши · Misha\'s grandmother', branch:'lando', col:24.6, row:1, places:[8] },
   { id:'hersh',     he:'הרש לנדו', ru:'Герш Ландо', en:'Hersh Lando', years:'', role:'מנהל משק אצל חוואי · управляющий у хуторянина · estate manager for a wealthy farmer', branch:'lando', col:27.2, row:1, places:[8,30] },
   { id:'milia',     he:'מיליה', ru:'Миля', en:'Milia', years:'', role:'דודתו של מישה · тётя Миши · Misha\'s aunt', branch:'lando', col:21.6, row:2, places:[7] },
   { id:'huma',      he:'חומה (חנה) שכטר', ru:'Хума (Хана) Шехтер', en:'Huma (Hana) Schechter', years:'נ׳ 1908', role:'אם מישה · мать Миши · Misha\'s mother', branch:'lando', col:23.6, row:2, places:[8,7,13] },
@@ -94,7 +94,7 @@ const PEOPLE = [
   { id:'hana_l',    he:'חנה', ru:'Хана', en:'Hana', years:'', role:'אחות ברוך, אשת רב · жена раввина · Boruch\'s sister, a rabbi\'s wife', branch:'lando', col:26, row:2, places:[8,30] },
   { id:'husband1',  he:'הבעל הראשון', ru:'первый муж', en:'the first husband', years:'', role:'שידוך בכפייה · брак по сговору · an arranged match', branch:'lando', col:27.2, row:2, places:[8,30] },
   { id:'roza',      he:'רוזה', ru:'Роза', en:'Roza', years:'', role:'אחות ברוך · сестра Баруха · Boruch\'s sister', branch:'lando', col:28.2, row:2, places:[8,30] },
-  { id:'shaul',     he:'שאול', ru:'Шауль', en:'Shaul', years:'', role:'אהובה של רוזה, כלכלן · любимый муж, экономист · Roza\'s beloved husband, an economist', branch:'lando', col:29.2, row:2, places:[8,9,30] },
+  { id:'shaul',     he:'שאול (שולה)', ru:'Шауль (Шуля)', en:'Shaul (Shula)', years:'', role:'אהובה של רוזה, כלכלן · любимый муж, экономист · Roza\'s beloved husband, an economist', branch:'lando', col:29.2, row:2, places:[8,9,30] },
   { id:'lyonya',    he:'ליוניה (לאוניד)', ru:'Лёня (Леонид)', en:'Lyonya (Leonid)', years:'', role:'נכד מיליה, נשאר במוסקבה · внук Мили · Milia\'s grandson, stayed in Moscow', branch:'lando', col:20.8, row:4, places:[7] },
   { id:'marina',    he:'מרינה', ru:'Марина', en:'Marina', years:'', role:'נכדת מיליה · внучка Мили · Milia\'s granddaughter', branch:'lando', col:21.8, row:4, places:[7] },
   { id:'volodya',   he:'וולודיה', ru:'Володя', en:'Volodya', years:'', role:'בעלה של מרינה · муж Марины · Marina\'s husband', branch:'lando', col:22.8, row:4, places:[7] },

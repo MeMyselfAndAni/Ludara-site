@@ -985,7 +985,14 @@ function clearAllSaved() {
   window.renderList = function() {
     var isSaved = typeof savedFilterActive !== 'undefined' && savedFilterActive;
     if (!isSaved) {
-      if (typeof clearTripRoute === 'function') clearTripRoute();
+      /* A drawn path must survive an ordinary list re-render. closePlaceCard()
+         calls renderList(), and this line used to wipe the route off the map,
+         so the Family Path vanished the moment a reader opened a place card and
+         closed it again. The same applied to one person's path from the tree.
+         Only a stale bookmarks route needs clearing here. (11 Aug 2026.) */
+      var _pathUp = (typeof _storyPathOn !== 'undefined' && _storyPathOn)
+                 || (typeof isPersonFiltered === 'function' && isPersonFiltered());
+      if (!_pathUp && typeof clearTripRoute === 'function') clearTripRoute();
       var scb = document.getElementById('sheet-clear-btn');
       if (scb) scb.style.display = 'none';
       var t = document.getElementById('sheet-title');
