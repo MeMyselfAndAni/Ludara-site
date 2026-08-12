@@ -171,6 +171,15 @@
     .who-card { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:22px; }
     .who-card h4 { font-family:'Fraunces',Georgia,serif; font-size:1.2rem; font-weight:600; color:var(--dark-text); margin-bottom:6px; }
     .who-card p { font-size:13.5px; font-weight:300; color:var(--dark-muted); line-height:1.6; }
+    /* The three occasion pages, as cards you can click. Replaces the generic
+       "who it's for" copy, 12 Aug 2026. */
+    a.who-card { display:flex; flex-direction:column; padding:0; overflow:hidden; text-decoration:none; transition:border-color .18s ease, transform .18s ease, background .18s ease; }
+    a.who-card:hover { border-color:rgba(184,150,90,.55); background:#191c22; transform:translateY(-2px); }
+    a.who-card .who-img { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; border-bottom:1px solid var(--dark-border); filter:saturate(.92) brightness(.94); transition:filter .18s ease; }
+    a.who-card:hover .who-img { filter:saturate(1) brightness(1); }
+    a.who-card .who-body { padding:20px 22px 22px; display:flex; flex-direction:column; flex:1; }
+    a.who-card .who-go { display:inline-block; margin-top:auto; padding-top:14px; font-size:12.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--gold-l); }
+    a.who-card:hover .who-go { color:var(--gold); }
 
     /* PRICING */
     .price-solo { background:var(--warm-card); border:1px solid rgba(184,150,90,0.55); border-radius:var(--radius); box-shadow:0 6px 26px rgba(184,150,90,0.12); margin-top:24px; display:grid; grid-template-columns:1fr; }
@@ -438,16 +447,38 @@
 <section class="dark-section" data-animate id="who">
   <div class="inner">
     <p class="kicker-dark">Who it&rsquo;s for</p>
-    <h2 class="dark">For families who already have the story, and want everyone to see it.</h2>
+    <h2 class="dark">Most families come to us for one of three reasons.</h2>
+    <p class="sub-dark" style="margin-top:10px;max-width:74ch;">Each one has a page of its own, written for it.</p>
+    <!-- The three occasion pages, as clickable cards. These replaced three
+         generic cards on 12 Aug 2026: the occasions are what people arrive
+         with, and the links are what makes the pages crawlable. -->
     <div class="grid-3" style="margin-top:22px;">
-      <div class="who-card"><h4>A milestone worth marking</h4><p>A big birthday, an anniversary, a wedding, a reunion. One link the whole family opens on the day, and keeps long after it.</p></div>
-      <div class="who-card"><h4>You have already done the research</h4><p>The memoir is written, the tree is built, the folders are full. This is what turns it into something the whole family explores together.</p></div>
-      <div class="who-card"><h4>Ask the one who still remembers</h4><p>The dates are already on paper. What no archive holds is who your grandmother was at twenty, why she said yes to him, and what she was brave enough to do next. Ask her, and it goes on the map in her own voice.</p></div>
+      <a class="who-card" href="/familystorymap/birthday/">
+        <img class="who-img" src="/assets/occ-birthday.webp" width="880" height="495" loading="lazy" alt="Three generations of one family photographed together in a garden, the oldest sitting in the middle"/>
+        <span class="who-body">
+          <h4>A big birthday</h4>
+          <p>She says she wants nothing, and she means it. The present is not the map. It is the two hours after it opens.</p>
+          <span class="who-go">A gift for a big birthday &rsaquo;</span>
+        </span>
+      </a>
+      <a class="who-card" href="/familystorymap/in-memory/">
+        <img class="who-img" src="/assets/occ-in-memory.webp" width="880" height="495" loading="lazy" alt="A place card open on the map: an archive portrait of a young woman in uniform above the title The Dnieper Crossing"/>
+        <span class="who-body">
+          <h4>In memory of someone who has died</h4>
+          <p>Their towns, their photographs and their own words, kept where the family can reach them. There is no hurry in it.</p>
+          <span class="who-go">In memory &rsaquo;</span>
+        </span>
+      </a>
+      <a class="who-card" href="/familystorymap/where-we-came-from/">
+        <img class="who-img" src="/assets/occ-where-we-came-from.webp" width="880" height="495" loading="lazy" alt="A family journey drawn across the Atlantic, from the United States to Europe, Israel and Kazakhstan"/>
+        <span class="who-body">
+          <h4>Where the family came from</h4>
+          <p>For families whose stories span continents. Every town found under the name it carries today.</p>
+          <span class="who-go">Show your children where you came from &rsaquo;</span>
+        </span>
+      </a>
     </div>
-    <!-- The three occasion pages. One quiet line, so a reader who arrived for a
-         particular reason finds the page written for it, and so the pages are
-         crawlable. Added 12 Aug 2026. -->
-    <p class="sub-dark" style="margin-top:22px;max-width:80ch;">Most families arrive here for one particular reason. If yours is one of these, there is a page written for it: <a href="/familystorymap/birthday/" style="color:var(--gold-l);text-decoration:none;border-bottom:1px solid rgba(212,176,122,.35);">a present for a big birthday</a>, <a href="/familystorymap/in-memory/" style="color:var(--gold-l);text-decoration:none;border-bottom:1px solid rgba(212,176,122,.35);">remembering someone you have lost</a>, or <a href="/familystorymap/where-we-came-from/" style="color:var(--gold-l);text-decoration:none;border-bottom:1px solid rgba(212,176,122,.35);">showing your children where you came from</a>.</p>
+    <p class="sub-dark" style="margin-top:22px;max-width:78ch;">And one thing that is true whichever reason brought you: the dates are already on paper somewhere. What no archive holds is who your grandmother was at twenty, why she said yes to him, and what she was brave enough to do next. Ask her, and it goes on the map in her own voice.</p>
   </div>
 </section>
 
