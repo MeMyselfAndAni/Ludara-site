@@ -979,35 +979,39 @@ window.addEventListener('load', function() {
 <!-- ── UNIFIED SAVED PANEL + CLEAR ALL ── -->
 <script>
 /* ── Memoir citation on the place card ───────────────────────────────────────
-   openDetail() is wrapped rather than edited, so ui-card.js stays byte for byte
-   the shared version and no other family map is touched. A place carries
-   page: N in data.js; everything else is here. (13 Aug 2026.) */
+   _populateCard(p) is wrapped rather than openDetail(id), because the ‹ › arrows
+   move between cards through _showSlide and never call openDetail. Hooking
+   openDetail left the citation frozen on whichever card was opened first, so
+   every card appeared to come from the same page. _populateCard runs for every
+   card however it is reached, and it is handed the place itself, so there is no
+   lookup to get wrong.
+
+   ui-card.js is not edited: it stays byte for byte the shared version, and no
+   other family map is affected. A place carries page: N, or source: 'maria'
+   where the story is Maria's rather than Anna's. (13 Aug 2026.) */
 (function(){
-  if (typeof openDetail !== 'function') return;
-  var _openDetail = openDetail;
-  window.openDetail = function(id){
-    _openDetail.apply(this, arguments);
+  if (typeof _populateCard !== 'function') return;
+  var _orig = _populateCard;
+  window._populateCard = function(p){
+    _orig.apply(this, arguments);
     var el = document.getElementById('pc-source');
     if (!el) return;
-    var p = (typeof PLACES !== 'undefined')
-      ? PLACES.filter(function(x){ return x.id === id; })[0] : null;
+    var txt = '';
     if (p && p.source === 'maria') {
-      el.textContent = (typeof _T === 'function')
+      txt = (typeof _T === 'function')
         ? _T('\u05de\u05ea\u05d5\u05da \u05e1\u05d9\u05e4\u05d5\u05e8\u05d9\u05d4 \u05e9\u05dc \u05de\u05e8\u05d9\u05d4',
              '\u0418\u0437 \u0440\u0430\u0441\u0441\u043a\u0430\u0437\u043e\u0432 \u041c\u0430\u0440\u0438\u0438',
              "From Maria's stories")
         : "From Maria's stories";
-      el.style.display = '';
     } else if (p && p.page) {
-      el.textContent = (typeof _T === 'function')
+      txt = (typeof _T === 'function')
         ? _T('\u05de\u05ea\u05d5\u05da \u05d6\u05db\u05e8\u05d5\u05e0\u05d5\u05ea\u05d9\u05d4 \u05e9\u05dc \u05d0\u05e0\u05d4, \u05e2\u05de\u05f3 ' + p.page,
              '\u0418\u0437 \u0432\u043e\u0441\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u0439 \u0410\u043d\u043d\u044b, \u0441. ' + p.page,
              "From Anna's memoir, p. " + p.page)
         : "From Anna's memoir, p. " + p.page;
-      el.style.display = '';
-    } else {
-      el.style.display = 'none';
     }
+    el.textContent = txt;
+    el.style.display = txt ? '' : 'none';
   };
 })();
 </script>
