@@ -63,9 +63,8 @@
      of the card, so the map reads as an index to the book rather than a
      replacement for it. Page numbers refer to the frozen PDF export of
      FamilyMemories_Part1.docx: re-export it and they all move. (13 Aug 2026.) */
-  .pc-source { font-size: 0.72rem; color: #8f8a7d; line-height: 1.6; margin-top: 12px;
-               padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.07);
-               unicode-bidi: plaintext; }
+  .pc-source { font-size: 0.72rem; color: #9a9382; line-height: 1.6; margin-top: 10px;
+               font-style: normal; unicode-bidi: plaintext; }
   /* ── List scroll fix ── */
   .sheet { display: flex !important; flex-direction: column !important; }
   .places-list {
@@ -579,6 +578,7 @@
     <div class="pc-hours" id="pc-hours"></div>
     <div class="pc-note-wrap">
       <div class="pc-note" id="pc-note"></div>
+      <div class="pc-source" id="pc-source" style="display:none"></div>
       <span class="pc-emily-by" style="display:none"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
@@ -586,7 +586,6 @@
       <span id="pc-tip-text"></span>
     </div>
     <div class="pc-contacts" id="pc-contacts"></div>
-    <div class="pc-source" id="pc-source" style="display:none"></div>
     <div class="pc-counter" id="pc-counter" style="display:none"></div>
   </div>
 </div>
@@ -992,7 +991,14 @@ window.addEventListener('load', function() {
     if (!el) return;
     var p = (typeof PLACES !== 'undefined')
       ? PLACES.filter(function(x){ return x.id === id; })[0] : null;
-    if (p && p.page) {
+    if (p && p.source === 'maria') {
+      el.textContent = (typeof _T === 'function')
+        ? _T('\u05de\u05ea\u05d5\u05da \u05e1\u05d9\u05e4\u05d5\u05e8\u05d9\u05d4 \u05e9\u05dc \u05de\u05e8\u05d9\u05d4',
+             '\u0418\u0437 \u0440\u0430\u0441\u0441\u043a\u0430\u0437\u043e\u0432 \u041c\u0430\u0440\u0438\u0438',
+             "From Maria's stories")
+        : "From Maria's stories";
+      el.style.display = '';
+    } else if (p && p.page) {
       el.textContent = (typeof _T === 'function')
         ? _T('\u05de\u05ea\u05d5\u05da \u05d6\u05db\u05e8\u05d5\u05e0\u05d5\u05ea\u05d9\u05d4 \u05e9\u05dc \u05d0\u05e0\u05d4, \u05e2\u05de\u05f3 ' + p.page,
              '\u0418\u0437 \u0432\u043e\u0441\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u0439 \u0410\u043d\u043d\u044b, \u0441. ' + p.page,
