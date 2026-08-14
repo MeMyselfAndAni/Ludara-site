@@ -285,7 +285,19 @@
     .video-facade:focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
     #fsm-video iframe { width:100%; aspect-ratio:16/9; display:block; border:0; }
     @media(max-width:600px){ .video-play { width:58px; height:58px; } .video-play::before { border-width:11px 0 11px 18px; } }
-  </style>
+  
+/* Hero as two columns: the words carry the argument, the photograph carries the
+   room. Below 900px it stacks, and the photograph is capped so it does not push
+   the buttons off a phone screen. */
+.hero-cols{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+           gap:38px;align-items:center}
+.hero-portrait img{width:100%;height:auto;display:block;border-radius:14px;
+           box-shadow:0 18px 46px rgba(0,0,0,.5)}
+@media (max-width:900px){
+  .hero-cols{grid-template-columns:1fr;gap:26px}
+  .hero-portrait{max-width:430px;margin:0 auto}
+}
+</style>
 <style>
     /* A card for a set apart passage inside a warm section. The product page's
        .privacy-note is built for the dark sections only: its text colour is
@@ -361,18 +373,26 @@
 <section class="dark-section" data-animate id="top">
   <div class="inner">
     <div class="hero-wrap">
-      <p class="kicker-dark">Big birthdays and anniversaries</p>
-      <h1>A gift that brings the whole family<br><em>together.</em></h1>
-      <p class="hero-sub" style="font-size:1.15em">A century of family history, on one interactive map, linked with a family tree.</p>
-      <p class="hero-sub">Five generations, towns across three continents: the photographs, the stories and the journeys, all reachable from anywhere.</p>
-      <p class="hero-sub">For a big birthday, a golden anniversary, or the first time everyone is in one room in years.</p>
-      <div class="hero-btns">
-        <a class="btn-gold" href="#get-started">Tell us about them</a>
-        <a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/landokliotfamily/" target="_blank" rel="noopener">Open a real family map</a>
+      <div class="hero-cols">
+        <div class="hero-text">
+          <p class="kicker-dark">Big birthdays and anniversaries</p>
+          <h1>A gift that brings the whole family<br><em>together.</em></h1>
+          <p class="hero-sub" style="font-size:1.15em">A century of family history, on one interactive map, linked with a family tree.</p>
+          <p class="hero-sub">Five generations, towns across three continents: the photographs, the stories and the journeys, all reachable from anywhere.</p>
+          <p class="hero-sub">For a big birthday, a golden anniversary, or the first time everyone is in one room in years.</p>
+          <div class="hero-btns">
+            <a class="btn-gold" href="#get-started">Tell us about them</a>
+            <a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/landokliotfamily/" target="_blank" rel="noopener">Open a real family map</a>
+          </div>
+        </div>
+        <div class="hero-portrait">
+          <img src="../../assets/fsm-family-laptop.webp" width="1000" height="1000" fetchpriority="high"
+               alt="Three generations at a laptop in a lamplit room, looking at a family story map together"/>
+        </div>
       </div>
     </div>
     <div class="shot-frame" style="margin-top:34px">
-      <img src="../../assets/fsm-map-hero-v2.webp" fetchpriority="high"
+      <img src="../../assets/fsm-map-hero-v2.webp" loading="lazy"
            alt="The whole family map with the journey drawn, from Belarus and Lithuania through Russia and Ukraine to Israel, then across the Atlantic"/>
     </div>
     <p class="hero-note" style="margin-top:14px">This is our own family&rsquo;s map. We published it so you can see exactly what you would be getting. Yours stays private.</p>
