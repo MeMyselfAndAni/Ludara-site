@@ -1773,6 +1773,98 @@ html[lang="he"] .header-ludara-text {
   text-transform: none;
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   "ONE FOR YOUR FAMILY" CARD  (.list-promo)
+   Foot of the places list. Present only on maps whose family.js
+   carries a promo block. Reads as a quiet note, not a banner:
+   it sits after the last place, so by the time anyone sees it
+   they have already read the whole journey.
+   ════════════════════════════════════════════════════════════ */
+.list-promo {
+  display: block;
+  margin: 14px 10px 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface2);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.list-promo:hover, .list-promo:active {
+  background: var(--surface3);
+  border-color: var(--gold);
+}
+.list-promo-title {
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.35;
+}
+.list-promo-body {
+  margin-top: 5px;
+  font-size: 0.79rem;
+  line-height: 1.5;
+  color: var(--text2);
+}
+.list-promo-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent2);
+  letter-spacing: 0.01em;
+}
+.list-promo:hover .list-promo-cta { color: var(--gold); }
+
+
+/* ════════════════════════════════════════════════════════════
+   HEADER CTA  (.header-cta)
+   Top right of the header, on maps that carry an invitation.
+   It replaces the second "Family Story Map by Ludara.AI", which
+   only repeated the logo already sitting on the left. A reader
+   who wants one of these should not have to scroll to the foot
+   of twenty-nine places to find out they can ask.
+   Maps without the element are unaffected.  (11 Aug 2026.)
+   ════════════════════════════════════════════════════════════ */
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1.5px solid var(--gold, #d4a84b);
+  border-radius: 999px;
+  background: rgba(212,168,75,0.12);
+  color: #f5e6c0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+  unicode-bidi: plaintext;
+}
+.header-cta:hover, .header-cta:active {
+  background: var(--gold, #d4a84b);
+  color: #0f0d0a;
+  transform: translateY(-1px);
+}
+.header-cta-arrow { font-size: 0.85rem; line-height: 1; }
+@media (max-width: 767px) {
+  /* The label now carries the brand name as well, which is too long for one
+     line on a phone. Let it wrap to two tight lines rather than shrink the
+     type below what anyone can read. */
+  .header-cta { padding: 5px 9px; font-size: 0.55rem; gap: 4px; border-width: 1.2px;
+                white-space: normal; max-width: 132px; line-height: 1.25; text-align: right; }
+  .header-cta-arrow { font-size: 0.68rem; }
+}
+@media (max-width: 380px) {
+  .header-cta-arrow { display: none; }
+}
+
 /* ── Share-this-story sticker on the card photo ──────────────────────────────
    Bottom-left corner: the bookmark and ✕ own the top-right, the photo credit
    owns the bottom-right, and the back button the top-left, so this is the one
@@ -1812,9 +1904,4 @@ html[lang="he"] .pc-share-btn {
   padding: 3px 3px 3px 10px;
   font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
   font-size: 0.84rem;
-}
-/* Inter carries no display Hebrew: own face, slightly larger (see person pill) */
-html[lang="he"] .pc-share-btn {
-  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
-  font-size: 0.95rem;
 }
