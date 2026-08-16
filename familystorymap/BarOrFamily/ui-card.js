@@ -502,3 +502,98 @@ document.addEventListener('keydown', e => {
 })();
 
 // (card position reset happens in closePlaceCard)
+
+
+// ── Share this story (photo + text) — SHARED ENGINE FEATURE ─────────────────
+// A sticker-button on the card photo. One tap opens the device share sheet
+// (WhatsApp, iMessage, Mail all live there), with the place's photograph
+// attached where the device allows files. Where no share sheet exists the
+// story text and link are copied instead. A shared link (?place=N) opens the
+// map on that story once the reader has picked a language.
+window.sharePlaceStory = async function(){
+  var p = (typeof CARD_PLACE !== 'undefined') ? CARD_PLACE : null;
+  if(!p) return;
+  var link = location.origin + location.pathname + '?place=' + p.id;
+  var title = p.name + (p.years ? ' · ' + p.years : '');
+  var note = (p.note || '').trim();
+  if(note.length > 550) note = note.slice(0, 550).replace(/\s+\S*$/, '') + '…';
+  var text = title + '\n\n' + note + '\n\n'
+           + _T('להמשך הסיפור על המפה:', 'Продолжение истории на карте:', 'The full story on the map:')
+           + '\n' + link;
+  if(navigator.share){
+    try {
+      var files;
+      try {
+        var r = await fetch('images/place-' + p.id + '.jpg');
+        if(r.ok){
+          var b = await r.blob();
+          var f = new File([b], 'story-' + p.id + '.jpg', { type: 'image/jpeg' });
+          if(navigator.canShare && navigator.canShare({ files: [f] })) files = [f];
+        }
+      } catch(e){}
+      var payload = { title: title, text: text };
+      if(files) payload.files = files;
+      await navigator.share(payload);
+      return;
+    } catch(e){
+      if(e && e.name === 'AbortError') return;   // the reader closed the sheet
+    }
+  }
+  var done = function(){
+    if(typeof _toast === 'function')
+      _toast(_T('🔗 הסיפור והקישור הועתקו — הדביקו בוואטסאפ או במייל.',
+                '🔗 История и ссылка скопированы — вставьте в WhatsApp или письмо.',
+                '🔗 Story and link copied — paste into WhatsApp or an email.'), 4000);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done)
+      .catch(function(){ if(typeof _fallbackCopy === 'function') _fallbackCopy(text); });
+  } else if(typeof _fallbackCopy === 'function'){
+    _fallbackCopy(text);
+  }
+};
+
+window.addEventListener('load', function(){
+  var wrap = document.getElementById('pc-photo-wrap');
+  if(!wrap || document.getElementById('pc-share-btn')) return;
+  var b = document.createElement('button');
+  b.id = 'pc-share-btn';
+  b.className = 'pc-share-btn';
+  b.type = 'button';
+  // the photo has its own swipe/drag handlers — the sticker must not start them
+  ['pointerdown', 'touchstart', 'mousedown'].forEach(function(ev){
+    b.addEventListener(ev, function(e){ e.stopPropagation(); }, { passive: true });
+  });
+  b.addEventListener('click', function(e){
+    e.stopPropagation(); e.preventDefault();
+    window.sharePlaceStory();
+  });
+  wrap.appendChild(b);
+  var relabel = function(){
+    // Maria's share icon (Aug 2026): three nodes with hand-drawn tapering links,
+    // set in a gold medallion. currentColor, so the medallion decides the ink.
+    b.innerHTML = '<span class="pc-share-circ"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false" style="display:block"><circle cx="5.6" cy="12.3" r="3.05" fill="currentColor"/><circle cx="17.6" cy="6.1" r="3.05" fill="currentColor"/><circle cx="17.9" cy="18.1" r="2.95" fill="currentColor"/><path d="M 8.1 11.0 C 11.0 10.6 13.2 9.3 15.2 7.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" fill="none"/><path d="M 8.0 13.8 C 10.9 14.3 13.4 15.5 15.4 17.1" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" fill="none"/></svg></span>'
+                + '<span>' + _T('לשתף עם המשפחה', 'Поделиться с семьёй', 'Share with family') + '</span>';
+    b.title = _T('לשתף את הסיפור והתמונה עם המשפחה או חברים',
+                 'Поделиться историей и фотографией с семьёй или друзьями',
+                 'Share this story and its picture with family or friends');
+  };
+  relabel();
+  // keep the label in the reader's language whenever a card (re)opens
+  var titleEl = document.getElementById('pc-title');
+  if(titleEl) new MutationObserver(relabel).observe(titleEl, { childList: true, characterData: true, subtree: true });
+
+  // Shared story link: open that card once a language is chosen (the language
+  // choice closes open cards, so opening before it would be undone).
+  var pid = parseInt(new URLSearchParams(location.search).get('place'), 10);
+  if(pid && typeof PLACES !== 'undefined' && PLACES.some(function(pl){ return pl.id === pid; })){
+    var tries = 40;
+    (function _openSharedPlace(){
+      var ready = (typeof LANG !== 'undefined' && LANG) &&
+                  typeof openDetail === 'function' &&
+                  (function(){ try { return !!(map && map.getSource); } catch(e){ return false; } })();
+      if(ready){ setTimeout(function(){ openDetail(pid); }, 300); return; }
+      if(--tries > 0) setTimeout(_openSharedPlace, 400);
+    })();
+  }
+});
