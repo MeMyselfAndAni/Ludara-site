@@ -205,6 +205,23 @@ function showNbhdCircleAnimated(nbhdId) {
 function makeIconHTML(p, active) {
   const color = CC[p.cat] || '#888';
   const emoji = p.emoji || '📍';
+  // Seasonal events get a distinct, high-contrast calendar pin (drawn, not emoji)
+  // so they stand out against the beige base map.
+  if (p.cat === 'event') {
+    const s = active ? 62 : 52;
+    const c = s / 2;
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '">'
+      + '<defs><filter id="es' + p.id + '" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="2.5" stdDeviation="3.4" flood-color="rgba(0,0,0,0.55)"/></filter></defs>'
+      + '<circle cx="' + c + '" cy="' + c + '" r="' + (c - 2) + '" fill="#ffffff" filter="url(#es' + p.id + ')"/>'
+      + '<circle cx="' + c + '" cy="' + c + '" r="' + (c - 4) + '" fill="#F2B705" stroke="#ffffff" stroke-width="2.5"/>'
+      + '<g transform="translate(' + (c - 10) + ',' + (c - 10.5) + ')">'
+      +   '<rect x="1" y="3" width="18" height="16" rx="2.6" fill="#4A3410"/>'
+      +   '<rect x="5" y="0.5" width="2.4" height="5" rx="1.2" fill="#4A3410"/>'
+      +   '<rect x="12.6" y="0.5" width="2.4" height="5" rx="1.2" fill="#4A3410"/>'
+      +   '<rect x="2.6" y="7.6" width="14.8" height="9.6" rx="1.2" fill="#ffffff"/>'
+      +   '<g fill="#4A3410"><rect x="4.2" y="9.7" width="2.3" height="2.3"/><rect x="8.85" y="9.7" width="2.3" height="2.3"/><rect x="13.5" y="9.7" width="2.3" height="2.3"/><rect x="4.2" y="13.4" width="2.3" height="2.3"/><rect x="8.85" y="13.4" width="2.3" height="2.3"/></g>'
+      + '</g></svg>';
+  }
   if (active) {
     const s = 58;
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">

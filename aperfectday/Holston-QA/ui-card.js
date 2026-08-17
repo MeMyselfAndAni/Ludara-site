@@ -215,6 +215,7 @@ function _populateCard(p){
   // Restore default (non-event) card chrome in case the previous card was an event
   var _evHdr = document.getElementById('pc-event-hdr');
   if(_evHdr) _evHdr.remove();
+  var _pcCard = document.getElementById('place-card'); if(_pcCard) _pcCard.classList.remove('card-event');
   ['pc-title','pc-type','pc-address','pc-cat','pc-emoji'].forEach(function(id){
     var e = document.getElementById(id); if(e) e.style.display = '';
   });
@@ -323,6 +324,7 @@ function _eventDateText(p){
 }
 function _populateEventCard(p){
   CARD_PLACE = p;
+  var _pcCard = document.getElementById('place-card'); if(_pcCard) _pcCard.classList.add('card-event');
   var wrap = document.getElementById('pc-photo-wrap');
   var img = document.getElementById('pc-img');
   var placeholder = document.getElementById('pc-emoji');
