@@ -151,6 +151,12 @@ function isEventNotPassed(p){
   if(!p || p.cat !== 'event') return true;
   return _apdParseDate(p.endDate) >= _apdEventToday();
 }
+// True when an event is happening today (used so Open Now also counts live events).
+function isEventOnNow(p){
+  if(!p || p.cat !== 'event') return false;
+  var today = _apdEventToday();
+  return _apdParseDate(p.startDate) <= today && _apdParseDate(p.endDate) >= today;
+}
 // Small chip label for the card / list.
 function eventDayLabel(p){
   var today = _apdEventToday();

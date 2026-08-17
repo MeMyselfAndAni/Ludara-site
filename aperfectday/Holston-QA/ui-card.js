@@ -10,7 +10,7 @@ let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 const CAT_COLORS = {
   landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
   church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a',
-  event:'#C9A24B'
+  event:'#9A6E12'
 };
 const CAT_LABELS = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
@@ -374,6 +374,10 @@ function _populateEventCard(p){
     contacts += '<a class="pc-contact-pill pc-nav-pill" href="' + navUrl + '" target="_blank" rel="noopener" onclick="apdTrack(\'navigate\',{place_id:' + p.id + '})"><span class="pc-ico">🚶</span>Navigate</a>';
   }
   var contactsEl = document.getElementById('pc-contacts'); if(contactsEl) contactsEl.innerHTML = contacts;
+
+  // Hide the ‹ › nav arrows + counter on event cards so they never cover the title.
+  // (Guests move between events via the list; mobile swipe still works.)
+  ['pc-nav-prev','pc-nav-next','pc-counter'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
 
   _updateFavBtn();
   var body = document.getElementById('pc-body'); if(body) body.scrollTop = 0;

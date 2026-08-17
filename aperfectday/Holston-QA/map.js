@@ -24,7 +24,7 @@ const CC = {
   'shopping':   '#2E8B8B',   // Warm teal — boutique and curated
   'boots':      '#8B5E3C',   // Saddle brown — western leather
   'parks':      '#3D7A50',   // Forest green — nature and greater Nashville
-  'event':      '#C9A24B',   // Gold — time-limited special events (What's On)
+  'event':      '#9A6E12',   // Deep gold — time-limited special events (visible calendar pin)
 };
 
 // ─── Category labels ──────────────────────────────────────────────────────────

@@ -315,9 +315,12 @@ function renderList(){
   filtered = PLACES.filter(p => {
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
     if(p.cat === 'event'){
-      return (AF === 'event') && (typeof isEventInWindow === 'function' ? isEventInWindow(p) : false) && searchOk;
+      const evShow = (AF === 'event')
+        ? (typeof isEventInWindow === 'function' && isEventInWindow(p))
+        : (openNowActive && typeof isEventOnNow === 'function' && isEventOnNow(p));
+      return evShow && searchOk;
     }
-    if(AF === 'event') return false; /* What's On shows events only */
+    if(AF === 'event') return false; /* Seasonal shows events only */
     const catOk    = AF === 'all' || p.cat === AF;
     const openOk   = !openNowActive || isOpenNow(p);
     return catOk && openOk && searchOk;
@@ -342,7 +345,7 @@ function renderList(){
   el.innerHTML=filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
-      <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
+      <div class="place-thumb" id="thumb-${p.id}"${p.cat==='event'?' style="background:#9A6E12;color:#fff;font-size:1.5rem"':''}>${p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
         <div class="place-type">${CL[p.cat]}</div>
@@ -611,9 +614,11 @@ function applyFilters(){
       visible = inSaved || inCat;
       if(p.cat === 'event' && typeof isEventNotPassed === 'function' && !isEventNotPassed(p)) visible = false; // never a passed event
     } else if(p.cat === 'event'){
-      visible = (AF === 'event') && _inWindow(p); /* events only under What's On, within the month */
+      if(AF === 'event') visible = _inWindow(p);                 /* Seasonal filter: whole month */
+      else if(openNowActive) visible = (typeof isEventOnNow === 'function' && isEventOnNow(p)); /* Open Now also counts events happening today */
+      else visible = false;
     } else if(AF === 'event'){
-      visible = false; /* hide normal places while What's On is active */
+      visible = false; /* hide normal places while Seasonal is active */
     } else {
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
