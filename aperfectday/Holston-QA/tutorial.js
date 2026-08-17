@@ -8,12 +8,13 @@
   var DEMO_PLACE      = CFG.demoPlaceId   || 1;
   var TRIP_NAMES      = CFG.tripNames     || 'a curated day trip';
   var DEMO_SAVED_IDS  = CFG.demoSavedIds  || null; /* array of 3-4 real place IDs */
+  var PLACE_COUNT     = (typeof PLACES !== 'undefined') ? PLACES.filter(function(p){ return p.cat !== 'event'; }).length : 63; /* exclude seasonal events */
 
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'We curated ' + (typeof PLACES !== 'undefined' ? PLACES.length : 63) + ' places for you to explore and plan your perfect day in ' + CITY + '. Tap Next to start.',
+      body: 'We curated ' + PLACE_COUNT + ' places for you to explore and plan your perfect day in ' + CITY + '. Tap Next to start.',
       target: null,
       cardPos: 'center',
       demo: null,
@@ -32,10 +33,19 @@
     {
       /* Seasonal events — the live, changing highlight */
       title: "What's on this season",
-      body: 'The Seasonal band along the bottom shows what is happening in ' + CITY + ' right now: festivals, concerts and events we keep refreshed for you. Tap one to open it on the map.',
+      body: 'The Seasonal band along the bottom shows what is happening in ' + CITY + ' now or soon: festivals, concerts and events we keep refreshed for you. Tap one to open it on the map.',
       target: '#seasonal-bar',
       cardPos: 'center',
       demo: 'open-seasonal',
+      btn: 'Next'
+    },
+    {
+      /* Explore the full map of curated places */
+      title: 'Explore ' + PLACE_COUNT + ' curated places',
+      body: 'Every pin on the map is a place we picked for you across ' + CITY + ': dining, music, sights and more. Have a look around.',
+      target: null,
+      cardPos: 'center',
+      demo: 'reset-map',
       btn: 'Next'
     },
     {
@@ -371,6 +381,12 @@
         setTimeout(function () { setCard(0, null); }, 340);
       }
     } catch (e) {}
+  }
+
+  function resetMapDemo() {
+    /* Close any open card (e.g. the seasonal one) and restore the default map of place pins */
+    if (_demoCardOpen && typeof closePlaceCard === 'function') { closePlaceCard(false); _demoCardOpen = false; }
+    if (typeof applyFilters === 'function') applyFilters();
   }
 
   function scrollCardDemo() {
@@ -714,6 +730,7 @@
       }
     }, 3000); }
     if (step.demo === 'open-seasonal')     { setTimeout(openSeasonalDemo, 450); }
+    if (step.demo === 'reset-map')         { setTimeout(resetMapDemo, 200); }
     if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
