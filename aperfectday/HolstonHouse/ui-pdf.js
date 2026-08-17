@@ -128,8 +128,8 @@ async function generatePDF(){
           ${p.address ? `<span>📍 ${p.address}</span>` : ''}
           ${p.phone ? `<span>📞 ${p.phone}</span>` : ''}
         </div>
-        ${p.note ? `<div class="pdf-card-note">"${p.note}"<span class="pdf-note-by"> — ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</span></div>` : ''}
-        ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME + "'s Tip" : 'Tip'}</span> ${p.tip}</div>` : ''}
+        ${p.note ? `<div class="pdf-card-note">"${p.note}"</div>` : ''}
+        ${p.tip ? `<div class="pdf-card-tip"><span class="pdf-tip-label">💡 Visitor Tip</span> ${p.tip}</div>` : ''}
         <div class="pdf-card-qr-row">
           <img class="pdf-qr" src="${qrUrl}" alt="Open in Maps">
           <span class="pdf-qr-label">Scan for Google Maps</span>
@@ -422,17 +422,24 @@ async function generatePDF(){
     letter-spacing: 0.06em;
   }
 
+  .pdf-page-sig { display: none; }
   @media print {
-    body { margin: 0; }
+    body { margin: 0; padding-bottom: 14mm; }
     .pdf-cover { page-break-after: always; }
     .pdf-card { page-break-inside: avoid; }
     .pdf-walk { page-break-inside: avoid; }
-    .pdf-brand-footer { page-break-inside: avoid; }
+    .pdf-brand-footer { display: none; } /* replaced by the per-page running signature */
+    .pdf-page-sig {
+      display: block; position: fixed; bottom: 4mm; left: 0; right: 0;
+      text-align: center; font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 0.62rem; color: #9a8f80;
+    }
     @page { margin: 0; size: A4; }
   }
 </style>
 </head>
 <body>
+<div class="pdf-page-sig">A Perfect Day by Ludara.AI</div>
 
 <!-- COVER -->
 <div class="pdf-cover">
@@ -454,7 +461,7 @@ async function generatePDF(){
       <div class="pdf-stat-label">${formatDistanceUnit()}</div>
     </div>
   </div>
-  <div class="pdf-cover-by">Curated by ${typeof BLOGGER_NAME !== 'undefined' ? BLOGGER_NAME : 'Your Guide'}</div>
+  <div class="pdf-cover-by">Curated by ${typeof HOTEL_NAME !== 'undefined' ? HOTEL_NAME : 'your hotel'}</div>
   <div class="pdf-cover-date">${date}</div>
 </div>
 
@@ -466,8 +473,7 @@ async function generatePDF(){
 <!-- BRANDING FOOTER -->
 <div class="pdf-brand-footer">
   <div class="pdf-brand-footer-label">Interactive map guide created with</div>
-  <div class="pdf-brand-footer-name">A Perfect Day</div>
-  <div class="pdf-brand-footer-url">ludara.ai</div>
+  <div class="pdf-brand-footer-name">A Perfect Day by Ludara.AI</div>
 </div>
 
 </body>

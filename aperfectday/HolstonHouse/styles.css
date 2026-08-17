@@ -149,7 +149,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   right: 10px;
   bottom: auto;
   left: auto;
-  z-index: 420;
+  z-index: 355;            /* below the sheet (360) so the open list's ✕ + handle stay tappable */
   background: rgba(49,38,29,0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -382,6 +382,37 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 
 /* ── Neighbourhood title — floats just above the bar, always visible ── */
+/* ── Seasonal events ribbon (replaces the neighbourhood bar) ── */
+#nbhd-bar, #nbhd-title, #nbhd-show-btn { display: none !important; }
+#place-card.card-event #pc-counter { display: none !important; }
+#seasonal-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1495; /* above the card dim (1490), below the card (1500) so pills stay tappable while a card is open */
+  display: flex; align-items: center; gap: 12px;
+  background: #31261d; border-top: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px 10px 0 0; padding: 10px 12px;
+  box-shadow: 0 -2px 14px rgba(0,0,0,0.22);
+}
+#seasonal-label {
+  flex: 0 0 auto; color: #FFC12E;
+  font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.2;
+}
+#seasonal-row { flex: 1 1 auto; min-width: 0; display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#seasonal-row::-webkit-scrollbar { display: none; }
+.seasonal-card {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+  background: #3a2c22; border: 1.5px solid #C9A24B;
+  border-radius: 14px; padding: 6px 13px 6px 9px; cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(201,162,74,0.18);
+  transition: transform .12s, background .12s, border-color .12s;
+}
+.seasonal-card:hover { background: #463527; border-color: #FFC12E; transform: translateY(-1px); }
+.seasonal-card svg { width: 20px; height: 20px; flex: 0 0 auto; }
+.seasonal-card .sc-text { display: flex; flex-direction: column; line-height: 1.18; }
+.seasonal-card .sc-name { font-family: Georgia, serif; color: #f3ece1; font-size: 0.82rem; white-space: nowrap; }
+.seasonal-card .sc-date { font-family: 'Inter', sans-serif; color: #cbb894; font-size: 0.66rem; white-space: nowrap; }
+.sheet.open ~ #seasonal-bar { display: none; }
+
 #nbhd-title {
   position: fixed;
   left: 0; right: 0;
@@ -461,6 +492,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* When sheet is open, hide nbhd-bar and browse button */
   .sheet.open ~ #nbhd-bar { display: none; }
   .sheet.open ~ .list-toggle { display: none !important; }
+  /* openSheet() adds .hidden — the sibling rule above is unreliable because
+     #list-toggle sits before .sheet in the DOM. This guarantees it hides so
+     it never covers the sheet's ✕ close button. */
+  #list-toggle.hidden, .list-toggle.hidden { display: none !important; }
 
   /* ── Browse all places: horizontal pill, top-right under filter bar ── */
   .list-toggle {
@@ -1514,6 +1549,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .pc-btn-fav.faved { color: #e00040; background: rgba(0,0,0,0.52); font-family: Arial, sans-serif; }
 .pc-btn-fav:active { transform: scale(1.2); }
 /* ‹ › prev/next — centred sides, shown in both detail and nbhd mode */
+/* Seasonal event cards: keep ‹ › nav but drop it to the foot of the brown header
+   (clear of the title), and lift the heart up beside the close button so it does
+   not collide with the next arrow. */
+#place-card.card-event .pc-btn-nav { top: auto; bottom: 12px; transform: none; }
+#place-card.card-event .pc-btn-fav { top: 12px; bottom: auto; right: 54px; }
 .pc-btn-nav {
   top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.88);

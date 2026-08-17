@@ -260,7 +260,8 @@ function formatWalk(m){
 }
 
 function getSortedFavPlaces(){
-  let u = favourites.map(id => PLACES.find(x=>x.id===id)).filter(Boolean);
+  let u = favourites.map(id => PLACES.find(x=>x.id===id)).filter(Boolean)
+    .filter(p => typeof isEventNotPassed !== 'function' || isEventNotPassed(p)); // never a passed event
   if(u.length < 2) return u;
   // Use manual drag order if set (stored by ui-filter.js helpers)
   if(typeof _getSavedOrder === 'function'){

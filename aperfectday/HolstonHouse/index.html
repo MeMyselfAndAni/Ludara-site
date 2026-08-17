@@ -95,7 +95,7 @@
     <div class="splash-logo-row">
       <img src="Branding/HH_Logo_White%20%282%29.png" class="splash-hh-logo" alt="Holston House Nashville, Tennessee">
     </div>
-    <p class="splash-hotel-desc">Get curated dining, nightlife, music, and local recommendations tailored to your stay.</p>
+    <p class="splash-hotel-desc">Get curated dining, nightlife, music, and the season's best events, tailored to your stay.</p>
     <button class="splash-btn" onclick="closeSplash()">Explore the Map →</button>
     <div class="splash-footer">
       <a href="https://ludara.ai/aperfectday" target="_blank">Interactive map by A Perfect Day · Ludara.AI</a>
@@ -189,6 +189,12 @@
     </div>
 
   </div>
+</div>
+
+<!-- Seasonal events ribbon (replaces the neighbourhood bar) -->
+<div id="seasonal-bar">
+  <div id="seasonal-label">Seasonal</div>
+  <div id="seasonal-row"></div>
 </div>
 
 <!-- Place card -->
@@ -334,6 +340,7 @@
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
+<script src="events.js"></script>
 <script src="credits.js"></script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script>
@@ -665,7 +672,7 @@ function _undoTrip(prev, key) {
   window.TutorialConfig = {
     doneKey:      'holston_tour_v1',
     cityName:     'Nashville',
-    demoPlaceId:  42,                          /* 3rd & Lindsley — opens in step 4 */
+    demoPlaceId:  8,                           /* City House — dinner w/ reservations + James Beard award (demo card) */
     demoSavedIds: [42, 1, 5, 3, 4],             /* Skull's Rainbow Room, Ryman, Tootsie's, NMAAM, Hatch Show Print — all Broadway/walkable */
     tripNames:    'a Music Insider Day or a Broadway Bar Hop'
   };

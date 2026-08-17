@@ -8,26 +8,44 @@
   var DEMO_PLACE      = CFG.demoPlaceId   || 1;
   var TRIP_NAMES      = CFG.tripNames     || 'a curated day trip';
   var DEMO_SAVED_IDS  = CFG.demoSavedIds  || null; /* array of 3-4 real place IDs */
+  var PLACE_COUNT     = (typeof window.PLACE_COUNT === 'number') ? window.PLACE_COUNT : ((typeof PLACES !== 'undefined') ? PLACES.length : 63); /* single source of truth, set in events.js before events merge */
 
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
     {
       title: 'Welcome to Your Perfect Day in ' + CITY,
-      body: 'We curated ' + (typeof PLACES !== 'undefined' ? PLACES.length : 63) + ' places for you to explore and plan your perfect day in ' + CITY + '. Tap Next to start.',
+      body: 'We curated ' + PLACE_COUNT + ' places for you to explore and plan your perfect day in ' + CITY + '. Tap Next to start.',
       target: null,
       cardPos: 'center',
       demo: null,
       btn: 'Next'
     },
     {
-      /* Filter by type + area (merged), shown before the card step */
-      title: 'Filter by type and area',
-      body: 'Slide the top bar to filter by place type, or tap a ' + CITY + ' neighborhood below to zoom in. The map follows either way.',
+      /* Filter by type */
+      title: 'Filter by type',
+      body: 'Slide the top bar to filter places by type: dining, music, shopping and more. The map follows along.',
       target: '.filter-bar',
-      dualTargets: ['.filter-bar', '#nbhd-bar'],
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',
+      btn: 'Next'
+    },
+    {
+      /* Seasonal events — the live, changing highlight */
+      title: 'Seasonal events',
+      body: 'The Seasonal band along the bottom shows what is happening in ' + CITY + ' now or soon: festivals, concerts and events we keep refreshed for you. Tap one to open it on the map.',
+      target: '#seasonal-bar',
+      cardPos: 'center',
+      demo: 'scroll-seasonal',
+      btn: 'Next'
+    },
+    {
+      /* Explore the full map of curated places */
+      title: 'Explore ' + PLACE_COUNT + ' curated places',
+      body: 'Every pin on the map is a place we picked for you across ' + CITY + ': dining, music, sights and more. Have a look around.',
+      target: null,
+      cardPos: 'center',
+      demo: 'reset-map',
       btn: 'Next'
     },
     {
@@ -317,6 +335,8 @@
   }
 
   function tapPinDemo() {
+    /* Close any card left open by an earlier step (e.g. the seasonal demo) */
+    if (_demoCardOpen && typeof closePlaceCard === 'function') { closePlaceCard(false); _demoCardOpen = false; }
     /* Find a visible marker near screen centre to "tap" */
     var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
     var markers = document.querySelectorAll('.mgl-marker, .leaflet-marker-icon');
@@ -346,6 +366,29 @@
       closePlaceCard(false);
       _demoCardOpen = false;
     }
+  }
+
+  function openSeasonalDemo() {
+    /* On phones the card is a bottom sheet that would cover the band; just show the band there. */
+    if (window.innerWidth < 768) return;
+    try {
+      var firstId = null;
+      if (typeof EVENTS !== 'undefined' && typeof isEventInWindow === 'function') {
+        var evs = EVENTS.filter(function (e) { return isEventInWindow(e); });
+        if (evs.length) firstId = evs[0].id;
+      }
+      if (firstId != null && typeof openSeasonalEvent === 'function') {
+        openSeasonalEvent(firstId, true);
+        _demoCardOpen = true;
+        setTimeout(function () { setCard(0, null); }, 340);
+      }
+    } catch (e) {}
+  }
+
+  function resetMapDemo() {
+    /* Close any open card (e.g. the seasonal one) and restore the default map of place pins */
+    if (_demoCardOpen && typeof closePlaceCard === 'function') { closePlaceCard(false); _demoCardOpen = false; }
+    if (typeof applyFilters === 'function') applyFilters();
   }
 
   function scrollCardDemo() {
@@ -489,6 +532,31 @@
           }
           requestAnimationFrame(goLeft);
         }, 500);
+      }
+    }
+    requestAnimationFrame(goRight);
+  }
+
+  function scrollSeasonalDemo() {
+    var row = document.getElementById('seasonal-row');
+    if (!row) return;
+    var maxScroll = row.scrollWidth - row.clientWidth;
+    if (maxScroll <= 4) return;
+    var t = 0;
+    function goRight() {
+      t += 18;
+      row.scrollLeft = Math.min(maxScroll, (t / 700) * maxScroll);
+      if (t < 700) { requestAnimationFrame(goRight); }
+      else {
+        setTimeout(function () {
+          var t2 = 0; var start = row.scrollLeft;
+          function goLeft() {
+            t2 += 18;
+            row.scrollLeft = Math.max(0, start * (1 - t2 / 500));
+            if (t2 < 500) requestAnimationFrame(goLeft);
+          }
+          requestAnimationFrame(goLeft);
+        }, 600);
       }
     }
     requestAnimationFrame(goRight);
@@ -688,6 +756,9 @@
         _demoCardOpen = true;
       }
     }, 3000); }
+    if (step.demo === 'open-seasonal')     { setTimeout(openSeasonalDemo, 450); }
+    if (step.demo === 'scroll-seasonal')   { setTimeout(scrollSeasonalDemo, 500); }
+    if (step.demo === 'reset-map')         { setTimeout(resetMapDemo, 200); }
     if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
@@ -743,6 +814,7 @@
 
   /* ── Public restart ─────────────────────────────────────────── */
   window.restartTutorial = function () {
+    if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'button' });
     localStorage.removeItem(DONE_KEY);
     launch();
   };
@@ -779,7 +851,7 @@
     ].join('');
     document.body.appendChild(n);
     requestAnimationFrame(function () { n.classList.add('show'); });
-    document.getElementById('tut-nudge-go').addEventListener('click', function () { dismissNudge(); launch(); });
+    document.getElementById('tut-nudge-go').addEventListener('click', function () { if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'nudge' }); dismissNudge(); launch(); });
     document.getElementById('tut-nudge-x').addEventListener('click', dismissNudge);
     _nudgeTimer = setTimeout(dismissNudge, 15000);
   }

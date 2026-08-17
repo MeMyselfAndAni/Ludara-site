@@ -9,12 +9,14 @@ let CARD_MODE    = 'detail'; // 'detail' | 'nbhd'
 
 const CAT_COLORS = {
   landmark:'#e8724a', food:'#f0c060', cafe:'#6b9e6e',
-  church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a'
+  church:'#6090c8', market:'#c08060', soviet:'#9080a8', pub:'#9080a8', nature:'#50906a',
+  event:'#9A6E12'
 };
 const CAT_LABELS = {
   landmark:'Landmark', food:'Restaurant', cafe:'Café & Bar',
   church:'Church & Spiritual', market:'Market & Shopping',
-  soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature & Views'
+  soviet:'Soviet Heritage', pub:'Pub & Bar', nature:'Nature & Views',
+  event:'Special event'
 };
 const CAT_GRADIENTS = {
   landmark:'linear-gradient(135deg,#1a3a5c,#2a5298)',
@@ -25,6 +27,7 @@ const CAT_GRADIENTS = {
   soviet:  'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
   pub:     'linear-gradient(135deg,#3a1a5c,#6a3a9c)',
   nature:  'linear-gradient(135deg,#1a4a2a,#3a8a4a)',
+  event:   'linear-gradient(135deg,#2b211c,#241b16)',
 };
 
 // ── Open card from list ────────────────────────────────────────
@@ -104,7 +107,7 @@ function _renderNbhdList(nbhd){
 
 function _clearNbhdList(){
   // Restore full count on all badges
-  const n = PLACES.length;
+  const n = (typeof PLACE_COUNT === 'number') ? PLACE_COUNT : PLACES.length;
   ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.textContent = n;
@@ -209,6 +212,17 @@ function _reserveMeta(p){
 function _populateCard(p){
   CARD_PLACE = p;
 
+  // Restore default (non-event) card chrome in case the previous card was an event
+  var _evHdr = document.getElementById('pc-event-hdr');
+  if(_evHdr) _evHdr.remove();
+  var _pcCard = document.getElementById('place-card'); if(_pcCard) _pcCard.classList.remove('card-event');
+  ['pc-title','pc-type','pc-address','pc-cat','pc-emoji'].forEach(function(id){
+    var e = document.getElementById(id); if(e) e.style.display = '';
+  });
+
+  // Special events get their own designed card (no photo, exciting write-up)
+  if(p.cat === 'event'){ _populateEventCard(p); return; }
+
   const wrap = document.getElementById('pc-photo-wrap');
   const placeholder = document.getElementById('pc-emoji');
   const img = document.getElementById('pc-img');
@@ -302,6 +316,72 @@ function _populateCard(p){
 
   const body = document.getElementById('pc-body');
   if(body) body.scrollTop = 0;
+}
+
+// ── Special-event card (no photo, designed header + write-up) ──
+function _eventDateText(p){
+  return p.address ? (p.address.split('·')[0].trim() + ', 2026') : '';
+}
+function _populateEventCard(p){
+  CARD_PLACE = p;
+  var _pcCard = document.getElementById('place-card'); if(_pcCard) _pcCard.classList.add('card-event');
+  var wrap = document.getElementById('pc-photo-wrap');
+  var img = document.getElementById('pc-img');
+  var placeholder = document.getElementById('pc-emoji');
+  var credit = document.getElementById('pc-credit');
+
+  if(img){ img.classList.remove('loaded'); img.src = ''; }
+  if(credit) credit.innerHTML = '';
+  if(placeholder) placeholder.style.display = 'none';
+  if(wrap) wrap.style.background = '#2b211c';
+
+  var chip = (typeof eventDayLabel === 'function') ? eventDayLabel(p) : '';
+  var hdr = document.getElementById('pc-event-hdr');
+  if(!hdr && wrap){ hdr = document.createElement('div'); hdr.id = 'pc-event-hdr'; wrap.appendChild(hdr); }
+  if(hdr){
+    hdr.style.cssText = 'position:absolute;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:24px 22px;color:#f3ece1;box-sizing:border-box;pointer-events:none;';
+    hdr.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2.5px;color:#c9a24b;font-weight:700;text-transform:uppercase;">Special event</div>' +
+      '<div style="font-family:Georgia,serif;font-size:26px;line-height:1.15;margin-top:10px;">' + p.name + '</div>' +
+      '<div style="display:flex;align-items:center;gap:9px;margin-top:14px;flex-wrap:wrap;">' +
+        '<span style="font-size:14px;color:#e7dccb;">' + _eventDateText(p) + '</span>' +
+        (chip ? '<span style="font-size:11px;color:#2b211c;background:#c9a24b;border-radius:20px;padding:2px 10px;font-weight:700;">' + chip + '</span>' : '') +
+      '</div>';
+  }
+
+  ['pc-title','pc-type','pc-address','pc-cat'].forEach(function(id){ var e = document.getElementById(id); if(e) e.style.display = 'none'; });
+  var awardsEl = document.getElementById('pc-awards'); if(awardsEl) awardsEl.style.display = 'none';
+  var tipEl = document.getElementById('pc-tip'); if(tipEl) tipEl.style.display = 'none';
+  var byEl = document.querySelector('.pc-emily-by'); if(byEl) byEl.textContent = '';
+
+  var venue = p.address ? p.address.split('·').slice(1).join('·').trim() : '';
+  var lines = [];
+  if(venue) lines.push('📍 ' + venue);
+  var hb = [];
+  if(p.hours) hb.push(p.hours);
+  if(p.admission) hb.push(p.admission);
+  if(hb.length) lines.push('🕐 ' + hb.join('  ·  '));
+  var hoursEl = document.getElementById('pc-hours');
+  if(hoursEl){ hoursEl.style.display = ''; hoursEl.innerHTML = lines.join('<br>'); }
+
+  var noteEl = document.getElementById('pc-note'); if(noteEl) noteEl.textContent = p.note || '';
+
+  var contacts = '';
+  if(p.url){
+    contacts += '<a class="pc-contact-pill pc-reserve-pill" href="' + p.url + '" target="_blank" rel="noopener" onclick="apdTrack(\'event_details\',{event_id:' + p.id + '})"><span class="pc-ico">🎟️</span>Details &amp; tickets</a>';
+  }
+  if(p.lat && p.lng){
+    var dest = p.lat + ',' + p.lng;
+    var navUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+    contacts += '<a class="pc-contact-pill pc-nav-pill" href="' + navUrl + '" target="_blank" rel="noopener" onclick="apdTrack(\'navigate\',{place_id:' + p.id + '})"><span class="pc-ico">🚶</span>Navigate</a>';
+  }
+  var contactsEl = document.getElementById('pc-contacts'); if(contactsEl) contactsEl.innerHTML = contacts;
+
+  // Nav arrows stay visible; CSS (.card-event) drops them to the foot of the brown
+  // header so they never cover the title.
+
+  _updateFavBtn();
+  var body = document.getElementById('pc-body'); if(body) body.scrollTop = 0;
 }
 
 // ── Fav ──────────────────────────────────────────────────────

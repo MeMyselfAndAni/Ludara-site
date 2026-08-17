@@ -3,13 +3,14 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apd-shell-v17';
+var SHELL_CACHE = 'apd-shell-v38';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
   './',
   './index.html',
   './data.js',
+  './events.js',
   './map.js',
   './photos.js',
   './map-core.js',

@@ -228,7 +228,8 @@ function renderList(){
     if(_searchIconBtn) _searchIconBtn.style.display = 'none';
     if(_searchInputEl){ _searchInputEl.style.display = 'none'; _searchInputEl.value = ''; _searchQuery = ''; }
     const rawFavs = JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
-    const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean);
+    const allSaved = rawFavs.map(id => PLACES.find(x => x.id === id || x.id === +id)).filter(Boolean)
+      .filter(p => typeof isEventNotPassed !== 'function' || isEventNotPassed(p)); // never a passed event
 
     // Use manual order if set, otherwise auto proximity sort
     let sorted = _applyDragOrder(allSaved);
@@ -312,11 +313,17 @@ function renderList(){
   if(_searchIconBtn) _searchIconBtn.style.display = '';
 
   filtered = PLACES.filter(p => {
-    const catOk    = AF === 'all' || p.cat === AF;
-    const nbhdOk   = true; /* neighborhood selection only pans map — all markers stay visible */
-    const openOk   = !openNowActive || isOpenNow(p);
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
-    return catOk && nbhdOk && openOk && searchOk;
+    if(p.cat === 'event'){
+      const evShow = openNowActive
+        ? (typeof isEventOnNow === 'function' && isEventOnNow(p))
+        : (AF === 'event' && typeof isEventInWindow === 'function' && isEventInWindow(p));
+      return evShow && searchOk;
+    }
+    if(AF === 'event') return false; /* Seasonal shows events only */
+    const catOk    = AF === 'all' || p.cat === AF;
+    const openOk   = !openNowActive || isOpenNow(p);
+    return catOk && openOk && searchOk;
   });
   const count = filtered.length;
   const nbhdName = (typeof ANF !== 'undefined' && ANF && ANF !== 'all') ? ({
@@ -324,14 +331,22 @@ function renderList(){
   }[ANF] || ANF) + ' · ' : '';
   const _titleText = _searchQuery
     ? (count + ' match' + (count !== 1 ? 'es' : ''))
-    : (nbhdName + count + ' Places');
+    : (AF === 'event'
+        ? (count + (count === 1 ? ' event' : ' events'))
+        : (nbhdName + count + ' Places'));
   document.getElementById('sheet-title').textContent = _titleText;
   document.getElementById('list-badge').textContent = count;
+
+  if(AF === 'event' && count === 0){
+    const _emptyMsg = openNowActive ? 'No special events happening today.' : 'No special events in the next month.';
+    el.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;line-height:1.5;">' + _emptyMsg + '<br>Please check back soon.</div>';
+    return;
+  }
 
   el.innerHTML=filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
-      <div class="place-thumb" id="thumb-${p.id}">${p.emoji}</div>
+      <div class="place-thumb" id="thumb-${p.id}"${p.cat==='event'?' style="background:#2B211C"':''}>${p.cat==='event' && typeof eventGlyphHTML==='function' ? eventGlyphHTML() : p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
         <div class="place-type">${CL[p.cat]}</div>
@@ -381,7 +396,11 @@ function fc(el,cat){
   applyFilters();
 
   // Fit MapLibre map to visible places
-  const vis = PLACES.filter(p=>(AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p)));
+  const vis = PLACES.filter(p=>{
+    if(p.cat==='event') return AF==='event' && (typeof isEventInWindow==='function'?isEventInWindow(p):false);
+    if(AF==='event') return false;
+    return (AF==='all'||p.cat===AF)&&(!openNowActive||isOpenNow(p));
+  });
   if(vis.length && map){
     const lngs = vis.map(p => p.lng), lats = vis.map(p => p.lat);
     map.fitBounds(
@@ -586,17 +605,25 @@ function applyFilters(){
     ? JSON.parse(localStorage.getItem(FAVS_KEY) || '[]').map(Number)
     : null;
 
+  const _inWindow = (p) => (typeof isEventInWindow === 'function' ? isEventInWindow(p) : false);
   PLACES.forEach(p => {
     let visible;
     if(isSaved){
       const inSaved = savedIds.includes(p.id);
-      const inCat   = AF !== 'all' && p.cat === AF;
+      let inCat = AF !== 'all' && p.cat === AF;
+      if(p.cat === 'event') inCat = inCat && _inWindow(p);
       visible = inSaved || inCat;
+      if(p.cat === 'event' && typeof isEventNotPassed === 'function' && !isEventNotPassed(p)) visible = false; // never a passed event
+    } else if(p.cat === 'event'){
+      if(openNowActive) visible = (typeof isEventOnNow === 'function' && isEventOnNow(p)); /* Open Now: only events happening today */
+      else if(AF === 'event') visible = _inWindow(p);            /* Seasonal: whole month ahead */
+      else visible = false;
+    } else if(AF === 'event'){
+      visible = false; /* hide normal places while Seasonal is active */
     } else {
-      const nbhdOk = true; /* neighborhood selection only pans map — all markers stay visible */
       const catOk  = AF === 'all' || p.cat === AF;
       const openOk = !openNowActive || isOpenNow(p);
-      visible = catOk && openOk && nbhdOk;
+      visible = catOk && openOk;
     }
     if(markers[p.id]) markers[p.id].setVisible(visible);
   });
