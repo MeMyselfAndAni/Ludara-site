@@ -185,3 +185,52 @@ if (typeof PLACES !== 'undefined' && Array.isArray(PLACES)) {
   EVENTS.sort(function(a,b){ return a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0); });
   PLACES.push.apply(PLACES, EVENTS);
 }
+
+// ── Seasonal ribbon (bottom bar) ──────────────────────────────
+// Events in the next month, sorted by date, as tappable mini-cards.
+function _eventsInWindowSorted(){
+  return EVENTS.filter(isEventInWindow).sort(function(a,b){
+    return a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0);
+  });
+}
+function renderSeasonalBar(){
+  var row = document.getElementById('seasonal-row');
+  if(!row) return;
+  var evs = _eventsInWindowSorted();
+  if(!evs.length){
+    row.innerHTML = '<div style="color:#cbb894;font-size:0.78rem;padding:8px 6px;">More events coming soon.</div>';
+    return;
+  }
+  row.innerHTML = evs.map(function(p){
+    var dateTxt = p.address ? p.address.split('·')[0].trim() : '';
+    var glyph = (typeof eventGlyphHTML === 'function') ? eventGlyphHTML() : '';
+    return '<div class="seasonal-card" onclick="openSeasonalEvent(' + p.id + ')">'
+      + glyph
+      + '<span class="sc-name">' + p.name + '</span>'
+      + '<span class="sc-date">· ' + dateTxt + '</span>'
+      + '</div>';
+  }).join('');
+}
+// Open an event card from the ribbon, with the events (not the place list) as the ‹ › nav set.
+function openSeasonalEvent(id){
+  try {
+    if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
+    CARD_LIST = _eventsInWindowSorted();
+    CARD_IDX = CARD_LIST.findIndex(function(x){ return x.id === id; });
+    if(CARD_IDX < 0) CARD_IDX = 0;
+    var p = PLACES.find(function(x){ return x.id === id; });
+    if(!p) return;
+    if(typeof apdTrack === 'function') apdTrack('place_open', { place_id: p.id, place_name: p.name });
+    if(typeof _activateMarker === 'function') _activateMarker(p);
+    var back = document.getElementById('pc-btn-back'); if(back) back.style.display = 'flex';
+    if(typeof _refreshNav === 'function') _refreshNav();
+    if(typeof _populateCard === 'function') _populateCard(p);
+    if(typeof _openCard === 'function') _openCard();
+    if(window.innerWidth < 768){ var s = document.getElementById('sheet'); if(s) s.classList.remove('open'); }
+  } catch(e){
+    if(typeof openDetail === 'function') openDetail(id);
+  }
+}
+if(typeof document !== 'undefined'){
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(renderSeasonalBar, 300); });
+}

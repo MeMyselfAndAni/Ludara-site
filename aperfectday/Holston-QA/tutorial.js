@@ -24,7 +24,7 @@
       title: 'Filter by type and area',
       body: 'Slide the top bar to filter by place type, or tap a ' + CITY + ' neighborhood below to zoom in. The map follows either way.',
       target: '.filter-bar',
-      dualTargets: ['.filter-bar', '#nbhd-bar'],
+      dualTargets: ['.filter-bar', '#seasonal-bar'],
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',

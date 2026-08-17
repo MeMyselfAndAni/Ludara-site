@@ -382,6 +382,35 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 
 /* ── Neighbourhood title — floats just above the bar, always visible ── */
+/* ── Seasonal events ribbon (replaces the neighbourhood bar) ── */
+#nbhd-bar, #nbhd-title, #nbhd-show-btn { display: none !important; }
+#place-card.card-event #pc-counter { display: none !important; }
+#seasonal-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1098;
+  display: flex; align-items: center; gap: 12px;
+  background: #31261d; border-top: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px 10px 0 0; padding: 10px 12px;
+  box-shadow: 0 -2px 14px rgba(0,0,0,0.22);
+}
+#seasonal-label {
+  flex: 0 0 auto; color: #FFC12E;
+  font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.2;
+}
+#seasonal-row { flex: 1 1 auto; min-width: 0; display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#seasonal-row::-webkit-scrollbar { display: none; }
+.seasonal-card {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+  background: #3a2c22; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 22px; padding: 7px 15px 7px 10px; cursor: pointer;
+  transition: transform .12s, background .12s;
+}
+.seasonal-card:hover { background: #463527; transform: translateY(-1px); }
+.seasonal-card svg { width: 20px; height: 20px; flex: 0 0 auto; }
+.seasonal-card .sc-name { font-family: Georgia, serif; color: #f3ece1; font-size: 0.84rem; white-space: nowrap; }
+.seasonal-card .sc-date { font-family: 'Inter', sans-serif; color: #cbb894; font-size: 0.7rem; white-space: nowrap; }
+.sheet.open ~ #seasonal-bar { display: none; }
+
 #nbhd-title {
   position: fixed;
   left: 0; right: 0;
