@@ -369,6 +369,8 @@
   }
 
   function openSeasonalDemo() {
+    /* On phones the card is a bottom sheet that would cover the band; just show the band there. */
+    if (window.innerWidth < 768) return;
     try {
       var firstId = null;
       if (typeof EVENTS !== 'undefined' && typeof isEventInWindow === 'function') {

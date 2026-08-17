@@ -491,6 +491,10 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   /* When sheet is open, hide nbhd-bar and browse button */
   .sheet.open ~ #nbhd-bar { display: none; }
   .sheet.open ~ .list-toggle { display: none !important; }
+  /* openSheet() adds .hidden — the sibling rule above is unreliable because
+     #list-toggle sits before .sheet in the DOM. This guarantees it hides so
+     it never covers the sheet's ✕ close button. */
+  #list-toggle.hidden, .list-toggle.hidden { display: none !important; }
 
   /* ── Browse all places: horizontal pill, top-right under filter bar ── */
   .list-toggle {
