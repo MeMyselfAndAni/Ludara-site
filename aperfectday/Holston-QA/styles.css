@@ -402,13 +402,14 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .seasonal-card {
   flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
   background: #3a2c22; border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 22px; padding: 7px 15px 7px 10px; cursor: pointer;
+  border-radius: 14px; padding: 6px 13px 6px 9px; cursor: pointer;
   transition: transform .12s, background .12s;
 }
 .seasonal-card:hover { background: #463527; transform: translateY(-1px); }
 .seasonal-card svg { width: 20px; height: 20px; flex: 0 0 auto; }
-.seasonal-card .sc-name { font-family: Georgia, serif; color: #f3ece1; font-size: 0.84rem; white-space: nowrap; }
-.seasonal-card .sc-date { font-family: 'Inter', sans-serif; color: #cbb894; font-size: 0.7rem; white-space: nowrap; }
+.seasonal-card .sc-text { display: flex; flex-direction: column; line-height: 1.18; }
+.seasonal-card .sc-name { font-family: Georgia, serif; color: #f3ece1; font-size: 0.82rem; white-space: nowrap; }
+.seasonal-card .sc-date { font-family: 'Inter', sans-serif; color: #cbb894; font-size: 0.66rem; white-space: nowrap; }
 .sheet.open ~ #seasonal-bar { display: none; }
 
 #nbhd-title {

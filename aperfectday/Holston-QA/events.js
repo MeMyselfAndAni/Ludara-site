@@ -206,8 +206,8 @@ function renderSeasonalBar(){
     var glyph = (typeof eventGlyphHTML === 'function') ? eventGlyphHTML() : '';
     return '<div class="seasonal-card" onclick="openSeasonalEvent(' + p.id + ')">'
       + glyph
-      + '<span class="sc-name">' + p.name + '</span>'
-      + '<span class="sc-date">· ' + dateTxt + '</span>'
+      + '<span class="sc-text"><span class="sc-name">' + p.name + '</span>'
+      + '<span class="sc-date">' + dateTxt + '</span></span>'
       + '</div>';
   }).join('');
 }

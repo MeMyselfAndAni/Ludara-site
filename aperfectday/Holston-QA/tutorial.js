@@ -20,9 +20,9 @@
       btn: 'Next'
     },
     {
-      /* Filter by type + area (merged), shown before the card step */
-      title: 'Filter by type and area',
-      body: 'Slide the top bar to filter by place type, or tap a ' + CITY + ' neighborhood below to zoom in. The map follows either way.',
+      /* Filter by type + what's on (merged), shown before the card step */
+      title: "Filter by type, and see what's on",
+      body: 'Slide the top bar to filter by place type. Along the bottom, the Seasonal band shows what is happening in ' + CITY + ' this month, tap any event to see it on the map.',
       target: '.filter-bar',
       dualTargets: ['.filter-bar', '#seasonal-bar'],
       cardPos: 'center',
