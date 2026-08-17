@@ -1,5 +1,7 @@
 // ── Neighbourhood filter (works with type filter as intersection) ──
 function selectNbhd(nbhd, el){
+  // GA: record which neighbourhood pill was tapped (captures the raw tap, before toggle-off)
+  if(typeof apdTrack === 'function') apdTrack('neighbourhood', { name: nbhd });
   // Toggle off if already active
   if(ANF === nbhd && nbhd !== 'all'){ nbhd = 'all'; }
   ANF = nbhd;
