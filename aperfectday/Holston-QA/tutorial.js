@@ -8,7 +8,7 @@
   var DEMO_PLACE      = CFG.demoPlaceId   || 1;
   var TRIP_NAMES      = CFG.tripNames     || 'a curated day trip';
   var DEMO_SAVED_IDS  = CFG.demoSavedIds  || null; /* array of 3-4 real place IDs */
-  var PLACE_COUNT     = (typeof PLACES !== 'undefined') ? PLACES.filter(function(p){ return p.cat !== 'event'; }).length : 63; /* exclude seasonal events */
+  var PLACE_COUNT     = (typeof window.PLACE_COUNT === 'number') ? window.PLACE_COUNT : ((typeof PLACES !== 'undefined') ? PLACES.length : 63); /* single source of truth, set in events.js before events merge */
 
   /* ── Step definitions ───────────────────────────────────────── */
   var STEPS = [
@@ -376,7 +376,7 @@
         if (evs.length) firstId = evs[0].id;
       }
       if (firstId != null && typeof openSeasonalEvent === 'function') {
-        openSeasonalEvent(firstId);
+        openSeasonalEvent(firstId, true);
         _demoCardOpen = true;
         setTimeout(function () { setCard(0, null); }, 340);
       }
@@ -786,6 +786,7 @@
 
   /* ── Public restart ─────────────────────────────────────────── */
   window.restartTutorial = function () {
+    if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'button' });
     localStorage.removeItem(DONE_KEY);
     launch();
   };
@@ -822,7 +823,7 @@
     ].join('');
     document.body.appendChild(n);
     requestAnimationFrame(function () { n.classList.add('show'); });
-    document.getElementById('tut-nudge-go').addEventListener('click', function () { dismissNudge(); launch(); });
+    document.getElementById('tut-nudge-go').addEventListener('click', function () { if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'nudge' }); dismissNudge(); launch(); });
     document.getElementById('tut-nudge-x').addEventListener('click', dismissNudge);
     _nudgeTimer = setTimeout(dismissNudge, 15000);
   }

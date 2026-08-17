@@ -7,6 +7,7 @@ const MAP_ZOOM          = 13;
 const OFFLINE_CENTER    = { lat: 36.1500, lng: -86.7879 };
 const GUIDE_CITY        = 'Nashville';
 const BLOGGER_NAME      = 'Ludara';
+const HOTEL_NAME        = 'The Holston House';   // curator shown on the PDF cover (per-guide)
 const GUIDE_TIMEZONE    = 'America/Chicago';    // Central Time
 const TIME_FORMAT       = '12h';               // Display hours in AM/PM for US guides
 const DISTANCE_UNITS    = 'imperial';         // Use feet/miles for US guides

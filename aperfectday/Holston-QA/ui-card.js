@@ -107,7 +107,7 @@ function _renderNbhdList(nbhd){
 
 function _clearNbhdList(){
   // Restore full count on all badges
-  const n = PLACES.length;
+  const n = (typeof PLACE_COUNT === 'number') ? PLACE_COUNT : PLACES.length;
   ['list-badge','list-badge-desktop','desktop-list-count'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.textContent = n;

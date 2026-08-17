@@ -182,6 +182,9 @@ function eventDayLabel(p){
 // Merge events into PLACES so pins, cards and favourites work natively.
 // (Visibility is still gated by the What's On filter + date window.)
 if (typeof PLACES !== 'undefined' && Array.isArray(PLACES)) {
+  // Canonical count of curated places, captured BEFORE events merge in.
+  // Single source of truth for every "N places" display; works for any hotel.
+  window.PLACE_COUNT = PLACES.length;
   EVENTS.sort(function(a,b){ return a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0); });
   PLACES.push.apply(PLACES, EVENTS);
 }
@@ -212,7 +215,7 @@ function renderSeasonalBar(){
   }).join('');
 }
 // Open an event card from the ribbon, with the events (not the place list) as the ‹ › nav set.
-function openSeasonalEvent(id){
+function openSeasonalEvent(id, silent){
   try {
     if(typeof CARD_MODE !== 'undefined') CARD_MODE = 'detail';
     CARD_LIST = _eventsInWindowSorted();
@@ -220,7 +223,8 @@ function openSeasonalEvent(id){
     if(CARD_IDX < 0) CARD_IDX = 0;
     var p = PLACES.find(function(x){ return x.id === id; });
     if(!p) return;
-    if(typeof apdTrack === 'function') apdTrack('place_open', { place_id: p.id, place_name: p.name });
+    // GA: count seasonal pill presses per event (silent when opened by the tutorial demo)
+    if(!silent && typeof apdTrack === 'function') apdTrack('seasonal_open', { event_id: p.id, event_name: p.name });
     if(typeof _activateMarker === 'function') _activateMarker(p);
     // Reveal the event's pin on the map (event pins are hidden by default)
     if(typeof markers !== 'undefined' && markers[p.id] && markers[p.id].setVisible) markers[p.id].setVisible(true);
