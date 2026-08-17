@@ -222,6 +222,8 @@ function openSeasonalEvent(id){
     if(!p) return;
     if(typeof apdTrack === 'function') apdTrack('place_open', { place_id: p.id, place_name: p.name });
     if(typeof _activateMarker === 'function') _activateMarker(p);
+    // Reveal the event's pin on the map (event pins are hidden by default)
+    if(typeof markers !== 'undefined' && markers[p.id] && markers[p.id].setVisible) markers[p.id].setVisible(true);
     var back = document.getElementById('pc-btn-back'); if(back) back.style.display = 'flex';
     if(typeof _refreshNav === 'function') _refreshNav();
     if(typeof _populateCard === 'function') _populateCard(p);

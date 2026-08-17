@@ -386,7 +386,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 #nbhd-bar, #nbhd-title, #nbhd-show-btn { display: none !important; }
 #place-card.card-event #pc-counter { display: none !important; }
 #seasonal-bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1098;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1495; /* above the card dim (1490), below the card (1500) so pills stay tappable while a card is open */
   display: flex; align-items: center; gap: 12px;
   background: #31261d; border-top: 1px solid rgba(255,255,255,0.10);
   border-radius: 10px 10px 0 0; padding: 10px 12px;

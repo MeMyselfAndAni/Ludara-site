@@ -20,14 +20,22 @@
       btn: 'Next'
     },
     {
-      /* Filter by type + what's on (merged), shown before the card step */
-      title: "Filter by type, and see what's on",
-      body: 'Slide the top bar to filter by place type. Along the bottom, the Seasonal band shows what is happening in ' + CITY + ' this month, tap any event to see it on the map.',
+      /* Filter by type */
+      title: 'Filter by type',
+      body: 'Slide the top bar to filter places by type: dining, music, shopping and more. The map follows along.',
       target: '.filter-bar',
-      dualTargets: ['.filter-bar', '#seasonal-bar'],
       cardPos: 'center',
       closeCard: true,
       demo: 'scroll-filter',
+      btn: 'Next'
+    },
+    {
+      /* Seasonal events — the live, changing highlight */
+      title: "What's on this season",
+      body: 'The Seasonal band along the bottom shows what is happening in ' + CITY + ' right now: festivals, concerts and events we keep refreshed for you. Tap one to open it on the map.',
+      target: '#seasonal-bar',
+      cardPos: 'center',
+      demo: 'open-seasonal',
       btn: 'Next'
     },
     {
@@ -317,6 +325,8 @@
   }
 
   function tapPinDemo() {
+    /* Close any card left open by an earlier step (e.g. the seasonal demo) */
+    if (_demoCardOpen && typeof closePlaceCard === 'function') { closePlaceCard(false); _demoCardOpen = false; }
     /* Find a visible marker near screen centre to "tap" */
     var tapX = window.innerWidth * 0.5, tapY = window.innerHeight * 0.4;
     var markers = document.querySelectorAll('.mgl-marker, .leaflet-marker-icon');
@@ -346,6 +356,21 @@
       closePlaceCard(false);
       _demoCardOpen = false;
     }
+  }
+
+  function openSeasonalDemo() {
+    try {
+      var firstId = null;
+      if (typeof EVENTS !== 'undefined' && typeof isEventInWindow === 'function') {
+        var evs = EVENTS.filter(function (e) { return isEventInWindow(e); });
+        if (evs.length) firstId = evs[0].id;
+      }
+      if (firstId != null && typeof openSeasonalEvent === 'function') {
+        openSeasonalEvent(firstId);
+        _demoCardOpen = true;
+        setTimeout(function () { setCard(0, null); }, 340);
+      }
+    } catch (e) {}
   }
 
   function scrollCardDemo() {
@@ -688,6 +713,7 @@
         _demoCardOpen = true;
       }
     }, 3000); }
+    if (step.demo === 'open-seasonal')     { setTimeout(openSeasonalDemo, 450); }
     if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }
     if (step.demo === 'close-card')        { setTimeout(closeDemoCard,    100); }
