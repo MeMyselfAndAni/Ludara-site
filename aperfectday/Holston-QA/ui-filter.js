@@ -315,9 +315,9 @@ function renderList(){
   filtered = PLACES.filter(p => {
     const searchOk = !_searchQuery || p.name.toLowerCase().includes(_searchQuery);
     if(p.cat === 'event'){
-      const evShow = (AF === 'event')
-        ? (typeof isEventInWindow === 'function' && isEventInWindow(p))
-        : (openNowActive && typeof isEventOnNow === 'function' && isEventOnNow(p));
+      const evShow = openNowActive
+        ? (typeof isEventOnNow === 'function' && isEventOnNow(p))
+        : (AF === 'event' && typeof isEventInWindow === 'function' && isEventInWindow(p));
       return evShow && searchOk;
     }
     if(AF === 'event') return false; /* Seasonal shows events only */
@@ -338,7 +338,8 @@ function renderList(){
   document.getElementById('list-badge').textContent = count;
 
   if(AF === 'event' && count === 0){
-    el.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;line-height:1.5;">No special events in the next month.<br>Please check back soon.</div>';
+    const _emptyMsg = openNowActive ? 'No special events happening today.' : 'No special events in the next month.';
+    el.innerHTML = '<div style="padding:32px 20px;text-align:center;color:#999;font-size:0.85rem;line-height:1.5;">' + _emptyMsg + '<br>Please check back soon.</div>';
     return;
   }
 
@@ -614,8 +615,8 @@ function applyFilters(){
       visible = inSaved || inCat;
       if(p.cat === 'event' && typeof isEventNotPassed === 'function' && !isEventNotPassed(p)) visible = false; // never a passed event
     } else if(p.cat === 'event'){
-      if(AF === 'event') visible = _inWindow(p);                 /* Seasonal filter: whole month */
-      else if(openNowActive) visible = (typeof isEventOnNow === 'function' && isEventOnNow(p)); /* Open Now also counts events happening today */
+      if(openNowActive) visible = (typeof isEventOnNow === 'function' && isEventOnNow(p)); /* Open Now: only events happening today */
+      else if(AF === 'event') visible = _inWindow(p);            /* Seasonal: whole month ahead */
       else visible = false;
     } else if(AF === 'event'){
       visible = false; /* hide normal places while Seasonal is active */
