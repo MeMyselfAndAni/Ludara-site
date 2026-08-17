@@ -149,7 +149,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   right: 10px;
   bottom: auto;
   left: auto;
-  z-index: 420;
+  z-index: 355;            /* below the sheet (360) so the open list's ✕ + handle stay tappable */
   background: rgba(49,38,29,0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -401,11 +401,12 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 #seasonal-row::-webkit-scrollbar { display: none; }
 .seasonal-card {
   flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
-  background: #3a2c22; border: 1px solid rgba(255,255,255,0.12);
+  background: #3a2c22; border: 1.5px solid #C9A24B;
   border-radius: 14px; padding: 6px 13px 6px 9px; cursor: pointer;
-  transition: transform .12s, background .12s;
+  box-shadow: 0 0 0 1px rgba(201,162,74,0.18);
+  transition: transform .12s, background .12s, border-color .12s;
 }
-.seasonal-card:hover { background: #463527; transform: translateY(-1px); }
+.seasonal-card:hover { background: #463527; border-color: #FFC12E; transform: translateY(-1px); }
 .seasonal-card svg { width: 20px; height: 20px; flex: 0 0 auto; }
 .seasonal-card .sc-text { display: flex; flex-direction: column; line-height: 1.18; }
 .seasonal-card .sc-name { font-family: Georgia, serif; color: #f3ece1; font-size: 0.82rem; white-space: nowrap; }

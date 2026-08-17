@@ -32,11 +32,11 @@
     },
     {
       /* Seasonal events — the live, changing highlight */
-      title: "What's on this season",
+      title: 'Seasonal events',
       body: 'The Seasonal band along the bottom shows what is happening in ' + CITY + ' now or soon: festivals, concerts and events we keep refreshed for you. Tap one to open it on the map.',
       target: '#seasonal-bar',
       cardPos: 'center',
-      demo: 'open-seasonal',
+      demo: 'scroll-seasonal',
       btn: 'Next'
     },
     {
@@ -537,6 +537,31 @@
     requestAnimationFrame(goRight);
   }
 
+  function scrollSeasonalDemo() {
+    var row = document.getElementById('seasonal-row');
+    if (!row) return;
+    var maxScroll = row.scrollWidth - row.clientWidth;
+    if (maxScroll <= 4) return;
+    var t = 0;
+    function goRight() {
+      t += 18;
+      row.scrollLeft = Math.min(maxScroll, (t / 700) * maxScroll);
+      if (t < 700) { requestAnimationFrame(goRight); }
+      else {
+        setTimeout(function () {
+          var t2 = 0; var start = row.scrollLeft;
+          function goLeft() {
+            t2 += 18;
+            row.scrollLeft = Math.max(0, start * (1 - t2 / 500));
+            if (t2 < 500) requestAnimationFrame(goLeft);
+          }
+          requestAnimationFrame(goLeft);
+        }, 600);
+      }
+    }
+    requestAnimationFrame(goRight);
+  }
+
   function pulseLauncher() {
     document.querySelectorAll('.trip-btn-circle').forEach(function (b) {
       b.style.animation = 'tut-launcher-glow 1.1s ease-in-out infinite';
@@ -732,6 +757,7 @@
       }
     }, 3000); }
     if (step.demo === 'open-seasonal')     { setTimeout(openSeasonalDemo, 450); }
+    if (step.demo === 'scroll-seasonal')   { setTimeout(scrollSeasonalDemo, 500); }
     if (step.demo === 'reset-map')         { setTimeout(resetMapDemo, 200); }
     if (step.demo === 'tap-pin')           { setTimeout(tapPinDemo, 500); }
     if (step.demo === 'scroll-card')       { scrollCardDemo(); }

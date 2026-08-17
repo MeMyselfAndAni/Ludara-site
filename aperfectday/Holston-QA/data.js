@@ -603,7 +603,8 @@ const PLACES = [
     blog: "", 
     phone: "+1 615-736-5838", 
     website: "https://cityhousenashville.com",
-    resUrl: "https://www.opentable.com/r/city-house-nashville", 
+    resUrl: "https://www.opentable.com/r/city-house-nashville",
+    awards: "James Beard Award: Best Chef Southeast (Tandy Wilson, 2016)",
   },
 
   {
