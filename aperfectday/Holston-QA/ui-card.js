@@ -377,9 +377,8 @@ function _populateEventCard(p){
   }
   var contactsEl = document.getElementById('pc-contacts'); if(contactsEl) contactsEl.innerHTML = contacts;
 
-  // Hide the ‹ › nav arrows + counter on event cards so they never cover the title.
-  // (Guests move between events via the list; mobile swipe still works.)
-  ['pc-nav-prev','pc-nav-next','pc-counter'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+  // Nav arrows stay visible; CSS (.card-event) drops them to the foot of the brown
+  // header so they never cover the title.
 
   _updateFavBtn();
   var body = document.getElementById('pc-body'); if(body) body.scrollTop = 0;

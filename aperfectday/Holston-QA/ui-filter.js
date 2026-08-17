@@ -345,7 +345,7 @@ function renderList(){
   el.innerHTML=filtered.map(p=>`
     <div class="place-row ${p.id===AID?'active':''}" onclick="openDetail(${p.id})" id="row-${p.id}">
       <div class="cat-pip" style="background:${CC[p.cat]}"></div>
-      <div class="place-thumb" id="thumb-${p.id}"${p.cat==='event'?' style="background:#9A6E12;color:#fff;font-size:1.5rem"':''}>${p.emoji}</div>
+      <div class="place-thumb" id="thumb-${p.id}"${p.cat==='event'?' style="background:#2B211C"':''}>${p.cat==='event' && typeof eventGlyphHTML==='function' ? eventGlyphHTML() : p.emoji}</div>
       <div class="place-info">
         <div class="place-name">${p.name}</div>
         <div class="place-type">${CL[p.cat]}</div>

@@ -151,6 +151,16 @@ function isEventNotPassed(p){
   if(!p || p.cat !== 'event') return true;
   return _apdParseDate(p.endDate) >= _apdEventToday();
 }
+// Gold calendar glyph (matches the map pin) for the list thumbnail.
+function eventGlyphHTML(){
+  return '<svg width="26" height="26" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    + '<rect x="5" y="0.5" width="2.4" height="5" rx="1.2" fill="#E9B44C"/>'
+    + '<rect x="12.6" y="0.5" width="2.4" height="5" rx="1.2" fill="#E9B44C"/>'
+    + '<rect x="1" y="3" width="18" height="16" rx="2.6" fill="#E9B44C"/>'
+    + '<rect x="1" y="3" width="18" height="5" rx="2.6" fill="#2B211C"/>'
+    + '<g fill="#2B211C"><rect x="4.2" y="10.2" width="2.3" height="2.3"/><rect x="8.85" y="10.2" width="2.3" height="2.3"/><rect x="13.5" y="10.2" width="2.3" height="2.3"/><rect x="4.2" y="13.9" width="2.3" height="2.3"/><rect x="8.85" y="13.9" width="2.3" height="2.3"/></g>'
+    + '</svg>';
+}
 // True when an event is happening today (used so Open Now also counts live events).
 function isEventOnNow(p){
   if(!p || p.cat !== 'event') return false;
