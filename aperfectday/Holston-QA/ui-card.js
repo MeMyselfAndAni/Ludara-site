@@ -530,8 +530,8 @@ document.addEventListener('keydown', e => {
     const dy = e.clientY - startMouseY;
     let nx = startCardX + dx;
     let ny = startCardY + dy;
-    nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  nx));
-    ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, ny));
+    nx = Math.max(72 - card.offsetWidth, Math.min(window.innerWidth  - 72, nx));
+    ny = Math.max(72 - card.offsetHeight, Math.min(window.innerHeight - 72, ny));
     card.style.left = nx + 'px';
     card.style.top  = ny + 'px';
   }
@@ -571,8 +571,9 @@ document.addEventListener('keydown', e => {
       card.style.transform = 'none'; card.style.transition = 'none';
       moved = true; window._cardDragged = true;
     }
-    var nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  baseX + dx));
-    var ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, baseY + dy));
+    var keep = 72; // keep at least this much of the card on-screen so it can always be grabbed back
+    var nx = Math.max(keep - card.offsetWidth, Math.min(window.innerWidth  - keep, baseX + dx));
+    var ny = Math.max(keep - card.offsetHeight, Math.min(window.innerHeight - keep, baseY + dy));
     card.style.left = nx + 'px'; card.style.top = ny + 'px';
     e.preventDefault();
   }, {passive:false});
