@@ -16,33 +16,29 @@
   </script>
   <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1091224590135285&ev=PageView&noscript=1"/></noscript>
-  <!-- Meta business verification for the Ludara business portfolio (11 Aug 2026).
-       Must stay inside <head> on the root domain home page: Meta re-checks it,
-       and removing it un-verifies ludara.ai and can pause the ad account. -->
-  <meta name="facebook-domain-verification" content="96pu8vpm7hzehmplmqztrjq61h0pd8" />
   <meta charset="utf-8" />
-  <title>Ludara.AI: Stories, Put on the Map</title>
+  <title>Products · Ludara.AI</title>
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Ludara.AI">
-<link rel="canonical" href="https://ludara.ai/">
-  <meta name="description" content="Interactive multilingual maps for culture, tourism and storytelling: guides for hotels and museums, maps for books and screen, and family history maps." />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="/favicon.svg" type="image/svg">
+<link rel="canonical" href="https://ludara.ai/product.html">
+  <meta name="description" content="The four Ludara.AI products: A Perfect Day guides for hotels and museums, A Perfect Story Map for books and screen, and A Family Story Map for family history." />
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ludara.AI">
-  <meta property="og:title" content="Ludara.AI: Stories, Put on the Map">
-  <meta property="og:description" content="Four products, live today. Hotels, museums, books, family history.">
-  <meta property="og:url" content="https://ludara.ai/">
-  <meta property="og:image" content="https://ludara.ai/assets/og-ludara.jpg">
-  <meta property="og:image:secure_url" content="https://ludara.ai/assets/og-ludara.jpg">
+  <meta property="og:title" content="A Perfect Story Map: a writer’s recommendations, turned into a map">
+  <meta property="og:description" content="Visualize your story on an interactive map your fans can grasp and travel">
+  <meta property="og:url" content="https://ludara.ai/product.html">
+  <meta property="og:image" content="https://ludara.ai/assets/og-perfectstorymap.jpg">
+  <meta property="og:image:secure_url" content="https://ludara.ai/assets/og-perfectstorymap.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Ludara.AI: interactive story maps for writers, hotels and families">
-  <meta name="twitter:image" content="https://ludara.ai/assets/og-ludara.jpg">
+  <meta property="og:image:alt" content="A Perfect Story Map, a writer’s recommended places on one interactive map">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ludara.AI: Stories, Put on the Map">
-  <meta name="twitter:description" content="Four products, live today. Hotels, museums, books, family history.">
+  <meta name="twitter:title" content="A Perfect Story Map: a writer’s recommendations, turned into a map">
+  <meta name="twitter:description" content="Visualize your story on an interactive map your fans can grasp and travel">
+  <meta name="twitter:image" content="https://ludara.ai/assets/og-perfectstorymap.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/favicon.svg" type="image/svg">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SEY87L8PFW');</script>
 
@@ -197,21 +193,24 @@
     [data-animate]{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
     [data-animate].in{opacity:1;transform:none}
     @media(prefers-reduced-motion:reduce){[data-animate]{opacity:1;transform:none}}
+    /* Where we're headed */
+    .vision-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:640px){.vision-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:980px){.vision-grid{grid-template-columns:repeat(3,1fr)}}
+    .vcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+    .vhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .vhead h3{margin:0;font-size:18px}
+    .vhead .vicon{width:22px;height:22px;color:var(--gold-l);flex-shrink:0}
+    .vcard ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
+    .vcard li{margin-bottom:4px}
   </style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization",
- "name":"Ludara.AI","url":"https://ludara.ai/",
- "email":"maria@ludara.ai",
- "founder":{"@type":"Person","name":"Maria Lando"},
- "description":"Ludara.AI builds interactive, multilingual maps for culture, tourism and storytelling: guides for hotels and museums, companion maps for books and screen, and family history maps."}
-</script>
 </head>
 <body>
   <div class="wrap">
     <nav class="nav" aria-label="Primary">
       <div class="logo"><a href="/">Ludara.AI</a></div>
       <div class="menu">
-        <a class="active" href="/">Home</a>
+        <a href="/">Home</a>
         <div class="has-dropdown">
           <a href="/product.html">Products <span class="caret" aria-hidden="true">&#9662;</span></a>
           <div class="dropdown" role="menu">
@@ -233,8 +232,8 @@
 
     <!-- ===== COMPANY HERO ===== -->
     <section class="lhero">
-      <h1 class="serif">Stories belong somewhere.<br><em>We put them on the map.</em></h1>
-      <p class="lead">Interactive, multilingual maps for hotels, museums, books, screen stories and families.</p>
+      <h1 class="serif">Interactive, multilingual products for <em>culture, tourism and storytelling.</em></h1>
+      <p class="lead">Four products, live today.</p>
       <div class="cta-row">
         <a class="btn-gold" href="/aperfectday/ludara/london/" target="_blank" rel="noopener">See a live guide &#8594;</a>
         <a class="btn-line" href="/contact.html">Request a demo</a>
@@ -260,7 +259,7 @@
         <div class="area-body">
           <div class="tag-en">Concierge-quality city guides your guests carry with them, curated by locals and branded for your property.</div>
           <div class="area-foot">
-            <div class="proof-line"><b>9</b> cities live &middot; <b>40 to 75</b> curated places &middot; multilingual</div>
+            <div class="proof-line"><b>9</b> cities live &middot; up to <b>100</b> curated attractions &middot; multilingual</div>
             <a class="area-cta" href="/aperfectday/ludara/london/" target="_blank" rel="noopener">See the live London guide &#8594;</a>
           </div>
         </div>
@@ -318,7 +317,7 @@
         <div class="area-body">
           <div class="tag-en">Every place a family lived, fled and rebuilt, on one map, with their own photographs, the story behind each place, and a family tree linked to the map.</div>
           <div class="area-foot">
-            <div class="proof-line">First map built &middot; <b>31</b> places &middot; <b>86</b> family members &middot; <b>3</b> languages &middot; private by default</div>
+            <div class="proof-line">First map built &middot; <b>28</b> places &middot; <b>86</b> family members &middot; <b>3</b> languages &middot; private by default</div>
             <a class="area-cta" href="/familystorymap/">How a Family Story Map works &#8594;</a>
           </div>
         </div>
@@ -336,44 +335,20 @@
       </div>
     </section>
 
-    <!-- ===== Why Ludara (kept) ===== -->
-    <section class="why-band" aria-labelledby="value" data-animate>
-      <div class="why-inner">
-      <h2 class="why-title" id="value">Why Ludara</h2>
-      <div class="grid-3">
-        <div class="feature">
-          <h3 class="icon-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-            <span>Curated</span>
-          </h3>
-          <p class="feature-note">Only places worth the visit, hand-picked from local critics, reviews and your team&rsquo;s own knowledge. Every place and quote is sourced and approved, never invented.</p>
-        </div>
-        <div class="feature">
-          <h3 class="icon-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9s1.3-6.5 3.8-9z"/></svg>
-            <span>Multilingual</span>
-          </h3>
-          <p class="feature-note">One link, every language. International visitors read every place and story in their own language. We handle all the translation for you.</p>
-        </div>
-        <div class="feature">
-          <h3 class="icon-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 7 7 7 7 3"/><path d="M7 7a7 7 0 0 1 12 5"/><polyline points="21 17 17 17 17 21"/><path d="M17 17a7 7 0 0 1-12-5"/></svg>
-            <span>Always current</span>
-          </h3>
-          <p class="feature-note">Minimal work on your side: we host and update everything for you, refreshed with seasonal events and preset itineraries, always ready to share.</p>
-        </div>
-        <div class="feature">
-          <h3 class="icon-title">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v7M17 20h4"/></svg>
-            <span>No app needed</span>
-          </h3>
-          <p class="feature-note">No app to download. A QR code opens the map on any device: embedded in your website and linked in every reservation confirmation.</p>
-        </div>
-      </div>
-      </div>
+        <!-- ===== Where Ludara is headed ===== -->
+    <div class="flabel">Where we're headed</div>
+    <p class="fsub">A Perfect Day and A Perfect Story Map are the first applications of our personalization engine. The same core, adaptive narratives, game loops, brand-safe content, opens a range of directions we're exploring.</p>
+    <section class="vision-grid" data-animate>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a12 12 0 0 1 0 18"/><path d="M12 3a12 12 0 0 0 0 18"/></svg><h3>Travel Industry</h3></div><ul><li>Bespoke gamified itineraries for tour agencies</li><li>Ultra-personalized trips on booking platforms</li></ul></div>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-5 9 5z"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8"/><path d="M3 18h18M2 20h20"/></svg><h3>Museums &amp; Sites</h3></div><ul><li>Adaptive &ldquo;story modes&rdquo; in audio-guides and websites</li><li>Personalized trails at heritage sites</li></ul></div>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5A1.5 1.5 0 0 1 18.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/><path d="M4 6h13.5A2.5 2.5 0 0 1 20 8.5V3"/></svg><h3>Education</h3></div><ul><li>Turning educational materials into interactive, personalized apps</li><li>Persona-tailored content for online learning platforms</li></ul></div>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M2 19a7 7 0 0 1 14 0"/><circle cx="17" cy="9" r="2.5"/><path d="M21.5 19a5.5 5.5 0 0 0-7.5-4.9"/></svg><h3>Genealogy Platforms</h3></div><ul><li>Personal storytelling for ancestry platforms</li><li>Ancestral travel packages, virtual and real</li></ul></div>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14l8-4 8 4-2 6H6l-2-6z"/><path d="M10 10V6h4v4"/><path d="M3 20c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/></svg><h3>Resorts &amp; Cruise Lines</h3></div><ul><li>Branded guides for resorts, live today in A Perfect Day</li><li>Personalized on-shore excursions for cruises</li></ul></div>
+      <div class="vcard"><div class="vhead"><svg class="vicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-4.8-8.5-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6c-2 3.2-8.5 8-8.5 8z"/></svg><h3>Wellness</h3></div><ul><li>Narrative-driven, personalized healing programs</li><li>Adaptive mental-health storytelling apps</li></ul></div>
     </section>
+    <p style="text-align:center;color:var(--muted);margin:20px 0 0">Interested in partnering on one of these directions? <a href="/contact.html" style="color:var(--gold-l);font-weight:700">Get in touch</a>.</p>
 
-    <!-- Contact CTA -->
+<!-- Contact CTA -->
     <section class="card" data-animate style="text-align:center;margin-top:16px">
       <h3 style="margin:4px 0 8px">We're building the future of personalized storytelling.</h3>
       <p style="color:var(--muted);margin:0 0 14px">If you're a curious partner or customer, let's talk.</p>
