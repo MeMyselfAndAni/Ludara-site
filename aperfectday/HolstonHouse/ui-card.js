@@ -213,10 +213,17 @@ function _populateCard(p){
   CARD_PLACE = p;
 
   // Clear any drag-applied inline size/position so every card renders at its natural
-  // height (navigating via swipe/arrows skips _openCard, which would otherwise leave a
-  // taller card's locked height on a shorter one, e.g. an event card).
+  // height/position (navigating via swipe/arrows skips _openCard, which would otherwise
+  // leave a taller card's locked height on a shorter one, e.g. an event card). Only act
+  // when inline styles are actually present, and clear them WITHOUT a transition so the
+  // card never animates from the frozen drag spot back to centre on desktop.
   var _dc = document.getElementById('place-card');
-  if(_dc){ _dc.style.left=''; _dc.style.top=''; _dc.style.right=''; _dc.style.bottom=''; _dc.style.width=''; _dc.style.height=''; _dc.style.transform=''; _dc.style.transition=''; }
+  if(_dc && (_dc.style.left || _dc.style.top || _dc.style.width || _dc.style.height || _dc.style.transform)){
+    _dc.style.transition = 'none';
+    _dc.style.left=''; _dc.style.top=''; _dc.style.right=''; _dc.style.bottom=''; _dc.style.width=''; _dc.style.height=''; _dc.style.transform='';
+    void _dc.offsetWidth;      // commit the cleared state without animating
+    _dc.style.transition = ''; // restore CSS transition for future opens
+  }
 
   // Restore default (non-event) card chrome in case the previous card was an event
   var _evHdr = document.getElementById('pc-event-hdr');
