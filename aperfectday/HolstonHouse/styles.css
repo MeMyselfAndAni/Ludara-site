@@ -397,7 +397,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
   font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 900;
   text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.2;
 }
-#seasonal-row { flex: 1 1 auto; min-width: 0; display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x; overscroll-behavior-x: contain; }
+#seasonal-row { flex: 1 1 auto; min-width: 0; display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x; overscroll-behavior-x: contain; padding-left: 2px; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 10px), transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 10px), transparent 100%); }
 #seasonal-row::-webkit-scrollbar { display: none; }
 .seasonal-card {
   flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
@@ -1538,7 +1538,7 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 .pc-btn-close:hover { background: rgba(0,0,0,0.65); }
 /* ♡ heart — bottom right */
 .pc-btn-fav {
-  bottom: 12px; right: 12px;
+  top: 12px; right: 54px;   /* upper-right on ALL cards, just left of the ✕ */
   background: rgba(0,0,0,0.38);
   color: white;
   width: 38px; height: 38px;
@@ -1553,7 +1553,6 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
    (clear of the title), and lift the heart up beside the close button so it does
    not collide with the next arrow. */
 #place-card.card-event .pc-btn-nav { top: auto; bottom: 12px; transform: none; }
-#place-card.card-event .pc-btn-fav { top: 12px; bottom: auto; right: 54px; }
 .pc-btn-nav {
   top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.88);
