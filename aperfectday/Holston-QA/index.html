@@ -4,6 +4,13 @@
 <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>
+/* Block iOS Safari page-level pinch zoom (which it allows despite user-scalable=no).
+   Uses the Safari-only gesture* events, so the map's own touch pinch-zoom and double-tap zoom stay working. */
+document.addEventListener('gesturestart',  function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener('gesturechange', function(e){ e.preventDefault(); }, {passive:false});
+document.addEventListener('gestureend',    function(e){ e.preventDefault(); }, {passive:false});
+</script>
 <title>Holston House Nashville — A Perfect Day</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.json">

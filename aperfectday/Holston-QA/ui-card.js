@@ -565,6 +565,7 @@ document.addEventListener('keydown', e => {
     var dx = t.clientX - sx, dy = t.clientY - sy;
     if(!moved){
       if(Math.abs(dx) + Math.abs(dy) < 8) return; // small threshold so taps still work
+      if(Math.abs(dx) > Math.abs(dy)){ active = false; return; } // horizontal → let the swipe navigate cards
       r = card.getBoundingClientRect();
       card.style.left = r.left + 'px'; card.style.top = r.top + 'px';
       card.style.right = 'auto'; card.style.bottom = 'auto';
