@@ -414,7 +414,7 @@ function cardToggleFav(){
 function _openCard(){
   // Reset any drag-applied inline position before opening (desktop and mobile)
   var _card = document.getElementById('place-card');
-  _card.style.left = ''; _card.style.top = ''; _card.style.right = ''; _card.style.bottom = ''; _card.style.transform = ''; _card.style.transition = '';
+  _card.style.left = ''; _card.style.top = ''; _card.style.right = ''; _card.style.bottom = ''; _card.style.width = ''; _card.style.height = ''; _card.style.transform = ''; _card.style.transition = '';
   _card.classList.add('open');
   document.getElementById('place-card-dim').classList.add('open');
   // On phones the card is a bottom sheet that would sit over the seasonal band — hide it while open.
@@ -427,7 +427,7 @@ function closePlaceCard(reopenList){
   _pcCard0.classList.remove('open');
   document.getElementById('place-card-dim').classList.remove('open');
   // Clear any drag-applied inline position so the card hides / re-opens cleanly
-  _pcCard0.style.left = ''; _pcCard0.style.top = ''; _pcCard0.style.right = ''; _pcCard0.style.bottom = ''; _pcCard0.style.transform = ''; _pcCard0.style.transition = '';
+  _pcCard0.style.left = ''; _pcCard0.style.top = ''; _pcCard0.style.right = ''; _pcCard0.style.bottom = ''; _pcCard0.style.width = ''; _pcCard0.style.height = ''; _pcCard0.style.transform = ''; _pcCard0.style.transition = '';
   var _sbClose = document.getElementById('seasonal-bar'); if(_sbClose) _sbClose.style.display = '';
 
   if(AID && markers[AID]){
