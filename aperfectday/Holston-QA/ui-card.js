@@ -212,6 +212,12 @@ function _reserveMeta(p){
 function _populateCard(p){
   CARD_PLACE = p;
 
+  // Clear any drag-applied inline size/position so every card renders at its natural
+  // height (navigating via swipe/arrows skips _openCard, which would otherwise leave a
+  // taller card's locked height on a shorter one, e.g. an event card).
+  var _dc = document.getElementById('place-card');
+  if(_dc){ _dc.style.left=''; _dc.style.top=''; _dc.style.right=''; _dc.style.bottom=''; _dc.style.width=''; _dc.style.height=''; _dc.style.transform=''; _dc.style.transition=''; }
+
   // Restore default (non-event) card chrome in case the previous card was an event
   var _evHdr = document.getElementById('pc-event-hdr');
   if(_evHdr) _evHdr.remove();
