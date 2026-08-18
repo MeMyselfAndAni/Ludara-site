@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 66,          // bump on every deploy so the service worker updates
+  cacheVersion: 67,          // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -118,6 +118,29 @@ var FAMILY = {
       { key:'lando',     col:23.6, chip:'לנדו · Ландо · Lando',
         header:'לנדו ושכטר, צד מישה · Ландо и Шехтеры · Lando & Schechter' },
     ],
+  },
+
+  // ── "One for your family" card, at the foot of the places list ─────────────
+  //  OPTIONAL, and deliberately so. A map with no promo block shows no card at
+  //  all, which is how a customer family's map stays free of anything that
+  //  sells to them while they are reading about their own grandmother.
+  //  Only add it to a customer's map if that family has said yes.
+  //  The link lands on #how, not on the enquiry form. Someone arriving from a
+  //  family map has just spent minutes inside the finished thing; what they
+  //  do not yet know is what it would take and what it costs. #how answers
+  //  both, with pricing directly under it and the form after that, so they
+  //  reach the form having decided rather than being asked cold.
+  promo: {
+    url: 'https://ludara.ai/familystorymap/?utm_source=familymap&utm_medium=map&utm_campaign=landokliotfamily#how',
+    he: { title: 'גם למשפחה שלכם יש סיפור כזה.',
+          body:  'ספר זיכרונות, או תיקייה של מסמכים ותצלומים, ואנחנו בונים מפה כמו זו.',
+          cta:   'ספרו לנו על המשפחה שלכם' },
+    ru: { title: 'У вашей семьи есть такая же история.',
+          body:  'Книга воспоминаний или папка документов и фотографий — и мы построим такую же карту.',
+          cta:   'Расскажите нам о вашей семье' },
+    en: { title: 'Your family has a story like this one.',
+          body:  'A memoir, or a folder of documents and photographs, and we build a map like this.',
+          cta:   'Tell us about your family' },
   },
 };
 

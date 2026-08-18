@@ -21,11 +21,11 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Ludara.AI">
 <link rel="canonical" href="https://ludara.ai/about.html">
-  <meta name="description" content="At Ludara.AI we make stories explorable: interactive multilingual maps for hotels, museums, authors and publishers, and families preserving generations of journeys, photographs and memories." />
+  <meta name="description" content="About Ludara.AI: who we are and why we build interactive multilingual maps for hotels, museums, books and family history. Read the story behind the company." />
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ludara.AI">
   <meta property="og:title" content="About Ludara.AI">
-  <meta property="og:description" content="Three lines, live today. Hotels and museums, novels and screen, memoirs and family history.">
+  <meta property="og:description" content="Four products, live today. Hotels, museums, books, family history.">
   <meta property="og:url" content="https://ludara.ai/about.html">
   <meta property="og:image" content="https://ludara.ai/assets/og-ludara.jpg">
   <meta property="og:image:secure_url" content="https://ludara.ai/assets/og-ludara.jpg">
@@ -35,7 +35,7 @@
   <meta property="og:image:alt" content="Ludara.AI, interactive story maps for writers, hotels and families">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="About Ludara.AI">
-  <meta name="twitter:description" content="Three lines, live today. Hotels and museums, novels and screen, memoirs and family history.">
+  <meta name="twitter:description" content="Four products, live today. Hotels, museums, books, family history.">
   <meta name="twitter:image" content="https://ludara.ai/assets/og-ludara.jpg">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/favicon.svg" type="image/svg">
@@ -125,6 +125,8 @@
             <a class="dd-group" href="/aperfectday/" role="menuitem">A Perfect Day</a>
             <a class="dd-sub" href="/aperfectday/" role="menuitem">Hotels</a>
             <a class="dd-sub" href="/museums.html" role="menuitem">Museums, Zoos &amp; Gardens</a>
+            <a class="dd-sub" href="/universities.html" role="menuitem">Universities</a>
+            <a class="dd-sub" href="/realestate.html" role="menuitem">Real Estate</a>
             <div class="dd-sep" aria-hidden="true"></div>
             <a class="dd-group" href="/aperfectstorymap/" role="menuitem">A Perfect Story Map</a>
             <a class="dd-sub" href="/aperfectstorymap/" role="menuitem">Books</a>
@@ -139,25 +141,22 @@
     </nav>
 
     <section class="section">
-      <h1 class="serif">Stories belong somewhere.<br><em>We put them on the map.</em></h1>
+      <h1 class="serif">Our <em>story</em></h1>
       <div class="gold-rule" aria-hidden="true"></div>
-      <p style="color:var(--muted)">At Ludara.AI, we make stories explorable.</p>
-      <p style="color:var(--muted);margin-top:12px">We turn curated knowledge, memories and narratives into interactive, multilingual maps that people can see, follow and share.</p>
-      <p style="color:var(--muted);margin-top:12px">Our maps help hotels share the places their teams genuinely recommend, museums bring their collections and grounds to life, authors and publishers reveal the real places behind a story, and families preserve generations of journeys, photographs and memories.</p>
-      <p style="color:var(--muted);margin-top:12px">In a world overflowing with more information than anyone can absorb, we believe the answer is not more content, but better context. We help our customers bring the stories and knowledge that matter to the people they want to reach: visually, memorably, and in the language they understand.</p>
-      <p style="color:var(--muted);margin-top:12px">Whether the story belongs to a city, a museum, a book or a family, Ludara.AI puts it on the map, making it easier to explore, remember and share across languages, continents and generations.</p>
+      <p style="color:var(--muted)">At Ludara.AI, we believe that every story can be a personal adventure. After years in R&D, creative technology, and business development, we saw a huge gap: museums, tour sites, educators, and publishers were delivering the same generic content to everyone, missing the chance to truly connect. We built Ludara.AI to change that. Our platform transforms any existing content into deeply personalized, gamified narratives, crafted for each visitor’s background, interests, and emotional triggers. Whether you’re walking through a historic city, exploring an art exhibit, or learning online, Ludara.AI turns static information into an interactive journey that feels made just for you. By blending AI-driven personalization with storytelling and game mechanics, we help cultural institutions, tourism providers, and educational platforms captivate audiences, drive repeat visits, and create lasting emotional bonds.</p>
+      <p style="color:var(--muted);margin-top:12px">Today that vision is live across two flagship lines: <a href="/aperfectday/"><strong>A Perfect Day</strong></a>, interactive, locally-curated guides for hotels, museums, botanical gardens and historical sites, and <a href="/aperfectstorymap/"><strong>A Perfect Story Map</strong></a>, which maps the real places behind the books and films we love. More is on the way.</p>
     </section>
 
     <section class="section">
       <h2 class="serif">Team</h2>
       <div class="gold-rule" aria-hidden="true"></div>
       <div class="grid">
-        <div class="member"><div class="profile-grid"><div><h3>Maria Lando</h3><div class="role">CEO & Founder</div></div><img src="./assets/Maria.jpg" alt="Maria Lando portrait" /><p class="bio" style="color:var(--muted)">Maria Lando has spent more than 25 years turning ideas into products, working across visual effects, fashion technology, medical devices, education, and now AI. She has lived in Russia, the U.S., and Israel, and today is also a licensed tour guide, two things that have given her a particular fascination with places, people, and the stories that connect them.</p><p class="bio" style="color:var(--muted)">Ludara&rsquo;s first Family Story Map was her own. Built from her mother&rsquo;s memoir, it follows five generations through towns across three continents, bringing photographs, memories, and family history together on one map.</p></div></div>
+        <div class="member"><div class="profile-grid"><div><h3>Maria Lando</h3><div class="role">CEO & Founder</div></div><img src="./assets/Maria.jpg" alt="Maria Lando portrait" /><p class="bio" style="color:var(--muted)">Maria Lando is an innovator with 25+ years in R&D, product development, and business growth across movie special effects, fashion tech, medical devices, and education. A lifelong learner and AI enthusiast, she has lived in Russia, the U.S., and Israel, bringing a global perspective to Ludara.AI’s mission of transforming culture, travel, and learning through personalized storytelling. Maria is also a licensed tour guide, so she knows how to tell a story.</p></div></div>
         <div class="member consultants">
           <h3>Consultants</h3>
           <div class="start-align"></div>
           <div class="role"></div>
-          <p style="color:var(--muted)">Ludara.AI works with a range of experts across tourism, publishing, archives and family history research.</p>
+          <p style="color:var(--muted)">Ludara.AI relies on variety of experts in the fields of tourism and gaming technologies.</p>
         </div>
       </div>
     </section>
