@@ -565,15 +565,17 @@ document.addEventListener('keydown', e => {
     var dx = t.clientX - sx, dy = t.clientY - sy;
     if(!moved){
       if(Math.abs(dx) + Math.abs(dy) < 8) return; // small threshold so taps still work
-      r = card.getBoundingClientRect();          // freeze the box once, no reflow
-      card.style.transition = 'none';
+      r = card.getBoundingClientRect();
+      card.style.left = r.left + 'px'; card.style.top = r.top + 'px';
+      card.style.right = 'auto'; card.style.bottom = 'auto';
+      card.style.width = r.width + 'px'; card.style.height = r.height + 'px'; // lock size, no reflow
+      card.style.transform = 'none'; card.style.transition = 'none';
       moved = true; window._cardDragged = true;
     }
-    var keep = 72; // keep at least this much of the card on-screen so it can always be grabbed back
-    // translate only — never touch left/top/width/height, so the card never resizes
-    var cdx = Math.max(keep - r.right,  Math.min(window.innerWidth  - keep - r.left, dx));
-    var cdy = Math.max(keep - r.bottom, Math.min(window.innerHeight - keep - r.top,  dy));
-    card.style.transform = 'translate(' + cdx + 'px,' + cdy + 'px)';
+    // keep the whole card inside the screen
+    var nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  r.left + dx));
+    var ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, r.top  + dy));
+    card.style.left = nx + 'px'; card.style.top = ny + 'px';
     e.preventDefault();
   }, {passive:false});
   handle.addEventListener('touchend', function(){
