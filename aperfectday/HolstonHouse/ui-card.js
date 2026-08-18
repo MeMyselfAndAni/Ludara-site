@@ -212,6 +212,12 @@ function _reserveMeta(p){
 function _populateCard(p){
   CARD_PLACE = p;
 
+  // Clear any drag-applied inline size/position so every card renders at its natural
+  // height (navigating via swipe/arrows skips _openCard, which would otherwise leave a
+  // taller card's locked height on a shorter one, e.g. an event card).
+  var _dc = document.getElementById('place-card');
+  if(_dc){ _dc.style.left=''; _dc.style.top=''; _dc.style.right=''; _dc.style.bottom=''; _dc.style.width=''; _dc.style.height=''; _dc.style.transform=''; _dc.style.transition=''; }
+
   // Restore default (non-event) card chrome in case the previous card was an event
   var _evHdr = document.getElementById('pc-event-hdr');
   if(_evHdr) _evHdr.remove();
@@ -412,14 +418,10 @@ function cardToggleFav(){
 
 // ── Open / close ──────────────────────────────────────────────
 function _openCard(){
-  // Reset any drag-applied inline position before opening
-  if(window.innerWidth >= 768){
-    const card = document.getElementById('place-card');
-    card.style.left = '';
-    card.style.top  = '';
-    card.style.transform = '';
-  }
-  document.getElementById('place-card').classList.add('open');
+  // Reset any drag-applied inline position before opening (desktop and mobile)
+  var _card = document.getElementById('place-card');
+  _card.style.left = ''; _card.style.top = ''; _card.style.right = ''; _card.style.bottom = ''; _card.style.width = ''; _card.style.height = ''; _card.style.transform = ''; _card.style.transition = '';
+  _card.classList.add('open');
   document.getElementById('place-card-dim').classList.add('open');
   // On phones the card is a bottom sheet that would sit over the seasonal band — hide it while open.
   var _sb = document.getElementById('seasonal-bar');
@@ -427,8 +429,11 @@ function _openCard(){
 }
 
 function closePlaceCard(reopenList){
-  document.getElementById('place-card').classList.remove('open');
+  var _pcCard0 = document.getElementById('place-card');
+  _pcCard0.classList.remove('open');
   document.getElementById('place-card-dim').classList.remove('open');
+  // Clear any drag-applied inline position so the card hides / re-opens cleanly
+  _pcCard0.style.left = ''; _pcCard0.style.top = ''; _pcCard0.style.right = ''; _pcCard0.style.bottom = ''; _pcCard0.style.width = ''; _pcCard0.style.height = ''; _pcCard0.style.transform = ''; _pcCard0.style.transition = '';
   var _sbClose = document.getElementById('seasonal-bar'); if(_sbClose) _sbClose.style.display = '';
 
   if(AID && markers[AID]){
@@ -473,6 +478,7 @@ document.addEventListener('keydown', e => {
   if(!el) return;
   el.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
   el.addEventListener('touchend', e => {
+    if(window._cardDragged) return; // was a header drag-to-move, not a close swipe
     if(e.changedTouches[0].clientY - startY > 70) closePlaceCard();
   }, {passive:true});
 })();
@@ -489,6 +495,7 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
   card.addEventListener('touchend', function(e) {
     if (window.innerWidth >= 768) return;
+    if (window._cardDragged) return; // was a header drag-to-move, not a navigate swipe
     var dx = e.changedTouches[0].clientX - touchStartX;
     var dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
@@ -529,8 +536,8 @@ document.addEventListener('keydown', e => {
     const dy = e.clientY - startMouseY;
     let nx = startCardX + dx;
     let ny = startCardY + dy;
-    nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  nx));
-    ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, ny));
+    nx = Math.max(72 - card.offsetWidth, Math.min(window.innerWidth  - 72, nx));
+    ny = Math.max(72 - card.offsetHeight, Math.min(window.innerHeight - 72, ny));
     card.style.left = nx + 'px';
     card.style.top  = ny + 'px';
   }
@@ -544,6 +551,44 @@ document.addEventListener('keydown', e => {
   handle.addEventListener('mousedown', startDrag);
   document.addEventListener('mousemove', doDrag);
   document.addEventListener('mouseup',   endDrag);
+})();
+
+// ── Draggable card on touch (mobile) — shift the card to see the pin/area under it ──
+(function initCardTouchDrag(){
+  var card   = document.getElementById('place-card');
+  var handle = document.getElementById('pc-photo-wrap');
+  if(!card || !handle) return;
+  var active = false, moved = false, sx = 0, sy = 0, r = null;
+  handle.addEventListener('touchstart', function(e){
+    if(window.innerWidth >= 768) return;   // phone only; desktop uses the mouse drag
+    if(e.touches.length !== 1) return;
+    active = true; moved = false; r = null;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, {passive:true});
+  handle.addEventListener('touchmove', function(e){
+    if(!active) return;
+    var t = e.touches[0];
+    var dx = t.clientX - sx, dy = t.clientY - sy;
+    if(!moved){
+      if(Math.abs(dx) + Math.abs(dy) < 8) return; // small threshold so taps still work
+      if(Math.abs(dx) > Math.abs(dy)){ active = false; return; } // horizontal → let the swipe navigate cards
+      r = card.getBoundingClientRect();
+      card.style.left = r.left + 'px'; card.style.top = r.top + 'px';
+      card.style.right = 'auto'; card.style.bottom = 'auto';
+      card.style.width = r.width + 'px'; card.style.height = r.height + 'px'; // lock size, no reflow
+      card.style.transform = 'none'; card.style.transition = 'none';
+      moved = true; window._cardDragged = true;
+    }
+    // keep the whole card inside the screen
+    var nx = Math.max(0, Math.min(window.innerWidth  - card.offsetWidth,  r.left + dx));
+    var ny = Math.max(0, Math.min(window.innerHeight - card.offsetHeight, r.top  + dy));
+    card.style.left = nx + 'px'; card.style.top = ny + 'px';
+    e.preventDefault();
+  }, {passive:false});
+  handle.addEventListener('touchend', function(){
+    active = false;
+    if(moved){ setTimeout(function(){ window._cardDragged = false; }, 60); }
+  }, {passive:true});
 })();
 
 // (card position reset happens in closePlaceCard)
