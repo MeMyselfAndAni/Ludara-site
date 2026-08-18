@@ -421,11 +421,15 @@ function _openCard(){
   }
   document.getElementById('place-card').classList.add('open');
   document.getElementById('place-card-dim').classList.add('open');
+  // On phones the card is a bottom sheet that would sit over the seasonal band — hide it while open.
+  var _sb = document.getElementById('seasonal-bar');
+  if(_sb && window.innerWidth < 768) _sb.style.display = 'none';
 }
 
 function closePlaceCard(reopenList){
   document.getElementById('place-card').classList.remove('open');
   document.getElementById('place-card-dim').classList.remove('open');
+  var _sbClose = document.getElementById('seasonal-bar'); if(_sbClose) _sbClose.style.display = '';
 
   if(AID && markers[AID]){
     const prev = PLACES.find(x => x.id === AID);
