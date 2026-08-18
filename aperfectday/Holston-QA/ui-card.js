@@ -552,10 +552,11 @@ document.addEventListener('keydown', e => {
   var card   = document.getElementById('place-card');
   var handle = document.getElementById('pc-photo-wrap');
   if(!card || !handle) return;
-  var active = false, moved = false, sx = 0, sy = 0, baseX = 0, baseY = 0;
+  var active = false, moved = false, sx = 0, sy = 0, r = null;
   handle.addEventListener('touchstart', function(e){
+    if(window.innerWidth >= 768) return;   // phone only; desktop uses the mouse drag
     if(e.touches.length !== 1) return;
-    active = true; moved = false;
+    active = true; moved = false; r = null;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
   }, {passive:true});
   handle.addEventListener('touchmove', function(e){
@@ -564,17 +565,15 @@ document.addEventListener('keydown', e => {
     var dx = t.clientX - sx, dy = t.clientY - sy;
     if(!moved){
       if(Math.abs(dx) + Math.abs(dy) < 8) return; // small threshold so taps still work
-      var rect = card.getBoundingClientRect();
-      baseX = rect.left; baseY = rect.top;
-      card.style.left = baseX + 'px'; card.style.top = baseY + 'px';
-      card.style.right = 'auto'; card.style.bottom = 'auto';
-      card.style.transform = 'none'; card.style.transition = 'none';
+      r = card.getBoundingClientRect();          // freeze the box once, no reflow
+      card.style.transition = 'none';
       moved = true; window._cardDragged = true;
     }
     var keep = 72; // keep at least this much of the card on-screen so it can always be grabbed back
-    var nx = Math.max(keep - card.offsetWidth, Math.min(window.innerWidth  - keep, baseX + dx));
-    var ny = Math.max(keep - card.offsetHeight, Math.min(window.innerHeight - keep, baseY + dy));
-    card.style.left = nx + 'px'; card.style.top = ny + 'px';
+    // translate only — never touch left/top/width/height, so the card never resizes
+    var cdx = Math.max(keep - r.right,  Math.min(window.innerWidth  - keep - r.left, dx));
+    var cdy = Math.max(keep - r.bottom, Math.min(window.innerHeight - keep - r.top,  dy));
+    card.style.transform = 'translate(' + cdx + 'px,' + cdy + 'px)';
     e.preventDefault();
   }, {passive:false});
   handle.addEventListener('touchend', function(){
