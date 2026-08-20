@@ -1,1 +1,6 @@
 _to_delete/
+
+# Local safety copies. Never publish these.
+*.bak-*
+_nav_backup_*/
+_backup_*
