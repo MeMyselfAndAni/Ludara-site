@@ -637,15 +637,41 @@ window.addEventListener('load', function(){
   };
 });
 
-/* Story Path is the default view: draw it automatically once the map is ready */
+/* Story Path is the default view: draw it as soon as the map is genuinely ready.
+   The previous version polled every 400ms twenty five times and then gave up for
+   good. Ten seconds is not long enough on a phone on slow wifi, and once it
+   expired the reader never saw the path at all unless they found the button.
+   This listens to the map's own events instead, and keeps a patient poll as a
+   backstop. Fixed 25 August 2026. */
 window.addEventListener('load', function(){
-  var tries = 25;
-  (function _autoPath(){
-    if(_storyPathOn) return;
-    var ready = window.map && map.getSource && (function(){ try { return !!map.getSource('trip-route'); } catch(e){ return false; } })()
-                && typeof window._addNumberedMarkers === 'function';
-    if(ready){ toggleStoryPath(true); return; }
-    if(--tries > 0) setTimeout(_autoPath, 400);
+  var drawn = false;
+
+  function tryDraw(){
+    if(drawn || _storyPathOn) return true;
+    var ready = false;
+    try {
+      ready = !!(window.map && map.getSource && map.getSource('trip-route'))
+              && typeof window._addNumberedMarkers === 'function';
+    } catch(e){ ready = false; }
+    if(!ready) return false;
+    drawn = true;
+    toggleStoryPath(true);
+    return true;
+  }
+
+  if(tryDraw()) return;
+
+  try {
+    if(window.map && typeof map.on === 'function'){
+      map.on('load', tryDraw);
+      map.on('idle', tryDraw);
+    }
+  } catch(e){}
+
+  var tries = 150;                 /* 60 seconds, patient rather than 10 */
+  (function _poll(){
+    if(tryDraw()) return;
+    if(--tries > 0) setTimeout(_poll, 400);
   })();
 });
 </script>
