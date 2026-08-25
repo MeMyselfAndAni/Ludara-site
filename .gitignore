@@ -4,3 +4,8 @@ _to_delete/
 *.bak-*
 _nav_backup_*/
 _backup_*
+
+# Build tooling. Installed locally, never served to a browser.
+# sharp is used by minimize-images.js and resize-images.js and runs on Maria's
+# machine only. Nothing in any HTML or CSS references node_modules.
+node_modules/
