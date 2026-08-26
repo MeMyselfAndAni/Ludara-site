@@ -614,7 +614,8 @@ function clearAllSaved() {
    refreshFavourites() which syncs the variable and re-renders the UI.     */
 var _TRIPS = {
   music: { name: 'Music Insider Day', ids: [40, 1, 4, 2, 39, 3, 35], note: 'NMAAM closed Mon & Sun · Ryman tours end 16:00' },
-  bar:   { name: 'Broadway Bar Hop',  ids: [41, 5, 6, 42, 20], note: 'Skull’s Rainbow Room: Tue–Sat only' }
+  bar:   { name: 'Broadway Bar Hop',  ids: [41, 5, 6, 42, 20], note: 'Skull’s Rainbow Room: Tue–Sat only' },
+  dolly: { name: 'Dolly’s Nashville', ids: [1, 5, 81, 82, 84, 83, 2, 39, 80, 85], note: 'All on foot · not Sundays, Arnold’s is closed · Tootsie’s is 21+ after 18:00' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
@@ -674,6 +675,13 @@ function _undoTrip(prev, key) {
       <text class="trip-arc-label"><textPath href="#arc-bar" startOffset="50%" text-anchor="middle">Bar Hop</textPath></text>
     </svg>
   </button>
+  <button class="trip-btn-circle" id="trip-btn-dolly" onclick="loadTrip('dolly')" title="Dolly’s Nashville">
+    <span class="trip-btn-emoji-html">🦋</span>
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-dolly" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-dolly" startOffset="50%" text-anchor="middle">Dolly</textPath></text>
+    </svg>
+  </button>
 </div>
 <script>
   window.TutorialConfig = {
@@ -681,7 +689,7 @@ function _undoTrip(prev, key) {
     cityName:     'Nashville',
     demoPlaceId:  8,                           /* City House — dinner w/ reservations + James Beard award (demo card) */
     demoSavedIds: [42, 1, 5, 3, 4],             /* Skull's Rainbow Room, Ryman, Tootsie's, NMAAM, Hatch Show Print — all Broadway/walkable */
-    tripNames:    'a Music Insider Day or a Broadway Bar Hop'
+    tripNames:    'a Music Insider Day, a Broadway Bar Hop or Dolly\u2019s Nashville'
   };
 </script>
 <script src="tutorial.js"></script>
