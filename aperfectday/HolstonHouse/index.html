@@ -493,7 +493,7 @@ function clearAllSaved() {
           var we = document.getElementById('saved-stat-walk-sheet');
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
           var te = document.getElementById('saved-stat-total-sheet');
-          if (te && window._lastDwellMins) te.innerHTML = '<b>⏱ ~' + fmtTime(rs.walkMins + window._lastDwellMins) + ' in all</b>';
+          if (te && window._lastDwellMins) te.innerHTML = '<b>⏱ ' + fmtTime(rs.walkMins + window._lastDwellMins) + ' in all</b>';
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
             if (c) c.textContent = rs.travelMode === 'driving' ? '↓ ~' + m + ' min drive' : '↓ ~' + m + ' min walk';
@@ -531,7 +531,7 @@ function clearAllSaved() {
       }
       html +=
         '<div class="saved-stats-bar" style="display:flex;flex-wrap:wrap"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
-        (dwellMins ? '<span class="saved-stat-dot">·</span><span id="saved-stat-total-sheet"><b>⏱ ~'+fmtTime(walkMins+dwellMins)+' in all</b></span>' : '')+
+        (dwellMins ? '<span class="saved-stat-dot">·</span><span id="saved-stat-total-sheet"><b>⏱ '+fmtTime(walkMins+dwellMins)+' in all</b></span>' : '')+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
@@ -584,7 +584,7 @@ function clearAllSaved() {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
           var te=document.getElementById('saved-stat-total-sheet');
-          if(te&&window._lastDwellMins)te.innerHTML='<b>⏱ ~'+fmtTime(s.walkMins+window._lastDwellMins)+' in all</b>';
+          if(te&&window._lastDwellMins)te.innerHTML='<b>⏱ '+fmtTime(s.walkMins+window._lastDwellMins)+' in all</b>';
           if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
         }).catch(function(){});
       }
@@ -719,6 +719,22 @@ function _tripToast(msg, note, prev, key) {
   document.body.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
 }
+/* ?trip=dolly opens the guide with that day already loaded. Unlike ?itinerary=,
+   this goes through loadTrip, so the order is pinned and the day's header and
+   closing card appear. Used for shared links and social posts. */
+window.addEventListener('load', function () {
+  var key = new URLSearchParams(window.location.search).get('trip');
+  if (!key || typeof _TRIPS === 'undefined' || !_TRIPS[key]) return;
+  setTimeout(function () {
+    try {
+      if (typeof loadTrip === 'function') loadTrip(key);
+      /* Clean the URL so a refresh or a Clear does not re-apply the day */
+      if (window.history && history.replaceState) {
+        history.replaceState({}, '', window.location.pathname);
+      }
+    } catch (e) {}
+  }, 1200);
+});
 function _undoTrip(prev, key) {
   var el = document.getElementById("_trip-toast"); if (el) el.remove();
   localStorage.setItem(_favsKey(), JSON.stringify(prev));
