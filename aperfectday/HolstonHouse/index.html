@@ -442,6 +442,7 @@ function clearAllSaved() {
   if (!favourites || favourites.length === 0) return;
   if (!confirm('Clear all ' + favourites.length + ' saved places?')) return;
   favourites = []; saveFavs(); clearTripRoute();
+  try { if (typeof _tripActiveKey === 'function') localStorage.removeItem(_tripActiveKey()); } catch(e) {}
   var pill = document.getElementById('pill-saved');
   if (typeof savedFilterActive !== 'undefined' && savedFilterActive && pill) toggleSavedFilter(pill);
   if (typeof _toast === 'function') _toast('Saved places cleared.', 2500);
@@ -530,6 +531,20 @@ function clearAllSaved() {
           '<span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">›</span></div>';
         if (i < pl.length-1) html += '<div class="saved-walk-connector" id="saved-conn-'+i+'">↓</div>';
       });
+      var _ak = typeof _getActiveTrip === 'function' ? _getActiveTrip() : null;
+      var _at = _ak && typeof _TRIPS !== 'undefined' ? _TRIPS[_ak] : null;
+      if (_at && _at.closing) {
+        html += '<div class="trip-closing-card" style="margin:14px 10px 18px;padding:14px 16px;'
+          + 'border:1px solid rgba(0,0,0,0.08);border-left:3px solid var(--brand);border-radius:10px;'
+          + 'background:rgba(0,0,0,0.02);">'
+          + '<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;'
+          + 'color:var(--brand);margin-bottom:6px;">' + (_at.closingTitle || 'One last thing') + '</div>'
+          + '<div style="font-size:0.86rem;line-height:1.55;color:#31261d;">' + _at.closing + '</div>'
+          + (_at.closingLinkUrl ? '<div style="margin-top:9px;"><a href="' + _at.closingLinkUrl
+              + '" target="_blank" rel="noopener" style="font-size:0.86rem;font-weight:600;color:var(--brand);">'
+              + (_at.closingLinkText || _at.closingLinkUrl) + ' ↗</a></div>' : '')
+          + '</div>';
+      }
       listEl.innerHTML = html;
       if (listEl.parentNode) listEl.parentNode.appendChild(listEl);
       var al = document.getElementById('saved-autosort-link');
@@ -623,8 +638,20 @@ function clearAllSaved() {
 var _TRIPS = {
   music: { name: 'Music Insider Day', ids: [40, 1, 4, 2, 39, 3, 35], note: 'NMAAM closed Mon & Sun · Ryman tours end 16:00' },
   bar:   { name: 'Broadway Bar Hop',  ids: [41, 5, 6, 42, 20], note: 'Skull’s Rainbow Room: Tue–Sat only' },
-  dolly: { name: 'Dolly’s Nashville', ids: [1, 5, 81, 82, 84, 83, 2, 39, 80, 85], note: 'A full day on foot, about 09:00 to 19:00 · not Sundays, Arnold’s is closed · Tootsie’s is 21+ after 18:00' }
+  dolly: {
+    name: 'Dolly’s Nashville',
+    ids: [1, 5, 81, 82, 84, 83, 2, 39, 80, 85],
+    note: 'A full day on foot, about 09:00 to 19:00 · not Sundays, Arnold’s is closed · Tootsie’s is 21+ after 18:00',
+    closingTitle: 'One last thing',
+    closing: 'Dolly Parton’s family asked for no flowers. They asked instead for books, through the Dolly Parton Imagination Library, which has posted more than two hundred million free books to children who could not otherwise have them. If today moved you, that is the thing Dolly Parton would want you to do about it.',
+    closingLinkText: 'imaginationlibrary.com',
+    closingLinkUrl: 'https://imaginationlibrary.com'
+  }
 };
+/* Which preset day, if any, the guest is currently holding. Used to show that
+   day's closing message under the last stop. */
+function _tripActiveKey(){ return 'trip_' + window.location.pathname.replace(/\//g, '_'); }
+function _getActiveTrip(){ try { return localStorage.getItem(_tripActiveKey()); } catch(e){ return null; } }
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
 }
@@ -637,6 +664,7 @@ function loadTrip(key) {
      so the proximity auto-sort must not be allowed to reshuffle them. The guest
      can still drag, and Auto-sort still clears it. */
   if (typeof _setSavedOrder === 'function') _setSavedOrder(trip.ids.slice());
+  try { localStorage.setItem(_tripActiveKey(), key); } catch(e) {}
   if (typeof refreshFavourites === "function") refreshFavourites();
   var sp = document.getElementById("pill-saved");
   if (sp && !sp.classList.contains("active")) {
@@ -662,6 +690,7 @@ function _undoTrip(prev, key) {
   var el = document.getElementById("_trip-toast"); if (el) el.remove();
   localStorage.setItem(_favsKey(), JSON.stringify(prev));
   if (typeof _clearSavedOrder === 'function') _clearSavedOrder();
+  try { localStorage.removeItem(_tripActiveKey()); } catch(e) {}
   if (typeof refreshFavourites === "function") refreshFavourites();
   var ap = document.getElementById("pill-trip-" + key); if (ap) ap.classList.remove("active");
   if (!prev.length) {
