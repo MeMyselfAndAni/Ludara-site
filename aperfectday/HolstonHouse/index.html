@@ -502,6 +502,9 @@ function clearAllSaved() {
       }
     }
     function showTrip(pl, distM, walkMins) {
+      var _ak = typeof _getActiveTrip === 'function' ? _getActiveTrip() : null;
+      var _at = _ak && typeof _TRIPS !== 'undefined' ? _TRIPS[_ak] : null;
+      var _ib = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
       var mode = (typeof _lastRouteStats!=='undefined'&&_lastRouteStats&&_lastRouteStats.travelMode)
         ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
       var icon = mode==='driving' ? '🚗' : '🚶';
@@ -509,7 +512,24 @@ function clearAllSaved() {
       var dwellMins = 0;
       if (typeof getDwell === 'function') pl.forEach(function(p){ dwellMins += getDwell(p); });
       window._lastDwellMins = dwellMins;
-      var html =
+      var html = '';
+      if (_at) {
+        html += '<div class="trip-day-header" style="display:flex;align-items:center;gap:11px;'
+          + 'padding:12px 12px 10px;border-bottom:1px solid rgba(0,0,0,0.06);">'
+          + (_at.headerImage
+              ? '<img src="' + _ib + _at.headerImage + '" alt="" aria-hidden="true" loading="lazy" '
+                + 'onerror="this.remove();" '
+                + 'style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;'
+                + 'box-shadow:0 1px 5px rgba(49,38,29,0.25);">'
+              : '')
+          + '<div style="min-width:0;">'
+          + '<div style="font-size:0.95rem;font-weight:700;color:#31261d;line-height:1.2;">'
+          + (_at.name || '') + '</div>'
+          + (_at.note ? '<div style="font-size:0.68rem;color:#8a8079;line-height:1.35;margin-top:3px;">'
+              + _at.note + '</div>' : '')
+          + '</div></div>';
+      }
+      html +=
         '<div class="saved-stats-bar" style="display:flex;flex-wrap:wrap"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
         (dwellMins ? '<span class="saved-stat-dot">·</span><span id="saved-stat-total-sheet"><b>⏱ ~'+fmtTime(walkMins+dwellMins)+' in all</b></span>' : '')+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
@@ -531,10 +551,7 @@ function clearAllSaved() {
           '<span class="chevron" onclick="openDetail('+p.id+')" style="cursor:pointer">›</span></div>';
         if (i < pl.length-1) html += '<div class="saved-walk-connector" id="saved-conn-'+i+'">↓</div>';
       });
-      var _ak = typeof _getActiveTrip === 'function' ? _getActiveTrip() : null;
-      var _at = _ak && typeof _TRIPS !== 'undefined' ? _TRIPS[_ak] : null;
       if (_at && _at.closing) {
-        var _ib = (typeof IMAGES_PATH !== 'undefined') ? IMAGES_PATH : 'images/';
         html += '<div class="trip-closing-card" style="margin:14px 10px 18px;padding:14px 16px;'
           + 'border:1px solid rgba(0,0,0,0.08);border-left:3px solid var(--brand);border-radius:10px;'
           + 'background:rgba(0,0,0,0.02);">'
@@ -658,6 +675,7 @@ var _TRIPS = {
     closing: 'Dolly Parton’s family asked for no flowers. They asked instead for books, through the Dolly Parton Imagination Library, which has posted more than two hundred million free books to children who could not otherwise have them. If today moved you, that is the thing Dolly Parton would want you to do about it.',
     closingLinkText: 'imaginationlibrary.com',
     closingLinkUrl: 'https://imaginationlibrary.com',
+    headerImage: 'dolly-button.jpg',
     closingImage: 'dolly-tribute.jpg',
     closingCredit: 'Dolly Parton at the Grand Ole Opry, 2005. Photo: Tech. Sgt. Cherie A. Thurlby, U.S. Air Force, public domain',
     closingCaption: 'Dolly Parton, 19 January 1946 to 25 August 2026'
@@ -737,7 +755,7 @@ function _undoTrip(prev, key) {
     <img src="images/dolly-button.jpg" alt="" aria-hidden="true"
          onload="var e=document.getElementById('trip-emoji-dolly'); if(e) e.style.display='none'; this.style.opacity='1';"
          onerror="this.remove();"
-         style="position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:center 28%;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s;box-shadow:0 1px 4px rgba(49,38,29,0.35);">
+         style="position:absolute;top:32%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 28%;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s;box-shadow:0 1px 4px rgba(49,38,29,0.35);">
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-dolly" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
       <text class="trip-arc-label"><textPath href="#arc-dolly" startOffset="50%" text-anchor="middle">Dolly</textPath></text>
