@@ -239,8 +239,19 @@ function drawSavedRoute(){
 }
 
 // ── DWELL TIMES ───────────────────────────────────────────────
-const DWELL = { landmark:25, church:20, food:75, cafe:40, market:35, soviet:25, pub:25, nature:40 };
-function getDwell(cat){ return DWELL[cat] || 25; }
+// Minutes a guest actually spends AT a place. Categories are this guide's own
+// (the old list here was inherited from another city and matched nothing, so
+// every place silently fell through to 25 minutes, museums included).
+// A place may override with its own `dwell:` in data.js.
+const DWELL = { breakfast:45, lunch:60, dinner:90, bbq:60, bar:45, music:90,
+                attraction:60, shopping:30, boots:30, parks:60 };
+function getDwell(p){
+  if(p && typeof p === 'object'){
+    if(typeof p.dwell === 'number') return p.dwell;
+    return DWELL[p.cat] || 30;
+  }
+  return DWELL[p] || 30;   // legacy: called with a category string
+}
 function formatMins(mins){
   if(mins < 60) return `${mins} min`;
   const h = Math.floor(mins/60), m = mins % 60;
@@ -284,7 +295,7 @@ function planFavTrip(){
   const places = getSortedFavPlaces();
   let totalWalkSecs = 0, totalDwell = 0;
   places.forEach((p, i) => {
-    totalDwell += getDwell(p.cat);
+    totalDwell += getDwell(p);
     if(i < places.length-1){
       totalWalkSecs += Math.round(haversineM(p, places[i+1]) / 58 * 60 * 1.35);
     }
@@ -318,7 +329,7 @@ function planFavTrip(){
         <div class="trip-stop-name">${p.emoji} ${p.name}</div>
         <div class="trip-stop-meta">${CL[p.cat]}${p.address?' · '+p.address:''}</div>
         ${p.hours?`<div class="trip-stop-hours">🕐 ${p.hours}`+`</div>`:''}
-        <div class="trip-stop-dwell">⏱ ~${getDwell(p.cat)} min here</div>
+        <div class="trip-stop-dwell">⏱ ~${getDwell(p)} min here</div>
       </div>
 
     </div>

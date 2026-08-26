@@ -491,6 +491,8 @@ function clearAllSaved() {
           var icon = rs.travelMode === 'driving' ? '🚗' : '🚶';
           var we = document.getElementById('saved-stat-walk-sheet');
           if (we) we.textContent = icon + ' ' + fmtTime(rs.walkMins);
+          var te = document.getElementById('saved-stat-total-sheet');
+          if (te && window._lastDwellMins) te.innerHTML = '<b>⏱ ~' + fmtTime(rs.walkMins + window._lastDwellMins) + ' in all</b>';
           if (rs.legMins) rs.legMins.forEach(function(m, i) {
             var c = document.getElementById('saved-conn-' + i);
             if (c) c.textContent = rs.travelMode === 'driving' ? '↓ ~' + m + ' min drive' : '↓ ~' + m + ' min walk';
@@ -503,8 +505,12 @@ function clearAllSaved() {
         ? _lastRouteStats.travelMode : (walkMins>180?'driving':'walking');
       var icon = mode==='driving' ? '🚗' : '🚶';
       var dist = typeof formatDistance==='function' ? formatDistance(distM) : ((distM/1000).toFixed(1)+' km');
+      var dwellMins = 0;
+      if (typeof getDwell === 'function') pl.forEach(function(p){ dwellMins += getDwell(p); });
+      window._lastDwellMins = dwellMins;
       var html =
-        '<div class="saved-stats-bar" style="display:flex"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
+        '<div class="saved-stats-bar" style="display:flex;flex-wrap:wrap"><span>'+pl.length+(pl.length===1?' stop':' stops')+'</span>'+
+        (dwellMins ? '<span class="saved-stat-dot">·</span><span id="saved-stat-total-sheet"><b>⏱ ~'+fmtTime(walkMins+dwellMins)+' in all</b></span>' : '')+
         '<span class="saved-stat-dot">·</span><span id="saved-stat-walk-sheet">'+icon+' '+fmtTime(walkMins)+'</span>'+
         '<span class="saved-stat-dot">·</span><span>📏 '+dist+'</span></div>'+
         '<div style="display:flex;padding:8px 10px;gap:5px;">'+
@@ -533,6 +539,8 @@ function clearAllSaved() {
         _fetchRouteStats(pl).then(function(s) {
           var we=document.getElementById('saved-stat-walk-sheet');
           if(we)we.textContent=(s.travelMode==='driving'?'🚗':'🚶')+' '+fmtTime(s.walkMins);
+          var te=document.getElementById('saved-stat-total-sheet');
+          if(te&&window._lastDwellMins)te.innerHTML='<b>⏱ ~'+fmtTime(s.walkMins+window._lastDwellMins)+' in all</b>';
           if(s.legMins)s.legMins.forEach(function(m,i){var c=document.getElementById('saved-conn-'+i);if(c)c.textContent=(s.travelMode==='driving'?'↓ ~'+m+' min drive':'↓ ~'+m+' min walk');});
         }).catch(function(){});
       }
@@ -615,7 +623,7 @@ function clearAllSaved() {
 var _TRIPS = {
   music: { name: 'Music Insider Day', ids: [40, 1, 4, 2, 39, 3, 35], note: 'NMAAM closed Mon & Sun · Ryman tours end 16:00' },
   bar:   { name: 'Broadway Bar Hop',  ids: [41, 5, 6, 42, 20], note: 'Skull’s Rainbow Room: Tue–Sat only' },
-  dolly: { name: 'Dolly’s Nashville', ids: [1, 5, 81, 82, 84, 83, 2, 39, 80, 85], note: 'All on foot · not Sundays, Arnold’s is closed · Tootsie’s is 21+ after 18:00' }
+  dolly: { name: 'Dolly’s Nashville', ids: [1, 5, 81, 82, 84, 83, 2, 39, 80, 85], note: 'A full day on foot, about 09:00 to 19:00 · not Sundays, Arnold’s is closed · Tootsie’s is 21+ after 18:00' }
 };
 function _favsKey() {
   return 'favs_' + window.location.pathname.replace(/\//g, '_');
@@ -625,6 +633,10 @@ function loadTrip(key) {
   if (typeof apdTrack === 'function') apdTrack('trip_loaded', { trip: key, trip_name: trip.name || key });
   var prev = JSON.parse(localStorage.getItem(_favsKey()) || "[]");
   localStorage.setItem(_favsKey(), JSON.stringify(trip.ids));
+  /* Pin the order. These days are sequenced by opening hours, not by distance,
+     so the proximity auto-sort must not be allowed to reshuffle them. The guest
+     can still drag, and Auto-sort still clears it. */
+  if (typeof _setSavedOrder === 'function') _setSavedOrder(trip.ids.slice());
   if (typeof refreshFavourites === "function") refreshFavourites();
   var sp = document.getElementById("pill-saved");
   if (sp && !sp.classList.contains("active")) {
@@ -649,6 +661,7 @@ function _tripToast(msg, note, prev, key) {
 function _undoTrip(prev, key) {
   var el = document.getElementById("_trip-toast"); if (el) el.remove();
   localStorage.setItem(_favsKey(), JSON.stringify(prev));
+  if (typeof _clearSavedOrder === 'function') _clearSavedOrder();
   if (typeof refreshFavourites === "function") refreshFavourites();
   var ap = document.getElementById("pill-trip-" + key); if (ap) ap.classList.remove("active");
   if (!prev.length) {

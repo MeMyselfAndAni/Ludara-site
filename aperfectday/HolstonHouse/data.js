@@ -19,6 +19,7 @@ const PLACES = [
 
   {
     id: 1,
+    dwell: 60,
     nbhd: "downtown",
     name: "Ryman Auditorium",
     cat: "attraction",
@@ -27,7 +28,7 @@ const PLACES = [
     lat: 36.1612,
     lng: -86.7785,
     search: "Ryman Auditorium Nashville",
-    note: "Built in 1892 as a gospel tabernacle, the Ryman became home of the Grand Ole Opry from 1943 to 1974 and is now recognised as one of the most acoustically perfect concert venues in America. Daytime tours open the sanctuary, backstage corridors, and the very dressing rooms where Hank Williams and Patsy Cline prepared to perform. The wooden pews, stained-glass windows, and cathedral quiet make it feel sacred even when the stage is empty.",
+    note: "Built in 1892 as a gospel tabernacle, the Ryman became home of the Grand Ole Opry from 1943 to 1974 and is now recognised as one of the most acoustically perfect concert venues in America. Daytime tours open the sanctuary, backstage corridors, and the very dressing rooms where Hank Williams and Patsy Cline prepared to perform. The wooden pews, stained-glass windows, and cathedral quiet make it feel sacred even when the stage is empty. In July 1959 a thirteen year old Dolly Parton stood at the WSM microphone on this stage. Johnny Cash introduced her, she sang a George Jones song, and the room called for three encores. Ten years later, in 1969, Dolly Parton was made a member of the Grand Ole Opry in this same room.",
     hours: "Daily 09:00–16:00",
     tip: "Book the backstage tour in advance — it sells out. The self-guided tour includes a photo opportunity on the famous stage. The Ryman is a working concert hall, so daytime tours are cut short on show days. Check ryman.com/tours on the morning you go.",
     type: "Historic Music Venue & Museum",
@@ -38,6 +39,7 @@ const PLACES = [
 
   {
     id: 2,
+    dwell: 150,
     nbhd: "downtown",
     name: "Country Music Hall of Fame & Museum",
     cat: "attraction",
@@ -46,7 +48,7 @@ const PLACES = [
     lat: 36.158263,
     lng: -86.776126,
     search: "Country Music Hall of Fame Nashville",
-    note: "The permanent collection traces country music's roots from its Appalachian folk origins through the outlaw movement, the stadium era, and the genre's contemporary diversity — told through instruments, stage costumes, rare recordings, and the Hall of Fame rotunda where each inductee's medallion lines the curved wall. Nashvegas: 'The Hall of Fame rotunda is genuinely moving in a way that's hard to explain and easy to experience.' Recent exhibitions have covered Dolly Parton's complete archive and Johnny Cash's visual art. Allow at least three hours. Discounted tickets available at the Holston House Front Desk.",
+    note: "The permanent collection traces country music's roots from its Appalachian folk origins through the outlaw movement, the stadium era, and the genre's contemporary diversity — told through instruments, stage costumes, rare recordings, and the Hall of Fame rotunda where each inductee's medallion lines the curved wall. Nashvegas: 'The Hall of Fame rotunda is genuinely moving in a way that's hard to explain and easy to experience.' Recent exhibitions have covered Dolly Parton's complete archive and Johnny Cash's visual art. Allow at least three hours. Discounted tickets available at the Holston House Front Desk. Dolly Parton was inducted in 1999 and her plaque is in the rotunda, the round room at the top.",
     hours: "Daily 09:00–17:00",
     tip: "Combination tickets with RCA Studio B on Music Row offer the best value in Nashville music tourism. Book Studio B in advance — tours are limited in size.",
     type: "Music History Museum",
@@ -95,6 +97,7 @@ const PLACES = [
 
   {
     id: 5,
+    dwell: 30,
     nbhd: "downtown",
     name: "Tootsie's Orchid Lounge",
     cat: "bar",
@@ -103,7 +106,7 @@ const PLACES = [
     lat: 36.160902,
     lng: -86.778292,
     search: "Tootsies Orchid Lounge Nashville Broadway honky tonk historic",
-    note: "Since 1960, when Hattie Louise 'Tootsie' Bess purchased the bar, Tootsie's remains Nashville's go-to destination for locals and visitors alike. Tootsie's has more music history per square inch than anywhere else in Music City. Fun fact: Willie Nelson got his first songwriting job after performing at Tootsie's.",
+    note: "Since 1960, when Hattie Louise 'Tootsie' Bess purchased the bar, Tootsie's remains Nashville's go-to destination for locals and visitors alike. Tootsie's has more music history per square inch than anywhere else in Music City. Fun fact: Willie Nelson got his first songwriting job after performing at Tootsie's. Dolly Parton put it plainly: when she moved to Nashville, if you could not find someone backstage at the Ryman, there was a good chance they were at the bar at Tootsie's. Years later she filmed a segment for her own television show in this room.",
     hours: "Daily 09:30–03:00",
     tip: "A Holston House staff pick — Daniel. Go upstairs for a slightly quieter experience with a view down Broadway. Weekday afternoons are the best time to actually hear the musicians. Family friendly until 18:00 only. After six it is 21 and over at the door, so come in the morning if you have children with you.",
     type: "Historic Honky-Tonk",
@@ -1171,6 +1174,7 @@ const PLACES = [
 
   {
     id: 39,
+    dwell: 60,
     nbhd: "midtown",
     name: "RCA Studio B",
     cat: "attraction",
@@ -1179,7 +1183,7 @@ const PLACES = [
     lat: 36.1500,
     lng: -86.7929,
     search: "RCA Studio B Nashville Music Row",
-    note: "Nashvegas is unambiguous: RCA Studio B is the most historically significant recording studio in country music history. Elvis Presley, Dolly Parton, Willie Nelson, Chet Atkins, Roy Orbison, and hundreds more recorded here between 1957 and 1977. The studio's original console, isolation booth, and reverb chamber are all intact and fully operational. Tours run through the Country Music Hall of Fame and are consistently among the most informative cultural experiences Nashville offers.",
+    note: "Nashvegas is unambiguous: RCA Studio B is the most historically significant recording studio in country music history. Elvis Presley, Dolly Parton, Willie Nelson, Chet Atkins, Roy Orbison, and hundreds more recorded here between 1957 and 1977. The studio's original console, isolation booth, and reverb chamber are all intact and fully operational. Tours run through the Country Music Hall of Fame and are consistently among the most informative cultural experiences Nashville offers. Dolly Parton recorded Jolene in this room on 22 May 1973, and I Will Always Love You three weeks after that. Both songs, one small room, one summer.",
     hours: "Daily 10:00–15:00; last tour bus 14:30 (departs from Country Music Hall of Fame)",
     tip: "Book the combination ticket with the Country Music Hall of Fame. Tours are limited in size and sell out — book at least a week ahead on weekends. The last bus out is 14:30 and you must check in at the Hall of Fame lobby by 14:15. Miss it and the seat is not refunded.",
     type: "Historic Recording Studio (tours)",
@@ -1274,6 +1278,7 @@ const PLACES = [
 
   {
     id: 80,
+    dwell: 10,
     nbhd: "downtown",
     name: "The reading mural at Hume-Fogg",
     cat: "attraction",
@@ -1293,6 +1298,7 @@ const PLACES = [
 
   {
     id: 81,
+    dwell: 10,
     nbhd: "downtown",
     name: "The Dolly Parton mural at Acme",
     cat: "attraction",
@@ -1312,6 +1318,7 @@ const PLACES = [
 
   {
     id: 82,
+    dwell: 20,
     nbhd: "downtown",
     name: "John Seigenthaler Pedestrian Bridge",
     cat: "attraction",
@@ -1331,6 +1338,7 @@ const PLACES = [
 
   {
     id: 83,
+    dwell: 15,
     nbhd: "downtown",
     name: "Music City Walk of Fame",
     cat: "attraction",
@@ -1350,6 +1358,7 @@ const PLACES = [
 
   {
     id: 84,
+    dwell: 60,
     nbhd: "downtown",
     name: "Arnold's Country Kitchen",
     cat: "lunch",
@@ -1369,6 +1378,7 @@ const PLACES = [
 
   {
     id: 85,
+    dwell: 45,
     nbhd: "downtown",
     name: "The Butterfly Bar (Dolly Wines)",
     cat: "bar",

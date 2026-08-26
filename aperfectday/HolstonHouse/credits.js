@@ -67,6 +67,12 @@ const PHOTO_CREDITS = {
   77: { author: "Warren LeMay", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Big_Time_Boots_Sign,_Broadway,_Nashville,_TN_(54384488694).jpg", venue:false },
   78: { author: "Betty Boots", license: "", url: "https://www.trailwestnashville.com/betty-boots", venue:true },
   79: { author: "Nashville Boot Co", license: "", url: "https://www.nashvilleboots.com", venue:true },
+  80: { author: "Shawn Miller, Library of Congress", license: "Public Domain", url: "https://commons.wikimedia.org/wiki/File:Dolly_Parton_reads_to_children_in_the_Library_of_Congress_Great_Hall_in_2018.png", venue:false },
+  81: { author: "Domenico Convertini", license: "CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Broadway_(Nashville)_lights.jpg", venue:false },
+  82: { author: "Kaldari", license: "CC0 (Public Domain)", url: "https://commons.wikimedia.org/wiki/File:Shelby_Street_Bridge_2008.jpg", venue:false },
+  83: { author: "An Errant Knight", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Music_City_Walk_of_Fame_1,_Aug_17.jpg", venue:false },
+  84: { author: "Rachel Chapdelaine", license: "CC BY 2.0", url: "https://www.flickr.com/photos/124016496@N07/14118527336/", venue:false },
+  85: { author: "Assembly Food Hall", license: "", url: "https://www.assemblyfoodhall.com", venue:true },
 };
 
 // Build the credit anchor HTML for a place id (returns '' if none).
