@@ -277,7 +277,6 @@
 </header>
 
 <!-- Filter bar -->
-<!-- [10] Adjust category pills to suit the city. Keep onclick="fc(this,'CATKEY')" exactly as-is. -->
 <div class="filter-bar">
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> Saved <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span>All</button>
@@ -297,10 +296,6 @@
 <div id="map"></div>
 
 <!-- Neighbourhood bubble bar -->
-<!-- [11] One nbhd-bubble per neighbourhood.
-     id = "nbhd-" + key.  selectNbhd arg = key (no "nbhd-" prefix).
-     ⚠️  Keys here, in map.js NBHD_* objects, and in data.js nbhd field must ALL match
-         and must be plain words — e.g. 'sokolov', 'old-town' — NO 'nbhd-' prefix. -->
 <div id="nbhd-title">Neighbourhoods</div>
 <div id="nbhd-bar">
   <div class="nbhd-bar-handle" id="nbhd-handle">
@@ -382,8 +377,7 @@
       <span class="pc-emily-by" style="display:none"></span>
     </div>
     <div class="pc-tip" id="pc-tip" style="display:none">
-      <span class="pc-tip-label">💡 Visitor Tip</span><!-- [13] ALWAYS "Visitor Tip" — never blogger name -->
-      <span id="pc-tip-text"></span>
+      <span class="pc-tip-label">💡 Visitor Tip</span>      <span id="pc-tip-text"></span>
     </div>
     <div class="pc-counter" id="pc-counter" style="display:none"></div>
   </div>
@@ -409,11 +403,10 @@
 </div>
 
 <!-- List toggle (mobile) -->
-<!-- [14] Update 68 in all three places below -->
 <button class="list-toggle" id="list-toggle" onclick="toggleSheet()">
   <span class="list-toggle-icon">☰</span>
   <span class="list-toggle-label">Places</span>
-  <span class="count-badge" id="list-badge">71</span>
+  <span class="count-badge" id="list-badge">69</span>
 </button>
 
 <button onclick="restartTutorial()" title="Show tutorial" style="
@@ -440,7 +433,7 @@
 <button id="list-toggle-desktop" onclick="toggleDesktopList()" style="display:none">
   <span id="list-toggle-desktop-icon">☰</span>
   <span>Places</span>
-  <span id="list-badge-desktop">71</span>
+  <span id="list-badge-desktop">69</span>
 </button>
 
 <!-- Places list sheet -->
@@ -449,7 +442,7 @@
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <span class="sheet-title" id="sheet-title">68 Places</span>
+    <span class="sheet-title" id="sheet-title">69 Places</span>
     <span class="fav-count-badge" id="fav-count-badge" style="display:none">0</span>
     <button id="sheet-clear-btn" onclick="clearAllSaved()" title="Clear all saved places" style="display:none;background:none;border:none;font-size:0.72rem;font-weight:700;color:var(--brand);cursor:pointer;padding:4px 8px;border-radius:6px;">🗑 Clear</button>
     <button class="sheet-close" onclick="toggleSheet()">✕</button>
@@ -479,7 +472,7 @@
 <button class="desktop-list-btn" id="desktop-list-btn" onclick="toggleDesktopList()">
   <span class="desktop-list-btn-icon">☰</span>
   <span>Places</span>
-  <span class="desktop-list-count" id="desktop-list-count">71</span>
+  <span class="desktop-list-count" id="desktop-list-count">69</span>
 </button>
 
 <!-- JS modules — load order is critical, do not reorder -->
