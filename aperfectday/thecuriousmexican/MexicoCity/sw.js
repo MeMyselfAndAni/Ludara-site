@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apd-shell-v6';
+var SHELL_CACHE = 'apd-mexicocity-shell-v6';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
@@ -42,7 +42,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(k) {
-          return k.startsWith('apd-shell-') && k !== SHELL_CACHE;
+          return k.startsWith('apd-mexicocity-shell-') && k !== SHELL_CACHE;
         }).map(function(k) { return caches.delete(k); })
       );
     }).then(function() { return self.clients.claim(); })

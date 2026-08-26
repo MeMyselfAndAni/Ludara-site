@@ -1,5 +1,5 @@
 // sw.js — Service Worker for offline map support (MapLibre + MapTiler)
-const APP_CACHE  = 'aperfectday-app-v2';
+const APP_CACHE  = 'apd-prague-shell-v3';
 const TILE_CACHE = 'maptiler-tiles-v2';
 
 const APP_FILES = [
@@ -20,7 +20,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys
-        .filter(k => k !== APP_CACHE && k !== TILE_CACHE)
+        .filter(k => k.startsWith('apd-prague-shell-') && k !== APP_CACHE)
         .map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
