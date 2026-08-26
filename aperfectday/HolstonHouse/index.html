@@ -563,7 +563,11 @@ function clearAllSaved() {
                 + (_at.closingCaption ? '<figcaption style="font-size:0.72rem;color:#6b6259;margin-top:6px;">'
                     + _at.closingCaption + '</figcaption>' : '')
                 + (_at.closingCredit ? '<figcaption style="font-size:0.62rem;color:#9a9189;margin-top:2px;">'
-                    + _at.closingCredit + '</figcaption>' : '')
+                    + (_at.closingCreditUrl
+                        ? '<a href="' + _at.closingCreditUrl + '" target="_blank" rel="noopener" '
+                          + 'style="color:inherit;text-decoration:underline;">' + _at.closingCredit + '</a>'
+                        : _at.closingCredit)
+                    + '</figcaption>' : '')
                 + '</figure>'
               : '')
           + '<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;'
@@ -678,6 +682,7 @@ var _TRIPS = {
     headerImage: 'dolly-tribute.jpg',
     closingImage: 'dolly-closing.jpg',
     closingCredit: 'Photo: Curtis Hilbun, CC BY 3.0',
+    closingCreditUrl: 'https://commons.wikimedia.org/wiki/File:Dolly_Parton_accepting_Liseberg_Applause_Award_2010_landscape.jpg',
     closingCaption: 'Dolly Parton, 19 January 1946 to 25 August 2026'
   }
 };
