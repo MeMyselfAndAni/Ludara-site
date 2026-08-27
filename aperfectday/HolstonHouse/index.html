@@ -767,6 +767,17 @@ function _undoTrip(prev, key) {
 <!-- Day Trip launcher — fixed left edge -->
 <div class="trip-launcher" id="trip-launcher">
   <span class="trip-launcher-label">Holston<br>Recommends</span>
+  <button class="trip-btn-circle" id="trip-btn-dolly" onclick="loadTrip('dolly')" title="Dolly’s Nashville">
+    <span class="trip-btn-emoji-html" id="trip-emoji-dolly">🦋</span>
+    <img src="images/dolly-button.jpg" alt="" aria-hidden="true"
+         onload="var e=document.getElementById('trip-emoji-dolly'); if(e) e.style.display='none'; this.style.opacity='1';"
+         onerror="this.remove();"
+         style="position:absolute;top:32%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 22%;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s;box-shadow:0 1px 4px rgba(49,38,29,0.35);">
+    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="arc-dolly" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
+      <text class="trip-arc-label"><textPath href="#arc-dolly" startOffset="50%" text-anchor="middle">Dolly</textPath></text>
+    </svg>
+  </button>
   <button class="trip-btn-circle" id="trip-btn-music" onclick="loadTrip('music')" title="Music Insider Day">
     <span class="trip-btn-emoji-html">🎵</span>
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
@@ -779,17 +790,6 @@ function _undoTrip(prev, key) {
     <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
       <defs><path id="arc-bar" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
       <text class="trip-arc-label"><textPath href="#arc-bar" startOffset="50%" text-anchor="middle">Bar Hop</textPath></text>
-    </svg>
-  </button>
-  <button class="trip-btn-circle" id="trip-btn-dolly" onclick="loadTrip('dolly')" title="Dolly’s Nashville">
-    <span class="trip-btn-emoji-html" id="trip-emoji-dolly">🦋</span>
-    <img src="images/dolly-button.jpg" alt="" aria-hidden="true"
-         onload="var e=document.getElementById('trip-emoji-dolly'); if(e) e.style.display='none'; this.style.opacity='1';"
-         onerror="this.remove();"
-         style="position:absolute;top:32%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 22%;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s;box-shadow:0 1px 4px rgba(49,38,29,0.35);">
-    <svg class="trip-btn-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="arc-dolly" d="M 7,26 A 19,19 0 0,0 45,26"/></defs>
-      <text class="trip-arc-label"><textPath href="#arc-dolly" startOffset="50%" text-anchor="middle">Dolly</textPath></text>
     </svg>
   </button>
 </div>
