@@ -1287,13 +1287,13 @@ const PLACES = [
     lat: 36.159592,
     lng: -86.781779,
     search: "Hume-Fogg Academic Magnet High School Nashville",
-    note: "Kim Radford painted Dolly Parton here in 2021, in a rocking chair, reading to a child. Not singing. Reading. Since 1995 the Dolly Parton Imagination Library has posted a free book every month to children too young to read on their own, and it has now sent well over two hundred million of them. Dolly Parton's father could not read. Dolly Parton started it for him. It is two minutes from the hotel door and most people walk straight past it.",
+    note: "Kim Radford painted Dolly Parton here in 2021, in a rocking chair, reading to a child. Not singing. Reading. Since 1995 the Dolly Parton Imagination Library has posted a free book every month to children too young to read on their own, and it has now sent well over two hundred million of them. Dolly Parton's father could not read. Dolly Parton started it for him. It is two minutes from the hotel door and most people walk straight past it. More of Kim Radford’s work is at kimradfordart.com.",
     hours: "Outdoors, visible from the pavement at any hour",
     tip: "The mural is on the school building. If you cannot see it from Broadway, walk around the block. This is a working high school and the school day runs 08:00 to 15:00, so come mid morning or after 16:30, never at drop off or pick up, and look from the pavement rather than going in.",
     type: "Street Mural",
     blog: "",
     phone: "",
-    website: "",
+    website: "https://www.kimradfordart.com",
   },
 
   {
