@@ -814,7 +814,7 @@
 
   /* ── Public restart ─────────────────────────────────────────── */
   window.restartTutorial = function () {
-    if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'button' });
+    if (typeof apdTrack === 'function') apdTrack('tutorial_open', { open_from: 'button' });
     localStorage.removeItem(DONE_KEY);
     launch();
   };
@@ -851,7 +851,7 @@
     ].join('');
     document.body.appendChild(n);
     requestAnimationFrame(function () { n.classList.add('show'); });
-    document.getElementById('tut-nudge-go').addEventListener('click', function () { if (typeof apdTrack === 'function') apdTrack('tutorial_open', { source: 'nudge' }); dismissNudge(); launch(); });
+    document.getElementById('tut-nudge-go').addEventListener('click', function () { if (typeof apdTrack === 'function') apdTrack('tutorial_open', { open_from: 'nudge' }); dismissNudge(); launch(); });
     document.getElementById('tut-nudge-x').addEventListener('click', dismissNudge);
     _nudgeTimer = setTimeout(dismissNudge, 15000);
   }
