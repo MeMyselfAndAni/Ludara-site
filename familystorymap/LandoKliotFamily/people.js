@@ -63,7 +63,7 @@ const PEOPLE = [
   // ── FRIEDLAND — צד אמא ───────────────────────────────────────────────────
   { id:'yosi',      he:'יוסף (יוסי) פרידלנד', ru:'Иосиф (Йоси) Фридланд', en:'Yosef (Yosi) Friedland', years:'', role:'אבי סבא זלמן · отец деда Залмана · father of grandfather Zalman', branch:'friedland', col:15.6, row:0, places:[1] },
   { id:'zina',      he:'זינה (זישה) פרידלנד', ru:'Зина (Зиша) Фридланд', en:'Zina (Zisha) Friedland', years:'', role:'לפי הכיתוב: אם סבתי · по подписи: мать бабушки · per the caption: my grandmother\'s mother', branch:'friedland', col:16.6, row:0, places:[1] },
-  { id:'sam',       he:'סם (שמואל) פרידלנד', ru:'Сэм (Шмуэль) Фридланд', en:'Sam (Shmuel) Friedland', years:'', role:'ברח לאמריקה ~1910 · бежал в Америку · fled to America ~1910', branch:'friedland', col:13.2, row:1, places:[1,7,16] },
+  { id:'sam',       he:'סם (שמואל) פרידלנד', ru:'Сэм (Шмуэль) Фридланд', en:'Sam (Shmuel) Friedland', years:'', role:'היגר לאמריקה ~1910 · уехал в Америку ~1910 · emigrated to America ~1910', branch:'friedland', col:13.2, row:1, places:[1,7,16] },
   { id:'dora',      he:'דורה', ru:'Дора', en:'Dora', years:'', role:'רעייתו של סם · жена Сэма · Sam\'s wife', branch:'friedland', col:14.2, row:1, places:[16] },
   { id:'zalman',    he:'זלמן (זחר) פרידלנד', ru:'Залман (Захар) Фридланд', en:'Zalman (Zakhar) Friedland', years:'', role:'סבא (צד אמא) · дед · grandfather', branch:'friedland', col:15.6, row:1, places:[2,11,16] },
   { id:'malka',     he:'מלכה פרידלנד', ru:'Малка Фридланд', en:'Malka Friedland', years:'נפ׳ ~1941', role:'סבתא · бабушка · grandmother', branch:'friedland', col:16.6, row:1, places:[2,11] },
