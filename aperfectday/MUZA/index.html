@@ -266,7 +266,6 @@
 <div class="filter-bar">
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> <span data-i18n="f_saved">Saved</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span><span data-i18n="f_all">All</span></button>
-  <button class="pill" onclick="fc(this,'event')"><span class="dot" style="background:#6a4c93"></span><span data-i18n="f_event">What&#39;s On</span></button>
   <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#9e2b25"></span><span data-i18n="f_pavilion">Pavilions</span></button>
   <button class="pill" onclick="fc(this,'hall')"><span class="dot" style="background:#c8761b"></span><span data-i18n="f_hall">Exhibition Halls</span></button>
   <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_heritage">Heritage</span></button>
@@ -306,6 +305,12 @@
       <span class="nbhd-label" data-i18n="z_park">Western Park</span>
     </div>
   </div>
+</div>
+
+<!-- What's On ribbon (replaces the zone bubble bar, as in Holston House) -->
+<div id="seasonal-bar">
+  <div id="seasonal-label" data-i18n="seasonal_label">Now on show</div>
+  <div id="seasonal-row"></div>
 </div>
 
 <!-- Place card -->

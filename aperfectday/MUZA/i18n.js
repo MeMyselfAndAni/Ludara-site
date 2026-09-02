@@ -17,7 +17,7 @@ const STRINGS = {
       hdr_guide_h1:'<em>Eretz Israel Museum</em> Guide',
       credit:'Interactive map by Ludara.AI ↗',
       f_saved:'Saved', f_all:'All', f_pavilion:'Pavilions', f_hall:'Exhibition Halls',
-      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services', f_restroom:'Restrooms', f_event:"What's On",
+      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services', f_restroom:'Restrooms', f_event:"What's On", seasonal_label:'Now on show', seasonal_empty:'More exhibitions coming soon.',
       zones_title:'Campus zones', z_all:'All', z_east:'Eastern Pavilions', z_core:'Central Core', z_park:'Western Park',
       places:'Places', places_word:'Places', guide:'Guide',
       trip_title:'🗺 Your Saved Places Route', trip_maps:'🗺 Open in Google Maps',
@@ -58,7 +58,7 @@ const STRINGS = {
       hdr_guide_h1:'מדריך <em>מוזיאון ארץ ישראל</em>',
       credit:'מפה אינטראקטיבית מאת Ludara.AI ↗',
       f_saved:'שמורים', f_all:'הכול', f_pavilion:'ביתנים', f_hall:'אולמות תערוכה',
-      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים', f_restroom:'שירותים', f_event:'מה קורה עכשיו',
+      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים', f_restroom:'שירותים', f_event:'מה קורה עכשיו', seasonal_label:'מוצג עכשיו', seasonal_empty:'תערוכות נוספות בקרוב.',
       zones_title:'אזורי המתחם', z_all:'הכול', z_east:'הביתנים המזרחיים', z_core:'מתחם המרכז', z_park:'הפארק המערבי',
       places:'מקומות', places_word:'מקומות', guide:'מדריך',
       trip_title:'🗺 מסלול המקומות השמורים', trip_maps:'🗺 פתחו ב‑Google Maps',
@@ -105,7 +105,7 @@ const STRINGS = {
       f_hall:"Выставочные залы",
       f_heritage:"Археология",
       f_outdoor:"Сады и территория",
-      f_service:"Услуги", f_restroom:"Туалеты", f_event:"Что сейчас",
+      f_service:"Услуги", f_restroom:"Туалеты", f_event:"Что сейчас", seasonal_label:"Сейчас в музее", seasonal_empty:"Скоро новые выставки.",
       zones_title:"Зоны кампуса",
       z_all:"Все",
       z_east:"Восточные павильоны",
@@ -187,7 +187,7 @@ const STRINGS = {
       f_hall:"قاعات العرض",
       f_heritage:"التراث",
       f_outdoor:"الحدائق والساحات",
-      f_service:"الخدمات", f_restroom:"دورات المياه", f_event:"ما المعروض الآن",
+      f_service:"الخدمات", f_restroom:"دورات المياه", f_event:"ما المعروض الآن", seasonal_label:"معروض الآن", seasonal_empty:"معارض أخرى قريباً.",
       zones_title:"المناطق",
       z_all:"الكل",
       z_east:"الأجنحة الشرقية",
@@ -349,6 +349,7 @@ function applyLang(lang){
   // 5) re-render dynamic UI
   if(typeof setBasemapLang === 'function') setBasemapLang(lang);
   if(typeof renderList === 'function') renderList();
+  if(typeof renderSeasonalBar === 'function') renderSeasonalBar();
   if(typeof CARD_PLACE !== 'undefined' && CARD_PLACE && typeof _populateCard === 'function') _populateCard(CARD_PLACE);
   if(typeof refreshSavedPill === 'function') refreshSavedPill();
   const si = document.getElementById('search-input'); if(si) si.placeholder = t('search_ph');

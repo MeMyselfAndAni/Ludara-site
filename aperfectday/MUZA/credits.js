@@ -3,7 +3,8 @@
 // photographer the museum names (or to the museum). A couple of images come from
 // Wikimedia Commons under Creative Commons and carry the photographer + licence.
 // Only ids with an image return a credit.
-var MUZA_PHOTO_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26];
+var MUZA_PHOTO_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26,
+                      9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009];
 
 // Museum photos — photographer where the museum names them.
 var MUZA_CREDIT = {
@@ -17,7 +18,18 @@ var MUZA_CREDIT = {
   19: 'Nof Harari',
   21: 'Leonid Pedrol',
   25: 'Tal Izsak',
-  26: 'Nof Harari'
+  26: 'Nof Harari',
+
+  // Current exhibitions (events.js, ids 9001+). Each image is the museum's own
+  // press image for that exhibition, taken from its page on eretzmuseum.org.il.
+  // The photographer is the one named in the museum's own file name.
+  9001: 'Michael Liran',      // Vered Aharonovitch, Girl with Wings, 2023
+  9002: 'Daniel Hanoch',      // Neta Harari-Navon, installation view, Nehushtan Pavilion
+  9003: 'Assaf Peretz / Israel Antiquities Authority',  // the Binyamina herms
+  9004: 'Avi Amsalem',        // Idit Fisher Katz, The Plastic Queue
+  9006: 'Dalia Nava',         // seal ring from the museum collection
+  9008: 'Yehudit Shadur papercut, museum image',
+  9009: 'Felix Bonfils, 1867-1894'
 };
 
 // Wikimedia Commons images (Creative Commons) — author, licence, and links.

@@ -1579,3 +1579,58 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 }
 #nbhd-show-btn.visible { display: flex; }
 #nbhd-show-btn:hover { background: #1a1a10; }
+
+/* ── What's On ribbon ───────────────────────────────────────────
+   Replaces the zone bubble bar at the bottom of the screen, the same
+   arrangement used in the Holston House guide, where it is labelled
+   Seasonal. Exhibitions are shown soonest-to-close first.          */
+#nbhd-bar, #nbhd-title, #nbhd-show-btn { display: none !important; }
+
+#seasonal-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1495;
+  display: flex; align-items: center; gap: 12px;
+  background: #3a201c; border-top: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px 10px 0 0; padding: 10px 12px;
+  box-shadow: 0 -2px 14px rgba(0,0,0,0.22);
+}
+#seasonal-label {
+  flex: 0 0 auto; color: #e6c34d;
+  font-family: 'Rubik', sans-serif; font-size: 0.62rem; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.2;
+  max-width: 68px;
+}
+#seasonal-row {
+  flex: 1 1 auto; min-width: 0; display: flex; gap: 10px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; touch-action: pan-x;
+  overscroll-behavior-x: contain; padding-left: 2px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 10px), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 10px), transparent 100%);
+}
+#seasonal-row::-webkit-scrollbar { display: none; }
+.seasonal-card {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+  background: #4a2a24; border: 1.5px solid #6a4c93;
+  border-radius: 14px; padding: 6px 13px 6px 9px; cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(106,76,147,0.20);
+  transition: transform .12s, background .12s, border-color .12s;
+}
+.seasonal-card:hover { background: #5a352d; border-color: #9a7ac4; transform: translateY(-1px); }
+.seasonal-card .sc-emoji { font-size: 1.05rem; flex: 0 0 auto; line-height: 1; }
+.seasonal-card .sc-text { display: flex; flex-direction: column; line-height: 1.18; min-width: 0; }
+.seasonal-card .sc-name { font-family: 'Suez One', Georgia, serif; color: #f3ece1; font-size: 0.8rem; white-space: nowrap; max-width: 46vw; overflow: hidden; text-overflow: ellipsis; }
+.seasonal-card .sc-date { font-family: 'Rubik', sans-serif; color: #e0c9a6; font-size: 0.66rem; white-space: nowrap; }
+.seasonal-empty { color: #e0c9a6; font-size: 0.78rem; padding: 8px 6px; }
+
+/* Hebrew and Arabic: the ribbon reads right to left like the rest of the guide */
+body.rtl #seasonal-bar { flex-direction: row-reverse; }
+body.rtl #seasonal-row { flex-direction: row-reverse; padding-left: 0; padding-right: 2px; }
+body.rtl .seasonal-card { flex-direction: row-reverse; padding: 6px 9px 6px 13px; }
+body.rtl .seasonal-card .sc-text { align-items: flex-end; }
+body.rtl #seasonal-label { letter-spacing: 0; text-align: right; }
+/* Without an explicit direction the ellipsis clips the START of a Hebrew or
+   Arabic title instead of its end, which reads as a broken name. */
+body.rtl .seasonal-card .sc-name,
+body.rtl .seasonal-card .sc-date,
+body.rtl .seasonal-empty { direction: rtl; text-align: right; }
+
+.sheet.open ~ #seasonal-bar { display: none; }

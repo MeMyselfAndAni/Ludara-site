@@ -230,3 +230,42 @@ if (typeof PLACES !== 'undefined' && Array.isArray(PLACES)) {
   window.EVENT_COUNT = _apdLive.length;
   PLACES.push.apply(PLACES, _apdLive);
 }
+
+// ── What's On ribbon (bottom bar) ─────────────────────────────
+// Sits where the zone bubble bar used to be, the same arrangement as the
+// Holston House guide, where the bar is labelled Seasonal. Re-rendered by
+// i18n.js applyLang() so the names and the label follow the chosen language.
+function _tSeasonal(key, fallback){
+  try { return (typeof t === 'function' && t(key)) || fallback; } catch(e){ return fallback; }
+}
+function renderSeasonalBar(){
+  var row = document.getElementById('seasonal-row');
+  if(!row) return;
+  var evs = eventsShowing();
+  if(!evs.length){
+    row.innerHTML = '<div class="seasonal-empty">' + _tSeasonal('seasonal_empty', 'More exhibitions coming soon.') + '</div>';
+    return;
+  }
+  row.innerHTML = evs.map(function(p){
+    var when = '';
+    if(p.type && p.type.indexOf('\u00b7') > -1) when = p.type.split('\u00b7')[1].trim();
+    else if(p.type) when = p.type;
+    return '<div class="seasonal-card" onclick="openSeasonalEvent(' + p.id + ')">'
+      + '<span class="sc-emoji">' + (p.emoji || '\ud83d\uddbc\ufe0f') + '</span>'
+      + '<span class="sc-text"><span class="sc-name">' + (p.name || '') + '</span>'
+      + '<span class="sc-date">' + when + '</span></span>'
+      + '</div>';
+  }).join('');
+}
+// Open an exhibition from the ribbon, using whichever card opener this guide has.
+function openSeasonalEvent(id, silent){
+  var p = (typeof PLACES !== 'undefined') ? PLACES.filter(function(x){ return x.id === id; })[0] : null;
+  if(!p) return;
+  if(!silent && typeof flyToPlace === 'function'){ try { flyToPlace(p); } catch(e){} }
+  if(typeof openDetail === 'function') openDetail(id);
+  else if(typeof openPlaceCard === 'function') openPlaceCard(id);
+  if(typeof apdTrack === 'function') apdTrack('seasonal_open', { place_id: id });
+}
+if(typeof document !== 'undefined'){
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(renderSeasonalBar, 300); });
+}

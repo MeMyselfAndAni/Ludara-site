@@ -236,8 +236,18 @@ function _populateCard(p){
 
   document.getElementById('pc-title').textContent = p.name;
   // Role subtitle hidden — the title + the category badge already say what it is.
+  // The exception is a current exhibition, where the role carries the closing
+  // date and a visitor needs to see how long is left.
   var _ptypeEl = document.getElementById('pc-type');
-  if(_ptypeEl){ _ptypeEl.textContent = ''; _ptypeEl.style.display = 'none'; }
+  if(_ptypeEl){
+    if(p.cat === 'event' && p.type){
+      _ptypeEl.textContent = p.type;
+      _ptypeEl.style.display = '';
+    } else {
+      _ptypeEl.textContent = '';
+      _ptypeEl.style.display = 'none';
+    }
+  }
   document.getElementById('pc-hours').innerHTML   = p.hours ? `🕐 ${typeof formatHours === 'function' ? formatHours(p.hours) : p.hours}` : '';
 
   document.getElementById('pc-note').textContent = p.note || '';
