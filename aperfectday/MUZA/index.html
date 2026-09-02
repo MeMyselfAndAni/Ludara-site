@@ -7,7 +7,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="MUZA">
 <link rel="canonical" href="https://ludara.ai/aperfectday/muza/">
-<meta name="description" content="A visitor guide to the Eretz Israel Museum in Tel Aviv: 29 pavilions, exhibitions and gardens on one interactive map, in Hebrew, English, Russian and Arabic.">
+<meta name="description" content="A visitor guide to the Eretz Israel Museum in Tel Aviv: pavilions, gardens and every current exhibition on one interactive map, in Hebrew, English, Russian and Arabic.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Open Graph / WhatsApp rich preview -->
 <meta property="og:type" content="website">
@@ -266,6 +266,7 @@
 <div class="filter-bar">
   <button class="pill pill-saved" id="pill-saved" onclick="toggleSavedFilter(this)"><span class="heart-icon">♡</span> <span data-i18n="f_saved">Saved</span> <span class="pill-saved-count" id="pill-saved-count" style="display:none">0</span></button>
   <button class="pill active" onclick="fc(this,'all')"><span class="dot" style="background:#aaa"></span><span data-i18n="f_all">All</span></button>
+  <button class="pill" onclick="fc(this,'event')"><span class="dot" style="background:#6a4c93"></span><span data-i18n="f_event">What&#39;s On</span></button>
   <button class="pill" onclick="fc(this,'pavilion')"><span class="dot" style="background:#9e2b25"></span><span data-i18n="f_pavilion">Pavilions</span></button>
   <button class="pill" onclick="fc(this,'hall')"><span class="dot" style="background:#c8761b"></span><span data-i18n="f_hall">Exhibition Halls</span></button>
   <button class="pill" onclick="fc(this,'heritage')"><span class="dot" style="background:#7a5230"></span><span data-i18n="f_heritage">Heritage</span></button>
@@ -432,6 +433,7 @@
 <script>const IMAGES_PATH = "images/";</script>
 <script>let map;</script>
 <script src="data.js"></script>
+<script src="events.js"></script><!-- MUST be after data.js and before i18n.js -->
 <script src="credits.js"></script>
 <script src="photos.js"></script>
 <script src="map-core.js"></script><!-- MUST be before map.js -->

@@ -8,8 +8,8 @@ let LANG = 'he';
 
 const STRINGS = {
   en: {
-    cl:        { pavilion:'Pavilions', hall:'Exhibition Halls', heritage:'Heritage', outdoor:'Gardens & Outdoor', service:'Services', restroom:'Restrooms' },
-    catLabels: { pavilion:'Pavilion', hall:'Exhibition Hall', heritage:'Heritage Site', outdoor:'Garden & Outdoor', service:'Service', restroom:'Restroom' },
+    cl:        { pavilion:'Pavilions', hall:'Exhibition Halls', heritage:'Heritage', outdoor:'Gardens & Outdoor', service:'Services', restroom:'Restrooms', event:"What's On" },
+    catLabels: { pavilion:'Pavilion', hall:'Exhibition Hall', heritage:'Heritage Site', outdoor:'Garden & Outdoor', service:'Service', restroom:'Restroom', event:'Current exhibition' },
     zones:     { east:'Eastern Pavilions', core:'Central Core', park:'Western Park' },
     ui: {
       hdr_apd_in:'A Perfect Day in', hdr_museum:'Eretz Israel Museum',
@@ -17,7 +17,7 @@ const STRINGS = {
       hdr_guide_h1:'<em>Eretz Israel Museum</em> Guide',
       credit:'Interactive map by Ludara.AI ↗',
       f_saved:'Saved', f_all:'All', f_pavilion:'Pavilions', f_hall:'Exhibition Halls',
-      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services', f_restroom:'Restrooms',
+      f_heritage:'Heritage', f_outdoor:'Gardens & Outdoor', f_service:'Services', f_restroom:'Restrooms', f_event:"What's On",
       zones_title:'Campus zones', z_all:'All', z_east:'Eastern Pavilions', z_core:'Central Core', z_park:'Western Park',
       places:'Places', places_word:'Places', guide:'Guide',
       trip_title:'🗺 Your Saved Places Route', trip_maps:'🗺 Open in Google Maps',
@@ -31,7 +31,7 @@ const STRINGS = {
       splash_welcome:"Welcome to MUZA, the Eretz Israel Museum — pavilions of ceramics, glass, coins, copper and folklore around a 3,000-year-old tell and green gardens. This guide helps you find each one and see what's on show inside it now.",
       splash_hours:'🕐 Opening hours · Sun–Wed 10:00–16:00 · Thu 10:00–20:00 · Fri & Sat 10:00–14:00',
       splash_enter:'Enter the Museum Map',
-      splash_note:'Exhibition information current as of June 2026.',
+      splash_note:'Exhibition information current as of September 2026.',
       full_route:'🗺 Full Route', pdf_guide:'📄 PDF Guide', save_map:'🖼 Save Map',
       places_word_btn:'Places',
       no_saved_title:'No saved places yet',
@@ -49,8 +49,8 @@ const STRINGS = {
     }
   },
   he: {
-    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים למבקרים', restroom:'שירותים' },
-    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות למבקרים', restroom:'שירותים' },
+    cl:        { pavilion:'ביתנים', hall:'אולמות תערוכה', heritage:'מורשת', outdoor:'גנים ומרחב פתוח', service:'שירותים למבקרים', restroom:'שירותים', event:'מה קורה עכשיו' },
+    catLabels: { pavilion:'ביתן', hall:'אולם תערוכה', heritage:'אתר מורשת', outdoor:'גן ומרחב פתוח', service:'שירות למבקרים', restroom:'שירותים', event:'תערוכה מתחלפת' },
     zones:     { east:'הביתנים המזרחיים', core:'מתחם המרכז', park:'הפארק המערבי' },
     ui: {
       hdr_apd_in:'A Perfect Day —', hdr_museum:'מוזיאון ארץ ישראל',
@@ -58,7 +58,7 @@ const STRINGS = {
       hdr_guide_h1:'מדריך <em>מוזיאון ארץ ישראל</em>',
       credit:'מפה אינטראקטיבית מאת Ludara.AI ↗',
       f_saved:'שמורים', f_all:'הכול', f_pavilion:'ביתנים', f_hall:'אולמות תערוכה',
-      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים', f_restroom:'שירותים',
+      f_heritage:'מורשת', f_outdoor:'גנים ומרחב פתוח', f_service:'שירותים למבקרים', f_restroom:'שירותים', f_event:'מה קורה עכשיו',
       zones_title:'אזורי המתחם', z_all:'הכול', z_east:'הביתנים המזרחיים', z_core:'מתחם המרכז', z_park:'הפארק המערבי',
       places:'מקומות', places_word:'מקומות', guide:'מדריך',
       trip_title:'🗺 מסלול המקומות השמורים', trip_maps:'🗺 פתחו ב‑Google Maps',
@@ -72,7 +72,7 @@ const STRINGS = {
       splash_welcome:'ברוכים הבאים למוז״א, מוזיאון ארץ ישראל — ביתני קרמיקה, זכוכית, מטבעות, נחושת ופולקלור סביב תל בן 3,000 שנה וגנים ירוקים. המדריך יעזור לכם למצוא כל ביתן ולראות מה מוצג בו עכשיו.',
       splash_hours:'🕐 שעות פתיחה · א׳–ד׳ 10:00–16:00 · ה׳ 10:00–20:00 · ו׳–שבת 10:00–14:00',
       splash_enter:'כניסה למפת המוזיאון',
-      splash_note:'מידע על התערוכות עדכני ליוני 2026.',
+      splash_note:'מידע על התערוכות עדכני לספטמבר 2026.',
       full_route:'🗺 מסלול מלא', pdf_guide:'📄 מדריך PDF', save_map:'🖼 שמירת מפה',
       places_word_btn:'מקומות',
       no_saved_title:'אין עדיין מקומות שמורים',
@@ -90,8 +90,8 @@ const STRINGS = {
     }
   },
   ru: {
-    cl:        { pavilion:"Павильоны", hall:"Выставочные залы", heritage:"Археология", outdoor:"Сады и территория", service:"Услуги", restroom:"Туалеты" },
-    catLabels: { pavilion:"Павильон", hall:"Выставочный зал", heritage:"Археологический объект", outdoor:"Сад и территория", service:"Услуга", restroom:"Туалет" },
+    cl:        { pavilion:"Павильоны", hall:"Выставочные залы", heritage:"Археология", outdoor:"Сады и территория", service:"Услуги", restroom:"Туалеты", event:"Что сейчас" },
+    catLabels: { pavilion:"Павильон", hall:"Выставочный зал", heritage:"Археологический объект", outdoor:"Сад и территория", service:"Услуга", restroom:"Туалет", event:"Временная выставка" },
     zones:     { east:"Восточные павильоны", core:"Центральная часть", park:"Западный парк" },
     ui: {
       hdr_apd_in:"A Perfect Day —",
@@ -105,7 +105,7 @@ const STRINGS = {
       f_hall:"Выставочные залы",
       f_heritage:"Археология",
       f_outdoor:"Сады и территория",
-      f_service:"Услуги", f_restroom:"Туалеты",
+      f_service:"Услуги", f_restroom:"Туалеты", f_event:"Что сейчас",
       zones_title:"Зоны кампуса",
       z_all:"Все",
       z_east:"Восточные павильоны",
@@ -135,7 +135,7 @@ const STRINGS = {
       splash_welcome:"Добро пожаловать в МУЗА, Музей Эрец-Исраэль, — павильоны керамики, стекла, монет, меди и фольклора вокруг 3000-летнего телля и зелёных садов. И этот путеводитель поможет найти любой павильон и понять, какие выставки работают сейчас.",
       splash_hours:"🕐 Часы работы · Вс–Ср 10:00–16:00 · Чт 10:00–20:00 · Пт и Сб 10:00–14:00",
       splash_enter:"Открыть карту музея",
-      splash_note:"Информация о выставках актуальна на июнь 2026 года.",
+      splash_note:"Информация о выставках актуальна на сентябрь 2026 года.",
       full_route:"🗺 Весь маршрут",
       pdf_guide:"📄 PDF-путеводитель",
       save_map:"🖼 Сохранить карту",
@@ -172,8 +172,8 @@ const STRINGS = {
     }
   },
   ar: {
-    cl:        { pavilion:"الأجنحة", hall:"قاعات العرض", heritage:"التراث", outdoor:"الحدائق والساحات", service:"الخدمات", restroom:"دورات المياه" },
-    catLabels: { pavilion:"جناح", hall:"قاعة عرض", heritage:"موقع تراثي", outdoor:"حديقة وساحة", service:"خدمة", restroom:"دورة مياه" },
+    cl:        { pavilion:"الأجنحة", hall:"قاعات العرض", heritage:"التراث", outdoor:"الحدائق والساحات", service:"الخدمات", restroom:"دورات المياه", event:"ما المعروض الآن" },
+    catLabels: { pavilion:"جناح", hall:"قاعة عرض", heritage:"موقع تراثي", outdoor:"حديقة وساحة", service:"خدمة", restroom:"دورة مياه", event:"معرض مؤقت" },
     zones:     { east:"الأجنحة الشرقية", core:"المنطقة المركزية", park:"الحديقة الغربية" },
     ui: {
       hdr_apd_in:"A Perfect Day —",
@@ -187,7 +187,7 @@ const STRINGS = {
       f_hall:"قاعات العرض",
       f_heritage:"التراث",
       f_outdoor:"الحدائق والساحات",
-      f_service:"الخدمات", f_restroom:"دورات المياه",
+      f_service:"الخدمات", f_restroom:"دورات المياه", f_event:"ما المعروض الآن",
       zones_title:"المناطق",
       z_all:"الكل",
       z_east:"الأجنحة الشرقية",
@@ -217,7 +217,7 @@ const STRINGS = {
       splash_welcome:"أهلاً بكم في موزا، متحف أرض إسرائيل — أجنحة الخزف والزجاج والعملات والنحاس والفولكلور وحدائق خضراء حول تل عمره 3000 عام. يساعدكم هذا الدليل في العثور على كل جناح ومعرفة ما يُعرض داخله الآن.",
       splash_hours:"🕐 ساعات العمل · الأحد–الأربعاء 10:00–16:00 · الخميس 10:00–20:00 · الجمعة والسبت 10:00–14:00",
       splash_enter:"ادخل إلى خريطة المتحف",
-      splash_note:"معلومات المعارض محدَّثة حتى يونيو 2026.",
+      splash_note:"معلومات المعارض محدَّثة حتى سبتمبر 2026.",
       full_route:"🗺 المسار الكامل",
       pdf_guide:"📄 دليل PDF",
       save_map:"🖼 حفظ الخريطة",
