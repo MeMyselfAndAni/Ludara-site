@@ -34,16 +34,30 @@
 const FAMILY_ARCHIVE = 'ארכיון המשפחה · семейный архив · Family archive';
 
 const PHOTO_CREDITS = {
-  6:  { author: FAMILY_ARCHIVE },   // Tula — young Benjamin Kliot
-  25: { author: FAMILY_ARCHIVE },   // Ramat HaSharon — Maria and family
-  26: { author: FAMILY_ARCHIVE },   // Raanana — Dmitry & Zoya's family: Mark & Nikol
-  24: { author: FAMILY_ARCHIVE },   // Ashdod — Ilya & Olga's family: Lital, Nir & Ron
-  1:  { author: FAMILY_ARCHIVE },
-  2:  { author: FAMILY_ARCHIVE },
-  3:  { author: FAMILY_ARCHIVE },
-  4:  { author: FAMILY_ARCHIVE },
-  5:  { author: FAMILY_ARCHIVE },
-  7:  { author: FAMILY_ARCHIVE },
+  6:  { author: FAMILY_ARCHIVE,
+        prefix: 'בנימין קליוט הצעיר' + ' · Юный Вениамин Клиот' + ' · Young Benjamin Kliot' },   // Tula — young Benjamin Kliot
+  25: { author: FAMILY_ARCHIVE,
+        prefix: 'מריה והמשפחה' + ' · Мария с семьёй' + ' · Maria and family' },   // Ramat HaSharon — Maria and family
+  26: { author: FAMILY_ARCHIVE,
+        prefix: 'משפחת דמיטרי וזויה: מארק וניקול' + ' · Семья Дмитрия и Зои: Марк и Николь' + " · Dmitry and Zoya's family: Mark and Nikol" },   // Raanana — Dmitry & Zoya's family: Mark & Nikol
+  24: { author: FAMILY_ARCHIVE,
+        prefix: 'משפחת איליה ואולגה: ליטל, ניר ורון' + ' · Семья Ильи и Ольги: Литаль, Нир и Рон' + " · Ilya and Olga's family: Lital, Nir and Ron" },   // Ashdod — Ilya & Olga's family: Lital, Nir & Ron
+  1:  { author: FAMILY_ARCHIVE,
+        prefix: 'יוסף (יוסי) פרידלנד'
+              + ' · Иосиф (Йоси) Фридланд'
+              + ' · Yosef (Yosi) Friedland' },
+  2:  { author: FAMILY_ARCHIVE,
+        prefix: 'זלמן (זחר) ומלכה פרידלנד'
+              + ' · Залман (Захар) и Малка Фридланд'
+              + ' · Zalman (Zakhar) and Malka Friedland' },
+  3:  { author: FAMILY_ARCHIVE,
+        prefix: 'בנימין קליוט, 1933' + ' · Вениамин Клиот, 1933' + ' · Benjamin Kliot, 1933' },
+  4:  { author: FAMILY_ARCHIVE,
+        prefix: 'בנימין קליוט ושלוש מאחיותיו' + ' · Вениамин Клиот и три его сестры' + ' · Benjamin Kliot and three of his sisters' },
+  5:  { author: FAMILY_ARCHIVE,
+        prefix: 'סוניה קליוט במדים, 1943–44' + ' · Соня Клиот в форме, 1943–44' + ' · Sonya Kliot in uniform, 1943–44' },
+  7:  { author: FAMILY_ARCHIVE,
+        prefix: 'האחים מארק, מיכאל ויעקב לנדו, ~1955' + ' · Братья Марк, Михаил и Яков Ландо, ~1955' + ' · The brothers Mark, Michael and Yakov Lando, ~1955' },
   // Odessa, 1949. Anna's written caption names the children as Michael (right),
   // Vera and Pavel. A later note from her called the young man on the right
   // Yefim, but Yefim was killed at Stalingrad in 1942, so he cannot be in a
@@ -52,15 +66,24 @@ const PHOTO_CREDITS = {
         prefix: 'יושבים: רוזה ושאול (שולה); עומדים: פאבל, ורה ומיכאל, 1949'
               + ' · Сидят: Роза и Шауль (Шуля); стоят: Павел, Вера и Михаил, 1949'
               + ' · Seated: Roza and Shaul (Shula); standing: Pavel, Vera and Michael, 1949' },
-  10: { author: FAMILY_ARCHIVE },
-  11: { author: FAMILY_ARCHIVE },
-  12: { author: FAMILY_ARCHIVE },
-  13: { author: FAMILY_ARCHIVE },
-  16: { author: FAMILY_ARCHIVE },
-  17: { author: FAMILY_ARCHIVE },
-  20: { author: FAMILY_ARCHIVE },
-  29: { author: FAMILY_ARCHIVE },   // Dnieper crossing — Nina Friedland in uniform, 1944 (was place-14)
-  21: { author: FAMILY_ARCHIVE },
+  10: { author: FAMILY_ARCHIVE,
+        prefix: 'נינה ובנימין קליוט' + ' · Нина и Вениамин Клиот' + ' · Nina and Benjamin Kliot' },
+  11: { author: FAMILY_ARCHIVE,
+        prefix: 'משפחת הצד של אמא: זלמן, מלכה והילדים' + ' · Семья со стороны мамы: Залман, Малка и дети' + " · Mother's side of the family: Zalman, Malka and the children" },
+  12: { author: FAMILY_ARCHIVE,
+        prefix: 'אליסה בת שנתיים, 1943' + ' · Алиса в два года, 1943' + ' · Alisa aged two, 1943' },
+  13: { author: FAMILY_ARCHIVE,
+        prefix: 'מיכאל ויעקב לנדו, 1944' + ' · Михаил и Яков Ландо, 1944' + ' · Michael and Yakov Lando, 1944' },
+  16: { author: FAMILY_ARCHIVE,
+        prefix: 'המפגש עם סם ודורה, קייב 1964' + ' · Встреча с Сэмом и Дорой, Киев, 1964' + ' · The reunion with Sam and Dora, Kyiv 1964' },
+  17: { author: FAMILY_ARCHIVE,
+        prefix: 'חתונת אליסה ומארק רוזנבלט, 1962' + ' · Свадьба Алисы и Марка Розенблата, 1962' + " · Alisa and Mark Rozenblat's wedding, 1962" },
+  20: { author: FAMILY_ARCHIVE,
+        prefix: 'נינה קליוט (פרידלנד), רחובות 1994' + ' · Нина Клиот (Фридланд), Реховот, 1994' + ' · Nina Kliot (Friedland), Rehovot 1994' },
+  29: { author: FAMILY_ARCHIVE,
+        prefix: 'נינה פרידלנד במדים, 1944' + ' · Нина Фридланд в форме, 1944' + ' · Nina Friedland in uniform, 1944' },   // Dnieper crossing — Nina Friedland in uniform, 1944 (was place-14)
+  21: { author: FAMILY_ARCHIVE,
+        prefix: 'חתונת ברוך ורחל קליוט, 2009' + ' · Свадьба Баруха и Рахели Клиот, 2009' + " · Baruch and Rachel Kliot's wedding, 2009" },
   30: { author: FAMILY_ARCHIVE,
         prefix: 'רוזה, מתוך תצלום המשפחה משנת 1949'
               + ' · Роза, фрагмент семейного снимка 1949 года'
