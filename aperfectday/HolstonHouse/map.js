@@ -35,7 +35,7 @@ const CL = {
   'dinner':     'Dinner',
   'bbq':        'BBQ',
   'bar':        'Bars & Honky Tonks',
-  'music':      'Music Venues',
+  'music':      'Live Music',
   'attraction': 'Attractions',
   'shopping':   'Shopping',
   'boots':      'Boot Shops',
