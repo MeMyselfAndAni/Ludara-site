@@ -293,6 +293,18 @@
     .video-facade:focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
     #fsm-video iframe { width:100%; aspect-ratio:16/9; display:block; border:0; }
     @media(max-width:600px){ .video-play { width:58px; height:58px; } .video-play::before { border-width:11px 0 11px 18px; } }
+
+    /* Holiday table card, 6 Sep 2026: a cream card on the dark section so it
+       cannot be missed, with the printed card pictured beside the words. */
+    .holiday { display:grid; grid-template-columns:1fr; gap:24px; align-items:center; margin-top:28px; padding:28px 30px; background:var(--warm-bg); border:1.5px solid var(--gold); border-radius:var(--radius); box-shadow:0 10px 40px rgba(184,150,90,0.18); text-decoration:none; color:var(--warm-text); transition:box-shadow .2s, transform .2s; }
+    .holiday:hover { box-shadow:0 14px 48px rgba(184,150,90,0.30); transform:translateY(-2px); }
+    @media(min-width:820px){ .holiday{ grid-template-columns:1fr 240px; gap:36px; padding:32px 36px; } }
+    .holiday-kicker { font-size:.8rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+    .holiday h3 { font-family:'Fraunces',Georgia,serif; font-size:clamp(22px,2.6vw,32px); font-weight:600; color:var(--warm-text); line-height:1.15; margin-bottom:10px; }
+    .holiday p { color:var(--warm-muted); font-size:15px; font-weight:300; line-height:1.7; max-width:64ch; margin:0 0 18px; }
+    .holiday .btn-gold { margin:0; }
+    .holiday img { width:100%; height:auto; display:block; border:1px solid rgba(184,150,90,0.5); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.25); background:#fff; }
+    @media(max-width:819px){ .holiday img { max-width:260px; margin:0 auto; } }
   </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Service",
@@ -493,11 +505,15 @@
       <div class="step-card"><div class="step-num">03</div><h4>We build and translate</h4><p>Your map goes live on a private link, in the languages your family reads, with the tree, the path and the photographs in place.</p></div>
       <div class="step-card"><div class="step-num">04</div><h4>It grows with your family</h4><p>Once the family sees the map, new photographs and memories surface. One update round in the first year is included, and further rounds can be added whenever you need them.</p></div>
     </div>
-    <div class="privacy-note" style="margin-top:26px;">
-      <h3>Nothing written down yet? Start at the table.</h3>
-      <p>Three questions to ask when three generations sit down at once, on one printable card. Put your phone on the table, press record, and ten minutes is enough. Free, no sign up.</p>
-      <p style="margin-top:16px;"><a class="btn-gold" href="https://ludara.ai/familystorymap/holiday-table/">Get the three questions</a></p>
-    </div>
+    <a class="holiday" href="https://ludara.ai/familystorymap/holiday-table/">
+      <div>
+        <p class="holiday-kicker">For the holiday table this week</p>
+        <h3>Three questions to ask at the holiday table</h3>
+        <p>Someone at your table this week remembers a town that no longer exists, a journey, a name nobody else knows. One printable card, three questions, everybody answers. Put your phone on the table, press record, and ten minutes is enough. Free, in English, Hebrew and Russian, no sign up.</p>
+        <span class="btn-gold">Get the holiday table card</span>
+      </div>
+      <img src="holiday-table/fsm-three-questions-card-EN.webp" width="1100" height="1555" alt="The printed card: three questions to ask at the holiday table this year" loading="lazy"/>
+    </a>
   </div>
 </section>
 

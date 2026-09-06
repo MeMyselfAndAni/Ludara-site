@@ -23,11 +23,11 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Family Story Map">
 <link rel="canonical" href="https://ludara.ai/familystorymap/holiday-table/">
-  <meta name="description" content="A free printable card with three questions to ask when three generations sit down at once. Put your phone on the table, press record, and keep what the family still remembers."/>
+  <meta name="description" content="A free printable card, in English, Hebrew and Russian, with three questions to ask when three generations sit down at once. Put your phone on the table, press record, and keep what the family still remembers."/>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ludara.AI">
   <meta property="og:title" content="Three questions to ask at the holiday table this year">
-  <meta property="og:description" content="Someone at your table remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record. Ten minutes is enough. A free card to print.">
+  <meta property="og:description" content="Someone at your table remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record. Ten minutes is enough. A free card to print, in English, Hebrew and Russian.">
   <meta property="og:url" content="https://ludara.ai/familystorymap/holiday-table/">
   <meta property="og:image" content="https://ludara.ai/assets/og-fsm-holiday-table.jpg">
   <meta property="og:image:secure_url" content="https://ludara.ai/assets/og-fsm-holiday-table.jpg">
@@ -38,7 +38,7 @@
   <meta name="twitter:image" content="https://ludara.ai/assets/og-fsm-holiday-table.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Three questions to ask at the holiday table this year">
-  <meta name="twitter:description" content="Someone at your table remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record. Ten minutes is enough. A free card to print.">
+  <meta name="twitter:description" content="Someone at your table remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record. Ten minutes is enough. A free card to print, in English, Hebrew and Russian.">
 <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEY87L8PFW"></script>
   <script>
@@ -126,8 +126,11 @@
 
     /* CARD PREVIEWS: the printed cards are white, so they sit on a white
        mat with the same gold rule the product page puts around screenshots. */
-    .cards { display:grid; grid-template-columns:1fr; gap:30px; margin-top:26px; }
-    @media(min-width:820px){ .cards{ grid-template-columns:1fr 1fr; } }
+    .cards { display:grid; grid-template-columns:1fr; gap:26px; margin-top:8px; }
+    @media(min-width:700px){ .cards{ grid-template-columns:repeat(3,1fr); gap:22px; } }
+    .card-lang { font-size:.8rem; font-weight:700; color:var(--gold-l); text-transform:uppercase; letter-spacing:.08em; margin:14px 0 8px; text-align:center; }
+    .card-btn { text-align:center; }
+    .card-btn .btn-gold { width:100%; text-align:center; }
     .shot-frame { background:#fff; border:1.5px solid rgba(184,150,90,0.72); border-radius:14px;
                   padding:0; overflow:hidden; display:block; line-height:0;
                   box-shadow:0 18px 48px rgba(0,0,0,0.6); }
@@ -140,9 +143,12 @@
 
     /* THE QUESTIONS, set large */
     .qs { list-style:none; margin-top:26px; display:grid; gap:14px; }
-    .qs li { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:22px 26px; display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:center; }
+    .qs li { background:var(--warm-card); border:1px solid var(--warm-border); border-radius:var(--radius); padding:22px 26px; display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:start; }
     .qs .n { width:50px; height:50px; border-radius:50%; border:1.5px solid var(--gold); color:var(--gold); font-family:'Fraunces',Georgia,serif; font-size:26px; font-weight:600; display:flex; align-items:center; justify-content:center; }
     .qs p { font-family:'Fraunces',Georgia,serif; font-size:clamp(20px,2.4vw,28px); line-height:1.3; font-weight:600; color:var(--warm-text); }
+    .qs .tr { margin-top:8px; display:grid; gap:4px; }
+    .qs .tr span { display:block; font-size:16px; line-height:1.45; color:var(--warm-muted); font-weight:400; }
+    .qs .tr span[lang=he] { direction:rtl; text-align:right; font-family:'Frank Ruhl Libre',Georgia,serif; font-size:18px; }
     .how { background:var(--warm-card); border:1px solid var(--warm-border); border-left:3px solid var(--gold); border-radius:var(--radius); padding:24px 26px; margin-top:22px; }
     .how p { font-size:15.5px; font-weight:300; color:var(--warm-muted); line-height:1.75; max-width:78ch; }
     .how p b { color:var(--warm-text); font-weight:600; }
@@ -228,23 +234,26 @@
 
       <p class="hero-sub">Someone at your table this week remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record on your phone. Ten minutes is enough.</p>
 
-      <div class="hero-btns">
-        <a class="btn-gold" href="Three-Questions-Holiday-Table.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_pdf'})">Download the card to print</a>
-        <a class="btn-ghost-dark" href="Ten-Questions-Family-Story-Map.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'ten_questions_pdf'})">Ten questions, for a longer evening</a>
-        <a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/">What a Family Story Map is</a>
-      </div>
-      <p class="hero-note">Free. Print it, or open it on your phone at the table. No sign up, no email address, nothing to fill in.</p>
+      <p class="hero-note">Free, in English, Hebrew and Russian. Print it, or open it on your phone at the table. No sign up, no email address, nothing to fill in.</p>
 
       <div class="cards">
         <div>
-          <div class="shot-frame"><img class="hero-shot" src="fsm-three-questions-card.webp" width="1100" height="1555" alt="The printed card: three questions to ask at the holiday table this year, with a short note on how to record the answers" fetchpriority="high"/></div>
-          <p class="shot-cap"><b>The three questions.</b> One page. Everybody at the table answers, like the four questions at Passover, except that here nobody is exempt. <a href="Three-Questions-Holiday-Table.pdf" download>Download</a></p>
+          <div class="shot-frame"><img class="hero-shot" src="fsm-three-questions-card-EN.webp" width="1100" height="1555" alt="The printed card in English: three questions to ask at the holiday table this year" fetchpriority="high"/></div>
+          <p class="card-lang">English</p>
+          <p class="card-btn"><a class="btn-gold" href="Three-Questions-Holiday-Table-EN.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_en'})">Download the card</a></p>
         </div>
         <div>
-          <div class="shot-frame"><img src="fsm-ten-questions-card.webp" width="1100" height="1555" alt="The printed card: ten questions to ask at the table, about the town, the house, the leaving and the people" loading="lazy"/></div>
-          <p class="shot-cap"><b>Ten questions, if the evening is going well.</b> The town, the house, why they left, who stayed, who was the troublemaker, and the dish nobody makes any more. <a href="Ten-Questions-Family-Story-Map.pdf" download>Download</a></p>
+          <div class="shot-frame"><img src="fsm-three-questions-card-HE.webp" width="1100" height="1555" alt="The printed card in Hebrew: three questions to ask at the holiday table this year" fetchpriority="high"/></div>
+          <p class="card-lang" lang="he">עברית</p>
+          <p class="card-btn"><a class="btn-gold" href="Three-Questions-Holiday-Table-HE.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_he'})"><span lang="he">להורדת הכרטיס</span></a></p>
+        </div>
+        <div>
+          <div class="shot-frame"><img src="fsm-three-questions-card-RU.webp" width="1100" height="1555" alt="The printed card in Russian: three questions to ask at the holiday table this year" fetchpriority="high"/></div>
+          <p class="card-lang" lang="ru">Русский</p>
+          <p class="card-btn"><a class="btn-gold" href="Three-Questions-Holiday-Table-RU.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_ru'})"><span lang="ru">Скачать карточку</span></a></p>
         </div>
       </div>
+      <p class="hero-disc" style="margin-top:22px;">One page each, white, ready to print. Everybody at the table answers, like the four questions at Passover, except that here nobody is exempt. <a href="https://ludara.ai/familystorymap/" style="color:var(--gold-l);">What a Family Story Map is</a>.</p>
     </div>
   </div>
 </section>
@@ -258,9 +267,9 @@
       <p>Tell everyone the day before to bring one old photograph. Then put your phone on the table and press record before the cake comes out. Ask the questions one at a time and let everyone talk over each other, because that is where the good parts are. <b>Say the date and who is at the table at the start</b>, so that in thirty years somebody knows.</p>
     </div>
     <ol class="qs">
-      <li><span class="n">1</span><p>Which relative from your childhood do you remember best, and why?</p></li>
-      <li><span class="n">2</span><p>Tell one family story that is vivid for you.</p></li>
-      <li><span class="n">3</span><p>Show your photograph. Who is on it, where was it taken, and when?</p></li>
+      <li><span class="n">1</span><div><p>Which relative from your childhood do you remember best, and why?</p><div class="tr"><span lang="he">את מי מקרובי המשפחה מילדותכם אתם זוכרים הכי טוב, ולמה?</span><span lang="ru">Кого из родственников вы лучше всего помните с детства, и почему?</span></div></div></li>
+      <li><span class="n">2</span><div><p>Tell one family story that is vivid for you.</p><div class="tr"><span lang="he">ספרו סיפור משפחתי אחד שנשאר חי בזיכרונכם.</span><span lang="ru">Расскажите одну семейную историю, которая особенно ярко вам запомнилась.</span></div></div></li>
+      <li><span class="n">3</span><div><p>Show your photograph. Who is on it, where was it taken, and when?</p><div class="tr"><span lang="he">הראו את התמונה שהבאתם. מי מופיע בה, איפה היא צולמה, ומתי?</span><span lang="ru">Покажите свою фотографию. Кто на ней, где она снята и когда?</span></div></div></li>
     </ol>
     <p class="sub-warm" style="margin-top:22px;max-width:74ch;color:var(--warm-text);font-weight:400;">Preserve and cherish your family memories, while all the people who hold them are still sitting at the table.</p>
   </div>
