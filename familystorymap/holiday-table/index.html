@@ -167,6 +167,27 @@
     .offer-body p b { color:var(--dark-text); font-weight:600; }
     .offer-btns { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
 
+
+    /* FORM (same as the product page) */
+    .form { display:flex; flex-direction:column; gap:12px; max-width:560px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media(max-width:480px){ .form-row{ grid-template-columns:1fr; } }
+    .fg { display:flex; flex-direction:column; gap:5px; }
+    .fg label { font-size:11px; font-weight:500; letter-spacing:.09em; text-transform:uppercase; color:var(--dark-muted); }
+    .fg input, .fg textarea { background:rgba(255,255,255,0.05); border:1px solid var(--dark-border); border-radius:8px; padding:11px 12px; font-family:'Inter',sans-serif; font-size:14px; font-weight:300; color:var(--dark-text); outline:none; width:100%; transition:border-color .18s,background .18s; }
+    .fg input::placeholder, .fg textarea::placeholder { color:rgba(255,255,255,0.3); }
+    .fg input:focus, .fg textarea:focus { border-color:var(--gold); background:rgba(184,150,90,0.05); }
+    .fg textarea { resize:vertical; min-height:70px; }
+    .submit-btn { width:100%; background:var(--gold); color:#fff; border:none; border-radius:8px; padding:13px; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; letter-spacing:.04em; cursor:pointer; transition:background .2s,transform .15s; }
+    .submit-btn:hover { background:var(--gold-l); transform:translateY(-1px); }
+    .submit-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+    .form-note { font-size:12px; color:var(--dark-muted); text-align:center; }
+    .form-success { display:none; flex-direction:column; align-items:center; gap:10px; text-align:center; padding:24px 0; }
+    .form-success.visible { display:flex; }
+    .success-icon { width:44px; height:44px; border-radius:50%; background:rgba(184,150,90,0.12); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:var(--gold-l); }
+    .form-success h3 { font-family:'Fraunces',Georgia,serif; font-size:1.4rem; font-weight:600; }
+    .form-success p { font-size:14px; color:var(--dark-muted); }
+
     /* THE FULL MAP */
     .map-link { display:grid; grid-template-columns:1fr; gap:26px; align-items:center; margin-top:22px; }
     @media(min-width:900px){ .map-link{ grid-template-columns:1fr 1fr; } }
@@ -230,11 +251,9 @@
   <div class="inner">
     <div class="hero-wrap">
       <p class="kicker-dark">For Rosh Hashanah, Sukkot, Thanksgiving, or any table where three generations sit down at once</p>
-      <h1>Three questions to ask<br><em>at the table this year</em></h1>
+      <h1>Three questions to ask<br><em>at the holiday table this year</em></h1>
 
-      <p class="hero-sub">Someone at your table this week remembers a town that no longer exists, a journey, a name nobody else knows. Ask. Press record on your phone. Ten minutes is enough.</p>
-
-      <p class="hero-note">Free, in English, Hebrew and Russian. Print it, or open it on your phone at the table. No sign up, no email address, nothing to fill in.</p>
+      <p class="hero-sub">Someone at your table remembers a love found in wartime, an evacuation, a loss, the names, the town: your family&rsquo;s history. Let&rsquo;s preserve it before it is too late. Ask these questions. Press record on your phone. Ten minutes is enough.</p>
 
       <div class="cards">
         <div>
@@ -291,10 +310,23 @@
       <div class="offer-body">
         <p>We listen to the recording and pick five places from it. The town your grandmother was born in. The port they left from. The city they waited in. The street they first lived on here. We research each one, find it even if it has been renamed twice, and put all five on a real map with your family&rsquo;s own words beside them.</p>
         <p>One language, ready in about a week. <b>If you go on to the full family map afterwards, the whole $195 comes off the price.</b></p>
-        <div class="offer-btns">
-          <a class="btn-gold" href="mailto:maria@ludara.ai?subject=Our%20holiday%20table%20recording" onclick="gtag('event','recording_email_click',{event_category:'familystorymap',event_label:'holiday_table'})">Send us the recording</a>
-          <a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/#pricing">The full map, and what it costs</a>
+        <form class="form" id="recForm" novalidate style="margin-top:22px;">
+          <input type="hidden" name="_subject" value="Holiday table recording: First Chapter"/>
+          <div class="form-row">
+            <div class="fg"><label for="rname">Your name</label><input type="text" id="rname" name="name" placeholder="Jane Smith" required/></div>
+            <div class="fg"><label for="remail">Your email</label><input type="email" id="remail" name="email" placeholder="jane@example.com" required/></div>
+          </div>
+          <div class="fg"><label for="rlang">Which language is the recording in</label><input type="text" id="rlang" name="languages" placeholder="English, Hebrew, Russian, or a mix"/></div>
+          <div class="fg"><label for="rmsg">Who did you record? <span style="opacity:.55;text-transform:none;letter-spacing:0;">(optional)</span></label><textarea id="rmsg" name="message" placeholder="My grandmother and her sister, at Rosh Hashanah dinner."></textarea></div>
+          <button type="submit" class="submit-btn" id="recBtn">Send us the recording</button>
+          <p class="form-note">No commitment. Your recording stays private.<br>Or email us at <a href="mailto:maria@ludara.ai" style="color:var(--gold-l);">maria@ludara.ai</a> and we will tell you how to upload your recording, or a whole folder.</p>
+        </form>
+        <div class="form-success" id="recSuccess">
+          <div class="success-icon">&#10003;</div>
+          <h3>Message sent</h3>
+          <p>We will be in touch within one business day and tell you how to upload your recording, or a whole folder.</p>
         </div>
+        <p style="margin-top:18px;"><a class="btn-ghost-dark" href="https://ludara.ai/familystorymap/#pricing">The full map, and what it costs</a></p>
       </div>
     </div>
   </div>
@@ -340,6 +372,21 @@
     const io=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:0.1});
     els.forEach(el=>io.observe(el));
   })();
+  document.getElementById('recForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn=document.getElementById('recBtn');
+    const label="Send us the recording";
+    btn.disabled=true; btn.textContent='Sending...';
+    try{
+      const res=await fetch('https://formspree.io/f/mnjwakbo',{ method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
+      if(res.ok){
+        document.getElementById('recForm').style.display='none';
+        document.getElementById('recSuccess').classList.add('visible');
+        gtag('event','form_submit',{event_category:'outreach',event_label:'familystorymap_holiday_table'});
+        if(typeof fbq==='function'){ fbq('track','Lead',{content_name:'familystorymap_holiday_table'}); }
+      } else { btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
+    }catch(err){ btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
+  });
 </script>
 </body>
 </html>
