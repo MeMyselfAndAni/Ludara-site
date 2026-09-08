@@ -66,13 +66,11 @@ function initMap() {
       console.warn('Map tile fetch failed (transient):', msg);
       return;
     }
-    // Fatal error — show overlay
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:50%;left:5%;right:5%;transform:translateY(-50%);background:#900;color:#fff;padding:15px;border-radius:8px;z-index:999999;font-size:12px;font-family:monospace;cursor:pointer;';
-    d.textContent = 'Map error: ' + msg + ' (tap to dismiss)';
-    d.onclick = function() { d.remove(); };
-    document.body.appendChild(d);
-    setTimeout(function() { if (d.parentNode) d.remove(); }, 8000);
+    // Was: a red developer overlay printing the raw error, including the tile
+    // URL with the API key in it. Removed 8 September 2026. Readers should
+    // never see that, and the tile notice below now explains a failed base map
+    // in plain language. Keep this in the console for us.
+    console.warn('Map error:', msg);
   });
   map.on('load', () => {
     try {
