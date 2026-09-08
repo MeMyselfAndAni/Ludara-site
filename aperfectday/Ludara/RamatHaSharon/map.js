@@ -131,14 +131,14 @@ function initMap() {
   // mails Maria a daily digest. The URL is just a script id: it carries no
   // email address and no phone number, so nothing personal is exposed to the
   // reader. Fires at most once per browser session.
-  var REPORT_URL = '';   // the /exec URL of the Ludara map alert Apps Script
-  var REPORT_KEY = '';   // must match SECRET inside that script
+  var REPORT_URL = 'https://script.google.com/macros/s/AKfycbzOtGuFCSX0ut-fzRYh_OgODb9BkMtQ1ZLJlD1s5rCZI77KitIbJYR0CGeWmRcWJ6svYg/exec';   // the /exec URL of the Ludara map alert Apps Script
+  var REPORT_KEY = 'lud-91ycv8xzlczp';   // must match SECRET inside that script
 
   var TEXT = {
-    en: { t: 'The background map is not loading on this network.', s: 'Everything else works. Open any place to read its story.', b: 'Try again' },
-    he: { t: '\u05de\u05e4\u05ea \u05d4\u05e8\u05e7\u05e2 \u05d0\u05d9\u05e0\u05d4 \u05e0\u05d8\u05e2\u05e0\u05ea \u05d1\u05e8\u05e9\u05ea \u05d6\u05d5.', s: '\u05db\u05dc \u05d4\u05e9\u05d0\u05e8 \u05e4\u05d5\u05e2\u05dc. \u05d0\u05e4\u05e9\u05e8 \u05dc\u05e4\u05ea\u05d5\u05d7 \u05db\u05dc \u05de\u05e7\u05d5\u05dd \u05d5\u05dc\u05e7\u05e8\u05d5\u05d0 \u05d0\u05ea \u05d4\u05e1\u05d9\u05e4\u05d5\u05e8 \u05e9\u05dc\u05d5.', b: '\u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1' },
-    ru: { t: '\u0424\u043e\u043d\u043e\u0432\u0430\u044f \u043a\u0430\u0440\u0442\u0430 \u043d\u0435 \u0437\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u0442\u0441\u044f \u0432 \u044d\u0442\u043e\u0439 \u0441\u0435\u0442\u0438.', s: '\u0412\u0441\u0451 \u043e\u0441\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442. \u041e\u0442\u043a\u0440\u043e\u0439\u0442\u0435 \u043b\u044e\u0431\u043e\u0435 \u043c\u0435\u0441\u0442\u043e, \u0447\u0442\u043e\u0431\u044b \u043f\u0440\u043e\u0447\u0438\u0442\u0430\u0442\u044c \u0435\u0433\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u044e.', b: '\u041f\u043e\u043f\u0440\u043e\u0431\u043e\u0432\u0430\u0442\u044c \u0441\u043d\u043e\u0432\u0430' },
-    ar: { t: '\u062e\u0631\u064a\u0637\u0629 \u0627\u0644\u062e\u0644\u0641\u064a\u0629 \u0644\u0627 \u064a\u062a\u0645 \u062a\u062d\u0645\u064a\u0644\u0647\u0627 \u0639\u0644\u0649 \u0647\u0630\u0647 \u0627\u0644\u0634\u0628\u0643\u0629.', s: '\u0643\u0644 \u0634\u064a\u0621 \u0622\u062e\u0631 \u064a\u0639\u0645\u0644. \u0627\u0641\u062a\u062d \u0623\u064a \u0645\u0643\u0627\u0646 \u0644\u0642\u0631\u0627\u0621\u0629 \u0642\u0635\u062a\u0647.', b: '\u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649' }
+    en: { t: 'The background map is temporarily not working.', s: 'Ludara.AI is notified of this.', s2: 'Everything else works. Open any place to read its story.', b: 'Try again' },
+    he: { t: 'מפת הרקע אינה פועלת כרגע.', s: 'קיבלנו על כך התראה.', s2: 'כל השאר פועל. אפשר לפתוח כל מקום ולקרוא את הסיפור שלו.', b: 'נסו שוב' },
+    ru: { t: 'Фоновая карта временно не работает.', s: 'Мы получили уведомление об этом.', s2: 'Всё остальное работает. Откройте любое место, чтобы прочитать его историю.', b: 'Попробовать снова' },
+    ar: { t: 'خريطة الخلفية لا تعمل مؤقتا.', s: 'لقد تم إبلاغنا بذلك.', s2: 'كل شيء آخر يعمل. افتح أي مكان لقراءة قصته.', b: 'حاول مرة أخرى' }
   };
 
   var shown = false, settled = false, errors = 0, waited = 0;
@@ -238,7 +238,7 @@ function initMap() {
     title.style.cssText = 'font-weight:700;margin-bottom:4px;';
 
     var sub = document.createElement('div');
-    sub.textContent = w.s;
+    sub.textContent = REPORT_URL ? w.s : w.s2;
     sub.style.cssText = 'font-weight:400;opacity:.85;';
 
     var row = document.createElement('div');
