@@ -14,7 +14,11 @@ rem  A stale copy there silently reverted three weeks of work on
 rem  3 August. Never reintroduce a copy step.
 rem  Live URLs after push:
 rem    https://ludara.ai/aperfectstorymap/            (landing page)
-rem    https://ludara.ai/aperfectstorymap/shantaram/  (unlisted demo, never link publicly)
+rem    https://ludara.ai/aperfectstorymap/shantaram/       (public demo, linked from the landing page)
+rem    https://ludara.ai/aperfectstorymap/bookoflongings/  (public demo, linked from the landing page)
+rem  Both demos are public: they are listed in sitemap.xml, they carry no noindex,
+rem  and the landing page links them from the "See a real one" section. The old
+rem  "never link publicly" note was stale and was removed on 8 September 2026.
 rem  ------------------------------------------------------------------
 
 pushd "%~dp0"
@@ -70,7 +74,7 @@ echo   STORY MAP DEPLOYED!
 echo ==========================================
 echo.
 echo Landing:  https://ludara.ai/aperfectstorymap/
-echo Demo:     https://ludara.ai/aperfectstorymap/shantaram/  (unlisted)
+echo Demos:    /shantaram/  and  /bookoflongings/   (both public)
 echo.
 popd
 pause
