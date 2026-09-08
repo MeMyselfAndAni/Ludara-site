@@ -173,12 +173,19 @@ function initMap() {
       sessionStorage.setItem('tile_notice_sent', '1');
     } catch (e) {}
     try {
+      var ua = navigator.userAgent || '';
+      var tz = '';
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e2) {}
       var body = JSON.stringify({
         k: REPORT_KEY,
+        title: (document.title || '').slice(0, 120),
         page: location.pathname,
         host: location.host,
-        lang: document.documentElement.getAttribute('lang') || '',
-        ua: navigator.userAgent,
+        device: /Mobi|Android|iPhone|iPad|iPod/i.test(ua) ? 'mobile' : 'desktop',
+        tz: tz,
+        lang: document.documentElement.getAttribute('lang') || navigator.language || '',
+        screen: (screen.width || 0) + 'x' + (screen.height || 0),
+        ua: ua,
         at: new Date().toISOString()
       });
       if (navigator.sendBeacon) navigator.sendBeacon(REPORT_URL, body);
