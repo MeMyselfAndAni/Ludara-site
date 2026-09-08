@@ -3,7 +3,7 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'apsm-inanasfootsteps-shell-v10';   // bump this on every deploy to push updates
+var SHELL_CACHE = 'apsm-inanasfootsteps-shell-v11';   // bump this on every deploy to push updates
 var TILE_CACHE  = 'apsm-shantaram-tiles-v1';
 
 var SHELL_FILES = [
@@ -21,6 +21,8 @@ var SHELL_FILES = [
   './ui-pdf.js',
   './ui-stories.js',
   './favicon.svg',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.js',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.css',
 ];
 
 self.addEventListener('install', function(event) {
