@@ -186,6 +186,22 @@ function initMap() {
     } catch (e) {}
   }
 
+
+  /* The page builds its list, filters and favourites inside map.on('load'),
+     which never fires when the style cannot be fetched. So the reader was
+     left with an empty panel as well as an empty map. These four functions
+     touch only the DOM, so we can run them ourselves and give back the
+     places, the filter chips and the saved list. */
+  function reviveWithoutMap() {
+    var fns = ['applyFilters', 'renderList', 'initFavourites', 'alignNbhdBar'];
+    for (var i = 0; i < fns.length; i++) {
+      try {
+        var f = window[fns[i]];
+        if (typeof f === 'function') f();
+      } catch (e) {}
+    }
+  }
+
   function show() {
     if (shown || settled) return;
     var m = currentMap();
@@ -194,6 +210,7 @@ function initMap() {
 
     report();
     hideSpinner();
+    reviveWithoutMap();
 
     // Make the empty map read as paper rather than a void.
     var holder = document.getElementById('map');
@@ -207,7 +224,7 @@ function initMap() {
     box.setAttribute('role', 'status');
     box.setAttribute('dir', rtl ? 'rtl' : 'ltr');
     box.style.cssText = [
-      'position:fixed', 'top:14px', 'left:50%', 'transform:translateX(-50%)',
+      'position:fixed', 'top:50%', 'left:50%', 'transform:translate(-50%,-50%)',
       'z-index:1000', 'width:min(92vw,460px)', 'box-sizing:border-box',
       'background:#fffdf7', 'color:#2c2a26', 'border:1px solid #d9cfae',
       'border-radius:10px', 'box-shadow:0 6px 24px rgba(0,0,0,.18)',
