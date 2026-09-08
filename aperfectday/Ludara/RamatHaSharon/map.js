@@ -135,10 +135,10 @@ function initMap() {
   var REPORT_KEY = 'lud-91ycv8xzlczp';   // must match SECRET inside that script
 
   var TEXT = {
-    en: { t: 'The background map is temporarily not working.', s: 'Ludara.AI is notified of this.', s2: 'Everything else works. Open any place to read its story.', b: 'Try again' },
-    he: { t: 'מפת הרקע אינה פועלת כרגע.', s: 'קיבלנו על כך התראה.', s2: 'כל השאר פועל. אפשר לפתוח כל מקום ולקרוא את הסיפור שלו.', b: 'נסו שוב' },
-    ru: { t: 'Фоновая карта временно не работает.', s: 'Мы получили уведомление об этом.', s2: 'Всё остальное работает. Откройте любое место, чтобы прочитать его историю.', b: 'Попробовать снова' },
-    ar: { t: 'خريطة الخلفية لا تعمل مؤقتا.', s: 'لقد تم إبلاغنا بذلك.', s2: 'كل شيء آخر يعمل. افتح أي مكان لقراءة قصته.', b: 'حاول مرة أخرى' }
+    en: { t: 'The background map is temporarily not working.', s: 'Ludara.AI is notified of this.', s3: 'You can still load all the place cards.', b: 'Try again' },
+    he: { t: 'מפת הרקע אינה פועלת כרגע.', s: 'קיבלנו על כך התראה.', s3: 'עדיין אפשר לפתוח את כל כרטיסי המקומות.', b: 'נסו שוב' },
+    ru: { t: 'Фоновая карта временно не работает.', s: 'Мы получили уведомление об этом.', s3: 'Карточки всех мест по-прежнему открываются.', b: 'Попробовать снова' },
+    ar: { t: 'خريطة الخلفية لا تعمل مؤقتا.', s: 'لقد تم إبلاغنا بذلك.', s3: 'لا يزال بإمكانك فتح جميع بطاقات الأماكن.', b: 'حاول مرة أخرى' }
   };
 
   var shown = false, settled = false, errors = 0, waited = 0;
@@ -238,8 +238,15 @@ function initMap() {
     title.style.cssText = 'font-weight:700;margin-bottom:4px;';
 
     var sub = document.createElement('div');
-    sub.textContent = REPORT_URL ? w.s : w.s2;
     sub.style.cssText = 'font-weight:400;opacity:.85;';
+    if (REPORT_URL) {
+      var line1 = document.createElement('div');
+      line1.textContent = w.s;
+      sub.appendChild(line1);
+    }
+    var line2 = document.createElement('div');
+    line2.textContent = w.s3;
+    sub.appendChild(line2);
 
     var row = document.createElement('div');
     row.style.cssText = 'margin-top:10px;display:flex;gap:8px;justify-content:' + (rtl ? 'flex-start' : 'flex-end') + ';';
