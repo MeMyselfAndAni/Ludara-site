@@ -3,10 +3,13 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'muza-shell-v85';
+var SHELL_CACHE = 'muza-shell-v86';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
+  '/assets/vendor/mapbox-gl-rtl-text-0.2.3/mapbox-gl-rtl-text.min.js',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.css',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.js',
   './',
   './index.html',
   './data.js',

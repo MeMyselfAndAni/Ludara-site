@@ -12,6 +12,9 @@ var TILE_CACHE  = 'apsm-' + FAMILY.slug + '-tiles-v1';
 var SHELL_PREFIX = 'apsm-' + FAMILY.slug + '-shell-';
 
 var SHELL_FILES = [
+  '/assets/vendor/mapbox-gl-rtl-text-0.2.3/mapbox-gl-rtl-text.min.js',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.css',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.js',
   './',
   './index.html',
   './family.js',

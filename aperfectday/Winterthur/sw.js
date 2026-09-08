@@ -3,10 +3,12 @@
 // If a resource is in cache, return it IMMEDIATELY — no network request.
 // This prevents the 60-second hang when offline.
 
-var SHELL_CACHE = 'winterthur-shell-v11';
+var SHELL_CACHE = 'winterthur-shell-v12';
 var TILE_CACHE  = 'apd-tiles-v1';
 
 var SHELL_FILES = [
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.css',
+  '/assets/vendor/maplibre-gl-4.7.1/maplibre-gl.js',
   './',
   './index.html',
   './data.js',
