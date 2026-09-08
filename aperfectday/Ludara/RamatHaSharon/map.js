@@ -51,7 +51,7 @@ const NBHD_APPROX_CENTERS = {
 function initMap() {
   map = new maplibregl.Map({
     container: 'map',
-    style: `https://api.maptiler.invalid.example/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`,
     center: MAP_CENTER,
     zoom: MAP_ZOOM,
     attributionControl: false,
