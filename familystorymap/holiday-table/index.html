@@ -124,6 +124,17 @@
       .hero-note{ font-size:13.5px; margin-bottom:20px; }
     }
 
+    /* QUICK DOWNLOAD ROW: on a phone the card previews push the real download
+       buttons below the first screen, so offer the three cards up front too.
+       Hidden from 700px up, where the three cards sit side by side already. */
+    .quick-dl { display:block; margin:0 0 22px; }
+    .quick-dl-lead { font-size:.8rem; font-weight:700; color:var(--gold-l); text-transform:uppercase; letter-spacing:.08em; margin:0 0 10px; }
+    .quick-dl-row { display:flex; gap:8px; }
+    .quick-dl-row .btn-gold { flex:1 1 0; min-width:0; text-align:center; padding:11px 6px; font-size:13px; white-space:nowrap; }
+    /* Hidden from 700px up, the exact width at which .cards becomes three
+       columns and the real buttons rise onto the first screen by themselves. */
+    @media(min-width:700px){ .quick-dl { display:none; } }
+
     /* CARD PREVIEWS: the printed cards are white, so they sit on a white
        mat with the same gold rule the product page puts around screenshots. */
     .cards { display:grid; grid-template-columns:1fr; gap:26px; margin-top:8px; }
@@ -254,6 +265,15 @@
       <h1>Three questions to ask<br><em>at the holiday table this year</em></h1>
 
       <p class="hero-sub">Someone at your table remembers a love found in wartime, an evacuation, a loss, the names, the town: your family&rsquo;s history. Let&rsquo;s preserve it before it is too late. Ask these questions. Press record on your phone. Ten minutes is enough.</p>
+
+      <div class="quick-dl">
+        <p class="quick-dl-lead">Free printable card</p>
+        <div class="quick-dl-row">
+          <a class="btn-gold" href="Three-Questions-Holiday-Table-EN.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_en'})">English</a>
+          <a class="btn-gold" href="Three-Questions-Holiday-Table-HE.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_he'})" lang="he">עברית</a>
+          <a class="btn-gold" href="Three-Questions-Holiday-Table-RU.pdf" download onclick="gtag('event','file_download',{event_category:'familystorymap',event_label:'three_questions_ru'})" lang="ru">Русский</a>
+        </div>
+      </div>
 
       <div class="cards">
         <div>
