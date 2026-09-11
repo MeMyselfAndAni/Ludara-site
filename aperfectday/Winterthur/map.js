@@ -123,8 +123,8 @@ function initMap() {
 // ⚠️ DO NOT call initMap() here
 
 
-/* ─── LUDARA_TILE_NOTICE_V1 ────────────────────────────────────────────────
-   Base map availability notice. Added 8 September 2026.
+/* ─── LUDARA_TILE_NOTICE_V2 ────────────────────────────────────────────────
+   Base map availability notice. Added 8 September 2026, revised 10 September.
 
    The base map imagery comes from api.maptiler.com, which sits on Cloudflare.
    A network that cannot reach it gets no error from MapLibre at all: the map
@@ -136,13 +136,22 @@ function initMap() {
    photographs, search and the story path all keep working, so the right
    behaviour is to say so plainly and carry on, not to fail silently.
 
+   Version 2 answers the question version 1 could not. The notice already
+   removes itself if the base map turns up late, but the report had already
+   been sent, so a reader who waited eighteen seconds and then had a perfect
+   map looked exactly like a reader who never got a map at all. Version 2
+   sends a second, tiny message when the map recovers, and records why the
+   notice fired, how long it had waited, and what kind of connection the
+   reader is on. All of it is already in the browser's own memory. Nothing
+   is asked of the reader and no location is collected.
+
    Self contained on purpose. It adds no files, no styles and no
    dependencies, so it can be dropped into any map unchanged.
    ────────────────────────────────────────────────────────────────────────── */
 (function () {
   'use strict';
 
-  var STYLE_TIMEOUT_MS = 15000;   // how long the base map may take before we speak
+  var STYLE_TIMEOUT_MS = 15000;  // how long the base map may take before we speak
   var FIND_MAP_MS      = 60000;  // how long to keep looking for the map object
   var ERROR_LIMIT      = 4;      // failed requests that also trigger the notice
   var PAPER            = '#f5edd8';
@@ -151,7 +160,7 @@ function initMap() {
   // Point it at a Google Apps Script web app that writes a row to a sheet and
   // mails Maria a daily digest. The URL is just a script id: it carries no
   // email address and no phone number, so nothing personal is exposed to the
-  // reader. Fires at most once per browser session.
+  // reader. Fires at most once per browser session, plus one recovery ping.
   var REPORT_URL = 'https://script.google.com/macros/s/AKfycbzOtGuFCSX0ut-fzRYh_OgODb9BkMtQ1ZLJlD1s5rCZI77KitIbJYR0CGeWmRcWJ6svYg/exec';   // the /exec URL of the Ludara map alert Apps Script
   var REPORT_KEY = 'lud-91ycv8xzlczp';   // must match SECRET inside that script
 
@@ -162,7 +171,40 @@ function initMap() {
     ar: { t: 'خريطة الخلفية لا تعمل مؤقتا.', s: 'لقد تم إبلاغنا بذلك.', s3: 'لا يزال بإمكانك فتح جميع بطاقات الأماكن.', b: 'حاول مرة أخرى' }
   };
 
-  var shown = false, settled = false, errors = 0, waited = 0;
+  var T0 = Date.now();
+  var shown = false, settled = false, errors = 0, hunting = 0;
+  var sentHere = false, recoverySent = false;
+
+  /* A short id so the sheet can pair a failure with its recovery. It is
+     random, it lives for one browser session, and it identifies nobody. */
+  function sessionId() {
+    var v = '';
+    try { v = sessionStorage.getItem('lud_sid') || ''; } catch (e) {}
+    if (!v) {
+      v = Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+      try { sessionStorage.setItem('lud_sid', v); } catch (e) {}
+    }
+    return v;
+  }
+  var SID = sessionId();
+
+  /* What the browser already knows about the connection. Chrome and the
+     Android browsers report this, Safari does not, in which case it stays
+     empty and the digest says so. */
+  function connection() {
+    try {
+      var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!c) return '';
+      var bits = [];
+      if (c.effectiveType) bits.push(String(c.effectiveType));
+      if (c.saveData) bits.push('data saver');
+      return bits.join(' ');
+    } catch (e) { return ''; }
+  }
+
+  function secondsSinceStart() {
+    return Math.round((Date.now() - T0) / 1000);
+  }
 
   function currentMap() {
     try { if (typeof map !== 'undefined' && map) return map; } catch (e) {}
@@ -187,33 +229,67 @@ function initMap() {
     if (el) el.style.display = 'none';
   }
 
-  function report() {
+  function send(payload) {
     if (!REPORT_URL) return;
     try {
-      if (sessionStorage.getItem('tile_notice_sent')) return;
-      sessionStorage.setItem('tile_notice_sent', '1');
-    } catch (e) {}
-    try {
-      var ua = navigator.userAgent || '';
-      var tz = '';
-      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e2) {}
-      var body = JSON.stringify({
-        k: REPORT_KEY,
-        title: (document.title || '').slice(0, 120),
-        page: location.pathname,
-        host: location.host,
-        device: /Mobi|Android|iPhone|iPad|iPod/i.test(ua) ? 'mobile' : 'desktop',
-        tz: tz,
-        lang: document.documentElement.getAttribute('lang') || navigator.language || '',
-        screen: (screen.width || 0) + 'x' + (screen.height || 0),
-        ua: ua,
-        at: new Date().toISOString()
-      });
+      payload.k     = REPORT_KEY;
+      payload.s     = SID;
+      payload.title = (document.title || '').slice(0, 120);
+      payload.page  = location.pathname;
+      payload.host  = location.host;
+      payload.at    = new Date().toISOString();
+      var body = JSON.stringify(payload);
       if (navigator.sendBeacon) navigator.sendBeacon(REPORT_URL, body);
       else fetch(REPORT_URL, { method: 'POST', mode: 'no-cors', body: body });
     } catch (e) {}
   }
 
+  function reportFailure(why) {
+    if (sentHere) return;
+    try {
+      if (sessionStorage.getItem('tile_notice_sent')) return;   // already reported this session
+      sessionStorage.setItem('tile_notice_sent', '1');
+    } catch (e) {}
+    sentHere = true;
+    var ua = navigator.userAgent || '';
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    send({
+      ev:     'failed',
+      why:    why,                    // 'timeout' or 'errors'
+      waited: secondsSinceStart(),    // seconds the reader had waited
+      conn:   connection(),
+      errs:   errors,
+      device: /Mobi|Android|iPhone|iPad|iPod/i.test(ua) ? 'mobile' : 'desktop',
+      tz:     tz,
+      lang:   document.documentElement.getAttribute('lang') || navigator.language || '',
+      screen: (screen.width || 0) + 'x' + (screen.height || 0),
+      ua:     ua
+    });
+  }
+
+  /* The whole point of version 2. Only sent if this session reported a
+     failure first, so it always has a row to pair with. It also covers the
+     reader who pressed Try again and got a working map on the second go:
+     that arrives as a recovery with reloaded set, because the seconds then
+     count from the reload and not from the original attempt. */
+  function reportRecovery() {
+    if (recoverySent) return;
+    var prior = false;
+    try { prior = !!sessionStorage.getItem('tile_notice_sent'); } catch (e) {}
+    if (!sentHere && !prior) return;
+    try {
+      if (sessionStorage.getItem('tile_recovery_sent')) { recoverySent = true; return; }
+      sessionStorage.setItem('tile_recovery_sent', '1');
+    } catch (e) {}
+    recoverySent = true;
+    send({
+      ev:       'recovered',
+      after:    secondsSinceStart(),
+      reloaded: sentHere ? 0 : 1,
+      conn:     connection()
+    });
+  }
 
   /* The page builds its list, filters and favourites inside map.on('load'),
      which never fires when the style cannot be fetched. So the reader was
@@ -230,13 +306,13 @@ function initMap() {
     }
   }
 
-  function show() {
+  function show(why) {
     if (shown || settled) return;
     var m = currentMap();
     if (styleReady(m)) return;
     shown = true;
 
-    report();
+    reportFailure(why || 'timeout');
     hideSpinner();
     reviveWithoutMap();
 
@@ -288,7 +364,7 @@ function initMap() {
     var close = document.createElement('button');
     close.type = 'button';
     close.setAttribute('aria-label', 'Close');
-    close.textContent = '\u00d7';
+    close.textContent = '×';
     close.style.cssText = 'font:600 16px/1 inherit;padding:6px 11px;border-radius:7px;border:1px solid transparent;background:transparent;color:#2c2a26;cursor:pointer;opacity:.6;';
     close.onclick = function () { if (box.parentNode) box.parentNode.removeChild(box); };
 
@@ -301,7 +377,10 @@ function initMap() {
   }
 
   function clear() {
-    settled = true;
+    if (!settled) {
+      settled = true;
+      reportRecovery();
+    }
     var box = document.getElementById('tile-notice');
     if (box && box.parentNode) box.parentNode.removeChild(box);
   }
@@ -310,19 +389,19 @@ function initMap() {
     try {
       m.on('error', function () {
         errors++;
-        if (errors >= ERROR_LIMIT && !styleReady(m)) show();
+        if (errors >= ERROR_LIMIT && !styleReady(m)) show('errors');
       });
       m.on('load', clear);
       m.on('styledata', function () { if (styleReady(m)) clear(); });
     } catch (e) {}
-    setTimeout(function () { if (!styleReady(m)) show(); }, STYLE_TIMEOUT_MS);
+    setTimeout(function () { if (!styleReady(m)) show('timeout'); }, STYLE_TIMEOUT_MS);
   }
 
   function look() {
     var m = currentMap();
     if (m) { attach(m); return; }
-    waited += 150;
-    if (waited < FIND_MAP_MS) setTimeout(look, 150);
+    hunting += 150;
+    if (hunting < FIND_MAP_MS) setTimeout(look, 150);
   }
 
   if (document.readyState === 'loading') {
