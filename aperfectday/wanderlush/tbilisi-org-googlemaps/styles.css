@@ -1415,10 +1415,11 @@ h1 em { font-style: italic; color: rgba(255,255,255,0.75); font-weight: 400; }
 
 /* Emily's note */
 .pc-note-wrap {
-  background: #fffef5;
-  border-left: 3px solid #b8960a;
-  border-radius: 0 8px 8px 0;
-  padding: 10px 12px;
+  /* Until 12 September 2026 the note sat in a cream pull quote with a gold rule
+     down one side. The same styling was used on the story and family maps, where
+     the note is the story itself, so it was dropped everywhere for one look. The
+     blogger byline underneath still says whose words these are, and the "today"
+     tip below keeps its own panel. */
   margin-bottom: 9px;
 }
 .pc-note {

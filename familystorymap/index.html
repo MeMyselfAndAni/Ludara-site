@@ -302,7 +302,11 @@
     .holiday-kicker { font-size:.8rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
     .holiday h3 { font-family:'Fraunces',Georgia,serif; font-size:clamp(22px,2.6vw,32px); font-weight:600; color:var(--warm-text); line-height:1.15; margin-bottom:10px; }
     .holiday p { color:var(--warm-muted); font-size:15px; font-weight:300; line-height:1.7; max-width:64ch; margin:0 0 18px; }
+    /* 12 Sep 2026: the card absorbed the old "Start with a recording" section,
+       so it carries one italic line of its own. */
+    .holiday p.holiday-line { font-family:'Fraunces',Georgia,serif; font-size:18px; font-style:italic; font-weight:400; color:var(--warm-text); margin:0 0 20px; max-width:58ch; }
     .holiday .btn-gold { margin:0; }
+    .holiday p.holiday-fine { font-size:13px; color:var(--warm-muted); opacity:.85; margin:14px 0 0; }
     .holiday img { width:100%; height:auto; display:block; border:1px solid rgba(184,150,90,0.5); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.25); background:#fff; }
     @media(max-width:819px){ .holiday img { max-width:260px; margin:0 auto; } }
   </style>
@@ -507,32 +511,25 @@
     </div>
     <a class="holiday" href="https://ludara.ai/familystorymap/holiday-table/">
       <div>
-        <p class="holiday-kicker">For the holiday table this week</p>
-        <h3>Three questions to ask at the holiday table</h3>
-        <p>Someone at your table this week remembers a town that no longer exists, a journey, a name nobody else knows. One printable card, three questions, everybody answers. Put your phone on the table, press record, and ten minutes is enough. Free, in English, Hebrew and Russian, no sign up.</p>
+        <p class="holiday-kicker">Start with what you have</p>
+        <h3>A memoir, a recording, or a folder of documents.</h3>
+        <p>The richest material of all is a written memoir. Someone has already sat with the family, asked the patient questions, chosen what matters and shaped it into a story, and the map can be built almost straight from those pages. If a memoir writer is working with your family, their work is exactly what we hope to receive.</p>
+        <p>Where the memoir has not been written yet, recent technology lets us begin from the voice itself. A map interlinked with the family tree can be built from audio recordings directly, or from a folder of documents and photographs. So this holiday season, when the whole family is around one table, put a phone in the middle, ask three questions and press record. Ten minutes of someone talking is a beginning, in any language or several mixed together. You do not need to transcribe it, tidy it, or know where any of the places are. That is our work.</p>
+        <p class="holiday-line">Record your mother while she still remembers, and we will put it on the map.</p>
         <span class="btn-gold">Get the holiday table card</span>
+        <p class="holiday-fine">The printable card is free, in English, Hebrew and Russian, with no sign up.</p>
       </div>
       <img src="holiday-table/fsm-three-questions-card-EN.webp" width="1100" height="1555" alt="The printed card: three questions to ask at the holiday table this year" loading="lazy"/>
     </a>
+    <p class="sub-dark" style="margin-top:16px;font-size:14px;"><a href="#pricing" style="color:var(--gold-l);">Try five places first, for $195 &rsaquo;</a></p>
   </div>
 </section>
+
+<!-- The separate "Start with a recording" section stood here until 12 September
+     2026. It said the same thing as the holiday card just above it, so the two
+     were folded into one card in the dark section. -->
 
 <!-- PRICING (warm) -->
-<!-- START WITH A RECORDING (warm) -->
-<section class="warm-section" id="recording" data-animate>
-  <div class="inner">
-    <p class="kicker-warm">Start with a recording</p>
-    <h2 class="warm">You do not need a finished book.</h2>
-    <p class="sub-warm" style="margin-top:10px;max-width:78ch;">Ten minutes of someone talking is a beginning. Put a phone on the table at a birthday or a holiday meal and ask three questions. Send us what you get, in any language, or several mixed together. You do not need to transcribe it, tidy it, or know where any of the places are. That is our work.</p>
-    <p class="sub-warm" style="margin-top:18px;max-width:70ch;font-size:20px;font-style:italic;">Record your mother while she still remembers, and we will put it on the map.</p>
-    <p class="sub-warm" style="margin-top:18px;">
-      <a href="/familystorymap/holiday-table/">Three questions to ask at your table &rsaquo;</a>
-      &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-      <a href="#pricing">Try five places first, for $195 &rsaquo;</a>
-    </p>
-  </div>
-</section>
-
 <section class="warm-section" id="pricing" data-animate>
   <div class="inner">
     <p class="kicker-warm">What it costs</p>

@@ -1,5 +1,5 @@
 // sw.js — Service Worker for offline map support (MapLibre + MapTiler)
-const APP_CACHE  = 'apd-prague-shell-v6';
+const APP_CACHE  = 'apd-prague-shell-v7';
 const TILE_CACHE = 'maptiler-tiles-v2';
 
 const APP_FILES = [
