@@ -90,6 +90,10 @@ const PHOTO_CREDITS = {
         prefix: 'מישה אחרי הלימודים, בשירות הצבאי, אותן שנים'
               + ' · Миша после института, на военной службе, те же годы'
               + ' · Misha after the institute, on military service, the same years' },
+  34: { author: FAMILY_ARCHIVE,
+        prefix: 'ראש השנה האזרחי בבית. מאחור: הסבתא חומה, מארק במרכז, הסבא בוריס מימין. מלפנים: יעקב ויוליה על כתפיו, ומריה בת חמש בערך'
+              + ' · Новый год дома. Сзади: бабушка Хума, Марк в центре, дедушка Борис справа. Впереди: Яков с Юлей на плечах и Мария, лет пяти'
+              + ' · New Year at home. Behind: grandmother Huma, Mark in the centre, grandfather Boris on the right. In front: Yakov with Julia on his shoulders, and Maria, about five' },
   33: { author: FAMILY_ARCHIVE,
         prefix: 'אנה ומיכאל אחרי שחיית חורף ליד מוסקבה, מינוס 30 מעלות, בערך באותן שנים'
               + ' · Анна и Михаил после зимнего купания под Москвой, минус 30, примерно в те же годы'

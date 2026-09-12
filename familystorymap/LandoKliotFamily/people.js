@@ -57,7 +57,7 @@ const PEOPLE = [
   { id:'lital',     he:'ליטל קליוט', ru:'Литаль Клиот', en:'Leetal Kliot', years:'', role:'בת איליה ואולגה · дочь Ильи и Ольги · daughter of Ilya and Olga', branch:'kliot', col:13.8, row:5, places:[24] },
   { id:'nir',       he:'ניר קליוט', ru:'Нир Клиот', en:'Nir Kliot', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги · son of Ilya and Olga', branch:'kliot', col:14.8, row:5, places:[24] },
   { id:'ron',       he:'רון קליוט', ru:'Рон Клиот', en:'Ron Kliot', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги · son of Ilya and Olga', branch:'kliot', col:15.8, row:5, places:[24] },
-  { id:'masha',     he:'מאשה (מריה) לנדו', ru:'Маша (Мария) Ландо', en:'Maria (Masha) Lando', years:'', role:'יזמה את העלייה; מייסדת Ludara.AI · инициатор алии; основательница Ludara.AI · initiated the aliyah; founder of Ludara.AI', branch:'lando', col:9.4, row:4, places:[7,33,20,23,27,28,25] },
+  { id:'masha',     he:'מאשה (מריה) לנדו', ru:'Маша (Мария) Ландо', en:'Maria (Masha) Lando', years:'', role:'יזמה את העלייה; מייסדת Ludara.AI · инициатор алии; основательница Ludara.AI · initiated the aliyah; founder of Ludara.AI', branch:'lando', col:9.4, row:4, places:[7,33,20,23,27,28,25,34] },
   { id:'dima',      he:'דימה (דמיטרי) לנדו', ru:'Дима (Дмитрий) Ландо', en:'Dmitry (Dima) Lando', years:'', role:'חי ברעננה עם משפחתו · живёт в Раанане с семьёй · lives in Raanana with his family', branch:'lando', col:11.8, row:4, places:[7,33,20,26] },
 
   // ── FRIEDLAND — צד אמא ───────────────────────────────────────────────────
@@ -95,10 +95,10 @@ const PEOPLE = [
   { id:'husband1',  he:'הבעל הראשון', ru:'первый муж', en:'the first husband', years:'', role:'שידוך בכפייה · брак по сговору · an arranged match', branch:'lando', col:27.2, row:2, places:[8,30] },
   { id:'roza',      he:'רוזה', ru:'Роза', en:'Roza', years:'', role:'אחות ברוך · сестра Баруха · Boruch\'s sister', branch:'lando', col:28.2, row:2, places:[8,30] },
   { id:'shaul',     he:'שאול (שולה)', ru:'Шауль (Шуля)', en:'Shaul (Shula)', years:'', role:'אהובה של רוזה, כלכלן · любимый муж, экономист · Roza\'s beloved husband, an economist', branch:'lando', col:29.2, row:2, places:[8,9,30] },
-  { id:'lyonya',    he:'ליוניה (לאוניד)', ru:'Лёня (Леонид)', en:'Lyonya (Leonid)', years:'', role:'נכד מיליה, נשאר במוסקבה · внук Мили · Milia\'s grandson, stayed in Moscow', branch:'lando', col:20.8, row:4, places:[7] },
-  { id:'marina',    he:'מרינה', ru:'Марина', en:'Marina', years:'', role:'נכדת מיליה · внучка Мили · Milia\'s granddaughter', branch:'lando', col:21.8, row:4, places:[7] },
-  { id:'volodya',   he:'וולודיה', ru:'Володя', en:'Volodya', years:'', role:'בעלה של מרינה · муж Марины · Marina\'s husband', branch:'lando', col:22.8, row:4, places:[7] },
-  { id:'mark_l',    he:'מארק לנדו', ru:'Марк Ландо', en:'Mark Lando', years:'נ׳ 1930', role:'אחיו הבכור של מישה · старший брат · Misha\'s elder brother', branch:'lando', col:23.9, row:3, places:[8,13,7] },
+  { id:'lyonya',    he:'ליוניה (לאוניד) זייצב', ru:'Лёня (Леонид) Зайцев', en:'Lyonya (Leonid) Zaitzev', years:'', role:'נכד מיליה, נשאר במוסקבה · внук Мили · Milia\'s grandson, stayed in Moscow', branch:'lando', col:20.8, row:4, places:[7] },
+  { id:'marina',    he:'מרינה זייצבה', ru:'Марина Зайцева', en:'Marina Zaitzeva', years:'', role:'נכדת מיליה · внучка Мили · Milia\'s granddaughter', branch:'lando', col:21.8, row:4, places:[7] },
+  { id:'volodya',   he:'וולודיה פיינשטיין', ru:'Володя Файнштейн', en:'Volodya Fainshtein', years:'', role:'בעלה של מרינה · муж Марины · Marina\'s husband', branch:'lando', col:22.8, row:4, places:[7] },
+  { id:'mark_l',    he:'מארק לנדו', ru:'Марк Ландо', en:'Mark Lando', years:'שנות ה־30 – 1987 · 1930-е – 1987 · 1930s – 1987', role:'אחיו הבכור של מישה, נפטר מסרטן במוסקבה · старший брат Миши, умер от рака в Москве · Misha\'s elder brother, died of cancer in Moscow', branch:'lando', col:23.9, row:3, places:[8,13,7,34] },
   { id:'misha_l',   he:'מישה (מיכאל) לנדו', ru:'Миша (Михаил) Ландо', en:'Misha (Michael) Lando', years:'נ׳ 1938', role:'בעלי · мой муж · my husband', branch:'lando', col:24.9, row:3, places:[8,13,7,32,33,20] },
   { id:'yakov',     he:'יעקב לנדו', ru:'Яков Ландо', en:'Yakov Lando', years:'נ׳ 1941', role:'נולד בפינוי · родился в эвакуации · born in evacuation', branch:'lando', col:25.9, row:3, places:[13,7] },
   { id:'misha_r',   he:'מישה (מיכאל)', ru:'Миша (Михаил)', en:'Misha (Michael)', years:'', role:'בן רוזה; היגר לארה״ב · сын Розы, США · Roza\'s son; emigrated to the USA', branch:'lando', col:27.2, row:3, places:[8,14,30] },
