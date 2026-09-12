@@ -45,10 +45,10 @@ const PEOPLE = [
   { id:'michael_br',he:'מיכאל קליאוט', ru:'Михаил Клиот', en:'Michael Kliot', years:'נ׳ 1950', role:'אחי ז״ל · мой брат, светлой памяти · my brother, of blessed memory', branch:'kliot', col:12.6, row:3, places:[10,16,7] },
   { id:'nina_s',    he:'נינה סמישבה', ru:'Нина Самышева', en:'Nina Samysheva', years:'', role:'רעייתו; מטפלת במצבות · жена · his wife', branch:'kliot', col:13.8, row:3, places:[10] },
   { id:'ilya',      he:'איליה קליאוט', ru:'Илья Клиот', en:'Ilya Kliot', years:'', role:'חי באשדוד עם משפחתו · живёт в Ашдоде с семьёй · lives in Ashdod with his family', branch:'kliot', col:14.4, row:4, places:[10,24] },
-  { id:'moshe_bar', he:'משה בר', ru:'Моше Бар', en:'Moshe Bar', years:'', role:'אבי נאור, נדיה ונילי · отец Наора, Нади и Нили · father of Naor, Nadia and Nili', branch:'lando', col:8.2, row:4, places:[] },
+  { id:'moshe_bar', he:'משה בר', ru:'Моше Бар', en:'Moshe Bar', years:'', role:'אבי נאור, נדיה ונילי · отец Наора, Нади и Нили · father of Naor, Nadia and Nili', branch:'lando', col:8.2, row:4, places:[23,27,28,25] },
   { id:'natasha',   he:'נטשה גורביץ׳', ru:'Наташа Гуревич', en:'Natasha Gurevich', years:'', role:'אם מארק וניקול · мать Марка и Николь · mother of Mark and Nikol', branch:'lando', col:10.6, row:4, places:[] },
-  { id:'naor',      he:'נאור בר', ru:'Наор Бар', en:'Naor Bar', years:'', role:'בן מריה ומשה · сын Марии и Моше · son of Maria and Moshe', branch:'lando', col:7.6, row:5, places:[25] },
-  { id:'nadia',     he:'נדיה בר', ru:'Надя Бар', en:'Nadia Bar', years:'', role:'בת מריה ומשה · дочь Марии и Моше · daughter of Maria and Moshe', branch:'lando', col:8.6, row:5, places:[25] },
+  { id:'naor',      he:'נאור בר', ru:'Наор Бар', en:'Naor Bar', years:'', role:'בן מריה ומשה · сын Марии и Моше · son of Maria and Moshe', branch:'lando', col:7.6, row:5, places:[28,25] },
+  { id:'nadia',     he:'נדיה בר', ru:'Надя Бар', en:'Nadia Bar', years:'', role:'בת מריה ומשה · дочь Марии и Моше · daughter of Maria and Moshe', branch:'lando', col:8.6, row:5, places:[28,25] },
   { id:'nili',      he:'נילי בר', ru:'Нили Бар', en:'Nili Bar', years:'', role:'בת מריה ומשה · дочь Марии и Моше · daughter of Maria and Moshe', branch:'lando', col:9.6, row:5, places:[25] },
   { id:'zoya',      he:'זויה לנדו', ru:'Зоя Ландо', en:'Zoya Lando', years:'', role:'רעייתו השנייה של דמיטרי · вторая жена Дмитрия · Dmitry\'s second wife', branch:'lando', col:13.0, row:4, places:[26] },
   { id:'mark_d',    he:'מארק לנדו', ru:'Марк Ландо', en:'Mark Lando', years:'', role:'בן דמיטרי ונטשה · сын Дмитрия и Наташи · son of Dmitry and Natasha', branch:'lando', col:10.8, row:5, places:[26] },
@@ -57,7 +57,7 @@ const PEOPLE = [
   { id:'lital',     he:'ליטל קליוט', ru:'Литаль Клиот', en:'Leetal Kliot', years:'', role:'בת איליה ואולגה · дочь Ильи и Ольги · daughter of Ilya and Olga', branch:'kliot', col:13.8, row:5, places:[24] },
   { id:'nir',       he:'ניר קליוט', ru:'Нир Клиот', en:'Nir Kliot', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги · son of Ilya and Olga', branch:'kliot', col:14.8, row:5, places:[24] },
   { id:'ron',       he:'רון קליוט', ru:'Рон Клиот', en:'Ron Kliot', years:'', role:'בן איליה ואולגה · сын Ильи и Ольги · son of Ilya and Olga', branch:'kliot', col:15.8, row:5, places:[24] },
-  { id:'masha',     he:'מאשה (מריה) לנדו', ru:'Маша (Мария) Ландо', en:'Maria (Masha) Lando', years:'', role:'יזמה את העלייה; מייסדת Ludara.AI · инициатор алии; основательница Ludara.AI · initiated the aliyah; founder of Ludara.AI', branch:'lando', col:9.4, row:4, places:[7,20,23,25] },
+  { id:'masha',     he:'מאשה (מריה) לנדו', ru:'Маша (Мария) Ландо', en:'Maria (Masha) Lando', years:'', role:'יזמה את העלייה; מייסדת Ludara.AI · инициатор алии; основательница Ludara.AI · initiated the aliyah; founder of Ludara.AI', branch:'lando', col:9.4, row:4, places:[7,20,23,27,28,25] },
   { id:'dima',      he:'דימה (דמיטרי) לנדו', ru:'Дима (Дмитрий) Ландо', en:'Dmitry (Dima) Lando', years:'', role:'חי ברעננה עם משפחתו · живёт в Раанане с семьёй · lives in Raanana with his family', branch:'lando', col:11.8, row:4, places:[7,20,26] },
 
   // ── FRIEDLAND — צד אמא ───────────────────────────────────────────────────
