@@ -229,10 +229,18 @@ function _populateCard(p){
     }
   };
 
+  /* The photo caption is a trilingual string that pickLang narrows to one
+     language, so it has to be built at the moment the card opens. Until
+     12 September 2026 it was built once, when photos.js first preloaded the
+     picture, and stored in photoCache alongside the url. A reader who opened the
+     map in Hebrew and then switched to English kept the Hebrew caption under
+     every photograph for the rest of the visit. The url is still cached; only
+     the caption is rebuilt. */
+  const freshAttr = (typeof photoCreditHtml === 'function') ? photoCreditHtml(p.id) : '';
   if(photoCache[p.id]?.url){
-    loadPhoto(photoCache[p.id].url, photoCache[p.id].attr);
+    loadPhoto(photoCache[p.id].url, freshAttr);
   } else {
-    fetchPhoto(p, result => { if(result?.url) loadPhoto(result.url, result.attr); });
+    fetchPhoto(p, result => { if(result?.url) loadPhoto(result.url, freshAttr); });
   }
 
   const col = CAT_COLORS[p.cat] || '#888';

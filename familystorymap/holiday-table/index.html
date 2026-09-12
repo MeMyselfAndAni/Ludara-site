@@ -408,6 +408,19 @@
       } else { btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
     }catch(err){ btn.disabled=false; btn.textContent=label; alert('Something went wrong. Please try again.'); }
   });
+
+  /* 12 September 2026. Every card download reported to Google Analytics but
+     nothing at all to Meta, so a Facebook ad could only be optimised on page
+     views, not on the download it asks for. Each download link now also sends
+     CardDownload with the language of the card. In Events Manager, make a
+     Custom Conversion on CardDownload and the ad set can optimise for it. */
+  document.querySelectorAll('a[href$=".pdf"][download]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var m = /-([A-Za-z]{2})\.pdf$/.exec(a.getAttribute('href') || '');
+      var lang = m ? m[1].toLowerCase() : 'unknown';
+      if (typeof fbq === 'function') { fbq('trackCustom','CardDownload',{ language: lang }); }
+    });
+  });
 </script>
 </body>
 </html>

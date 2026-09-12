@@ -91,9 +91,9 @@ const PHOTO_CREDITS = {
               + ' · Миша после института, на военной службе, те же годы'
               + ' · Misha after the institute, on military service, the same years' },
   33: { author: FAMILY_ARCHIVE,
-        prefix: 'מיכאל בשחיית חורף ליד מוסקבה, בערך באותן שנים'
-              + ' · Михаил на зимнем купании под Москвой, примерно в те же годы'
-              + ' · Mikhail winter swimming near Moscow, at about the same time' },
+        prefix: 'אנה ומיכאל אחרי שחיית חורף ליד מוסקבה, מינוס 30 מעלות, בערך באותן שנים'
+              + ' · Анна и Михаил после зимнего купания под Москвой, минус 30, примерно в те же годы'
+              + ' · Anna and Michael after a winter swim near Moscow, minus 30 degrees, at about the same time' },
   30: { author: FAMILY_ARCHIVE,
         prefix: 'רוזה, מתוך תצלום המשפחה משנת 1949'
               + ' · Роза, фрагмент семейного снимка 1949 года'
