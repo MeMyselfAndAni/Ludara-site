@@ -101,6 +101,22 @@
     .sub-warm { color:var(--warm-muted); font-weight:300; max-width:640px; }
 
     /* HERO */
+        /* Season band, 12 September 2026. The same strip runs on the product page,
+       the three gift pages and the holiday table page, so whichever one a reader
+       lands on carries the same date. Reword or delete it once winter is past;
+       it is the only seasonal thing on these pages. */
+    .season-band {
+      display:grid; grid-template-columns:1fr; gap:10px; align-items:center;
+      margin-bottom:18px; padding:16px 20px;
+      background:linear-gradient(90deg, rgba(184,150,90,0.18), rgba(184,150,90,0.05));
+      border:1px solid var(--gold); border-radius:var(--radius);
+      color:var(--dark-text);
+    }
+    @media(min-width:880px){ .season-band{ grid-template-columns:auto 1fr; gap:22px; padding:16px 24px; } }
+    .season-band-kicker { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-l); white-space:nowrap; }
+    .season-band-text { font-size:15px; font-weight:300; line-height:1.6; color:var(--dark-muted); margin:0; }
+    .season-band-text strong { color:var(--dark-text); font-weight:600; }
+
     .hero-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:48px 40px 40px; position:relative; overflow:hidden; }
     .hero-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(184,150,90,0.09) 0%,transparent 70%); pointer-events:none; }
     .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 26px; font-weight:300; max-width:68ch; }
@@ -351,6 +367,12 @@
 <!-- HERO (dark) -->
 <section class="dark-section" data-animate id="top">
   <div class="inner">
+
+    <div class="season-band">
+      <span class="season-band-kicker">Start it this month</span>
+      <span class="season-band-text"><strong>The perfect family gift for Thanksgiving, Christmas, Hanukkah or New Year. Or a big birthday.</strong> Start now and the gift is ready in a month. A memoir, a folder of documents and photographs, or ten minutes of you recording your parents&rsquo; stories on your phone at the table: whatever you have is enough for us to start. We build a map of your family journeys through history, linked to a family tree.</span>
+    </div>
+
     <div class="hero-wrap">
       <p class="kicker-dark">For families whose stories span continents</p>
       <h1>So where are we from,<br><em>actually?</em></h1>

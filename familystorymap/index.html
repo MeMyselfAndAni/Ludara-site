@@ -101,6 +101,22 @@
     .sub-warm { color:var(--warm-muted); font-weight:300; max-width:640px; }
 
     /* HERO */
+    /* Season band, 12 September 2026. Every other present can be bought in
+       December. This one cannot, because it starts with a parent still at the
+       table in September. That is the whole argument, so it sits above the hero
+       rather than inside the page. Reword or delete it once winter is past. */
+    .season-band {
+      display:grid; grid-template-columns:1fr; gap:10px; align-items:center;
+      margin-bottom:18px; padding:16px 20px;
+      background:linear-gradient(90deg, rgba(184,150,90,0.18), rgba(184,150,90,0.05));
+      border:1px solid var(--gold); border-radius:var(--radius);
+      color:var(--dark-text);
+    }
+    @media(min-width:880px){ .season-band{ grid-template-columns:auto 1fr; gap:22px; padding:16px 24px; } }
+    .season-band-kicker { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-l); white-space:nowrap; }
+    .season-band-text { font-size:15px; font-weight:300; line-height:1.6; color:var(--dark-muted); margin:0; }
+    .season-band-text strong { color:var(--dark-text); font-weight:600; }
+
     .hero-wrap { background:var(--dark-card); border:1px solid var(--dark-border); border-radius:var(--radius); padding:48px 40px 40px; position:relative; overflow:hidden; }
     .hero-wrap::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(184,150,90,0.09) 0%,transparent 70%); pointer-events:none; }
     .hero-sub { color:var(--dark-muted); font-size:17px; margin:12px 0 26px; font-weight:300; max-width:68ch; }
@@ -361,11 +377,17 @@
 <!-- HERO (dark) -->
 <section class="dark-section" data-animate id="top">
   <div class="inner">
+
+    <div class="season-band">
+      <span class="season-band-kicker">Start it this month</span>
+      <span class="season-band-text"><strong>The perfect family gift for Thanksgiving, Christmas, Hanukkah or New Year. Or a big birthday.</strong> Start now and the gift is ready in a month. A memoir, a folder of documents and photographs, or ten minutes of you recording your parents&rsquo; stories on your phone at the table: whatever you have is enough for us to start. We build a map of your family journeys through history, linked to a family tree.</span>
+    </div>
+
     <div class="hero-wrap">
       <p class="kicker-dark">A Family Story Map</p>
       <h1>A hundred years of your family,<br><em>and every road they walked.</em></h1>
-      <p class="hero-sub">Some families have a recording: an afternoon when somebody finally pressed record and let a grandmother talk. Others have a memoir, or a folder of documents, a box of photographs and a handful of names nobody wants to lose. Any of it is enough to begin, and you do not need to transcribe a word.</p>
-      <p class="hero-sub">We take what you have and put it back where it happened. A pin for every town a life unfolded in, each one opening a photograph and the passage that belongs to it. Tap a person and their road draws itself across the map, from the house they were born in to the country they ended in.</p>
+      <p class="hero-sub">Some families have a memoir, a box of photographs, a folder of documents. Others can still press record and capture their relatives&rsquo; stories around a family holiday table. Any of it is enough to begin.</p>
+      <p class="hero-sub">We take what you have and put it back where it happened. All the people, all the places, all the stories. On one Family Story Map, interconnected with a Family Tree. Interactive, shareable, printable as a PDF.</p>
       <p class="hero-sub">Everyone reads it in their own language, from one link, on any screen. The bigger the screen, the better. No app to install, no membership fee.</p>
       <div class="hero-btns">
         <a class="btn-gold" href="#get-started">Tell us about your family</a>
