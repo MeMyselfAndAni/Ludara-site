@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 107,        // bump on every deploy so the service worker updates
+  cacheVersion: 108,        // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -115,8 +115,13 @@ var FAMILY = {
         header:'קליוט, צד אבא · Клиоты · Kliot, father’s side' },
       { key:'friedland', col:13.2, chip:'פרידלנד · Фридланды · Friedland',
         header:'פרידלנד, צד אמא · Фридланды · Friedland, mother’s side' },
+      { key:'schechter', col:19.6, chip:'שכטר · Шехтеры · Schechter',
+        header:'שכטר, משפחת אמו של מישה · Шехтеры · Schechter, Misha’s mother’s side',
+        // Schechter groups people on the tree but owns no places on the map, so
+        // it carries its own colour here instead of being a map thread.
+        color:'#7d5ba6', tint:'#f1ecf8' },
       { key:'lando',     col:23.6, chip:'לנדו · Ландо · Lando',
-        header:'לנדו ושכטר, צד מישה · Ландо и Шехтеры · Lando & Schechter' },
+        header:'לנדו, צד מישה · Ландо · Lando, Misha’s side' },
     ],
   },
 

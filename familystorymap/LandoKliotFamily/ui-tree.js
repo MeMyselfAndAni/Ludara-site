@@ -14,6 +14,16 @@
 (function(){
   const _TB   = (FAMILY.tree && FAMILY.tree.branches) || [];
   const _KEYS = _TB.map(b => b.key);
+
+  // A tree branch is normally also a map thread, so it borrows that thread's
+  // colour. A branch may instead carry its own `color` and `tint` in family.js:
+  // that is for a family line which groups people on the tree but owns no places
+  // on the map, where giving it a thread would put a colour chip in the map's
+  // legend that filters to nothing. (12 September 2026.)
+  const _BCOL = {}, _BTINT = {};
+  _TB.forEach(b => { if(b.color) _BCOL[b.key] = b.color; if(b.tint) _BTINT[b.key] = b.tint; });
+  const brColor = k => _BCOL[k] || ((typeof CC !== 'undefined' && CC[k]) || '#8a7a55');
+  const brTint  = k => _BTINT[k] || ((typeof THREAD_TINT !== 'undefined' && THREAD_TINT[k]) || '#f3efe6');
   const _HL   = _KEYS.map(k => 'hl-' + k);
 
   // Guarded L3: the tree is built before lang.js has been asked for a language in
@@ -78,8 +88,8 @@
          Generated from FAMILY.tree.branches, so adding a branch needs no CSS edit. */
       ${_KEYS.map(k => `#tree-svg.hl-${k} .tree-node:not(.br-${k}) { opacity:0.16; }
       #tree-svg.hl-${k} .tree-edge:not(.br-${k}) { opacity:0.10; }
-      #tree-svg.hl-${k} .tree-node.br-${k} rect { fill:${(THREAD_TINT && THREAD_TINT[k]) || '#f3efe6'}; stroke-width:3.5; }
-      .tree-btn.hl-on-${k} { background:${(CC && CC[k]) || '#8a7a55'}; border-color:${(CC && CC[k]) || '#8a7a55'}; color:#fff; }`).join('\n      ')}
+      #tree-svg.hl-${k} .tree-node.br-${k} rect { fill:${brTint(k)}; stroke-width:3.5; }
+      .tree-btn.hl-on-${k} { background:${brColor(k)}; border-color:${brColor(k)}; color:#fff; }`).join('\n      ')}
       .tree-node, .tree-edge { transition:opacity 0.25s; }
       .tree-btn.hl-on-all    { background:#d4a84b; border-color:#d4a84b; color:#16130c; }
       @media (max-width:768px){ .tree-hint { display:none; } }
@@ -124,7 +134,7 @@
     // hardcoded ternary over one family's branch keys, so every branch of the next
     // family fell through to a missing key and rendered grey, the exact failure
     // this file is now built to avoid.
-    const col = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
+    const col = brColor;
 
     let s = '';
 
@@ -534,7 +544,7 @@
     const folks = PEOPLE.filter(per => (per.places || []).includes(place.id));
     if(!folks.length){ host.innerHTML = ''; showType(); return; }
     if(typeEl) typeEl.style.display = 'none';
-    const colOf = b => (typeof CC !== 'undefined' && CC[b]) || '#8a7a55';
+    const colOf = brColor;
     const isRu = (typeof LANG !== 'undefined' && LANG === 'ru');
     const isEn = (typeof LANG !== 'undefined' && LANG === 'en');
     const lbl = _L('🌳 מי קשור למקום', '🌳 Кто связан с этим местом', '🌳 Who is connected to this place');
