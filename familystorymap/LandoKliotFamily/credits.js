@@ -67,7 +67,9 @@ const PHOTO_CREDITS = {
               + ' · Сидят: Роза и Шауль (Шуля); стоят: Павел, Вера и Михаил, 1949'
               + ' · Seated: Roza and Shaul (Shula); standing: Pavel, Vera and Michael, 1949' },
   10: { author: FAMILY_ARCHIVE,
-        prefix: 'נינה ובנימין קליוט' + ' · Нина и Вениамин Клиот' + ' · Nina and Benjamin Kliot' },
+        prefix: 'נינה, בנימין, אנה ומיכאל קליוט, בערך 1968'
+              + ' · Нина, Вениамин, Анна и Михаил Клиот, около 1968 года'
+              + ' · Nina, Benjamin, Anna and Michael Kliot, circa 1968' },
   11: { author: FAMILY_ARCHIVE,
         prefix: 'משפחת הצד של אמא: זלמן, מלכה והילדים' + ' · Семья со стороны мамы: Залман, Малка и дети' + " · Mother's side of the family: Zalman, Malka and the children" },
   12: { author: FAMILY_ARCHIVE,
@@ -84,6 +86,14 @@ const PHOTO_CREDITS = {
         prefix: 'נינה פרידלנד במדים, 1944' + ' · Нина Фридланд в форме, 1944' + ' · Nina Friedland in uniform, 1944' },   // Dnieper crossing — Nina Friedland in uniform, 1944 (was place-14)
   21: { author: FAMILY_ARCHIVE,
         prefix: 'חתונת ברוך ורחל קליוט, 2009' + ' · Свадьба Баруха и Рахели Клиот, 2009' + " · Baruch and Rachel Kliot's wedding, 2009" },
+  32: { author: FAMILY_ARCHIVE,
+        prefix: 'מישה אחרי הלימודים, בשירות הצבאי, אותן שנים'
+              + ' · Миша после института, на военной службе, те же годы'
+              + ' · Misha after the institute, on military service, the same years' },
+  33: { author: FAMILY_ARCHIVE,
+        prefix: 'מיכאל בשחיית חורף ליד מוסקבה, בערך באותן שנים'
+              + ' · Михаил на зимнем купании под Москвой, примерно в те же годы'
+              + ' · Mikhail winter swimming near Moscow, at about the same time' },
   30: { author: FAMILY_ARCHIVE,
         prefix: 'רוזה, מתוך תצלום המשפחה משנת 1949'
               + ' · Роза, фрагмент семейного снимка 1949 года'

@@ -1464,10 +1464,11 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 
 /* blogger note */
 .pc-note-wrap {
-  background: #fffef5;
-  border-left: 3px solid #b8960a;
-  border-radius: 0 8px 8px 0;
-  padding: 10px 12px;
+  /* Until 12 September 2026 the story sat in a cream pull quote with a gold rule
+     down one side. That styling came from the city guides, where the note really
+     is a blogger's quoted opinion. On a story map the note is the story itself,
+     so the card was quoting itself. It is plain now. The "today" tip below keeps
+     its own panel, because that one is genuinely an aside. */
   margin-bottom: 9px;
 }
 .pc-note {
@@ -1638,11 +1639,8 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 html[lang="he"] .pc-body { text-align: right; }
 html[lang="he"] .pc-cat { flex-direction: row-reverse; justify-content: flex-start; }
 html[lang="he"] .pc-contacts { justify-content: flex-end; }
-html[lang="he"] .pc-note-wrap {
-  border-left: none;
-  border-right: 3px solid #b8960a;
-  border-radius: 8px 0 0 8px;
-}
+/* The gold rule was removed on 12 September 2026, so there is nothing left here
+   to mirror for Hebrew. */
 html[lang="he"] .pc-tip { direction: rtl; }
 html[lang="he"] .pc-tip-label { margin-right: 0; margin-left: 5px; }
 html[lang="he"] .pc-hours { flex-direction: row-reverse; justify-content: flex-start; }

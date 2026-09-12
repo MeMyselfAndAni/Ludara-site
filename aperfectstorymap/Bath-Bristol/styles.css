@@ -1431,10 +1431,11 @@ h1 em { font-style: italic; color: #d4a84b; font-weight: 400; }
 
 /* blogger note */
 .pc-note-wrap {
-  background: #fffef5;
-  border-left: 3px solid #b8960a;
-  border-radius: 0 8px 8px 0;
-  padding: 10px 12px;
+  /* Until 12 September 2026 the story sat in a cream pull quote with a gold rule
+     down one side. That styling came from the city guides, where the note really
+     is a blogger's quoted opinion. On a story map the note is the story itself,
+     so the card was quoting itself. It is plain now. The "today" tip below keeps
+     its own panel, because that one is genuinely an aside. */
   margin-bottom: 9px;
 }
 .pc-note {
