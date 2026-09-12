@@ -20,7 +20,7 @@ var FAMILY = {
   // ── Identity ───────────────────────────────────────────────────────────────
   slug:  'landokliotfamily',                                    // folder + cache name + URL
   url:   'https://ludara.ai/familystorymap/landokliotfamily/',
-  cacheVersion: 100,          // bump on every deploy so the service worker updates
+  cacheVersion: 105,        // bump on every deploy so the service worker updates
 
   // Languages this map offers. One entry = no language switcher.
   languages: ['he', 'ru', 'en'],
@@ -133,13 +133,13 @@ var FAMILY = {
   promo: {
     url: 'https://ludara.ai/familystorymap/?utm_source=familymap&utm_medium=map&utm_campaign=landokliotfamily#how',
     he: { title: 'גם למשפחה שלכם יש סיפור כזה.',
-          body:  'ספר זיכרונות, או תיקייה של מסמכים ותצלומים, ואנחנו בונים מפה כמו זו.',
+          body:  'ספר זיכרונות, הקלטת קול, או תיקייה של מסמכים ותצלומים, ואנחנו בונים מפה כמו זו.',
           cta:   'ספרו לנו על המשפחה שלכם' },
     ru: { title: 'У вашей семьи есть такая же история.',
-          body:  'Книга воспоминаний или папка документов и фотографий — и мы построим такую же карту.',
+          body:  'Книга воспоминаний, аудиозапись или папка документов и фотографий, и мы построим такую же карту.',
           cta:   'Расскажите нам о вашей семье' },
     en: { title: 'Your family has a story like this one.',
-          body:  'A memoir, or a folder of documents and photographs, and we build a map like this.',
+          body:  'A memoir, an audio recording, or a folder of documents and photographs, and we build a map like this.',
           cta:   'Tell us about your family' },
   },
 };
