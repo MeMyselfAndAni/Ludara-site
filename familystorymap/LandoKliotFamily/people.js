@@ -78,11 +78,14 @@ const PEOPLE = [
   { id:'pavlina_w', he:'פבלינה', ru:'Павлина', en:'Pavlina', years:'', role:'רעיית גרישה · жена Гриши · Grisha\'s wife', branch:'friedland', col:19.2, row:2, places:[10] },
   { id:'alisa',     he:'אליסה קגן', ru:'Алиса Каган', en:'Alisa Kagan', years:'נ׳ 1941', role:'כנרית ביארוסלבל · скрипачка · violinist in Yaroslavl', branch:'friedland', col:15, row:3, places:[12,10,16,17] },
   { id:'markr',     he:'מארק רוזנבלט', ru:'Марк Розенблат', en:'Mark Rozenblat', years:'', role:'בעלה של אליסה (1962) · муж Алисы · Alisa\'s husband (1962)', branch:'friedland', col:16, row:3, places:[17] },
-  { id:'raya_f',    he:'רעיה', ru:'Рая', en:'Raya', years:'', role:'בת פולינה · дочь Полины · Polina\'s daughter', branch:'friedland', col:17.4, row:3, places:[10] },
-  { id:'igor',      he:'איגור', ru:'Игорь', en:'Igor', years:'', role:'בן גרישה ופבלינה · сын Гриши и Павлины · son of Grisha and Pavlina', branch:'friedland', col:18.6, row:3, places:[10] },
-  { id:'boris_r',   he:'בוריס רוזנבלט', ru:'Борис Розенблат', en:'Boris Rozenblat', years:'', role:'בן אליסה · сын Алисы · Alisa\'s son', branch:'friedland', col:16.8, row:4, places:[17] },
-  { id:'yevgeny',   he:'יבגני רוזנבלט', ru:'Евгений Розенблат', en:'Yevgeny Rozenblat', years:'', role:'בן אליסה · сын Алисы · Alisa\'s son', branch:'friedland', col:17.8, row:4, places:[17] },
-  { id:'michael_idf',he:'מיכאל', ru:'Михаил', en:'Michael', years:'', role:'נכד אליסה, לוחם בצה״ל · внук Алисы, боец ЦАХАЛа · Alisa\'s grandson, an IDF soldier', branch:'friedland', col:17.1, row:5, places:[20] },
+  { id:'raya_f',    he:'רעיה', ru:'Рая', en:'Raya', years:'', role:'בת פולינה · дочь Полины · Polina\'s daughter', branch:'friedland', col:18.6, row:3, places:[10] },
+  { id:'igor',      he:'איגור', ru:'Игорь', en:'Igor', years:'', role:'בן גרישה ופבלינה · сын Гриши и Павлины · son of Grisha and Pavlina', branch:'friedland', col:17.4, row:3, places:[10] },
+  { id:'boris_r',   he:'בוריס רוזנבלט', ru:'Борис Розенблат', en:'Boris Rozenblat', years:'', role:'בן אליסה · сын Алисы · Alisa\'s son', branch:'friedland', col:16.6, row:4, places:[17] },
+  { id:'yevgeny',   he:'יבגני רוזנבלט', ru:'Евгений Розенблат', en:'Yevgeny Rozenblat', years:'', role:'בן אליסה · сын Алисы · Alisa\'s son', branch:'friedland', col:17.6, row:4, places:[17] },
+  { id:'lilya_r',   he:'ליליה', ru:'Лиля', en:'Lilya', years:'', role:'בתה של רעיה, חיה בשוויץ · дочь Раи, живёт в Швейцарии · Raya\'s daughter, lives in Switzerland', branch:'friedland', col:18.7, row:4, places:[] },
+  { id:'lia_r',     he:'ליה', ru:'Лия', en:'Lia', years:'', role:'בתו של בוריס, חיה בגרמניה · дочь Бориса, живёт в Германии · Boris\'s daughter, lives in Germany', branch:'friedland', col:16.9, row:5, places:[] },
+  { id:'misha_v',   he:'מישה ורשבסקי', ru:'Миша Варшавский', en:'Misha Varshavskyi', years:'', role:'בנו של בוריס, לוחם בצה״ל · сын Бориса, боец ЦАХАЛа · Boris\'s son, an IDF soldier', branch:'friedland', col:17.9, row:5, places:[20] },
+  { id:'sonya_r',   he:'סוניה ורשבסקיה', ru:'Соня Варшавская', en:'Sonya Varshavskaya', years:'', role:'בתו של בוריס, חיה ביארוסלבל · дочь Бориса, живёт в Ярославле · Boris\'s daughter, lives in Yaroslavl', branch:'friedland', col:18.9, row:5, places:[17] },
 
   // ── LANDO & SCHECHTER — צד מישה ──────────────────────────────────────────
   { id:'david_s',   he:'דויד שכטר', ru:'Давид Шехтер', en:'David Schechter', years:'', role:'סבא של מישה · дед Миши · Misha\'s grandfather', branch:'lando', col:23.6, row:1, places:[8] },
@@ -147,6 +150,8 @@ const FAMILY_UNIONS = [
   { p:['bella','kagan_f'],   c:['alisa'] },
   { p:['alisa','markr'],     c:['boris_r','yevgeny'] },
   { p:['polina_f'],          c:['raya_f'] },
+  { p:['raya_f'],            c:['lilya_r'] },
+  { p:['boris_r'],           c:['lia_r','misha_v','sonya_r'] },
   { p:['grisha','pavlina_w'],c:['igor'] },
   // Lando & Schechter
   { p:['david_s','odiya'],   c:['sara_s','milia','gersh_s','huma'] },
@@ -169,6 +174,5 @@ const FAMILY_UNIONS = [
 
 // Dotted edges — known descent whose exact line the memoir leaves open.
 const FAMILY_EXTRA_EDGES = [
-  { from:'alisa',   to:'michael_idf', label:'נכד · внук' },
   { from:'svirsky', to:'etasara',     label:'משפחתה · её семья' },
 ];

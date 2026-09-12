@@ -375,9 +375,25 @@
     _hlBranch = (!branch || _hlBranch === branch) ? null : branch;
     _applyHighlight();
     if(_hlBranch){
-      const first = PEOPLE.filter(p => p.branch === branch).sort((a,b) => a.col - b.col)[0];
+      // Scroll to the branch's own block, not to its leftmost person anywhere on
+      // the canvas. Several people carry a branch key while sitting far from that
+      // branch's heading: Maria's children are 'lando' but are drawn at the
+      // meeting point in the middle, so jumping to the leftmost person landed the
+      // panel under the Friedland heading and the tree looked like it had gone to
+      // the wrong branch. The block now starts at the heading, or at the leftmost
+      // person within five columns of it when relatives sit just to its left.
+      // (12 September 2026.)
+      const hdr = BRANCH_HEADERS.find(h => h.branch === branch);
+      const kin = PEOPLE.filter(p => p.branch === branch).map(p => p.col);
+      let colAt;
+      if(hdr){
+        const near = kin.filter(c => c >= hdr.col - 5);
+        colAt = near.length ? Math.min(hdr.col, ...near) : hdr.col;
+      } else {
+        colAt = kin.length ? Math.min(...kin) : 0;
+      }
       const sc = document.getElementById('tree-scroll');
-      if(first && sc) sc.scrollTo({ left: nodeX(first)*zoom - 40, top: 0, behavior:'smooth' });
+      if(sc) sc.scrollTo({ left: Math.max(0, (PADX + colAt*COLW)*zoom - 40), top: 0, behavior:'smooth' });
     }
   };
 
