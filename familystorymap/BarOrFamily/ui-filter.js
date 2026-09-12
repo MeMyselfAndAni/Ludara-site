@@ -215,20 +215,31 @@ window.getPersonFilterId    = function(){ return PERSON_FILTER ? PERSON_FILTER.p
    the current display language is. */
 function _placeMatchesQuery(p, q){
   if(!q) return true;
-  if(p.name && p.name.toLowerCase().includes(q)) return true;
-  if(p.type && p.type.toLowerCase().includes(q)) return true;
-  if(p.address && p.address.toLowerCase().includes(q)) return true;
-  if(p.search && p.search.toLowerCase().includes(q)) return true;
+  /* Everything this place can be found by, in one string: its own fields, and
+     the names and roles of every family member linked to it. */
+  var hay = [p.name, p.type, p.address, p.search].filter(Boolean).join(' ');
   if(typeof PEOPLE !== 'undefined'){
     for(var i = 0; i < PEOPLE.length; i++){
       var per = PEOPLE[i];
-      if(per.places && per.places.indexOf(p.id) !== -1 &&
-         ((per.he && per.he.toLowerCase().includes(q)) ||
-          (per.ru && per.ru.toLowerCase().includes(q)) ||
-          (per.en && per.en.toLowerCase().includes(q)))) return true;
+      if(per.places && per.places.indexOf(p.id) !== -1){
+        /* Names only, never the role. A role reads "father of Naor, Nadia and
+           Nili", so including it made a search for a child return every place
+           of the parent. */
+        hay += ' ' + (per.he || '') + ' ' + (per.ru || '') + ' ' + (per.en || '');
+      }
     }
   }
-  return false;
+  hay = hay.toLowerCase();
+  /* Every word of the query must appear somewhere, in any order, rather than
+     the whole query appearing as one unbroken phrase. The old test failed on
+     the most natural search there is: a reader typing "Maria Lando" found
+     nothing at all, because the tree calls her "Maria (Masha) Lando" and the
+     bracket in the middle broke the phrase. (12 September 2026.) */
+  var words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  for(var w = 0; w < words.length; w++){
+    if(hay.indexOf(words[w]) === -1) return false;
+  }
+  return true;
 }
 
 function _initSearch(){
